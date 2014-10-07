@@ -69,7 +69,7 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Enter methode creerDraft");
 
-		Auteur auteur = auteurInfo.getAuteur().toDomain();
+		Auteur auteur = new Auteur(auteurInfo);
 
 		Draft draft = new Draft();
 		draft.setAuteur(auteur);
@@ -85,7 +85,6 @@ public class DraftServiceImpl implements DraftService {
 			draft.setReference(Constants.REF_DRAEFT_INIT);
 			inc = Integer.parseInt(Constants.REF_DRAEFT_INIT) + 1;
 		}
-		// draft.setReference(UUID.randomUUID().toString().substring(0, 8));
 
 		draftRepository.save(draft);
 
@@ -116,15 +115,10 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * Annuler un draft.
-	 * 
-	 * @param refDraft
-	 *            la reference du draft.
-	 * @throws OpaleException
-	 *             opale exception.
+	 * {@inheritDoc}
 	 */
 	public void annulerDraft(String refDraft) throws OpaleException {
-		LOGGER.info("Entrer methode creerDraft");
+		LOGGER.info("Entrer methode annulerDraft");
 
 		Draft draft = draftRepository.findByReference(refDraft);
 
@@ -134,6 +128,6 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		LOGGER.info("Fin methode creerDraft");
+		LOGGER.info("Fin methode annulerDraft");
 	}
 }
