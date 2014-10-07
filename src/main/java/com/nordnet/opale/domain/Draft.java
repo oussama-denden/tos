@@ -1,6 +1,7 @@
 package com.nordnet.opale.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -51,6 +52,11 @@ public class Draft {
 	 */
 	@Embedded
 	private Auteur auteur;
+
+	/**
+	 * La date d annulation du draft.
+	 */
+	private Date dateAnnulation;
 
 	/**
 	 * la list des {@link DraftLigne} associe au draft.
@@ -137,6 +143,23 @@ public class Draft {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateAnnulation}.
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}.
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
 	}
 
 }

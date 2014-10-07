@@ -1,7 +1,11 @@
 package com.nordnet.opale.domain;
 
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModePaiement;
@@ -13,7 +17,16 @@ import com.nordnet.opale.enums.ModePaiementDeserializer;
  * @author akram-moncer
  * 
  */
+@Table(name = "draftlinedetail")
+@Entity
 public class DraftLineDetail {
+
+	/**
+	 * cle primaire.
+	 */
+	@Id
+	@GeneratedValue
+	private Integer id;
 
 	/**
 	 * reference de la ligne dans le draft.
@@ -31,6 +44,29 @@ public class DraftLineDetail {
 	@JsonDeserialize(using = ModePaiementDeserializer.class)
 	@Enumerated(EnumType.STRING)
 	private ModePaiement modePaiement;
+
+	/**
+	 * constructeur par defaut.
+	 */
+	public DraftLineDetail() {
+	}
+
+	/**
+	 * 
+	 * @return {@link #id}.
+	 */
+	public Integer getId() {
+		return id;
+	}
+
+	/**
+	 * 
+	 * @param id
+	 *            {@link #id}.
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	/**
 	 * configuration json.

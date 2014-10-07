@@ -56,7 +56,9 @@ public final class Utils {
 	 * Comparer deux date.
 	 * 
 	 * @param firstDate
+	 *            la premiere date.
 	 * @param seconDate
+	 *            la deuxiemement date.
 	 * @return int (-1 first date is less then second date, 0 equals , first
 	 *         date is great then second date)
 	 */
@@ -80,6 +82,15 @@ public final class Utils {
 		return matcher.find();
 	}
 
+	/**
+	 * Decrementer une date dun nombre i de mois.
+	 * 
+	 * @param date
+	 *            la date.
+	 * @param i
+	 *            nombre de mois.
+	 * @return {@link Date}.
+	 */
 	public static Date dateMinusMonth(Date date, int i) {
 		if (date != null) {
 			return LocalDate.fromDateFields(date).minusMonths(i).toDate();

@@ -1,8 +1,9 @@
-package com.nordnet.opale.service;
+package com.nordnet.opale.draft.service;
 
 import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.exception.OpaleException;
 
 /**
  * La service DraftService va contenir tous les operations le draft.
@@ -23,6 +24,7 @@ public interface DraftService {
 	 * Supprimer draft.
 	 * 
 	 * @param reference
+	 *            {@link Draft#getReference()}.
 	 * 
 	 */
 	public void supprimerDraft(String reference);
@@ -31,8 +33,19 @@ public interface DraftService {
 	 * Creer un draft.
 	 * 
 	 * @param auteurInfo
+	 *            {@link AuteurInfo}.
 	 * @return {@link DraftReturn}
 	 */
 	public DraftReturn creerDraft(AuteurInfo auteurInfo);
+
+	/**
+	 * Annuler un draft.
+	 * 
+	 * @param refDraft
+	 *            la reference du draft.
+	 * @throws OpaleException
+	 *             opale exception.
+	 */
+	public void annulerDraft(String refDraft) throws OpaleException;
 
 }

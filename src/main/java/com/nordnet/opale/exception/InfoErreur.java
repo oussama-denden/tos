@@ -1,4 +1,4 @@
-package com.nordnet.opale.business;
+package com.nordnet.opale.exception;
 
 /**
  * Message customisee pour les methodes de controlle annotee avec @ExceptionHandler

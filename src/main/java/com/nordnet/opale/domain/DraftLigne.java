@@ -1,10 +1,16 @@
 package com.nordnet.opale.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -44,6 +50,13 @@ public class DraftLigne {
 	@JsonDeserialize(using = ModePaiementDeserializer.class)
 	@Enumerated(EnumType.STRING)
 	private ModePaiement modePaiement;
+
+	/**
+	 * liste des {@link DraftLineDetail} associe a la ligne d'un draft.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "draftLineId")
+	private List<DraftLineDetail> draftLineDetails = new ArrayList<DraftLineDetail>();
 
 	/**
 	 * constructeur par defaut.
@@ -117,6 +130,23 @@ public class DraftLigne {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #draftLineDetails}
+	 */
+	public List<DraftLineDetail> getDraftLineDetails() {
+		return draftLineDetails;
+	}
+
+	/**
+	 * 
+	 * @param draftLineDetails
+	 *            {@link #draftLineDetails}.
+	 */
+	public void setDraftLineDetails(List<DraftLineDetail> draftLineDetails) {
+		this.draftLineDetails = draftLineDetails;
 	}
 
 }
