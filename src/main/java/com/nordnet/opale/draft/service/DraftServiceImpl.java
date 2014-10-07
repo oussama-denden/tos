@@ -67,12 +67,7 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Enter methode creerDraft");
 
-		Auteur auteur = new Auteur();
-		auteur.setCanal(auteurInfo.getAuteur().getCanal());
-		auteur.setCode(auteurInfo.getAuteur().getCode());
-		auteur.setIp(auteurInfo.getAuteur().getIp().getIp());
-		auteur.setQui(auteurInfo.getAuteur().getQui());
-		auteur.setTimestamp(auteurInfo.getAuteur().getIp().getTs());
+		Auteur auteur = new Auteur(auteurInfo);
 
 		Draft draft = new Draft();
 		draft.setAuteur(auteur);

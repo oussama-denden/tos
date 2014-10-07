@@ -4,6 +4,8 @@ import javax.persistence.Embeddable;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.AuteurInfo;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link Auteur}.
  * 
@@ -44,6 +46,19 @@ public class Auteur {
 	 */
 	public Auteur() {
 
+	}
+
+	/**
+	 * 
+	 * @param auteurInfo
+	 *            {@link AuteurInfo}.
+	 */
+	public Auteur(AuteurInfo auteurInfo) {
+		this.setCanal(auteurInfo.getAuteur().getCanal());
+		this.setCode(auteurInfo.getAuteur().getCode());
+		this.setIp(auteurInfo.getAuteur().getIp().getIp());
+		this.setQui(auteurInfo.getAuteur().getQui());
+		this.setTimestamp(auteurInfo.getAuteur().getIp().getTs());
 	}
 
 	/**
