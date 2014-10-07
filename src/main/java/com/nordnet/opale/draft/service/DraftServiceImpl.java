@@ -114,7 +114,7 @@ public class DraftServiceImpl implements DraftService {
 	 *             opale exception.
 	 */
 	public void annulerDraft(String refDraft) throws OpaleException {
-		LOGGER.info("Entrer methode creerDraft");
+		LOGGER.info("Entrer methode annulerDraft");
 
 		Draft draft = draftRepository.findByReference(refDraft);
 
@@ -124,6 +124,6 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		LOGGER.info("Fin methode creerDraft");
+		LOGGER.info("Fin methode annulerDraft");
 	}
 }
