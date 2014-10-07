@@ -73,4 +73,20 @@ public class Auteur {
 		this.ip = ip;
 	}
 
+	/**
+	 * convertir un {@link Auteur} en {@link com.nordnet.opale.domain.Auteur}.
+	 * 
+	 * @return {@link com.nordnet.opale.domain.Auteur}.
+	 */
+	public com.nordnet.opale.domain.Auteur toDomain() {
+		com.nordnet.opale.domain.Auteur auteur = new com.nordnet.opale.domain.Auteur();
+		auteur.setCanal(canal);
+		auteur.setCode(code);
+		auteur.setIp(ip.getIp());
+		auteur.setQui(qui);
+		auteur.setTimestamp(ip.getTs());
+
+		return auteur;
+	}
+
 }

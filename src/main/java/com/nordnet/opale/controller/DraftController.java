@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.draft.service.DraftService;
@@ -106,6 +107,24 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::creerDraft");
 		return draftService.creerDraft(auteurInfo);
 
+	}
+
+	/**
+	 * Ajouter une ligne au draft.
+	 * 
+	 * @param reference
+	 *            reference du {@link Draft}.
+	 * @param draftLigneInfo
+	 *            {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{reference:.+}/ligne", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void ajouterLigne(@PathVariable String reference, @RequestBody DraftLigneInfo draftLigneInfo)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::ajouterLigne");
+		draftService.ajouterLigne(reference, draftLigneInfo);
 	}
 
 	/**

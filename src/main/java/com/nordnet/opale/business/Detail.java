@@ -1,32 +1,17 @@
-package com.nordnet.opale.domain;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package com.nordnet.opale.business;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.domain.DraftLigneDetail;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.ModePaiementDeserializer;
 
 /**
- * contient les detail d'une {@link DraftLigne} dans un {@link Draft}.
+ * contient les details d'une offre.
  * 
  * @author akram-moncer
  * 
  */
-@Table(name = "draftlinedetail")
-@Entity
-public class DraftLineDetail {
-
-	/**
-	 * cle primaire.
-	 */
-	@Id
-	@GeneratedValue
-	private Integer id;
+public class Detail {
 
 	/**
 	 * reference de la ligne dans le draft.
@@ -42,36 +27,18 @@ public class DraftLineDetail {
 	 * {@link ModePaiement}.
 	 */
 	@JsonDeserialize(using = ModePaiementDeserializer.class)
-	@Enumerated(EnumType.STRING)
 	private ModePaiement modePaiement;
-
-	/**
-	 * constructeur par defaut.
-	 */
-	public DraftLineDetail() {
-	}
-
-	/**
-	 * 
-	 * @return {@link #id}.
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 *            {@link #id}.
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	/**
 	 * configuration json.
 	 */
 	private String configurationJson;
+
+	/**
+	 * constructeur par defaut.
+	 */
+	public Detail() {
+	}
 
 	/**
 	 * 
@@ -139,6 +106,21 @@ public class DraftLineDetail {
 	 */
 	public void setConfigurationJson(String configurationJson) {
 		this.configurationJson = configurationJson;
+	}
+
+	/**
+	 * Convertir un {@link Detail} en {@link DraftLigneDetail}.
+	 * 
+	 * @return {@link DraftLigneDetail}.
+	 */
+	public DraftLigneDetail toDraftLineDetail() {
+		DraftLigneDetail draftLigneDetail = new DraftLigneDetail();
+		draftLigneDetail.setReference(reference);
+		draftLigneDetail.setReferenceTarif(referenceTarif);
+		draftLigneDetail.setModePaiement(modePaiement);
+		draftLigneDetail.setConfigurationJson(configurationJson);
+
+		return draftLigneDetail;
 	}
 
 }

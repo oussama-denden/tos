@@ -162,4 +162,14 @@ public class Draft {
 		this.dateAnnulation = dateAnnulation;
 	}
 
+	/**
+	 * ajouter une {@link DraftLigne} au draft.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 */
+	public void addLigne(DraftLigne draftLigne) {
+		this.draftLignes.add(draftLigne);
+	}
+
 }

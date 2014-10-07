@@ -1,30 +1,23 @@
 package com.nordnet.opale.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
- * entite qui represente une ligne d'un {@link Draft}.
+ * contient les detail d'une {@link DraftLigne} dans un {@link Draft}.
  * 
  * @author akram-moncer
  * 
  */
-@Table(name = "draftligne")
+@Table(name = "draftlignedetail")
 @Entity
-public class DraftLigne {
+public class DraftLigneDetail {
 
 	/**
 	 * cle primaire.
@@ -50,22 +43,14 @@ public class DraftLigne {
 	private ModePaiement modePaiement;
 
 	/**
-	 * l auteur du de la ligne du draft.
+	 * configuration json.
 	 */
-	@Embedded
-	private Auteur auteur;
-
-	/**
-	 * liste des {@link DraftLigneDetail} associe a la ligne d'un draft.
-	 */
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "draftLigneId")
-	private List<DraftLigneDetail> draftLigneDetails = new ArrayList<DraftLigneDetail>();
+	private String configurationJson;
 
 	/**
 	 * constructeur par defaut.
 	 */
-	public DraftLigne() {
+	public DraftLigneDetail() {
 	}
 
 	/**
@@ -138,46 +123,19 @@ public class DraftLigne {
 
 	/**
 	 * 
-	 * @return {@link Auteur}.
+	 * @return {@link #configurationJson}.
 	 */
-	public Auteur getAuteur() {
-		return auteur;
+	public String getConfigurationJson() {
+		return configurationJson;
 	}
 
 	/**
 	 * 
-	 * @param auteur
-	 *            {@link Auteur}.
+	 * @param configurationJson
+	 *            {@link #configurationJson}.
 	 */
-	public void setAuteur(Auteur auteur) {
-		this.auteur = auteur;
-	}
-
-	/**
-	 * 
-	 * @return {@link #draftLigneDetails}
-	 */
-	public List<DraftLigneDetail> getDraftLigneDetails() {
-		return draftLigneDetails;
-	}
-
-	/**
-	 * 
-	 * @param draftLigneDetails
-	 *            {@link #draftLigneDetails}.
-	 */
-	public void setDraftLigneDetails(List<DraftLigneDetail> draftLigneDetails) {
-		this.draftLigneDetails = draftLigneDetails;
-	}
-
-	/**
-	 * ajouter une {@link DraftLigneDetail} a la list associe a une ligne draft.
-	 * 
-	 * @param draftLigneDetail
-	 *            {@link DraftLigneDetail}.
-	 */
-	public void addDraftLigneDetail(DraftLigneDetail draftLigneDetail) {
-		this.draftLigneDetails.add(draftLigneDetail);
+	public void setConfigurationJson(String configurationJson) {
+		this.configurationJson = configurationJson;
 	}
 
 }

@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.domain.Keygen;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.DraftRepository;
@@ -67,12 +69,7 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Enter methode creerDraft");
 
-		Auteur auteur = new Auteur();
-		auteur.setCanal(auteurInfo.getAuteur().getCanal());
-		auteur.setCode(auteurInfo.getAuteur().getCode());
-		auteur.setIp(auteurInfo.getAuteur().getIp().getIp());
-		auteur.setQui(auteurInfo.getAuteur().getQui());
-		auteur.setTimestamp(auteurInfo.getAuteur().getIp().getTs());
+		Auteur auteur = auteurInfo.getAuteur().toDomain();
 
 		Draft draft = new Draft();
 		draft.setAuteur(auteur);
@@ -103,6 +100,19 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Fin methode creerDraft");
 		return draftReturn;
+	}
+
+	@Override
+	public void ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+		Auteur auteur = draftLigneInfo.getAuteur().toDomain();
+		DraftLigne draftLigne = draftLigneInfo.getOffre().toDraftLigne();
+		draftLigne.setAuteur(auteur);
+		draft.addLigne(draftLigne);
+
+		draftRepository.save(draft);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package com.nordnet.opale.draft.service;
 
 import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.exception.OpaleException;
@@ -37,6 +38,18 @@ public interface DraftService {
 	 * @return {@link DraftReturn}
 	 */
 	public DraftReturn creerDraft(AuteurInfo auteurInfo);
+
+	/**
+	 * Ajouter une ligne au draft.
+	 * 
+	 * @param refDraft
+	 *            reference du {@link Draft}.
+	 * @param draftLigneInfo
+	 *            {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException;
 
 	/**
 	 * Annuler un draft.
