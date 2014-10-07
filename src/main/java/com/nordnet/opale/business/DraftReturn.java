@@ -22,10 +22,19 @@ public class DraftReturn {
 
 	}
 
+	/**
+	 * 
+	 * @return {@link #reference}.
+	 */
 	public String getReference() {
 		return reference;
 	}
 
+	/**
+	 * 
+	 * @param reference
+	 *            {@link #reference}.
+	 */
 	public void setReference(String reference) {
 		this.reference = reference;
 	}

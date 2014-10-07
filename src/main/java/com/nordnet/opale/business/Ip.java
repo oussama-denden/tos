@@ -28,18 +28,36 @@ public class Ip {
 
 	}
 
+	/**
+	 * 
+	 * @return {@link #ip}.
+	 */
 	public String getIp() {
 		return ip;
 	}
 
+	/**
+	 * 
+	 * @param ip
+	 *            {@link #ip}.
+	 */
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
 
+	/**
+	 * 
+	 * @return {@link #ts}.
+	 */
 	public long getTs() {
 		return ts;
 	}
 
+	/**
+	 * 
+	 * @param ts
+	 *            {@link #ts}.
+	 */
 	public void setTs(long ts) {
 		this.ts = ts;
 	}

@@ -46,42 +46,87 @@ public class Auteur {
 
 	}
 
+	/**
+	 * 
+	 * @return {@link #code}.
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	/**
+	 * 
+	 * @param code
+	 *            {@link #code}.
+	 */
 	public void setCode(String code) {
 		this.code = code;
 	}
 
+	/**
+	 * 
+	 * @return {@link Auteur#qui}.
+	 */
 	public String getQui() {
 		return qui;
 	}
 
+	/**
+	 * 
+	 * @param qui
+	 *            {@link Auteur#qui}.
+	 */
 	public void setQui(String qui) {
 		this.qui = qui;
 	}
 
+	/**
+	 * 
+	 * @return {@link #canal}.
+	 */
 	public String getCanal() {
 		return canal;
 	}
 
+	/**
+	 * 
+	 * @param canal
+	 *            {@link #canal}.
+	 */
 	public void setCanal(String canal) {
 		this.canal = canal;
 	}
 
+	/**
+	 * 
+	 * @return {@link #ip}.
+	 */
 	public String getIp() {
 		return ip;
 	}
 
+	/**
+	 * 
+	 * @param ip
+	 *            {@link #ip}.
+	 */
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
 
+	/**
+	 * 
+	 * @return {@link #timestamp}.
+	 */
 	public long getTimestamp() {
 		return timestamp;
 	}
 
+	/**
+	 * 
+	 * @param timestamp
+	 *            {@link #timestamp}.
+	 */
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}

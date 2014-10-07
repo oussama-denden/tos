@@ -88,7 +88,6 @@ public class DraftServiceImpl implements DraftService {
 			draft.setReference(Constants.REF_DRAEFT_INIT);
 			inc = Integer.parseInt(Constants.REF_DRAEFT_INIT) + 1;
 		}
-		// draft.setReference(UUID.randomUUID().toString().substring(0, 8));
 
 		draftRepository.save(draft);
 
@@ -106,12 +105,7 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * Annuler un draft.
-	 * 
-	 * @param refDraft
-	 *            la reference du draft.
-	 * @throws OpaleException
-	 *             opale exception.
+	 * {@inheritDoc}
 	 */
 	public void annulerDraft(String refDraft) throws OpaleException {
 		LOGGER.info("Entrer methode annulerDraft");
