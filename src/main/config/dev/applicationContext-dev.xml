@@ -20,6 +20,11 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:rest-url.properties" />
 	</bean>
+	
+	<bean id="oplaeExceptionsProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:opale-exceptions.properties" />
+	</bean>
 
 	<bean id="dynamicProperties"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

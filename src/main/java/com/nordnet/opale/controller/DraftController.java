@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DraftReturn;
-import com.nordnet.opale.business.InfoErreur;
 import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.service.DraftService;
+import com.nordnet.opale.draft.service.DraftService;
+import com.nordnet.opale.exception.InfoErreur;
+import com.nordnet.opale.exception.OpaleException;
 import com.wordnik.swagger.annotations.Api;
 
 /**
@@ -60,6 +61,22 @@ public class DraftController {
 	}
 
 	/**
+	 * chercher draft par reference.
+	 * 
+	 * @param reference
+	 *            reference du draft.
+	 * @return {@link Draft}.
+	 * @throws Exception
+	 *             exception {@link Exception}.
+	 */
+	@RequestMapping(value = "/{reference:.+}/annuler", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@ResponseBody
+	public void annulerDraft(@PathVariable String reference) throws OpaleException {
+		LOGGER.info(":::ws-rec:::annulerDraft");
+		draftService.annulerDraft(reference);
+	}
+
+	/**
 	 * supprimer draft.
 	 * 
 	 * @param reference
@@ -77,8 +94,8 @@ public class DraftController {
 	/**
 	 * Generer un draft.
 	 * 
-	 * @param AuteurInfo
-	 *            auteur info {@link AuteurInfo}.
+	 * @param auteurInfo
+	 *            auteur informations.
 	 * @return {@link Contrat}.
 	 * @throws Exception
 	 *             exception {@link Exception}.
@@ -100,10 +117,10 @@ public class DraftController {
 	 *            exception
 	 * @return {@link InfoErreur}
 	 */
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler({ Exception.class })
+	@ResponseStatus(value = HttpStatus.OK)
+	@ExceptionHandler({ OpaleException.class })
 	@ResponseBody
 	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
-		return new InfoErreur(req.getRequestURI(), ex.getCause().toString(), ex.getLocalizedMessage());
+		return new InfoErreur(req.getRequestURI(), ((OpaleException) ex).getErrorCode(), ex.getLocalizedMessage());
 	}
 }

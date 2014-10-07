@@ -1,5 +1,7 @@
 package com.nordnet.opale.domain;
 
+import java.util.Date;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,6 +47,11 @@ public class Draft {
 	 */
 	@Embedded
 	private Auteur auteur;
+
+	/**
+	 * La date d annulation du draft.
+	 */
+	private Date dateAnnulation;
 
 	/**
 	 * constructeur par defaut.
@@ -124,6 +131,23 @@ public class Draft {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateAnnulation}.
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}.
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
 	}
 
 }

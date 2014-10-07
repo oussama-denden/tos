@@ -27,6 +27,9 @@ public class Keygen {
 	 */
 	private String referenceDraft;
 
+	/**
+	 * constructeur par default.
+	 */
 	public Keygen() {
 		super();
 	}

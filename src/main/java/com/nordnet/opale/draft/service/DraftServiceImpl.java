@@ -1,4 +1,4 @@
-package com.nordnet.opale.service;
+package com.nordnet.opale.draft.service;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +9,12 @@ import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.Keygen;
+import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.DraftRepository;
 import com.nordnet.opale.repository.KeygenRepository;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.validator.DraftValidator;
 
 /**
  * L'implementation de service {@link DraftService}.
@@ -100,5 +103,27 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Fin methode creerDraft");
 		return draftReturn;
+	}
+
+	/**
+	 * Annuler un draft.
+	 * 
+	 * @param refDraft
+	 *            la reference du draft.
+	 * @throws OpaleException
+	 *             opale exception.
+	 */
+	public void annulerDraft(String refDraft) throws OpaleException {
+		LOGGER.info("Entrer methode creerDraft");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		draft.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour().toDate());
+
+		draftRepository.save(draft);
+
+		LOGGER.info("Fin methode creerDraft");
 	}
 }
