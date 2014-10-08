@@ -9,14 +9,17 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.Offre;
+import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -27,6 +30,7 @@ import com.nordnet.opale.enums.ModePaiement;
  */
 @Table(name = "draftligne")
 @Entity
+@JsonIgnoreProperties({ "id" })
 public class DraftLigne {
 
 	/**
@@ -37,7 +41,7 @@ public class DraftLigne {
 	private Integer id;
 
 	/**
-	 * reference de la ligne dans le draft.
+	 * reference de l'offre.
 	 */
 	private String reference;
 
@@ -53,6 +57,12 @@ public class DraftLigne {
 	private ModePaiement modePaiement;
 
 	/**
+	 * {@link ModeFacturation}.
+	 */
+	@Enumerated(EnumType.STRING)
+	private ModeFacturation modeFacturation;
+
+	/**
 	 * date de creation de la ligne.
 	 */
 	private Date dateCreation;
@@ -66,7 +76,7 @@ public class DraftLigne {
 	/**
 	 * liste des {@link DraftLigneDetail} associe a la ligne d'un draft.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "draftLigneId")
 	private List<DraftLigneDetail> draftLigneDetails = new ArrayList<DraftLigneDetail>();
 
@@ -157,6 +167,23 @@ public class DraftLigne {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link ModeFacturation}.
+	 */
+	public ModeFacturation getModeFacturation() {
+		return modeFacturation;
+	}
+
+	/**
+	 * 
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}.
+	 */
+	public void setModeFacturation(ModeFacturation modeFacturation) {
+		this.modeFacturation = modeFacturation;
 	}
 
 	/**

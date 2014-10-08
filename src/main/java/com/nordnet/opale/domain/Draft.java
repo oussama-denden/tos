@@ -68,7 +68,7 @@ public class Draft {
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "draftId")
-	private final List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
+	private List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 
 	/**
 	 * constructeur par defaut.
@@ -186,6 +186,23 @@ public class Draft {
 	 */
 	public void setDateAnnulation(Date dateAnnulation) {
 		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @return List {@link DraftLigne}.
+	 */
+	public List<DraftLigne> getDraftLignes() {
+		return draftLignes;
+	}
+
+	/**
+	 * 
+	 * @param draftLignes
+	 *            List {@link DraftLigne}.
+	 */
+	public void setDraftLignes(List<DraftLigne> draftLignes) {
+		this.draftLignes = draftLignes;
 	}
 
 	/**

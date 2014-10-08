@@ -1,12 +1,21 @@
 package com.nordnet.opale.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.enums.ModePaiement;
 
@@ -18,6 +27,7 @@ import com.nordnet.opale.enums.ModePaiement;
  */
 @Table(name = "draftlignedetail")
 @Entity
+@JsonIgnoreProperties({ "id" })
 public class DraftLigneDetail {
 
 	/**
@@ -49,6 +59,19 @@ public class DraftLigneDetail {
 	private String configurationJson;
 
 	/**
+	 * {@link DraftLigneDetail}.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "dependDe")
+	private DraftLigneDetail draftLigneDetailParent;
+
+	/**
+	 * list des sous {@link DraftLigneDetail}.
+	 */
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "draftLigneDetailParent", fetch = FetchType.EAGER)
+	private List<DraftLigneDetail> sousDraftLigneDetails = new ArrayList<DraftLigneDetail>();
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public DraftLigneDetail() {
@@ -65,6 +88,12 @@ public class DraftLigneDetail {
 		this.referenceTarif = detail.getReferenceTarif();
 		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
+	}
+
+	@Override
+	public String toString() {
+		return "DraftLigneDetail [id=" + id + ", reference=" + reference + ", referenceTarif=" + referenceTarif
+				+ ", modePaiement=" + modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
 	/**
@@ -150,6 +179,40 @@ public class DraftLigneDetail {
 	 */
 	public void setConfigurationJson(String configurationJson) {
 		this.configurationJson = configurationJson;
+	}
+
+	/**
+	 * 
+	 * @return {@link DraftLigneDetail}.
+	 */
+	public DraftLigneDetail getDraftLigneDetailParent() {
+		return draftLigneDetailParent;
+	}
+
+	/**
+	 * 
+	 * @param draftLigneDetailParent
+	 *            {@link DraftLigneDetail}.
+	 */
+	public void setDraftLigneDetailParent(DraftLigneDetail draftLigneDetailParent) {
+		this.draftLigneDetailParent = draftLigneDetailParent;
+	}
+
+	/**
+	 * 
+	 * @return {@link #sousDraftLigneDetails}.
+	 */
+	public List<DraftLigneDetail> getSousDraftLigneDetails() {
+		return sousDraftLigneDetails;
+	}
+
+	/**
+	 * 
+	 * @param sousDraftLigneDetails
+	 *            {@link #sousDraftLigneDetails}.
+	 */
+	public void setSousDraftLigneDetails(List<DraftLigneDetail> sousDraftLigneDetails) {
+		this.sousDraftLigneDetails = sousDraftLigneDetails;
 	}
 
 }

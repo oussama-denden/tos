@@ -40,6 +40,8 @@
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
 		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="draftId" use="optional" />
+		<xsd:attribute name="modeFacturation" use="optional" />
 	</xsd:complexType>
 	
 	
@@ -50,6 +52,8 @@
 		<xsd:attribute name="referenceTarif" use="optional" />
 		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="configurationJson" use="optional" />
+		<xsd:attribute name="dependDe" use="optional" />
+		<xsd:attribute name="draftLigneId" use="optional" />
 	</xsd:complexType>
 	
 	

@@ -5,17 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
-import com.nordnet.opale.domain.Keygen;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.keygen.service.KeygenService;
+import com.nordnet.opale.repository.DraftLigneRepository;
 import com.nordnet.opale.repository.DraftRepository;
-import com.nordnet.opale.repository.KeygenRepository;
-import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.DraftValidator;
 
@@ -40,10 +40,16 @@ public class DraftServiceImpl implements DraftService {
 	private DraftRepository draftRepository;
 
 	/**
-	 * {@link KeygenRepository}.
+	 * {@link DraftLigneRepository}.
 	 */
 	@Autowired
-	private KeygenRepository keygenRepository;
+	private DraftLigneRepository draftLigneRepository;
+
+	/**
+	 * {@link KeygenService}.
+	 */
+	@Autowired
+	private KeygenService keygenService;
 
 	/**
 	 * {@inheritDoc}
@@ -58,11 +64,13 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void supprimerDraft(String reference) {
+	public void supprimerDraft(String reference) throws OpaleException {
 
+		LOGGER.info("Enter methode supprimerDraft");
 		Draft draft = getDraftByReference(reference);
-
+		DraftValidator.isExistDraft(draft, reference);
 		draftRepository.delete(draft);
+		LOGGER.info("Fin methode supprimerDraft");
 	}
 
 	/**
@@ -78,25 +86,9 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = new Draft();
 		draft.setAuteur(auteur);
 
-		Keygen keygen = keygenRepository.findDernier();
-
-		Keygen keygen2 = new Keygen();
-		int inc = 0;
-		if (keygen != null) {
-			draft.setReference(keygen.getReferenceDraft());
-			inc = Integer.parseInt(keygen.getReferenceDraft()) + 1;
-		} else {
-			draft.setReference(Constants.REF_DRAEFT_INIT);
-			inc = Integer.parseInt(Constants.REF_DRAEFT_INIT) + 1;
-		}
+		draft.setReference(keygenService.getNextKey(Draft.class));
 
 		draftRepository.save(draft);
-
-		// generer la nouvelle reference draft.
-
-		String newReferenceDraft = String.format("%08d", inc);
-		keygen2.setReferenceDraft(newReferenceDraft);
-		keygenRepository.save(keygen2);
 
 		DraftReturn draftReturn = new DraftReturn();
 		draftReturn.setReference(draft.getReference());
@@ -105,18 +97,30 @@ public class DraftServiceImpl implements DraftService {
 		return draftReturn;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
+	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 		Auteur auteur = new Auteur(draftLigneInfo.getAuteur());
 		DraftLigne draftLigne = new DraftLigne(draftLigneInfo.getOffre());
 		draftLigne.setAuteur(auteur);
+		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 		draft.addLigne(draftLigne);
 
 		draftRepository.save(draft);
+
+		return draftLigne.getReference();
+	}
+
+	public void modifierLigne(String refDraft, String refLigne) throws OpaleException {
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
 	}
 
 	/**
@@ -153,6 +157,26 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 		LOGGER.info("Fin methode ajouterReferenceExterne");
 
+	}
+
+	@Override
+	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
+			throws OpaleException {
+
+		LOGGER.info("Enter methode supprimerLigneDraft");
+		Draft draft = getDraftByReference(reference);
+
+		// verifier si le draft existe.
+		DraftValidator.isExistDraft(draft, reference);
+
+		DraftLigne draftLigne = draftLigneRepository.findByReference(referenceLigne);
+
+		// verifier si la ligne draft existe.
+		DraftValidator.isExistLigneDraft(draftLigne, referenceLigne);
+
+		draftLigneRepository.delete(draftLigne);
+
+		LOGGER.info("fin methode supprimerLigneDraft");
 	}
 
 }

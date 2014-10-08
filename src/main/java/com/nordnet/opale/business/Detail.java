@@ -2,7 +2,7 @@ package com.nordnet.opale.business;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.ModePaiementDeserializer;
+import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
 
 /**
  * contient les details d'une offre.

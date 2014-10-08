@@ -41,6 +41,8 @@ CREATE TABLE `draftLigne` (
   `canal` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `timestamp` int(11) DEFAULT NULL,
+    `modeFacturation` varchar(255) DEFAULT NULL,
+    `draftId`  int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -52,6 +54,8 @@ CREATE TABLE `draftLigneDetail` (
   `referenceTarif` varchar(255) NOT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
    `configurationJson`  varchar(255) DEFAULT NULL,
+     `dependDe` int(11) DEFAULT NULL,
+    `draftLigneId`  int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
