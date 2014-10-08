@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.ModePaiementDeserializer;
 
@@ -109,23 +108,6 @@ public class Offre {
 	 */
 	public void setDetails(List<Detail> details) {
 		this.details = details;
-	}
-
-	/**
-	 * convertir une {@link Offre} en {@link DraftLigne}.
-	 * 
-	 * @return {@link DraftLigne}.
-	 */
-	public DraftLigne toDraftLigne() {
-		DraftLigne draftLigne = new DraftLigne();
-		draftLigne.setReference(reference);
-		draftLigne.setReferenceTarif(referenceTarif);
-		draftLigne.setModePaiement(modePaiement);
-		for (Detail detail : details) {
-			draftLigne.addDraftLigneDetail(detail.toDraftLineDetail());
-		}
-
-		return draftLigne;
 	}
 
 }

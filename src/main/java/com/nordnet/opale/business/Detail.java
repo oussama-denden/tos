@@ -1,7 +1,6 @@
 package com.nordnet.opale.business;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nordnet.opale.domain.DraftLigneDetail;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.ModePaiementDeserializer;
 
@@ -106,21 +105,6 @@ public class Detail {
 	 */
 	public void setConfigurationJson(String configurationJson) {
 		this.configurationJson = configurationJson;
-	}
-
-	/**
-	 * Convertir un {@link Detail} en {@link DraftLigneDetail}.
-	 * 
-	 * @return {@link DraftLigneDetail}.
-	 */
-	public DraftLigneDetail toDraftLineDetail() {
-		DraftLigneDetail draftLigneDetail = new DraftLigneDetail();
-		draftLigneDetail.setReference(reference);
-		draftLigneDetail.setReferenceTarif(referenceTarif);
-		draftLigneDetail.setModePaiement(modePaiement);
-		draftLigneDetail.setConfigurationJson(configurationJson);
-
-		return draftLigneDetail;
 	}
 
 }

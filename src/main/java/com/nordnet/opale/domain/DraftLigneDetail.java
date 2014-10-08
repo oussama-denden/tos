@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -51,6 +52,19 @@ public class DraftLigneDetail {
 	 * constructeur par defaut.
 	 */
 	public DraftLigneDetail() {
+	}
+
+	/**
+	 * creation de {@link DraftLigneDetail} a partir de {@link Detail}.
+	 * 
+	 * @param detail
+	 *            {@link Detail}.
+	 */
+	public DraftLigneDetail(Detail detail) {
+		this.reference = detail.getReference();
+		this.referenceTarif = detail.getReferenceTarif();
+		this.modePaiement = detail.getModePaiement();
+		this.configurationJson = detail.getConfigurationJson();
 	}
 
 	/**

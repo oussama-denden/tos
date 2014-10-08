@@ -65,12 +65,13 @@ public class PropertiesUtil {
 
 	/**
 	 * @return LocalDateTime de jour definit dans la fichier env.properties.
-	 * @throws TopazeException
-	 *             {@link TopazeException}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	public LocalDateTime getDateDuJour() throws OpaleException {
-		String dateDuJourString = dynamicProperties.getMessage(Constants.DATE_DU_JOUR_PROPERTY, null,
-				Constants.DEFAULT_DATE_FORMAT.format(new Date()), null);
+		String dateDuJourString =
+				dynamicProperties.getMessage(Constants.DATE_DU_JOUR_PROPERTY, null,
+						Constants.DEFAULT_DATE_FORMAT.format(new Date()), null);
 		if (Utils.isStringNullOrEmpty(dateDuJourString) || dateDuJourString.equals(Constants.NOW)
 				|| System.getProperty(Constants.ENV_PROPERTY).equals(Constants.PROD_ENV)) {
 			return new LocalDateTime();

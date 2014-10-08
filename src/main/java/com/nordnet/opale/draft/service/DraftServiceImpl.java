@@ -69,7 +69,7 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Enter methode creerDraft");
 
-		Auteur auteur = new Auteur(auteurInfo);
+		Auteur auteur = new Auteur(auteurInfo.getAuteur());
 
 		Draft draft = new Draft();
 		draft.setAuteur(auteur);
@@ -106,9 +106,10 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
-		Auteur auteur = draftLigneInfo.getAuteur().toDomain();
-		DraftLigne draftLigne = draftLigneInfo.getOffre().toDraftLigne();
+		Auteur auteur = new Auteur(draftLigneInfo.getAuteur());
+		DraftLigne draftLigne = new DraftLigne(draftLigneInfo.getOffre());
 		draftLigne.setAuteur(auteur);
+		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 		draft.addLigne(draftLigne);
 
 		draftRepository.save(draft);

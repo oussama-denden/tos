@@ -1,6 +1,7 @@
 package com.nordnet.opale.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.nordnet.opale.business.Detail;
+import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -50,6 +53,11 @@ public class DraftLigne {
 	private ModePaiement modePaiement;
 
 	/**
+	 * date de creation de la ligne.
+	 */
+	private Date dateCreation;
+
+	/**
 	 * l auteur du de la ligne du draft.
 	 */
 	@Embedded
@@ -66,6 +74,21 @@ public class DraftLigne {
 	 * constructeur par defaut.
 	 */
 	public DraftLigne() {
+	}
+
+	/**
+	 * creation de {@link DraftLigne} a partir d'une {@link Offre}.
+	 * 
+	 * @param offre
+	 *            {@link Offre}.
+	 */
+	public DraftLigne(Offre offre) {
+		this.reference = offre.getReference();
+		this.referenceTarif = offre.getReferenceTarif();
+		this.modePaiement = offre.getModePaiement();
+		for (Detail detail : offre.getDetails()) {
+			draftLigneDetails.add(new DraftLigneDetail(detail));
+		}
 	}
 
 	/**
@@ -134,6 +157,23 @@ public class DraftLigne {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateCreation}.
+	 */
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+	/**
+	 * 
+	 * @param dateCreation
+	 *            {@link #dateCreation}.
+	 */
+	public void setDateCreation(Date dateCreation) {
+		this.dateCreation = dateCreation;
 	}
 
 	/**
