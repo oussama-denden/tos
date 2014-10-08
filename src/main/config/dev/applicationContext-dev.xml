@@ -21,7 +21,7 @@
 		<property name="location" value="classpath:rest-url.properties" />
 	</bean>
 	
-	<bean id="oplaeExceptionsProperties"
+	<bean id="opaleExceptionsProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:opale-exceptions.properties" />
 	</bean>

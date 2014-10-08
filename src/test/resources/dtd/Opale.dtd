@@ -8,3 +8,46 @@
     file_name CDATA #IMPLIED
 	version CDATA #IMPLIED  
 >
+
+<!ELEMENT draft EMPTY>
+<!ATTLIST draft
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    clientId CDATA #IMPLIED
+    AdresseFacturationId CDATA #IMPLIED
+    AdresseLivraisonId CDATA #IMPLIED
+    code CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    referenceExterne CDATA #IMPLIED
+    dateAnnulation  CDATA #IMPLIED
+>
+<!ELEMENT draftLigne EMPTY>
+<!ATTLIST draftLigne
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    modeFacturation CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
+    code CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    draftId CDATA #IMPLIED
+    referenceOffre CDATA #IMPLIED
+>
+<!ELEMENT draftLigneDtail EMPTY>
+<!ATTLIST draftLigneDtail
+     id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    configurationJson CDATA #IMPLIED
+    dependDe CDATA #IMPLIED
+    draftLigneId CDATA #IMPLIED
+>
+
