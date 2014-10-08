@@ -83,6 +83,9 @@ public class DraftServiceImpl implements DraftService {
 		return draftReturn;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
 

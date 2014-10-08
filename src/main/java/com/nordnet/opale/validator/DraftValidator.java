@@ -63,9 +63,22 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.2"), "1.1.2");
 		}
 
-		for (Detail detail : offre.getDetails()) {
+		for (int i = 0; i < offre.getDetails().size(); i++) {
+			Detail detail = offre.getDetails().get(i);
 
+			if (Utils.isStringNullOrEmpty(detail.getReference())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].reference"),
+						"0.1.4");
+			}
+
+			if (Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].referenceTarif"),
+						"0.1.4");
+			}
+
+			isFormatValide(detail.getModePaiement());
 		}
+
 	}
 
 	/**
