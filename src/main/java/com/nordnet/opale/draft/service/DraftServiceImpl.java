@@ -61,11 +61,11 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void supprimerDraft(String reference) {
+	public void supprimerDraft(String reference) throws OpaleException {
 
 		LOGGER.info("Enter methode supprimerDraft");
 		Draft draft = getDraftByReference(reference);
-
+		DraftValidator.isExistDraft(draft, reference);
 		draftRepository.delete(draft);
 		LOGGER.info("Fin methode supprimerDraft");
 	}

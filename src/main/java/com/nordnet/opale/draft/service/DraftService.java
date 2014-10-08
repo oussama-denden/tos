@@ -27,9 +27,11 @@ public interface DraftService {
 	 * 
 	 * @param reference
 	 *            {@link Draft#getReference()}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 * 
 	 */
-	public void supprimerDraft(String reference);
+	public void supprimerDraft(String reference) throws OpaleException;
 
 	/**
 	 * Creer un draft.
