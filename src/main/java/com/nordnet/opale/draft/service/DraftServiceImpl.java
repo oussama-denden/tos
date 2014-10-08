@@ -103,22 +103,43 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
-		Auteur auteur = new Auteur(draftLigneInfo.getAuteur());
-		DraftLigne draftLigne = new DraftLigne(draftLigneInfo.getOffre());
-		draftLigne.setAuteur(auteur);
+		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
+		DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
 		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 		draft.addLigne(draftLigne);
 
 		draftRepository.save(draft);
 
-		return draftLigne.getReference();
+		return draftLigne.getReferenceOffre();
 	}
 
-	public void modifierLigne(String refDraft, String refLigne) throws OpaleException {
+	@Override
+	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
+		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 
+		/*
+		 * suppression de ligne a modifier
+		 */
+		draft.getDraftLignes().remove(draftLigne);
+		draftLigneRepository.delete(draftLigne);
+
+		/*
+		 * creation de la nouvelle ligne.
+		 */
+		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
+		nouveauDraftLigne.setReference(draftLigne.getReference());
+		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
+
+		/*
+		 * ajout de la nouvelle ligne au draft.
+		 */
+		draft.addLigne(nouveauDraftLigne);
+		draftRepository.save(draft);
 	}
 
 	/**

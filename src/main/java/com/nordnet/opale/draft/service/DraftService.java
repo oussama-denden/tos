@@ -5,6 +5,7 @@ import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -49,10 +50,23 @@ public interface DraftService {
 	 *            the draft ligne information.
 	 * @return string
 	 * @throws OpaleException
-	 *             opale exception {@link DraftLigneInfo}.
-	 *             {@link OpaleException}.
+	 *             opale exception {@link DraftLigneInfo}. {@link OpaleException}.
 	 */
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException;
+
+	/**
+	 * modifier une ligne.
+	 * 
+	 * @param refDraft
+	 *            reference {@link Draft}.
+	 * @param refLigne
+	 *            reference {@link DraftLigne}.
+	 * @param draftLigneInfo
+	 *            {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException;
 
 	/**
 	 * Annuler un draft.

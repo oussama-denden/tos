@@ -19,6 +19,7 @@ import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.draft.service.DraftService;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
@@ -117,6 +118,7 @@ public class DraftController {
 	 *            reference du {@link Draft}.
 	 * @param draftLigneInfo
 	 *            {@link DraftLigneInfo}.
+	 * @return reference de la ligne ajouter.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
@@ -126,6 +128,26 @@ public class DraftController {
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::ajouterLigne");
 		return draftService.ajouterLigne(reference, draftLigneInfo);
+	}
+
+	/**
+	 * modifier une ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference {@link Draft}.
+	 * @param referenceLigne
+	 *            reference {@link DraftLigne}.
+	 * @param draftLigneInfo
+	 *            {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{referenceDraft:.+}/ligne/{referenceLigne:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void modifierLigne(@PathVariable String referenceDraft, @PathVariable String referenceLigne,
+			@RequestBody DraftLigneInfo draftLigneInfo) throws OpaleException {
+		LOGGER.info(":::ws-rec:::modifierLigne");
+		draftService.modifierLigne(referenceDraft, referenceLigne, draftLigneInfo);
 	}
 
 	/**
@@ -145,7 +167,7 @@ public class DraftController {
 	}
 
 	/**
-	 * Gerer le cas ou on a une TopazeException.
+	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req
 	 *            requete HttpServletRequest.
