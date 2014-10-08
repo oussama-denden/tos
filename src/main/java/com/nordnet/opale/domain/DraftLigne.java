@@ -16,9 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
-import com.nordnet.opale.business.Offre;
+import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
@@ -41,9 +43,14 @@ public class DraftLigne {
 	private Integer id;
 
 	/**
-	 * reference de l'offre.
+	 * reference de la ligne de draft.
 	 */
 	private String reference;
+
+	/**
+	 * reference de l'offre.
+	 */
+	private String referenceOffre;
 
 	/**
 	 * reference tarif.
@@ -87,18 +94,38 @@ public class DraftLigne {
 	}
 
 	/**
-	 * creation de {@link DraftLigne} a partir d'une {@link Offre}.
+	 * creation de {@link DraftLigne} a partir d'une {@link draftLigneInfo}.
 	 * 
-	 * @param offre
-	 *            {@link Offre}.
+	 * @param draftLigneInfo
+	 *            {@link DraftLigneInfo}.
 	 */
-	public DraftLigne(Offre offre) {
-		this.reference = offre.getReference();
-		this.referenceTarif = offre.getReferenceTarif();
-		this.modePaiement = offre.getModePaiement();
-		for (Detail detail : offre.getDetails()) {
+	public DraftLigne(DraftLigneInfo draftLigneInfo) {
+		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
+		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
+		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
+		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
+		this.auteur = new Auteur(draftLigneInfo.getAuteur());
+		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "DraftLigne [id=" + id + ", reference=" + reference + ", referenceOffre=" + referenceOffre
+				+ ", referenceTarif=" + referenceTarif + ", modePaiement=" + modePaiement + ", modeFacturation="
+				+ modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		DraftLigne rhs = (DraftLigne) obj;
+		return new EqualsBuilder().append(id, rhs.id).append(referenceOffre, rhs.referenceOffre)
+				.append(referenceTarif, rhs.referenceTarif).isEquals();
 	}
 
 	/**
@@ -120,7 +147,7 @@ public class DraftLigne {
 
 	/**
 	 * 
-	 * @return {@link #reference}.
+	 * @return {@link #reference}
 	 */
 	public String getReference() {
 		return reference;
@@ -133,6 +160,23 @@ public class DraftLigne {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceOffre}.
+	 */
+	public String getReferenceOffre() {
+		return referenceOffre;
+	}
+
+	/**
+	 * 
+	 * @param referenceOffre
+	 *            {@link #referenceOffre}.
+	 */
+	public void setReferenceOffre(String referenceOffre) {
+		this.referenceOffre = referenceOffre;
 	}
 
 	/**

@@ -38,6 +38,7 @@
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
     draftId CDATA #IMPLIED
+    referenceOffre CDATA #IMPLIED
 >
 <!ELEMENT draftLigneDtail EMPTY>
 <!ATTLIST draftLigneDtail

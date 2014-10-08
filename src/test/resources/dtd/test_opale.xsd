@@ -42,6 +42,7 @@
 		<xsd:attribute name="timestamp" use="optional" />
 		<xsd:attribute name="draftId" use="optional" />
 		<xsd:attribute name="modeFacturation" use="optional" />
+		<xsd:attribute name="referenceOffre" use="optional" />
 	</xsd:complexType>
 	
 	

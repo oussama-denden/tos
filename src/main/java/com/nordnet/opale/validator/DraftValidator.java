@@ -49,7 +49,7 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void isOffreValide(Offre offre) throws OpaleException {
-		if (Utils.isStringNullOrEmpty(offre.getReference())) {
+		if (Utils.isStringNullOrEmpty(offre.getReferenceOffre())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Offre.reference"), "0.1.4");
 		}
 
@@ -61,7 +61,7 @@ public class DraftValidator {
 		isFormatValide(offre.getModePaiement());
 
 		if (offre.getDetails().size() == Constants.ZERO) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.2"), "1.1.2");
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.3"), "1.1.3");
 		}
 
 		for (int i = 0; i < offre.getDetails().size(); i++) {

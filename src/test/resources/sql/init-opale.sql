@@ -34,6 +34,7 @@ CREATE TABLE `draftLigne` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reference` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) NOT NULL,
+  `referenceOffre`  varchar(255) NOT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
    `dateCreation` datetime DEFAULT NULL,
   `code` varchar(255) NOT NULL,

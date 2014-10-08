@@ -18,9 +18,9 @@ import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
 public class Offre {
 
 	/**
-	 * reference de la ligne dans le draft.
+	 * reference de l'offre.
 	 */
-	private String reference;
+	private String referenceOffre;
 
 	/**
 	 * reference tarif.
@@ -52,25 +52,25 @@ public class Offre {
 
 	@Override
 	public String toString() {
-		return "Offre [reference=" + reference + ", referenceTarif=" + referenceTarif + ", modePaiement="
+		return "Offre [referenceOffre=" + referenceOffre + ", referenceTarif=" + referenceTarif + ", modePaiement="
 				+ modePaiement + ", modeFacturation=" + modeFacturation + ", details=" + details + "]";
 	}
 
 	/**
 	 * 
-	 * @return {@link #reference}.
+	 * @return {@link #referenceOffre}.
 	 */
-	public String getReference() {
-		return reference;
+	public String getReferenceOffre() {
+		return referenceOffre;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}.
+	 * @param referenceOffre
+	 *            {@link #referenceOffre}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setReferenceOffre(String referenceOffre) {
+		this.referenceOffre = referenceOffre;
 	}
 
 	/**
