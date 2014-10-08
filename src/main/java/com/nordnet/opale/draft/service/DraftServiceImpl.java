@@ -3,8 +3,10 @@ package com.nordnet.opale.draft.service;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Auteur;
@@ -12,6 +14,7 @@ import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.keygen.service.KeygenService;
+import com.nordnet.opale.repository.DraftLigneRepository;
 import com.nordnet.opale.repository.DraftRepository;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.DraftValidator;
@@ -37,6 +40,12 @@ public class DraftServiceImpl implements DraftService {
 	private DraftRepository draftRepository;
 
 	/**
+	 * {@link DraftLigneRepository}.
+	 */
+	@Autowired
+	private DraftLigneRepository draftLigneRepository;
+
+	/**
 	 * {@link KeygenService}.
 	 */
 	@Autowired
@@ -53,11 +62,14 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerDraft(String reference) {
 
+		LOGGER.info("Enter methode supprimerDraft");
 		Draft draft = getDraftByReference(reference);
 
 		draftRepository.delete(draft);
+		LOGGER.info("Fin methode supprimerDraft");
 	}
 
 	/**
@@ -125,4 +137,28 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Fin methode annulerDraft");
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
+			throws OpaleException {
+
+		LOGGER.info("Enter methode supprimerLigneDraft");
+		Draft draft = getDraftByReference(reference);
+
+		// verifier si le draft existe.
+		DraftValidator.isExistDraft(draft, reference);
+
+		DraftLigne draftLigne = draftLigneRepository.findByReference(referenceLigne);
+
+		// verifier si la ligne draft existe.
+		DraftValidator.isExistLigneDraft(draftLigne, referenceLigne);
+
+		draftLigneRepository.delete(draftLigne);
+
+		LOGGER.info("fin methode supprimerLigneDraft");
+	}
+
 }

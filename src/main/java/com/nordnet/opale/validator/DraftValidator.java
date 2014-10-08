@@ -3,6 +3,7 @@ package com.nordnet.opale.validator;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
@@ -107,5 +108,22 @@ public class DraftValidator {
 		if (modePaiement == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.1", "ModePaiement"), "0.1.1");
 		}
+	}
+
+	/**
+	 * tester si la ligne draft existe.
+	 * 
+	 * @param draftLigne
+	 *            ligne draft.
+	 * @param referenceLigne
+	 *            reference ligne draft.
+	 * @throws OpaleException
+	 *             opale exception.
+	 */
+	public static void isExistLigneDraft(DraftLigne draftLigne, String referenceLigne) throws OpaleException {
+		if (draftLigne == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.2", referenceLigne), "1.1.2");
+		}
+
 	}
 }
