@@ -49,7 +49,7 @@ public interface DraftService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException;
+	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException;
 
 	/**
 	 * Annuler un draft.

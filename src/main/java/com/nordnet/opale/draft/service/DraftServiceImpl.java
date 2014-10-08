@@ -84,7 +84,7 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	@Override
-	public void ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
+	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
@@ -96,6 +96,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.addLigne(draftLigne);
 
 		draftRepository.save(draft);
+
+		return draftLigne.getReference();
 	}
 
 	/**
