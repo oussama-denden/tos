@@ -10,11 +10,9 @@ import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
-import com.nordnet.opale.domain.Keygen;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.keygen.service.KeygenService;
 import com.nordnet.opale.repository.DraftRepository;
-import com.nordnet.opale.repository.KeygenRepository;
-import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.DraftValidator;
 
@@ -39,10 +37,10 @@ public class DraftServiceImpl implements DraftService {
 	private DraftRepository draftRepository;
 
 	/**
-	 * {@link KeygenRepository}.
+	 * {@link KeygenService}.
 	 */
 	@Autowired
-	private KeygenRepository keygenRepository;
+	private KeygenService keygenService;
 
 	/**
 	 * {@inheritDoc}
@@ -74,25 +72,9 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = new Draft();
 		draft.setAuteur(auteur);
 
-		Keygen keygen = keygenRepository.findDernier();
-
-		Keygen keygen2 = new Keygen();
-		int inc = 0;
-		if (keygen != null) {
-			draft.setReference(keygen.getReferenceDraft());
-			inc = Integer.parseInt(keygen.getReferenceDraft()) + 1;
-		} else {
-			draft.setReference(Constants.REF_DRAEFT_INIT);
-			inc = Integer.parseInt(Constants.REF_DRAEFT_INIT) + 1;
-		}
+		draft.setReference(keygenService.getNextKey(Draft.class));
 
 		draftRepository.save(draft);
-
-		// generer la nouvelle reference draft.
-
-		String newReferenceDraft = String.format("%08d", inc);
-		keygen2.setReferenceDraft(newReferenceDraft);
-		keygenRepository.save(keygen2);
 
 		DraftReturn draftReturn = new DraftReturn();
 		draftReturn.setReference(draft.getReference());
@@ -109,6 +91,7 @@ public class DraftServiceImpl implements DraftService {
 		Auteur auteur = new Auteur(draftLigneInfo.getAuteur());
 		DraftLigne draftLigne = new DraftLigne(draftLigneInfo.getOffre());
 		draftLigne.setAuteur(auteur);
+		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 		draft.addLigne(draftLigne);
 

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -61,7 +62,7 @@ public class Draft {
 	/**
 	 * la list des {@link DraftLigne} associe au draft.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "draftId")
 	private List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 
@@ -160,6 +161,23 @@ public class Draft {
 	 */
 	public void setDateAnnulation(Date dateAnnulation) {
 		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @return List {@link DraftLigne}.
+	 */
+	public List<DraftLigne> getDraftLignes() {
+		return draftLignes;
+	}
+
+	/**
+	 * 
+	 * @param draftLignes
+	 *            List {@link DraftLigne}.
+	 */
+	public void setDraftLignes(List<DraftLigne> draftLignes) {
+		this.draftLignes = draftLignes;
 	}
 
 	/**
