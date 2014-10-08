@@ -228,13 +228,8 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	private void creerArborescence(List<Detail> details, List<DraftLigneDetail> draftLigneDetails) {
 		/*
-		 * transformer les deux list en Map pour faciliter l'accee par la suite.
+		 * transformer la list en Map pour faciliter l'accee par la suite.
 		 */
-		// Map<String, Detail> detailsMap = new HashMap<String, Detail>();
-		// for (Detail detail : details) {
-		// detailsMap.put(detail.getReference(), detail);
-		// }
-
 		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
 		for (DraftLigneDetail draftLigneDetail : draftLigneDetails) {
 			draftLigneDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
