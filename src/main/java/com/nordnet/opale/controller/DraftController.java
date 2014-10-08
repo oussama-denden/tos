@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.domain.Draft;
@@ -85,7 +86,7 @@ public class DraftController {
 	 * @throws Exception
 	 *             exception {@link Exception}.
 	 */
-	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerDraft(@PathVariable String reference) throws Exception {
 		LOGGER.info(":::ws-rec:::supprimerDraft");
@@ -125,6 +126,22 @@ public class DraftController {
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::ajouterLigne");
 		return draftService.ajouterLigne(reference, draftLigneInfo);
+	}
+
+	/**
+	 * supprimer draft.
+	 * 
+	 * @param reference
+	 *            reference du draft.
+	 * @throws Exception
+	 *             exception {@link Exception}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerLigneDraft(@PathVariable String refDraft, @PathVariable String refLigne,
+			@RequestBody DeleteInfo deleteInfo) throws Exception {
+		LOGGER.info(":::ws-rec:::supprimerDraft");
+		draftService.supprimerLigneDraft(refDraft, refLigne, deleteInfo);
 	}
 
 	/**
