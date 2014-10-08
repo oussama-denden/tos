@@ -22,5 +22,27 @@
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
     referenceExterne CDATA #IMPLIED
+    dateAnnulation  CDATA #IMPLIED
+>
+<!ELEMENT draftLigne EMPTY>
+<!ATTLIST draftLigne
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
+    code CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+>
+<!ELEMENT draftLigneDtail EMPTY>
+<!ATTLIST draftLigneDtail
+     id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    configurationJson CDATA #IMPLIED
 >
 

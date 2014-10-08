@@ -1,4 +1,4 @@
-package com.nordnet.opale.draft.test.utils;
+package com.nordnet.opale.test.utils;
 
 import java.text.SimpleDateFormat;
 

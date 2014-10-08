@@ -7,6 +7,8 @@
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
                            <xsd:element name="dbmaintain_scripts" type="dflt:dbmaintain_scripts__type" />
 		                   <xsd:element name="draft" type="dflt:draft_type" />
+		                   <xsd:element name="draftLigne" type="dflt:draftLigne_type" />
+		                   <xsd:element name="draftLigneDetail" type="dflt:draftLigneDetail_type" />
 				<xsd:any namespace="test_opale" />
 			</xsd:choice>
 		</xsd:complexType>

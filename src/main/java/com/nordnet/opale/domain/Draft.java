@@ -1,9 +1,16 @@
 package com.nordnet.opale.domain;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
@@ -50,6 +57,18 @@ public class Draft {
 	 * reference externe du draft
 	 */
 	private String referenceExterne;
+
+	/**
+	 * La date d annulation du draft.
+	 */
+	private Date dateAnnulation;
+
+	/**
+	 * la list des {@link DraftLigne} associe au draft.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "draftId")
+	private final List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 
 	/**
 	 * constructeur par defaut.
@@ -138,6 +157,7 @@ public class Draft {
 	 */
 	public String getReferenceExterne() {
 		return referenceExterne;
+
 	}
 
 	/**
@@ -148,6 +168,34 @@ public class Draft {
 	 */
 	public void setReferenceExterne(String referenceExterne) {
 		this.referenceExterne = referenceExterne;
+
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateAnnulation}.
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}.
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
+	 * ajouter une {@link DraftLigne} au draft.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 */
+	public void addLigne(DraftLigne draftLigne) {
+		this.draftLignes.add(draftLigne);
 	}
 
 }

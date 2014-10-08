@@ -8,6 +8,9 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>com.nordnet.opale.domain.Keygen</class>
 		<class>com.nordnet.opale.domain.Draft</class>
+		<class>com.nordnet.opale.domain.DraftLigne</class>
+		<class>com.nordnet.opale.domain.DraftLigneDetail</class>
+		<class>com.nordnet.opale.domain.Auteur</class>
 		
 		<properties>
 <!--			<property name="hibernate.hbm2ddl.auto" value="update" />-->

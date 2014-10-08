@@ -25,6 +25,33 @@ CREATE TABLE `draft` (
   `ip` varchar(255) DEFAULT NULL,
   `timestamp` int(11) DEFAULT NULL,
    `referenceExterne` varchar(255) DEFAULT NULL,
+   `dateAnnulation` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `draftLigne`;
+CREATE TABLE `draftLigne` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(255) DEFAULT NULL,
+  `referenceTarif` varchar(255) NOT NULL,
+  `modePaiement` varchar(255) DEFAULT NULL,
+   `dateCreation` datetime DEFAULT NULL,
+  `code` varchar(255) NOT NULL,
+  `qui` varchar(255) DEFAULT NULL,
+  `canal` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `timestamp` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `draftLigneDetail`;
+CREATE TABLE `draftLigneDetail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(255) DEFAULT NULL,
+  `referenceTarif` varchar(255) NOT NULL,
+  `modePaiement` varchar(255) DEFAULT NULL,
+   `configurationJson`  varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

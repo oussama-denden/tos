@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
-import com.nordnet.opale.business.InfoErreur;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.service.DraftService;
+import com.nordnet.opale.draft.service.DraftService;
+import com.nordnet.opale.exception.InfoErreur;
+import com.nordnet.opale.exception.OpaleException;
 import com.wordnik.swagger.annotations.Api;
 
 /**
@@ -61,6 +63,22 @@ public class DraftController {
 	}
 
 	/**
+	 * chercher draft par reference.
+	 * 
+	 * @param reference
+	 *            reference du draft.
+	 * @return {@link Draft}.
+	 * @throws Exception
+	 *             exception {@link Exception}.
+	 */
+	@RequestMapping(value = "/{reference:.+}/annuler", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@ResponseBody
+	public void annulerDraft(@PathVariable String reference) throws OpaleException {
+		LOGGER.info(":::ws-rec:::annulerDraft");
+		draftService.annulerDraft(reference);
+	}
+
+	/**
 	 * supprimer draft.
 	 * 
 	 * @param reference
@@ -78,8 +96,8 @@ public class DraftController {
 	/**
 	 * Generer un draft.
 	 * 
-	 * @param AuteurInfo
-	 *            auteur info {@link AuteurInfo}.
+	 * @param auteurInfo
+	 *            auteur informations.
 	 * @return {@link Contrat}.
 	 * @throws Exception
 	 *             exception {@link Exception}.
@@ -106,7 +124,24 @@ public class DraftController {
 			@RequestBody ReferenceExterneInfo referenceExterneInfo) throws Exception {
 		LOGGER.info(":::ws-rec:::ajouterReferenceExterne");
 		draftService.ajouterReferenceExterne(referenceDraft, referenceExterneInfo);
+	}
 
+	/**
+	 * Ajouter une ligne au draft.
+	 * 
+	 * @param reference
+	 *            reference du {@link Draft}.
+	 * @param draftLigneInfo
+	 *            {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{reference:.+}/ligne", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void ajouterLigne(@PathVariable String reference, @RequestBody DraftLigneInfo draftLigneInfo)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::ajouterLigne");
+		draftService.ajouterLigne(reference, draftLigneInfo);
 	}
 
 	/**
@@ -118,10 +153,10 @@ public class DraftController {
 	 *            exception
 	 * @return {@link InfoErreur}
 	 */
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler({ Exception.class })
+	@ResponseStatus(value = HttpStatus.OK)
+	@ExceptionHandler({ OpaleException.class })
 	@ResponseBody
 	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
-		return new InfoErreur(req.getRequestURI(), ex.getCause().toString(), ex.getLocalizedMessage());
+		return new InfoErreur(req.getRequestURI(), ((OpaleException) ex).getErrorCode(), ex.getLocalizedMessage());
 	}
 }

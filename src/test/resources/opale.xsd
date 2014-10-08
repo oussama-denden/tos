@@ -3,6 +3,8 @@
 
 <xsd:element name="draft" type="draft_type" />
 <xsd:element name="dbmaintain_scripts" type="dbmaintain_scripts__type" />
+		<xsd:element name="draftLigneDetail" type="draftLigneDetail_type"/>
+		<xsd:element name="draftLigne" type="draftLigne_type"/>
 	
 	<xsd:complexType name="dbmaintain_scripts__type">
 		<xsd:attribute name="succeeded" use="optional" />
@@ -25,6 +27,27 @@
 		<xsd:attribute name="canal" use="optional" />
 		<xsd:attribute name="timestamp" use="optional" />
 		<xsd:attribute name="referenceExterne" use="optional" />
+		<xsd:attribute name="dateAnnulation" use="optional" />
+	</xsd:complexType>
+	
+	<xsd:complexType name="draftLigne_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="reference" use="optional" />
+		<xsd:attribute name="referenceTarif" use="optional" />
+		<xsd:attribute name="modePaiement" use="optional" />
+		<xsd:attribute name="dateCreation" use="optional" />
+		<xsd:attribute name="code" use="optional" />
+		<xsd:attribute name="qui" use="optional" />
+		<xsd:attribute name="ip" use="optional" />
+		<xsd:attribute name="canal" use="optional" />
+		<xsd:attribute name="timestamp" use="optional" />
+	</xsd:complexType>
+	    <xsd:complexType name="draftLigneDetail_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="reference" use="optional" />
+		<xsd:attribute name="referenceTarif" use="optional" />
+		<xsd:attribute name="modePaiement" use="optional" />
+		<xsd:attribute name="configurationJson" use="optional" />
 	</xsd:complexType>
 
 </xsd:schema>

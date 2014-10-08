@@ -22,21 +22,24 @@ public class Client {
 	/**
 	 * L adresse de facturation.
 	 */
-	private String AdresseFacturationId;
+	private String adresseFacturationId;
 
 	/**
 	 * L adresse de facturation.
 	 */
-	private String AdresseLivraisonId;
+	private String adresseLivraisonId;
 
+	/**
+	 * Constructeur par default.
+	 */
 	public Client() {
 		super();
 	}
 
 	@Override
 	public String toString() {
-		return "Client [clientId=" + clientId + ", AdresseFacturationId=" + AdresseFacturationId
-				+ ", AdresseLivraisonId=" + AdresseLivraisonId + "]";
+		return "Client [clientId=" + clientId + ", AdresseFacturationId=" + adresseFacturationId
+				+ ", AdresseLivraisonId=" + adresseLivraisonId + "]";
 	}
 
 	/**
@@ -57,12 +60,12 @@ public class Client {
 	}
 
 	/**
-	 * {@link Client#AdresseLivraisonId}.
 	 * 
-	 * @return
+	 * 
+	 * @return adresse facturation id {@link Client#adresseLivraisonId}.
 	 */
 	public String getAdresseFacturationId() {
-		return AdresseFacturationId;
+		return adresseFacturationId;
 	}
 
 	/**
@@ -71,24 +74,24 @@ public class Client {
 	 *            Client#AdresseLivraisonId}.
 	 */
 	public void setAdresseFacturationId(String adresseFacturationId) {
-		AdresseFacturationId = adresseFacturationId;
+		this.adresseFacturationId = adresseFacturationId;
 	}
 
 	/**
 	 * 
-	 * @return {@link Client#AdresseLivraisonId}.
+	 * @return {@link Client#adresseLivraisonId}.
 	 */
 	public String getAdresseLivraisonId() {
-		return AdresseLivraisonId;
+		return adresseLivraisonId;
 	}
 
 	/**
 	 * 
 	 * @param adresseLivraisonId
-	 *            {@link Client#AdresseLivraisonId}.
+	 *            {@link Client#adresseLivraisonId}.
 	 */
 	public void setAdresseLivraisonId(String adresseLivraisonId) {
-		AdresseLivraisonId = adresseLivraisonId;
+		this.adresseLivraisonId = adresseLivraisonId;
 	}
 
 }

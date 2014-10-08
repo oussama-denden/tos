@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="opale_test" targetNamespace="opale_test">
+	<xsd:element name="draftlignedetail" type="draftlignedetail__type" />
 	<xsd:element name="draft" type="draft__type" />
 	<xsd:element name="dbmaintain_scripts" type="dbmaintain_scripts__type" />
+	<xsd:element name="draftligne" type="draftligne__type" />
+	<xsd:complexType name="draftlignedetail__type">
+		<xsd:attribute name="reference" use="optional" />
+		<xsd:attribute name="modePaiement" use="optional" />
+		<xsd:attribute name="configurationJson" use="optional" />
+		<xsd:attribute name="referenceTarif" use="optional" />
+		<xsd:attribute name="id" use="optional" />
+	</xsd:complexType>
 	<xsd:complexType name="draft__type">
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="clientId" use="optional" />
@@ -10,6 +19,7 @@
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="referenceExterne" use="optional" />
+		<xsd:attribute name="dateAnnulation" use="optional" />
 		<xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="AdresseLivraisonId" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
@@ -22,5 +32,17 @@
 		<xsd:attribute name="file_last_modified_at" use="optional" />
 		<xsd:attribute name="version" use="optional" />
 		<xsd:attribute name="succeeded" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="draftligne__type">
+		<xsd:attribute name="reference" use="optional" />
+		<xsd:attribute name="dateCreation" use="optional" />
+		<xsd:attribute name="code" use="optional" />
+		<xsd:attribute name="qui" use="optional" />
+		<xsd:attribute name="ip" use="optional" />
+		<xsd:attribute name="modePaiement" use="optional" />
+		<xsd:attribute name="referenceTarif" use="optional" />
+		<xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="canal" use="optional" />
+		<xsd:attribute name="timestamp" use="optional" />
 	</xsd:complexType>
 </xsd:schema>
