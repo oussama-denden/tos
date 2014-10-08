@@ -1,5 +1,7 @@
 package com.nordnet.opale.draft.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,6 +70,13 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, reference);
 		draftRepository.delete(draft);
 		LOGGER.info("Fin methode supprimerDraft");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Draft> findDraftAnnule() {
+		return draftRepository.findDraftAnnule();
 	}
 
 	/**
