@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS `draft`;
 CREATE TABLE `draft` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reference` varchar(255) DEFAULT NULL,
-  `clientId` varchar(255) NOT NULL,
+  `clientId` varchar(255),
   `AdresseFacturationId` varchar(255) DEFAULT NULL,
   `AdresseLivraisonId` varchar(255) DEFAULT NULL,
   `code` varchar(255) NOT NULL,
