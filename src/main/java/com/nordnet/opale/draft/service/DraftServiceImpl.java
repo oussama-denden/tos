@@ -93,6 +93,9 @@ public class DraftServiceImpl implements DraftService {
 		return draftReturn;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
@@ -108,6 +111,12 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 
 		return draftLigne.getReference();
+	}
+
+	public void modifierLigne(String refDraft, String refLigne) throws OpaleException {
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
 	}
 
 	/**

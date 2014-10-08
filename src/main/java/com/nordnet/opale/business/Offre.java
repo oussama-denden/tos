@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.ModePaiementDeserializer;
+import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
+import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
 
 /**
  * classe business contien les information necassaire pour la creation d'une ligne draft.
@@ -32,6 +34,12 @@ public class Offre {
 	private ModePaiement modePaiement;
 
 	/**
+	 * {@link ModeFacturation}.
+	 */
+	@JsonDeserialize(using = ModeFacturationDeserializer.class)
+	private ModeFacturation modeFacturation;
+
+	/**
 	 * liste des {@link Detail} associe a une offre.
 	 */
 	List<Detail> details = new ArrayList<Detail>();
@@ -40,6 +48,12 @@ public class Offre {
 	 * constructeur par defaut.
 	 */
 	public Offre() {
+	}
+
+	@Override
+	public String toString() {
+		return "Offre [reference=" + reference + ", referenceTarif=" + referenceTarif + ", modePaiement="
+				+ modePaiement + ", modeFacturation=" + modeFacturation + ", details=" + details + "]";
 	}
 
 	/**
@@ -91,6 +105,23 @@ public class Offre {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link ModeFacturation}.
+	 */
+	public ModeFacturation getModeFacturation() {
+		return modeFacturation;
+	}
+
+	/**
+	 * 
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}.
+	 */
+	public void setModeFacturation(ModeFacturation modeFacturation) {
+		this.modeFacturation = modeFacturation;
 	}
 
 	/**
