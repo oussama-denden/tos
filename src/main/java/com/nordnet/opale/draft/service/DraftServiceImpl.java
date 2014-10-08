@@ -3,7 +3,6 @@ package com.nordnet.opale.draft.service;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DeleteInfo;
@@ -62,7 +61,6 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Transactional(rollbackFor = Exception.class)
 	public void supprimerDraft(String reference) {
 
 		LOGGER.info("Enter methode supprimerDraft");
@@ -132,7 +130,6 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Transactional(rollbackFor = Exception.class)
 	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
 			throws OpaleException {
 
