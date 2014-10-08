@@ -8,3 +8,19 @@
     file_name CDATA #IMPLIED
 	version CDATA #IMPLIED  
 >
+
+<!ELEMENT draft EMPTY>
+<!ATTLIST draft
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    clientId CDATA #IMPLIED
+    AdresseFacturationId CDATA #IMPLIED
+    AdresseLivraisonId CDATA #IMPLIED
+    code CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    referenceExterne CDATA #IMPLIED
+>
+

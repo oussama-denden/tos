@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.InfoErreur;
+import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.service.DraftService;
 import com.wordnik.swagger.annotations.Api;
@@ -88,6 +89,23 @@ public class DraftController {
 	public DraftReturn creerDraft(@RequestBody AuteurInfo auteurInfo) throws Exception {
 		LOGGER.info(":::ws-rec:::creerDraft");
 		return draftService.creerDraft(auteurInfo);
+
+	}
+
+	/**
+	 * ajouter une reference externe au draft
+	 * 
+	 * @param referenceExterneInfo
+	 *            reference externe info {@link ReferenceExterneInfo}
+	 * @throws Exception
+	 *             exception {@link Exception}
+	 */
+	@RequestMapping(value = "/draft/{referenceDraft:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void ajouterReferenceExterne(@PathVariable String referenceDraft,
+			@RequestBody ReferenceExterneInfo referenceExterneInfo) throws Exception {
+		LOGGER.info(":::ws-rec:::ajouterReferenceExterne");
+		draftService.ajouterReferenceExterne(referenceDraft, referenceExterneInfo);
 
 	}
 

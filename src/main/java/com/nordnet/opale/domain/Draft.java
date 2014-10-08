@@ -47,6 +47,11 @@ public class Draft {
 	private Auteur auteur;
 
 	/**
+	 * reference externe du draft
+	 */
+	private String referenceExterne;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Draft() {
@@ -124,6 +129,25 @@ public class Draft {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * get reference externe
+	 * 
+	 * @return {@link #referenceExterne}
+	 */
+	public String getReferenceExterne() {
+		return referenceExterne;
+	}
+
+	/**
+	 * set reference externe
+	 * 
+	 * @param referenceExterne
+	 *            the new {@link #referenceExterne}
+	 */
+	public void setReferenceExterne(String referenceExterne) {
+		this.referenceExterne = referenceExterne;
 	}
 
 }

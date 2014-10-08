@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.Keygen;
@@ -42,6 +43,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Draft getDraftByReference(String reference) {
 
 		return draftRepository.findByReference(reference);
@@ -50,6 +52,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void supprimerDraft(String reference) {
 
 		Draft draft = getDraftByReference(reference);
@@ -60,6 +63,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public DraftReturn creerDraft(AuteurInfo auteurInfo) {
 
 		LOGGER.info("Enter methode creerDraft");
@@ -100,5 +104,20 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Fin methode creerDraft");
 		return draftReturn;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo) {
+		LOGGER.info("Debut methode ajouterReferenceExterne");
+		Draft draft = getDraftByReference(referenceDraft);
+
+		draft.setReferenceExterne(referenceExterneInfo.getReferenceExterne());
+		draftRepository.save(draft);
+
+		LOGGER.info("Fin methode ajouterReferenceExterne");
+
 	}
 }

@@ -12,4 +12,20 @@
 		<xsd:attribute name="version" use="optional" />
 	</xsd:complexType>
 	
+	<xsd:element name="draft" type="draft_type"/>
+	<xsd:complexType name="draft_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="reference" use="optional" />
+		<xsd:attribute name="clientId" use="optional" />
+		<xsd:attribute name="AdresseFacturationId" use="optional" />
+		<xsd:attribute name="AdresseLivraisonId" use="optional" />
+		<xsd:attribute name="code" use="optional" />
+		<xsd:attribute name="qui" use="optional" />
+		<xsd:attribute name="ip" use="optional" />
+		<xsd:attribute name="canal" use="optional" />
+		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="referenceExterne" use="optional" />
+	</xsd:complexType>
+	
+	
 </xsd:schema>
