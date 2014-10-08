@@ -109,11 +109,12 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		return draftLigne.getReferenceOffre();
+		return draftLigne.getReference();
 	}
 
 	@Override
 	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
+
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);

@@ -3,6 +3,8 @@ package com.nordnet.opale.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -121,13 +123,18 @@ public class DraftController {
 	 * @return reference de la ligne ajouter.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
 	 */
 	@RequestMapping(value = "/{reference:.+}/ligne", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public String ajouterLigne(@PathVariable String reference, @RequestBody DraftLigneInfo draftLigneInfo)
-			throws OpaleException {
+			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::ajouterLigne");
-		return draftService.ajouterLigne(reference, draftLigneInfo);
+		String referenceLigne = draftService.ajouterLigne(reference, draftLigneInfo);
+		JSONObject rsc = new JSONObject();
+		rsc.put("referenceLigne", referenceLigne);
+		return rsc.toString();
 	}
 
 	/**
