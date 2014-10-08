@@ -20,6 +20,7 @@ import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.draft.service.DraftService;
@@ -111,6 +112,22 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::creerDraft");
 		return draftService.creerDraft(auteurInfo);
 
+	}
+
+	/**
+	 * ajouter une reference externe au draft
+	 * 
+	 * @param referenceExterneInfo
+	 *            reference externe info {@link ReferenceExterneInfo}
+	 * @throws Exception
+	 *             exception {@link Exception}
+	 */
+	@RequestMapping(value = "/draft/{referenceDraft:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void ajouterReferenceExterne(@PathVariable String referenceDraft,
+			@RequestBody ReferenceExterneInfo referenceExterneInfo) throws Exception {
+		LOGGER.info(":::ws-rec:::ajouterReferenceExterne");
+		draftService.ajouterReferenceExterne(referenceDraft, referenceExterneInfo);
 	}
 
 	/**

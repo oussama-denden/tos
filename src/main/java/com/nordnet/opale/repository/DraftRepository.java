@@ -1,6 +1,9 @@
 package com.nordnet.opale.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.nordnet.opale.domain.Draft;
@@ -21,5 +24,13 @@ public interface DraftRepository extends JpaRepository<Draft, Integer> {
 	 * @return {@link Draft}.
 	 */
 	public Draft findByReference(String reference);
+
+	/**
+	 * Récupérer les drafts annulés.
+	 * 
+	 * @return {@link Draft}.
+	 */
+	@Query(name = "findDraftAnnule", value = "SELECT d FROM Draft d WHERE d.dateAnnulation IS NOT NULL")
+	public List<Draft> findDraftAnnule();
 
 }

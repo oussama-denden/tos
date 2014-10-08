@@ -1,9 +1,12 @@
 package com.nordnet.opale.draft.service;
 
+import java.util.List;
+
 import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.exception.OpaleException;
@@ -81,6 +84,17 @@ public interface DraftService {
 	public void annulerDraft(String refDraft) throws OpaleException;
 
 	/**
+	 * ajouter une reference externe a un draft
+	 * 
+	 * @param referenceDraft
+	 *            reference draft {@link java.lang.String}
+	 * @param referenceExterneInfo
+	 *            reference externe info {@link ReferenceExterneInfo}
+	 */
+	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo)
+			throws OpaleException;
+
+	/**
 	 * Supprimer une ligne draft.
 	 * 
 	 * @param reference
@@ -95,5 +109,12 @@ public interface DraftService {
 	 */
 	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
 			throws OpaleException;
+
+	/**
+	 * Récupérer les drafts annulés.
+	 * 
+	 * @return {@link Draft}.
+	 */
+	public List<Draft> findDraftAnnule();
 
 }

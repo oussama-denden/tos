@@ -30,7 +30,7 @@
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="persistenceUnitName" value="topaze" />
+		<property name="persistenceUnitName" value="opale" />
 		<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence-test.xml" />
 		<property name="jpaVendorAdapter">
 			<bean
@@ -58,7 +58,10 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:rest-url.properties" />
 	</bean>
-	
+	<bean id="opaleExceptionsProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:opale-exceptions.properties" />
+	</bean>
 	
 	<bean id="env"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">

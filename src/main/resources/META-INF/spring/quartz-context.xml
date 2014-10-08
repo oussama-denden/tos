@@ -6,5 +6,34 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
+<bean id="draftService" class="com.nordnet.opale.draft.service.DraftServiceImpl" />
 
+<bean name="nettoyerDB" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass"
+			value="com.nordnet.opale.cron.NettoyerDB" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="draftService" value-ref="draftService" />
+		</map>
+		</property>
+	</bean>
+	
+	<!-- Cron Trigger NettoyerDB-->
+	<bean id="cronTriggerNettoyerDB" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="nettoyerDB" />
+		<property name="cronExpression" value="${cronExpressionNettoyerDB}" />
+	</bean>
+
+<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="nettoyerDB" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="cronTriggerNettoyerDB" />
+			</list>
+		</property>
+	</bean>
 </beans>

@@ -13,6 +13,7 @@ import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
@@ -59,6 +60,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Draft getDraftByReference(String reference) {
 
 		return draftRepository.findByReference(reference);
@@ -67,6 +69,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void supprimerDraft(String reference) throws OpaleException {
 
 		LOGGER.info("Enter methode supprimerDraft");
@@ -79,6 +82,14 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	public List<Draft> findDraftAnnule() {
+		return draftRepository.findDraftAnnule();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public DraftReturn creerDraft(AuteurInfo auteurInfo) {
 
 		LOGGER.info("Enter methode creerDraft");
@@ -151,6 +162,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void annulerDraft(String refDraft) throws OpaleException {
 		LOGGER.info("Entrer methode annulerDraft");
 
@@ -167,7 +179,26 @@ public class DraftServiceImpl implements DraftService {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @throws OpaleException
 	 */
+
+	@Override
+	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo)
+			throws OpaleException {
+		LOGGER.info("Debut methode ajouterReferenceExterne");
+		Draft draft = getDraftByReference(referenceDraft);
+		DraftValidator.isExistDraft(draft, referenceDraft);
+		draft.setReferenceExterne(referenceExterneInfo.getReferenceExterne());
+		draftRepository.save(draft);
+		LOGGER.info("Fin methode ajouterReferenceExterne");
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
 			throws OpaleException {
 

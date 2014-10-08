@@ -27,12 +27,12 @@ public class PropertiesUtil {
 	/**
 	 * Rest URL properties file.
 	 */
-	private Properties oplaeExceptionsProperties = ApplicationContextHolder.getBean("oplaeExceptionsProperties");
+	private final Properties opaleExceptionsProperties = ApplicationContextHolder.getBean("opaleExceptionsProperties");
 
 	/**
 	 * Dynamic properties file.
 	 */
-	private MessageSource dynamicProperties = ApplicationContextHolder.getBean("dynamicProperties");
+	private final MessageSource dynamicProperties = ApplicationContextHolder.getBean("dynamicProperties");
 
 	/**
 	 * private constructor.
@@ -60,7 +60,7 @@ public class PropertiesUtil {
 	 * @return message d'erreur.
 	 */
 	public String getErrorMessage(String errorMessageKey, Object... parameters) {
-		return String.format(oplaeExceptionsProperties.getProperty(errorMessageKey), parameters);
+		return String.format(opaleExceptionsProperties.getProperty(errorMessageKey), parameters);
 	}
 
 	/**
