@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.Offre;
+import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -37,7 +38,7 @@ public class DraftLigne {
 	private Integer id;
 
 	/**
-	 * reference de la ligne dans le draft.
+	 * reference de l'offre.
 	 */
 	private String reference;
 
@@ -51,6 +52,12 @@ public class DraftLigne {
 	 */
 	@Enumerated(EnumType.STRING)
 	private ModePaiement modePaiement;
+
+	/**
+	 * {@link ModeFacturation}.
+	 */
+	@Enumerated(EnumType.STRING)
+	private ModeFacturation modeFacturation;
 
 	/**
 	 * date de creation de la ligne.
@@ -157,6 +164,23 @@ public class DraftLigne {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link ModeFacturation}.
+	 */
+	public ModeFacturation getModeFacturation() {
+		return modeFacturation;
+	}
+
+	/**
+	 * 
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}.
+	 */
+	public void setModeFacturation(ModeFacturation modeFacturation) {
+		this.modeFacturation = modeFacturation;
 	}
 
 	/**

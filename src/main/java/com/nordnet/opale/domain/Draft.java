@@ -163,6 +163,23 @@ public class Draft {
 	}
 
 	/**
+	 * 
+	 * @return {@link #draftLignes}.
+	 */
+	public List<DraftLigne> getDraftLignes() {
+		return draftLignes;
+	}
+
+	/**
+	 * 
+	 * @param draftLignes
+	 *            {@link #draftLignes}.
+	 */
+	public void setDraftLignes(List<DraftLigne> draftLignes) {
+		this.draftLignes = draftLignes;
+	}
+
+	/**
 	 * ajouter une {@link DraftLigne} au draft.
 	 * 
 	 * @param draftLigne

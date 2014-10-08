@@ -67,6 +67,12 @@ public class DraftLigneDetail {
 		this.configurationJson = detail.getConfigurationJson();
 	}
 
+	@Override
+	public String toString() {
+		return "DraftLigneDetail [id=" + id + ", reference=" + reference + ", referenceTarif=" + referenceTarif
+				+ ", modePaiement=" + modePaiement + ", configurationJson=" + configurationJson + "]";
+	}
+
 	/**
 	 * 
 	 * @return {@link #id}.

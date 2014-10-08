@@ -1,4 +1,4 @@
-package com.nordnet.opale.enums;
+package com.nordnet.opale.enums.deserializer;
 
 import java.io.IOException;
 
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.nordnet.opale.enums.ModePaiement;
 
 /**
  * Definir notre propre logique de deserialisation que sera utiliser par jackson lors de auto-population de

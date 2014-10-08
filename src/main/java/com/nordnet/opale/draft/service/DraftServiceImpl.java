@@ -115,6 +115,12 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 	}
 
+	public void modifierLigne(String refDraft, String refLigne) throws OpaleException {
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
