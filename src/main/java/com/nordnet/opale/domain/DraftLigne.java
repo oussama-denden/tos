@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.enums.ModeFacturation;
@@ -28,6 +29,7 @@ import com.nordnet.opale.enums.ModePaiement;
  */
 @Table(name = "draftligne")
 @Entity
+@JsonIgnoreProperties({ "id" })
 public class DraftLigne {
 
 	/**

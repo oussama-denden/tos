@@ -28,6 +28,11 @@ public class Keygen {
 	private String referenceDraft;
 
 	/**
+	 * L entiter.
+	 */
+	private String entite;
+
+	/**
 	 * constructeur par default.
 	 */
 	public Keygen() {
@@ -66,5 +71,22 @@ public class Keygen {
 	 */
 	public void setReferenceDraft(String referenceDraft) {
 		this.referenceDraft = referenceDraft;
+	}
+
+	/**
+	 * 
+	 * @return {@link Keygen#entite}.
+	 */
+	public String getEntite() {
+		return entite;
+	}
+
+	/**
+	 * 
+	 * @param entite
+	 *            {@link Keygen#entite}.
+	 */
+	public void setEntite(String entite) {
+		this.entite = entite;
 	}
 }

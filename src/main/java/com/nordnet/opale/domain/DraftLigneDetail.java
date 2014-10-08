@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.enums.ModePaiement;
 
@@ -18,6 +19,7 @@ import com.nordnet.opale.enums.ModePaiement;
  */
 @Table(name = "draftlignedetail")
 @Entity
+@JsonIgnoreProperties({ "id" })
 public class DraftLigneDetail {
 
 	/**

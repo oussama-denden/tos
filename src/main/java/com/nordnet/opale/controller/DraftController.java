@@ -121,10 +121,10 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/{reference:.+}/ligne", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void ajouterLigne(@PathVariable String reference, @RequestBody DraftLigneInfo draftLigneInfo)
+	public String ajouterLigne(@PathVariable String reference, @RequestBody DraftLigneInfo draftLigneInfo)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::ajouterLigne");
-		draftService.ajouterLigne(reference, draftLigneInfo);
+		return draftService.ajouterLigne(reference, draftLigneInfo);
 	}
 
 	/**
