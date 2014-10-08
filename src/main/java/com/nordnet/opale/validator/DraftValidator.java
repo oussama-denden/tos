@@ -1,5 +1,7 @@
 package com.nordnet.opale.validator;
 
+import java.util.List;
+
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.Draft;
@@ -64,12 +66,23 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.3"), "1.1.3");
 		}
 
-		for (int i = 0; i < offre.getDetails().size(); i++) {
-			Detail detail = offre.getDetails().get(i);
+		List<Detail> details = offre.getDetails();
+		for (int i = 0; i < details.size(); i++) {
+			Detail detail = details.get(i);
 
 			if (Utils.isStringNullOrEmpty(detail.getReference())) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].reference"),
 						"0.1.4");
+			}
+
+			if (detail.getReference().equals(detail.getDependDe())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.4", detail.getReference()), "1.1.4");
+			}
+
+			Detail detailElement = new Detail();
+			detailElement.setReference(detail.getDependDe());
+			if (!detail.isParent() && !details.contains(detailElement)) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.2", detail.getDependDe()), "0.1.2");
 			}
 
 			if (Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
@@ -78,6 +91,7 @@ public class DraftValidator {
 			}
 
 			isFormatValide(detail.getModePaiement());
+
 		}
 
 	}
