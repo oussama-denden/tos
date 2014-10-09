@@ -72,4 +72,28 @@ public class DraftInfoGenerator {
 
 	}
 
+	/**
+	 * Retourne une {@link DraftLigneInfo} pour la modification d'une ligne.
+	 * 
+	 * @return {@link DraftLigneInfo}.
+	 */
+	public static DraftLigneInfo getDraftLigneInfoModifier() {
+		DraftLigneInfo draftLigneInfo = getDraftLigneInfo();
+		Offre offre = draftLigneInfo.getOffre();
+		offre.setModeFacturation(ModeFacturation.PREMIER_MOIS);
+		offre.setModePaiement(ModePaiement.SEPA);
+
+		for (Detail detail : offre.getDetails()) {
+			detail.setModePaiement(ModePaiement.SEPA);
+		}
+
+		Detail detail = new Detail();
+		detail.setReference("option");
+		detail.setModePaiement(ModePaiement.SEPA);
+		detail.setReferenceTarif("achat_kit_mensuel");
+		detail.setDependDe("kitsat");
+		offre.getDetails().add(detail);
+
+		return draftLigneInfo;
+	}
 }

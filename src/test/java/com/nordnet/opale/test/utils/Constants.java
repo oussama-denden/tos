@@ -37,4 +37,9 @@ public final class Constants {
 	 */
 	public static final Integer TROIS = 3;
 
+	/**
+	 * entier de valeur 4.
+	 */
+	public static final Integer QUATRE = 4;
+
 }
