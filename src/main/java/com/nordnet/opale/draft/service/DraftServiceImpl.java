@@ -1,13 +1,17 @@
 package com.nordnet.opale.draft.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
+import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
@@ -15,6 +19,7 @@ import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
+import com.nordnet.opale.domain.DraftLigneDetail;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.keygen.service.KeygenService;
 import com.nordnet.opale.repository.DraftLigneRepository;
@@ -122,12 +127,15 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
+		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 		DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
+		creerArborescence(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 		draft.addLigne(draftLigne);
@@ -145,6 +153,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
+		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 
 		/*
 		 * suppression de ligne a modifier
@@ -156,6 +165,7 @@ public class DraftServiceImpl implements DraftService {
 		 * creation de la nouvelle ligne.
 		 */
 		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
+		creerArborescence(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
 		nouveauDraftLigne.setReference(draftLigne.getReference());
 		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
 
@@ -244,6 +254,32 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("fin methode associerClient");
 
+	}
+
+	/**
+	 * creer l'arborescence entre les {@link DraftLigneDetail}.
+	 * 
+	 * @param details
+	 *            liste des {@link Detail}.
+	 * @param draftLigneDetails
+	 *            liste des {@link DraftLigneDetail}.
+	 */
+	private void creerArborescence(List<Detail> details, List<DraftLigneDetail> draftLigneDetails) {
+		/*
+		 * transformer la list en Map pour faciliter l'accee par la suite.
+		 */
+		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
+		for (DraftLigneDetail draftLigneDetail : draftLigneDetails) {
+			draftLigneDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
+		}
+
+		for (Detail detail : details) {
+			if (!detail.isParent()) {
+				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(detail.getReference());
+				DraftLigneDetail draftLigneDetailParent = draftLigneDetailsMap.get(detail.getDependDe());
+				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
+			}
+		}
 	}
 
 }
