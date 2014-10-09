@@ -1,4 +1,4 @@
-<!ELEMENT dataset (draft*, draftLigne*, draftLigneDtail*)>
+<!ELEMENT dataset (draft*, draftLigne*, draftLigneDetail*)>
 
 <!ELEMENT draft EMPTY>
 <!ATTLIST draft
@@ -31,8 +31,8 @@
     draftId CDATA #IMPLIED
     referenceOffre CDATA #IMPLIED
 >
-<!ELEMENT draftLigneDtail EMPTY>
-<!ATTLIST draftLigneDtail
+<!ELEMENT draftLigneDetail EMPTY>
+<!ATTLIST draftLigneDetail
      id CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED

@@ -39,8 +39,8 @@ public class AjouterLigneTest extends GlobalTestCase {
 	 * Tester le cas de l'ajout valid d'une ligne valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-reference-externe.xml" })
-	public void testAjouterLigneValid() {
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
+	public void testAjouterLigneValide() {
 		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfo();
 		try {
 			draftService.ajouterLigne("REF-DRAFT-1", draftLigneInfo);
