@@ -3,8 +3,6 @@ package com.nordnet.opale.draft.test;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.unitils.UnitilsJUnit4;
-import org.unitils.database.annotations.Transactional;
-import org.unitils.database.util.TransactionMode;
 import org.unitils.spring.annotation.SpringApplicationContext;
 
 import com.nordnet.opale.util.spring.ApplicationContextHolder;
@@ -18,7 +16,6 @@ import com.nordnet.opale.util.spring.ApplicationContextHolder;
  * 
  */
 @SpringApplicationContext(value = { "applicationContextTest.xml" })
-@Transactional(TransactionMode.DISABLED)
 public abstract class GlobalTestCase extends UnitilsJUnit4 {
 
 	/**
