@@ -34,11 +34,21 @@
 <!ELEMENT draftLigneDetail EMPTY>
 <!ATTLIST draftLigneDetail
      id CDATA #IMPLIED
+    referenceSelection CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
     modePaiement CDATA #IMPLIED
     configurationJson CDATA #IMPLIED
     dependDe CDATA #IMPLIED
     draftLigneId CDATA #IMPLIED
+>
+
+<!ELEMENT tracage EMPTY>
+<!ATTLIST tracage
+     id CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    action CDATA #IMPLIED
+    user CDATA #IMPLIED
+    date CDATA #IMPLIED
 >
 

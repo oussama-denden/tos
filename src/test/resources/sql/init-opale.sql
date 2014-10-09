@@ -51,6 +51,7 @@ CREATE TABLE `draftLigne` (
 DROP TABLE IF EXISTS `draftLigneDetail`;
 CREATE TABLE `draftLigneDetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referenceSelection` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) NOT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
@@ -65,6 +66,16 @@ CREATE TABLE `keygen` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `entite` varchar(255) DEFAULT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tracage`;
+CREATE TABLE `tracage` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referenceDraft` varchar(255) DEFAULT NULL,
+  `action` varchar(255) DEFAULT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  `date` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

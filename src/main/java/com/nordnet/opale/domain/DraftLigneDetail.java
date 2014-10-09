@@ -37,6 +37,11 @@ public class DraftLigneDetail {
 	private Integer id;
 
 	/**
+	 * reference selection.
+	 */
+	private String referenceSelection;
+
+	/**
 	 * reference de la ligne dans le draft.
 	 */
 	private String reference;
@@ -83,6 +88,7 @@ public class DraftLigneDetail {
 	 *            {@link Detail}.
 	 */
 	public DraftLigneDetail(Detail detail) {
+		this.referenceSelection = detail.getReferenceSelection();
 		this.reference = detail.getReference();
 		this.referenceTarif = detail.getReferenceTarif();
 		this.modePaiement = detail.getModePaiement();
@@ -110,6 +116,23 @@ public class DraftLigneDetail {
 	 */
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceSelection}.
+	 */
+	public String getReferenceSelection() {
+		return referenceSelection;
+	}
+
+	/**
+	 * 
+	 * @param referenceSelection
+	 *            {@link #referenceSelection}.
+	 */
+	public void setReferenceSelection(String referenceSelection) {
+		this.referenceSelection = referenceSelection;
 	}
 
 	/**

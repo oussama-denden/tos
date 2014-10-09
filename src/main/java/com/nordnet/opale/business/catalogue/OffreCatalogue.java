@@ -1,0 +1,179 @@
+package com.nordnet.opale.business.catalogue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.enums.ModeFacturation;
+import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
+
+/**
+ * Classe reprensente une offre dans le catalogue.
+ * 
+ * @author akram-moncer
+ * 
+ */
+public class OffreCatalogue {
+
+	/**
+	 * reference offre.
+	 */
+	private String reference;
+
+	/**
+	 * la gemme de l'offre.
+	 */
+	private String gamme;
+
+	/**
+	 * le famille de l'offre.
+	 */
+	private String famille;
+
+	/**
+	 * {@link ModeFacturation}.
+	 */
+	@JsonDeserialize(using = ModeFacturationDeserializer.class)
+	private ModeFacturation modeFacturation;
+
+	/**
+	 * liste des reference des {@link Tarif} associe a l'offre.
+	 */
+	private List<String> tarifs = new ArrayList<String>();
+
+	/**
+	 * les tranches de tarification.
+	 */
+	private List<String> tranches = new ArrayList<String>();
+
+	/**
+	 * liste des {@link DetailCatalogue} associe a l'offre.
+	 */
+	private List<DetailCatalogue> details = new ArrayList<DetailCatalogue>();
+
+	/**
+	 * constructeur par defaut.
+	 */
+	public OffreCatalogue() {
+	}
+
+	/**
+	 * 
+	 * @return {@link #reference}.
+	 */
+	public String getReference() {
+		return reference;
+	}
+
+	/**
+	 * 
+	 * @param reference
+	 *            {@link #reference}.
+	 */
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #gamme}.
+	 */
+	public String getGamme() {
+		return gamme;
+	}
+
+	/**
+	 * 
+	 * @param gamme
+	 *            {@link #gamme}.
+	 */
+	public void setGamme(String gamme) {
+		this.gamme = gamme;
+	}
+
+	/**
+	 * 
+	 * @return {@link #famille}.
+	 */
+	public String getFamille() {
+		return famille;
+	}
+
+	/**
+	 * 
+	 * @param famille
+	 *            {@link #famille}.
+	 */
+	public void setFamille(String famille) {
+		this.famille = famille;
+	}
+
+	/**
+	 * 
+	 * @return {@link ModeFacturation}.
+	 */
+	public ModeFacturation getModeFacturation() {
+		return modeFacturation;
+	}
+
+	/**
+	 * 
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}.
+	 */
+	public void setModeFacturation(ModeFacturation modeFacturation) {
+		this.modeFacturation = modeFacturation;
+	}
+
+	/**
+	 * 
+	 * @return {@link #tarifs}.
+	 */
+	public List<String> getTarifs() {
+		return tarifs;
+	}
+
+	/**
+	 * 
+	 * @param tarifs
+	 *            {@link #tarifs}.
+	 */
+	public void setTarifs(List<String> tarifs) {
+		this.tarifs = tarifs;
+	}
+
+	/**
+	 * 
+	 * @return {@link #tranches}.
+	 */
+	public List<String> getTranches() {
+		return tranches;
+	}
+
+	/**
+	 * 
+	 * @param tranches
+	 *            {@link #tranches}.
+	 */
+	public void setTranches(List<String> tranches) {
+		this.tranches = tranches;
+	}
+
+	/**
+	 * 
+	 * @return {@link #details}.
+	 */
+	public List<DetailCatalogue> getDetails() {
+		return details;
+	}
+
+	/**
+	 * 
+	 * @param details
+	 *            {@link #details}.
+	 */
+	public void setDetails(List<DetailCatalogue> details) {
+		this.details = details;
+	}
+
+}

@@ -19,6 +19,11 @@ public class DraftLigneInfo {
 	private Offre offre;
 
 	/**
+	 * L utilisateur.
+	 */
+	private String user;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public DraftLigneInfo() {
@@ -56,6 +61,23 @@ public class DraftLigneInfo {
 	 */
 	public void setOffre(Offre offre) {
 		this.offre = offre;
+	}
+
+	/**
+	 * 
+	 * @return {@link #user}.
+	 */
+	public String getUser() {
+		return user;
+	}
+
+	/**
+	 * 
+	 * @param user
+	 *            {@link #user}.
+	 */
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 }

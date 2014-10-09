@@ -47,6 +47,7 @@ public class DraftInfoGenerator {
 		detail.setReference("kitsat");
 		detail.setModePaiement(ModePaiement.CB);
 		detail.setReferenceTarif("achat_kit_mensuel");
+		draftLigneInfo.setUser("unit-test-user");
 		details.add(detail);
 
 		detail = new Detail();
@@ -102,6 +103,7 @@ public class DraftInfoGenerator {
 		detail.setReferenceTarif("achat_kit_mensuel");
 		detail.setDependDe("kitsat");
 		offre.getDetails().add(detail);
+		draftLigneInfo.setUser("unit-test-user");
 
 		return draftLigneInfo;
 	}
