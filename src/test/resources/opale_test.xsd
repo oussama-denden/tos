@@ -13,6 +13,7 @@
 		<xsd:attribute name="draftLigneId" use="optional" />
 		<xsd:attribute name="referenceTarif" use="optional" />
 		<xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="referenceSelection" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="draft__type">
 		<xsd:attribute name="reference" use="optional" />

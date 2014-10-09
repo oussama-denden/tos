@@ -51,6 +51,7 @@ CREATE TABLE `draftLigne` (
 DROP TABLE IF EXISTS `draftLigneDetail`;
 CREATE TABLE `draftLigneDetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referenceSelection` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) NOT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,

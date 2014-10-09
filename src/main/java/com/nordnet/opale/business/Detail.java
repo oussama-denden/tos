@@ -16,6 +16,11 @@ import com.nordnet.opale.util.Utils;
 public class Detail {
 
 	/**
+	 * reference selection.
+	 */
+	private String referenceSelection;
+
+	/**
 	 * reference de la ligne dans le draft.
 	 */
 	private String reference;
@@ -55,6 +60,23 @@ public class Detail {
 			return false;
 		Detail rhs = (Detail) obj;
 		return new EqualsBuilder().append(reference, rhs.reference).isEquals();
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceSelection}.
+	 */
+	public String getReferenceSelection() {
+		return referenceSelection;
+	}
+
+	/**
+	 * 
+	 * @param referenceSelection
+	 *            {@link #referenceSelection}.
+	 */
+	public void setReferenceSelection(String referenceSelection) {
+		this.referenceSelection = referenceSelection;
 	}
 
 	/**
