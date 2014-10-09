@@ -22,6 +22,7 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.catalogue.CatalogueTrame;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.draft.service.DraftService;
@@ -207,6 +208,12 @@ public class DraftController {
 	public void associerClient(@PathVariable String refDraft, @RequestBody ClientInfo clientInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::associerClient");
 		draftService.associerClient(refDraft, clientInfo);
+	}
+
+	@RequestMapping(value = "/{refDraft:.+}/valider", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@ResponseBody
+	public void validerDraft(@PathVariable String refDraft, @RequestBody CatalogueTrame catalogueTrame) {
+
 	}
 
 	/**
