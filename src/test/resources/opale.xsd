@@ -5,6 +5,7 @@
 <xsd:element name="dbmaintain_scripts" type="dbmaintain_scripts__type" />
 		<xsd:element name="draftLigneDetail" type="draftLigneDetail_type"/>
 		<xsd:element name="draftLigne" type="draftLigne_type"/>
+		<xsd:element name="tracage" type="tracage_type"/>
 	
 	<xsd:complexType name="dbmaintain_scripts__type">
 		<xsd:attribute name="succeeded" use="optional" />
@@ -56,6 +57,14 @@
 		<xsd:attribute name="configurationJson" use="optional" />
 		<xsd:attribute name="dependDe" use="optional" />
 		<xsd:attribute name="draftLigneId" use="optional" />
+	</xsd:complexType>
+	
+	   <xsd:complexType name="tracage_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="referenceDraft" use="optional" />
+		<xsd:attribute name="action" use="optional" />
+		<xsd:attribute name="user" use="optional" />
+		<xsd:attribute name="date" use="optional" />
 	</xsd:complexType>
 
 </xsd:schema>

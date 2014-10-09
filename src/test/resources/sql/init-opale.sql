@@ -69,3 +69,13 @@ CREATE TABLE `keygen` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tracage`;
+CREATE TABLE `tracage` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referenceDraft` varchar(255) DEFAULT NULL,
+  `action` varchar(255) DEFAULT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  `date` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
