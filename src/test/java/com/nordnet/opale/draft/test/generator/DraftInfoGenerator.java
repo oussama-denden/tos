@@ -1,8 +1,15 @@
 package com.nordnet.opale.draft.test.generator;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
@@ -14,11 +21,13 @@ import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
- * classe pour generer des info a stocker dans un {@link Draft}/ {@link DraftLigne} d'un draft.
+ * classe pour generer des info a stocker dans un {@link Draft}/
+ * {@link DraftLigne} d'un draft.
  * 
  * @author akram-moncer
  * 
  */
+@Component("draftInfoGenerator")
 public class DraftInfoGenerator {
 
 	/**
@@ -96,4 +105,29 @@ public class DraftInfoGenerator {
 
 		return draftLigneInfo;
 	}
+
+	/**
+	 * Retourne une {@link Draft}.
+	 * 
+	 * @param <T>
+	 *            the generic type
+	 * @param valueType
+	 *            the value type
+	 * @param jsonFilePath
+	 *            the json file path
+	 * @return {@link DraftLigneInfo}.
+	 * @throws JsonParseException
+	 *             the json parse exception
+	 * @throws JsonMappingException
+	 *             the json mapping exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public <T> T getObjectFromJsonFile(Class<T> valueType, String jsonFilePath) throws JsonParseException,
+			JsonMappingException, IOException {
+		ClassLoader classLoader = getClass().getClassLoader();
+		File json = new File(classLoader.getResource(jsonFilePath).getFile());
+		return (T) new ObjectMapper().readValue(json, valueType);
+	}
+
 }
