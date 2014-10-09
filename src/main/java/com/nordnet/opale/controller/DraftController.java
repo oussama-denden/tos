@@ -209,25 +209,6 @@ public class DraftController {
 		draftService.associerClient(refDraft, clientInfo);
 	}
 
-	// /**
-	// * Creer un draft complet.
-	// *
-	// * @param auteurInfo
-	// * auteur informations.
-	// * @return {@link Contrat}.
-	// * @throws Exception
-	// * exception {@link Exception}.
-	// */
-	// @RequestMapping(value = "/draft", method = RequestMethod.POST, produces =
-	// "application/json", headers = "Accept=application/json")
-	// @ResponseBody
-	// public DraftReturn creerDraftComplet(@RequestBody DraftInfo draftInfo)
-	// throws Exception {
-	// LOGGER.info(":::ws-rec:::creerDraftComplet");
-	// return draftService.creerDraftComplet(draftInfo);
-	//
-	// }
-
 	/**
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
