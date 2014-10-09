@@ -13,6 +13,7 @@ import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.draft.service.DraftService;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
+import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.test.utils.Constants;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
@@ -51,6 +52,37 @@ public class AjouterLigneTest extends GlobalTestCase {
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Tester le cas ou le draft n'existe pas.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
+	public void testAjouterLigneAvecDraftNonExist() {
+		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfo();
+		try {
+			draftService.ajouterLigne("REF-DRAFT-2", draftLigneInfo);
+			fail("Unexpected error");
+		} catch (OpaleException e) {
+			assertEquals("1.1.1", e.getErrorCode());
+		}
+	}
+
+	/**
+	 * Tester le cas d'ajout avec une offre non valid.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
+	public void testAjouterLigneAvecOffreNonValide() {
+		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfo();
+		draftLigneInfo.getOffre().setReferenceOffre(null);
+		try {
+			draftService.ajouterLigne("REF-DRAFT-1", draftLigneInfo);
+			fail("Unexpected error");
+		} catch (OpaleException e) {
+			assertEquals("0.1.4", e.getErrorCode());
 		}
 	}
 }

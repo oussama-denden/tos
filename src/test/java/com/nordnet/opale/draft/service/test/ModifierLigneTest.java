@@ -17,6 +17,7 @@ import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.test.utils.Constants;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
@@ -27,12 +28,12 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
  * @author akram-moncer
  * 
  */
-public class ModifierLigne extends GlobalTestCase {
+public class ModifierLigneTest extends GlobalTestCase {
 
 	/**
 	 * Declaration du log.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(ModifierLigne.class);
+	private static final Logger LOGGER = Logger.getLogger(ModifierLigneTest.class);
 
 	/**
 	 * {@link DraftService}.
@@ -41,7 +42,7 @@ public class ModifierLigne extends GlobalTestCase {
 	private DraftService draftService;
 
 	/**
-	 * 
+	 * Mofifier une ligne valide.
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
@@ -62,6 +63,52 @@ public class ModifierLigne extends GlobalTestCase {
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Tester le cas ou le draft n'existe pas.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
+	public void testerModifierLignePourDraftNonExist() {
+		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfoModifier();
+		try {
+			draftService.modifierLigne("REF-DRAFT-2", "00000001", draftLigneInfo);
+			fail("Unexpected error");
+		} catch (OpaleException e) {
+			assertEquals("1.1.1", e.getErrorCode());
+		}
+	}
+
+	/**
+	 * Tester le cas ou le draft n'existe pas.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
+	public void testerModifierLigneNonExist() {
+		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfoModifier();
+		try {
+			draftService.modifierLigne("REF-DRAFT-1", "00000002", draftLigneInfo);
+			fail("Unexpected error");
+		} catch (OpaleException e) {
+			assertEquals("1.1.2", e.getErrorCode());
+		}
+	}
+
+	/**
+	 * Tester le cas de modifier une ligne avec une offre non valid.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
+	public void testModifierLigneAvecOffreNonValide() {
+		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfo();
+		draftLigneInfo.getOffre().setReferenceOffre(null);
+		try {
+			draftService.modifierLigne("REF-DRAFT-1", "00000001", draftLigneInfo);
+			fail("Unexpected error");
+		} catch (OpaleException e) {
+			assertEquals("0.1.4", e.getErrorCode());
 		}
 	}
 }
