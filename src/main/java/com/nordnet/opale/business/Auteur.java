@@ -1,8 +1,5 @@
 package com.nordnet.opale.business;
 
-import javax.persistence.Embeddable;
-
-import org.hibernate.validator.NotNull;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Auteur}.
@@ -10,13 +7,11 @@ import org.hibernate.validator.NotNull;
  * @author anisselmane.
  * 
  */
-@Embeddable
 public class Auteur {
 
 	/**
 	 * code auteur.
 	 */
-	@NotNull
 	private String code;
 
 	/**

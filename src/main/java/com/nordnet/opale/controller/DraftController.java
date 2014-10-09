@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
+import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
@@ -108,9 +109,9 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/draft", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public DraftReturn creerDraft(@RequestBody AuteurInfo auteurInfo) throws Exception {
+	public DraftReturn creerDraft(@RequestBody DraftInfo draftInfo) throws Exception {
 		LOGGER.info(":::ws-rec:::creerDraft");
-		return draftService.creerDraft(auteurInfo);
+		return draftService.creerDraft(draftInfo);
 
 	}
 
@@ -188,6 +189,24 @@ public class DraftController {
 			@RequestBody DeleteInfo deleteInfo) throws Exception {
 		LOGGER.info(":::ws-rec:::supprimerDraft");
 		draftService.supprimerLigneDraft(refDraft, refLigne, deleteInfo);
+	}
+
+	/**
+	 * Associe une draft à un client.
+	 * 
+	 * @param refDraft
+	 *            the ref draft
+	 * @param clientInfo
+	 *            client informations.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             the opale exception
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/associerClient", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@ResponseBody
+	public void associerClient(@PathVariable String refDraft, @RequestBody ClientInfo clientInfo) throws OpaleException {
+		LOGGER.info(":::ws-rec:::associerClient");
+		draftService.associerClient(refDraft, clientInfo);
 	}
 
 	/**

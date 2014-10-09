@@ -31,6 +31,7 @@ public class KeygenServiceImpl implements KeygenService {
 	/**
 	 * {@inheritDoc}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public String getNextKey(Class clazz) {
 
 		LOGGER.info("Enter methode getNextKey");

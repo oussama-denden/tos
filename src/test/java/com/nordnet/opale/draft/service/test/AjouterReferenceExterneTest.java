@@ -28,11 +28,17 @@ public class AjouterReferenceExterneTest extends GlobalTestCase {
 	private static final Logger LOGGER = Logger.getLogger(AjouterReferenceExterneTest.class);
 
 	/**
-	 * service de draft
+	 * service de draft.
 	 */
 	@SpringBean("draftService")
 	private DraftService draftService;
 
+	/**
+	 * Test ajouter reference externe valid.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-reference-externe.xml" })
 	public void TestAjouterReferenceExterneValid() throws OpaleException {

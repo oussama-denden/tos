@@ -15,6 +15,7 @@ import com.nordnet.opale.util.spring.ApplicationContextHolder;
  * @author anisselmane.
  * 
  */
+
 @SpringApplicationContext(value = { "applicationContextTest.xml" })
 public abstract class GlobalTestCase extends UnitilsJUnit4 {
 

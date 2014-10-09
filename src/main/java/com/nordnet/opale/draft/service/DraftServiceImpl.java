@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.Detail;
+import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
@@ -91,14 +92,25 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DraftReturn creerDraft(AuteurInfo auteurInfo) {
+	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException {
 
 		LOGGER.info("Enter methode creerDraft");
 
-		Auteur auteur = new Auteur(auteurInfo.getAuteur());
+		Auteur auteur = new Auteur(draftInfo.getAuteur());
 
 		Draft draft = new Draft();
 		draft.setAuteur(auteur);
+
+		if (draftInfo.getClient() != null) {
+			draft.setClient(draftInfo.getClient().toDomain());
+		}
+
+		if (draftInfo.getLignes() != null) {
+			for (DraftLigneInfo draftLigneInfo : draftInfo.getLignes()) {
+				DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
+				draft.addLigne(draftLigne);
+			}
+		}
 
 		draft.setReference(keygenService.getNextKey(Draft.class));
 
@@ -221,6 +233,27 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.delete(draftLigne);
 
 		LOGGER.info("fin methode supprimerLigneDraft");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void associerClient(String refDraft, ClientInfo clientInfo) throws OpaleException {
+		LOGGER.info("Enter methode associerClient");
+		Draft draft = getDraftByReference(refDraft);
+
+		// verifier si le draft existe.
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		// verifier si le clientId n'est pas null ou empty.
+		DraftValidator.clientIdNotNull(clientInfo);
+
+		draft.setClient(clientInfo.toDomain());
+
+		draftRepository.save(draft);
+
+		LOGGER.info("fin methode associerClient");
+
 	}
 
 	/**

@@ -54,7 +54,7 @@ public class Draft {
 	private Auteur auteur;
 
 	/**
-	 * reference externe du draft
+	 * reference externe du draft.
 	 */
 	private String referenceExterne;
 
@@ -151,7 +151,7 @@ public class Draft {
 	}
 
 	/**
-	 * get reference externe
+	 * get reference externe.
 	 * 
 	 * @return {@link #referenceExterne}
 	 */
@@ -161,7 +161,7 @@ public class Draft {
 	}
 
 	/**
-	 * set reference externe
+	 * set reference externe.
 	 * 
 	 * @param referenceExterne
 	 *            the new {@link #referenceExterne}
