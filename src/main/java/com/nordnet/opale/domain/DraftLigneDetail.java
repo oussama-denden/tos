@@ -7,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -68,7 +67,7 @@ public class DraftLigneDetail {
 	/**
 	 * list des sous {@link DraftLigneDetail}.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "draftLigneDetailParent", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "draftLigneDetailParent")
 	private List<DraftLigneDetail> sousDraftLigneDetails = new ArrayList<DraftLigneDetail>();
 
 	/**

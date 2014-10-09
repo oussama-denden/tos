@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.AuteurInfo;
 import com.nordnet.opale.business.DeleteInfo;
@@ -114,11 +115,13 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
+		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 		DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
 		creerArborescence(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
@@ -138,6 +141,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
+		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 
 		/*
 		 * suppression de ligne a modifier
@@ -149,6 +153,7 @@ public class DraftServiceImpl implements DraftService {
 		 * creation de la nouvelle ligne.
 		 */
 		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
+		creerArborescence(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
 		nouveauDraftLigne.setReference(draftLigne.getReference());
 		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
 

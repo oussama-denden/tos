@@ -9,7 +9,6 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -83,8 +82,9 @@ public class DraftLigne {
 	/**
 	 * liste des {@link DraftLigneDetail} associe a la ligne d'un draft.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "draftLigneId")
+	// @IndexColumn(name = "draftLigneId")
 	private List<DraftLigneDetail> draftLigneDetails = new ArrayList<DraftLigneDetail>();
 
 	/**

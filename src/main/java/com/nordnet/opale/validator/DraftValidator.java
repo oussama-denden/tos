@@ -2,6 +2,7 @@ package com.nordnet.opale.validator;
 
 import java.util.List;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.Draft;
@@ -9,7 +10,6 @@ import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
-import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 
@@ -62,7 +62,7 @@ public class DraftValidator {
 		isFormatValide(offre.getModeFacturation());
 		isFormatValide(offre.getModePaiement());
 
-		if (offre.getDetails().size() == Constants.ZERO) {
+		if (Utils.isListNullOrEmpty(offre.getDetails())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.3"), "1.1.3");
 		}
 
@@ -132,11 +132,38 @@ public class DraftValidator {
 	 * @param referenceLigne
 	 *            reference ligne draft.
 	 * @throws OpaleException
-	 *             opale exception.
+	 *             {@link OpaleException}.
 	 */
 	public static void isExistLigneDraft(DraftLigne draftLigne, String referenceLigne) throws OpaleException {
 		if (draftLigne == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.2", referenceLigne), "1.1.2");
+		}
+
+	}
+
+	/**
+	 * Valider l {@link Auteur}.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isAuteurValide(Auteur auteur) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.code"), "0.1.4");
+		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.qui"), "0.1.4");
+		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.canal"), "0.1.4");
+		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.Ip.ip"), "0.1.4");
 		}
 
 	}

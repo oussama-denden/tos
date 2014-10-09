@@ -10,8 +10,7 @@ import org.unitils.dbunit.datasetfactory.impl.MultiSchemaXmlDataSetFactory;
 import org.unitils.dbunit.util.MultiSchemaDataSet;
 
 /**
- * The class {@link OpaleMultiSchemaXmlDataSetFactory} allows us to use some
- * 'non-static' values in datasets.
+ * The class {@link OpaleMultiSchemaXmlDataSetFactory} allows us to use some 'non-static' values in datasets.
  * <p>
  * 
  * @author ngendron
@@ -38,8 +37,7 @@ public class OpaleMultiSchemaXmlDataSetFactory extends MultiSchemaXmlDataSetFact
 	 * 
 	 * @param dataSetFiles
 	 *            The dataset files, not null
-	 * @return A {@link MultiSchemaDataSet} containing the datasets per schema,
-	 *         not null.
+	 * @return A {@link MultiSchemaDataSet} containing the datasets per schema, not null.
 	 */
 	@Override
 	public MultiSchemaDataSet createDataSet(File... dataSetFiles) {
@@ -128,12 +126,6 @@ public class OpaleMultiSchemaXmlDataSetFactory extends MultiSchemaXmlDataSetFact
 				now6.set(Calendar.MONTH, 48);
 				replacementDataSet.addReplacementObject("[now+48month]",
 						new SimpleDateFormat(DATE_FORMAT).format(now6.getTime()));
-
-				replacementDataSet.addReplacementObject("[cession-json-contrat]",
-						"{\"idClient\":\"idCL01\",\"idAdrFacturation\":\"01\"}");
-
-				replacementDataSet.addReplacementObject("[cession-json-element]",
-						"{\"numEC\":1,\"engagement\":12,\"duree\":11}");
 
 				multiSchemaDataSet.setDataSetForSchema(schemaName, replacementDataSet);
 			}
