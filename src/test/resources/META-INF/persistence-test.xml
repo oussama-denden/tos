@@ -11,6 +11,7 @@
 		<class>com.nordnet.opale.domain.DraftLigne</class>
 		<class>com.nordnet.opale.domain.DraftLigneDetail</class>
 		<class>com.nordnet.opale.domain.Auteur</class>
+		<class>com.nordnet.opale.domain.Tracage</class>
 		
 		<properties>
 <!--			<property name="hibernate.hbm2ddl.auto" value="update" />-->

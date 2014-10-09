@@ -5,6 +5,7 @@
 	<xsd:element name="dbmaintain_scripts" type="dbmaintain_scripts__type" />
 	<xsd:element name="draftligne" type="draftligne__type" />
 	<xsd:element name="keygen" type="keygen__type" />
+	<xsd:element name="tracage" type="tracage__type" />
 	<xsd:complexType name="draftlignedetail__type">
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="dependDe" use="optional" />
@@ -56,5 +57,12 @@
 		<xsd:attribute name="entite" use="optional" />
 		<xsd:attribute name="referenceDraft" use="optional" />
 		<xsd:attribute name="id" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="tracage__type">
+		<xsd:attribute name="date" use="optional" />
+		<xsd:attribute name="referenceDraft" use="optional" />
+		<xsd:attribute name="action" use="optional" />
+		<xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="user" use="optional" />
 	</xsd:complexType>
 </xsd:schema>

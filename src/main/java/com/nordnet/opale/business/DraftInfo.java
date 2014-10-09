@@ -25,10 +25,10 @@ public class DraftInfo {
 	 */
 	private ClientInfo client;
 
-	// /**
-	// * L utilisateur.
-	// */
-	// private String user;
+	/**
+	 * L utilisateur.
+	 */
+	private String user;
 
 	/**
 	 * constructeur par defaut.
@@ -88,21 +88,21 @@ public class DraftInfo {
 		this.client = client;
 	}
 
-	// /**
-	// *
-	// * @return {@link #user}.
-	// */
-	// public String getUser() {
-	// return user;
-	// }
-	//
-	// /**
-	// *
-	// * @param user
-	// * {@link #user}.
-	// */
-	// public void setUser(String user) {
-	// this.user = user;
-	// }
+	/**
+	 * 
+	 * @return {@link #user}.
+	 */
+	public String getUser() {
+		return user;
+	}
+
+	/**
+	 * 
+	 * @param user
+	 *            {@link #user}.
+	 */
+	public void setUser(String user) {
+		this.user = user;
+	}
 
 }

@@ -43,3 +43,12 @@
     draftLigneId CDATA #IMPLIED
 >
 
+<!ELEMENT tracage EMPTY>
+<!ATTLIST tracage
+     id CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    action CDATA #IMPLIED
+    user CDATA #IMPLIED
+    date CDATA #IMPLIED
+>
+

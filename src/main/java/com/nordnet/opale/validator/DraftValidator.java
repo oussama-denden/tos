@@ -182,4 +182,16 @@ public class DraftValidator {
 		}
 
 	}
+
+	/**
+	 * verifer que l'user existe pour chaque appel web service
+	 * 
+	 * @param user
+	 * @throws OpaleException
+	 */
+	public static void checkUser(String user) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(user)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14"), "0.1.14");
+		}
+	}
 }

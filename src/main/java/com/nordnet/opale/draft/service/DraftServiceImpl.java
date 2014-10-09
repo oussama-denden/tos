@@ -24,6 +24,8 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.keygen.service.KeygenService;
 import com.nordnet.opale.repository.DraftLigneRepository;
 import com.nordnet.opale.repository.DraftRepository;
+import com.nordnet.opale.tracage.service.TracageService;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.DraftValidator;
 
@@ -60,6 +62,12 @@ public class DraftServiceImpl implements DraftService {
 	private KeygenService keygenService;
 
 	/**
+	 * {@link TracageService}
+	 */
+	@Autowired
+	private TracageService tracageService;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -78,12 +86,14 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = getDraftByReference(reference);
 		DraftValidator.isExistDraft(draft, reference);
 		draftRepository.delete(draft);
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, reference, "Draft " + reference + " supprimé");
 		LOGGER.info("Fin methode supprimerDraft");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Draft> findDraftAnnule() {
 		return draftRepository.findDraftAnnule();
 	}
@@ -95,6 +105,7 @@ public class DraftServiceImpl implements DraftService {
 	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException {
 
 		LOGGER.info("Enter methode creerDraft");
+		DraftValidator.checkUser(draftInfo.getUser());
 
 		Auteur auteur = new Auteur(draftInfo.getAuteur());
 
@@ -118,7 +129,8 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftReturn draftReturn = new DraftReturn();
 		draftReturn.setReference(draft.getReference());
-
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, draft.getReference(), "Draft " + draft.getReference()
+				+ " crée");
 		LOGGER.info("Fin methode creerDraft");
 		return draftReturn;
 	}
@@ -131,6 +143,7 @@ public class DraftServiceImpl implements DraftService {
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.checkUser(draftLigneInfo.getUser());
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
@@ -141,6 +154,7 @@ public class DraftServiceImpl implements DraftService {
 		draft.addLigne(draftLigne);
 
 		draftRepository.save(draft);
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "ajout de ligne aux draft " + refDraft);
 
 		return draftLigne.getReference();
 	}
@@ -149,6 +163,7 @@ public class DraftServiceImpl implements DraftService {
 	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.checkUser(draftLigneInfo.getUser());
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
@@ -174,6 +189,9 @@ public class DraftServiceImpl implements DraftService {
 		 */
 		draft.addLigne(nouveauDraftLigne);
 		draftRepository.save(draft);
+
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "la ligne " + refLigne + " du draft " + refDraft
+				+ " modifiée");
 	}
 
 	/**
@@ -191,6 +209,7 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "le draft " + refDraft + " annulé");
 		LOGGER.info("Fin methode annulerDraft");
 	}
 
@@ -204,10 +223,13 @@ public class DraftServiceImpl implements DraftService {
 	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo)
 			throws OpaleException {
 		LOGGER.info("Debut methode ajouterReferenceExterne");
+		DraftValidator.checkUser(referenceExterneInfo.getUser());
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isExistDraft(draft, referenceDraft);
 		draft.setReferenceExterne(referenceExterneInfo.getReferenceExterne());
 		draftRepository.save(draft);
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, referenceDraft, "ajout de reference externe au draft  "
+				+ referenceDraft);
 		LOGGER.info("Fin methode ajouterReferenceExterne");
 
 	}
@@ -222,6 +244,8 @@ public class DraftServiceImpl implements DraftService {
 		LOGGER.info("Enter methode supprimerLigneDraft");
 		Draft draft = getDraftByReference(reference);
 
+		DraftValidator.checkUser(deleteInfo.getUser());
+
 		// verifier si le draft existe.
 		DraftValidator.isExistDraft(draft, reference);
 
@@ -232,15 +256,20 @@ public class DraftServiceImpl implements DraftService {
 
 		draftLigneRepository.delete(draftLigne);
 
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, reference, "la ligne " + referenceLigne + " du draft "
+				+ reference + " supprimée");
+
 		LOGGER.info("fin methode supprimerLigneDraft");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void associerClient(String refDraft, ClientInfo clientInfo) throws OpaleException {
 		LOGGER.info("Enter methode associerClient");
 		Draft draft = getDraftByReference(refDraft);
+		DraftValidator.checkUser(clientInfo.getUser());
 
 		// verifier si le draft existe.
 		DraftValidator.isExistDraft(draft, refDraft);
@@ -251,6 +280,9 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClient(clientInfo.toDomain());
 
 		draftRepository.save(draft);
+
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "associer le client " + clientInfo.getClientId()
+				+ " au draft" + refDraft);
 
 		LOGGER.info("fin methode associerClient");
 
