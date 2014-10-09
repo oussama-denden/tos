@@ -14,5 +14,6 @@ public interface KeygenService {
 	 *            l entite.
 	 * @return la nouvelle reference.
 	 */
+	@SuppressWarnings("rawtypes")
 	public String getNextKey(Class clazz);
 }

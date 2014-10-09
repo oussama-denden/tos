@@ -17,6 +17,7 @@ import com.nordnet.opale.util.spring.ApplicationContextHolder;
  * @author anisselmane.
  * 
  */
+
 @SpringApplicationContext(value = { "applicationContextTest.xml" })
 @Transactional(TransactionMode.DISABLED)
 public abstract class GlobalTestCase extends UnitilsJUnit4 {

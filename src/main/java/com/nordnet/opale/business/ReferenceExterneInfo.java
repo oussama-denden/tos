@@ -1,7 +1,8 @@
 package com.nordnet.opale.business;
 
 /**
- * cette classe rassemble les informations necessaires pour attriuber un reference externe a un draft
+ * cette classe rassemble les informations necessaires pour attriuber un
+ * reference externe a un draft.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -9,17 +10,17 @@ package com.nordnet.opale.business;
 public class ReferenceExterneInfo {
 
 	/**
-	 * l'utilisateur qui invoke l'action
+	 * l'utilisateur qui invoke l'action.
 	 */
 	private String user;
 
 	/**
-	 * la reference externe du draft
+	 * la reference externe du draft.
 	 */
 	private String referenceExterne;
 
 	/**
-	 * constructeur par defaut
+	 * constructeur par defaut.
 	 */
 	public ReferenceExterneInfo() {
 
@@ -28,7 +29,7 @@ public class ReferenceExterneInfo {
 	/* Getters and Setters */
 
 	/**
-	 * get the user
+	 * get the user.
 	 * 
 	 * @return {@link #user}
 	 */
@@ -37,7 +38,7 @@ public class ReferenceExterneInfo {
 	}
 
 	/**
-	 * set the user
+	 * set the user.
 	 * 
 	 * @param user
 	 *            the new {@link #user}
@@ -47,7 +48,7 @@ public class ReferenceExterneInfo {
 	}
 
 	/**
-	 * the reference externe
+	 * the reference externe.
 	 * 
 	 * @return {@link #referenceExterne}
 	 */
@@ -56,7 +57,7 @@ public class ReferenceExterneInfo {
 	}
 
 	/**
-	 * set the reference externe
+	 * set the reference externe.
 	 * 
 	 * @param referenceExterne
 	 *            the new {@link #referenceExterne}

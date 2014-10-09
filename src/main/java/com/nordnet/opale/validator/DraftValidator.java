@@ -1,5 +1,6 @@
 package com.nordnet.opale.validator;
 
+import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.Draft;
@@ -123,6 +124,21 @@ public class DraftValidator {
 	public static void isExistLigneDraft(DraftLigne draftLigne, String referenceLigne) throws OpaleException {
 		if (draftLigne == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.2", referenceLigne), "1.1.2");
+		}
+
+	}
+
+	/**
+	 * Tester si le clientId n'est pas null ou empty.
+	 * 
+	 * @param clientInfo
+	 *            {@link ClientInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void clientIdNotNull(ClientInfo clientInfo) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(clientInfo.getClientId())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.4"), "1.1.4");
 		}
 
 	}

@@ -1,6 +1,5 @@
 package com.nordnet.opale.business;
 
-import javax.persistence.Embeddable;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Ip}.
@@ -8,7 +7,6 @@ import javax.persistence.Embeddable;
  * @author anisselmane.
  * 
  */
-@Embeddable
 public class Ip {
 
 	/**

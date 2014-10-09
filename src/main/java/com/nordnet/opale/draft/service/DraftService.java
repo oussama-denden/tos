@@ -2,8 +2,9 @@ package com.nordnet.opale.draft.service;
 
 import java.util.List;
 
-import com.nordnet.opale.business.AuteurInfo;
+import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
+import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
@@ -40,11 +41,13 @@ public interface DraftService {
 	/**
 	 * Creer un draft.
 	 * 
-	 * @param auteurInfo
-	 *            {@link AuteurInfo}.
+	 * @param draftInfo
+	 *            draft info {@link DraftInfo}
 	 * @return {@link DraftReturn}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public DraftReturn creerDraft(AuteurInfo auteurInfo);
+	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException;
 
 	/**
 	 * Ajouter une ligne au draft.
@@ -55,7 +58,8 @@ public interface DraftService {
 	 *            the draft ligne information.
 	 * @return string
 	 * @throws OpaleException
-	 *             opale exception {@link DraftLigneInfo}. {@link OpaleException}.
+	 *             opale exception {@link DraftLigneInfo}.
+	 *             {@link OpaleException}.
 	 */
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException;
 
@@ -84,12 +88,14 @@ public interface DraftService {
 	public void annulerDraft(String refDraft) throws OpaleException;
 
 	/**
-	 * ajouter une reference externe a un draft
+	 * ajouter une reference externe a un draft.
 	 * 
 	 * @param referenceDraft
 	 *            reference draft {@link java.lang.String}
 	 * @param referenceExterneInfo
 	 *            reference externe info {@link ReferenceExterneInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo)
 			throws OpaleException;
@@ -116,5 +122,17 @@ public interface DraftService {
 	 * @return {@link Draft}.
 	 */
 	public List<Draft> findDraftAnnule();
+
+	/**
+	 * Associe une draft à un client.
+	 * 
+	 * @param refDraft
+	 *            reference draft.
+	 * @param clientInfo
+	 *            client informations.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void associerClient(String refDraft, ClientInfo clientInfo) throws OpaleException;
 
 }

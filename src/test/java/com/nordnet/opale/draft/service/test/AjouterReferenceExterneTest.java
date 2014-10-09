@@ -28,7 +28,7 @@ public class AjouterReferenceExterneTest extends GlobalTestCase {
 	private static final Logger LOGGER = Logger.getLogger(AjouterReferenceExterneTest.class);
 
 	/**
-	 * service de draft
+	 * service de draft.
 	 */
 	@SpringBean("draftService")
 	private DraftService draftService;
