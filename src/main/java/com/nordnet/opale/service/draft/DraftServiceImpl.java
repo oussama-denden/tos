@@ -1,4 +1,4 @@
-package com.nordnet.opale.draft.service;
+package com.nordnet.opale.service.draft;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,14 +19,14 @@ import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
-import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.domain.DraftLigne;
-import com.nordnet.opale.domain.DraftLigneDetail;
+import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.exception.OpaleException;
-import com.nordnet.opale.keygen.service.KeygenService;
 import com.nordnet.opale.repository.DraftLigneRepository;
 import com.nordnet.opale.repository.DraftRepository;
-import com.nordnet.opale.tracage.service.TracageService;
+import com.nordnet.opale.service.keygen.KeygenService;
+import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CatalogueValidator;

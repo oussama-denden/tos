@@ -15,8 +15,8 @@ import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Ip;
 import com.nordnet.opale.business.Offre;
-import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.domain.DraftLigne;
+import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 

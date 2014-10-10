@@ -3,7 +3,7 @@ package com.nordnet.opale.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.domain.draft.Draft;
 
 /**
  * contient les resultats de la validation du {@link Draft} avec la {@link CatalogueTrame}.

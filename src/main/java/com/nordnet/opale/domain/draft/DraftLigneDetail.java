@@ -1,4 +1,4 @@
-package com.nordnet.opale.domain;
+package com.nordnet.opale.domain.draft;
 
 import java.util.ArrayList;
 import java.util.List;

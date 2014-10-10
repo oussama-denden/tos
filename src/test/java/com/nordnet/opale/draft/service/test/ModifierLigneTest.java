@@ -9,15 +9,15 @@ import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
 import com.nordnet.opale.business.DraftLigneInfo;
-import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.domain.DraftLigne;
-import com.nordnet.opale.domain.DraftLigneDetail;
-import com.nordnet.opale.draft.service.DraftService;
+import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.Constants;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 

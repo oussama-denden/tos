@@ -1,4 +1,4 @@
-package com.nordnet.opale.domain;
+package com.nordnet.opale.domain.draft;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import org.hibernate.validator.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.nordnet.opale.domain.Auteur;
+import com.nordnet.opale.domain.Client;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.

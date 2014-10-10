@@ -1,4 +1,4 @@
-package com.nordnet.opale.keygen.service;
+package com.nordnet.opale.service.keygen;
 
 /**
  * La service KeygenService va contenir tous les operations le keygen.

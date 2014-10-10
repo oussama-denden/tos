@@ -8,9 +8,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.draft.service.DraftService;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.service.draft.DraftService;
 
 /**
  * cron responsable de nettoyer la base de données des données inutiles.

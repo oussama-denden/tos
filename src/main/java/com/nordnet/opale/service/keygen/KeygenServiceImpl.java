@@ -1,4 +1,4 @@
-package com.nordnet.opale.keygen.service;
+package com.nordnet.opale.service.keygen;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

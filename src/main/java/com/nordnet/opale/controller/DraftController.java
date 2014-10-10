@@ -24,11 +24,11 @@ import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.domain.DraftLigne;
-import com.nordnet.opale.draft.service.DraftService;
+import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.service.draft.DraftService;
 import com.wordnik.swagger.annotations.Api;
 
 /**

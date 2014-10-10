@@ -1,4 +1,4 @@
-package com.nordnet.opale.domain;
+package com.nordnet.opale.domain.draft;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +20,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
@@ -84,7 +85,6 @@ public class DraftLigne {
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "draftLigneId")
-	// @IndexColumn(name = "draftLigneId")
 	private List<DraftLigneDetail> draftLigneDetails = new ArrayList<DraftLigneDetail>();
 
 	/**

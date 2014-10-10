@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.domain.draft.Draft;
 
 /**
  * Outils de persistence pour l'entite {@link Draft}.

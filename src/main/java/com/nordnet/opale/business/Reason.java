@@ -3,7 +3,7 @@ package com.nordnet.opale.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nordnet.opale.domain.Draft;
+import com.nordnet.opale.domain.draft.Draft;
 
 /**
  * classe qui represente la cause de l'erreur de validation du {@link Draft}.

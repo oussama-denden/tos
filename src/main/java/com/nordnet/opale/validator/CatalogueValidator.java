@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.domain.DraftLigne;
-import com.nordnet.opale.domain.DraftLigneDetail;
+import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.util.PropertiesUtil;
 
 /**

@@ -1,4 +1,4 @@
-package com.nordnet.opale.tracage.service;
+package com.nordnet.opale.service.tracage;
 
 import com.nordnet.opale.domain.Tracage;
 
