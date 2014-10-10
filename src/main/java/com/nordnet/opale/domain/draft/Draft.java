@@ -38,7 +38,7 @@ public class Draft {
 	private Integer id;
 
 	/**
-	 * reference du contrat.
+	 * reference du draft.
 	 */
 	@NotNull
 	private String reference;

@@ -8,8 +8,10 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.exception.OpaleException;
@@ -148,5 +150,19 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public ValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException;
+
+	/**
+	 * transformer un {@link Draft} en {@link Commande}.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft.
+	 * @param transformationInfo
+	 *            {@link TransformationInfo}.
+	 * @return reference commande ou {@link ValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
+			throws OpaleException;
 
 }

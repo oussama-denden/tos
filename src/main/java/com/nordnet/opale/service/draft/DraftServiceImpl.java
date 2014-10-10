@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +17,11 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
+import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
@@ -341,4 +344,19 @@ public class DraftServiceImpl implements DraftService {
 		return catalogueValidator.validerDraft(draft, trameCatalogue);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
+			throws OpaleException {
+		Draft draft = getDraftByReference(referenceDraft);
+		DraftValidator.isExistDraft(draft, referenceDraft);
+		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
+		if (validationInfo.isValide()) {
+			Commande commande = new Commande();
+			return new JSONObject();
+		}
+		return validationInfo;
+	}
 }

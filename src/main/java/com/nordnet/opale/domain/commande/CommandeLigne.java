@@ -1,12 +1,19 @@
 package com.nordnet.opale.domain.commande;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.enums.ModeFacturation;
@@ -18,6 +25,8 @@ import com.nordnet.opale.enums.ModePaiement;
  * @author akram
  * 
  */
+@Table(name = "commandeligne")
+@Entity
 public class CommandeLigne {
 
 	/**
@@ -74,6 +83,13 @@ public class CommandeLigne {
 	 */
 	@Embedded
 	private Auteur auteur;
+
+	/**
+	 * liste des {@link CommandeLigneDetail} associe au ligne dans la commande.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "commandeLigneId")
+	private List<CommandeLigneDetail> commandeLigneDetails = new ArrayList<CommandeLigneDetail>();
 
 	/**
 	 * constructeur par defaut.

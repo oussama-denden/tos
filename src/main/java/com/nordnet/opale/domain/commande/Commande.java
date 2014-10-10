@@ -1,11 +1,16 @@
 package com.nordnet.opale.domain.commande;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
@@ -31,7 +36,7 @@ public class Commande {
 	private Integer id;
 
 	/**
-	 * reference du contrat.
+	 * reference de la commande.
 	 */
 	@NotNull
 	private String reference;
@@ -54,9 +59,22 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
+	 * listes des {@link CommandeLigne} de la commande.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "commandeId")
+	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Commande() {
+	}
+
+	@Override
+	public String toString() {
+		return "Commande [id=" + id + ", reference=" + reference + ", client=" + client + ", auteur=" + auteur
+				+ ", dateCreation=" + dateCreation + "]";
 	}
 
 	/**
@@ -142,6 +160,23 @@ public class Commande {
 	 */
 	public void setDateCreation(Date dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+
+	/**
+	 * 
+	 * @return {@link #commandeLignes}.
+	 */
+	public List<CommandeLigne> getCommandeLignes() {
+		return commandeLignes;
+	}
+
+	/**
+	 * 
+	 * @param commandeLignes
+	 *            {@link #commandeLignes}.
+	 */
+	public void setCommandeLignes(List<CommandeLigne> commandeLignes) {
+		this.commandeLignes = commandeLignes;
 	}
 
 }

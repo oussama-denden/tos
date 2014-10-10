@@ -22,8 +22,10 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.exception.InfoErreur;
@@ -228,6 +230,25 @@ public class DraftController {
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::validerDraft");
 		return draftService.validerDraft(refDraft, trameCatalogue);
+	}
+
+	/**
+	 * transformer un {@link Draft} en {@link Commande}.
+	 * 
+	 * @param refDraft
+	 *            reference draft.
+	 * @param transformationInfo
+	 *            {@link TransformationInfo}.
+	 * @return reference commande ou {@link ValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/transformerEnCommande", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object transformerEnCommande(@PathVariable String refDraft,
+			@RequestBody TransformationInfo transformationInfo) throws OpaleException {
+		LOGGER.info(":::ws-rec:::transformerEnCommande");
+		return draftService.transformerEnCommande(refDraft, transformationInfo);
 	}
 
 	/**
