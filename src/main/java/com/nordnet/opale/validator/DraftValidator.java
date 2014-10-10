@@ -5,6 +5,7 @@ import java.util.List;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
+import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -184,15 +185,32 @@ public class DraftValidator {
 	}
 
 	/**
-	 * verifer que l'user existe pour chaque appel web service
+	 * verifer que l'user existe pour chaque appel web service.
 	 * 
 	 * @param user
+	 *            {@link DraftInfo#getUser()}
 	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
 	public static void checkUser(String user) throws OpaleException {
 		if (Utils.isStringNullOrEmpty(user)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14"), "0.1.14");
 		}
+	}
+
+	/**
+	 * tester si le code n est pas null.
+	 * 
+	 * @param auteur
+	 *            {@link com.nordnet.opale.domain.Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void codeNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14", "code"), "0.1.14");
+		}
+
 	}
 
 }

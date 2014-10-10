@@ -1,4 +1,4 @@
-<!ELEMENT dataset (draft*, draftLigne*, draftLigneDetail*)>
+<!ELEMENT dataset (keygen*,draft*, draftLigne*, draftLigneDetail*)>
 
 <!ELEMENT draft EMPTY>
 <!ATTLIST draft
@@ -50,5 +50,12 @@
     action CDATA #IMPLIED
     user CDATA #IMPLIED
     date CDATA #IMPLIED
+>
+
+<!ELEMENT keygen EMPTY>
+<!ATTLIST keygen
+     id CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    entite CDATA #IMPLIED
 >
 
