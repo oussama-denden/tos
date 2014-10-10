@@ -97,6 +97,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.delete(draft);
 		tracageService.ajouterTrace(Constants.INTERNAL_USER, reference, "Draft " + reference + " supprimé");
 		LOGGER.info("Fin methode supprimerDraft");
+
 	}
 
 	/**
@@ -272,6 +273,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistLigneDraft(draftLigne, referenceLigne);
 
 		draftLigneRepository.delete(draftLigne);
+		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(Constants.INTERNAL_USER, reference, "la ligne " + referenceLigne + " du draft "
 				+ reference + " supprimée");
