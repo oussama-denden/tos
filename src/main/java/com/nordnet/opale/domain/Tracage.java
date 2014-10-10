@@ -92,7 +92,7 @@ public class Tracage {
 
 	/**
 	 * 
-	 * @param referenceContrat
+	 * @param referenceDraft
 	 *            {@link #referenceContrat}.
 	 */
 	public void setReferenceDraft(String referenceDraft) {
@@ -103,6 +103,7 @@ public class Tracage {
 	 * 
 	 * 
 	 * @param action
+	 *            {@link #action}
 	 * 
 	 */
 	public void setAction(String action) {

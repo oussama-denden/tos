@@ -88,21 +88,6 @@ public class DraftController {
 	}
 
 	/**
-	 * supprimer draft.
-	 * 
-	 * @param reference
-	 *            reference du draft.
-	 * @throws Exception
-	 *             exception {@link Exception}.
-	 */
-	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
-	@ResponseBody
-	public void supprimerDraft(@PathVariable String reference) throws Exception {
-		LOGGER.info(":::ws-rec:::supprimerDraft");
-		draftService.supprimerDraft(reference);
-	}
-
-	/**
 	 * Generer un draft.
 	 * 
 	 * @param auteurInfo
