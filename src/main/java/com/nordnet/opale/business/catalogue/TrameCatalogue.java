@@ -9,7 +9,7 @@ import java.util.List;
  * @author akram-moncer
  * 
  */
-public class CatalogueTrame {
+public class TrameCatalogue {
 
 	/**
 	 * list des {@link Frais}.
@@ -29,7 +29,7 @@ public class CatalogueTrame {
 	/**
 	 * constructeur par defaut.
 	 */
-	public CatalogueTrame() {
+	public TrameCatalogue() {
 	}
 
 	/**
@@ -83,4 +83,43 @@ public class CatalogueTrame {
 		this.offres = offres;
 	}
 
+	/**
+	 * verifier si la reference de l' offre dans le draft existe dans la trame du catalogue.
+	 * 
+	 * @param referenceOffre
+	 *            reference offre.
+	 * @return {@link OffreCatalogue}.
+	 */
+	public OffreCatalogue isOffreExist(String referenceOffre) {
+		OffreCatalogue offreCatalogue = new OffreCatalogue();
+		offreCatalogue.setReference(referenceOffre);
+		if (offres.contains(offreCatalogue)) {
+			for (OffreCatalogue offre : offres) {
+				if (offre.getReference().equals(referenceOffre))
+					return offre;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * varifier si la selection existe dans l'offre du catalogue.
+	 * 
+	 * @param offreCatalogue
+	 *            {@link OffreCatalogue}.
+	 * @param referenceSelection
+	 *            reference selection.
+	 * @return true si la selection existe dans l'offre.
+	 */
+	public boolean isDetailExist(OffreCatalogue offreCatalogue, String referenceSelection) {
+
+		if (offreCatalogue != null) {
+			DetailCatalogue detailCatalogue = new DetailCatalogue();
+			detailCatalogue.setReferenceSelection(referenceSelection);
+			if (offreCatalogue.getDetails().contains(detailCatalogue)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

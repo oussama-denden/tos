@@ -57,6 +57,23 @@ public class OffreCatalogue {
 	public OffreCatalogue() {
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OffreCatalogue other = (OffreCatalogue) obj;
+		if (reference == null) {
+			if (other.reference != null)
+				return false;
+		} else if (!reference.equals(other.reference))
+			return false;
+		return true;
+	}
+
 	/**
 	 * 
 	 * @return {@link #reference}.

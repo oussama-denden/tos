@@ -8,6 +8,8 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.ValidationInfo;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.exception.OpaleException;
@@ -58,8 +60,7 @@ public interface DraftService {
 	 *            the draft ligne information.
 	 * @return string
 	 * @throws OpaleException
-	 *             opale exception {@link DraftLigneInfo}.
-	 *             {@link OpaleException}.
+	 *             opale exception {@link DraftLigneInfo}. {@link OpaleException}.
 	 */
 	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException;
 
@@ -134,5 +135,18 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public void associerClient(String refDraft, ClientInfo clientInfo) throws OpaleException;
+
+	/**
+	 * valider un {@link Draft} avec une {@link TrameCatalogue}.
+	 * 
+	 * @param referenceDraft
+	 *            reference du draft.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return {@link ValidationInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public ValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException;
 
 }

@@ -37,6 +37,23 @@ public class DetailCatalogue {
 	public DetailCatalogue() {
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DetailCatalogue other = (DetailCatalogue) obj;
+		if (referenceSelection == null) {
+			if (other.referenceSelection != null)
+				return false;
+		} else if (!referenceSelection.equals(other.referenceSelection))
+			return false;
+		return true;
+	}
+
 	/**
 	 * 
 	 * @return {@link #referenceSelection}.

@@ -194,4 +194,5 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14"), "0.1.14");
 		}
 	}
+
 }

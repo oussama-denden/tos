@@ -16,6 +16,8 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.ValidationInfo;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
@@ -27,6 +29,7 @@ import com.nordnet.opale.repository.DraftRepository;
 import com.nordnet.opale.tracage.service.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
 
 /**
@@ -60,6 +63,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private KeygenService keygenService;
+
+	/**
+	 * {@link CatalogueValidator}.
+	 */
+	@Autowired
+	private CatalogueValidator catalogueValidator;
 
 	/**
 	 * {@link TracageService}
@@ -159,6 +168,9 @@ public class DraftServiceImpl implements DraftService {
 		return draftLigne.getReference();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
@@ -216,9 +228,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws OpaleException
 	 */
-
 	@Override
 	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo)
 			throws OpaleException {
@@ -312,6 +322,16 @@ public class DraftServiceImpl implements DraftService {
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+		Draft draft = getDraftByReference(referenceDraft);
+		DraftValidator.isExistDraft(draft, referenceDraft);
+		return catalogueValidator.validerDraft(draft, trameCatalogue);
 	}
 
 }
