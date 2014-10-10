@@ -7,9 +7,9 @@
 	<persistence-unit name="opale" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>com.nordnet.opale.domain.Keygen</class>
-		<class>com.nordnet.opale.domain.Draft</class>
-		<class>com.nordnet.opale.domain.DraftLigne</class>
-		<class>com.nordnet.opale.domain.DraftLigneDetail</class>
+		<class>com.nordnet.opale.domain.draft.Draft</class>
+		<class>com.nordnet.opale.domain.draft.DraftLigne</class>
+		<class>com.nordnet.opale.domain.draft.DraftLigneDetail</class>
 		<class>com.nordnet.opale.domain.Auteur</class>
 		<class>com.nordnet.opale.domain.Tracage</class>
 		

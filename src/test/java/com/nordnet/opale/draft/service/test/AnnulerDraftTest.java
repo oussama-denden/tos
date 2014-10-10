@@ -9,11 +9,11 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
-import com.nordnet.opale.domain.Draft;
-import com.nordnet.opale.draft.service.DraftService;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
