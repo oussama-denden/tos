@@ -22,7 +22,8 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
-import com.nordnet.opale.business.catalogue.CatalogueTrame;
+import com.nordnet.opale.business.ValidationInfo;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Draft;
 import com.nordnet.opale.domain.DraftLigne;
 import com.nordnet.opale.draft.service.DraftService;
@@ -210,10 +211,23 @@ public class DraftController {
 		draftService.associerClient(refDraft, clientInfo);
 	}
 
-	@RequestMapping(value = "/{refDraft:.+}/valider", method = RequestMethod.PUT, headers = "Accept=application/json")
+	/**
+	 * valider un {@link Draft} avec une {@link TrameCatalogue}.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return {@link ValidationInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/valider", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void validerDraft(@PathVariable String refDraft, @RequestBody CatalogueTrame catalogueTrame) {
-
+	public ValidationInfo validerDraft(@PathVariable String refDraft, @RequestBody TrameCatalogue trameCatalogue)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::validerDraft");
+		return draftService.validerDraft(refDraft, trameCatalogue);
 	}
 
 	/**
