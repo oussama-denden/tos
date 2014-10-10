@@ -62,7 +62,7 @@ public class DraftServiceImpl implements DraftService {
 	private KeygenService keygenService;
 
 	/**
-	 * {@link TracageService}
+	 * {@link TracageService}.
 	 */
 	@Autowired
 	private TracageService tracageService;
@@ -110,9 +110,16 @@ public class DraftServiceImpl implements DraftService {
 		Auteur auteur = new Auteur(draftInfo.getAuteur());
 
 		Draft draft = new Draft();
+
+		if (auteur != null) {
+			DraftValidator.codeNotNull(auteur);
+		}
+
 		draft.setAuteur(auteur);
 
 		if (draftInfo.getClient() != null) {
+			// verifier si le clientId n'est pas null ou empty.
+			DraftValidator.clientIdNotNull(draftInfo.getClient());
 			draft.setClient(draftInfo.getClient().toDomain());
 		}
 

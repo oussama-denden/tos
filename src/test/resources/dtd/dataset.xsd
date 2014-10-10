@@ -6,6 +6,7 @@
 		<xsd:complexType>
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
 		                   <xsd:element name="draft" type="dflt:draft_type" />
+		                   <xsd:element name="keygen" type="dflt:keygen_type" />
 		                   <xsd:element name="draftLigne" type="dflt:draftLigne_type" />
 		                   <xsd:element name="draftLigneDetail" type="dflt:draftLigneDetail_type" />
 		                    <xsd:element name="tracage" type="dflt:tracage_type" />

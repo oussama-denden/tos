@@ -1,0 +1,44 @@
+{
+  "lignes": [
+    {
+      "auteur": {
+        "code": "part_123456",
+        "qui": "GRC.WEL-JOHNDOE",
+        "canal": "welcome",
+        "ip": {
+          "ts": "1411654933 ",
+          "ip": "127.0.0.1"
+        }
+      },
+      "offre": {
+        "referenceOffre": "jet_surf10",
+        "referenceTarif": "mensuel_jet10_base",
+        "modePaiement": "SEPA",
+        "modeFacturation": "PREMIER_MOIS",
+        "details": [
+          {
+            "reference": "kitsat",
+            "referenceTarif": "achat_kit_mensuel",
+            "modePaiement": "FACTURE",
+            "configurationJson": ""
+          }
+        ]
+      }
+    }
+  ],
+  "client": {
+  "clientId": "client-1245",
+     "adresseFacturationId": "Adr_Facturation_2",
+    "adresseLivraisonId": "Adr_Livraison_69"
+  },
+  "auteur": {
+    "qui": "GRC.WEL-JOHNDOE",
+    "canal": "welcome",
+    "ip": {
+      "ts": "1411654933",
+      "ip": "127.0.0.1"
+    }
+  },
+  
+  "user" :"someone"
+}
