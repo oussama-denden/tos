@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.nordnet.opale.business.DetailCommandeLigneInfo;
+import com.nordnet.opale.business.OffreCatalogueInfo;
+import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
@@ -365,6 +368,35 @@ public class CommandeLigne {
 	 */
 	public void addTarif(Tarif tarif) {
 		tarifs.add(tarif);
+	}
+
+	/**
+	 * recuperer l'offre business a parot de chaque ligne de commande
+	 * 
+	 * @return {@link OffreCatalogueInfo}
+	 */
+	public OffreCatalogueInfo toOffreCatalogueInfo() {
+		OffreCatalogueInfo offreCatalogueInfo = new OffreCatalogueInfo();
+		offreCatalogueInfo.setReference(referenceOffre);
+		offreCatalogueInfo.setLabel(label);
+		offreCatalogueInfo.setGamme(gamme);
+		offreCatalogueInfo.setFammille(secteur);
+		offreCatalogueInfo.setModeFacturation(modeFacturation);
+
+		List<TarifInfo> tarifInfos = new ArrayList<TarifInfo>();
+		for (Tarif tarif : tarifs) {
+			tarifInfos.add(tarif.toTarifInfo());
+		}
+		offreCatalogueInfo.setTarif(tarifInfos);
+
+		List<DetailCommandeLigneInfo> detailCommandeLigneInfos = new ArrayList<DetailCommandeLigneInfo>();
+		for (CommandeLigneDetail commandeLigneDetail : commandeLigneDetails) {
+			detailCommandeLigneInfos.add(commandeLigneDetail.toDetailCommandeLigneInfo());
+		}
+		offreCatalogueInfo.setDetails(detailCommandeLigneInfos);
+
+		return offreCatalogueInfo;
+
 	}
 
 }

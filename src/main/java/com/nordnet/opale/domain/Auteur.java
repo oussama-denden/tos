@@ -4,6 +4,8 @@ import javax.persistence.Embeddable;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.Ip;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link Auteur}.
  * 
@@ -142,6 +144,18 @@ public class Auteur {
 	 */
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public com.nordnet.opale.business.Auteur toAuteurBusiness() {
+		com.nordnet.opale.business.Auteur auteur = new com.nordnet.opale.business.Auteur();
+		auteur.setCanal(canal);
+		auteur.setCode(code);
+		Ip ipBusiness = new Ip();
+		ipBusiness.setIp(ip);
+		auteur.setIp(ipBusiness);
+		auteur.setQui(qui);
+		return auteur;
+
 	}
 
 }

@@ -13,4 +13,11 @@ import com.nordnet.opale.domain.commande.Commande;
 @Repository("commandeRepository")
 public interface CommandeRepository extends JpaRepository<Commande, Integer> {
 
+	/**
+	 * 
+	 * @param reference
+	 * @return
+	 */
+	public Commande findByReference(String reference);
+
 }
