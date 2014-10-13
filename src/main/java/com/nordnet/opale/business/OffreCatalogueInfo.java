@@ -2,8 +2,10 @@ package com.nordnet.opale.business;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.enums.ModeFacturation;
+import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link OffreCatalogue}.
@@ -41,6 +43,7 @@ public class OffreCatalogueInfo {
 	/**
 	 * mode de facturation
 	 */
+	@JsonDeserialize(using = ModeFacturationDeserializer.class)
 	private ModeFacturation modeFacturation;
 
 	/**

@@ -1,5 +1,8 @@
 package com.nordnet.opale.validator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.nordnet.opale.business.ValidationInfo;
@@ -30,18 +33,27 @@ public class CatalogueValidator {
 	 */
 	public ValidationInfo validerDraft(Draft draft, TrameCatalogue trameCatalogue) {
 		ValidationInfo validationInfo = new ValidationInfo();
+		List<String> values;
 		int i = 0, j = 0;
+		if (draft.getClient() == null) {
+			validationInfo.addReason("commande", null, PropertiesUtil.getInstance().getErrorMessage("1.1.8"), null);
+		}
+
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
 			if (offreCatalogue == null) {
-				validationInfo.addReason("lignes[" + i + "].offre.reference", null, PropertiesUtil.getInstance()
-						.getErrorMessage("1.1.6", draftLigne.getReferenceOffre()), null);
+				values = new ArrayList<String>();
+				values.add(draftLigne.getReferenceOffre());
+				validationInfo.addReason("lignes[" + i + "].offre.reference", "36.3.1.2", PropertiesUtil.getInstance()
+						.getErrorMessage("1.1.6", draftLigne.getReferenceOffre()), values);
 			} else {
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
 					if (!trameCatalogue.isDetailExist(offreCatalogue, detail.getReferenceSelection())) {
-						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].reference", null,
+						values = new ArrayList<String>();
+						values.add(detail.getReferenceSelection());
+						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].reference", "36.3.1.3",
 								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
-								null);
+								values);
 					}
 					j++;
 				}
