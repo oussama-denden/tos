@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,6 @@ import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
-import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
@@ -332,15 +330,18 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
 			throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
-		DraftValidator.isExistDraft(draft, referenceDraft);
+		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
+			commande.setReference(keygenService.getNextKey(DraftLigne.class));
+			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 			commandeService.save(commande);
-			return new JSONObject();
+			return commande;
 		} else {
 			return validationInfo;
 		}
@@ -370,19 +371,6 @@ public class DraftServiceImpl implements DraftService {
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}
-	}
-
-	/**
-	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
-	 * 
-	 * @param draftDetails
-	 *            liste des {@link DraftLigneDetail}.
-	 * @param commandeDetails
-	 *            liste des {@link CommandeLigneDetail}.
-	 */
-	private void creerArborescenceCommande(List<DraftLigneDetail> draftDetails,
-			List<CommandeLigneDetail> commandeDetails) {
-
 	}
 
 }

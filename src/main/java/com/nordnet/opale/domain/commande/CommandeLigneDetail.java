@@ -36,9 +36,9 @@ public class CommandeLigneDetail {
 	private Integer id;
 
 	/**
-	 * reference selection.
+	 * reference produit.
 	 */
-	private String referenceSelection;
+	private String referenceProduit;
 
 	/**
 	 * {@link ModePaiement}.
@@ -87,14 +87,14 @@ public class CommandeLigneDetail {
 	 *            {@link TrameCatalogue}.
 	 */
 	public CommandeLigneDetail(DraftLigneDetail detail, TrameCatalogue trameCatalogue) {
-		this.referenceSelection = detail.getReferenceSelection();
+		this.referenceProduit = detail.getReference();
 		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
 	}
 
 	@Override
 	public String toString() {
-		return "CommandeLigneDetail [id=" + id + ", referenceSelection=" + referenceSelection + ", modePaiement="
+		return "CommandeLigneDetail [id=" + id + ", referenceSelection=" + referenceProduit + ", modePaiement="
 				+ modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
@@ -117,19 +117,19 @@ public class CommandeLigneDetail {
 
 	/**
 	 * 
-	 * @return {@link #referenceSelection}.
+	 * @return {@link #referenceProduit}.
 	 */
-	public String getReferenceSelection() {
-		return referenceSelection;
+	public String getReferenceProduit() {
+		return referenceProduit;
 	}
 
 	/**
 	 * 
-	 * @param referenceSelection
-	 *            {@link #referenceSelection}.
+	 * @param referenceProduit
+	 *            {@link #referenceProduit}.
 	 */
-	public void setReferenceSelection(String referenceSelection) {
-		this.referenceSelection = referenceSelection;
+	public void setReferenceProduit(String referenceProduit) {
+		this.referenceProduit = referenceProduit;
 	}
 
 	/**

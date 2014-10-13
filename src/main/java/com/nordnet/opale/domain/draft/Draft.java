@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Optional;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 
@@ -215,6 +216,16 @@ public class Draft {
 	 */
 	public void addLigne(DraftLigne draftLigne) {
 		this.draftLignes.add(draftLigne);
+	}
+
+	/**
+	 * tester si le draft est annule.
+	 * 
+	 * @return true si le draft est annule.
+	 */
+	public Boolean isAnnule() {
+		Optional<Date> dateAnnulationOp = Optional.fromNullable(dateAnnulation);
+		return dateAnnulationOp.isPresent();
 	}
 
 }

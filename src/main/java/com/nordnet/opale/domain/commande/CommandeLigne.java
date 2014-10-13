@@ -26,7 +26,7 @@ import com.nordnet.opale.enums.ModePaiement;
 /**
  * Classe represente une ligne (offre) dans la {@link Commande}.
  * 
- * @author akram
+ * @author akram-moncer
  * 
  */
 @Table(name = "commandeligne")
@@ -123,6 +123,7 @@ public class CommandeLigne {
 		this.modePaiement = draftLigne.getModePaiement();
 		this.modeFacturation = draftLigne.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
+		this.dateCreation = draftLigne.getDateCreation();
 
 		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
 			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, trameCatalogue);

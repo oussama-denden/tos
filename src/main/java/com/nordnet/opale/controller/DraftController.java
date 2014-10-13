@@ -227,13 +227,21 @@ public class DraftController {
 	 * @return reference commande ou {@link ValidationInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/transformerEnCommande", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object transformerEnCommande(@PathVariable String refDraft,
-			@RequestBody TransformationInfo transformationInfo) throws OpaleException {
+			@RequestBody TransformationInfo transformationInfo) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerEnCommande");
-		return draftService.transformerEnCommande(refDraft, transformationInfo);
+		Object object = draftService.transformerEnCommande(refDraft, transformationInfo);
+		if (object instanceof Commande) {
+			JSONObject jsonResponse = new JSONObject();
+			jsonResponse.put("reference", ((Commande) object).getReference());
+			return jsonResponse.toString();
+		}
+		return object;
 	}
 
 	/**
