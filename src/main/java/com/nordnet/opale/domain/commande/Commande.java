@@ -48,6 +48,11 @@ public class Commande {
 	private String reference;
 
 	/**
+	 * la reference du draft de la commande.
+	 */
+	private String referenceDraft;
+
+	/**
 	 * L adresse du draft.
 	 */
 	@Embedded
@@ -88,8 +93,10 @@ public class Commande {
 	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
 		this.client = draft.getClient();
 		this.auteur = draft.getAuteur();
+		this.referenceDraft = draft.getReference();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
+			commandeLigne.setNumero(this.commandeLignes.size());
 			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
 			addLigne(commandeLigne);
 		}
@@ -133,6 +140,23 @@ public class Commande {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceDraft}.
+	 */
+	public String getReferenceDraft() {
+		return referenceDraft;
+	}
+
+	/**
+	 * 
+	 * @param referenceDraft
+	 *            {@link #referenceDraft}.
+	 */
+	public void setReferenceDraft(String referenceDraft) {
+		this.referenceDraft = referenceDraft;
 	}
 
 	/**

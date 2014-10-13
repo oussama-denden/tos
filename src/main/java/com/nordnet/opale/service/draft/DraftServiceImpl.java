@@ -335,12 +335,15 @@ public class DraftServiceImpl implements DraftService {
 			throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
+		draft.setClient(transformationInfo.getClientInfo().getClientId(), null, null);
 		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
-			commande.setReference(keygenService.getNextKey(DraftLigne.class));
+			commande.setReference(keygenService.getNextKey(Commande.class));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 			commandeService.save(commande);
+			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour().toDate());
+			draftRepository.save(draft);
 			return commande;
 		} else {
 			return validationInfo;

@@ -230,6 +230,10 @@ public class DraftValidator {
 		if (draft.isAnnule()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.9"), "1.1.9");
 		}
+
+		if (draft.isTransforme()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.10"), "1.1.10");
+		}
 	}
 
 }

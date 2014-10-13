@@ -37,17 +37,24 @@ public class AjouterLigneTest extends GlobalTestCase {
 	private DraftService draftService;
 
 	/**
+	 * {@link DraftInfoGenerator}.
+	 */
+	@SpringBean("draftInfoGenerator")
+	private DraftInfoGenerator draftInfoGenerator;
+
+	/**
 	 * Tester le cas de l'ajout valid d'une ligne valide.
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLigneValide() {
-		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfo();
 		try {
+			DraftLigneInfo draftLigneInfo =
+					draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/ajouterLigne.json");
 			draftService.ajouterLigne("REF-DRAFT-1", draftLigneInfo);
 			Draft draft = draftService.getDraftByReference("REF-DRAFT-1");
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(draft.getDraftLignes().size()));
-			assertEquals(Double.valueOf(Constants.TROIS),
+			assertEquals(Double.valueOf(Constants.DEUX),
 					Double.valueOf(draft.getDraftLignes().get(Constants.ZERO).getDraftLigneDetails().size()));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -61,12 +68,16 @@ public class AjouterLigneTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLigneAvecDraftNonExist() {
-		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfo();
 		try {
+			DraftLigneInfo draftLigneInfo =
+					draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/ajouterLigne.json");
 			draftService.ajouterLigne("REF-DRAFT-2", draftLigneInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("1.1.1", e.getErrorCode());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
 		}
 	}
 
@@ -76,13 +87,17 @@ public class AjouterLigneTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLigneAvecOffreNonValide() {
-		DraftLigneInfo draftLigneInfo = DraftInfoGenerator.getDraftLigneInfo();
-		draftLigneInfo.getOffre().setReferenceOffre(null);
 		try {
+			DraftLigneInfo draftLigneInfo =
+					draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/ajouterLigne.json");
+			draftLigneInfo.getOffre().setReferenceOffre(null);
 			draftService.ajouterLigne("REF-DRAFT-1", draftLigneInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("0.1.4", e.getErrorCode());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
 		}
 	}
 }

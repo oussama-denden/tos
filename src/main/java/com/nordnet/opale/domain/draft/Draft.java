@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
+import com.nordnet.opale.domain.commande.Commande;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.
@@ -65,6 +66,11 @@ public class Draft {
 	 * La date d annulation du draft.
 	 */
 	private Date dateAnnulation;
+
+	/**
+	 * date de transformation du draft en {@link Commande}.
+	 */
+	private Date dateTransformationCommande;
 
 	/**
 	 * la list des {@link DraftLigne} associe au draft.
@@ -137,6 +143,24 @@ public class Draft {
 	}
 
 	/**
+	 * associe un client au draft.
+	 * 
+	 * @param clientId
+	 *            id du client.
+	 * @param adresseFacturationId
+	 *            addresse de facturation.
+	 * @param adresseLivraisonId
+	 *            addresse de livraison.
+	 */
+	public void setClient(String clientId, String adresseFacturationId, String adresseLivraisonId) {
+		Client client = new Client();
+		client.setAdresseFacturationId(adresseFacturationId);
+		client.setAdresseLivraisonId(adresseLivraisonId);
+		client.setClientId(clientId);
+		this.client = client;
+	}
+
+	/**
 	 * 
 	 * @return {@link #auteur}.
 	 */
@@ -193,6 +217,23 @@ public class Draft {
 
 	/**
 	 * 
+	 * @return {@link #dateTransformationCommande}.
+	 */
+	public Date getDateTransformationCommande() {
+		return dateTransformationCommande;
+	}
+
+	/**
+	 * 
+	 * @param dateTransformationCommande
+	 *            {@link #dateTransformationCommande}.
+	 */
+	public void setDateTransformationCommande(Date dateTransformationCommande) {
+		this.dateTransformationCommande = dateTransformationCommande;
+	}
+
+	/**
+	 * 
 	 * @return List {@link DraftLigne}.
 	 */
 	public List<DraftLigne> getDraftLignes() {
@@ -226,6 +267,16 @@ public class Draft {
 	public Boolean isAnnule() {
 		Optional<Date> dateAnnulationOp = Optional.fromNullable(dateAnnulation);
 		return dateAnnulationOp.isPresent();
+	}
+
+	/**
+	 * tester si le draft a ete transforme en {@link Commande}.
+	 * 
+	 * @return true si le draft a ete transforme en draft.
+	 */
+	public Boolean isTransforme() {
+		Optional<Date> dateTransfromationOp = Optional.fromNullable(dateTransformationCommande);
+		return dateTransfromationOp.isPresent();
 	}
 
 }

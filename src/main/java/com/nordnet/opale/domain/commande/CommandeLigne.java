@@ -41,9 +41,9 @@ public class CommandeLigne {
 	private Integer id;
 
 	/**
-	 * reference de la ligne de draft.
+	 * numero de la ligne dans la commande.
 	 */
-	private String reference;
+	private Integer numero;
 
 	/**
 	 * reference de l'offre.
@@ -138,8 +138,8 @@ public class CommandeLigne {
 
 	@Override
 	public String toString() {
-		return "CommandeLigne [id=" + id + ", reference=" + reference + ", referenceOffre=" + referenceOffre
-				+ ", label=" + label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement
+		return "CommandeLigne [id=" + id + ", numero=" + numero + ", referenceOffre=" + referenceOffre + ", label="
+				+ label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement
 				+ ", modeFacturation=" + modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur
 				+ "]";
 	}
@@ -163,19 +163,19 @@ public class CommandeLigne {
 
 	/**
 	 * 
-	 * @return {@link #reference}
+	 * @return {@link #numero}.
 	 */
-	public String getReference() {
-		return reference;
+	public Integer getNumero() {
+		return numero;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}.
+	 * @param numero
+	 *            {@link #numero}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setNumero(Integer numero) {
+		this.numero = numero;
 	}
 
 	/**
