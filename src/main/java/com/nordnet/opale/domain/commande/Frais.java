@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.FraisInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.enums.TypeFrais;
 
@@ -202,6 +203,20 @@ public class Frais {
 	 */
 	public void setPolitiqueIndex(String politiqueIndex) {
 		this.politiqueIndex = politiqueIndex;
+	}
+
+	/**
+	 * recuperer le frais business partir du frais doamin
+	 * 
+	 * @return {@link FraisInfo}
+	 */
+	public FraisInfo tofraisInfo() {
+		FraisInfo fraisInfo = new FraisInfo();
+		fraisInfo.setReference(reference);
+		fraisInfo.setLabel(label);
+		fraisInfo.setMontant(montant);
+		fraisInfo.setType(typeFrais);
+		return fraisInfo;
 	}
 
 }

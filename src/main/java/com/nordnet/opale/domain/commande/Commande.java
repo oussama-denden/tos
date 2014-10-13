@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
@@ -263,4 +265,25 @@ public class Commande {
 		}
 	}
 
+	/**
+	 * recuperer commande business a paritr de command domain.
+	 * 
+	 * @return
+	 */
+	public CommandeInfo toCommandInfo() {
+		CommandeInfo commandeInfo = new CommandeInfo();
+		commandeInfo.setAuteur(auteur.toAuteurBusiness());
+		List<CommandeLigneInfo> lignes = new ArrayList<CommandeLigneInfo>();
+
+		for (CommandeLigne commandeLigne : commandeLignes) {
+			CommandeLigneInfo commandeLigneInfo = new CommandeLigneInfo();
+			commandeLigneInfo.setAuteur(commandeLigne.getAuteur().toAuteurBusiness());
+			commandeLigneInfo.setOffre(commandeLigne.toOffreCatalogueInfo());
+			lignes.add(commandeLigneInfo);
+
+		}
+		commandeInfo.setLignes(lignes);
+		return commandeInfo;
+
+	}
 }

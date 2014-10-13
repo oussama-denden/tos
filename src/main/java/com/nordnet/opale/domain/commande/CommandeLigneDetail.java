@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.nordnet.opale.business.DetailCommandeLigneInfo;
+import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModePaiement;
@@ -225,6 +227,26 @@ public class CommandeLigneDetail {
 	 */
 	public void addTarif(Tarif tarif) {
 		this.tarifs.add(tarif);
+	}
+
+	/**
+	 * recuperer commande ligne business a paritr de command ligne domain
+	 * 
+	 * @return {@link DetailCommandeLigneInfo}
+	 */
+	public DetailCommandeLigneInfo toDetailCommandeLigneInfo() {
+		DetailCommandeLigneInfo detailCommandeLigneInfo = new DetailCommandeLigneInfo();
+		detailCommandeLigneInfo.setReference(referenceProduit);
+		// detailCommandeLigneInfo.setLabel(label);
+		List<TarifInfo> tarifInfos = new ArrayList<TarifInfo>();
+
+		for (Tarif tarif : tarifs) {
+			tarifInfos.add(tarif.toTarifInfo());
+		}
+		detailCommandeLigneInfo.setTarif(tarifInfos);
+
+		return detailCommandeLigneInfo;
+
 	}
 
 }

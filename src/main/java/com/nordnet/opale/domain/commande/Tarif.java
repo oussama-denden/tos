@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.FraisInfo;
+import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.enums.TypeTVA;
 
@@ -246,6 +248,28 @@ public class Tarif {
 	 */
 	public void addFrais(Frais frais) {
 		this.frais.add(frais);
+	}
+
+	/**
+	 * recuprer le tarif business partir du tarif domain
+	 * 
+	 * @return {@link TarifInfo}
+	 */
+	public TarifInfo toTarifInfo() {
+		TarifInfo tarifInfo = new TarifInfo();
+		tarifInfo.setReference(reference);
+		tarifInfo.setPrix(prix);
+		tarifInfo.setPeriodicite(periode);
+		tarifInfo.setDuree(duree);
+		tarifInfo.setEngagement(engagement);
+		List<FraisInfo> fraisInfos = new ArrayList<FraisInfo>();
+		for (Frais frai : frais) {
+			fraisInfos.add(frai.tofraisInfo());
+		}
+		tarifInfo.setFrais(fraisInfos);
+
+		return tarifInfo;
+
 	}
 
 }
