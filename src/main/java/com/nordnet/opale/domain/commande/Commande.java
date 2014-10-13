@@ -19,6 +19,7 @@ import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
 
 /**
  * Classe qui represente la commande.
@@ -84,6 +85,10 @@ public class Commande {
 	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
 		this.client = draft.getClient();
 		this.auteur = draft.getAuteur();
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
+			addLigne(commandeLigne);
+		}
 	}
 
 	@Override
@@ -192,6 +197,16 @@ public class Commande {
 	 */
 	public void setCommandeLignes(List<CommandeLigne> commandeLignes) {
 		this.commandeLignes = commandeLignes;
+	}
+
+	/**
+	 * ajouter une ligne a la commande.
+	 * 
+	 * @param commandeLigne
+	 *            {@link CommandeLigne}.
+	 */
+	public void addLigne(CommandeLigne commandeLigne) {
+		this.commandeLignes.add(commandeLigne);
 	}
 
 }

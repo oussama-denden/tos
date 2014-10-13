@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.enums.TypeTVA;
 
 /**
@@ -77,6 +78,28 @@ public class Tarif {
 	 * constructeur par defaut.
 	 */
 	public Tarif() {
+	}
+
+	/**
+	 * creation d'un tarif a partir de la {@link TrameCatalogue}.
+	 * 
+	 * @param refTarif
+	 *            reference tarif.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public Tarif(String refTarif, TrameCatalogue trameCatalogue) {
+		com.nordnet.opale.business.catalogue.Tarif tarif = trameCatalogue.getTarifsMap().get(refTarif);
+		this.reference = tarif.getReference();
+		this.prix = tarif.getPrix();
+		this.engagement = tarif.getEngagement();
+		// this.duree
+		// this.typeTVA
+		this.periode = tarif.getPeriode();
+		for (String refFrais : tarif.getFrais()) {
+			Frais frais = new Frais(refFrais, trameCatalogue);
+			addFrais(frais);
+		}
 	}
 
 	/**
@@ -213,6 +236,16 @@ public class Tarif {
 	 */
 	public void setFrais(List<Frais> frais) {
 		this.frais = frais;
+	}
+
+	/**
+	 * ajouter un {@link Frais} au tarif.
+	 * 
+	 * @param frais
+	 *            {@link Frais}.
+	 */
+	public void addFrais(Frais frais) {
+		this.frais.add(frais);
 	}
 
 }

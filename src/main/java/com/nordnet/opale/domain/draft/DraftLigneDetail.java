@@ -237,4 +237,11 @@ public class DraftLigneDetail {
 		this.sousDraftLigneDetails = sousDraftLigneDetails;
 	}
 
+	public Boolean isParent() {
+		if (draftLigneDetailParent != null) {
+			return false;
+		}
+		return true;
+	}
+
 }

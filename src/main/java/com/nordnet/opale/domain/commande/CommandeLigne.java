@@ -15,7 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.nordnet.opale.business.catalogue.OffreCatalogue;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
+import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
@@ -95,13 +99,40 @@ public class CommandeLigne {
 	 * liste des {@link Tarif} associe a la ligne de commande.
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "tarifId")
+	@JoinColumn(name = "commandeLigneId")
 	private List<Tarif> tarifs = new ArrayList<Tarif>();
 
 	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {
+	}
+
+	/**
+	 * creation d'une ligne de commande a partir du {@link DraftLigne} et de {@link TrameCatalogue}.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public CommandeLigne(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
+		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
+		this.referenceOffre = draftLigne.getReferenceOffre();
+		this.gamme = offreCatalogue.getGamme();
+		this.modePaiement = draftLigne.getModePaiement();
+		this.modeFacturation = draftLigne.getModeFacturation();
+		this.auteur = draftLigne.getAuteur();
+
+		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
+			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, trameCatalogue);
+			addCommandeLigneDetail(commandeLigneDetail);
+		}
+
+		for (String refTarif : offreCatalogue.getTarifs()) {
+			Tarif tarif = new Tarif(refTarif, trameCatalogue);
+			addTarif(tarif);
+		}
 	}
 
 	@Override
@@ -300,6 +331,16 @@ public class CommandeLigne {
 	}
 
 	/**
+	 * ajouter un {@link CommandeLigneDetail} a ligne de commande.
+	 * 
+	 * @param commandeLigneDetail
+	 *            {@link CommandeLigneDetail}.
+	 */
+	public void addCommandeLigneDetail(CommandeLigneDetail commandeLigneDetail) {
+		this.commandeLigneDetails.add(commandeLigneDetail);
+	}
+
+	/**
 	 * 
 	 * @return {@link #tarifs}.
 	 */
@@ -314,6 +355,16 @@ public class CommandeLigne {
 	 */
 	public void setTarifs(List<Tarif> tarifs) {
 		this.tarifs = tarifs;
+	}
+
+	/**
+	 * associe un {@link Tarif} a l'offre dans la commande.
+	 * 
+	 * @param tarif
+	 *            {@link Tarif}.
+	 */
+	public void addTarif(Tarif tarif) {
+		tarifs.add(tarif);
 	}
 
 }

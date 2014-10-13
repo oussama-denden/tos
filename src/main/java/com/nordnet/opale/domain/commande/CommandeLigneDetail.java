@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -63,9 +65,31 @@ public class CommandeLigneDetail {
 	private List<CommandeLigneDetail> sousCommandeLigneDetails = new ArrayList<CommandeLigneDetail>();
 
 	/**
+	 * Liste des {@link Tarif} associe.
+	 * 
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "commandeLigneDetailId")
+	private List<Tarif> tarifs = new ArrayList<Tarif>();
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigneDetail() {
+	}
+
+	/**
+	 * creation d'un {@link CommandeLigneDetail}.
+	 * 
+	 * @param detail
+	 *            {@link DraftLigneDetail}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public CommandeLigneDetail(DraftLigneDetail detail, TrameCatalogue trameCatalogue) {
+		this.referenceSelection = detail.getReferenceSelection();
+		this.modePaiement = detail.getModePaiement();
+		this.configurationJson = detail.getConfigurationJson();
 	}
 
 	@Override
@@ -140,6 +164,67 @@ public class CommandeLigneDetail {
 	 */
 	public void setConfigurationJson(String configurationJson) {
 		this.configurationJson = configurationJson;
+	}
+
+	/**
+	 * 
+	 * @return {@link CommandeLigneDetail}.
+	 */
+	public CommandeLigneDetail getCommandeLigneDetailParent() {
+		return commandeLigneDetailParent;
+	}
+
+	/**
+	 * 
+	 * @param commandeLigneDetailParent
+	 *            {@link CommandeLigneDetail}.
+	 */
+	public void setCommandeLigneDetailParent(CommandeLigneDetail commandeLigneDetailParent) {
+		this.commandeLigneDetailParent = commandeLigneDetailParent;
+	}
+
+	/**
+	 * 
+	 * @return {@link #sousCommandeLigneDetails}.
+	 */
+	public List<CommandeLigneDetail> getSousCommandeLigneDetails() {
+		return sousCommandeLigneDetails;
+	}
+
+	/**
+	 * 
+	 * @param sousCommandeLigneDetails
+	 *            {@link #sousCommandeLigneDetails}.
+	 */
+	public void setSousCommandeLigneDetails(List<CommandeLigneDetail> sousCommandeLigneDetails) {
+		this.sousCommandeLigneDetails = sousCommandeLigneDetails;
+	}
+
+	/**
+	 * 
+	 * @return {@link #tarifs}.
+	 */
+	public List<Tarif> getTarifs() {
+		return tarifs;
+	}
+
+	/**
+	 * 
+	 * @param tarifs
+	 *            {@link #tarifs}.
+	 */
+	public void setTarifs(List<Tarif> tarifs) {
+		this.tarifs = tarifs;
+	}
+
+	/**
+	 * ajouter un tarif.
+	 * 
+	 * @param tarif
+	 *            {@link Tarif}.
+	 */
+	public void addTarif(Tarif tarif) {
+		this.tarifs.add(tarif);
 	}
 
 }

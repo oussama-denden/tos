@@ -22,12 +22,14 @@ import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
+import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
@@ -78,6 +80,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private TracageService tracageService;
+
+	/**
+	 * {@link CommandeService}.
+	 */
+	@Autowired
+	private CommandeService commandeService;
 
 	/**
 	 * {@inheritDoc}
@@ -168,7 +176,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 		DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
-		creerArborescence(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
+		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 		draft.addLigne(draftLigne);
@@ -203,7 +211,7 @@ public class DraftServiceImpl implements DraftService {
 		 * creation de la nouvelle ligne.
 		 */
 		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
-		creerArborescence(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
+		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
 		nouveauDraftLigne.setReference(draftLigne.getReference());
 		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
 
@@ -311,32 +319,6 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * creer l'arborescence entre les {@link DraftLigneDetail}.
-	 * 
-	 * @param details
-	 *            liste des {@link Detail}.
-	 * @param draftLigneDetails
-	 *            liste des {@link DraftLigneDetail}.
-	 */
-	private void creerArborescence(List<Detail> details, List<DraftLigneDetail> draftLigneDetails) {
-		/*
-		 * transformer la list en Map pour faciliter l'accee par la suite.
-		 */
-		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
-		for (DraftLigneDetail draftLigneDetail : draftLigneDetails) {
-			draftLigneDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
-		}
-
-		for (Detail detail : details) {
-			if (!detail.isParent()) {
-				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(detail.getReference());
-				DraftLigneDetail draftLigneDetailParent = draftLigneDetailsMap.get(detail.getDependDe());
-				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
-			}
-		}
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -357,10 +339,50 @@ public class DraftServiceImpl implements DraftService {
 		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
+			commandeService.save(commande);
 			return new JSONObject();
 		} else {
 			return validationInfo;
 		}
+	}
+
+	/**
+	 * creer l'arborescence entre les {@link DraftLigneDetail}.
+	 * 
+	 * @param details
+	 *            liste des {@link Detail}.
+	 * @param draftLigneDetails
+	 *            liste des {@link DraftLigneDetail}.
+	 */
+	private void creerArborescenceDraft(List<Detail> details, List<DraftLigneDetail> draftLigneDetails) {
+		/*
+		 * transformer la list en Map pour faciliter l'accee par la suite.
+		 */
+		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
+		for (DraftLigneDetail draftLigneDetail : draftLigneDetails) {
+			draftLigneDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
+		}
+
+		for (Detail detail : details) {
+			if (!detail.isParent()) {
+				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(detail.getReference());
+				DraftLigneDetail draftLigneDetailParent = draftLigneDetailsMap.get(detail.getDependDe());
+				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
+			}
+		}
+	}
+
+	/**
+	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
+	 * 
+	 * @param draftDetails
+	 *            liste des {@link DraftLigneDetail}.
+	 * @param commandeDetails
+	 *            liste des {@link CommandeLigneDetail}.
+	 */
+	private void creerArborescenceCommande(List<DraftLigneDetail> draftDetails,
+			List<CommandeLigneDetail> commandeDetails) {
+
 	}
 
 }
