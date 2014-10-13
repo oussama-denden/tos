@@ -1,4 +1,4 @@
-package com.nordnet.opale.repository;
+package com.nordnet.opale.repository.draft;
 
 import java.util.List;
 

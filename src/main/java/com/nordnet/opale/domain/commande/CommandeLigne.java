@@ -92,6 +92,13 @@ public class CommandeLigne {
 	private List<CommandeLigneDetail> commandeLigneDetails = new ArrayList<CommandeLigneDetail>();
 
 	/**
+	 * liste des {@link Tarif} associe a la ligne de commande.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tarifId")
+	private List<Tarif> tarifs = new ArrayList<Tarif>();
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {
@@ -154,6 +161,57 @@ public class CommandeLigne {
 	 */
 	public void setReferenceOffre(String referenceOffre) {
 		this.referenceOffre = referenceOffre;
+	}
+
+	/**
+	 * 
+	 * @return {@link #label}.
+	 */
+	public String getLabel() {
+		return label;
+	}
+
+	/**
+	 * 
+	 * @param label
+	 *            {@link #label}.
+	 */
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	/**
+	 * 
+	 * @return {@link #gamme}.
+	 */
+	public String getGamme() {
+		return gamme;
+	}
+
+	/**
+	 * 
+	 * @param gamme
+	 *            {@link #gamme}.
+	 */
+	public void setGamme(String gamme) {
+		this.gamme = gamme;
+	}
+
+	/**
+	 * 
+	 * @return {@link #secteur}.
+	 */
+	public String getSecteur() {
+		return secteur;
+	}
+
+	/**
+	 * 
+	 * @param secteur
+	 *            {@link #secteur}.
+	 */
+	public void setSecteur(String secteur) {
+		this.secteur = secteur;
 	}
 
 	/**
@@ -222,6 +280,40 @@ public class CommandeLigne {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link #commandeLigneDetails}.
+	 */
+	public List<CommandeLigneDetail> getCommandeLigneDetails() {
+		return commandeLigneDetails;
+	}
+
+	/**
+	 * 
+	 * @param commandeLigneDetails
+	 *            {@link #commandeLigneDetails}.
+	 */
+	public void setCommandeLigneDetails(List<CommandeLigneDetail> commandeLigneDetails) {
+		this.commandeLigneDetails = commandeLigneDetails;
+	}
+
+	/**
+	 * 
+	 * @return {@link #tarifs}.
+	 */
+	public List<Tarif> getTarifs() {
+		return tarifs;
+	}
+
+	/**
+	 * 
+	 * @param tarifs
+	 *            {@link #tarifs}.
+	 */
+	public void setTarifs(List<Tarif> tarifs) {
+		this.tarifs = tarifs;
 	}
 
 }

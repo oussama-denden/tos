@@ -15,8 +15,10 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
+import com.nordnet.opale.domain.draft.Draft;
 
 /**
  * Classe qui represente la commande.
@@ -69,6 +71,19 @@ public class Commande {
 	 * constructeur par defaut.
 	 */
 	public Commande() {
+	}
+
+	/**
+	 * creation d'une commande a partir du draft et de la trame catalogue.
+	 * 
+	 * @param draft
+	 *            {@link Draft}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
+		this.client = draft.getClient();
+		this.auteur = draft.getAuteur();
 	}
 
 	@Override

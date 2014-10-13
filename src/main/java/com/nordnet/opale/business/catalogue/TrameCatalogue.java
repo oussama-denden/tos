@@ -1,7 +1,9 @@
 package com.nordnet.opale.business.catalogue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Classe representatif de la trame recue du catalogue.
@@ -103,7 +105,7 @@ public class TrameCatalogue {
 	}
 
 	/**
-	 * varifier si la selection existe dans l'offre du catalogue.
+	 * verifier si la selection existe dans l'offre du catalogue.
 	 * 
 	 * @param offreCatalogue
 	 *            {@link OffreCatalogue}.
@@ -121,5 +123,31 @@ public class TrameCatalogue {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * transforme la {@link List} de tarif en un objet {@link Map}.
+	 * 
+	 * @return {@link Map<string, Tarif>}.
+	 */
+	public Map<String, Tarif> getTarifsMap() {
+		Map<String, Tarif> map = new HashMap<String, Tarif>();
+		for (Tarif tarif : tarifs) {
+			map.put(tarif.getReference(), tarif);
+		}
+		return map;
+	}
+
+	/**
+	 * transforme la {@link List} de frais en un objet {@link Map}.
+	 * 
+	 * @return {@link Map<string, Frais>}.
+	 */
+	public Map<String, Frais> getFraisMap() {
+		Map<String, Frais> map = new HashMap<String, Frais>();
+		for (Frais frais : this.frais) {
+			map.put(frais.getReference(), frais);
+		}
+		return map;
 	}
 }

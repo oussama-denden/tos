@@ -1,4 +1,4 @@
-package com.nordnet.opale.repository;
+package com.nordnet.opale.repository.draft;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

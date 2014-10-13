@@ -26,8 +26,8 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.exception.OpaleException;
-import com.nordnet.opale.repository.DraftLigneRepository;
-import com.nordnet.opale.repository.DraftRepository;
+import com.nordnet.opale.repository.draft.DraftLigneRepository;
+import com.nordnet.opale.repository.draft.DraftRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
@@ -356,9 +356,11 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, referenceDraft);
 		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
-			Commande commande = new Commande();
+			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
 			return new JSONObject();
+		} else {
+			return validationInfo;
 		}
-		return validationInfo;
 	}
+
 }

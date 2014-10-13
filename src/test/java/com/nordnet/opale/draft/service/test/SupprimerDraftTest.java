@@ -13,7 +13,7 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
-import com.nordnet.opale.repository.DraftLigneRepository;
+import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
