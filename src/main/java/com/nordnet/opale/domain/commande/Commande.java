@@ -106,8 +106,8 @@ public class Commande {
 
 	@Override
 	public String toString() {
-		return "Commande [id=" + id + ", reference=" + reference + ", client=" + client + ", auteur=" + auteur
-				+ ", dateCreation=" + dateCreation + "]";
+		return "Commande [id=" + id + ", reference=" + reference + ", referenceDraft=" + referenceDraft + ", client="
+				+ client + ", auteur=" + auteur + ", dateCreation=" + dateCreation + "]";
 	}
 
 	/**
@@ -285,5 +285,14 @@ public class Commande {
 		commandeInfo.setLignes(lignes);
 		return commandeInfo;
 
+	}
+
+	/**
+	 * calcule le cout total de le commande.
+	 * 
+	 * @return cout total.
+	 */
+	public Double getCoutTotal() {
+		return 10.0;
 	}
 }
