@@ -3,19 +3,24 @@ package com.nordnet.opale.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
+import com.nordnet.opale.service.signature.SignatureService;
 import com.wordnik.swagger.annotations.Api;
 
 /**
@@ -41,20 +46,48 @@ public class CommandeController {
 	private CommandeService commandeService;
 
 	/**
-	 * recuperer la commande
+	 * signature service. {@link SignatureService}
+	 */
+	@Autowired
+	private SignatureService signatureService;
+
+	/**
+	 * recuperer la commande.
 	 * 
-	 * @param redCommande
-	 *            reference du commande
+	 * @param refCommande
+	 *            ref de commande {@link String}
 	 * 
 	 * @return {@link CommandeInfo}
 	 * 
 	 * @throws OpaleException
-	 * @{@link OpaleExceptionr}
+	 * @{@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public CommandeInfo getCommande(String refCommande) throws OpaleException {
+	public CommandeInfo getCommande(@PathVariable String refCommande) throws OpaleException {
 		return commandeService.getCommande(refCommande);
+
+	}
+
+	/**
+	 * ajouter une signature et l'associer a une commande.
+	 * 
+	 * @param refCommande
+	 *            reference de commande {@link String}
+	 * @param ajoutSignatureInfo
+	 *            {@link AjoutSignatureInfo}
+	 * @return {@link Object}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object signerCommande(@PathVariable String refCommande, @RequestBody AjoutSignatureInfo ajoutSignatureInfo)
+			throws OpaleException, JSONException {
+		return signatureService.signerCommande(refCommande, ajoutSignatureInfo);
 
 	}
 

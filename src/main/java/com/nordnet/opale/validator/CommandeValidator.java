@@ -6,7 +6,7 @@ import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 
 /**
- * cette classe responsable de valider les informations liés a une commande
+ * cette classe responsable de valider les informations liés a une commande.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -19,11 +19,15 @@ public class CommandeValidator {
 	private static PropertiesUtil propertiesUtil = PropertiesUtil.getInstance();
 
 	/**
-	 * verfier que la commande existe sinon envoyer une exception
+	 * verfier que la commande existe sinon envoyer une exception.
 	 * 
 	 * @param refCommande
+	 *            reference du commande {@link String}
 	 * @param commande
+	 *            commande {@link Commande}
 	 * @throws OpaleException
+	 * @{@link OpaleExceptionr}.
+	 * 
 	 */
 	public static void checkCommandeExiste(String refCommande, Commande commande) throws OpaleException {
 		if (commande == null) {
@@ -32,10 +36,12 @@ public class CommandeValidator {
 	}
 
 	/**
-	 * verfier que la reference du commande n'est pas null ou vide
+	 * verfier que la reference du commande n'est pas null ou vide.
 	 * 
 	 * @param refCommande
+	 *            reference du commande {@link String}
 	 * @throws OpaleException
+	 *             @{@link OpaleException}
 	 */
 	public static void checkReferenceCommande(String refCommande) throws OpaleException {
 		if (Utils.isStringNullOrEmpty(refCommande)) {

@@ -79,6 +79,11 @@ public class Commande {
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
 
 	/**
+	 * la reference signature du client associe au commande.
+	 */
+	private String referenceSignature;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Commande() {
@@ -240,6 +245,25 @@ public class Commande {
 	}
 
 	/**
+	 * get the reference de signature.
+	 * 
+	 * @return {@link #referenceSignature}
+	 */
+	public String getReferenceSignature() {
+		return referenceSignature;
+	}
+
+	/**
+	 * set the referense de signature.
+	 * 
+	 * @param referenceSignature
+	 *            the new {@link #referenceSignature}
+	 */
+	public void setReferenceSignature(String referenceSignature) {
+		this.referenceSignature = referenceSignature;
+	}
+
+	/**
 	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
 	 * 
 	 * @param draftDetails
@@ -268,7 +292,7 @@ public class Commande {
 	/**
 	 * recuperer commande business a paritr de command domain.
 	 * 
-	 * @return
+	 * @return {@link CommandeInfo}
 	 */
 	public CommandeInfo toCommandInfo() {
 		CommandeInfo commandeInfo = new CommandeInfo();
