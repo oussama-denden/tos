@@ -2,7 +2,9 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -15,10 +17,14 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 
 /**
  * Classe qui represente la commande.
@@ -42,6 +48,11 @@ public class Commande {
 	 */
 	@NotNull
 	private String reference;
+
+	/**
+	 * la reference du draft de la commande.
+	 */
+	private String referenceDraft;
 
 	/**
 	 * L adresse du draft.
@@ -84,6 +95,13 @@ public class Commande {
 	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
 		this.client = draft.getClient();
 		this.auteur = draft.getAuteur();
+		this.referenceDraft = draft.getReference();
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
+			commandeLigne.setNumero(this.commandeLignes.size());
+			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
+			addLigne(commandeLigne);
+		}
 	}
 
 	@Override
@@ -124,6 +142,23 @@ public class Commande {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceDraft}.
+	 */
+	public String getReferenceDraft() {
+		return referenceDraft;
+	}
+
+	/**
+	 * 
+	 * @param referenceDraft
+	 *            {@link #referenceDraft}.
+	 */
+	public void setReferenceDraft(String referenceDraft) {
+		this.referenceDraft = referenceDraft;
 	}
 
 	/**
@@ -194,4 +229,61 @@ public class Commande {
 		this.commandeLignes = commandeLignes;
 	}
 
+	/**
+	 * ajouter une ligne a la commande.
+	 * 
+	 * @param commandeLigne
+	 *            {@link CommandeLigne}.
+	 */
+	public void addLigne(CommandeLigne commandeLigne) {
+		this.commandeLignes.add(commandeLigne);
+	}
+
+	/**
+	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
+	 * 
+	 * @param draftDetails
+	 *            liste des {@link DraftLigneDetail}.
+	 * @param commandeDetails
+	 *            liste des {@link CommandeLigneDetail}.
+	 */
+	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
+		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
+		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
+			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceProduit(), commandeLigneDetail);
+		}
+
+		for (DraftLigneDetail draftLigneDetail : draftDetails) {
+			if (!draftLigneDetail.isParent()) {
+				CommandeLigneDetail commandeLigneDetail =
+						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent =
+						commandeLigneDetailMap
+								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
+			}
+		}
+	}
+
+	/**
+	 * recuperer commande business a paritr de command domain.
+	 * 
+	 * @return
+	 */
+	public CommandeInfo toCommandInfo() {
+		CommandeInfo commandeInfo = new CommandeInfo();
+		commandeInfo.setAuteur(auteur.toAuteurBusiness());
+		List<CommandeLigneInfo> lignes = new ArrayList<CommandeLigneInfo>();
+
+		for (CommandeLigne commandeLigne : commandeLignes) {
+			CommandeLigneInfo commandeLigneInfo = new CommandeLigneInfo();
+			commandeLigneInfo.setAuteur(commandeLigne.getAuteur().toAuteurBusiness());
+			commandeLigneInfo.setOffre(commandeLigne.toOffreCatalogueInfo());
+			lignes.add(commandeLigneInfo);
+
+		}
+		commandeInfo.setLignes(lignes);
+		return commandeInfo;
+
+	}
 }

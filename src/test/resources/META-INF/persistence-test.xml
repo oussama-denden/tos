@@ -10,6 +10,11 @@
 		<class>com.nordnet.opale.domain.draft.Draft</class>
 		<class>com.nordnet.opale.domain.draft.DraftLigne</class>
 		<class>com.nordnet.opale.domain.draft.DraftLigneDetail</class>
+		<class>com.nordnet.opale.domain.commande.Commande</class>
+		<class>com.nordnet.opale.domain.commande.CommandeLigne</class>
+		<class>com.nordnet.opale.domain.commande.CommandeLigneDetail</class>
+		<class>com.nordnet.opale.domain.commande.Frais</class>
+		<class>com.nordnet.opale.domain.commande.Tarif</class>
 		<class>com.nordnet.opale.domain.Auteur</class>
 		<class>com.nordnet.opale.domain.Tracage</class>
 		

@@ -29,7 +29,8 @@
 	
 	<!-- create job-meta tables automatically -->
   <jdbc:initialize-database data-source="dataSource">
-	<jdbc:script separator="#" location="classpath:/sql/schema-init.sql"  encoding="UTF-8" />
+  <jdbc:script location="classpath:/init-opale-first.sql"/>
+   <jdbc:script separator="#" location="classpath:/schema-init.sql"  encoding="UTF-8" />
   </jdbc:initialize-database>
 
 	<bean id="entityManagerFactory"

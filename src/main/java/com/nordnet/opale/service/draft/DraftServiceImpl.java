@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +27,7 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
+import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
@@ -78,6 +78,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private TracageService tracageService;
+
+	/**
+	 * {@link CommandeService}.
+	 */
+	@Autowired
+	private CommandeService commandeService;
 
 	/**
 	 * {@inheritDoc}
@@ -167,7 +173,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 		DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
-		creerArborescence(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
+		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 		draft.addLigne(draftLigne);
@@ -202,7 +208,7 @@ public class DraftServiceImpl implements DraftService {
 		 * creation de la nouvelle ligne.
 		 */
 		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
-		creerArborescence(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
+		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
 		nouveauDraftLigne.setReference(draftLigne.getReference());
 		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
 
@@ -310,6 +316,40 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+		Draft draft = getDraftByReference(referenceDraft);
+		DraftValidator.isExistDraft(draft, referenceDraft);
+		return catalogueValidator.validerDraft(draft, trameCatalogue);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
+			throws OpaleException {
+		Draft draft = getDraftByReference(referenceDraft);
+		DraftValidator.isTransformationPossible(draft, referenceDraft);
+		draft.setClient(transformationInfo.getClientInfo().getClientId(), null, null);
+		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
+		if (validationInfo.isValide()) {
+			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
+			commande.setReference(keygenService.getNextKey(Commande.class));
+			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
+			commandeService.save(commande);
+			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour().toDate());
+			draftRepository.save(draft);
+			return commande;
+		} else {
+			return validationInfo;
+		}
+	}
+
+	/**
 	 * creer l'arborescence entre les {@link DraftLigneDetail}.
 	 * 
 	 * @param details
@@ -317,7 +357,7 @@ public class DraftServiceImpl implements DraftService {
 	 * @param draftLigneDetails
 	 *            liste des {@link DraftLigneDetail}.
 	 */
-	private void creerArborescence(List<Detail> details, List<DraftLigneDetail> draftLigneDetails) {
+	private void creerArborescenceDraft(List<Detail> details, List<DraftLigneDetail> draftLigneDetails) {
 		/*
 		 * transformer la list en Map pour faciliter l'accee par la suite.
 		 */
@@ -332,33 +372,6 @@ public class DraftServiceImpl implements DraftService {
 				DraftLigneDetail draftLigneDetailParent = draftLigneDetailsMap.get(detail.getDependDe());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
-		Draft draft = getDraftByReference(referenceDraft);
-		DraftValidator.isExistDraft(draft, referenceDraft);
-		return catalogueValidator.validerDraft(draft, trameCatalogue);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
-			throws OpaleException {
-		Draft draft = getDraftByReference(referenceDraft);
-		DraftValidator.isExistDraft(draft, referenceDraft);
-		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
-		if (validationInfo.isValide()) {
-			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
-			return new JSONObject();
-		} else {
-			return validationInfo;
 		}
 	}
 

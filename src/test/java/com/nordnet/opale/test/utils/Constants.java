@@ -23,14 +23,19 @@ public final class Constants {
 	public static final SimpleDateFormat YYYY_MM_DD_HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 	/**
+	 * entier de valeur 0.
+	 */
+	public static final Integer ZERO = 0;
+
+	/**
 	 * entier de valeur 1.
 	 */
 	public static final Integer UN = 1;
 
 	/**
-	 * entier de valeur 0.
+	 * entier de valeur 2.
 	 */
-	public static final Integer ZERO = 0;
+	public static final Integer DEUX = 2;
 
 	/**
 	 * entier de valeur 3.

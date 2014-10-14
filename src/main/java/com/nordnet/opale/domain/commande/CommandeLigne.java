@@ -15,14 +15,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.nordnet.opale.business.DetailCommandeLigneInfo;
+import com.nordnet.opale.business.OffreCatalogueInfo;
+import com.nordnet.opale.business.TarifInfo;
+import com.nordnet.opale.business.catalogue.OffreCatalogue;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
+import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
  * Classe represente une ligne (offre) dans la {@link Commande}.
  * 
- * @author akram
+ * @author akram-moncer
  * 
  */
 @Table(name = "commandeligne")
@@ -37,9 +44,9 @@ public class CommandeLigne {
 	private Integer id;
 
 	/**
-	 * reference de la ligne de draft.
+	 * numero de la ligne dans la commande.
 	 */
-	private String reference;
+	private Integer numero;
 
 	/**
 	 * reference de l'offre.
@@ -95,7 +102,7 @@ public class CommandeLigne {
 	 * liste des {@link Tarif} associe a la ligne de commande.
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "tarifId")
+	@JoinColumn(name = "commandeLigneId")
 	private List<Tarif> tarifs = new ArrayList<Tarif>();
 
 	/**
@@ -104,10 +111,38 @@ public class CommandeLigne {
 	public CommandeLigne() {
 	}
 
+	/**
+	 * creation d'une ligne de commande a partir du {@link DraftLigne} et de {@link TrameCatalogue}.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public CommandeLigne(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
+		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
+		this.referenceOffre = draftLigne.getReferenceOffre();
+		this.gamme = offreCatalogue.getGamme();
+		this.modePaiement = draftLigne.getModePaiement();
+		this.modeFacturation = draftLigne.getModeFacturation();
+		this.auteur = draftLigne.getAuteur();
+		this.dateCreation = draftLigne.getDateCreation();
+
+		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
+			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, trameCatalogue);
+			addCommandeLigneDetail(commandeLigneDetail);
+		}
+
+		for (String refTarif : offreCatalogue.getTarifs()) {
+			Tarif tarif = new Tarif(refTarif, trameCatalogue);
+			addTarif(tarif);
+		}
+	}
+
 	@Override
 	public String toString() {
-		return "CommandeLigne [id=" + id + ", reference=" + reference + ", referenceOffre=" + referenceOffre
-				+ ", label=" + label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement
+		return "CommandeLigne [id=" + id + ", numero=" + numero + ", referenceOffre=" + referenceOffre + ", label="
+				+ label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement
 				+ ", modeFacturation=" + modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur
 				+ "]";
 	}
@@ -131,19 +166,19 @@ public class CommandeLigne {
 
 	/**
 	 * 
-	 * @return {@link #reference}
+	 * @return {@link #numero}.
 	 */
-	public String getReference() {
-		return reference;
+	public Integer getNumero() {
+		return numero;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}.
+	 * @param numero
+	 *            {@link #numero}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setNumero(Integer numero) {
+		this.numero = numero;
 	}
 
 	/**
@@ -300,6 +335,16 @@ public class CommandeLigne {
 	}
 
 	/**
+	 * ajouter un {@link CommandeLigneDetail} a ligne de commande.
+	 * 
+	 * @param commandeLigneDetail
+	 *            {@link CommandeLigneDetail}.
+	 */
+	public void addCommandeLigneDetail(CommandeLigneDetail commandeLigneDetail) {
+		this.commandeLigneDetails.add(commandeLigneDetail);
+	}
+
+	/**
 	 * 
 	 * @return {@link #tarifs}.
 	 */
@@ -314,6 +359,45 @@ public class CommandeLigne {
 	 */
 	public void setTarifs(List<Tarif> tarifs) {
 		this.tarifs = tarifs;
+	}
+
+	/**
+	 * associe un {@link Tarif} a l'offre dans la commande.
+	 * 
+	 * @param tarif
+	 *            {@link Tarif}.
+	 */
+	public void addTarif(Tarif tarif) {
+		tarifs.add(tarif);
+	}
+
+	/**
+	 * recuperer l'offre business a parot de chaque ligne de commande
+	 * 
+	 * @return {@link OffreCatalogueInfo}
+	 */
+	public OffreCatalogueInfo toOffreCatalogueInfo() {
+		OffreCatalogueInfo offreCatalogueInfo = new OffreCatalogueInfo();
+		offreCatalogueInfo.setReference(referenceOffre);
+		offreCatalogueInfo.setLabel(label);
+		offreCatalogueInfo.setGamme(gamme);
+		offreCatalogueInfo.setFammille(secteur);
+		offreCatalogueInfo.setModeFacturation(modeFacturation);
+
+		List<TarifInfo> tarifInfos = new ArrayList<TarifInfo>();
+		for (Tarif tarif : tarifs) {
+			tarifInfos.add(tarif.toTarifInfo());
+		}
+		offreCatalogueInfo.setTarif(tarifInfos);
+
+		List<DetailCommandeLigneInfo> detailCommandeLigneInfos = new ArrayList<DetailCommandeLigneInfo>();
+		for (CommandeLigneDetail commandeLigneDetail : commandeLigneDetails) {
+			detailCommandeLigneInfos.add(commandeLigneDetail.toDetailCommandeLigneInfo());
+		}
+		offreCatalogueInfo.setDetails(detailCommandeLigneInfos);
+
+		return offreCatalogueInfo;
+
 	}
 
 }

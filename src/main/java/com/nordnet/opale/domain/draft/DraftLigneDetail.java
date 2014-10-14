@@ -237,4 +237,16 @@ public class DraftLigneDetail {
 		this.sousDraftLigneDetails = sousDraftLigneDetails;
 	}
 
+	/**
+	 * verifier si un detail du draft est parent ou non.
+	 * 
+	 * @return true si le detail du draft est un parent.
+	 */
+	public Boolean isParent() {
+		if (draftLigneDetailParent != null) {
+			return false;
+		}
+		return true;
+	}
+
 }

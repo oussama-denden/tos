@@ -2,6 +2,9 @@
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 
 <dataset>
+<keygen/>
+<draft/>
 <draft id="1" reference="REF-DRAFT-1" clientId="CLIENT-1"  code="000111" timestamp="100"/>
-
+<draftLigne/>
+<draftLigneDetail/>
 </dataset>

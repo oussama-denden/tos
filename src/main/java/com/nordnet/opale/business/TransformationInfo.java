@@ -23,11 +23,6 @@ public class TransformationInfo {
 	private ClientInfo clientInfo;
 
 	/**
-	 * valeur de tva.
-	 */
-	private Double tva;
-
-	/**
 	 * constrcteur par defaut.
 	 */
 	public TransformationInfo() {
@@ -65,23 +60,6 @@ public class TransformationInfo {
 	 */
 	public void setClientInfo(ClientInfo clientInfo) {
 		this.clientInfo = clientInfo;
-	}
-
-	/**
-	 * 
-	 * @return {@link #tva}.
-	 */
-	public Double getTva() {
-		return tva;
-	}
-
-	/**
-	 * 
-	 * @param tva
-	 *            {@link #tva}.
-	 */
-	public void setTva(Double tva) {
-		this.tva = tva;
 	}
 
 }

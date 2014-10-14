@@ -150,4 +150,17 @@ public class TrameCatalogue {
 		}
 		return map;
 	}
+
+	/**
+	 * transforme la {@link List} des offres en un objet {@link Map}.
+	 * 
+	 * @return {@link Map<string, OffreCatalogue>}.
+	 */
+	public Map<String, OffreCatalogue> getOffreMap() {
+		Map<String, OffreCatalogue> map = new HashMap<String, OffreCatalogue>();
+		for (OffreCatalogue offreCatalogue : this.offres) {
+			map.put(offreCatalogue.getReference(), offreCatalogue);
+		}
+		return map;
+	}
 }

@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+
+<dataset>
+	<keygen />
+	<draft />
+	<draft id="1" reference="REF-DRAFT-1" clientId="CLIENT-1" code="000111"
+		timestamp="100" />
+	<draft id="2" reference="REF-DRAFT-3" clientId="CLIENT-1" code="000111"
+		timestamp="100" />
+
+	<draft id="3" reference="REF-DRAFT-4" clientId="CLIENT-1" code="000111"
+		timestamp="100" />
+	<draftLigne />
+	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf10" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
+		code="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
+		timestamp="1411654933" draftId="1" />
+
+	<draftLigne id="1001" reference="00000002" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf100" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
+		code="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
+		timestamp="1411654933" draftId="2" />
+
+	<draftLigne id="1002" reference="00000003" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf10" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
+		code="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
+		timestamp="1411654933" draftId="3" />
+
+	<draftLigneDetail />
+	<draftLigneDetail id="1000" referenceSelection="kitsat"
+		reference="kitsat" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		configurationJson="" draftLigneId="1000" />
+	<draftLigneDetail id="1001" referenceSelection="jet"
+		reference="jet" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		configurationJson="" draftLigneId="1000" dependDe="1000" />
+
+	<draftLigneDetail id="1002" referenceSelection="kitsat"
+		reference="kitsat" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		configurationJson="" draftLigneId="1001" />
+	<draftLigneDetail id="1003" referenceSelection="jet"
+		reference="jet" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		configurationJson="" draftLigneId="1001" dependDe="1000" />
+
+	<draftLigneDetail id="1004" referenceSelection="kitsat10"
+		reference="kitsat10" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		configurationJson="" draftLigneId="1002" />
+
+</dataset>

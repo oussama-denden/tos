@@ -7,6 +7,7 @@ import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.Offre;
+import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.enums.ModeFacturation;
@@ -215,6 +216,28 @@ public class DraftValidator {
 			}
 		}
 
+	}
+
+	/**
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
+	 * 
+	 * 
+	 * @param draft
+	 *            {@link Draft}.
+	 * @param referenceDraft
+	 *            reference draft.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isTransformationPossible(Draft draft, String referenceDraft) throws OpaleException {
+		isExistDraft(draft, referenceDraft);
+		if (draft.isAnnule()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.9"), "1.1.9");
+		}
+
+		if (draft.isTransforme()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.10"), "1.1.10");
+		}
 	}
 
 }
