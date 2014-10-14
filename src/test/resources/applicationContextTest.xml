@@ -26,6 +26,12 @@
 		<property name="username" value="test" />
 		<property name="password" value="test" />
 	</bean>
+	
+	<!-- create job-meta tables automatically -->
+  <jdbc:initialize-database data-source="dataSource">
+  <jdbc:script location="classpath:/init-opale.sql"/>
+   <jdbc:script separator="#" location="classpath:/schema-init.sql"  encoding="UTF-8" />
+  </jdbc:initialize-database>
 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

@@ -1,5 +1,17 @@
-SET FOREIGN_KEY_CHECKS=0;
-DROP TABLE IF EXISTS `commande`;
+--
+-- Drop schema opale_test
+--
+
+DROP DATABASE IF EXISTS opale_test;
+commit;
+--
+-- Create schema opale_test
+--
+
+CREATE DATABASE IF NOT EXISTS opale_test;
+USE opale_test;
+
+
 CREATE TABLE `commande` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
@@ -20,7 +32,6 @@ CREATE TABLE `commande` (
 -- Table structure for table `commandeligne`
 --
 
-DROP TABLE IF EXISTS `commandeligne`;
 CREATE TABLE `commandeligne` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
@@ -47,7 +58,6 @@ CREATE TABLE `commandeligne` (
 -- Table structure for table `commandelignedetail`
 --
 
-DROP TABLE IF EXISTS `commandelignedetail`;
 CREATE TABLE `commandelignedetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `configurationJson` varchar(255) DEFAULT NULL,
@@ -62,7 +72,6 @@ CREATE TABLE `commandelignedetail` (
   CONSTRAINT `FK516CBE9883CC4F75` FOREIGN KEY (`dependDe`) REFERENCES `commandelignedetail` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `draft`;
 CREATE TABLE `draft` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reference` varchar(255) DEFAULT NULL,
@@ -80,7 +89,6 @@ CREATE TABLE `draft` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `draftLigne`;
 CREATE TABLE `draftLigne` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reference` varchar(255) DEFAULT NULL,
@@ -99,7 +107,6 @@ CREATE TABLE `draftLigne` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `draftLigneDetail`;
 CREATE TABLE `draftLigneDetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `referenceSelection` varchar(255) DEFAULT NULL,
@@ -116,7 +123,6 @@ CREATE TABLE `draftLigneDetail` (
 -- Table structure for table `tarif`
 --
 
-DROP TABLE IF EXISTS `tarif`;
 CREATE TABLE `tarif` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `duree` int(11) DEFAULT NULL,
@@ -138,7 +144,6 @@ CREATE TABLE `tarif` (
 -- Table structure for table `frais`
 --
 
-DROP TABLE IF EXISTS `frais`;
 CREATE TABLE `frais` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(255) DEFAULT NULL,
@@ -153,7 +158,6 @@ CREATE TABLE `frais` (
   CONSTRAINT `FK5D2A8FF8D480C8F` FOREIGN KEY (`tarifId`) REFERENCES `tarif` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `keygen`;
 CREATE TABLE `keygen` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `entite` varchar(255) DEFAULT NULL,
@@ -161,7 +165,6 @@ CREATE TABLE `keygen` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tracage`;
 CREATE TABLE `tracage` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `referenceDraft` varchar(255) DEFAULT NULL,
@@ -171,4 +174,4 @@ CREATE TABLE `tracage` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-SET FOREIGN_KEY_CHECKS=1;
+

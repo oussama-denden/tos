@@ -21,7 +21,8 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
- * {@link DraftService#transformerEnCommande(String, com.nordnet.opale.business.TransformationInfo)}.
+ * {@link DraftService#transformerEnCommande(String, com.nordnet.opale.business.TransformationInfo)}
+ * .
  * 
  * @author akram-moncer
  * 
@@ -58,9 +59,8 @@ public class TransformerEnCommandeTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-en-commande.xml" })
 	public void testTransformerEnCommandeValide() {
 		try {
-			TransformationInfo transformationInfo =
-					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
-							"./requests/transformerEnCommande.json");
+			TransformationInfo transformationInfo = draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
+					"./requests/transformerEnCommande.json");
 			draftService.transformerEnCommande("REF-DRAFT-1", transformationInfo);
 			Commande commande = commandeService.getCommandeByReferenceDraft("REF-DRAFT-1");
 			assertNotNull(commande);

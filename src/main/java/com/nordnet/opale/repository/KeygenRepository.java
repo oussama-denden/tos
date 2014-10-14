@@ -25,4 +25,14 @@ public interface KeygenRepository extends JpaRepository<Keygen, Integer> {
 	@Query(name = "findDernier", value = "SELECT k FROM Keygen k WHERE k.entite =:nom AND k.id = (SELECT MAX(id) FROM Keygen k WHERE k.entite =:nom)")
 	public Keygen findDernier(@Param("nom") String nom);
 
+	/**
+	 * cherecher la dernier référence.
+	 * 
+	 * @param nom
+	 *            le nom de l entite.
+	 * @return {@link Keygen}.
+	 */
+
+	@Query(value = "SELECT getReference(?1)", nativeQuery = true)
+	public String getReference(String nom);
 }

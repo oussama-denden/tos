@@ -18,7 +18,9 @@ import com.nordnet.opale.test.utils.Constants;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * Classe de test de la methode {@link DraftService#ajouterLigne(String, com.nordnet.opale.business.DraftLigneInfo)}.
+ * Classe de test de la methode
+ * {@link DraftService#ajouterLigne(String, com.nordnet.opale.business.DraftLigneInfo)}
+ * .
  * 
  * @author akram-moncer
  * 
@@ -49,8 +51,8 @@ public class AjouterLigneTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLigneValide() {
 		try {
-			DraftLigneInfo draftLigneInfo =
-					draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/ajouterLigne.json");
+			DraftLigneInfo draftLigneInfo = draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class,
+					"./requests/ajouterLigne.json");
 			draftService.ajouterLigne("REF-DRAFT-1", draftLigneInfo);
 			Draft draft = draftService.getDraftByReference("REF-DRAFT-1");
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(draft.getDraftLignes().size()));
@@ -69,8 +71,8 @@ public class AjouterLigneTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLigneAvecDraftNonExist() {
 		try {
-			DraftLigneInfo draftLigneInfo =
-					draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/ajouterLigne.json");
+			DraftLigneInfo draftLigneInfo = draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class,
+					"./requests/ajouterLigne.json");
 			draftService.ajouterLigne("REF-DRAFT-2", draftLigneInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
@@ -88,8 +90,8 @@ public class AjouterLigneTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLigneAvecOffreNonValide() {
 		try {
-			DraftLigneInfo draftLigneInfo =
-					draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/ajouterLigne.json");
+			DraftLigneInfo draftLigneInfo = draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class,
+					"./requests/ajouterLigne.json");
 			draftLigneInfo.getOffre().setReferenceOffre(null);
 			draftService.ajouterLigne("REF-DRAFT-1", draftLigneInfo);
 			fail("Unexpected error");

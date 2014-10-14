@@ -3,13 +3,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
 	xsi:schemaLocation="
+	http://www.springframework.org/schema/jee
+	http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
     http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
     http://www.springframework.org/schema/data/jpa
-    http://www.springframework.org/schema/data/jpa/spring-jpa-1.1.xsd">
+    http://www.springframework.org/schema/data/jpa/spring-jpa-1.1.xsd
+    http://www.springframework.org/schema/jdbc 
+    http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
       
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	
@@ -24,8 +30,18 @@
 
 		<property name="persistenceUnitName" value="opale_PU" />
 		<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence.xml" />
-	<!-- 	<property name="dataSource" ref="dataSource" /> -->
+		
 	</bean>
+	
+	<jee:jndi-lookup id="dataSource"
+   jndi-name="jdbc/OpaleDS"
+   expected-type="javax.sql.DataSource" />
+	
+	<!-- create job-meta tables automatically -->
+  <jdbc:initialize-database data-source="dataSource">
+	<jdbc:script separator="#" location="classpath:/META-INF/schema-init.sql"  encoding="UTF-8" />
+  </jdbc:initialize-database>
+	
 	
 	<jpa:repositories base-package="com.nordnet.opale.repository" />
 	
