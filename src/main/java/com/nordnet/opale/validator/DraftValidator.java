@@ -152,8 +152,10 @@ public class DraftValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void clientIdNotNull(ClientInfo clientInfo) throws OpaleException {
-		if (Utils.isStringNullOrEmpty(clientInfo.getClientId())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.5"), "1.1.5");
+		if (clientInfo != null) {
+			if (Utils.isStringNullOrEmpty(clientInfo.getClientId())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.5"), "1.1.5");
+			}
 		}
 	}
 
@@ -207,8 +209,10 @@ public class DraftValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void codeNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
-		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14", "code"), "0.1.14");
+		if (auteur != null) {
+			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14", "code"), "0.1.14");
+			}
 		}
 
 	}

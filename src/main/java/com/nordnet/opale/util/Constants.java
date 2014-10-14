@@ -65,6 +65,6 @@ public final class Constants {
 	/**
 	 * La reference initiale du draft.
 	 */
-	public static final String REF_DRAEFT_INIT = "00000001";
+	public static final String REF_DRAFT_INIT = "00000001";
 
 }

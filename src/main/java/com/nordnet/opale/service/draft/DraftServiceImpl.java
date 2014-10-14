@@ -124,15 +124,14 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = new Draft();
 
-		if (auteur != null) {
-			DraftValidator.codeNotNull(auteur);
-		}
+		DraftValidator.codeNotNull(auteur);
 
 		draft.setAuteur(auteur);
 
+		// verifier si le clientId n'est pas null ou empty.
+		DraftValidator.clientIdNotNull(draftInfo.getClient());
+
 		if (draftInfo.getClient() != null) {
-			// verifier si le clientId n'est pas null ou empty.
-			DraftValidator.clientIdNotNull(draftInfo.getClient());
 			draft.setClient(draftInfo.getClient().toDomain());
 		}
 
