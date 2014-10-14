@@ -43,4 +43,12 @@ public class CommandeServiceImpl implements CommandeService {
 		return commande.toCommandInfo();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Commande getCommandeByReferenceDraft(String referenceDraft) {
+		return commandeRepository.findByReferenceDraft(referenceDraft);
+	}
+
 }

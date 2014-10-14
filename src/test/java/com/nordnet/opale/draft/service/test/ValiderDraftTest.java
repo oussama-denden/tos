@@ -23,7 +23,7 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
  * Classe de test de la methode
  * {@link DraftService#validerDraft(String, com.nordnet.opale.business.catalogue.TrameCatalogue)}.
  * 
- * @author akram
+ * @author akram-moncer
  * 
  */
 public class ValiderDraftTest extends GlobalTestCase {

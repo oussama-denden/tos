@@ -4,6 +4,7 @@ import javax.activation.CommandInfo;
 
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -23,7 +24,7 @@ public interface CommandeService {
 	public void save(Commande commande);
 
 	/**
-	 * recuperer une commande
+	 * recuperer une commande.
 	 * 
 	 * @param refCommande
 	 *            {@link String}
@@ -31,8 +32,17 @@ public interface CommandeService {
 	 * @return {@link CommandInfo}
 	 * 
 	 * @throws OpaleException
-	 * @{@link OpaleException}
+	 *             {@link OpaleException}
 	 */
 	public CommandeInfo getCommande(String refCommande) throws OpaleException;
+
+	/**
+	 * recherche une commande a partir du reference {@link Draft}.
+	 * 
+	 * @param referenceDraft
+	 *            reference {@link Draft}.
+	 * @return {@link Commande}.
+	 */
+	public Commande getCommandeByReferenceDraft(String referenceDraft);
 
 }
