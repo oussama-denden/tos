@@ -28,6 +28,15 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	public List<Paiement> findByReferenceCommande(String referenceCommande);
 
 	/**
+	 * chercher un paiement par sa reference.
+	 * 
+	 * @param reference
+	 *            reference paiement.
+	 * @return {@link Paiement}.
+	 */
+	public Paiement findByReference(String reference);
+
+	/**
 	 * chercher l'intention de paiement associe a la commande.
 	 * 
 	 * @param referenceCommande

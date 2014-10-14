@@ -39,7 +39,7 @@ public class CommandeController {
 	/**
 	 * Declaration du log.
 	 */
-	private final static Logger LOGGER = Logger.getLogger(DraftController.class);
+	private final static Logger LOGGER = Logger.getLogger(CommandeController.class);
 
 	/**
 	 * draft service. {@link CommandeService}.
@@ -48,15 +48,15 @@ public class CommandeController {
 	private CommandeService commandeService;
 
 	/**
-	 * recuperer la commande
+	 * recuperer la commande.
 	 * 
-	 * @param redCommande
+	 * @param refCommande
 	 *            reference du commande
 	 * 
 	 * @return {@link CommandeInfo}
 	 * 
 	 * @throws OpaleException
-	 * @{@link OpaleExceptionr}
+	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -86,6 +86,25 @@ public class CommandeController {
 		JSONObject response = new JSONObject();
 		response.put("reference", paiement.getReference());
 		return response.toString();
+	}
+
+	/**
+	 * payer une intention de paiement.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param refPaiement
+	 *            reference {@link Paiement}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refCommande:.+}/payer", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void paiementComptant(@PathVariable String refCommande, @PathVariable String refPaiement,
+			@RequestBody PaiementInfo paiementInfo) throws OpaleException {
+		commandeService.associerPaiement(refCommande, refPaiement, paiementInfo);
 	}
 
 	/**

@@ -60,4 +60,19 @@ public interface CommandeService {
 	 */
 	public Paiement paiementComptant(String refCommande, PaiementInfo paiementInfo) throws OpaleException;
 
+	/**
+	 * payer une intention de paiement.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @param referencePaiement
+	 *            reference {@link Paiement}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void associerPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
+			throws OpaleException;
+
 }

@@ -24,6 +24,11 @@ public class PaiementInfo {
 	private Double montant;
 
 	/**
+	 * info paiement.
+	 */
+	private String infoPaiement;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public PaiementInfo() {
@@ -61,6 +66,23 @@ public class PaiementInfo {
 	 */
 	public void setMontant(Double montant) {
 		this.montant = montant;
+	}
+
+	/**
+	 * 
+	 * @return {@link #infoPaiement}.
+	 */
+	public String getInfoPaiement() {
+		return infoPaiement;
+	}
+
+	/**
+	 * 
+	 * @param infoPaiement
+	 *            {@link #infoPaiement}.
+	 */
+	public void setInfoPaiement(String infoPaiement) {
+		this.infoPaiement = infoPaiement;
 	}
 
 }

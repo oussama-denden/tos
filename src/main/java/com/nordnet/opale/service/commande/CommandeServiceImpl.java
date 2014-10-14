@@ -74,16 +74,14 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		Double montantPaye = paiementService.montantPaye(refCommande);
 		CommandeValidator.isCommandePaye(refCommande, commande, montantPaye);
-		Paiement paiement = paiementService.getIntentionPaiement(refCommande);
-		if (paiement != null) {
-			paiement.setModePaiement(paiementInfo.getModePaiement());
-		} else {
-			paiement = new Paiement(paiementInfo);
-			paiement.setReference(keygenService.getNextKey(Paiement.class));
-			paiement.setReferenceCommande(commande.getReference());
-		}
-		paiementService.save(paiement);
-		return paiement;
+		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
 
+	@Override
+	public void associerPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
+			throws OpaleException {
+		Commande commande = commandeRepository.findByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		paiementService.effectuerPaiement(referencePaiement, paiementInfo);
+	}
 }
