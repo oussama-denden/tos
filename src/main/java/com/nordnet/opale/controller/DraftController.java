@@ -90,7 +90,7 @@ public class DraftController {
 	/**
 	 * Generer un draft.
 	 * 
-	 * @param auteurInfo
+	 * @param draftInfo
 	 *            auteur informations.
 	 * @return {@link Contrat}.
 	 * @throws Exception
@@ -105,8 +105,10 @@ public class DraftController {
 	}
 
 	/**
-	 * ajouter une reference externe au draft
+	 * ajouter une reference externe au draft.
 	 * 
+	 * @param referenceDraft
+	 *            reference du draft.
 	 * @param referenceExterneInfo
 	 *            reference externe info {@link ReferenceExterneInfo}
 	 * @throws Exception

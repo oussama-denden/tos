@@ -11,27 +11,27 @@ import com.nordnet.opale.enums.TypeFrais;
 public class FraisInfo {
 
 	/**
-	 * le reference
+	 * le reference.
 	 */
 	private String reference;
 
 	/**
-	 * le label
+	 * le label.
 	 */
 	private String label;
 
 	/**
-	 * le montant
+	 * le montant.
 	 */
 	private Double montant;
 
 	/**
-	 * le type de frais
+	 * le type de frais.
 	 */
 	private TypeFrais type;
 
 	/**
-	 * constructeur par defaut
+	 * constructeur par defaut.
 	 */
 	public FraisInfo() {
 
@@ -40,7 +40,7 @@ public class FraisInfo {
 	/* Getters and Setters */
 
 	/**
-	 * get the reference
+	 * get the reference.
 	 * 
 	 * @return {@link #reference}
 	 */
@@ -49,7 +49,7 @@ public class FraisInfo {
 	}
 
 	/**
-	 * set the reference
+	 * set the reference.
 	 * 
 	 * @param reference
 	 *            the new {@link #reference}
@@ -59,7 +59,7 @@ public class FraisInfo {
 	}
 
 	/**
-	 * get the label
+	 * get the label.
 	 * 
 	 * @return {@link #label}
 	 */
@@ -68,7 +68,7 @@ public class FraisInfo {
 	}
 
 	/**
-	 * set the label
+	 * set the label.
 	 * 
 	 * @param label
 	 *            the new {@link #label}
@@ -78,7 +78,7 @@ public class FraisInfo {
 	}
 
 	/**
-	 * get the montant
+	 * get the montant.
 	 * 
 	 * @return {@link #montant}
 	 */
@@ -87,7 +87,7 @@ public class FraisInfo {
 	}
 
 	/**
-	 * set the montant
+	 * set the montant.
 	 * 
 	 * @param montant
 	 *            the new {@link #montant}
@@ -97,7 +97,7 @@ public class FraisInfo {
 	}
 
 	/**
-	 * get the type
+	 * get the type.
 	 * 
 	 * @return {@link TypeFrais}
 	 */
@@ -106,7 +106,7 @@ public class FraisInfo {
 	}
 
 	/**
-	 * set the type
+	 * set the type.
 	 * 
 	 * @param type
 	 *            the new {@link TypeFrais}
