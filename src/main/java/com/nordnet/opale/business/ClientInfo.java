@@ -1,6 +1,5 @@
 package com.nordnet.opale.business;
 
-
 /**
  * Cette classe regroupe les informations qui definissent un {@link ClientInfo}.
  * 
@@ -10,20 +9,24 @@ package com.nordnet.opale.business;
 public class ClientInfo {
 
 	/**
-	 * id client.
+	 * L auteur.
 	 */
-	private String clientId;
+	private Auteur auteur;
 
 	/**
-	 * adresse Facturation Id.
+	 * Le client souscripteur.
 	 */
-	private String adresseFacturationId;
+	private Client souscripteur;
 
 	/**
-	 * adresse Livraison Id.
+	 * Le client pour livraison.
 	 */
-	private String adresseLivraisonId;
+	private Client livraison;
 
+	/**
+	 * Le client pour la facturation.
+	 */
+	private Client facturation;
 	/**
 	 * L utilisateur.
 	 */
@@ -38,53 +41,70 @@ public class ClientInfo {
 
 	/**
 	 * 
-	 * @return {@link ClientInfo#clientId}.
+	 * @return {@link Auteur}
 	 */
-	public String getClientId() {
-		return clientId;
+	public Auteur getAuteur() {
+		return auteur;
 	}
 
 	/**
 	 * 
-	 * @param clientId
-	 *            {@link ClientInfo#clientId}.
+	 * @param auteur
+	 *            {@link Auteur}
 	 */
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**
 	 * 
-	 * @return {@link #adresseFacturationId}.
+	 * @return {@link Client}
 	 */
-	public String getAdresseFacturationId() {
-		return adresseFacturationId;
+	public Client getSouscripteur() {
+		return souscripteur;
 	}
 
 	/**
 	 * 
-	 * @param adresseFacturationId
-	 *            {@link #adresseFacturationId}.
+	 * @param souscripteur
+	 *            {@link Client}
 	 */
-	public void setAdresseFacturationId(String adresseFacturationId) {
-		this.adresseFacturationId = adresseFacturationId;
+	public void setSouscripteur(Client souscripteur) {
+		this.souscripteur = souscripteur;
 	}
 
 	/**
 	 * 
-	 * @return {@link ClientInfo#adresseLivraisonId}.
+	 * @return {@link Client}
 	 */
-	public String getAdresseLivraisonId() {
-		return adresseLivraisonId;
+	public Client getLivraison() {
+		return livraison;
 	}
 
 	/**
 	 * 
-	 * @param adresseLivraisonId
-	 *            {@link ClientInfo#adresseLivraisonId}.
+	 * @param livraison
+	 *            {@link Client}
 	 */
-	public void setAdresseLivraisonId(String adresseLivraisonId) {
-		this.adresseLivraisonId = adresseLivraisonId;
+	public void setLivraison(Client livraison) {
+		this.livraison = livraison;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}
+	 */
+	public Client getFacturation() {
+		return facturation;
+	}
+
+	/**
+	 * 
+	 * @param facturation
+	 *            {@link Client}
+	 */
+	public void setFacturation(Client facturation) {
+		this.facturation = facturation;
 	}
 
 	/**
@@ -102,21 +122,6 @@ public class ClientInfo {
 	 */
 	public void setUser(String user) {
 		this.user = user;
-	}
-
-	/**
-	 * convertir un {@link ClientInfo} en
-	 * {@link com.nordnet.opale.domain.Client}.
-	 * 
-	 * @return {@link com.nordnet.opale.domain.Client}.
-	 */
-	public com.nordnet.opale.domain.Client toDomain() {
-		com.nordnet.opale.domain.Client client = new com.nordnet.opale.domain.Client();
-
-		client.setAdresseFacturationId(adresseFacturationId);
-		client.setAdresseLivraisonId(adresseLivraisonId);
-		client.setClientId(clientId);
-		return client;
 	}
 
 }

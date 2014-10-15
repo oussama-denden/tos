@@ -2,7 +2,7 @@
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 
 <dataset>
-	<draft id="1" reference="00000001" clientId="CLIENT-1" code="000111"
+	<draft id="1" reference="00000001" code="000111"
 		timestamp="100" />
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="jet_surf10"

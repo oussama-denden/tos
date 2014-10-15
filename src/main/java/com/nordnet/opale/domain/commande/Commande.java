@@ -9,10 +9,12 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
@@ -55,10 +57,25 @@ public class Commande {
 	private String referenceDraft;
 
 	/**
-	 * L adresse du draft.
+	 * Le client souscripteur {@link Client}.
 	 */
-	@Embedded
-	private Client client;
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clientSouscripteurId", nullable = true)
+	private Client clientSouscripteur;
+
+	/**
+	 * Le client a livraer {@link Client}.
+	 */
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clientALivrerId", nullable = true)
+	private Client clientALivrer;
+
+	/**
+	 * Le client a facturer {@link Client}.
+	 */
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clientAFacturerId", nullable = true)
+	private Client clientAFacturer;
 
 	/**
 	 * l auteur du draft.
@@ -93,7 +110,11 @@ public class Commande {
 	 *            {@link TrameCatalogue}.
 	 */
 	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
-		this.client = draft.getClient();
+
+		this.clientAFacturer = draft.getClientAFacturer();
+		this.clientALivrer = draft.getClientALivrer();
+		this.clientSouscripteur = draft.getClientSouscripteur();
+
 		this.auteur = draft.getAuteur();
 		this.referenceDraft = draft.getReference();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
@@ -106,8 +127,10 @@ public class Commande {
 
 	@Override
 	public String toString() {
-		return "Commande [id=" + id + ", reference=" + reference + ", referenceDraft=" + referenceDraft + ", client="
-				+ client + ", auteur=" + auteur + ", dateCreation=" + dateCreation + "]";
+		return "Commande [id=" + id + ", reference=" + reference + ", referenceDraft=" + referenceDraft
+				+ ", clientSouscripteur=" + clientSouscripteur + ", clientALivrer=" + clientALivrer
+				+ ", clientAFacturer=" + clientAFacturer + ", auteur=" + auteur + ", dateCreation=" + dateCreation
+				+ ", commandeLignes=" + commandeLignes + "]";
 	}
 
 	/**
@@ -163,19 +186,53 @@ public class Commande {
 
 	/**
 	 * 
-	 * @return {@link #client}.
+	 * @return {@link Client}
 	 */
-	public Client getClient() {
-		return client;
+	public Client getClientSouscripteur() {
+		return clientSouscripteur;
 	}
 
 	/**
 	 * 
-	 * @param client
-	 *            {@link #client}.
+	 * @param clientSouscripteur
+	 *            {@link Client}.
 	 */
-	public void setClient(Client client) {
-		this.client = client;
+	public void setClientSouscripteur(Client clientSouscripteur) {
+		this.clientSouscripteur = clientSouscripteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}.
+	 */
+	public Client getClientALivrer() {
+		return clientALivrer;
+	}
+
+	/**
+	 * 
+	 * @param clientALivrer
+	 *            {@link Client}.
+	 */
+	public void setClientALivrer(Client clientALivrer) {
+		this.clientALivrer = clientALivrer;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}.
+	 */
+	public Client getClientAFacturer() {
+		return clientAFacturer;
+	}
+
+	/**
+	 * 
+	 * @param clientAFacturer
+	 *            {@link Client}.
+	 */
+	public void setClientAFacturer(Client clientAFacturer) {
+		this.clientAFacturer = clientAFacturer;
 	}
 
 	/**
@@ -255,11 +312,10 @@ public class Commande {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
+						.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
+						.getDraftLigneDetailParent().getReferenceSelection());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
@@ -268,7 +324,7 @@ public class Commande {
 	/**
 	 * recuperer commande business a paritr de command domain.
 	 * 
-	 * @return
+	 * @return {@link CommandeInfo}
 	 */
 	public CommandeInfo toCommandInfo() {
 		CommandeInfo commandeInfo = new CommandeInfo();

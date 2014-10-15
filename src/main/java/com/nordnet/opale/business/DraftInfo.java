@@ -21,9 +21,19 @@ public class DraftInfo {
 	private List<DraftLigneInfo> lignes;
 
 	/**
-	 * 
+	 * Le client souscripteur.
 	 */
-	private ClientInfo client;
+	private Client souscripteur;
+
+	/**
+	 * Le client pour livraison.
+	 */
+	private Client livraison;
+
+	/**
+	 * Le client pour la facturation.
+	 */
+	private Client facturation;
 
 	/**
 	 * L utilisateur.
@@ -71,21 +81,55 @@ public class DraftInfo {
 		this.lignes = lignes;
 	}
 
-	/***
+	/**
 	 * 
-	 * @return {@link #client}
+	 * @return {@link Client}
 	 */
-	public ClientInfo getClient() {
-		return client;
+	public Client getSouscripteur() {
+		return souscripteur;
 	}
 
 	/**
 	 * 
-	 * @param client
-	 *            {@link #client}
+	 * @param souscripteur
+	 *            {@link Client}
 	 */
-	public void setClient(ClientInfo client) {
-		this.client = client;
+	public void setSouscripteur(Client souscripteur) {
+		this.souscripteur = souscripteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}
+	 */
+	public Client getLivraison() {
+		return livraison;
+	}
+
+	/**
+	 * 
+	 * @param livraison
+	 *            {@link Client}
+	 */
+	public void setLivraison(Client livraison) {
+		this.livraison = livraison;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}
+	 */
+	public Client getFacturation() {
+		return facturation;
+	}
+
+	/**
+	 * 
+	 * @param facturation
+	 *            {@link Client}
+	 */
+	public void setFacturation(Client facturation) {
+		this.facturation = facturation;
 	}
 
 	/**

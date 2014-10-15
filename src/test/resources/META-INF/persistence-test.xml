@@ -18,6 +18,7 @@
 		<class>com.nordnet.opale.domain.paiement.Paiement</class>
 		<class>com.nordnet.opale.domain.Auteur</class>
 		<class>com.nordnet.opale.domain.Tracage</class>
+		<class>com.nordnet.opale.domain.Client</class>
 		
 		<properties>
 <!--			<property name="hibernate.hbm2ddl.auto" value="update" />-->
