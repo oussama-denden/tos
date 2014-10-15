@@ -12,6 +12,7 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 
 /**
  * Classe responsable de faire la validation du {@link Draft} avec la trame du
@@ -36,11 +37,27 @@ public class CatalogueValidator {
 		ValidationInfo validationInfo = new ValidationInfo();
 		List<String> values;
 		int i = 0, j = 0;
-		// if (draft.getClient() == null) {
-		// TODO_ERROR remove comment
-		// validationInfo.addReason("commande", null,
-		// PropertiesUtil.getInstance().getErrorMessage("1.1.8"), null);
-		// }
+		boolean isPossedeBiens = false;
+
+		if (draft.getClientAFacturer() == null) {
+			validationInfo
+					.addReason("commande", "1.1.12", PropertiesUtil.getInstance().getErrorMessage("1.1.12"), null);
+		} else {
+			if (Utils.isStringNullOrEmpty(draft.getClientAFacturer().getClientId())) {
+				validationInfo.addReason("commande", "1.1.15", PropertiesUtil.getInstance().getErrorMessage("1.1.15"),
+						null);
+			}
+		}
+
+		if (draft.getClientSouscripteur() == null) {
+			validationInfo
+					.addReason("commande", "1.1.13", PropertiesUtil.getInstance().getErrorMessage("1.1.13"), null);
+		} else {
+			if (Utils.isStringNullOrEmpty(draft.getClientSouscripteur().getClientId())) {
+				validationInfo.addReason("commande", "1.1.16", PropertiesUtil.getInstance().getErrorMessage("1.1.16"),
+						null);
+			}
+		}
 
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
@@ -57,6 +74,8 @@ public class CatalogueValidator {
 						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].reference", "36.3.1.3",
 								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
 								values);
+					} else {
+						isPossedeBiens = trameCatalogue.isPossedeBiens(offreCatalogue, detail.getReferenceSelection());
 					}
 					j++;
 				}
@@ -64,7 +83,17 @@ public class CatalogueValidator {
 			i++;
 		}
 
+		if (isPossedeBiens && draft.getClientALivrer() == null) {
+			validationInfo
+					.addReason("commande", "1.1.14", PropertiesUtil.getInstance().getErrorMessage("1.1.14"), null);
+		} else if (isPossedeBiens) {
+			if (Utils.isStringNullOrEmpty(draft.getClientALivrer().getClientId())
+					|| Utils.isStringNullOrEmpty(draft.getClientALivrer().getAdresseId())) {
+				validationInfo.addReason("commande", "1.1.16", PropertiesUtil.getInstance().getErrorMessage("1.1.16"),
+						null);
+			}
+		}
+
 		return validationInfo;
 	}
-
 }

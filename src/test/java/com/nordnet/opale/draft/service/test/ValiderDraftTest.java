@@ -21,7 +21,8 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
- * {@link DraftService#validerDraft(String, com.nordnet.opale.business.catalogue.TrameCatalogue)}.
+ * {@link DraftService#validerDraft(String, com.nordnet.opale.business.catalogue.TrameCatalogue)}
+ * .
  * 
  * @author akram-moncer
  * 
@@ -52,8 +53,8 @@ public class ValiderDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
 	public void testValiderDraftValide() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/validerDraft.json");
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
 			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertTrue(validationInfo.isValide());
 		} catch (Exception e) {
@@ -69,8 +70,8 @@ public class ValiderDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
 	public void testValiderDraftAvecDraftNonExist() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/validerDraft.json");
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
 			draftService.validerDraft("REF-DRAFT-2", trameCatalogue);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
@@ -88,11 +89,11 @@ public class ValiderDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
 	public void testValiderDraftAvecOffreNonValide() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/validerDraft.json");
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
 			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-3", trameCatalogue);
-			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
-			assertEquals("36.3.1.2", validationInfo.getReasons().get(Constants.ZERO).getError());
+			assertEquals(Double.valueOf(Constants.TROIS), Double.valueOf(validationInfo.getReasons().size()));
+			assertEquals("36.3.1.2", validationInfo.getReasons().get(Constants.DEUX).getError());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -106,11 +107,11 @@ public class ValiderDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
 	public void testValiderDraftAvecDetailOffreNonValide() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/validerDraft.json");
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
 			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-4", trameCatalogue);
-			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
-			assertEquals("36.3.1.3", validationInfo.getReasons().get(Constants.ZERO).getError());
+			assertEquals(Double.valueOf(Constants.TROIS), Double.valueOf(validationInfo.getReasons().size()));
+			assertEquals("36.3.1.3", validationInfo.getReasons().get(Constants.DEUX).getError());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

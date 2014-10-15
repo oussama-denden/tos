@@ -52,6 +52,7 @@
             "referenceSelection": "kitsat",
             "label": "Trafic",
             "type": "ONLY_ONE",
+            "nature": "BIEN",
             "choices": [
               {
                 "reference": "trafic10g",
@@ -66,6 +67,7 @@
             "referenceSelection": "jet",
             "label": "Trafic",
             "type": "ONLY_ONE",
+            "nature": "SERVICE",
             "choices": [
               {
                 "reference": "trafic10g",

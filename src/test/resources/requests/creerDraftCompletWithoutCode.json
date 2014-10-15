@@ -18,6 +18,7 @@
         "details": [
           {
             "reference": "kitsat",
+             "referenceSelection": "kitsat",
             "referenceTarif": "achat_kit_mensuel",
             "modePaiement": "FACTURE",
             "configurationJson": ""
