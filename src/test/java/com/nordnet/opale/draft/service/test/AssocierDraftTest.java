@@ -54,8 +54,8 @@ public class AssocierDraftTest extends GlobalTestCase {
 					draftInfoGenerator.getObjectFromJsonFile(ClientInfo.class, "./requests/associerDraft.json"));
 
 			Draft draft = draftService.getDraftByReference("00000001");
-			assertNotNull(draft.getClient());
-			assertEquals("client-1245", draft.getClient().getClientId());
+			assertNotNull(draft.getClientAFacturer());
+			assertEquals("client-1245", draft.getClientAFacturer().getClientId());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

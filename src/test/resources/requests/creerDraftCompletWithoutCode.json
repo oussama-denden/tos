@@ -26,10 +26,20 @@
       }
     }
   ],
-  "client": {
+  "souscripteur": {
   "clientId": "client-1245",
-     "adresseFacturationId": "Adr_Facturation_2",
-    "adresseLivraisonId": "Adr_Livraison_69"
+   "adresseId": "Adr_Souscripteur_1"
+    
+  },
+  "livraison": {
+  "clientId": "client-1245",
+   "adresseId": "Adr_Livraison_1"
+    
+  },
+  "facturation": {
+  "clientId": "client-1245",
+   "adresseId": "Adr_Facturation_1"
+    
   },
   "auteur": {
     "qui": "GRC.WEL-JOHNDOE",

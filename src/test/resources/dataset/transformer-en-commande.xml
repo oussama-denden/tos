@@ -4,12 +4,12 @@
 <dataset>
 	<keygen />
 	<draft />
-	<draft id="1" reference="REF-DRAFT-1" clientId="CLIENT-1" code="000111"
+	<draft id="1" reference="REF-DRAFT-1" code="000111"
 		timestamp="100" />
-	<draft id="2" reference="REF-DRAFT-3" clientId="CLIENT-1" code="000111"
+	<draft id="2" reference="REF-DRAFT-3" code="000111"
 		timestamp="100" />
 
-	<draft id="3" reference="REF-DRAFT-4" clientId="CLIENT-1" code="000111"
+	<draft id="3" reference="REF-DRAFT-4" code="000111"
 		timestamp="100" />
 	<draftLigne />
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"

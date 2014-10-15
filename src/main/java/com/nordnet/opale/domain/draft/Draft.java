@@ -7,10 +7,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
@@ -46,12 +48,6 @@ public class Draft {
 	private String reference;
 
 	/**
-	 * L adresse du draft.
-	 */
-	@Embedded
-	private Client client;
-
-	/**
 	 * l auteur du draft.
 	 */
 	@Embedded
@@ -78,6 +74,27 @@ public class Draft {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "draftId")
 	private List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
+
+	/**
+	 * Le client souscripteur {@link Client}.
+	 */
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clientSouscripteurId", nullable = true)
+	private Client clientSouscripteur;
+
+	/**
+	 * Le client a livraer {@link Client}.
+	 */
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clientALivrerId", nullable = true)
+	private Client clientALivrer;
+
+	/**
+	 * Le client a facturer {@link Client}.
+	 */
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clientAFacturerId", nullable = true)
+	private Client clientAFacturer;
 
 	/**
 	 * constructeur par defaut.
@@ -125,40 +142,21 @@ public class Draft {
 		this.reference = reference;
 	}
 
-	/**
-	 * 
-	 * @return {@link #client}.
-	 */
-	public Client getClient() {
-		return client;
-	}
-
-	/**
-	 * 
-	 * @param client
-	 *            {@link #client}.
-	 */
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	/**
-	 * associe un client au draft.
-	 * 
-	 * @param clientId
-	 *            id du client.
-	 * @param adresseFacturationId
-	 *            addresse de facturation.
-	 * @param adresseLivraisonId
-	 *            addresse de livraison.
-	 */
-	public void setClient(String clientId, String adresseFacturationId, String adresseLivraisonId) {
-		Client client = new Client();
-		client.setAdresseFacturationId(adresseFacturationId);
-		client.setAdresseLivraisonId(adresseLivraisonId);
-		client.setClientId(clientId);
-		this.client = client;
-	}
+	// TODO_ERROR remove comment
+	// /**
+	// * associe un client au draft.
+	// *
+	// * @param clientId
+	// * id du client.
+	// * @param adresseId
+	// * addresse.
+	// */
+	// public void setClient(String clientId, String adresseId) {
+	// Client client = new Client();
+	// client.setAdresseId(adresseId);
+	// client.setClientId(clientId);
+	// this.client = client;
+	// }
 
 	/**
 	 * 
@@ -247,6 +245,57 @@ public class Draft {
 	 */
 	public void setDraftLignes(List<DraftLigne> draftLignes) {
 		this.draftLignes = draftLignes;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}
+	 */
+	public Client getClientSouscripteur() {
+		return clientSouscripteur;
+	}
+
+	/**
+	 * 
+	 * @param clientSouscripteur
+	 *            {@link Client}.
+	 */
+	public void setClientSouscripteur(Client clientSouscripteur) {
+		this.clientSouscripteur = clientSouscripteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}.
+	 */
+	public Client getClientALivrer() {
+		return clientALivrer;
+	}
+
+	/**
+	 * 
+	 * @param clientALivrer
+	 *            {@link Client}.
+	 */
+	public void setClientALivrer(Client clientALivrer) {
+		this.clientALivrer = clientALivrer;
+	}
+
+	/**
+	 * 
+	 * @return {@link Client}.
+	 */
+	public Client getClientAFacturer() {
+		return clientAFacturer;
+	}
+
+	/**
+	 * 
+	 * @param clientAFacturer
+	 *            {@link Client}.
+	 */
+	public void setClientAFacturer(Client clientAFacturer) {
+		this.clientAFacturer = clientAFacturer;
 	}
 
 	/**
