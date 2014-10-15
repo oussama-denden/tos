@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nordnet.opale.enums.TypeProduit;
+
 /**
  * Classe representatif de la trame recue du catalogue.
  * 
@@ -86,7 +88,8 @@ public class TrameCatalogue {
 	}
 
 	/**
-	 * verifier si la reference de l' offre dans le draft existe dans la trame du catalogue.
+	 * verifier si la reference de l' offre dans le draft existe dans la trame
+	 * du catalogue.
 	 * 
 	 * @param referenceOffre
 	 *            reference offre.
@@ -119,6 +122,28 @@ public class TrameCatalogue {
 			DetailCatalogue detailCatalogue = new DetailCatalogue();
 			detailCatalogue.setReferenceSelection(referenceSelection);
 			if (offreCatalogue.getDetails().contains(detailCatalogue)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * verifier si la selection existe dans l'offre du catalogue.
+	 * 
+	 * @param offreCatalogue
+	 *            {@link OffreCatalogue}.
+	 * @param referenceSelection
+	 *            reference selection.
+	 * @return true si la selection existe dans l'offre.
+	 */
+	public boolean isPossedeBiens(OffreCatalogue offreCatalogue, String referenceSelection) {
+
+		if (offreCatalogue != null) {
+			DetailCatalogue detailCatalogue = new DetailCatalogue();
+			detailCatalogue.setReferenceSelection(referenceSelection);
+			int indexDetail = offreCatalogue.getDetails().indexOf(detailCatalogue);
+			if (offreCatalogue.getDetails().get(indexDetail).getNature().equals(TypeProduit.BIEN)) {
 				return true;
 			}
 		}
