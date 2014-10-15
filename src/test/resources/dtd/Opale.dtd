@@ -1,12 +1,12 @@
-<!ELEMENT dataset (keygen*,draft*, draftLigne*, draftLigneDetail*)>
+<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*)>
 
 <!ELEMENT draft EMPTY>
 <!ATTLIST draft
     id CDATA #IMPLIED
     reference CDATA #IMPLIED
-    clientId CDATA #IMPLIED
-    AdresseFacturationId CDATA #IMPLIED
-    AdresseLivraisonId CDATA #IMPLIED
+    clientAFacturerId CDATA #IMPLIED
+    clientALivrerId CDATA #IMPLIED
+    clientSouscripteurId CDATA #IMPLIED
     code CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
@@ -57,5 +57,12 @@
      id CDATA #IMPLIED
     referenceDraft CDATA #IMPLIED
     entite CDATA #IMPLIED
+>
+
+<!ELEMENT client EMPTY>
+<!ATTLIST client
+     id CDATA #IMPLIED
+    adresseId CDATA #IMPLIED
+    clientId CDATA #IMPLIED
 >
 

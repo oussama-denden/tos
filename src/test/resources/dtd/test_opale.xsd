@@ -6,9 +6,9 @@
 	<xsd:complexType name="draft_type">
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
-		<xsd:attribute name="clientId" use="optional" />
-		<xsd:attribute name="AdresseFacturationId" use="optional" />
-		<xsd:attribute name="AdresseLivraisonId" use="optional" />
+		<xsd:attribute name="clientAFacturerId" use="optional" />
+		<xsd:attribute name="clientALivrerId" use="optional" />
+		<xsd:attribute name="clientSouscripteurId" use="optional" />
 		<xsd:attribute name="code" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
@@ -62,6 +62,13 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="entite" use="optional" />
 		<xsd:attribute name="referenceDraft" use="optional" />
+	</xsd:complexType>
+	
+	<xsd:element name="client" type="client_type"/>
+	    <xsd:complexType name="client_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="adresseId" use="optional" />
+		<xsd:attribute name="clientId" use="optional" />
 	</xsd:complexType>
 	
 	

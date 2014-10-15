@@ -1,11 +1,4 @@
-package com.nordnet.opale.domain;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package com.nordnet.opale.business;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Client}.
@@ -13,17 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author anisselmane.
  * 
  */
-@Entity
-@Table(name = "client")
-@JsonIgnoreProperties({ "id" })
 public class Client {
-
-	/**
-	 * cle primaire.
-	 */
-	@Id
-	@GeneratedValue
-	private Integer id;
 
 	/**
 	 * L'identifianrt du client.
@@ -37,7 +20,7 @@ public class Client {
 
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", clientId=" + clientId + ", adresseId=" + adresseId + "]";
+		return "Client [clientId=" + clientId + ", adresseId=" + adresseId + "]";
 	}
 
 	/**
@@ -45,23 +28,6 @@ public class Client {
 	 */
 	public Client() {
 		super();
-	}
-
-	/**
-	 * 
-	 * @return {@link #id}.
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 *            {@link #id}.
-	 */
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	/**
@@ -97,6 +63,20 @@ public class Client {
 	 */
 	public void setAdresseId(String adresseId) {
 		this.adresseId = adresseId;
+	}
+
+	/**
+	 * convertir un {@link ClientInfo} en
+	 * {@link com.nordnet.opale.domain.Client}.
+	 * 
+	 * @return {@link com.nordnet.opale.domain.Client}.
+	 */
+	public com.nordnet.opale.domain.Client toDomain() {
+		com.nordnet.opale.domain.Client client = new com.nordnet.opale.domain.Client();
+
+		client.setAdresseId(adresseId);
+		client.setClientId(clientId);
+		return client;
 	}
 
 }

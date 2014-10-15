@@ -1,5 +1,6 @@
 package com.nordnet.opale.validator;
 
+import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
@@ -26,10 +27,9 @@ public class CommandeValidator {
 	 * @param commande
 	 *            commande {@link Commande}
 	 * @throws OpaleException
-	 * @{@link OpaleExceptionr}.
-	 * 
+	 *             {@link OpaleException}.
 	 */
-	public static void checkCommandeExiste(String refCommande, Commande commande) throws OpaleException {
+	public static void isExiste(String refCommande, Commande commande) throws OpaleException {
 		if (commande == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.2", refCommande), "2.1.2");
 		}
@@ -41,11 +41,54 @@ public class CommandeValidator {
 	 * @param refCommande
 	 *            reference du commande {@link String}
 	 * @throws OpaleException
-	 *             @{@link OpaleException}
+	 * @{@link OpaleException} reference {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	public static void checkReferenceCommande(String refCommande) throws OpaleException {
 		if (Utils.isStringNullOrEmpty(refCommande)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.1"), "2.1.1");
+		}
+	}
+
+	/**
+	 * verifier si une commande est deja paye ou non.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param montantPaye
+	 *            montant deja paye.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isCommandePaye(String refCommande, Commande commande, Double montantPaye) throws OpaleException {
+		isExiste(refCommande, commande);
+		if (commande.getCoutTotal() <= montantPaye) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.11"), "1.1.11");
+		}
+	}
+
+	/**
+	 * valider si le paiement est possible ou pas.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param montantPaye
+	 *            montant deja paye pour la commande.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isPaiementPossible(String referenceCommande, Commande commande, Double montantPaye,
+			PaiementInfo paiementInfo) throws OpaleException {
+		isExiste(referenceCommande, commande);
+		if (paiementInfo.getMontant() != null && commande.getCoutTotal() < (montantPaye + paiementInfo.getMontant())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.3"), "2.1.3");
 		}
 	}
 }

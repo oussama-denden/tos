@@ -14,7 +14,8 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.util.PropertiesUtil;
 
 /**
- * Classe responsable de faire la validation du {@link Draft} avec la trame du catalogue.
+ * Classe responsable de faire la validation du {@link Draft} avec la trame du
+ * catalogue.
  * 
  * @author akram-moncer
  * 
@@ -35,9 +36,11 @@ public class CatalogueValidator {
 		ValidationInfo validationInfo = new ValidationInfo();
 		List<String> values;
 		int i = 0, j = 0;
-		if (draft.getClient() == null) {
-			validationInfo.addReason("commande", null, PropertiesUtil.getInstance().getErrorMessage("1.1.8"), null);
-		}
+		// if (draft.getClient() == null) {
+		// TODO_ERROR remove comment
+		// validationInfo.addReason("commande", null,
+		// PropertiesUtil.getInstance().getErrorMessage("1.1.8"), null);
+		// }
 
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());

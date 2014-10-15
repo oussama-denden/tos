@@ -11,7 +11,7 @@ import com.nordnet.opale.enums.ModeSignature;
 public class SignatureInfo {
 
 	/**
-	 * l'auteur
+	 * l'auteur.
 	 */
 	private Auteur auteur;
 

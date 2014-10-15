@@ -23,6 +23,8 @@ public class SignatureValidator {
 	 * 
 	 * @param refCommande
 	 *            reference du commande.
+	 * @param isAddMode
+	 *            {@link Boolean}
 	 * @param signature
 	 *            {@link Signature}
 	 * @throws OpaleException
@@ -32,9 +34,9 @@ public class SignatureValidator {
 			throws OpaleException {
 
 		if (signature != null && signature.isSigne() && isAddMode) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.1"), "3.1.1");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.1"), "4.1.1");
 		} else if (signature != null && signature.isSigne() && !isAddMode) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.3"), "3.1.3");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.3"), "4.1.3");
 		}
 
 	}
@@ -55,9 +57,9 @@ public class SignatureValidator {
 	public static void checkSignatureExiste(Signature signature, String refSignature, String refCommande)
 			throws OpaleException {
 		if (signature == null && refSignature != null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.2", refSignature, refCommande), "3.1.2");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.2", refSignature, refCommande), "4.1.2");
 		} else if (signature == null && refSignature == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.5", refCommande), "3.1.5");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.5", refCommande), "4.1.5");
 		}
 	}
 
@@ -71,11 +73,10 @@ public class SignatureValidator {
 	 */
 	public static void validerSignature(SignatureInfo signatureInfo) throws OpaleException {
 		if (signatureInfo.getIdSignature() == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.3", "idSignature"), "3.1.3");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.3", "idSignature"), "4.1.3");
 		}
 		if (signatureInfo.getTimestamp() == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.3", "timestamp"), "3.1.3");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.3", "timestamp"), "4.1.3");
 		}
 	}
-
 }

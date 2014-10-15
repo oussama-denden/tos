@@ -66,7 +66,7 @@ public class SignatureServiceImpl implements SignatureService {
 			throws OpaleException, JSONException {
 
 		Commande commande = commandeService.getCommandeByReferenceDraft(refCommande);
-		CommandeValidator.checkCommandeExiste(refCommande, commande);
+		CommandeValidator.isExiste(refCommande, commande);
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {
 			signatureReference = creerSignature(ajoutSignatureInfo, null, commande);
@@ -93,7 +93,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 		LOGGER.info("Debut methode transmettreSignature");
 		Commande commande = commandeService.getCommandeByReferenceDraft(refCommande);
-		CommandeValidator.checkCommandeExiste(refCommande, commande);
+		CommandeValidator.isExiste(refCommande, commande);
 
 		Signature signature = signatureRepository.findByReference(refSignature);
 		SignatureValidator.checkSignatureExiste(signature, refSignature, refCommande);
@@ -113,7 +113,7 @@ public class SignatureServiceImpl implements SignatureService {
 	public Object transmettreSignature(String refCommande, SignatureInfo signatureInfo)
 			throws OpaleException, JSONException {
 		Commande commande = commandeService.getCommandeByReferenceDraft(refCommande);
-		CommandeValidator.checkCommandeExiste(refCommande, commande);
+		CommandeValidator.isExiste(refCommande, commande);
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {
 			signatureReference = creerSignature(null, signatureInfo, commande);
@@ -167,7 +167,7 @@ public class SignatureServiceImpl implements SignatureService {
 	@Override
 	public SignatureInfo getSignature(String refCommande) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.checkCommandeExiste(refCommande, commande);
+		CommandeValidator.isExiste(refCommande, commande);
 		if (commande.getReferenceSignature() != null) {
 			Signature signature = signatureRepository.findByReference(commande.getReferenceSignature());
 			SignatureValidator.checkSignatureExiste(signature, null, refCommande);

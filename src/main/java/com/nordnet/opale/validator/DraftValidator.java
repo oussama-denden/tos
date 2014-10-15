@@ -3,6 +3,7 @@ package com.nordnet.opale.validator;
 import java.util.List;
 
 import com.nordnet.opale.business.Auteur;
+import com.nordnet.opale.business.Client;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
@@ -152,9 +153,9 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void clientIdNotNull(ClientInfo clientInfo) throws OpaleException {
-		if (clientInfo != null) {
-			if (Utils.isStringNullOrEmpty(clientInfo.getClientId())) {
+	public static void clientIdNotNull(Client client) throws OpaleException {
+		if (client != null) {
+			if (Utils.isStringNullOrEmpty(client.getClientId())) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.5"), "1.1.5");
 			}
 		}
@@ -219,7 +220,8 @@ public class DraftValidator {
 	}
 
 	/**
-	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est
+	 * possible ou non.
 	 * 
 	 * 
 	 * @param draft

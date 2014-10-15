@@ -135,10 +135,18 @@ public class DraftServiceImpl implements DraftService {
 		draft.setAuteur(auteur);
 
 		// verifier si le clientId n'est pas null ou empty.
-		DraftValidator.clientIdNotNull(draftInfo.getClient());
+		DraftValidator.clientIdNotNull(draftInfo.getFacturation());
+		DraftValidator.clientIdNotNull(draftInfo.getLivraison());
+		DraftValidator.clientIdNotNull(draftInfo.getSouscripteur());
 
-		if (draftInfo.getClient() != null) {
-			draft.setClient(draftInfo.getClient().toDomain());
+		if (draftInfo.getFacturation() != null) {
+			draft.setClientAFacturer(draftInfo.getFacturation().toDomain());
+		}
+		if (draftInfo.getLivraison() != null) {
+			draft.setClientALivrer(draftInfo.getLivraison().toDomain());
+		}
+		if (draftInfo.getSouscripteur() != null) {
+			draft.setClientSouscripteur(draftInfo.getSouscripteur().toDomain());
 		}
 
 		if (draftInfo.getLignes() != null) {
@@ -295,21 +303,32 @@ public class DraftServiceImpl implements DraftService {
 	@Override
 	public void associerClient(String refDraft, ClientInfo clientInfo) throws OpaleException {
 		LOGGER.info("Enter methode associerClient");
+
 		Draft draft = getDraftByReference(refDraft);
+
 		DraftValidator.checkUser(clientInfo.getUser());
 
 		// verifier si le draft existe.
 		DraftValidator.isExistDraft(draft, refDraft);
 
 		// verifier si le clientId n'est pas null ou empty.
-		DraftValidator.clientIdNotNull(clientInfo);
+		DraftValidator.clientIdNotNull(clientInfo.getFacturation());
+		DraftValidator.clientIdNotNull(clientInfo.getLivraison());
+		DraftValidator.clientIdNotNull(clientInfo.getSouscripteur());
 
-		draft.setClient(clientInfo.toDomain());
+		// associer le client facturation.
+		draft.setClientAFacturer(clientInfo.getFacturation().toDomain());
+		// associer le client livraison.
+		draft.setClientALivrer(clientInfo.getLivraison().toDomain());
+		// associer le client souscripteur.
+		draft.setClientSouscripteur(clientInfo.getSouscripteur().toDomain());
 
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "associer le client " + clientInfo.getClientId()
-				+ " au draft" + refDraft);
+		tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "associer le client souscripteur "
+				+ clientInfo.getSouscripteur().getClientId() + " client facturation "
+				+ clientInfo.getFacturation().getClientId() + " client livraison "
+				+ clientInfo.getLivraison().getClientId() + " au draft" + refDraft);
 
 		LOGGER.info("fin methode associerClient");
 
@@ -334,7 +353,11 @@ public class DraftServiceImpl implements DraftService {
 			throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
-		draft.setClient(transformationInfo.getClientInfo().getClientId(), null, null);
+
+		draft.setClientAFacturer(transformationInfo.getClientInfo().getFacturation().toDomain());
+		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
+		draft.setClientSouscripteur(transformationInfo.getClientInfo().getSouscripteur().toDomain());
+
 		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
