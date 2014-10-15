@@ -11,6 +11,7 @@
 		                   <xsd:element name="draftLigneDetail" type="dflt:draftLigneDetail_type" />
 		                    <xsd:element name="tracage" type="dflt:tracage_type" />
 		                      <xsd:element name="client" type="dflt:client_type" />
+		                      <xsd:element name="commande" type="dflt:commande_type" />
 				<xsd:any namespace="test_opale" />
 			</xsd:choice>
 		</xsd:complexType>
