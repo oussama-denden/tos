@@ -75,7 +75,10 @@ public class CatalogueValidator {
 								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
 								values);
 					} else {
-						isPossedeBiens = trameCatalogue.isPossedeBiens(offreCatalogue, detail.getReferenceSelection());
+						if (!isPossedeBiens) {
+							isPossedeBiens = trameCatalogue.isPossedeBiens(offreCatalogue,
+									detail.getReferenceSelection());
+						}
 					}
 					j++;
 				}
@@ -87,6 +90,12 @@ public class CatalogueValidator {
 			validationInfo
 					.addReason("commande", "1.1.14", PropertiesUtil.getInstance().getErrorMessage("1.1.14"), null);
 		} else if (isPossedeBiens) {
+			if (Utils.isStringNullOrEmpty(draft.getClientALivrer().getClientId())
+					|| Utils.isStringNullOrEmpty(draft.getClientALivrer().getAdresseId())) {
+				validationInfo.addReason("commande", "1.1.16", PropertiesUtil.getInstance().getErrorMessage("1.1.16"),
+						null);
+			}
+		} else if (draft.getClientALivrer() != null) {
 			if (Utils.isStringNullOrEmpty(draft.getClientALivrer().getClientId())
 					|| Utils.isStringNullOrEmpty(draft.getClientALivrer().getAdresseId())) {
 				validationInfo.addReason("commande", "1.1.16", PropertiesUtil.getInstance().getErrorMessage("1.1.16"),

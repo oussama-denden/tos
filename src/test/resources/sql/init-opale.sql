@@ -1,3 +1,10 @@
+--
+-- Create schema opale_test
+--
+
+CREATE DATABASE IF NOT EXISTS opale_test;
+USE opale_test;
+
 SET FOREIGN_KEY_CHECKS=0;
 --
 -- Definition of table `client`

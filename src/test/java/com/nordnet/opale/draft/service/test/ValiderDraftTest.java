@@ -118,4 +118,98 @@ public class ValiderDraftTest extends GlobalTestCase {
 		}
 	}
 
+	/**
+	 * Tester le de validation d'un {@link Draft} possedant un bien et qui n'a
+	 * pas de client livraison.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftBienWithoutClientLivraisonWhenValiderDraftFail.xml" })
+	public void givenDraftBienWithoutClientLivraisonWhenValiderDraftFail() {
+		try {
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
+			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
+			assertEquals("1.1.14", validationInfo.getReasons().get(Constants.ZERO).getError());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Tester le de validation d'un {@link Draft} possedant un bien et qui n'a
+	 * pas de client livraison.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftServiceWithoutClientLivraisonWhenValiderDraftValid.xml" })
+	public void givenDraftServiceWithoutClientLivraisonWhenValiderDraftValid() {
+		try {
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
+			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(validationInfo.getReasons().size()));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Tester le de validation d'un {@link Draft} qui a de client livraison sans
+	 * adresse id.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenClientLivraisonWithoutAdresseIdWhenValiderDraftFail.xml" })
+	public void givenClientLivraisonWithoutAdresseIdWhenValiderDraftFail() {
+		try {
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
+			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
+			assertEquals("1.1.16", validationInfo.getReasons().get(Constants.ZERO).getError());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Tester le de validation d'un {@link Draft} qui n'a pas de client
+	 * facturation.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftWithoutClientFacturationWhenValiderDraftFail.xml" })
+	public void givenDraftWithoutClientFacturationWhenValiderDraftFail() {
+		try {
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
+			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
+			assertEquals("1.1.12", validationInfo.getReasons().get(Constants.ZERO).getError());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Tester le de validation d'un {@link Draft} qui n'a pas de client
+	 * souscripteur.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftWithoutClientSouscripteurWhenValiderDraftFail.xml" })
+	public void givenDraftWithoutClientSouscripteurWhenValiderDraftFail() {
+		try {
+			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+					"./requests/validerDraft.json");
+			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
+			assertEquals("1.1.13", validationInfo.getReasons().get(Constants.ZERO).getError());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
+	}
+
 }
