@@ -79,7 +79,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void associerPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
+	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
 			throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);

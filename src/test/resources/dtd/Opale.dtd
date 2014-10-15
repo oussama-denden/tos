@@ -1,4 +1,4 @@
-<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*)>
+<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, paiement*)>
 
 <!ELEMENT draft EMPTY>
 <!ATTLIST draft
@@ -79,5 +79,15 @@
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
+>
+
+<!ELEMENT paiement EMPTY>
+<!ATTLIST paiement
+    id CDATA #IMPLIED
+    infoPaiement CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    montant CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceCommande CDATA #IMPLIED
 >
 

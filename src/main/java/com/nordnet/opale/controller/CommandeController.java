@@ -102,9 +102,9 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}/payer", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public void associerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
+	public void payerIntentionPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
 			@RequestBody PaiementInfo paiementInfo) throws OpaleException {
-		commandeService.associerPaiement(refCommande, refPaiement, paiementInfo);
+		commandeService.payerIntentionPaiement(refCommande, refPaiement, paiementInfo);
 	}
 
 	/**

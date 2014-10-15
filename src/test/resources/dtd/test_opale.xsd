@@ -86,5 +86,15 @@
 		<xsd:attribute name="timestamp" use="optional" />
 	</xsd:complexType>
 	
+	<xsd:element name="paiement" type="paiement_type"/>
+	    <xsd:complexType name="paiement_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="infoPaiement" use="optional" />
+		<xsd:attribute name="modePaiement" use="optional" />
+		<xsd:attribute name="montant" use="optional" />
+		<xsd:attribute name="reference" use="optional" />
+		<xsd:attribute name="referenceCommande" use="optional" />
+	</xsd:complexType>
+	
 	
 </xsd:schema>
