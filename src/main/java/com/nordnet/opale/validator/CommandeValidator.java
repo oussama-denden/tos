@@ -23,9 +23,9 @@ public class CommandeValidator {
 	 * verfier que la commande existe sinon envoyer une exception.
 	 * 
 	 * @param refCommande
-	 *            reference {@link Commande}.
+	 *            reference du commande {@link String}
 	 * @param commande
-	 *            {@link Commande}.
+	 *            commande {@link Commande}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
@@ -39,7 +39,9 @@ public class CommandeValidator {
 	 * verfier que la reference du commande n'est pas null ou vide.
 	 * 
 	 * @param refCommande
-	 *            reference {@link Commande}.
+	 *            reference du commande {@link String}
+	 * @throws OpaleException
+	 * @{@link OpaleException} reference {@link Commande}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */

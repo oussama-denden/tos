@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Client;
-import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.Offre;
@@ -148,8 +147,8 @@ public class DraftValidator {
 	/**
 	 * Tester si le clientId n'est pas null ou empty.
 	 * 
-	 * @param clientInfo
-	 *            {@link ClientInfo}
+	 * @param client
+	 *            {@link Client}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */

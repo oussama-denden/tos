@@ -16,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
+import com.nordnet.opale.service.signature.SignatureService;
 import com.wordnik.swagger.annotations.Api;
 
 /**
@@ -48,6 +51,12 @@ public class CommandeController {
 	private CommandeService commandeService;
 
 	/**
+	 * signature service. {@link SignatureService}
+	 */
+	@Autowired
+	private SignatureService signatureService;
+
+	/**
 	 * recuperer la commande.
 	 * 
 	 * @param refCommande
@@ -60,7 +69,8 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public CommandeInfo getCommande(String refCommande) throws OpaleException {
+	public CommandeInfo getCommande(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::getCommande");
 		return commandeService.getCommande(refCommande);
 
 	}
@@ -129,6 +139,88 @@ public class CommandeController {
 		JSONObject response = new JSONObject();
 		response.put("reference", paiement.getReference());
 		return response.toString();
+	}
+
+	/**
+	 * ajouter une signature et l'associer a une commande.
+	 * 
+	 * @param refCommande
+	 *            reference de commande {@link String}
+	 * @param ajoutSignatureInfo
+	 *            {@link AjoutSignatureInfo}
+	 * @return {@link Object}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object signerCommande(@PathVariable String refCommande, @RequestBody AjoutSignatureInfo ajoutSignatureInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::signerCommande");
+		return signatureService.signerCommande(refCommande, ajoutSignatureInfo);
+
+	}
+
+	/**
+	 * transmettre une signature qui a deja un mode.
+	 * 
+	 * @param refCommande
+	 *            reference du commande
+	 * @param refSignature
+	 *            reference du signature
+	 * @param signatureInfo
+	 *            {@link SignatureInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void transmettreSignature(@PathVariable String refCommande, @PathVariable String refSignature,
+			@RequestBody SignatureInfo signatureInfo) throws OpaleException {
+		LOGGER.info(":::ws-rec:::transmettreSignature");
+		signatureService.transmettreSignature(refCommande, refSignature, signatureInfo);
+	}
+
+	/**
+	 * transmettre une nouvelle signature.
+	 * 
+	 * @param refCommande
+	 *            reference du commande
+	 * @param signatureInfo
+	 *            {@link SignatureInfo}
+	 * @return {@link object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature/transmettre", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object transmettreNouvelleSignature(@PathVariable String refCommande,
+			@RequestBody SignatureInfo signatureInfo) throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::transmettreNouvelleSignature");
+		return signatureService.transmettreSignature(refCommande, signatureInfo);
+
+	}
+
+	/**
+	 * recuperer une signature.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * 
+	 * @return {@link SignatureInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public SignatureInfo getSignature(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::getSignature");
+		return signatureService.getSignature(refCommande);
 	}
 
 	/**

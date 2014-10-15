@@ -6,20 +6,20 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.nordnet.opale.enums.TypeFrais;
+import com.nordnet.opale.enums.ModeSignature;
 
 /**
  * 
- * @author akram-moncer
+ * @author mahjoub-MARZOUGUI
  * 
  */
-public class TypeFraisDeserializer extends JsonDeserializer<TypeFrais> {
+public class ModeSignatureDeserialiser extends JsonDeserializer<ModeSignature> {
 
 	@Override
-	public TypeFrais deserialize(JsonParser parser, DeserializationContext context)
+	public ModeSignature deserialize(JsonParser parser, DeserializationContext context)
 			throws IOException, JsonProcessingException {
 
-		return TypeFrais.fromSting(parser.getText().toUpperCase());
+		return ModeSignature.fromSting(parser.getText().toUpperCase());
 	}
 
 }

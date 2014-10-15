@@ -96,6 +96,11 @@ public class Commande {
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
 
 	/**
+	 * la reference signature du client associe au commande.
+	 */
+	private String referenceSignature;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Commande() {
@@ -294,6 +299,25 @@ public class Commande {
 	 */
 	public void addLigne(CommandeLigne commandeLigne) {
 		this.commandeLignes.add(commandeLigne);
+	}
+
+	/**
+	 * get the reference de signature.
+	 * 
+	 * @return {@link #referenceSignature}
+	 */
+	public String getReferenceSignature() {
+		return referenceSignature;
+	}
+
+	/**
+	 * set the referense de signature.
+	 * 
+	 * @param referenceSignature
+	 *            the new {@link #referenceSignature}
+	 */
+	public void setReferenceSignature(String referenceSignature) {
+		this.referenceSignature = referenceSignature;
 	}
 
 	/**

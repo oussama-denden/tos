@@ -1,3 +1,10 @@
+--
+-- Create schema opale_test
+--
+
+CREATE DATABASE IF NOT EXISTS opale_test;
+USE opale_test;
+
 SET FOREIGN_KEY_CHECKS=0;
 --
 -- Definition of table `client`
@@ -29,7 +36,14 @@ CREATE TABLE `commande` (
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `referenceSignature` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKDC160A7A411643F6` (`clientAFacturerId`),
+  KEY `FKDC160A7A2A2C2866` (`clientALivrerId`),
+  KEY `FKDC160A7AD6AADB33` (`clientSouscripteurId`),
+  CONSTRAINT `FKDC160A7AD6AADB33` FOREIGN KEY (`clientSouscripteurId`) REFERENCES `client` (`id`),
+  CONSTRAINT `FKDC160A7A2A2C2866` FOREIGN KEY (`clientALivrerId`) REFERENCES `client` (`id`),
+  CONSTRAINT `FKDC160A7A411643F6` FOREIGN KEY (`clientAFacturerId`) REFERENCES `client` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
