@@ -15,6 +15,7 @@
 		<class>com.nordnet.opale.domain.commande.CommandeLigneDetail</class>
 		<class>com.nordnet.opale.domain.commande.Frais</class>
 		<class>com.nordnet.opale.domain.commande.Tarif</class>
+		<class>com.nordnet.opale.domain.paiement.Paiement</class>
 		<class>com.nordnet.opale.domain.Auteur</class>
 		<class>com.nordnet.opale.domain.Tracage</class>
 		<class>com.nordnet.opale.domain.Client</class>

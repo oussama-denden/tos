@@ -3,16 +3,23 @@ package com.nordnet.opale.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
@@ -32,7 +39,7 @@ public class CommandeController {
 	/**
 	 * Declaration du log.
 	 */
-	private final static Logger LOGGER = Logger.getLogger(DraftController.class);
+	private final static Logger LOGGER = Logger.getLogger(CommandeController.class);
 
 	/**
 	 * draft service. {@link CommandeService}.
@@ -41,21 +48,63 @@ public class CommandeController {
 	private CommandeService commandeService;
 
 	/**
-	 * recuperer la commande
+	 * recuperer la commande.
 	 * 
-	 * @param redCommande
+	 * @param refCommande
 	 *            reference du commande
 	 * 
 	 * @return {@link CommandeInfo}
 	 * 
 	 * @throws OpaleException
-	 * @{@link OpaleExceptionr}
+	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public CommandeInfo getCommande(String refCommande) throws OpaleException {
 		return commandeService.getCommande(refCommande);
 
+	}
+
+	/**
+	 * ajouter une intension de paiement a la commande.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @return {@link Paiement}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public String paiementComptant(@PathVariable String refCommande, @RequestBody PaiementInfo paiementInfo)
+			throws OpaleException, JSONException {
+		Paiement paiement = commandeService.paiementComptant(refCommande, paiementInfo);
+		JSONObject response = new JSONObject();
+		response.put("reference", paiement.getReference());
+		return response.toString();
+	}
+
+	/**
+	 * payer une intention de paiement.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param refPaiement
+	 *            reference {@link Paiement}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refCommande:.+}/payer", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void paiementComptant(@PathVariable String refCommande, @PathVariable String refPaiement,
+			@RequestBody PaiementInfo paiementInfo) throws OpaleException {
+		commandeService.associerPaiement(refCommande, refPaiement, paiementInfo);
 	}
 
 	/**

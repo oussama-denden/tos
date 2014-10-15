@@ -127,8 +127,10 @@ public class Commande {
 
 	@Override
 	public String toString() {
-		return "Commande [id=" + id + ", reference=" + reference + ", auteur=" + auteur + ", dateCreation="
-				+ dateCreation + "]";
+		return "Commande [id=" + id + ", reference=" + reference + ", referenceDraft=" + referenceDraft
+				+ ", clientSouscripteur=" + clientSouscripteur + ", clientALivrer=" + clientALivrer
+				+ ", clientAFacturer=" + clientAFacturer + ", auteur=" + auteur + ", dateCreation=" + dateCreation
+				+ ", commandeLignes=" + commandeLignes + "]";
 	}
 
 	/**
@@ -322,7 +324,7 @@ public class Commande {
 	/**
 	 * recuperer commande business a paritr de command domain.
 	 * 
-	 * @return
+	 * @return {@link CommandeInfo}
 	 */
 	public CommandeInfo toCommandInfo() {
 		CommandeInfo commandeInfo = new CommandeInfo();
@@ -339,5 +341,14 @@ public class Commande {
 		commandeInfo.setLignes(lignes);
 		return commandeInfo;
 
+	}
+
+	/**
+	 * calcule le cout total de le commande.
+	 * 
+	 * @return cout total.
+	 */
+	public Double getCoutTotal() {
+		return 10.0;
 	}
 }
