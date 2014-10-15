@@ -3,6 +3,8 @@ package com.nordnet.opale.business.catalogue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nordnet.opale.enums.TypeProduit;
+
 /**
  * Classe contenant les info d'un detail dans le catalogue.
  * 
@@ -25,6 +27,11 @@ public class DetailCatalogue {
 	 * type detail.
 	 */
 	private String type;
+
+	/**
+	 * Type de produit (SERVICE,Bien).
+	 */
+	private TypeProduit nature;
 
 	/**
 	 * liste des {@link Choice} associe au detail du catalogue.
@@ -103,6 +110,23 @@ public class DetailCatalogue {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	/**
+	 * 
+	 * @return {@link #nature}
+	 */
+	public TypeProduit getNature() {
+		return nature;
+	}
+
+	/**
+	 * 
+	 * @param nature
+	 *            {@link #nature}
+	 */
+	public void setNature(TypeProduit nature) {
+		this.nature = nature;
 	}
 
 	/**
