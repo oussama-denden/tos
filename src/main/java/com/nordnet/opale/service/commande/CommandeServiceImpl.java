@@ -70,18 +70,27 @@ public class CommandeServiceImpl implements CommandeService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Paiement paiementComptant(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
+	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		Double montantPaye = paiementService.montantPaye(refCommande);
 		CommandeValidator.isCommandePaye(refCommande, commande, montantPaye);
-		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
+		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo.getModePaiement());
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void associerPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
 			throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
-		paiementService.effectuerPaiement(referencePaiement, paiementInfo);
+		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
+		Commande commande = commandeRepository.findByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.effectuerPaiement(null, referenceCommande, paiementInfo);
 	}
 }

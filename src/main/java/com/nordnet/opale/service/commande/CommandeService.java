@@ -48,7 +48,7 @@ public interface CommandeService {
 	public Commande getCommandeByReferenceDraft(String referenceDraft);
 
 	/**
-	 * ajouter une intension de paiement a la commande.
+	 * ajouter une intention de paiement a la commande.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -58,7 +58,7 @@ public interface CommandeService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public Paiement paiementComptant(String refCommande, PaiementInfo paiementInfo) throws OpaleException;
+	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException;
 
 	/**
 	 * payer une intention de paiement.
@@ -74,5 +74,19 @@ public interface CommandeService {
 	 */
 	public void associerPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
 			throws OpaleException;
+
+	/**
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @return {@link Paiement}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException;
 
 }
