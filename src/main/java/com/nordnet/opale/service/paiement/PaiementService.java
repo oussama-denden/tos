@@ -5,6 +5,7 @@ import java.util.List;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -55,22 +56,38 @@ public interface PaiementService {
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
-	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 * @param modePaiement
+	 *            {@link ModePaiement}.
 	 * @return {@link Paiement}.
 	 */
-	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo);
+	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement);
 
 	/**
-	 * effectuer un paiement.
+	 * tester si le paiement est possible avant de faire l'appel de la methode 'effectuerPaiement'.
 	 * 
 	 * @param referencePaiement
-	 *            reference paiement.
+	 *            reference {@link Paiement}.
 	 * @param paiementInfo
 	 *            {@link PaiementInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void effectuerPaiement(String referencePaiement, PaiementInfo paiementInfo) throws OpaleException;
+	public void isEffectuerPaiementPossible(String referencePaiement, PaiementInfo paiementInfo) throws OpaleException;
+
+	/**
+	 * effectuer un paiement. Si la reference de paiement est null, un {@link Paiement} sera cree.
+	 * 
+	 * @param referencePaiement
+	 *            reference paiement.
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @return {@link Paiement} ou null si le paiement existe deja.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo)
+			throws OpaleException;
 
 }

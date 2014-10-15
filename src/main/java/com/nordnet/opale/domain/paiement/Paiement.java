@@ -72,6 +72,8 @@ public class Paiement {
 	 */
 	public Paiement(PaiementInfo paiementInfo) {
 		this.modePaiement = paiementInfo.getModePaiement();
+		this.montant = paiementInfo.getMontant();
+		this.infoPaiement = paiementInfo.getInfoPaiement();
 	}
 
 	/**
