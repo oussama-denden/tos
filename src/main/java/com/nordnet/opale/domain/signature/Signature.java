@@ -1,11 +1,17 @@
 package com.nordnet.opale.domain.signature;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.enums.ModeSignature;
+import com.nordnet.opale.enums.deserializer.ModeSignatureDeserialiser;
 
 /**
  * Classi qui groupe les informations de signature.
@@ -27,6 +33,8 @@ public class Signature {
 	/**
 	 * le mode de signature.
 	 */
+	@JsonDeserialize(using = ModeSignatureDeserialiser.class)
+	@Enumerated(EnumType.STRING)
 	private ModeSignature mode;
 
 	/**
@@ -42,6 +50,7 @@ public class Signature {
 	/**
 	 * footprint de signature.
 	 */
+	@Column(columnDefinition = "TINYTEXT")
 	private String footprint;
 
 	/**
@@ -178,7 +187,22 @@ public class Signature {
 	 * @return {@link Boolean}
 	 */
 	public Boolean isSigne() {
-		return (mode != null && idSignature != null && footprint != null && timestamp != null);
+		return (mode != null && idSignature != null && timestamp != null);
+	}
+
+	/**
+	 * transformer signature en business .
+	 * 
+	 * @return {@link SignatureInfo}
+	 */
+	public SignatureInfo toSignatureInfo() {
+		SignatureInfo signatureInfo = new SignatureInfo();
+		signatureInfo.setMode(mode);
+		signatureInfo.setIdSignature(idSignature);
+		signatureInfo.setFootprint(footprint);
+		signatureInfo.setTimestamp(timestamp);
+
+		return signatureInfo;
 	}
 
 }
