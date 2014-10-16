@@ -72,7 +72,7 @@ public interface CommandeService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void associerPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
+	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
 			throws OpaleException;
 
 	/**

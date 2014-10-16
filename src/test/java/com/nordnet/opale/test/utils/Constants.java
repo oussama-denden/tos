@@ -47,4 +47,9 @@ public final class Constants {
 	 */
 	public static final Integer QUATRE = 4;
 
+	/**
+	 * entier de valeur 5.
+	 */
+	public static final Integer CINQ = 5;
+
 }

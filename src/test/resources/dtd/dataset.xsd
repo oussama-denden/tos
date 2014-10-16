@@ -13,6 +13,7 @@
 		                      <xsd:element name="client" type="dflt:client_type" />
 		                      <xsd:element name="commande" type="dflt:commande_type" />
 		                      <xsd:element name="signature" type="dflt:signature_type" />
+		                      <xsd:element name="paiement" type="dflt:paiement_type" />
 				<xsd:any namespace="test_opale" />
 			</xsd:choice>
 		</xsd:complexType>

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+
+<dataset>
+<commande id="1000" canal="welcome" code="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="1411654933" reference="00000001" referenceDraft="00000001" />
+</dataset>

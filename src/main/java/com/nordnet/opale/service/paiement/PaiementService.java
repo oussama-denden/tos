@@ -26,6 +26,15 @@ public interface PaiementService {
 	public List<Paiement> getPaiementByReferenceCommande(String referenceCommande);
 
 	/**
+	 * chercher un paiement par sa reference.
+	 * 
+	 * @param reference
+	 *            reference paiement.
+	 * @return {@link Paiement}.
+	 */
+	public Paiement getPaiementByReference(String reference);
+
+	/**
 	 * sauvegarder un {@link Paiement} dans la base de données.
 	 * 
 	 * @param paiement
@@ -59,20 +68,25 @@ public interface PaiementService {
 	 * @param modePaiement
 	 *            {@link ModePaiement}.
 	 * @return {@link Paiement}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement);
+	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement) throws OpaleException;
 
 	/**
 	 * tester si le paiement est possible avant de faire l'appel de la methode 'effectuerPaiement'.
 	 * 
 	 * @param referencePaiement
 	 *            reference {@link Paiement}.
+	 * @param referenceCommade
+	 *            reference commande.
 	 * @param paiementInfo
 	 *            {@link PaiementInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void isEffectuerPaiementPossible(String referencePaiement, PaiementInfo paiementInfo) throws OpaleException;
+	public void isEffectuerPaiementPossible(String referencePaiement, String referenceCommade, PaiementInfo paiementInfo)
+			throws OpaleException;
 
 	/**
 	 * effectuer un paiement. Si la reference de paiement est null, un {@link Paiement} sera cree.

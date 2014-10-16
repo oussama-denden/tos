@@ -42,6 +42,11 @@ public class PaiementServiceImpl implements PaiementService {
 		return paiementRepository.findByReferenceCommande(referenceCommande);
 	}
 
+	@Override
+	public Paiement getPaiementByReference(String reference) {
+		return paiementRepository.findByReference(reference);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -77,7 +82,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement) {
+	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement) throws OpaleException {
+		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, modePaiement);
 		Paiement paiement = getIntentionPaiement(referenceCommande);
 		if (paiement != null) {
 			paiement.setModePaiement(modePaiement);
@@ -91,17 +97,25 @@ public class PaiementServiceImpl implements PaiementService {
 		return paiement;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void isEffectuerPaiementPossible(String referencePaiement, PaiementInfo paiementInfo) throws OpaleException {
+	public void isEffectuerPaiementPossible(String referencePaiement, String referenceCommade, PaiementInfo paiementInfo)
+			throws OpaleException {
 		Paiement paiement = paiementRepository.findByReference(referencePaiement);
-		PaiementValidator.validerEffectuerPaiement(referencePaiement, paiement, paiementInfo);
+		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommade, paiement, paiementInfo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo)
 			throws OpaleException {
-		Paiement paiement = paiementRepository.findByReference(referencePaiement);
-		PaiementValidator.validerEffectuerPaiement(referencePaiement, paiement, paiementInfo);
+		Paiement paiement =
+				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
+		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		if (referencePaiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());
