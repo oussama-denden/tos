@@ -101,9 +101,10 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void isEffectuerPaiementPossible(String referencePaiement, PaiementInfo paiementInfo) throws OpaleException {
+	public void isEffectuerPaiementPossible(String referencePaiement, String referenceCommade, PaiementInfo paiementInfo)
+			throws OpaleException {
 		Paiement paiement = paiementRepository.findByReference(referencePaiement);
-		PaiementValidator.validerEffectuerPaiement(referencePaiement, paiement, paiementInfo);
+		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommade, paiement, paiementInfo);
 	}
 
 	/**
@@ -112,8 +113,9 @@ public class PaiementServiceImpl implements PaiementService {
 	@Override
 	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo)
 			throws OpaleException {
-		Paiement paiement = paiementRepository.findByReference(referencePaiement);
-		PaiementValidator.validerEffectuerPaiement(referencePaiement, paiement, paiementInfo);
+		Paiement paiement =
+				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
+		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		if (referencePaiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());

@@ -25,14 +25,18 @@ public class PaiementValidator {
 	 * 
 	 * @param referencePaiement
 	 *            reference paiement.
+	 * @param referenceCommande
+	 *            reference commande.
 	 * @param paiement
 	 *            {@link Paiement}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isExiste(String referencePaiement, Paiement paiement) throws OpaleException {
+	public static void isExiste(String referencePaiement, String referenceCommande, Paiement paiement)
+			throws OpaleException {
 		if (paiement == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.1", referencePaiement), "3.1.1");
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.1", referencePaiement, referenceCommande),
+					"3.1.1");
 		}
 	}
 
@@ -63,6 +67,8 @@ public class PaiementValidator {
 	 * 
 	 * @param referencePaiement
 	 *            reference paiement.
+	 * @param referenceCommande
+	 *            reference commande.
 	 * @param paiement
 	 *            {@link Paiement}.
 	 * @param paiementInfo
@@ -70,11 +76,11 @@ public class PaiementValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void validerEffectuerPaiement(String referencePaiement, Paiement paiement, PaiementInfo paiementInfo)
-			throws OpaleException {
+	public static void validerEffectuerPaiement(String referencePaiement, String referenceCommande, Paiement paiement,
+			PaiementInfo paiementInfo) throws OpaleException {
 
 		if (referencePaiement != null) {
-			isExiste(referencePaiement, paiement);
+			isExiste(referencePaiement, referenceCommande, paiement);
 			if (paiement.getMontant() != null) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("3.1.2"), "3.1.2");
 			}

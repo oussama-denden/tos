@@ -128,4 +128,25 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 		}
 	}
 
+	/**
+	 * Tester le cas d'ajout d'une intention de paiement valide.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-intention-paiement.xml" })
+	public void testerCreerIntentionPaiementSansModePaiement() {
+		try {
+			PaiementInfo paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+							"./requests/creerIntentionPaiement.json");
+			paiementInfo.setModePaiement(null);
+			commandeService.creerIntentionPaiement("00000001", paiementInfo);
+			fail("Unexpected error");
+		} catch (OpaleException e) {
+			assertEquals("0.1.1", e.getErrorCode());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
+	}
+
 }

@@ -93,6 +93,26 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	}
 
 	/**
+	 * Tester le cas de paiement d'une intention qui n'existe pas.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
+	public void testerPayerIntentionPaiementNonExiste() {
+		try {
+			PaiementInfo paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+							"./requests/payerIntentionPaiement.json");
+			commandeService.payerIntentionPaiement("00000001", "00000000", paiementInfo);
+			fail("Unexpected error");
+		} catch (OpaleException e) {
+			assertEquals("3.1.1", e.getErrorCode());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
+	}
+
+	/**
 	 * tester le cas de paiement d'une intention deja paye.
 	 */
 	@Test

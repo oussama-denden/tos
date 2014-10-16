@@ -78,12 +78,15 @@ public interface PaiementService {
 	 * 
 	 * @param referencePaiement
 	 *            reference {@link Paiement}.
+	 * @param referenceCommade
+	 *            reference commande.
 	 * @param paiementInfo
 	 *            {@link PaiementInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void isEffectuerPaiementPossible(String referencePaiement, PaiementInfo paiementInfo) throws OpaleException;
+	public void isEffectuerPaiementPossible(String referencePaiement, String referenceCommade, PaiementInfo paiementInfo)
+			throws OpaleException;
 
 	/**
 	 * effectuer un paiement. Si la reference de paiement est null, un {@link Paiement} sera cree.
