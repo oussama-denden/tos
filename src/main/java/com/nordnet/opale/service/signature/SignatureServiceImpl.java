@@ -65,7 +65,9 @@ public class SignatureServiceImpl implements SignatureService {
 	public Object signerCommande(String refCommande, AjoutSignatureInfo ajoutSignatureInfo)
 			throws OpaleException, JSONException {
 
-		Commande commande = commandeService.getCommandeByReferenceDraft(refCommande);
+		LOGGER.info("Debut methode signerCommande");
+
+		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {
@@ -92,7 +94,8 @@ public class SignatureServiceImpl implements SignatureService {
 			throws OpaleException {
 
 		LOGGER.info("Debut methode transmettreSignature");
-		Commande commande = commandeService.getCommandeByReferenceDraft(refCommande);
+
+		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 
 		Signature signature = signatureRepository.findByReference(refSignature);
@@ -112,7 +115,10 @@ public class SignatureServiceImpl implements SignatureService {
 	@Override
 	public Object transmettreSignature(String refCommande, SignatureInfo signatureInfo)
 			throws OpaleException, JSONException {
-		Commande commande = commandeService.getCommandeByReferenceDraft(refCommande);
+
+		LOGGER.info("Debut methode transmettreSignature");
+
+		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {
@@ -130,6 +136,56 @@ public class SignatureServiceImpl implements SignatureService {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SignatureInfo getSignature(String refCommande) throws OpaleException {
+
+		LOGGER.info("Debut methode  getSignature");
+
+		Commande commande = commandeRepository.findByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		if (commande.getReferenceSignature() != null) {
+			Signature signature = signatureRepository.findByReference(commande.getReferenceSignature());
+			SignatureValidator.checkSignatureExiste(signature, null, refCommande);
+			return signatureRepository.findByReference(commande.getReferenceSignature()).toSignatureInfo();
+		}
+		return null;
+	}
+
+	@Override
+	public Signature getSignatureByReference(String refSignature) throws OpaleException {
+		return signatureRepository.findByReference(refSignature);
+	}
+
+	/**
+	 * ajouter les informations d'une signature deja existe.
+	 * 
+	 * @param signature
+	 *            {@link Signature}
+	 * @param signatureInfo
+	 *            {@link SignatureInfo}
+	 * @return {@link String}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	private String ajouterSignature(Signature signature, SignatureInfo signatureInfo) throws OpaleException {
+
+		LOGGER.info("Debut methode privee ajouterSignature");
+
+		if (signature.getMode() != null) {
+			signature.setMode(signatureInfo.getMode());
+		}
+		signature.setIdSignature(signatureInfo.getIdSignature());
+		signature.setFootprint(signatureInfo.getFootprint());
+		signature.setTimestamp(signatureInfo.getTimestamp());
+		signatureRepository.save(signature);
+
+		return signature.getReference();
+
+	}
+
+	/**
 	 * creer un signature et ajouter la reference au commande.
 	 * 
 	 * @param ajoutSignatureInfo
@@ -144,6 +200,9 @@ public class SignatureServiceImpl implements SignatureService {
 	 */
 	private String creerSignature(AjoutSignatureInfo ajoutSignatureInfo, SignatureInfo signatureInfo, Commande commande)
 			throws OpaleException {
+
+		LOGGER.info("Debut methode privee creerSignature");
+
 		Signature signature = new Signature();
 		if (ajoutSignatureInfo != null) {
 			signature.setMode(ajoutSignatureInfo.getMode());
@@ -159,45 +218,6 @@ public class SignatureServiceImpl implements SignatureService {
 		commande.setReferenceSignature(signature.getReference());
 		commandeRepository.save(commande);
 		return signature.getReference();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SignatureInfo getSignature(String refCommande) throws OpaleException {
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
-		if (commande.getReferenceSignature() != null) {
-			Signature signature = signatureRepository.findByReference(commande.getReferenceSignature());
-			SignatureValidator.checkSignatureExiste(signature, null, refCommande);
-			return signatureRepository.findByReference(commande.getReferenceSignature()).toSignatureInfo();
-		}
-		return null;
-	}
-
-	/**
-	 * ajouter les informations d'une signature deja existe.
-	 * 
-	 * @param signature
-	 *            {@link Signature}
-	 * @param signatureInfo
-	 *            {@link SignatureInfo}
-	 * @return {@link String}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	private String ajouterSignature(Signature signature, SignatureInfo signatureInfo) throws OpaleException {
-		if (signature.getMode() != null) {
-			signature.setMode(signatureInfo.getMode());
-		}
-		signature.setIdSignature(signatureInfo.getIdSignature());
-		signature.setFootprint(signatureInfo.getFootprint());
-		signature.setTimestamp(signatureInfo.getTimestamp());
-		signatureRepository.save(signature);
-
-		return signature.getReference();
-
 	}
 
 }

@@ -93,4 +93,12 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isExiste(referenceCommande, commande);
 		return paiementService.effectuerPaiement(null, referenceCommande, paiementInfo);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Commande getCommandeByReference(String reference) {
+		return commandeRepository.findByReference(reference);
+	}
 }
