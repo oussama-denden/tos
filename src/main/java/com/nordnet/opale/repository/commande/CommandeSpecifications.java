@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.Utils;
 
 /**
  * A class which is used to create Specification objects which are used to
@@ -25,14 +26,19 @@ public class CommandeSpecifications {
 	 * Client id equal.
 	 * 
 	 * @param clientId
-	 *            the client id
-	 * @return the specification
+	 *            client id
+	 * @return specification {@link Specification}
 	 */
 	public static Specification<Commande> clientIdEqual(final String clientId) {
 		return new Specification<Commande>() {
 			@Override
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.equal(commandeRoot.get("clientSouscripteur").get("clientId"), clientId);
+				if (!Utils.isStringNullOrEmpty(clientId)) {
+					return cb.or(cb.equal(commandeRoot.get("clientSouscripteur").get("clientId"), clientId),
+							cb.equal(commandeRoot.get("clientALivrer").get("clientId"), clientId),
+							cb.equal(commandeRoot.get("clientAFacturer").get("clientId"), clientId));
+				}
+				return null;
 			}
 
 		};
@@ -42,25 +48,23 @@ public class CommandeSpecifications {
 	 * Creation date between.
 	 * 
 	 * @param dateStart
-	 *            the date start
+	 *            date start
 	 * @param dateEnd
-	 *            the date end
-	 * @return the specification
+	 *            date end
+	 * @return specification {@link Specification}
 	 */
 	public static Specification<Commande> creationDateBetween(final String dateStart, final String dateEnd) {
 		return new Specification<Commande>() {
 			@Override
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-				LocalDate datefrom = new LocalDate(dateStart);
-				LocalDate dateto = new LocalDate(dateEnd).plusDays(Constants.UN);
+				if (!Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd)) {
+					LocalDate datefrom = new LocalDate(dateStart);
+					LocalDate dateto = new LocalDate(dateEnd).plusDays(Constants.UN);
 
-				// Expression<Date> dateCreation = cb.function("DATE_FORMAT",
-				// Date.class,
-				// commandeRoot.<Date> get("dateCreation"),
-				// cb.literal("%m/%d/%Y"));
-
-				return cb.between(commandeRoot.<Date> get("dateCreation"), datefrom.toDate(), dateto.toDate());
+					return cb.between(commandeRoot.<Date> get("dateCreation"), datefrom.toDate(), dateto.toDate());
+				}
+				return null;
 			}
 
 		};
@@ -70,18 +74,45 @@ public class CommandeSpecifications {
 	 * Client id equal.
 	 * 
 	 * @param signe
-	 *            the signe
-	 * @return the specification
+	 *            signe
+	 * @return specification {@link Specification}
 	 */
-	public static Specification<Commande> isSigne(final boolean signe) {
+	public static Specification<Commande> isSigne(final Boolean signe) {
 		return new Specification<Commande>() {
 			@Override
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-				if (signe) {
-					return cb.isNotNull(commandeRoot.get("referenceSignature"));
+				if (signe != null) {
+					if (signe) {
+						return cb.or(cb.isNotNull(commandeRoot.get("referenceSignature")),
+								cb.notEqual(commandeRoot.<String> get("referenceSignature"), ""));
+					}
+					return cb.or(cb.isNull(commandeRoot.get("referenceSignature")),
+							cb.equal(commandeRoot.<String> get("referenceSignature"), ""));
 				}
-				return cb.isNull(commandeRoot.get("referenceSignature"));
+				return null;
+			}
+
+		};
+	}
+
+	/**
+	 * Client id equal.
+	 * 
+	 * @param paye
+	 *            paye
+	 * @return specification {@link Specification}
+	 */
+	public static Specification<Commande> isPaye(final Boolean paye) {
+		return new Specification<Commande>() {
+			@Override
+			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+				if (paye != null) {
+					return cb.equal(commandeRoot.<Boolean> get("paye"), paye);
+				}
+				return null;
+
 			}
 
 		};

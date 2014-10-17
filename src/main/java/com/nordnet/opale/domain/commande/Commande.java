@@ -101,6 +101,11 @@ public class Commande {
 	private String referenceSignature;
 
 	/**
+	 * si commande paye, paye=true.
+	 */
+	private boolean paye;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Commande() {
@@ -321,6 +326,23 @@ public class Commande {
 	}
 
 	/**
+	 * 
+	 * @return {@link #paye}
+	 */
+	public boolean isPaye() {
+		return paye;
+	}
+
+	/**
+	 * 
+	 * @param paye
+	 *            #pay
+	 */
+	public void setPaye(boolean paye) {
+		this.paye = paye;
+	}
+
+	/**
 	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
 	 * 
 	 * @param draftDetails
@@ -336,11 +358,10 @@ public class Commande {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
+						.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
+						.getDraftLigneDetailParent().getReferenceSelection());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
