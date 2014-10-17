@@ -1,4 +1,4 @@
-{
+[{
   "offre": {
     "modePaiement": "CB",
     "referenceTarif": "mensuel_jet10_base",
@@ -35,4 +35,4 @@
     "canal": "string"
   },
   "user": "string"
-}
+}]

@@ -1,5 +1,7 @@
 package com.nordnet.opale.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -76,9 +78,8 @@ public class DraftController {
 	 * 
 	 * @param reference
 	 *            reference du draft.
-	 * @return {@link Draft}.
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{reference:.+}/annuler", method = RequestMethod.PUT, headers = "Accept=application/json")
 	@ResponseBody
@@ -123,26 +124,27 @@ public class DraftController {
 	}
 
 	/**
-	 * Ajouter une ligne au draft.
+	 * Ajouter une ou plusieurs lignes au draft.
 	 * 
 	 * @param reference
 	 *            reference du {@link Draft}.
-	 * @param draftLigneInfo
-	 *            {@link DraftLigneInfo}.
-	 * @return reference de la ligne ajouter.
+	 * @param draftLignesInfo
+	 *            liste des {@link DraftLigneInfo}.
+	 * @return liste des references des {@link DraftLigneInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{reference:.+}/ligne", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{reference:.+}/lignes", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public String ajouterLigne(@PathVariable String reference, @RequestBody DraftLigneInfo draftLigneInfo)
+	public String ajouterLignes(@PathVariable String reference, @RequestBody List<DraftLigneInfo> draftLignesInfo)
 			throws OpaleException, JSONException {
-		LOGGER.info(":::ws-rec:::ajouterLigne");
-		String referenceLigne = draftService.ajouterLigne(reference, draftLigneInfo);
+		LOGGER.info(":::ws-rec:::ajouterLignes");
+		List<String> referencesLignes = draftService.ajouterLignes(reference, draftLignesInfo);
+
 		JSONObject rsc = new JSONObject();
-		rsc.put("referenceLigne", referenceLigne);
+		rsc.put("numero", referencesLignes);
 		return rsc.toString();
 	}
 
@@ -169,8 +171,12 @@ public class DraftController {
 	/**
 	 * supprimer draft.
 	 * 
-	 * @param reference
+	 * @param refDraft
 	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param deleteInfo
+	 *            {@link DeleteInfo}
 	 * @throws Exception
 	 *             exception {@link Exception}.
 	 */
@@ -189,7 +195,6 @@ public class DraftController {
 	 *            the ref draft
 	 * @param clientInfo
 	 *            client informations.
-	 * @return {@link Draft}.
 	 * @throws OpaleException
 	 *             the opale exception
 	 */

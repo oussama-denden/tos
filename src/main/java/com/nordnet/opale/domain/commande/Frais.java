@@ -12,6 +12,7 @@ import org.hibernate.validator.NotNull;
 import com.nordnet.opale.business.FraisInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.enums.TypeFrais;
+import com.nordnet.opale.enums.TypeTVA;
 
 /**
  * Classe represente les frais dans une {@link Commande}.
@@ -53,6 +54,12 @@ public class Frais {
 	private Double montant;
 
 	/**
+	 * {@link TypeTVA}.
+	 */
+	@Enumerated(EnumType.STRING)
+	private TypeTVA typeTVA;
+
+	/**
 	 * politique.
 	 */
 	private String politique;
@@ -82,6 +89,7 @@ public class Frais {
 		this.label = frais.getLabel();
 		this.typeFrais = frais.getTypeFrais();
 		this.montant = frais.getMontant();
+		this.typeTVA = frais.getTypeTVA();
 		// this.politique
 		// this.politiqueIndex
 	}
@@ -169,6 +177,23 @@ public class Frais {
 	 */
 	public void setMontant(Double montant) {
 		this.montant = montant;
+	}
+
+	/**
+	 * 
+	 * @return {@link TypeTVA}.
+	 */
+	public TypeTVA getTypeTVA() {
+		return typeTVA;
+	}
+
+	/**
+	 * 
+	 * @param typeTVA
+	 *            {@link TypeTVA}.
+	 */
+	public void setTypeTVA(TypeTVA typeTVA) {
+		this.typeTVA = typeTVA;
 	}
 
 	/**
