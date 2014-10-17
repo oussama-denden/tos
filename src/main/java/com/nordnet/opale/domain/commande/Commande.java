@@ -336,10 +336,11 @@ public class Commande {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
-						.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
-						.getDraftLigneDetailParent().getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetail =
+						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent =
+						commandeLigneDetailMap
+								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
@@ -357,6 +358,7 @@ public class Commande {
 
 		for (CommandeLigne commandeLigne : commandeLignes) {
 			CommandeLigneInfo commandeLigneInfo = new CommandeLigneInfo();
+			commandeLigneInfo.setNumero(commandeLigne.getNumero());
 			commandeLigneInfo.setAuteur(commandeLigne.getAuteur().toAuteurBusiness());
 			commandeLigneInfo.setOffre(commandeLigne.toOffreCatalogueInfo());
 			lignes.add(commandeLigneInfo);

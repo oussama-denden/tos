@@ -11,22 +11,22 @@ import com.nordnet.opale.business.catalogue.OffreCatalogue;
 public class CommandeLigneInfo {
 
 	/**
-	 * numero de la ligne
+	 * numero de la ligne.
 	 */
 	private int numero;
 
 	/**
-	 * l'auteur
+	 * l'auteur.
 	 */
 	private Auteur auteur;
 
 	/**
-	 * l'offre
+	 * l'offre.
 	 */
 	private OffreCatalogueInfo offre;
 
 	/**
-	 * constructeur par defaut
+	 * constructeur par defaut.
 	 */
 	public CommandeLigneInfo() {
 
@@ -35,7 +35,7 @@ public class CommandeLigneInfo {
 	/* Getters and Setters */
 
 	/**
-	 * get the numero
+	 * get the numero.
 	 * 
 	 * @return {@link #numero}
 	 */
@@ -44,7 +44,7 @@ public class CommandeLigneInfo {
 	}
 
 	/**
-	 * set the numero
+	 * set the numero.
 	 * 
 	 * @param numero
 	 *            the new {@link #numero}
@@ -54,7 +54,7 @@ public class CommandeLigneInfo {
 	}
 
 	/**
-	 * get the auteur
+	 * get the auteur.
 	 * 
 	 * @return {@link Auteur}
 	 */
@@ -63,7 +63,7 @@ public class CommandeLigneInfo {
 	}
 
 	/**
-	 * set the auteur
+	 * set the auteur.
 	 * 
 	 * @param auteur
 	 *            the new {@link Auteur}
@@ -73,7 +73,7 @@ public class CommandeLigneInfo {
 	}
 
 	/**
-	 * get the offre
+	 * get the offre.
 	 * 
 	 * @return {@link OffreCatalogue}
 	 */
@@ -82,7 +82,7 @@ public class CommandeLigneInfo {
 	}
 
 	/**
-	 * set the offre
+	 * set the offre.
 	 * 
 	 * @param offre
 	 *            the new {@link OffreCatalogue}

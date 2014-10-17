@@ -37,14 +37,29 @@ CREATE TABLE `commande` (
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
   `referenceSignature` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKDC160A7A411643F6` (`clientAFacturerId`),
-  KEY `FKDC160A7A2A2C2866` (`clientALivrerId`),
-  KEY `FKDC160A7AD6AADB33` (`clientSouscripteurId`),
-  CONSTRAINT `FKDC160A7AD6AADB33` FOREIGN KEY (`clientSouscripteurId`) REFERENCES `client` (`id`),
-  CONSTRAINT `FKDC160A7A2A2C2866` FOREIGN KEY (`clientALivrerId`) REFERENCES `client` (`id`),
-  CONSTRAINT `FKDC160A7A411643F6` FOREIGN KEY (`clientAFacturerId`) REFERENCES `client` (`id`)
+  PRIMARY KEY (`id`)
+--  KEY `FKDC160A7A411643F6` (`clientAFacturerId`),
+--  KEY `FKDC160A7A2A2C2866` (`clientALivrerId`),
+--  KEY `FKDC160A7AD6AADB33` (`clientSouscripteurId`),
+--  CONSTRAINT `FKDC160A7AD6AADB33` FOREIGN KEY (`clientSouscripteurId`) REFERENCES `client` (`id`),
+--  CONSTRAINT `FKDC160A7A2A2C2866` FOREIGN KEY (`clientALivrerId`) REFERENCES `client` (`id`),
+--  CONSTRAINT `FKDC160A7A411643F6` FOREIGN KEY (`clientAFacturerId`) REFERENCES `client` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Definition of table `signature`
+--
+
+DROP TABLE IF EXISTS `signature`;
+CREATE TABLE `signature` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(255) NOT NULL,
+  `footprint` longtext,
+  `idSignature` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) DEFAULT NULL,
+  `mode` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `commandeligne`
@@ -67,9 +82,9 @@ CREATE TABLE `commandeligne` (
   `referenceOffre` varchar(255) DEFAULT NULL,
   `secteur` varchar(255) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
+  `famille` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK2872A787B0909C9F` (`commandeId`),
-  CONSTRAINT `FK2872A787B0909C9F` FOREIGN KEY (`commandeId`) REFERENCES `commande` (`id`)
+  KEY `FK2872A787B0909C9F` (`commandeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -86,9 +101,7 @@ CREATE TABLE `commandelignedetail` (
   `commandeLigneId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK516CBE981E3D9F39` (`commandeLigneId`),
-  KEY `FK516CBE9883CC4F75` (`dependDe`),
-  CONSTRAINT `FK516CBE9883CC4F75` FOREIGN KEY (`dependDe`) REFERENCES `commandelignedetail` (`id`),
-  CONSTRAINT `FK516CBE981E3D9F39` FOREIGN KEY (`commandeLigneId`) REFERENCES `commandeligne` (`id`)
+  KEY `FK516CBE9883CC4F75` (`dependDe`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -113,10 +126,7 @@ CREATE TABLE `draft` (
   PRIMARY KEY (`id`),
   KEY `FK5B679A1411643F6` (`clientAFacturerId`),
   KEY `FK5B679A12A2C2866` (`clientALivrerId`),
-  KEY `FK5B679A1D6AADB33` (`clientSouscripteurId`),
-  CONSTRAINT `FK5B679A1D6AADB33` FOREIGN KEY (`clientSouscripteurId`) REFERENCES `client` (`id`),
-  CONSTRAINT `FK5B679A12A2C2866` FOREIGN KEY (`clientALivrerId`) REFERENCES `client` (`id`),
-  CONSTRAINT `FK5B679A1411643F6` FOREIGN KEY (`clientAFacturerId`) REFERENCES `client` (`id`)
+  KEY `FK5B679A1D6AADB33` (`clientSouscripteurId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
@@ -139,8 +149,7 @@ CREATE TABLE `draftligne` (
   `referenceTarif` varchar(255) DEFAULT NULL,
   `draftId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKAF4C98C0DB017E6C` (`draftId`),
-  CONSTRAINT `FKAF4C98C0DB017E6C` FOREIGN KEY (`draftId`) REFERENCES `draft` (`id`)
+  KEY `FKAF4C98C0DB017E6C` (`draftId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -154,12 +163,12 @@ CREATE TABLE `draftlignedetail` (
   `modePaiement` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `referenceSelection` varchar(255) DEFAULT NULL,
+  `referenceChoix` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) DEFAULT NULL,
   `dependDe` int(11) DEFAULT NULL,
   `draftLigneId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK169121114A02D58C` (`draftLigneId`),
-  CONSTRAINT `FK169121114A02D58C` FOREIGN KEY (`draftLigneId`) REFERENCES `draftligne` (`id`)
+  KEY `FK169121114A02D58C` (`draftLigneId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -177,8 +186,7 @@ CREATE TABLE `frais` (
   `typeFrais` varchar(255) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK5D2A8FF8D480C8F` (`tarifId`),
-  CONSTRAINT `FK5D2A8FF8D480C8F` FOREIGN KEY (`tarifId`) REFERENCES `tarif` (`id`)
+  KEY `FK5D2A8FF8D480C8F` (`tarifId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -211,9 +219,7 @@ CREATE TABLE `tarif` (
   `commandeLigneDetailId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK69077821E3D9F39` (`commandeLigneId`),
-  KEY `FK6907782F5575D3B` (`commandeLigneDetailId`),
-  CONSTRAINT `FK6907782F5575D3B` FOREIGN KEY (`commandeLigneDetailId`) REFERENCES `commandelignedetail` (`id`),
-  CONSTRAINT `FK69077821E3D9F39` FOREIGN KEY (`commandeLigneId`) REFERENCES `commandeligne` (`id`)
+  KEY `FK6907782F5575D3B` (`commandeLigneDetailId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -230,6 +236,17 @@ CREATE TABLE `tracage` (
   `user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `paiement`;
+CREATE TABLE `paiement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `infoPaiement` varchar(255) DEFAULT NULL,
+  `modePaiement` varchar(255) DEFAULT NULL,
+  `montant` double DEFAULT NULL,
+  `reference` varchar(255) NOT NULL,
+  `referenceCommande` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 

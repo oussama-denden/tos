@@ -6,6 +6,7 @@
 		<xsd:element name="draftLigneDetail" type="draftLigneDetail_type"/>
 		<xsd:element name="draftLigne" type="draftLigne_type"/>
 		<xsd:element name="tracage" type="tracage_type"/>
+		<xsd:element name="signature" type="signature_type"/>
 	
 	<xsd:complexType name="dbmaintain_scripts__type">
 		<xsd:attribute name="succeeded" use="optional" />
@@ -65,6 +66,15 @@
 		<xsd:attribute name="action" use="optional" />
 		<xsd:attribute name="user" use="optional" />
 		<xsd:attribute name="date" use="optional" />
+	</xsd:complexType>
+	
+		<xsd:complexType name="signature_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="reference" use="optional" />
+		<xsd:attribute name="mode" use="optional" />
+		<xsd:attribute name="footprint" use="optional" />
+		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="idSignature" use="optional" />
 	</xsd:complexType>
 
 </xsd:schema>

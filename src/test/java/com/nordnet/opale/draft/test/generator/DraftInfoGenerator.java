@@ -21,8 +21,7 @@ import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
- * classe pour generer des info a stocker dans un {@link Draft}/
- * {@link DraftLigne} d'un draft.
+ * classe pour generer des info a stocker dans un {@link Draft}/ {@link DraftLigne} d'un draft.
  * 
  * @author akram-moncer
  * 
@@ -45,6 +44,8 @@ public class DraftInfoGenerator {
 		List<Detail> details = new ArrayList<Detail>();
 		Detail detail = new Detail();
 		detail.setReference("kitsat");
+		detail.setReferenceSelection("kitsat");
+		detail.setReferenceChoix("trafic10g");
 		detail.setModePaiement(ModePaiement.CB);
 		detail.setReferenceTarif("achat_kit_mensuel");
 		draftLigneInfo.setUser("unit-test-user");
@@ -52,6 +53,8 @@ public class DraftInfoGenerator {
 
 		detail = new Detail();
 		detail.setReference("jet");
+		detail.setReferenceSelection("jet");
+		detail.setReferenceChoix("trafic10g");
 		detail.setModePaiement(ModePaiement.CB);
 		detail.setReferenceTarif("achat_kit_mensuel");
 		detail.setDependDe("kitsat");
@@ -59,6 +62,8 @@ public class DraftInfoGenerator {
 
 		detail = new Detail();
 		detail.setReference("tlf");
+		detail.setReferenceSelection("tlf");
+		detail.setReferenceChoix("trafic10g");
 		detail.setModePaiement(ModePaiement.CB);
 		detail.setReferenceTarif("achat_kit_mensuel");
 		detail.setDependDe("kitsat");
@@ -99,6 +104,8 @@ public class DraftInfoGenerator {
 
 		Detail detail = new Detail();
 		detail.setReference("option");
+		detail.setReferenceSelection("option");
+		detail.setReferenceChoix("trafic10g");
 		detail.setModePaiement(ModePaiement.SEPA);
 		detail.setReferenceTarif("achat_kit_mensuel");
 		detail.setDependDe("kitsat");
@@ -125,8 +132,8 @@ public class DraftInfoGenerator {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public <T> T getObjectFromJsonFile(Class<T> valueType, String jsonFilePath) throws JsonParseException,
-			JsonMappingException, IOException {
+	public <T> T getObjectFromJsonFile(Class<T> valueType, String jsonFilePath)
+			throws JsonParseException, JsonMappingException, IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File json = new File(classLoader.getResource(jsonFilePath).getFile());
 		return (T) new ObjectMapper().readValue(json, valueType);

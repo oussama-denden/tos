@@ -106,6 +106,11 @@ public class CommandeLigne {
 	private List<Tarif> tarifs = new ArrayList<Tarif>();
 
 	/**
+	 * la famille de l'offre.
+	 */
+	private String famille;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {
@@ -123,6 +128,7 @@ public class CommandeLigne {
 		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
 		this.referenceOffre = draftLigne.getReferenceOffre();
 		this.gamme = offreCatalogue.getGamme();
+		this.famille = offreCatalogue.getFamille();
 		this.modePaiement = draftLigne.getModePaiement();
 		this.modeFacturation = draftLigne.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
@@ -372,7 +378,26 @@ public class CommandeLigne {
 	}
 
 	/**
-	 * recuperer l'offre business a parot de chaque ligne de commande
+	 * get the famille.
+	 * 
+	 * @return {@link #famille}
+	 */
+	public String getFamille() {
+		return famille;
+	}
+
+	/**
+	 * set the famille.
+	 * 
+	 * @param famille
+	 *            the new {@link #famille}
+	 */
+	public void setFamille(String famille) {
+		this.famille = famille;
+	}
+
+	/**
+	 * recuperer l'offre business a parot de chaque ligne de commande.
 	 * 
 	 * @return {@link OffreCatalogueInfo}
 	 */

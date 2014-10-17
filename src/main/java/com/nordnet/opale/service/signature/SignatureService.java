@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.SignatureInfo;
+import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -71,5 +72,17 @@ public interface SignatureService {
 	 *             {@link OpaleException}
 	 */
 	public SignatureInfo getSignature(String refCommande) throws OpaleException;
+
+	/**
+	 * recuperer une signature de la base de donnee par sa reference.
+	 * 
+	 * @param refSignature
+	 *            reference du signature.
+	 * 
+	 * @return {@link Signature}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public Signature getSignatureByReference(String refSignature) throws OpaleException;
 
 }

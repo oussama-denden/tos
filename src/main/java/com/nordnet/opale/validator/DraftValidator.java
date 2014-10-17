@@ -78,6 +78,16 @@ public class DraftValidator {
 						"0.1.4");
 			}
 
+			if (Utils.isStringNullOrEmpty(detail.getReferenceSelection())) {
+				throw new OpaleException(
+						propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].referenceSelection"), "0.1.4");
+			}
+
+			if (Utils.isStringNullOrEmpty(detail.getReferenceChoix())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].referenceChoix"),
+						"0.1.4");
+			}
+
 			if (detail.getReference().equals(detail.getDependDe())) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.4", detail.getReference()), "1.1.4");
 			}
@@ -219,8 +229,7 @@ public class DraftValidator {
 	}
 
 	/**
-	 * verifier si la transformation du {@link Draft} en {@link Commande} est
-	 * possible ou non.
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
 	 * 
 	 * 
 	 * @param draft

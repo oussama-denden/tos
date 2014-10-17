@@ -82,7 +82,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void associerPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
+	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
 			throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
@@ -186,4 +186,10 @@ public class CommandeServiceImpl implements CommandeService {
 	private boolean dateStartAndDateEndNotNull(String dateStart, String dateEnd) {
 		return !Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd);
 	}
+
+	@Override
+	public Commande getCommandeByReference(String reference) {
+		return commandeRepository.findByReference(reference);
+	}
+
 }
