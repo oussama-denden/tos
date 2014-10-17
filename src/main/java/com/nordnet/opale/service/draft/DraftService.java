@@ -54,17 +54,17 @@ public interface DraftService {
 	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException;
 
 	/**
-	 * Ajouter une ligne au draft.
+	 * Ajouter une ou plusieurs lignes au draft.
 	 * 
 	 * @param refDraft
 	 *            reference du {@link Draft}.
-	 * @param draftLigneInfo
-	 *            the draft ligne information.
-	 * @return string
+	 * @param draftLignesInfo
+	 *            the draft lignes informations.
+	 * @return liste des references des {@link DraftLigneInfo}.
 	 * @throws OpaleException
-	 *             opale exception {@link DraftLigneInfo}. {@link OpaleException}.
+	 *             opale exception {@link OpaleException}.
 	 */
-	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException;
+	public List<String> ajouterLignes(String refDraft, List<DraftLigneInfo> draftLignesInfo) throws OpaleException;
 
 	/**
 	 * modifier une ligne.
