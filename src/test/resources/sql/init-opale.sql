@@ -37,13 +37,13 @@ CREATE TABLE `commande` (
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
   `referenceSignature` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKDC160A7A411643F6` (`clientAFacturerId`),
-  KEY `FKDC160A7A2A2C2866` (`clientALivrerId`),
-  KEY `FKDC160A7AD6AADB33` (`clientSouscripteurId`),
-  CONSTRAINT `FKDC160A7AD6AADB33` FOREIGN KEY (`clientSouscripteurId`) REFERENCES `client` (`id`),
-  CONSTRAINT `FKDC160A7A2A2C2866` FOREIGN KEY (`clientALivrerId`) REFERENCES `client` (`id`),
-  CONSTRAINT `FKDC160A7A411643F6` FOREIGN KEY (`clientAFacturerId`) REFERENCES `client` (`id`)
+  PRIMARY KEY (`id`)
+--  KEY `FKDC160A7A411643F6` (`clientAFacturerId`),
+--  KEY `FKDC160A7A2A2C2866` (`clientALivrerId`),
+--  KEY `FKDC160A7AD6AADB33` (`clientSouscripteurId`),
+--  CONSTRAINT `FKDC160A7AD6AADB33` FOREIGN KEY (`clientSouscripteurId`) REFERENCES `client` (`id`),
+--  CONSTRAINT `FKDC160A7A2A2C2866` FOREIGN KEY (`clientALivrerId`) REFERENCES `client` (`id`),
+--  CONSTRAINT `FKDC160A7A411643F6` FOREIGN KEY (`clientAFacturerId`) REFERENCES `client` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -97,6 +97,8 @@ CREATE TABLE `commandelignedetail` (
   `configurationJson` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
   `referenceProduit` varchar(255) DEFAULT NULL,
+  `label` varchar(255) DEFAULT NULL,
+  `typeProduit` varchar(255) DEFAULT NULL,
   `dependDe` int(11) DEFAULT NULL,
   `commandeLigneId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -183,6 +185,7 @@ CREATE TABLE `frais` (
   `politique` varchar(255) DEFAULT NULL,
   `politiqueIndex` varchar(255) DEFAULT NULL,
   `reference` varchar(255) NOT NULL,
+  `typeTVA` varchar(255) DEFAULT NULL,
   `typeFrais` varchar(255) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),

@@ -2,6 +2,10 @@ package com.nordnet.opale.business.catalogue;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.enums.TypeTVA;
+import com.nordnet.opale.enums.deserializer.TypeTVADeserializer;
+
 /**
  * classe contenant les info du tarif.
  * 
@@ -21,6 +25,11 @@ public class Tarif {
 	private Double prix;
 
 	/**
+	 * duree.
+	 */
+	private Integer duree;
+
+	/**
 	 * la periodicite en nombre de mois.
 	 */
 	private Integer periode;
@@ -31,6 +40,12 @@ public class Tarif {
 	private Integer engagement;
 
 	/**
+	 * {@link TypeTVA}.
+	 */
+	@JsonDeserialize(using = TypeTVADeserializer.class)
+	private TypeTVA typeTVA;
+
+	/**
 	 * la liste des reference des {@link Frais} associe au tarif.
 	 */
 	private List<String> frais;
@@ -39,6 +54,12 @@ public class Tarif {
 	 * constructeur par defaut.
 	 */
 	public Tarif() {
+	}
+
+	@Override
+	public String toString() {
+		return "Tarif [reference=" + reference + ", prix=" + prix + ", duree=" + duree + ", periode=" + periode
+				+ ", engagement=" + engagement + ", frais=" + frais + "]";
 	}
 
 	/**
@@ -77,6 +98,23 @@ public class Tarif {
 
 	/**
 	 * 
+	 * @return {@link #duree}.
+	 */
+	public Integer getDuree() {
+		return duree;
+	}
+
+	/**
+	 * 
+	 * @param duree
+	 *            {@link #duree}.
+	 */
+	public void setDuree(Integer duree) {
+		this.duree = duree;
+	}
+
+	/**
+	 * 
 	 * @return {@link #periode}.
 	 */
 	public Integer getPeriode() {
@@ -107,6 +145,23 @@ public class Tarif {
 	 */
 	public void setEngagement(Integer engagement) {
 		this.engagement = engagement;
+	}
+
+	/**
+	 * 
+	 * @return {@link TypeTVA}.
+	 */
+	public TypeTVA getTypeTVA() {
+		return typeTVA;
+	}
+
+	/**
+	 * 
+	 * @param typeTVA
+	 *            {@link TypeTVA}.
+	 */
+	public void setTypeTVA(TypeTVA typeTVA) {
+		this.typeTVA = typeTVA;
 	}
 
 	/**

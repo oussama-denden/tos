@@ -135,7 +135,7 @@ public class CommandeLigne {
 		this.dateCreation = draftLigne.getDateCreation();
 
 		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, trameCatalogue);
+			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, referenceOffre, trameCatalogue);
 			addCommandeLigneDetail(commandeLigneDetail);
 		}
 

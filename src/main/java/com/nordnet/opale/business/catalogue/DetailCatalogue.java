@@ -1,7 +1,9 @@
 package com.nordnet.opale.business.catalogue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.nordnet.opale.enums.TypeProduit;
 
@@ -144,6 +146,20 @@ public class DetailCatalogue {
 	 */
 	public void setChoices(List<Choice> choices) {
 		this.choices = choices;
+	}
+
+	/**
+	 * transfomer la {@link List} de choice en un objet {@link Map}.
+	 * 
+	 * @return {@link Map<String, Choice>}
+	 */
+	public Map<String, Choice> getChoiceMap() {
+		Map<String, Choice> choiceMap = new HashMap<String, Choice>();
+		for (Choice choice : choices) {
+			choiceMap.put(choice.getReference(), choice);
+		}
+
+		return choiceMap;
 	}
 
 }

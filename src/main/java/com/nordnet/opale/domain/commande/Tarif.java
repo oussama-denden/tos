@@ -95,8 +95,8 @@ public class Tarif {
 		this.reference = tarif.getReference();
 		this.prix = tarif.getPrix();
 		this.engagement = tarif.getEngagement();
-		// this.duree
-		// this.typeTVA
+		this.duree = tarif.getDuree();
+		this.typeTVA = tarif.getTypeTVA();
 		this.periode = tarif.getPeriode();
 		for (String refFrais : tarif.getFrais()) {
 			Frais frais = new Frais(refFrais, trameCatalogue);
@@ -251,7 +251,7 @@ public class Tarif {
 	}
 
 	/**
-	 * recuprer le tarif business partir du tarif domain
+	 * recuprer le tarif business partir du tarif domain.
 	 * 
 	 * @return {@link TarifInfo}
 	 */
