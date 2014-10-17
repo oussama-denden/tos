@@ -47,6 +47,21 @@ CREATE TABLE `commande` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Definition of table `signature`
+--
+
+DROP TABLE IF EXISTS `signature`;
+CREATE TABLE `signature` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(255) NOT NULL,
+  `footprint` longtext,
+  `idSignature` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) DEFAULT NULL,
+  `mode` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
 -- Definition of table `commandeligne`
 --
 
@@ -67,6 +82,7 @@ CREATE TABLE `commandeligne` (
   `referenceOffre` varchar(255) DEFAULT NULL,
   `secteur` varchar(255) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
+  `famille` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK2872A787B0909C9F` (`commandeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

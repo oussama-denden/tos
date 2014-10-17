@@ -89,4 +89,13 @@ public interface CommandeService {
 	 */
 	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException;
 
+	/**
+	 * recherche une commande a partir du reference.
+	 * 
+	 * @param reference
+	 *            reference du commande.
+	 * @return {@link Commande}.
+	 */
+	public Commande getCommandeByReference(String reference);
+
 }

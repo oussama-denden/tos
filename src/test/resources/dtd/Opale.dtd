@@ -75,11 +75,23 @@
     clientAFacturerId CDATA #IMPLIED
     clientALivrerId CDATA #IMPLIED
     clientSouscripteurId CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
     code CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
+    referenceSignature CDATA #IMPLIED
+>
+
+<!ELEMENT signature EMPTY>
+<!ATTLIST signature
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    mode CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    footprint CDATA #IMPLIED
+    idSignature  CDATA #IMPLIED
 >
 
 <!ELEMENT paiement EMPTY>
