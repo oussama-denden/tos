@@ -173,7 +173,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 		LOGGER.info("Debut methode privee ajouterSignature");
 
-		if (signature.getMode() != null) {
+		if (signatureInfo.getMode() != null) {
 			signature.setMode(signatureInfo.getMode());
 		}
 		signature.setIdSignature(signatureInfo.getIdSignature());
