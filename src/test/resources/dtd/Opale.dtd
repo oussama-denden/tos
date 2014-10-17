@@ -36,6 +36,7 @@
      id CDATA #IMPLIED
     referenceSelection CDATA #IMPLIED
     reference CDATA #IMPLIED
+    referenceChoix CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
     modePaiement CDATA #IMPLIED
     configurationJson CDATA #IMPLIED

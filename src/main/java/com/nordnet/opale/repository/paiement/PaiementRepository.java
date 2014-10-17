@@ -57,4 +57,14 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	@Query(name = "Paiement.findIntentionPaiement", value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.montant IS null")
 	public Paiement findIntentionPaiement(@Param("referenceCommande") String referenceCommande);
 
+	/**
+	 * calculer la somme totale paye pour une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @return somme des paiement pour une commande.
+	 */
+	@Query(name = "Paiement.getMontantPayePourCommande", value = "SELECT SUM(montant) FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande")
+	public Double getMontantPayePourCommande(@Param("referenceCommande") String referenceCommande);
+
 }

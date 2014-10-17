@@ -47,6 +47,11 @@ public class DraftLigneDetail {
 	private String reference;
 
 	/**
+	 * reference choix.
+	 */
+	private String referenceChoix;
+
+	/**
 	 * reference tarif.
 	 */
 	private String referenceTarif;
@@ -97,8 +102,9 @@ public class DraftLigneDetail {
 
 	@Override
 	public String toString() {
-		return "DraftLigneDetail [id=" + id + ", reference=" + reference + ", referenceTarif=" + referenceTarif
-				+ ", modePaiement=" + modePaiement + ", configurationJson=" + configurationJson + "]";
+		return "DraftLigneDetail [id=" + id + ", referenceSelection=" + referenceSelection + ", reference=" + reference
+				+ ", referenceChoix=" + referenceChoix + ", referenceTarif=" + referenceTarif + ", modePaiement="
+				+ modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
 	/**
@@ -150,6 +156,23 @@ public class DraftLigneDetail {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceChoix}.
+	 */
+	public String getReferenceChoix() {
+		return referenceChoix;
+	}
+
+	/**
+	 * 
+	 * @param referenceChoix
+	 *            {@link #referenceChoix}.
+	 */
+	public void setReferenceChoix(String referenceChoix) {
+		this.referenceChoix = referenceChoix;
 	}
 
 	/**
