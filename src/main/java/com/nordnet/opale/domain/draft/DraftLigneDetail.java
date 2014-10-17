@@ -96,6 +96,7 @@ public class DraftLigneDetail {
 		this.referenceSelection = detail.getReferenceSelection();
 		this.reference = detail.getReference();
 		this.referenceTarif = detail.getReferenceTarif();
+		this.referenceChoix = detail.getReferenceChoix();
 		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
 	}
