@@ -60,14 +60,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 */
 	@Override
 	public Double montantPaye(String referenceCommande) {
-		Double montantTotal = 0d;
-		List<Paiement> paiements = paiementRepository.findByReferenceCommande(referenceCommande);
-		for (Paiement paiement : paiements) {
-			if (paiement.isPaye()) {
-				montantTotal += paiement.getMontant();
-			}
-		}
-		return montantTotal;
+		Double montantTotal = paiementRepository.getMontantPayePourCommande(referenceCommande);
+		return montantTotal == null ? 0d : montantTotal;
 	}
 
 	/**

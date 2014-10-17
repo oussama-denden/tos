@@ -163,6 +163,7 @@ CREATE TABLE `draftlignedetail` (
   `modePaiement` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `referenceSelection` varchar(255) DEFAULT NULL,
+  `referenceChoix` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) DEFAULT NULL,
   `dependDe` int(11) DEFAULT NULL,
   `draftLigneId` int(11) DEFAULT NULL,
