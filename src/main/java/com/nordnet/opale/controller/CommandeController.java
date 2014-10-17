@@ -1,5 +1,7 @@
 package com.nordnet.opale.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
@@ -29,7 +32,8 @@ import com.nordnet.opale.service.signature.SignatureService;
 import com.wordnik.swagger.annotations.Api;
 
 /**
- * Gerer l'ensemble des requetes qui ont en rapport avec le {@link CommandeController}.
+ * Gerer l'ensemble des requetes qui ont en rapport avec le
+ * {@link CommandeController}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -118,8 +122,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -221,6 +225,23 @@ public class CommandeController {
 	public SignatureInfo getSignature(@PathVariable String refCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::getSignature");
 		return signatureService.getSignature(refCommande);
+	}
+
+	/**
+	 * recuperer la commande.
+	 * 
+	 * @param criteresCommande
+	 *            the criteres commande
+	 * @return {@link CommandeInfo}
+	 * @throws OpaleException
+	 *             the opale exception {@link OpaleException}
+	 */
+	@RequestMapping(value = "/", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public List<CommandeInfo> chercherCommande(@RequestBody CriteresCommande criteresCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::chercherCommande");
+		return commandeService.find(criteresCommande);
+
 	}
 
 	/**
