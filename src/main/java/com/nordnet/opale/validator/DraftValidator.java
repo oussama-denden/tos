@@ -250,7 +250,8 @@ public class DraftValidator {
 	}
 
 	/**
-	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est
+	 * possible ou non.
 	 * 
 	 * 
 	 * @param draft
@@ -269,6 +270,21 @@ public class DraftValidator {
 		if (draft.isTransforme()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.10"), "1.1.10");
 		}
+	}
+
+	/**
+	 * Verifier si le draft est deja annule.
+	 * 
+	 * @param draft
+	 *            {@link Draft}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void isAnnuler(Draft draft) throws OpaleException {
+		if (draft.getDateAnnulation() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.19", draft.getDateAnnulation()), "1.1.19");
+		}
+
 	}
 
 }

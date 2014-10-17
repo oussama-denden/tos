@@ -243,7 +243,7 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = draftRepository.findByReference(refDraft);
 
 		DraftValidator.isExistDraft(draft, refDraft);
-
+		DraftValidator.isAnnuler(draft);
 		draft.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 
 		draftRepository.save(draft);
