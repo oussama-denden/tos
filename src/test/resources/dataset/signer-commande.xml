@@ -2,10 +2,6 @@
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 
 <dataset>
-	<keygen />
-	
-<signature />
-<commande />
 
 
 <signature id="1"  reference="REF-SIGNATURE-1" mode="OPEN_TRUST"/>
