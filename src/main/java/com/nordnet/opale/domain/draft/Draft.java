@@ -142,22 +142,6 @@ public class Draft {
 		this.reference = reference;
 	}
 
-	// TODO_ERROR remove comment
-	// /**
-	// * associe un client au draft.
-	// *
-	// * @param clientId
-	// * id du client.
-	// * @param adresseId
-	// * addresse.
-	// */
-	// public void setClient(String clientId, String adresseId) {
-	// Client client = new Client();
-	// client.setAdresseId(adresseId);
-	// client.setClientId(clientId);
-	// this.client = client;
-	// }
-
 	/**
 	 * 
 	 * @return {@link #auteur}.

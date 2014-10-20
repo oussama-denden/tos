@@ -3,7 +3,7 @@ package com.nordnet.opale.business;
 import com.nordnet.opale.enums.TypeFrais;
 
 /**
- * Cette classe regroupe les informations qui definissent un {@link Frais}
+ * Cette classe regroupe les informations qui definissent un {@link Frais}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
