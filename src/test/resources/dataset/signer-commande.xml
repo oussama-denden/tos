@@ -4,9 +4,6 @@
 <dataset>
 
 
-<signature id="1"  reference="REF-SIGNATURE-1" mode="OPEN_TRUST"/>
-<signature id="2"  reference="REF-SIGNATURE-2" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestamp="1411654933" footprint="e2680542f77606f42f1cb06d6"/>
-
 <commande id="1"  reference="REF-COMMANDE-1" timestamp="1411654933"/>
 
 <commande id="2"  reference="REF-COMMANDE-2" timestamp="1411654933" referenceSignature="REF-SIGNATURE-1"/>
@@ -15,4 +12,6 @@
 
 <commande id="4"  reference="REF-COMMANDE-4" timestamp="1411654933" referenceSignature="REF-SIGNATURE-2"/>
 
+<signature id="1"  reference="REF-SIGNATURE-1" mode="OPEN_TRUST"/>
+<signature id="2"  reference="REF-SIGNATURE-2" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestamp="1411654933" footprint="e2680542f77606f42f1cb06d6"/>
 </dataset>

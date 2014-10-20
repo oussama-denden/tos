@@ -1,4 +1,4 @@
-<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, signature*, paiement*)>
+<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, signature*,paiement*)>
 
 <!ELEMENT draft EMPTY>
 <!ATTLIST draft

@@ -16,9 +16,12 @@ import javax.persistence.Table;
 
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.TarifInfo;
+import com.nordnet.opale.business.catalogue.Choice;
+import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.enums.TypeProduit;
 
 /**
  * Contient les informations lie a une offre dans la commande.
@@ -41,6 +44,17 @@ public class CommandeLigneDetail {
 	 * reference produit.
 	 */
 	private String referenceProduit;
+
+	/**
+	 * {@link TypeProduit}.
+	 */
+	@Enumerated(EnumType.STRING)
+	private TypeProduit typeProduit;
+
+	/**
+	 * label du produit.
+	 */
+	private String label;
 
 	/**
 	 * {@link ModePaiement}.
@@ -85,18 +99,29 @@ public class CommandeLigneDetail {
 	 * 
 	 * @param detail
 	 *            {@link DraftLigneDetail}.
+	 * @param referenceOffre
+	 *            reference de l'offre.
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public CommandeLigneDetail(DraftLigneDetail detail, TrameCatalogue trameCatalogue) {
+	public CommandeLigneDetail(DraftLigneDetail detail, String referenceOffre, TrameCatalogue trameCatalogue) {
+		DetailCatalogue detailCatalogue =
+				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
 		this.referenceProduit = detail.getReference();
+		this.typeProduit = detailCatalogue.getNature();
 		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
+		Choice choice = detailCatalogue.getChoiceMap().get(detail.getReferenceChoix());
+		this.label = choice.getLabel();
+		for (String refTarif : choice.getTarifs()) {
+			Tarif tarif = new Tarif(refTarif, trameCatalogue);
+			addTarif(tarif);
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "CommandeLigneDetail [id=" + id + ", referenceSelection=" + referenceProduit + ", modePaiement="
+		return "CommandeLigneDetail [id=" + id + ", referenceProduit=" + referenceProduit + ", modePaiement="
 				+ modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
@@ -132,6 +157,40 @@ public class CommandeLigneDetail {
 	 */
 	public void setReferenceProduit(String referenceProduit) {
 		this.referenceProduit = referenceProduit;
+	}
+
+	/**
+	 * 
+	 * @return {@link TypeProduit}.
+	 */
+	public TypeProduit getTypeProduit() {
+		return typeProduit;
+	}
+
+	/**
+	 * 
+	 * @param typeProduit
+	 *            {@link TypeProduit}.
+	 */
+	public void setTypeProduit(TypeProduit typeProduit) {
+		this.typeProduit = typeProduit;
+	}
+
+	/**
+	 * 
+	 * @return {@link #label}.
+	 */
+	public String getLabel() {
+		return label;
+	}
+
+	/**
+	 * 
+	 * @param label
+	 *            {@link #label}.
+	 */
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	/**
@@ -230,14 +289,14 @@ public class CommandeLigneDetail {
 	}
 
 	/**
-	 * recuperer commande ligne business a paritr de command ligne domain
+	 * recuperer commande ligne business a paritr de command ligne domain.
 	 * 
 	 * @return {@link DetailCommandeLigneInfo}
 	 */
 	public DetailCommandeLigneInfo toDetailCommandeLigneInfo() {
 		DetailCommandeLigneInfo detailCommandeLigneInfo = new DetailCommandeLigneInfo();
 		detailCommandeLigneInfo.setReference(referenceProduit);
-		// detailCommandeLigneInfo.setLabel(label);
+		detailCommandeLigneInfo.setLabel(label);
 		List<TarifInfo> tarifInfos = new ArrayList<TarifInfo>();
 
 		for (Tarif tarif : tarifs) {

@@ -1,6 +1,7 @@
 package com.nordnet.opale.repository.commande;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.nordnet.opale.domain.commande.Commande;
@@ -12,12 +13,14 @@ import com.nordnet.opale.domain.draft.Draft;
  * @author akram-moncer.
  */
 @Repository("commandeRepository")
-public interface CommandeRepository extends JpaRepository<Commande, Integer> {
+public interface CommandeRepository extends JpaRepository<Commande, Integer>, JpaSpecificationExecutor<Commande> {
 
 	/**
+	 * Find by reference.
 	 * 
 	 * @param reference
-	 * @return
+	 *            the reference
+	 * @return the commande
 	 */
 	public Commande findByReference(String reference);
 

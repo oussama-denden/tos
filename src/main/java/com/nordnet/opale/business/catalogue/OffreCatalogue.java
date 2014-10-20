@@ -1,7 +1,9 @@
 package com.nordnet.opale.business.catalogue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModeFacturation;
@@ -191,6 +193,20 @@ public class OffreCatalogue {
 	 */
 	public void setDetails(List<DetailCatalogue> details) {
 		this.details = details;
+	}
+
+	/**
+	 * transformer la {@link List} en un objet {@link Map}.
+	 * 
+	 * @return {@link Map<String, DetailCatalogue>}
+	 */
+	public Map<String, DetailCatalogue> getDetailsMap() {
+		Map<String, DetailCatalogue> detailsMap = new HashMap<String, DetailCatalogue>();
+		for (DetailCatalogue detailCatalogue : details) {
+			detailsMap.put(detailCatalogue.getReferenceSelection(), detailCatalogue);
+		}
+
+		return detailsMap;
 	}
 
 }
