@@ -31,7 +31,7 @@ public class TarifInfo {
 	private Integer engagement;
 
 	/**
-	 * duree de tarif
+	 * duree de tarif.
 	 */
 	private Integer duree;
 

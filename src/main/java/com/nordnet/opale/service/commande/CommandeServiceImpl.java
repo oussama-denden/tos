@@ -72,6 +72,9 @@ public class CommandeServiceImpl implements CommandeService {
 		return commandeRepository.findByReferenceDraft(referenceDraft);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -80,6 +83,9 @@ public class CommandeServiceImpl implements CommandeService {
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo.getModePaiement());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
 			throws OpaleException {
@@ -90,6 +96,9 @@ public class CommandeServiceImpl implements CommandeService {
 		commandeRepository.save(commande);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);

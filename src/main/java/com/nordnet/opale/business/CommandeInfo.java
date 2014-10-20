@@ -3,7 +3,8 @@ package com.nordnet.opale.business;
 import java.util.List;
 
 /**
- * Cette classe regroupe les informations qui definissent un {@link CommandeInfo}.
+ * Cette classe regroupe les informations qui definissent un
+ * {@link CommandeInfo}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -11,17 +12,17 @@ import java.util.List;
 public class CommandeInfo {
 
 	/**
-	 * l'auteur
+	 * l'auteur.
 	 */
 	private Auteur auteur;
 
 	/**
-	 * la liste de ligne de la commande
+	 * la liste de ligne de la commande.
 	 */
-	private List<CommandeLigneInfo> Lignes;
+	private List<CommandeLigneInfo> lignes;
 
 	/**
-	 * constructeur par defaut
+	 * constructeur par defaut.
 	 */
 	public CommandeInfo() {
 
@@ -30,7 +31,7 @@ public class CommandeInfo {
 	/* Getters and Setters */
 
 	/**
-	 * get the auteur
+	 * get the auteur.
 	 * 
 	 * @return {@link Auteur}
 	 */
@@ -39,7 +40,7 @@ public class CommandeInfo {
 	}
 
 	/**
-	 * set the auteur
+	 * set the auteur.
 	 * 
 	 * @param auteur
 	 *            the new {@link Auteur}
@@ -49,22 +50,22 @@ public class CommandeInfo {
 	}
 
 	/**
-	 * get lignes
+	 * get lignes.
 	 * 
 	 * @return {@link List<CommandeLigneInfo>}
 	 */
 	public List<CommandeLigneInfo> getLignes() {
-		return Lignes;
+		return lignes;
 	}
 
 	/**
-	 * set the lignes
+	 * set the lignes.
 	 * 
 	 * @param lignes
 	 *            the new {@link List<CommandeLigneInfo>}
 	 */
 	public void setLignes(List<CommandeLigneInfo> lignes) {
-		Lignes = lignes;
+		lignes = this.lignes;
 	}
 
 }

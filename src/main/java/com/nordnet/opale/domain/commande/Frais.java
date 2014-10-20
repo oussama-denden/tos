@@ -231,7 +231,7 @@ public class Frais {
 	}
 
 	/**
-	 * recuperer le frais business partir du frais doamin
+	 * recuperer le frais business partir du frais doamin.
 	 * 
 	 * @return {@link FraisInfo}
 	 */
