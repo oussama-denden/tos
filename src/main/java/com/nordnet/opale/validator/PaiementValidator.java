@@ -100,4 +100,31 @@ public class PaiementValidator {
 		}
 
 	}
+
+	/**
+	 * validation lors de l'effectuation d'un paiement.
+	 * 
+	 * @param referencePaiement
+	 *            reference paiement.
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @param paiement
+	 *            {@link Paiement}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerPaiementRecurrent(String referencePaiement, String referenceCommande, Paiement paiement,
+			PaiementInfo paiementInfo) throws OpaleException {
+
+		if (paiementInfo.getModePaiement() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.modePaiement"), "0.1.4");
+		}
+
+		if (paiementInfo.getIdPaiement() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.idpaiement"), "0.1.4");
+		}
+
+	}
 }

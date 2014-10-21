@@ -33,7 +33,8 @@ import com.nordnet.opale.service.signature.SignatureService;
 import com.wordnik.swagger.annotations.Api;
 
 /**
- * Gerer l'ensemble des requetes qui ont en rapport avec le {@link CommandeController}.
+ * Gerer l'ensemble des requetes qui ont en rapport avec le
+ * {@link CommandeController}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -122,8 +123,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -140,6 +141,30 @@ public class CommandeController {
 	public String paiementDirect(@PathVariable String refCommande, @RequestBody PaiementInfo paiementInfo)
 			throws OpaleException, JSONException {
 		Paiement paiement = commandeService.paiementDirect(refCommande, paiementInfo, TypePaiement.COMPTANT);
+		JSONObject response = new JSONObject();
+		response.put("reference", paiement.getReference());
+		return response.toString();
+	}
+
+	/**
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @return reference paiement.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public String paiementRecurrent(@PathVariable String refCommande, @RequestBody PaiementInfo paiementInfo)
+			throws OpaleException, JSONException {
+		Paiement paiement = commandeService.paiementDirect(refCommande, paiementInfo, TypePaiement.RECURRENT);
 		JSONObject response = new JSONObject();
 		response.put("reference", paiement.getReference());
 		return response.toString();

@@ -2,9 +2,7 @@ package com.nordnet.opale.business;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
-import com.nordnet.opale.enums.deserializer.TypePaiementDeserializer;
 
 /**
  * classe pour transferer les info de paiement.
@@ -31,10 +29,9 @@ public class PaiementInfo {
 	private String infoPaiement;
 
 	/**
-	 * {@link TypePaiement}.
+	 * id paiement.
 	 */
-	@JsonDeserialize(using = TypePaiementDeserializer.class)
-	private TypePaiement typePaiement;
+	private String idPaiement;
 
 	/**
 	 * constructeur par defaut.
@@ -95,19 +92,18 @@ public class PaiementInfo {
 
 	/**
 	 * 
-	 * @return {@link #typePaiement}.
+	 * @return {@link #idPaiement}
 	 */
-	public TypePaiement getTypePaiement() {
-		return typePaiement;
+	public String getIdPaiement() {
+		return idPaiement;
 	}
 
 	/**
 	 * 
-	 * @param typePaiement
-	 *            {@link TypePaiement}.
+	 * @param idPaiement
+	 *            {@link #idPaiement}
 	 */
-	public void setTypePaiement(TypePaiement typePaiement) {
-		this.typePaiement = typePaiement;
+	public void setIdPaiement(String idPaiement) {
+		this.idPaiement = idPaiement;
 	}
-
 }

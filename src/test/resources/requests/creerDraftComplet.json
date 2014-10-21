@@ -19,6 +19,7 @@
           {
             "reference": "kitsat",
              "referenceSelection": "kitsat",
+             "referenceChoix": "trafic10g",
             "referenceTarif": "achat_kit_mensuel",
             "modePaiement": "FACTURE",
             "configurationJson": ""
