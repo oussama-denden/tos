@@ -8,7 +8,8 @@ import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
 
 /**
- * Cette classe regroupe les informations qui definissent un {@link OffreCatalogue}.
+ * Cette classe regroupe les informations qui definissent un
+ * {@link OffreCatalogue}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -16,43 +17,43 @@ import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
 public class OffreCatalogueInfo {
 
 	/**
-	 * la reference
+	 * la reference.
 	 */
 	private String reference;
 
 	/**
-	 * le label
+	 * le label.
 	 */
 	private String label;
 
 	/**
-	 * la gamme
+	 * la gamme.
 	 */
 	private String gamme;
 
 	/**
-	 * la famille
+	 * la famille.
 	 */
 	private String fammille;
 
 	/**
-	 * le tarif
+	 * le tarif.
 	 */
 	private List<TarifInfo> tarif;
 
 	/**
-	 * mode de facturation
+	 * mode de facturation.
 	 */
 	@JsonDeserialize(using = ModeFacturationDeserializer.class)
 	private ModeFacturation modeFacturation;
 
 	/**
-	 * la liste de detaille
+	 * la liste de detaille.
 	 */
 	private List<DetailCommandeLigneInfo> details;
 
 	/**
-	 * constructeur par defaut
+	 * constructeur par defaut.
 	 */
 	public OffreCatalogueInfo() {
 
@@ -61,7 +62,7 @@ public class OffreCatalogueInfo {
 	/* Getters and Setters */
 
 	/**
-	 * get the reference
+	 * 
 	 * 
 	 * @return {@link #reference}
 	 */
@@ -70,7 +71,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * set the reference
+	 * 
 	 * 
 	 * @param reference
 	 *            the new {@link #reference}
@@ -80,7 +81,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * get the label
+	 * 
 	 * 
 	 * @return {@link #label}
 	 */
@@ -89,7 +90,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * set the label
+	 * set the label.
 	 * 
 	 * @param label
 	 *            the new {@link #label}
@@ -99,7 +100,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * get the gamme
+	 * 
 	 * 
 	 * @return {@link #gamme}
 	 */
@@ -108,17 +109,17 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * set the gamme
+	 * 
 	 * 
 	 * @param gamme
-	 *            the new {@link #gamme}
+	 *            new {@link #gamme}
 	 */
 	public void setGamme(String gamme) {
 		this.gamme = gamme;
 	}
 
 	/**
-	 * get the famille
+	 * 
 	 * 
 	 * @return {@link #fammille}
 	 */
@@ -127,7 +128,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * set the famille
+	 * 
 	 * 
 	 * @param fammille
 	 *            the new {@link #fammille}
@@ -137,7 +138,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * get the tarif
+	 * 
 	 * 
 	 * @return {@link TarifInfo}
 	 */
@@ -146,7 +147,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * set the tarif
+	 * 
 	 * 
 	 * @param tarif
 	 *            the new {@link #tarif}
@@ -156,7 +157,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * get the mode de facturation
+	 * 
 	 * 
 	 * @return {@link ModeFacturation}
 	 */
@@ -165,7 +166,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * set the mode de facturation
+	 * 
 	 * 
 	 * @param modeFacturation
 	 *            the new {@link ModeFacturation}
@@ -175,7 +176,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * get the detaille commande lign
+	 * 
 	 * 
 	 * @return {@link List<DetailCommandeLigneInfo>}
 	 */
@@ -184,7 +185,7 @@ public class OffreCatalogueInfo {
 	}
 
 	/**
-	 * set the commande ligne detaille
+	 * 
 	 * 
 	 * @param details
 	 *            the new {@link List<DetailCommandeLigneInfo>}

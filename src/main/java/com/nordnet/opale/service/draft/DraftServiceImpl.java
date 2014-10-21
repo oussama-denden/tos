@@ -1,5 +1,6 @@
 package com.nordnet.opale.service.draft;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,23 +174,25 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional
-	public String ajouterLigne(String refDraft, DraftLigneInfo draftLigneInfo) throws OpaleException {
+	public List<String> ajouterLignes(String refDraft, List<DraftLigneInfo> draftLignesInfo) throws OpaleException {
 
 		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.checkUser(draftLigneInfo.getUser());
 		DraftValidator.isExistDraft(draft, refDraft);
-		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
-		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
-		DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
-		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
-		draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
-		draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
-		draft.addLigne(draftLigne);
+		DraftValidator.isOffresValide(draftLignesInfo);
+		List<String> referencesLignes = new ArrayList<>();
+		for (DraftLigneInfo draftLigneInfo : draftLignesInfo) {
+			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
+			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
+			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
+			draft.addLigne(draftLigne);
 
-		draftRepository.save(draft);
-		tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "ajout de ligne aux draft " + refDraft);
+			draftRepository.save(draft);
+			tracageService.ajouterTrace(Constants.INTERNAL_USER, refDraft, "ajout de ligne aux draft " + refDraft);
+			referencesLignes.add(draftLigne.getReference());
+		}
 
-		return draftLigne.getReference();
+		return referencesLignes;
 	}
 
 	/**
@@ -240,7 +243,7 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = draftRepository.findByReference(refDraft);
 
 		DraftValidator.isExistDraft(draft, refDraft);
-
+		DraftValidator.isAnnuler(draft);
 		draft.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour().toDate());
 
 		draftRepository.save(draft);

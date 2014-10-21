@@ -146,6 +146,11 @@ public class Auteur {
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * convertir en objet business.
+	 * 
+	 * @return {@link com.nordnet.opale.business.Auteur}
+	 */
 	public com.nordnet.opale.business.Auteur toAuteurBusiness() {
 		com.nordnet.opale.business.Auteur auteur = new com.nordnet.opale.business.Auteur();
 		auteur.setCanal(canal);

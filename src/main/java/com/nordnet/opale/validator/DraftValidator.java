@@ -6,6 +6,7 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Client;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
+import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -107,6 +108,26 @@ public class DraftValidator {
 
 		}
 
+	}
+
+	/**
+	 * valider une liste des {@link Offre}.
+	 * 
+	 * @param draftLignesInfos
+	 *            les informations des {@link Offre}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isOffresValide(List<DraftLigneInfo> draftLignesInfos) throws OpaleException {
+		if (Utils.isListNullOrEmpty(draftLignesInfos)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.18"), "1.1.18");
+		}
+
+		for (DraftLigneInfo draftLigneInfo : draftLignesInfos) {
+			checkUser(draftLigneInfo.getUser());
+			DraftValidator.isOffreValide(draftLigneInfo.getOffre());
+			DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
+		}
 	}
 
 	/**
@@ -229,7 +250,8 @@ public class DraftValidator {
 	}
 
 	/**
-	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est
+	 * possible ou non.
 	 * 
 	 * 
 	 * @param draft
@@ -248,6 +270,21 @@ public class DraftValidator {
 		if (draft.isTransforme()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.10"), "1.1.10");
 		}
+	}
+
+	/**
+	 * Verifier si le draft est deja annule.
+	 * 
+	 * @param draft
+	 *            {@link Draft}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void isAnnuler(Draft draft) throws OpaleException {
+		if (draft.getDateAnnulation() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.19", draft.getDateAnnulation()), "1.1.19");
+		}
+
 	}
 
 }

@@ -13,7 +13,7 @@ import com.nordnet.opale.enums.deserializer.ModeSignatureDeserialiser;
 public class AjoutSignatureInfo {
 
 	/**
-	 * l'auteur
+	 * l'auteur.
 	 */
 	private Auteur auteur;
 

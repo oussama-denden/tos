@@ -3,7 +3,8 @@ package com.nordnet.opale.business;
 import java.util.List;
 
 /**
- * Cette classe regroupe les informations qui definissent un {@link DetailCommandeLigneInfo}.
+ * Cette classe regroupe les informations qui definissent un
+ * {@link DetailCommandeLigneInfo}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -11,29 +12,29 @@ import java.util.List;
 public class DetailCommandeLigneInfo {
 
 	/**
-	 * le reference
+	 * le reference.
 	 */
 	private String reference;
 
 	/**
-	 * label
+	 * label.
 	 */
 	private String label;
 
 	/**
-	 * le tarif
+	 * le tarif.
 	 */
 	private List<TarifInfo> tarif;
 
 	/**
-	 * constructeur par defaut
+	 * constructeur par defaut.
 	 */
 	public DetailCommandeLigneInfo() {
 
 	}
 
 	/**
-	 * get the reference
+	 * get the reference.
 	 * 
 	 * @return {@link #reference}
 	 */
@@ -42,7 +43,7 @@ public class DetailCommandeLigneInfo {
 	}
 
 	/**
-	 * set the reference
+	 * set the reference.
 	 * 
 	 * @param reference
 	 *            the new {@link #reference}
@@ -52,7 +53,7 @@ public class DetailCommandeLigneInfo {
 	}
 
 	/**
-	 * get the label
+	 * get the label.
 	 * 
 	 * @return {@link #label}
 	 */
@@ -61,7 +62,7 @@ public class DetailCommandeLigneInfo {
 	}
 
 	/**
-	 * set the label
+	 * set the label.
 	 * 
 	 * @param label
 	 *            the new {@link #label}
@@ -71,7 +72,7 @@ public class DetailCommandeLigneInfo {
 	}
 
 	/**
-	 * get the tarif
+	 * get the tarif.
 	 * 
 	 * @return {@link TarifInfo}
 	 */
@@ -80,7 +81,7 @@ public class DetailCommandeLigneInfo {
 	}
 
 	/**
-	 * set the tarif
+	 * set the tarif.
 	 * 
 	 * @param tarif
 	 *            the new {@link TarifInfo}

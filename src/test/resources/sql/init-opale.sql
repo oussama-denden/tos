@@ -22,8 +22,8 @@ CREATE TABLE `client` (
 -- Definition of table `commande`
 --
 
-DROP TABLE IF EXISTS `commande`;
-CREATE TABLE `commande` (
+DROP TABLE IF EXISTS `opale_test`.`commande`;
+CREATE TABLE  `opale_test`.`commande` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
   `code` varchar(255) DEFAULT NULL,
@@ -31,19 +31,14 @@ CREATE TABLE `commande` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
+  `paye` bit(1) DEFAULT 0,
   `reference` varchar(255) NOT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
+  `referenceSignature` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
-  `referenceSignature` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
---  KEY `FKDC160A7A411643F6` (`clientAFacturerId`),
---  KEY `FKDC160A7A2A2C2866` (`clientALivrerId`),
---  KEY `FKDC160A7AD6AADB33` (`clientSouscripteurId`),
---  CONSTRAINT `FKDC160A7AD6AADB33` FOREIGN KEY (`clientSouscripteurId`) REFERENCES `client` (`id`),
---  CONSTRAINT `FKDC160A7A2A2C2866` FOREIGN KEY (`clientALivrerId`) REFERENCES `client` (`id`),
---  CONSTRAINT `FKDC160A7A411643F6` FOREIGN KEY (`clientAFacturerId`) REFERENCES `client` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
