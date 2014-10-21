@@ -244,6 +244,8 @@ CREATE TABLE `paiement` (
   `montant` double DEFAULT NULL,
   `reference` varchar(255) NOT NULL,
   `referenceCommande` varchar(255) DEFAULT NULL,
+  `timestampIntention` datetime DEFAULT NULL,
+  `timestampPaiement` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

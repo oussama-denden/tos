@@ -1,6 +1,7 @@
 package com.nordnet.opale.draft.service.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -66,6 +67,7 @@ public class PaiementDirectTest extends GlobalTestCase {
 			commandeService.paiementDirect("00000001", paiementInfo, TypePaiement.COMPTANT);
 			paiements = paiementService.getPaiementByReferenceCommande("00000001");
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(paiements.size()));
+			assertNotNull(paiements.get(Constants.ZERO).getTimestampPaiement());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

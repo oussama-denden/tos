@@ -114,7 +114,7 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}/payer", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public void payerIntentionPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
 			@RequestBody PaiementInfo paiementInfo) throws OpaleException {

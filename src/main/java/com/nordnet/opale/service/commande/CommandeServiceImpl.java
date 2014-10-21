@@ -88,7 +88,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Double coutCommandeComptant = calculerCoutComptant(refCommande);
 		CommandeValidator.validerCreerIntentionPaiement(refCommande, commande, coutCommandeComptant,
 				montantComptantPaye);
-		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo.getModePaiement());
+		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
 
 	/**

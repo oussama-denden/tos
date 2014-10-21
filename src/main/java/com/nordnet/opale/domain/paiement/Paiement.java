@@ -1,5 +1,7 @@
 package com.nordnet.opale.domain.paiement;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -64,6 +66,16 @@ public class Paiement {
 	 */
 	@Enumerated(EnumType.STRING)
 	private TypePaiement typePaiement;
+
+	/**
+	 * date d'intention de paiement.
+	 */
+	private Date timestampIntention;
+
+	/**
+	 * date de paiement.
+	 */
+	private Date timestampPaiement;
 
 	/**
 	 * constructeur par defaut.
@@ -207,6 +219,40 @@ public class Paiement {
 	 */
 	public void setTypePaiement(TypePaiement typePaiement) {
 		this.typePaiement = typePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #timestampIntention}.
+	 */
+	public Date getTimestampIntention() {
+		return timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @param timestampIntention
+	 *            {@link #timestampIntention}.
+	 */
+	public void setTimestampIntention(Date timestampIntention) {
+		this.timestampIntention = timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @return {@link #timestampPaiement}.
+	 */
+	public Date getTimestampPaiement() {
+		return timestampPaiement;
+	}
+
+	/**
+	 * 
+	 * @param timestampPaiement
+	 *            {@link #timestampPaiement}.
+	 */
+	public void setTimestampPaiement(Date timestampPaiement) {
+		this.timestampPaiement = timestampPaiement;
 	}
 
 	/**
