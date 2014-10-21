@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.FraisInfo;
 import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
@@ -278,4 +279,18 @@ public class Tarif {
 
 	}
 
+	/**
+	 * verifie si le tarif est recurrent ou non.
+	 * 
+	 * @return true si le tarif est recurrent.
+	 */
+	public boolean isRecurrent() {
+		Optional<Integer> dureeOp = Optional.fromNullable(duree);
+		Optional<Integer> frequenceOp = Optional.fromNullable(frequence);
+		if ((!dureeOp.isPresent() && frequenceOp.isPresent())
+				|| (frequenceOp.isPresent() && dureeOp.isPresent() && frequence < duree)) {
+			return true;
+		}
+		return false;
+	}
 }

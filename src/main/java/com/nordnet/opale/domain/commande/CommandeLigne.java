@@ -425,4 +425,26 @@ public class CommandeLigne {
 
 	}
 
+	/**
+	 * verifie si le commandeLigne est recurrent ou non.
+	 * 
+	 * @return true si le commandeLigne est recurrent.
+	 */
+	public boolean isRecurrent() {
+
+		for (Tarif tarif : tarifs) {
+			if (tarif.isRecurrent()) {
+				return true;
+			}
+		}
+
+		for (CommandeLigneDetail commandeLigneDetail : commandeLigneDetails) {
+			if (commandeLigneDetail.isRecurrent()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }
