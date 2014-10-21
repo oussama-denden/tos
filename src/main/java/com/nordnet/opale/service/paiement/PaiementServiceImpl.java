@@ -1,5 +1,6 @@
 package com.nordnet.opale.service.paiement;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,11 @@ import org.springframework.stereotype.Service;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.paiement.PaiementRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
+import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.PaiementValidator;
 
 /**
@@ -59,8 +62,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Double montantPaye(String referenceCommande) {
-		Double montantTotal = paiementRepository.getMontantPayePourCommande(referenceCommande);
+	public Double montantComptantPaye(String referenceCommande) {
+		Double montantTotal = paiementRepository.getMontantComptantPayePourCommande(referenceCommande);
 		return montantTotal == null ? 0d : montantTotal;
 	}
 
@@ -77,7 +80,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 */
 	@Override
 	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
-		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo.getModePaiement());
+		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo);
+		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo);
 		Paiement paiement = getIntentionPaiement(referenceCommande);
 		if (paiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
@@ -86,9 +90,14 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			Auteur auteur = new Auteur(paiementInfo.getAuteur());
 			paiement.setAuteur(auteur);
+			paiement.setTypePaiement(TypePaiement.COMPTANT);
+			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
 		}
+		Date dateIntention = paiementInfo.getTimestampIntention();
+		paiement.setTimestampIntention(dateIntention != null ? dateIntention : PropertiesUtil.getInstance()
+				.getDateDuJour());
 		paiementRepository.save(paiement);
 		return paiement;
 	}
@@ -107,8 +116,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo)
-			throws OpaleException {
+	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
+			TypePaiement typePaiement) throws OpaleException {
 		Paiement paiement =
 				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
 		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
@@ -125,9 +134,13 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setAuteur(auteur);
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
-			paiementRepository.save(paiement);
-			return paiement;
+			paiement.setTypePaiement(typePaiement);
 		}
+		Date datePaiement = paiementInfo.getTimestampPaiement();
+		paiement.setTimestampPaiement(datePaiement != null ? datePaiement : PropertiesUtil.getInstance()
+				.getDateDuJour());
+		paiementRepository.save(paiement);
+		return paiement;
 
 	}
 }

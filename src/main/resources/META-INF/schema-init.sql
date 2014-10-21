@@ -10,7 +10,7 @@ BEGIN
  DECLARE refInit VARCHAR(8);
  DECLARE x int;
 set refInit='00000001';
-SELECT k.referenceDraft INTO reference FROM Keygen k WHERE k.entite =class AND k.id = (SELECT MAX(id) FROM Keygen k WHERE k.entite =class);
+SELECT k.referenceDraft INTO reference FROM keygen k WHERE k.entite =class AND k.id = (SELECT MAX(id) FROM keygen k WHERE k.entite =class);
 
 if reference is null then
 set reference=refInit;

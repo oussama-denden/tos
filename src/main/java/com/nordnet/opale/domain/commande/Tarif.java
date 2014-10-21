@@ -51,7 +51,7 @@ public class Tarif {
 	/**
 	 * periode en nombre de mois.
 	 */
-	private Integer periode;
+	private Integer frequence;
 
 	/**
 	 * engagemet en nombre de mois.
@@ -97,11 +97,17 @@ public class Tarif {
 		this.engagement = tarif.getEngagement();
 		this.duree = tarif.getDuree();
 		this.typeTVA = tarif.getTypeTVA();
-		this.periode = tarif.getPeriode();
+		this.frequence = tarif.getFrequence();
 		for (String refFrais : tarif.getFrais()) {
 			Frais frais = new Frais(refFrais, trameCatalogue);
 			addFrais(frais);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Tarif [id=" + id + ", reference=" + reference + ", prix=" + prix + ", frequence=" + frequence
+				+ ", engagement=" + engagement + ", duree=" + duree + ", typeTVA=" + typeTVA + "]";
 	}
 
 	/**
@@ -157,19 +163,19 @@ public class Tarif {
 
 	/**
 	 * 
-	 * @return {@link #periode}.
+	 * @return {@link #frequence}.
 	 */
-	public Integer getPeriode() {
-		return periode;
+	public Integer getFrequence() {
+		return frequence;
 	}
 
 	/**
 	 * 
-	 * @param periode
-	 *            {@link #periode}.
+	 * @param frequence
+	 *            {@link #frequence}.
 	 */
-	public void setPeriode(Integer periode) {
-		this.periode = periode;
+	public void setFrequence(Integer frequence) {
+		this.frequence = frequence;
 	}
 
 	/**
@@ -259,7 +265,7 @@ public class Tarif {
 		TarifInfo tarifInfo = new TarifInfo();
 		tarifInfo.setReference(reference);
 		tarifInfo.setPrix(prix);
-		tarifInfo.setPeriodicite(periode);
+		tarifInfo.setFrequence(frequence);
 		tarifInfo.setDuree(duree);
 		tarifInfo.setEngagement(engagement);
 		List<FraisInfo> fraisInfos = new ArrayList<FraisInfo>();

@@ -1,5 +1,7 @@
 package com.nordnet.opale.domain.paiement;
 
+import java.util.Date;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +17,7 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.enums.TypePaiement;
 
 /**
  * Represente un paiement d'une {@link Commande}.
@@ -64,6 +67,22 @@ public class Paiement {
 	private Auteur auteur;
 
 	/**
+	 * {@link TypePaiement}.
+	 */
+	@Enumerated(EnumType.STRING)
+	private TypePaiement typePaiement;
+
+	/**
+	 * date d'intention de paiement.
+	 */
+	private Date timestampIntention;
+
+	/**
+	 * date de paiement.
+	 */
+	private Date timestampPaiement;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Paiement() {
@@ -79,6 +98,13 @@ public class Paiement {
 		this.modePaiement = paiementInfo.getModePaiement();
 		this.montant = paiementInfo.getMontant();
 		this.infoPaiement = paiementInfo.getInfoPaiement();
+	}
+
+	@Override
+	public String toString() {
+		return "Paiement [id=" + id + ", reference=" + reference + ", referenceCommande=" + referenceCommande
+				+ ", modePaiement=" + modePaiement + ", montant=" + montant + ", infoPaiement=" + infoPaiement
+				+ ", typePaiement=" + typePaiement + "]";
 	}
 
 	/**
@@ -192,12 +218,61 @@ public class Paiement {
 	}
 
 	/**
+	 * @return {@link TypePaiement}.
+	 */
+	public TypePaiement getTypePaiement() {
+		return typePaiement;
+	}
+
+	/**
 	 * 
 	 * @param auteur
 	 *            {@link #auteur}.
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * @param typePaiement
+	 *            {@link TypePaiement}.
+	 */
+	public void setTypePaiement(TypePaiement typePaiement) {
+		this.typePaiement = typePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #timestampIntention}.
+	 */
+	public Date getTimestampIntention() {
+		return timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @param timestampIntention
+	 *            {@link #timestampIntention}.
+	 */
+	public void setTimestampIntention(Date timestampIntention) {
+		this.timestampIntention = timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @return {@link #timestampPaiement}.
+	 */
+	public Date getTimestampPaiement() {
+		return timestampPaiement;
+	}
+
+	/**
+	 * 
+	 * @param timestampPaiement
+	 *            {@link #timestampPaiement}.
+	 */
+	public void setTimestampPaiement(Date timestampPaiement) {
+		this.timestampPaiement = timestampPaiement;
 	}
 
 	/**

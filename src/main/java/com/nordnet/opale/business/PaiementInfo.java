@@ -1,8 +1,12 @@
 package com.nordnet.opale.business;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
+import com.nordnet.opale.enums.deserializer.TypePaiementDeserializer;
 
 /**
  * classe pour transferer les info de paiement.
@@ -32,6 +36,22 @@ public class PaiementInfo {
 	 * l'auteur.
 	 */
 	private Auteur auteur;
+
+	/**
+	 * {@link TypePaiement}.
+	 */
+	@JsonDeserialize(using = TypePaiementDeserializer.class)
+	private TypePaiement typePaiement;
+
+	/**
+	 * date d'intention de paiement.
+	 */
+	private Date timestampIntention;
+
+	/**
+	 * date de paiement.
+	 */
+	private Date timestampPaiement;
 
 	/**
 	 * constructeur par defaut.
@@ -108,4 +128,55 @@ public class PaiementInfo {
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
 	}
+
+	/**
+	 * @return {@link #typePaiement}.
+	 */
+	public TypePaiement getTypePaiement() {
+		return typePaiement;
+	}
+
+	/**
+	 * 
+	 * @param typePaiement
+	 *            {@link TypePaiement}.
+	 */
+	public void setTypePaiement(TypePaiement typePaiement) {
+		this.typePaiement = typePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #timestampIntention}.
+	 */
+	public Date getTimestampIntention() {
+		return timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @param timestampIntention
+	 *            {@link #timestampIntention}.
+	 */
+	public void setTimestampIntention(Date timestampIntention) {
+		this.timestampIntention = timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @return {@link #timestampPaiement}.
+	 */
+	public Date getTimestampPaiement() {
+		return timestampPaiement;
+	}
+
+	/**
+	 * 
+	 * @param timestampPaiement
+	 *            {@link #timestampPaiement}.
+	 */
+	public void setTimestampPaiement(Date timestampPaiement) {
+		this.timestampPaiement = timestampPaiement;
+	}
+
 }

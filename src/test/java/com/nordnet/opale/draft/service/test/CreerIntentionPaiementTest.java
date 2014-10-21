@@ -1,6 +1,8 @@
 package com.nordnet.opale.draft.service.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
@@ -62,6 +64,8 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 							"./requests/creerIntentionPaiement.json");
 			Paiement paiement = commandeService.creerIntentionPaiement("00000001", paiementInfo);
 			assertEquals("00000001", paiement.getReference());
+			assertNotNull(paiement.getTimestampIntention());
+			assertNull(paiement.getTimestampPaiement());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -82,6 +86,8 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 							"./requests/creerIntentionPaiement.json");
 			paiement = commandeService.creerIntentionPaiement("00000004", paiementInfo);
 			assertEquals(ModePaiement.CB, paiement.getModePaiement());
+			assertNotNull(paiement.getTimestampIntention());
+			assertNull(paiement.getTimestampPaiement());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -102,26 +108,6 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("2.1.2", e.getErrorCode());
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			fail(e.getMessage());
-		}
-	}
-
-	/**
-	 * Tester le cas d'ajout d'une intention de paiement avec une commande paye totalement.
-	 */
-	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-intention-paiement.xml" })
-	public void testerCreerIntentionPaiementAvecCommandePayeTotalement() {
-		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
-							"./requests/creerIntentionPaiement.json");
-			commandeService.creerIntentionPaiement("00000003", paiementInfo);
-			fail("Unexpected error");
-		} catch (OpaleException e) {
-			assertEquals("1.1.11", e.getErrorCode());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

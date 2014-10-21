@@ -1,6 +1,7 @@
 package com.nordnet.opale.draft.service.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
@@ -65,7 +66,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 							"./requests/payerIntentionPaiement.json");
 			commandeService.payerIntentionPaiement("00000001", "00000001", paiementInfo);
 			Assert.assertEquals(Double.valueOf(Constants.CINQ), paiement.getMontant());
-			Assert.assertNotNull(paiement.getInfoPaiement());
+			assertNotNull(paiement.getInfoPaiement());
+			assertNotNull(paiement.getTimestampPaiement());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

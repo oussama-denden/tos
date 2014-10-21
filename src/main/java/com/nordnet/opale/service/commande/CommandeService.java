@@ -10,6 +10,7 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -79,18 +80,21 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la
-	 * creation d'un intention de paiement en avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
 	 * @param paiementInfo
 	 *            {@link PaiementInfo}.
+	 * @param typePaiement
+	 *            {@link TypePaiement}.
 	 * @return {@link Paiement}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException;
+	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo, TypePaiement typePaiement)
+			throws OpaleException;
 
 	/**
 	 * chercher une commande sur base de critères.

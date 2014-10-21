@@ -389,13 +389,4 @@ public class Commande {
 		return commandeInfo;
 
 	}
-
-	/**
-	 * calcule le cout total de le commande.
-	 * 
-	 * @return cout total.
-	 */
-	public Double getCoutTotal() {
-		return 10.0;
-	}
 }

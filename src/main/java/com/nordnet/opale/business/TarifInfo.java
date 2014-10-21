@@ -23,7 +23,7 @@ public class TarifInfo {
 	/**
 	 * la periodicite en nombre de mois.
 	 */
-	private Integer periodicite;
+	private Integer frequence;
 
 	/**
 	 * l'engagement en nombre de mois.
@@ -116,20 +116,20 @@ public class TarifInfo {
 
 	/**
 	 * 
-	 * @return {@link #periodicite}
+	 * @return {@link #frequence}
 	 */
-	public Integer getPeriodicite() {
-		return periodicite;
+	public Integer getFrequence() {
+		return frequence;
 	}
 
 	/**
 	 * 
-	 * @param periodicite
-	 *            {@link #periodicite}
+	 * @param frequence
+	 *            {@link #frequence}
 	 * 
 	 */
-	public void setPeriodicite(Integer periodicite) {
-		this.periodicite = periodicite;
+	public void setFrequence(Integer frequence) {
+		this.frequence = frequence;
 	}
 
 	/**

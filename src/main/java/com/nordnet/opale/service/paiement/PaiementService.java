@@ -5,6 +5,7 @@ import java.util.List;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -42,13 +43,13 @@ public interface PaiementService {
 	public void save(Paiement paiement);
 
 	/**
-	 * calculer le montant total payer pour une {@link Commande}.
+	 * calculer le montant comptant payer pour une commande.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
 	 * @return montant total paye.
 	 */
-	public Double montantPaye(String referenceCommande);
+	public Double montantComptantPaye(String referenceCommande);
 
 	/**
 	 * chercher l'intention de paiement associe a la commande.
@@ -96,11 +97,13 @@ public interface PaiementService {
 	 *            reference {@link Commande}.
 	 * @param paiementInfo
 	 *            {@link PaiementInfo}.
+	 * @param typePaiement
+	 *            {@link TypePaiement}.
 	 * @return {@link Paiement} ou null si le paiement existe deja.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo)
-			throws OpaleException;
+	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
+			TypePaiement typePaiement) throws OpaleException;
 
 }
