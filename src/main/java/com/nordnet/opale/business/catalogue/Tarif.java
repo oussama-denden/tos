@@ -32,7 +32,7 @@ public class Tarif {
 	/**
 	 * la periodicite en nombre de mois.
 	 */
-	private Integer periode;
+	private Integer frequence;
 
 	/**
 	 * l'engagement en nombre de mois.
@@ -58,7 +58,7 @@ public class Tarif {
 
 	@Override
 	public String toString() {
-		return "Tarif [reference=" + reference + ", prix=" + prix + ", duree=" + duree + ", periode=" + periode
+		return "Tarif [reference=" + reference + ", prix=" + prix + ", duree=" + duree + ", frequence=" + frequence
 				+ ", engagement=" + engagement + ", frais=" + frais + "]";
 	}
 
@@ -115,19 +115,19 @@ public class Tarif {
 
 	/**
 	 * 
-	 * @return {@link #periode}.
+	 * @return {@link #frequence}.
 	 */
-	public Integer getPeriode() {
-		return periode;
+	public Integer getFrequence() {
+		return frequence;
 	}
 
 	/**
 	 * 
-	 * @param periode
-	 *            {@link #periode}.
+	 * @param frequence
+	 *            {@link #frequence}.
 	 */
-	public void setPeriode(Integer periode) {
-		this.periode = periode;
+	public void setFrequence(Integer frequence) {
+		this.frequence = frequence;
 	}
 
 	/**

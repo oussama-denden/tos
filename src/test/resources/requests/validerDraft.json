@@ -25,7 +25,7 @@
       "frais": [
         "std_cloture"
       ],
-      "periode": "1"
+      "frequence": "1"
     },
     {
       "reference": "annuel_jet10_base",
@@ -36,7 +36,7 @@
       "frais": [
         "std_cloture"
       ],
-      "periode": "12"
+      "frequence": "12"
     }
   ],
   "offres": [

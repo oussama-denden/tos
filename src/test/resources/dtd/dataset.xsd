@@ -12,6 +12,10 @@
 		                    <xsd:element name="tracage" type="dflt:tracage_type" />
 		                      <xsd:element name="client" type="dflt:client_type" />
 		                      <xsd:element name="commande" type="dflt:commande_type" />
+		                      <xsd:element name="commandeLigne" type="dflt:commandeLigne_type" />
+		                       <xsd:element name="commandeLigneDetail" type="dflt:commandeLigneDetail_type" />
+		                       <xsd:element name="tarif" type="dflt:tarif_type" />
+		                       <xsd:element name="frais" type="dflt:frais_type" />
 		                      <xsd:element name="signature" type="dflt:signature_type" />
 		                      <xsd:element name="paiement" type="dflt:paiement_type" />
 				<xsd:any namespace="test_opale" />

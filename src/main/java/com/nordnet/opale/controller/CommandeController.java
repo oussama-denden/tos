@@ -25,6 +25,7 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
@@ -32,8 +33,7 @@ import com.nordnet.opale.service.signature.SignatureService;
 import com.wordnik.swagger.annotations.Api;
 
 /**
- * Gerer l'ensemble des requetes qui ont en rapport avec le
- * {@link CommandeController}.
+ * Gerer l'ensemble des requetes qui ont en rapport avec le {@link CommandeController}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -114,7 +114,7 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}/payer", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public void payerIntentionPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
 			@RequestBody PaiementInfo paiementInfo) throws OpaleException {
@@ -122,8 +122,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la
-	 * creation d'un intention de paiement en avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -135,11 +135,11 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiementDirect", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public String paiementDirect(@PathVariable String refCommande, @RequestBody PaiementInfo paiementInfo)
 			throws OpaleException, JSONException {
-		Paiement paiement = commandeService.paiementDirect(refCommande, paiementInfo);
+		Paiement paiement = commandeService.paiementDirect(refCommande, paiementInfo, TypePaiement.COMPTANT);
 		JSONObject response = new JSONObject();
 		response.put("reference", paiement.getReference());
 		return response.toString();

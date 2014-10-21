@@ -58,14 +58,17 @@ public class CommandeValidator {
 	 *            reference {@link Commande}.
 	 * @param commande
 	 *            {@link Commande}.
-	 * @param montantPaye
-	 *            montant deja paye.
+	 * @param coutCommandeComptant
+	 *            cout comtant de la commande.
+	 * @param montantComptantPaye
+	 *            montant comptant deja paye.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isCommandePaye(String refCommande, Commande commande, Double montantPaye) throws OpaleException {
+	public static void validerCreerIntentionPaiement(String refCommande, Commande commande,
+			Double coutCommandeComptant, Double montantComptantPaye) throws OpaleException {
 		isExiste(refCommande, commande);
-		if (commande.getCoutTotal() <= montantPaye) {
+		if (coutCommandeComptant <= montantComptantPaye) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.11"), "1.1.11");
 		}
 	}
@@ -77,6 +80,8 @@ public class CommandeValidator {
 	 *            reference {@link Commande}.
 	 * @param commande
 	 *            {@link Commande}.
+	 * @param coutCommandeComptant
+	 *            cout comptant de la {@link Commande}.
 	 * @param montantPaye
 	 *            montant deja paye pour la commande.
 	 * @param paiementInfo
@@ -84,10 +89,10 @@ public class CommandeValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isPaiementPossible(String referenceCommande, Commande commande, Double montantPaye,
-			PaiementInfo paiementInfo) throws OpaleException {
+	public static void isPaiementPossible(String referenceCommande, Commande commande, Double coutCommandeComptant,
+			Double montantPaye, PaiementInfo paiementInfo) throws OpaleException {
 		isExiste(referenceCommande, commande);
-		if (paiementInfo.getMontant() != null && commande.getCoutTotal() < (montantPaye + paiementInfo.getMontant())) {
+		if (paiementInfo.getMontant() != null && coutCommandeComptant < (montantPaye + paiementInfo.getMontant())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.3"), "2.1.3");
 		}
 	}
