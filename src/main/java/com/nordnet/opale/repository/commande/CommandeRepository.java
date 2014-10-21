@@ -42,7 +42,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 *            reference {@link Commande}.
 	 * @return cout des frais de creation.
 	 */
-	@Query(nativeQuery = true, value = "SELECT SUM(montant) FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t, Frais f where c.reference = :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (t.commandeLigneId = cld.id OR t.commandeLigneDetailId = cld.id) AND t.id = f.tarifId AND f.typeFrais = 'CREATION'")
+	@Query(nativeQuery = true, value = "SELECT sum(montant) FROM ( SELECT distinct f.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t, Frais f where c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) AND t.id = f.tarifId AND f.typeFrais = 'CREATION') fraiss")
 	public Double calculerCoutFraisCreation(@Param("referenceCommande") String referenceCommande);
 
 	/**
@@ -52,7 +52,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 *            reference commande.
 	 * @return cout paye en comptant.
 	 */
-	@Query(nativeQuery = true, value = "SELECT SUM(prix) FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t where c.reference = :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (t.commandeLigneId = cld.id OR t.commandeLigneDetailId = cld.id) AND (t.frequence = t.duree OR t.frequence is NULL)")
+	@Query(nativeQuery = true, value = "select sum(prix) from (SELECT distinct t.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t where c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) AND (t.frequence = t.duree OR t.frequence is NULL)) tarifs")
 	public Double calculerCoutPrixComptant(@Param("referenceCommande") String referenceCommande);
 
 }

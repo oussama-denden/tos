@@ -81,10 +81,12 @@ CREATE TABLE `commandeligne` (
   `numero` int(11) DEFAULT NULL,
   `referenceOffre` varchar(255) DEFAULT NULL,
   `secteur` varchar(255) DEFAULT NULL,
+  `tarifId` int(11) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
   `famille` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK2872A787B0909C9F` (`commandeId`)
+  KEY `FK2872A787B0909C9F` (`commandeId`),
+  KEY `FK2872A7878D480C8F` (`tarifId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -100,10 +102,12 @@ CREATE TABLE `commandelignedetail` (
   `label` varchar(255) DEFAULT NULL,
   `typeProduit` varchar(255) DEFAULT NULL,
   `dependDe` int(11) DEFAULT NULL,
+  `tarifId` int(11) DEFAULT NULL,
   `commandeLigneId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK516CBE981E3D9F39` (`commandeLigneId`),
-  KEY `FK516CBE9883CC4F75` (`dependDe`)
+  KEY `FK516CBE9883CC4F75` (`dependDe`),
+  KEY `FK516CBE988D480C8F` (`tarifId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -218,11 +222,7 @@ CREATE TABLE `tarif` (
   `prix` double DEFAULT NULL,
   `reference` varchar(255) NOT NULL,
   `typeTVA` varchar(255) DEFAULT NULL,
-  `commandeLigneId` int(11) DEFAULT NULL,
-  `commandeLigneDetailId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK69077821E3D9F39` (`commandeLigneId`),
-  KEY `FK6907782F5575D3B` (`commandeLigneDetailId`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

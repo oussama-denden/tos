@@ -8,8 +8,7 @@ import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
 
 /**
- * Cette classe regroupe les informations qui definissent un
- * {@link OffreCatalogue}.
+ * Cette classe regroupe les informations qui definissent un {@link OffreCatalogue}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -37,9 +36,9 @@ public class OffreCatalogueInfo {
 	private String fammille;
 
 	/**
-	 * le tarif.
+	 * {@link TarifInfo}.
 	 */
-	private List<TarifInfo> tarif;
+	private TarifInfo tarif;
 
 	/**
 	 * mode de facturation.
@@ -139,20 +138,18 @@ public class OffreCatalogueInfo {
 
 	/**
 	 * 
-	 * 
-	 * @return {@link TarifInfo}
+	 * @return {@link #tarif}.
 	 */
-	public List<TarifInfo> getTarif() {
+	public TarifInfo getTarif() {
 		return tarif;
 	}
 
 	/**
 	 * 
-	 * 
 	 * @param tarif
-	 *            the new {@link #tarif}
+	 *            {@link #tarif}.
 	 */
-	public void setTarif(List<TarifInfo> tarif) {
+	public void setTarif(TarifInfo tarif) {
 		this.tarif = tarif;
 	}
 
