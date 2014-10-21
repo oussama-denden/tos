@@ -153,6 +153,7 @@
 		<xsd:attribute name="montant" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceCommande" use="optional" />
+		<xsd:attribute name="typePaiement" use="optional" />
 	</xsd:complexType>
 	
 	

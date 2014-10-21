@@ -54,6 +54,17 @@ public class PaiementInfo {
 	public PaiementInfo() {
 	}
 
+	public PaiementInfo(ModePaiement modePaiement, Double montant, String infoPaiement, TypePaiement typePaiement,
+			Date timestampIntention, Date timestampPaiement) {
+		super();
+		this.modePaiement = modePaiement;
+		this.montant = montant;
+		this.infoPaiement = infoPaiement;
+		this.typePaiement = typePaiement;
+		this.timestampIntention = timestampIntention;
+		this.timestampPaiement = timestampPaiement;
+	}
+
 	/**
 	 * 
 	 * @return {@link ModePaiement}.

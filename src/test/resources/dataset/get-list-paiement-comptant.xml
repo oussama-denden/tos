@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<dataset>
+
+<commande id="1000" canal="welcome" code="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="1411654933" reference="00000001" referenceDraft="00000001" />
+
+
+<paiement id="1001" modePaiement="FACTURE" montant="10" reference="00000002" referenceCommande="00000001" typePaiement="COMPTANT" />
+<paiement id="1002" modePaiement="FACTURE" reference="00000002" referenceCommande="00000001" typePaiement="COMPTANT" />
+<paiement id="1003" modePaiement="FACTURE" reference="00000002" referenceCommande="00000001" typePaiement="RECURRENT" />
+
+</dataset>

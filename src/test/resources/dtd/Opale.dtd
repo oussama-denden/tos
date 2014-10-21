@@ -159,5 +159,6 @@
     montant CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
+    typePaiement CDATA #IMPLIED
 >
 

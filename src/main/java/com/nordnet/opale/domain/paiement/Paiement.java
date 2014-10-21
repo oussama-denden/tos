@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
@@ -25,6 +26,7 @@ import com.nordnet.opale.enums.TypePaiement;
  */
 @Table(name = "paiement")
 @Entity
+@JsonIgnoreProperties({ "id", "intension", "paye" })
 public class Paiement {
 
 	/**

@@ -114,4 +114,15 @@ public interface CommandeService {
 	 */
 	public Commande getCommandeByReference(String reference);
 
+	/**
+	 * retourner la liste des paiement comptant d'une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return liste des paiement comptant.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException;
+
 }

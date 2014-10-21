@@ -135,9 +135,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
-				.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
+		commandes =
+				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
+						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {
@@ -164,6 +165,14 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public Commande getCommandeByReference(String reference) {
 		return commandeRepository.findByReference(reference);
+	}
+
+	@Override
+	@Transactional
+	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.getListePaiementComptant(referenceCommande);
 	}
 
 	/**

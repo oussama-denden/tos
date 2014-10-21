@@ -145,6 +145,13 @@ public class CommandeController {
 		return response.toString();
 	}
 
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande)
+			throws OpaleException, JSONException {
+		return commandeService.getListePaiementComptant(refCommande);
+	}
+
 	/**
 	 * ajouter une signature et l'associer a une commande.
 	 * 
