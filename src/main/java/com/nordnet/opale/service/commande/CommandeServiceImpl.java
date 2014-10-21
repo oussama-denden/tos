@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -124,14 +126,31 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
-				.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
+		commandes = commandeRepository.findAll(
+				where(CommandeSpecifications.clientIdEqual(clientId))
+						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)), new Sort(
+						Direction.DESC, "clientSouscripteur", "clientALivrer", "clientAFacturer"));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {
-			commandeInfos.add(commande.toCommandInfo());
+			if (commande.getClientSouscripteur().getClientId().equals(clientId)) {
+				commandeInfos.add(commande.toCommandInfo());
+			}
 		}
+
+		for (Commande commande : commandes) {
+			if (commande.getClientALivrer().getClientId().equals(clientId)) {
+				commandeInfos.add(commande.toCommandInfo());
+			}
+		}
+
+		for (Commande commande : commandes) {
+			if (commande.getClientAFacturer().getClientId().equals(clientId)) {
+				commandeInfos.add(commande.toCommandInfo());
+			}
+		}
+
 		return commandeInfos;
 	}
 
