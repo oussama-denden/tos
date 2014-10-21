@@ -68,9 +68,6 @@ public class CommandeValidator {
 	public static void validerCreerIntentionPaiement(String refCommande, Commande commande,
 			Double coutCommandeComptant, Double montantComptantPaye) throws OpaleException {
 		isExiste(refCommande, commande);
-		if (coutCommandeComptant <= montantComptantPaye) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.11"), "1.1.11");
-		}
 	}
 
 	/**
