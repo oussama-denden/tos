@@ -84,7 +84,6 @@ public class CommandeServiceImpl implements CommandeService {
 	@Transactional(rollbackFor = Exception.class)
 	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(refCommande);
-		Double montantPaye = paiementService.montantComptantPaye(refCommande);
 		Double montantComptantPaye = paiementService.montantComptantPaye(refCommande);
 		Double coutCommandeComptant = calculerCoutComptant(refCommande);
 		CommandeValidator.validerCreerIntentionPaiement(refCommande, commande, coutCommandeComptant,
@@ -166,6 +165,14 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public Commande getCommandeByReference(String reference) {
 		return commandeRepository.findByReference(reference);
+	}
+
+	@Override
+	@Transactional
+	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.getListePaiementComptant(referenceCommande);
 	}
 
 	/**

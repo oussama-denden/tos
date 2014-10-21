@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.Auteur;
@@ -27,6 +28,7 @@ import com.nordnet.opale.enums.TypePaiement;
  */
 @Table(name = "paiement")
 @Entity
+@JsonIgnoreProperties({ "id", "intension", "paye" })
 public class Paiement {
 
 	/**
@@ -63,9 +65,6 @@ public class Paiement {
 	 */
 	private String infoPaiement;
 
-	@Embedded
-	private Auteur auteur;
-
 	/**
 	 * {@link TypePaiement}.
 	 */
@@ -81,6 +80,12 @@ public class Paiement {
 	 * date de paiement.
 	 */
 	private Date timestampPaiement;
+
+	/**
+	 * l'auteur
+	 */
+	@Embedded
+	private Auteur auteur;
 
 	/**
 	 * constructeur par defaut.
@@ -211,13 +216,6 @@ public class Paiement {
 
 	/**
 	 * 
-	 * @return {@link #auteur}.
-	 */
-	public Auteur getAuteur() {
-		return auteur;
-	}
-
-	/**
 	 * @return {@link TypePaiement}.
 	 */
 	public TypePaiement getTypePaiement() {
@@ -226,14 +224,6 @@ public class Paiement {
 
 	/**
 	 * 
-	 * @param auteur
-	 *            {@link #auteur}.
-	 */
-	public void setAuteur(Auteur auteur) {
-		this.auteur = auteur;
-	}
-
-	/**
 	 * @param typePaiement
 	 *            {@link TypePaiement}.
 	 */
@@ -273,6 +263,23 @@ public class Paiement {
 	 */
 	public void setTimestampPaiement(Date timestampPaiement) {
 		this.timestampPaiement = timestampPaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #auteur}.
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * 
+	 * @param auteur
+	 *            {@link #auteur}.
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**

@@ -169,5 +169,6 @@
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
+    typePaiement CDATA #IMPLIED
 >
 

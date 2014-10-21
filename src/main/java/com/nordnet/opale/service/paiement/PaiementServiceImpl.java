@@ -81,13 +81,11 @@ public class PaiementServiceImpl implements PaiementService {
 	@Override
 	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
 		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo);
-		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo);
 		Paiement paiement = getIntentionPaiement(referenceCommande);
 		if (paiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 		} else {
 			paiement = new Paiement();
-			paiement.setModePaiement(paiementInfo.getModePaiement());
 			Auteur auteur = new Auteur(paiementInfo.getAuteur());
 			paiement.setAuteur(auteur);
 			paiement.setTypePaiement(TypePaiement.COMPTANT);
@@ -126,8 +124,6 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setMontant(paiementInfo.getMontant());
 			paiement.setInfoPaiement(paiementInfo.getInfoPaiement());
 			paiement.setAuteur(new Auteur(paiementInfo.getAuteur()));
-			paiementRepository.save(paiement);
-			return null;
 		} else {
 			paiement = new Paiement(paiementInfo);
 			Auteur auteur = new Auteur(paiementInfo.getAuteur());
@@ -142,5 +138,13 @@ public class PaiementServiceImpl implements PaiementService {
 		paiementRepository.save(paiement);
 		return paiement;
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Paiement> getListePaiementComptant(String referenceCommande) {
+		return paiementRepository.getListePaiementComptant(referenceCommande);
 	}
 }

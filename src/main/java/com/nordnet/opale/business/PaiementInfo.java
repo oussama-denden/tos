@@ -17,6 +17,11 @@ import com.nordnet.opale.enums.deserializer.TypePaiementDeserializer;
 public class PaiementInfo {
 
 	/**
+	 * l'auteur.
+	 */
+	private Auteur auteur;
+
+	/**
 	 * {@link ModePaiement}.
 	 */
 	@JsonDeserialize(using = ModePaiementDeserializer.class)
@@ -31,11 +36,6 @@ public class PaiementInfo {
 	 * info paiement.
 	 */
 	private String infoPaiement;
-
-	/**
-	 * l'auteur.
-	 */
-	private Auteur auteur;
 
 	/**
 	 * {@link TypePaiement}.
@@ -57,6 +57,36 @@ public class PaiementInfo {
 	 * constructeur par defaut.
 	 */
 	public PaiementInfo() {
+	}
+
+	public PaiementInfo(ModePaiement modePaiement, Double montant, String infoPaiement, TypePaiement typePaiement,
+			Date timestampIntention, Date timestampPaiement) {
+		super();
+		this.modePaiement = modePaiement;
+		this.montant = montant;
+		this.infoPaiement = infoPaiement;
+		this.typePaiement = typePaiement;
+		this.timestampIntention = timestampIntention;
+		this.timestampPaiement = timestampPaiement;
+	}
+
+	/**
+	 * get the auteur.
+	 * 
+	 * @return {@link AuteurInfo}
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * set the auteur.
+	 * 
+	 * @param auteur
+	 *            the new {@link AuteurInfo}
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**
@@ -111,25 +141,7 @@ public class PaiementInfo {
 	}
 
 	/**
-	 * get the auteur.
 	 * 
-	 * @return {@link AuteurInfo}
-	 */
-	public Auteur getAuteur() {
-		return auteur;
-	}
-
-	/**
-	 * set the auteur.
-	 * 
-	 * @param auteur
-	 *            the new {@link AuteurInfo}
-	 */
-	public void setAuteur(Auteur auteur) {
-		this.auteur = auteur;
-	}
-
-	/**
 	 * @return {@link #typePaiement}.
 	 */
 	public TypePaiement getTypePaiement() {

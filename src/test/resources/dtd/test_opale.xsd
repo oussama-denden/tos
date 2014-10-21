@@ -158,6 +158,7 @@
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
 		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="typePaiement" use="optional" />
 	</xsd:complexType>
 	
 	

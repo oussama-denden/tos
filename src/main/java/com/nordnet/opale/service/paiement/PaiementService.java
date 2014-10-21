@@ -106,4 +106,13 @@ public interface PaiementService {
 	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
 			TypePaiement typePaiement) throws OpaleException;
 
+	/**
+	 * retourner la liste des paiement comptant d'une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @return liste {@link Paiement}.
+	 */
+	public List<Paiement> getListePaiementComptant(String referenceCommande);
+
 }
