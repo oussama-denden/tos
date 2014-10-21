@@ -29,6 +29,11 @@ public class PaiementInfo {
 	private String infoPaiement;
 
 	/**
+	 * l'auteur.
+	 */
+	private Auteur auteur;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public PaiementInfo() {
@@ -85,4 +90,22 @@ public class PaiementInfo {
 		this.infoPaiement = infoPaiement;
 	}
 
+	/**
+	 * get the auteur.
+	 * 
+	 * @return {@link AuteurInfo}
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * set the auteur.
+	 * 
+	 * @param auteur
+	 *            the new {@link AuteurInfo}
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
+	}
 }

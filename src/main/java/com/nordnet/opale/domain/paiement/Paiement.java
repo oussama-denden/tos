@@ -1,5 +1,6 @@
 package com.nordnet.opale.domain.paiement;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,6 +12,7 @@ import org.hibernate.validator.NotNull;
 
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.enums.ModePaiement;
 
@@ -57,6 +59,9 @@ public class Paiement {
 	 * info paiement.
 	 */
 	private String infoPaiement;
+
+	@Embedded
+	private Auteur auteur;
 
 	/**
 	 * constructeur par defaut.
@@ -176,6 +181,23 @@ public class Paiement {
 	 */
 	public void setInfoPaiement(String infoPaiement) {
 		this.infoPaiement = infoPaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #auteur}.
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * 
+	 * @param auteur
+	 *            {@link #auteur}.
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**

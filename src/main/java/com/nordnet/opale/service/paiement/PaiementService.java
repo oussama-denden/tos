@@ -5,7 +5,6 @@ import java.util.List;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -65,13 +64,13 @@ public interface PaiementService {
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
-	 * @param modePaiement
-	 *            {@link ModePaiement}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
 	 * @return {@link Paiement}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement) throws OpaleException;
+	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException;
 
 	/**
 	 * tester si le paiement est possible avant de faire l'appel de la methode 'effectuerPaiement'.

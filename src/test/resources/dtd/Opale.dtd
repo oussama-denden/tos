@@ -89,9 +89,14 @@
     id CDATA #IMPLIED
     reference CDATA #IMPLIED
     mode CDATA #IMPLIED
-    timestamp CDATA #IMPLIED
+    timestampSignature CDATA #IMPLIED
     footprint CDATA #IMPLIED
     idSignature  CDATA #IMPLIED
+     code CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
 >
 
 <!ELEMENT paiement EMPTY>
@@ -102,5 +107,10 @@
     montant CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
+     code CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
 >
 

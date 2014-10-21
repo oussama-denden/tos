@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.paiement.Paiement;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.paiement.PaiementRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
@@ -76,14 +76,16 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement) throws OpaleException {
-		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, modePaiement);
+	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
+		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo.getModePaiement());
 		Paiement paiement = getIntentionPaiement(referenceCommande);
 		if (paiement != null) {
-			paiement.setModePaiement(modePaiement);
+			paiement.setModePaiement(paiementInfo.getModePaiement());
 		} else {
 			paiement = new Paiement();
-			paiement.setModePaiement(modePaiement);
+			paiement.setModePaiement(paiementInfo.getModePaiement());
+			Auteur auteur = new Auteur(paiementInfo.getAuteur());
+			paiement.setAuteur(auteur);
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
 		}
@@ -114,10 +116,13 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());
 			paiement.setInfoPaiement(paiementInfo.getInfoPaiement());
+			paiement.setAuteur(new Auteur(paiementInfo.getAuteur()));
 			paiementRepository.save(paiement);
 			return null;
 		} else {
 			paiement = new Paiement(paiementInfo);
+			Auteur auteur = new Auteur(paiementInfo.getAuteur());
+			paiement.setAuteur(auteur);
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
 			paiementRepository.save(paiement);

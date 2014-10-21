@@ -51,6 +51,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void save(Commande commande) {
 		commandeRepository.save(commande);
 	}
@@ -58,6 +59,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CommandeInfo getCommande(String refCommande) throws OpaleException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -68,6 +70,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Commande getCommandeByReferenceDraft(String referenceDraft) {
 		return commandeRepository.findByReferenceDraft(referenceDraft);
 	}
@@ -75,17 +78,19 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		Double montantPaye = paiementService.montantPaye(refCommande);
 		CommandeValidator.isCommandePaye(refCommande, commande, montantPaye);
-		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo.getModePaiement());
+		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
 			throws OpaleException {
@@ -99,6 +104,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
@@ -114,6 +120,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<CommandeInfo> find(CriteresCommande criteresCommande) {
 
 		String dateStart = criteresCommande.getDateStart();
@@ -124,9 +131,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
-				.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
+		commandes =
+				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
+						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {

@@ -51,8 +51,13 @@ CREATE TABLE `signature` (
   `reference` varchar(255) NOT NULL,
   `footprint` longtext,
   `idSignature` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
+  `timestampSignature` bigint(20) DEFAULT NULL,
   `mode` varchar(255) DEFAULT NULL,
+   `canal` varchar(255) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `qui` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -243,6 +248,11 @@ CREATE TABLE `paiement` (
   `montant` double DEFAULT NULL,
   `reference` varchar(255) NOT NULL,
   `referenceCommande` varchar(255) DEFAULT NULL,
+   `canal` varchar(255) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `qui` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
