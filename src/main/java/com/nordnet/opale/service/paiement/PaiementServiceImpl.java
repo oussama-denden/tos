@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.paiement.PaiementRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
@@ -59,8 +60,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Double montantPaye(String referenceCommande) {
-		Double montantTotal = paiementRepository.getMontantPayePourCommande(referenceCommande);
+	public Double montantComptantPaye(String referenceCommande) {
+		Double montantTotal = paiementRepository.getMontantComptantPayePourCommande(referenceCommande);
 		return montantTotal == null ? 0d : montantTotal;
 	}
 
@@ -83,6 +84,7 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setModePaiement(modePaiement);
 		} else {
 			paiement = new Paiement();
+			paiement.setTypePaiement(TypePaiement.COMPTANT);
 			paiement.setModePaiement(modePaiement);
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
@@ -105,8 +107,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo)
-			throws OpaleException {
+	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
+			TypePaiement typePaiement) throws OpaleException {
 		Paiement paiement =
 				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
 		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
@@ -120,6 +122,7 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement = new Paiement(paiementInfo);
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
+			paiement.setTypePaiement(typePaiement);
 			paiementRepository.save(paiement);
 			return paiement;
 		}

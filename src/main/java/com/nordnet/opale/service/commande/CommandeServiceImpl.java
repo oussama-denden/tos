@@ -14,6 +14,7 @@ import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
@@ -52,6 +53,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void save(Commande commande) {
 		commandeRepository.save(commande);
 	}
@@ -59,6 +61,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CommandeInfo getCommande(String refCommande) throws OpaleException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -69,36 +72,53 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Commande getCommandeByReferenceDraft(String referenceDraft) {
 		return commandeRepository.findByReferenceDraft(referenceDraft);
-	}
-
-	@Transactional(rollbackFor = Exception.class)
-	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
-		Commande commande = commandeRepository.findByReference(refCommande);
-		Double montantPaye = paiementService.montantPaye(refCommande);
-		CommandeValidator.isCommandePaye(refCommande, commande, montantPaye);
-		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo.getModePaiement());
-	}
-
-	@Transactional(rollbackFor = Exception.class)
-	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
-			throws OpaleException {
-		Commande commande = commandeRepository.findByReference(referenceCommande);
-		CommandeValidator.isExiste(referenceCommande, commande);
-		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo);
-	}
-
-	@Transactional(rollbackFor = Exception.class)
-	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
-		Commande commande = commandeRepository.findByReference(referenceCommande);
-		CommandeValidator.isExiste(referenceCommande, commande);
-		return paiementService.effectuerPaiement(null, referenceCommande, paiementInfo);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
+		Commande commande = commandeRepository.findByReference(refCommande);
+		Double montantComptantPaye = paiementService.montantComptantPaye(refCommande);
+		Double coutCommandeComptant = calculerCoutComptant(refCommande);
+		CommandeValidator.validerCreerIntentionPaiement(refCommande, commande, coutCommandeComptant,
+				montantComptantPaye);
+		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo.getModePaiement());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
+			throws OpaleException {
+		Commande commande = commandeRepository.findByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Paiement paiementDirect(String referenceCommande, PaiementInfo paiementInfo, TypePaiement typePaiement)
+			throws OpaleException {
+		Commande commande = commandeRepository.findByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public List<CommandeInfo> find(CriteresCommande criteresCommande) {
 
 		String dateStart = criteresCommande.getDateStart();
@@ -117,24 +137,28 @@ public class CommandeServiceImpl implements CommandeService {
 
 				// filtrer par commande signe ou non
 				if (signe != null) {
-					commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId)).and(
-							CommandeSpecifications.creationDateBetween(dateStart, dateEnd)).and(
-							CommandeSpecifications.isSigne(signe.booleanValue())));
+					commandes =
+							commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId)).and(
+									CommandeSpecifications.creationDateBetween(dateStart, dateEnd)).and(
+									CommandeSpecifications.isSigne(signe.booleanValue())));
 				} else {
-					commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId)).and(
-							CommandeSpecifications.creationDateBetween(dateStart, dateEnd)));
+					commandes =
+							commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId)).and(
+									CommandeSpecifications.creationDateBetween(dateStart, dateEnd)));
 				}
 
 			} else {
 
 				// filtrer par commande signe ou non
 				if (signe != null) {
-					commandes = commandeRepository.findAll(where(
-							CommandeSpecifications.clientIdEqual(criteresCommande.getClientId())).and(
-							CommandeSpecifications.isSigne(signe.booleanValue())));
+					commandes =
+							commandeRepository.findAll(where(
+									CommandeSpecifications.clientIdEqual(criteresCommande.getClientId())).and(
+									CommandeSpecifications.isSigne(signe.booleanValue())));
 				} else {
-					commandes = commandeRepository.findAll(CommandeSpecifications.clientIdEqual(criteresCommande
-							.getClientId()));
+					commandes =
+							commandeRepository.findAll(CommandeSpecifications.clientIdEqual(criteresCommande
+									.getClientId()));
 				}
 			}
 		} else {
@@ -145,12 +169,13 @@ public class CommandeServiceImpl implements CommandeService {
 
 				// filtrer par commande signe ou non
 				if (signe != null) {
-					commandes = commandeRepository.findAll(where(
-							CommandeSpecifications.creationDateBetween(dateStart, dateEnd)).and(
-							CommandeSpecifications.isSigne(signe.booleanValue())));
+					commandes =
+							commandeRepository.findAll(where(
+									CommandeSpecifications.creationDateBetween(dateStart, dateEnd)).and(
+									CommandeSpecifications.isSigne(signe.booleanValue())));
 				} else {
-					commandes = commandeRepository.findAll(CommandeSpecifications.creationDateBetween(dateStart,
-							dateEnd));
+					commandes =
+							commandeRepository.findAll(CommandeSpecifications.creationDateBetween(dateStart, dateEnd));
 				}
 			} else {
 				// pas de filtre sur la date de creation
@@ -174,6 +199,26 @@ public class CommandeServiceImpl implements CommandeService {
 		return commandeInfos;
 	}
 
+	@Override
+	public Commande getCommandeByReference(String reference) {
+		return commandeRepository.findByReference(reference);
+	}
+
+	/**
+	 * calculer le cout comptant d'une {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return cout total de la {@link Commande}.
+	 */
+	private Double calculerCoutComptant(String referenceCommande) {
+		Double coutFrais = commandeRepository.calculerCoutFraisCreation(referenceCommande);
+		Double prixComptant = commandeRepository.calculerCoutPrixComptant(referenceCommande);
+		Double coutComptant = (coutFrais != null ? coutFrais : 0d) + (prixComptant != null ? prixComptant : 0d);
+
+		return coutComptant;
+	}
+
 	/**
 	 * Verififier que dateStart et dateEnd ne sont pas Null.
 	 * 
@@ -185,11 +230,6 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	private boolean dateStartAndDateEndNotNull(String dateStart, String dateEnd) {
 		return !Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd);
-	}
-
-	@Override
-	public Commande getCommandeByReference(String reference) {
-		return commandeRepository.findByReference(reference);
 	}
 
 }

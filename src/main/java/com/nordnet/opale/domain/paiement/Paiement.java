@@ -13,6 +13,7 @@ import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.enums.TypePaiement;
 
 /**
  * Represente un paiement d'une {@link Commande}.
@@ -59,6 +60,12 @@ public class Paiement {
 	private String infoPaiement;
 
 	/**
+	 * {@link TypePaiement}.
+	 */
+	@Enumerated(EnumType.STRING)
+	private TypePaiement typePaiement;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Paiement() {
@@ -74,6 +81,13 @@ public class Paiement {
 		this.modePaiement = paiementInfo.getModePaiement();
 		this.montant = paiementInfo.getMontant();
 		this.infoPaiement = paiementInfo.getInfoPaiement();
+	}
+
+	@Override
+	public String toString() {
+		return "Paiement [id=" + id + ", reference=" + reference + ", referenceCommande=" + referenceCommande
+				+ ", modePaiement=" + modePaiement + ", montant=" + montant + ", infoPaiement=" + infoPaiement
+				+ ", typePaiement=" + typePaiement + "]";
 	}
 
 	/**
@@ -176,6 +190,23 @@ public class Paiement {
 	 */
 	public void setInfoPaiement(String infoPaiement) {
 		this.infoPaiement = infoPaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link TypePaiement}.
+	 */
+	public TypePaiement getTypePaiement() {
+		return typePaiement;
+	}
+
+	/**
+	 * 
+	 * @param typePaiement
+	 *            {@link TypePaiement}.
+	 */
+	public void setTypePaiement(TypePaiement typePaiement) {
+		this.typePaiement = typePaiement;
 	}
 
 	/**

@@ -1,4 +1,4 @@
-<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, signature*,paiement*)>
+<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, commandeLigne*, commandeLigneDetail*, tarif*, frais*,signature*,paiement*)>
 
 <!ELEMENT draft EMPTY>
 <!ATTLIST draft
@@ -82,6 +82,63 @@
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
     referenceSignature CDATA #IMPLIED
+>
+
+<!ELEMENT commandeLigne EMPTY>
+<!ATTLIST commandeLigne
+    id CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
+    code CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    gamme CDATA #IMPLIED
+    label CDATA #IMPLIED
+    modeFacturation CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    referenceOffre CDATA #IMPLIED
+    secteur CDATA #IMPLIED
+    commandeId CDATA #IMPLIED
+    famille CDATA #IMPLIED
+>
+
+<!ELEMENT commandeLigneDetail EMPTY>
+<!ATTLIST commandeLigneDetail
+    id CDATA #IMPLIED
+    configurationJson CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    referenceProduit CDATA #IMPLIED
+    label CDATA #IMPLIED
+    typeProduit CDATA #IMPLIED
+    dependDe CDATA #IMPLIED
+    commandeLigneId CDATA #IMPLIED
+>
+
+<!ELEMENT tarif EMPTY>
+<!ATTLIST tarif
+     id CDATA #IMPLIED
+    duree CDATA #IMPLIED
+    engagement CDATA #IMPLIED
+    frequence CDATA #IMPLIED
+    prix CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    typeTVA CDATA #IMPLIED
+    commandeLigneId CDATA #IMPLIED
+    commandeLigneDetailId CDATA #IMPLIED
+>
+
+<!ELEMENT frais EMPTY>
+<!ATTLIST frais
+     id CDATA #IMPLIED
+    label CDATA #IMPLIED
+    montant CDATA #IMPLIED
+    politique CDATA #IMPLIED
+    politiqueIndex CDATA #IMPLIED
+    refrence CDATA #IMPLIED
+    typeTVA CDATA #IMPLIED
+    typeFrais CDATA #IMPLIED
+    tarifId CDATA #IMPLIED
 >
 
 <!ELEMENT signature EMPTY>
