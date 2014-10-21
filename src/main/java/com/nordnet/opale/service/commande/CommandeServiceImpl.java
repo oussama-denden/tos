@@ -101,8 +101,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
-		Double coutCommandeComptant = calculerCoutComptant(referenceCommande);
-		commande.setPaye(paiementService.montantComptantPaye(referenceCommande).equals(coutCommandeComptant));
+		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
 	}
 
@@ -116,8 +115,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
-		Double coutCommandeComptant = calculerCoutComptant(referenceCommande);
-		commande.setPaye(paiementService.montantComptantPaye(referenceCommande).equals(coutCommandeComptant));
+		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
 		return paiement;
 
@@ -166,6 +164,22 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public Commande getCommandeByReference(String reference) {
 		return commandeRepository.findByReference(reference);
+	}
+
+	/**
+	 * verifie si une {@link Commande} est totalement paye ou pas.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return true si la commande est totalement paye.
+	 */
+	private boolean isPayeTotalement(String referenceCommande) {
+		Double coutCommandeComptant = calculerCoutComptant(referenceCommande);
+		Double montantComptantPaye = paiementService.montantComptantPaye(referenceCommande);
+		if (coutCommandeComptant <= montantComptantPaye) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
