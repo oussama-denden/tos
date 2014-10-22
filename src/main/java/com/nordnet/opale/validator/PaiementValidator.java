@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
@@ -145,6 +146,22 @@ public class PaiementValidator {
 
 		if (paiementInfo.getIdPaiement() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.idpaiement"), "0.1.4");
+		}
+
+	}
+
+	/**
+	 * Verifier si le draft est deja annule.
+	 * 
+	 * @param paiement
+	 *            {@link Paiement}
+	 * @throws OpaleException
+	 *             the opale exception {@link Draft} {@link OpaleException}
+	 */
+	public static void isAnnuler(Paiement paiement) throws OpaleException {
+
+		if (paiement.getDateAnnulation() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.5", paiement.getDateAnnulation()), "3.1.5");
 		}
 
 	}

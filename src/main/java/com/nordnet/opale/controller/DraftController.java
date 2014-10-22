@@ -68,7 +68,7 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public Draft getDraftByReference(@PathVariable String reference) throws Exception {
+	public Draft getDraftByReference(@PathVariable String reference) throws OpaleException {
 		LOGGER.info(":::ws-rec:::getDraftByReference");
 		return draftService.getDraftByReference(reference);
 	}
@@ -99,7 +99,7 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/draft", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public DraftReturn creerDraft(@RequestBody DraftInfo draftInfo) throws Exception {
+	public DraftReturn creerDraft(@RequestBody DraftInfo draftInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::creerDraft");
 		return draftService.creerDraft(draftInfo);
 
@@ -118,7 +118,7 @@ public class DraftController {
 	@RequestMapping(value = "/draft/{referenceDraft:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public void ajouterReferenceExterne(@PathVariable String referenceDraft,
-			@RequestBody ReferenceExterneInfo referenceExterneInfo) throws Exception {
+			@RequestBody ReferenceExterneInfo referenceExterneInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::ajouterReferenceExterne");
 		draftService.ajouterReferenceExterne(referenceDraft, referenceExterneInfo);
 	}
@@ -183,7 +183,7 @@ public class DraftController {
 	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerLigneDraft(@PathVariable String refDraft, @PathVariable String refLigne,
-			@RequestBody DeleteInfo deleteInfo) throws Exception {
+			@RequestBody DeleteInfo deleteInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerDraft");
 		draftService.supprimerLigneDraft(refDraft, refLigne, deleteInfo);
 	}

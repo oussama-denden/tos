@@ -225,6 +225,16 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException {
+
+		Commande commande = getCommandeByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		paiementService.supprimer(refCommande, refPaiement);
+	}
+
+	/**
 	 * mapping paiement domain to paiement info.
 	 * 
 	 * @param paiementComptants

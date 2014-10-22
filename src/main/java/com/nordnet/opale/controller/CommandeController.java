@@ -326,6 +326,24 @@ public class CommandeController {
 	}
 
 	/**
+	 * supprimer draft.
+	 * 
+	 * @param refCommande
+	 *            reference commande
+	 * @param refPaiement
+	 *            reference paiement
+	 * @throws Exception
+	 *             exception {@link Exception}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::supprimerPaiement");
+		commandeService.supprimerPaiement(refCommande, refPaiement);
+	}
+
+	/**
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req
