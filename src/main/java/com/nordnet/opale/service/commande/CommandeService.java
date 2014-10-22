@@ -5,6 +5,7 @@ import java.util.List;
 import javax.activation.CommandInfo;
 
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
@@ -124,5 +125,17 @@ public interface CommandeService {
 	 *             {@link OpaleException}.
 	 */
 	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException;
+
+	/**
+	 * recuperer la liste de paiement lies a une commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * 
+	 * @return {@link CommandePaiementInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException;
 
 }
