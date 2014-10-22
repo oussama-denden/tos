@@ -184,7 +184,7 @@ public class DraftServiceImpl implements DraftService {
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
-			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
+			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			draft.addLigne(draftLigne);
 
 			draftRepository.save(draft);
@@ -244,7 +244,7 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftValidator.isAnnuler(draft);
-		draft.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour().toDate());
+		draft.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());
 
 		draftRepository.save(draft);
 
@@ -365,9 +365,9 @@ public class DraftServiceImpl implements DraftService {
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
 			commande.setReference(keygenService.getNextKey(Commande.class));
-			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour().toDate());
+			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
-			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour().toDate());
+			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
 			return commande;
 		} else {

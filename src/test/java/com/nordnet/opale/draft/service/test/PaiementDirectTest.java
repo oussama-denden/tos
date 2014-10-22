@@ -1,6 +1,7 @@
 package com.nordnet.opale.draft.service.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -61,11 +62,12 @@ public class PaiementDirectTest extends GlobalTestCase {
 		try {
 			PaiementInfo paiementInfo =
 					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
-			List<Paiement> paiements = paiementService.getPaiementByReferenceCommande("00000001");
+			List<Paiement> paiements = paiementService.getPaiementByReferenceCommande("00000005");
 			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(paiements.size()));
-			commandeService.paiementDirect("00000001", paiementInfo, TypePaiement.COMPTANT);
-			paiements = paiementService.getPaiementByReferenceCommande("00000001");
+			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
+			paiements = paiementService.getPaiementByReferenceCommande("00000005");
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(paiements.size()));
+			assertNotNull(paiements.get(Constants.ZERO).getTimestampPaiement());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -101,7 +103,7 @@ public class PaiementDirectTest extends GlobalTestCase {
 			PaiementInfo paiementInfo =
 					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
 			paiementInfo.setModePaiement(null);
-			commandeService.paiementDirect("00000001", paiementInfo, TypePaiement.COMPTANT);
+			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("0.1.1", e.getErrorCode());
@@ -121,7 +123,7 @@ public class PaiementDirectTest extends GlobalTestCase {
 			PaiementInfo paiementInfo =
 					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
 			paiementInfo.setMontant(null);
-			commandeService.paiementDirect("00000001", paiementInfo, TypePaiement.COMPTANT);
+			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("0.1.4", e.getErrorCode());
@@ -141,7 +143,7 @@ public class PaiementDirectTest extends GlobalTestCase {
 			PaiementInfo paiementInfo =
 					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
 			paiementInfo.setInfoPaiement(null);
-			commandeService.paiementDirect("00000001", paiementInfo, TypePaiement.COMPTANT);
+			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("0.1.4", e.getErrorCode());

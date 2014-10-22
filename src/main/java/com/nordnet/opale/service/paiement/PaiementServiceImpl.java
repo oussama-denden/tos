@@ -1,17 +1,19 @@
 package com.nordnet.opale.service.paiement;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.paiement.Paiement;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.paiement.PaiementRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
+import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.PaiementValidator;
 
 /**
@@ -77,18 +79,23 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement ajouterIntentionPaiement(String referenceCommande, ModePaiement modePaiement) throws OpaleException {
-		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, modePaiement);
+	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
+		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo);
 		Paiement paiement = getIntentionPaiement(referenceCommande);
 		if (paiement != null) {
-			paiement.setModePaiement(modePaiement);
+			paiement.setModePaiement(paiementInfo.getModePaiement());
 		} else {
 			paiement = new Paiement();
+			Auteur auteur = new Auteur(paiementInfo.getAuteur());
+			paiement.setAuteur(auteur);
 			paiement.setTypePaiement(TypePaiement.COMPTANT);
-			paiement.setModePaiement(modePaiement);
+			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
 		}
+		Date dateIntention = paiementInfo.getTimestampIntention();
+		paiement.setTimestampIntention(dateIntention != null ? dateIntention : PropertiesUtil.getInstance()
+				.getDateDuJour());
 		paiementRepository.save(paiement);
 		return paiement;
 	}
@@ -114,22 +121,43 @@ public class PaiementServiceImpl implements PaiementService {
 		if (typePaiement.equals(TypePaiement.COMPTANT)) {
 			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		} else {
-			PaiementValidator.validerPaiementRecurrent(referencePaiement, referenceCommande, paiement, paiementInfo);
+			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommande(referenceCommande);
+			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
 		}
 		if (referencePaiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());
 			paiement.setInfoPaiement(paiementInfo.getInfoPaiement());
-			paiementRepository.save(paiement);
-			return null;
+			paiement.setAuteur(new Auteur(paiementInfo.getAuteur()));
 		} else {
 			paiement = new Paiement(paiementInfo);
+			Auteur auteur = new Auteur(paiementInfo.getAuteur());
+			paiement.setAuteur(auteur);
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
 			paiement.setTypePaiement(typePaiement);
-			paiementRepository.save(paiement);
-			return paiement;
 		}
+		Date datePaiement = paiementInfo.getTimestampPaiement();
+		paiement.setTimestampPaiement(datePaiement != null ? datePaiement : PropertiesUtil.getInstance()
+				.getDateDuJour());
+		paiementRepository.save(paiement);
+		return paiement;
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Paiement> getListePaiementComptant(String referenceCommande) {
+		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Paiement> getListePaiementRecurrent(String referenceCommande) {
+		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT);
 	}
 }

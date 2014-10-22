@@ -1,6 +1,7 @@
 package com.nordnet.opale.domain.signature;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.business.SignatureInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.enums.ModeSignature;
 import com.nordnet.opale.enums.deserializer.ModeSignatureDeserialiser;
 
@@ -56,7 +58,13 @@ public class Signature {
 	/**
 	 * date de signature.
 	 */
-	private Long timestamp;
+	private Long timestampSignature;
+
+	/**
+	 * l auteur du draft.
+	 */
+	@Embedded
+	private Auteur auteur;
 
 	/**
 	 * contrcteur par defaut.
@@ -167,18 +175,35 @@ public class Signature {
 	 * 
 	 * @return {@link #timestamp}
 	 */
-	public Long getTimestamp() {
-		return timestamp;
+	public Long getTimestampSignature() {
+		return timestampSignature;
 	}
 
 	/**
 	 * set the timestamp.
 	 * 
-	 * @param timestamp
-	 *            set the new {@link #timestamp}
+	 * @param timestampSignature
+	 *            set the new {@link #timestampSignature}
 	 */
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
+	public void setTimestampSignature(Long timestampSignature) {
+		this.timestampSignature = timestampSignature;
+	}
+
+	/**
+	 * 
+	 * @return {@link #auteur}.
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * 
+	 * @param auteur
+	 *            {@link #auteur}.
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**
@@ -187,7 +212,7 @@ public class Signature {
 	 * @return {@link Boolean}
 	 */
 	public Boolean isSigne() {
-		return (mode != null && idSignature != null && timestamp != null);
+		return (mode != null && idSignature != null && timestampSignature != null);
 	}
 
 	/**
@@ -200,7 +225,7 @@ public class Signature {
 		signatureInfo.setMode(mode);
 		signatureInfo.setIdSignature(idSignature);
 		signatureInfo.setFootprint(footprint);
-		signatureInfo.setTimestamp(timestamp);
+		signatureInfo.setTimestamp(timestampSignature);
 
 		return signatureInfo;
 	}

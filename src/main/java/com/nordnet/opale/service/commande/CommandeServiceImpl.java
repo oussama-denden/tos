@@ -88,7 +88,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Double coutCommandeComptant = calculerCoutComptant(refCommande);
 		CommandeValidator.validerCreerIntentionPaiement(refCommande, commande, coutCommandeComptant,
 				montantComptantPaye);
-		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo.getModePaiement());
+		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
 
 	/**
@@ -166,6 +166,14 @@ public class CommandeServiceImpl implements CommandeService {
 		return commandeRepository.findByReference(reference);
 	}
 
+	@Override
+	@Transactional
+	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.getListePaiementComptant(referenceCommande);
+	}
+
 	/**
 	 * verifie si une {@link Commande} est totalement paye ou pas.
 	 * 
@@ -208,6 +216,16 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	private boolean dateStartAndDateEndNotNull(String dateStart, String dateEnd) {
 		return !Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Paiement> getListePaiementRecurrent(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.getListePaiementRecurrent(referenceCommande);
 	}
 
 }

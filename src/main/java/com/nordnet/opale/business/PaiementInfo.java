@@ -1,5 +1,7 @@
 package com.nordnet.opale.business;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
@@ -11,6 +13,11 @@ import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
  * 
  */
 public class PaiementInfo {
+
+	/**
+	 * l'auteur.
+	 */
+	private Auteur auteur;
 
 	/**
 	 * {@link ModePaiement}.
@@ -34,9 +41,62 @@ public class PaiementInfo {
 	private String idPaiement;
 
 	/**
+	 * date d'intention de paiement.
+	 */
+	private Date timestampIntention;
+
+	/**
+	 * date de paiement.
+	 */
+	private Date timestampPaiement;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public PaiementInfo() {
+	}
+
+	/**
+	 * constructeur parametre.
+	 * 
+	 * @param modePaiement
+	 *            {@link #modePaiement}
+	 * @param montant
+	 *            {@link #montant}
+	 * @param infoPaiement
+	 *            {@link #infoPaiement}
+	 * @param timestampIntention
+	 *            {@link #timestampIntention}
+	 * @param timestampPaiement
+	 *            {@link #timestampPaiement}
+	 */
+	public PaiementInfo(ModePaiement modePaiement, Double montant, String infoPaiement, Date timestampIntention,
+			Date timestampPaiement) {
+		super();
+		this.modePaiement = modePaiement;
+		this.montant = montant;
+		this.infoPaiement = infoPaiement;
+		this.timestampIntention = timestampIntention;
+		this.timestampPaiement = timestampPaiement;
+	}
+
+	/**
+	 * get the auteur.
+	 * 
+	 * @return {@link AuteurInfo}
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * set the auteur.
+	 * 
+	 * @param auteur
+	 *            the new {@link AuteurInfo}
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**
@@ -106,4 +166,39 @@ public class PaiementInfo {
 	public void setIdPaiement(String idPaiement) {
 		this.idPaiement = idPaiement;
 	}
+
+	/**
+	 * 
+	 * @return {@link #timestampIntention}.
+	 */
+	public Date getTimestampIntention() {
+		return timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @param timestampIntention
+	 *            {@link #timestampIntention}.
+	 */
+	public void setTimestampIntention(Date timestampIntention) {
+		this.timestampIntention = timestampIntention;
+	}
+
+	/**
+	 * 
+	 * @return {@link #timestampPaiement}.
+	 */
+	public Date getTimestampPaiement() {
+		return timestampPaiement;
+	}
+
+	/**
+	 * 
+	 * @param timestampPaiement
+	 *            {@link #timestampPaiement}.
+	 */
+	public void setTimestampPaiement(Date timestampPaiement) {
+		this.timestampPaiement = timestampPaiement;
+	}
+
 }

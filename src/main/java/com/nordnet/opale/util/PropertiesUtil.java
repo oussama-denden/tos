@@ -68,13 +68,13 @@ public class PropertiesUtil {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public LocalDateTime getDateDuJour() throws OpaleException {
+	public Date getDateDuJour() throws OpaleException {
 		String dateDuJourString =
 				dynamicProperties.getMessage(Constants.DATE_DU_JOUR_PROPERTY, null,
 						Constants.DEFAULT_DATE_FORMAT.format(new Date()), null);
 		if (Utils.isStringNullOrEmpty(dateDuJourString) || dateDuJourString.equals(Constants.NOW)
 				|| System.getProperty(Constants.ENV_PROPERTY).equals(Constants.PROD_ENV)) {
-			return new LocalDateTime();
+			return new LocalDateTime().toDate();
 		} else {
 			try {
 				SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
@@ -82,7 +82,7 @@ public class PropertiesUtil {
 				LocalDateTime date = new LocalDateTime(dateDuJour);
 				LocalTime time = new LocalTime();
 				return date.withTime(time.hourOfDay().get(), time.minuteOfHour().get(), time.secondOfMinute().get(),
-						time.millisOfSecond().get());
+						time.millisOfSecond().get()).toDate();
 
 			} catch (Exception e) {
 				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("0.1"), "0.1");

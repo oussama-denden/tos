@@ -12,6 +12,6 @@
 
 <commande id="4"  reference="REF-COMMANDE-4" timestamp="1411654933" referenceSignature="REF-SIGNATURE-2"/>
 
-<signature id="1"  reference="REF-SIGNATURE-1" mode="OPEN_TRUST"/>
-<signature id="2"  reference="REF-SIGNATURE-2" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestamp="1411654933" footprint="e2680542f77606f42f1cb06d6"/>
+<signature id="1"  reference="REF-SIGNATURE-1" mode="OPEN_TRUST" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="1411654933" code="part_123456"/>
+<signature id="2"  reference="REF-SIGNATURE-2" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestampSignature="1411654933" footprint="e2680542f77606f42f1cb06d6" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="1411654933" code="part_123456"/>
 </dataset>

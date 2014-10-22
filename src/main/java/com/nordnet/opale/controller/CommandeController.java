@@ -1,5 +1,6 @@
 package com.nordnet.opale.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementRecurrentInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
@@ -115,7 +117,7 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}/payer", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public void payerIntentionPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
 			@RequestBody PaiementInfo paiementInfo) throws OpaleException {
@@ -144,6 +146,38 @@ public class CommandeController {
 		JSONObject response = new JSONObject();
 		response.put("reference", paiement.getReference());
 		return response.toString();
+	}
+
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande) throws OpaleException,
+			JSONException {
+		return commandeService.getListePaiementComptant(refCommande);
+	}
+
+	/**
+	 * retourner la liste des paiement recurrent d'une commande.
+	 * 
+	 * @param refCommande
+	 *            reference commande
+	 * @return la liste liste paiement recurrent
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             the jSON exception {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<PaiementRecurrentInfo> getListePaiementRecurrent(@PathVariable String refCommande)
+			throws OpaleException, JSONException {
+		List<Paiement> paiements = commandeService.getListePaiementRecurrent(refCommande);
+		List<PaiementRecurrentInfo> recurrentInfos = new ArrayList<>();
+		for (Paiement paiement : paiements) {
+
+			recurrentInfos.add(new PaiementRecurrentInfo(paiement));
+		}
+
+		return recurrentInfos;
 	}
 
 	/**
