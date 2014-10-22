@@ -64,8 +64,6 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.1", "Paiement.modePaiement"), "0.1.1");
 		}
 
-		validerDate(paiementInfo.getTimestampIntention(), "Intention");
-
 	}
 
 	/**
@@ -105,7 +103,6 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.infoPaiement"), "0.1.4");
 		}
 
-		validerDate(paiementInfo.getTimestampPaiement(), "Paiement");
 	}
 
 	/**
