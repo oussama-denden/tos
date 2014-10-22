@@ -250,8 +250,7 @@ public class DraftValidator {
 	}
 
 	/**
-	 * verifier si la transformation du {@link Draft} en {@link Commande} est
-	 * possible ou non.
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
 	 * 
 	 * 
 	 * @param draft
@@ -287,4 +286,25 @@ public class DraftValidator {
 
 	}
 
+	/**
+	 * Verfier si le draft a une reference externe.
+	 * 
+	 * @param referenceDraft
+	 *            reference du draft.
+	 * @param draft
+	 *            {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkReferenceExterne(Draft draft, String referenceDraft) throws OpaleException {
+
+		if (draft == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.1", referenceDraft), "1.1.1");
+		}
+		if (!Utils.isStringNullOrEmpty(draft.getReferenceExterne())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.20", referenceDraft,
+					draft.getReferenceExterne()), "1.1.20");
+		}
+
+	}
 }

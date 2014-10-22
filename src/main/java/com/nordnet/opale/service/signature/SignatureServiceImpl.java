@@ -180,7 +180,9 @@ public class SignatureServiceImpl implements SignatureService {
 		signature.setIdSignature(signatureInfo.getIdSignature());
 		signature.setFootprint(signatureInfo.getFootprint());
 		signature.setTimestampSignature(signatureInfo.getTimestamp());
-		signature.setAuteur(new Auteur(signatureInfo.getAuteur()));
+		if (signatureInfo.getAuteur() != null) {
+			signature.setAuteur(new Auteur(signatureInfo.getAuteur()));
+		}
 		signatureRepository.save(signature);
 
 		return signature.getReference();
@@ -210,14 +212,14 @@ public class SignatureServiceImpl implements SignatureService {
 		;
 		if (ajoutSignatureInfo != null) {
 			signature.setMode(ajoutSignatureInfo.getMode());
-			auteur = new Auteur(ajoutSignatureInfo.getAuteur());
+			auteur = ajoutSignatureInfo.getAuteur() != null ? new Auteur(ajoutSignatureInfo.getAuteur()) : null;
 		} else if (signatureInfo != null) {
 			SignatureValidator.validerSignature(signatureInfo);
 			signature.setMode(signatureInfo.getMode());
 			signature.setIdSignature(signatureInfo.getIdSignature());
 			signature.setFootprint(signatureInfo.getFootprint());
 			signature.setTimestampSignature(signatureInfo.getTimestamp());
-			auteur = new Auteur(signatureInfo.getAuteur());
+			auteur = signatureInfo.getAuteur() != null ? new Auteur(signatureInfo.getAuteur()) : null;
 		}
 
 		signature.setAuteur(auteur);
