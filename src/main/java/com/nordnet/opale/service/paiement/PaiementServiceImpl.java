@@ -116,9 +116,14 @@ public class PaiementServiceImpl implements PaiementService {
 	@Override
 	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
 			TypePaiement typePaiement) throws OpaleException {
-		Paiement paiement =
-				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
-		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
+		Paiement paiement = paiementRepository
+				.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
+		if (typePaiement.equals(TypePaiement.COMPTANT)) {
+			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
+		} else {
+			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommande(referenceCommande);
+			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
+		}
 		if (referencePaiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());
@@ -145,7 +150,7 @@ public class PaiementServiceImpl implements PaiementService {
 	 */
 	@Override
 	public List<Paiement> getListePaiementComptant(String referenceCommande) {
-		return paiementRepository.getListePaiementComptant(referenceCommande);
+		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
 	}
 
 	/**
@@ -153,6 +158,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 */
 	@Override
 	public Paiement getPaiementRecurrent(String referenceCommande) {
-		return paiementRepository.getListePaiementRecurrent(referenceCommande);
+		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT)
+				.get(0);
 	}
+
 }

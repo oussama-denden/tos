@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 
 /**
  * Outils de persistence pour l'entite {@link Paiement}.
@@ -37,7 +38,8 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	public Paiement findByReference(String reference);
 
 	/**
-	 * chercher un paiement avec sa reference et la reference de la commande associe.
+	 * chercher un paiement avec sa reference et la reference de la commande
+	 * associe.
 	 * 
 	 * @param reference
 	 *            reference.
@@ -68,23 +70,14 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	public Double getMontantComptantPayePourCommande(@Param("referenceCommande") String referenceCommande);
 
 	/**
-	 * retourner la liste des paiement comptant d'une commande.
+	 * retourner la liste des paiement d'une commande selon le type paiement.
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
-	 * @return liste {@link Paiement}.
+	 * @param typePaiement
+	 *            {@link TypePaiement}
+	 * @return Liste de {@link Paiement}
 	 */
-	@Query(value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'COMPTANT'")
-	public List<Paiement> getListePaiementComptant(@Param("referenceCommande") String referenceCommande);
-
-	/**
-	 * retourner la liste des paiement recurrent d'une commande.
-	 * 
-	 * @param referenceCommande
-	 *            reference commande.
-	 * @return liste {@link Paiement}.
-	 */
-	@Query(value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'RECURRENT'")
-	public Paiement getListePaiementRecurrent(@Param("referenceCommande") String referenceCommande);
+	public List<Paiement> findByReferenceCommandeAndTypePaiement(String referenceCommande, TypePaiement typePaiement);
 
 }

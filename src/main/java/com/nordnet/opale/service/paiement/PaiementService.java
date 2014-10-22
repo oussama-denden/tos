@@ -9,7 +9,8 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
- * La service PaiementService va contenir tous les operations sur les {@link Paiement}.
+ * La service PaiementService va contenir tous les operations sur les
+ * {@link Paiement}.
  * 
  * @author akram-moncer
  * 
@@ -74,7 +75,8 @@ public interface PaiementService {
 	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException;
 
 	/**
-	 * tester si le paiement est possible avant de faire l'appel de la methode 'effectuerPaiement'.
+	 * tester si le paiement est possible avant de faire l'appel de la methode
+	 * 'effectuerPaiement'.
 	 * 
 	 * @param referencePaiement
 	 *            reference {@link Paiement}.
@@ -89,7 +91,8 @@ public interface PaiementService {
 			throws OpaleException;
 
 	/**
-	 * effectuer un paiement. Si la reference de paiement est null, un {@link Paiement} sera cree.
+	 * effectuer un paiement. Si la reference de paiement est null, un
+	 * {@link Paiement} sera cree.
 	 * 
 	 * @param referencePaiement
 	 *            reference paiement.

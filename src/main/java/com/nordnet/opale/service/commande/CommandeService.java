@@ -81,8 +81,8 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -125,6 +125,17 @@ public interface CommandeService {
 	 *             {@link OpaleException}.
 	 */
 	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException;
+
+	/**
+	 * retourner la liste des paiement recurrent d'une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return liste des paiement comptant.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Paiement getPaiementRecurrent(String referenceCommande) throws OpaleException;
 
 	/**
 	 * recuperer la liste de paiement lies a une commande.

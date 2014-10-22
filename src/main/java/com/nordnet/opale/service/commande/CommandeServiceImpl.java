@@ -21,7 +21,6 @@ import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
-import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.validator.CommandeValidator;
 
 /**
@@ -136,10 +135,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes =
-				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
-						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
+		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
+				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+				.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {
@@ -208,22 +206,18 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
-	 * Verififier que dateStart et dateEnd ne sont pas Null.
-	 * 
-	 * @param dateStart
-	 *            date start
-	 * @param dateEnd
-	 *            date end
-	 * @return true, if successful
+	 * {@inheritDoc}
 	 */
-	private boolean dateStartAndDateEndNotNull(String dateStart, String dateEnd) {
-		return !Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd);
+	@Override
+	public Paiement getPaiementRecurrent(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.getPaiementRecurrent(referenceCommande);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException {
 		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande);
 		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande);

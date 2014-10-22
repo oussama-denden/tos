@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
-import com.nordnet.opale.enums.deserializer.TypePaiementDeserializer;
 
 /**
  * classe pour transferer les info de paiement.
@@ -46,10 +44,9 @@ public class PaiementInfo {
 	private String infoPaiement;
 
 	/**
-	 * {@link TypePaiement}.
+	 * id paiement.
 	 */
-	@JsonDeserialize(using = TypePaiementDeserializer.class)
-	private TypePaiement typePaiement;
+	private String idPaiement;
 
 	/**
 	 * date d'intention de paiement.
@@ -67,13 +64,26 @@ public class PaiementInfo {
 	public PaiementInfo() {
 	}
 
-	public PaiementInfo(ModePaiement modePaiement, Double montant, String infoPaiement, TypePaiement typePaiement,
-			Date timestampIntention, Date timestampPaiement) {
+	/**
+	 * constructeur parametre.
+	 * 
+	 * @param modePaiement
+	 *            {@link #modePaiement}
+	 * @param montant
+	 *            {@link #montant}
+	 * @param infoPaiement
+	 *            {@link #infoPaiement}
+	 * @param timestampIntention
+	 *            {@link #timestampIntention}
+	 * @param timestampPaiement
+	 *            {@link #timestampPaiement}
+	 */
+	public PaiementInfo(ModePaiement modePaiement, Double montant, String infoPaiement, Date timestampIntention,
+			Date timestampPaiement) {
 		super();
 		this.modePaiement = modePaiement;
 		this.montant = montant;
 		this.infoPaiement = infoPaiement;
-		this.typePaiement = typePaiement;
 		this.timestampIntention = timestampIntention;
 		this.timestampPaiement = timestampPaiement;
 	}
@@ -169,19 +179,19 @@ public class PaiementInfo {
 
 	/**
 	 * 
-	 * @return {@link #typePaiement}.
+	 * @return {@link #idPaiement}
 	 */
-	public TypePaiement getTypePaiement() {
-		return typePaiement;
+	public String getIdPaiement() {
+		return idPaiement;
 	}
 
 	/**
 	 * 
-	 * @param typePaiement
-	 *            {@link TypePaiement}.
+	 * @param idPaiement
+	 *            {@link #idPaiement}
 	 */
-	public void setTypePaiement(TypePaiement typePaiement) {
-		this.typePaiement = typePaiement;
+	public void setIdPaiement(String idPaiement) {
+		this.idPaiement = idPaiement;
 	}
 
 	/**

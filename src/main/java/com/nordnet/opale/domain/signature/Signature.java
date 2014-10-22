@@ -182,8 +182,8 @@ public class Signature {
 	/**
 	 * set the timestamp.
 	 * 
-	 * @param timestamp
-	 *            set the new {@link #timestamp}
+	 * @param timestampSignature
+	 *            set the new {@link #timestampSignature}
 	 */
 	public void setTimestampSignature(Long timestampSignature) {
 		this.timestampSignature = timestampSignature;

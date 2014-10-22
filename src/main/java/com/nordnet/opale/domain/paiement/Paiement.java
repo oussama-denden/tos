@@ -66,6 +66,11 @@ public class Paiement {
 	private String infoPaiement;
 
 	/**
+	 * id paiement.
+	 */
+	private String idPaiement;
+
+	/**
 	 * {@link TypePaiement}.
 	 */
 	@Enumerated(EnumType.STRING)
@@ -103,6 +108,7 @@ public class Paiement {
 		this.modePaiement = paiementInfo.getModePaiement();
 		this.montant = paiementInfo.getMontant();
 		this.infoPaiement = paiementInfo.getInfoPaiement();
+		this.idPaiement = paiementInfo.getIdPaiement();
 	}
 
 	@Override
@@ -233,6 +239,22 @@ public class Paiement {
 
 	/**
 	 * 
+	 * @return {@link #idPaiement}
+	 */
+	public String getIdPaiement() {
+		return idPaiement;
+	}
+
+	/**
+	 * 
+	 * @param idPaiement
+	 *            {@link #idPaiement}
+	 */
+	public void setIdPaiement(String idPaiement) {
+		this.idPaiement = idPaiement;
+	}
+
+	/**
 	 * @return {@link #timestampIntention}.
 	 */
 	public Date getTimestampIntention() {
