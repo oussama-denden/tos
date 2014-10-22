@@ -18,6 +18,18 @@ import com.nordnet.opale.domain.draft.Draft;
 public interface CommandeRepository extends JpaRepository<Commande, Integer>, JpaSpecificationExecutor<Commande> {
 
 	/**
+	 * requette pour le calcule du cout des frais de creation d'une commande.
+	 */
+	public final static String COUT_FRAIS_CREATION_QUERY =
+			"SELECT sum(montant) FROM ( SELECT distinct f.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t, Frais f where c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) AND t.id = f.tarifId AND f.typeFrais = 'CREATION') fraiss";
+
+	/**
+	 * requette pour le calcule du cout des tarif comptant d'une commade.
+	 */
+	public final static String COUT_TARIFS_COMPTANT =
+			"SELECT sum(prix) FROM (SELECT distinct t.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t where c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) AND (t.frequence = t.duree OR t.frequence is NULL)) tarifs";
+
+	/**
 	 * Find by reference.
 	 * 
 	 * @param reference
@@ -42,17 +54,17 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 *            reference {@link Commande}.
 	 * @return cout des frais de creation.
 	 */
-	@Query(nativeQuery = true, value = "SELECT sum(montant) FROM ( SELECT distinct f.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t, Frais f where c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) AND t.id = f.tarifId AND f.typeFrais = 'CREATION') fraiss")
+	@Query(nativeQuery = true, value = COUT_FRAIS_CREATION_QUERY)
 	public Double calculerCoutFraisCreation(@Param("referenceCommande") String referenceCommande);
 
 	/**
-	 * calculer lo montant des offres/produit qui sera paye en comptant.
+	 * calculer le montant des offres/produit qui sera paye en comptant.
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
 	 * @return cout paye en comptant.
 	 */
-	@Query(nativeQuery = true, value = "select sum(prix) from (SELECT distinct t.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t where c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) AND (t.frequence = t.duree OR t.frequence is NULL)) tarifs")
-	public Double calculerCoutPrixComptant(@Param("referenceCommande") String referenceCommande);
+	@Query(nativeQuery = true, value = COUT_TARIFS_COMPTANT)
+	public Double calculerCoutTarifsComptant(@Param("referenceCommande") String referenceCommande);
 
 }

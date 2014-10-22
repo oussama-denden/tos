@@ -200,7 +200,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	private Double calculerCoutComptant(String referenceCommande) {
 		Double coutFrais = commandeRepository.calculerCoutFraisCreation(referenceCommande);
-		Double prixComptant = commandeRepository.calculerCoutPrixComptant(referenceCommande);
+		Double prixComptant = commandeRepository.calculerCoutTarifsComptant(referenceCommande);
 		Double coutComptant = (coutFrais != null ? coutFrais : 0d) + (prixComptant != null ? prixComptant : 0d);
 
 		return coutComptant;
