@@ -93,6 +93,11 @@ public class Paiement {
 	private Auteur auteur;
 
 	/**
+	 * date annulation.
+	 */
+	private Date dateAnnulation;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Paiement() {
@@ -305,13 +310,30 @@ public class Paiement {
 	}
 
 	/**
+	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
 	 * verifier si le payment est encore un intension ou pas.
 	 * 
 	 * @return true si le payment est une intension.
 	 */
-	public Boolean isIntension() {
-		Optional<Double> montantOP = Optional.fromNullable(montant);
-		if (montantOP.isPresent()) {
+	public boolean isIntention() {
+		Optional<Date> timestampPaiementOP = Optional.fromNullable(timestampPaiement);
+		if (timestampPaiementOP.isPresent()) {
 			return false;
 		}
 
@@ -324,7 +346,7 @@ public class Paiement {
 	 * @return true si le paiement a ete paye.
 	 */
 	public Boolean isPaye() {
-		return !isIntension();
+		return !isIntention();
 	}
 
 	/**
@@ -345,4 +367,5 @@ public class Paiement {
 		return paiementInfo;
 
 	}
+
 }

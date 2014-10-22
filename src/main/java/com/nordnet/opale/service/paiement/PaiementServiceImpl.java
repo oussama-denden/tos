@@ -3,6 +3,7 @@ package com.nordnet.opale.service.paiement;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,10 @@ import com.nordnet.opale.validator.PaiementValidator;
 @Service("paiementService")
 public class PaiementServiceImpl implements PaiementService {
 
+	/**
+	 * Declaration du log.
+	 */
+	private final static Logger LOGGER = Logger.getLogger(PaiementServiceImpl.class);
 	/**
 	 * {@link PaiementRepository}.
 	 */
@@ -121,9 +126,11 @@ public class PaiementServiceImpl implements PaiementService {
 		if (typePaiement.equals(TypePaiement.COMPTANT)) {
 			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		} else {
-			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommande(referenceCommande);
+			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommandeAndTypePaiement(
+					referenceCommande, typePaiement);
 			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
 		}
+
 		if (referencePaiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());
@@ -160,6 +167,30 @@ public class PaiementServiceImpl implements PaiementService {
 	public Paiement getPaiementRecurrent(String referenceCommande) {
 		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT)
 				.get(0);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void supprimer(String refCommande, String refPaiement) throws OpaleException {
+		LOGGER.info("Entrer methode supprimer");
+
+		Paiement paiement = paiementRepository.findByReference(refPaiement);
+
+		PaiementValidator.isExiste(refPaiement, refCommande, paiement);
+
+		if (paiement.isIntention()) {
+			paiementRepository.delete(paiement);
+			paiementRepository.flush();
+		} else {
+			PaiementValidator.isAnnuler(paiement);
+			paiement.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());
+
+			paiementRepository.save(paiement);
+		}
+
+		LOGGER.info("Fin methode supprimer");
 	}
 
 }

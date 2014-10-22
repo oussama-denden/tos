@@ -149,4 +149,16 @@ public interface CommandeService {
 	 */
 	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException;
 
+	/**
+	 * Applique une suppression physiquement un intention et logique pour un
+	 * paiement.
+	 * 
+	 * @param refCommande
+	 *            reference commande
+	 * @param refPaiement
+	 *            reference paiement
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException;
 }

@@ -257,6 +257,7 @@ CREATE TABLE  `opale_test`.`paiement` (
   `timestampIntention` datetime DEFAULT NULL,
   `timestampPaiement` datetime DEFAULT NULL,
   `typePaiement` varchar(255) DEFAULT NULL,
+  `dateAnnulation` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

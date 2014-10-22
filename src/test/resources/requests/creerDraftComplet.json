@@ -16,14 +16,24 @@
         "modePaiement": "SEPA",
         "modeFacturation": "PREMIER_MOIS",
         "details": [
-          {
-            "reference": "kitsat",
-             "referenceSelection": "kitsat",
-             "referenceChoix": "trafic10g",
-            "referenceTarif": "achat_kit_mensuel",
-            "modePaiement": "FACTURE",
-            "configurationJson": ""
-          }
+           {
+        "reference": "kitsat",
+        "referenceSelection": "kitsat",
+        "referenceChoix": "trafic10g",
+        "referenceTarif": "annuel_jet10_base",
+        "modePaiement": "CB",
+        "configurationJson": "",
+        "dependDe": ""
+      },
+      {
+        "reference": "jet",
+        "referenceSelection": "jet",
+        "referenceChoix": "trafic10g",
+        "referenceTarif": "annuel_jet10_base",
+        "modePaiement": "CB",
+        "configurationJson": "",
+        "dependDe": "kitsat"
+      }
         ]
       }
     }
