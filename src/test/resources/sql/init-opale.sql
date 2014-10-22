@@ -240,22 +240,23 @@ CREATE TABLE `tracage` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `paiement`;
-CREATE TABLE `paiement` (
+DROP TABLE IF EXISTS `opale_test`.`paiement`;
+CREATE TABLE  `opale_test`.`paiement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `infoPaiement` varchar(255) DEFAULT NULL,
-  `modePaiement` varchar(255) DEFAULT NULL,
-  `typePaiement` varchar(255) DEFAULT NULL,
-  `montant` double DEFAULT NULL,
-  `reference` varchar(255) NOT NULL,
-  `referenceCommande` varchar(255) DEFAULT NULL,
-   `canal` varchar(255) DEFAULT NULL,
+  `canal` varchar(255) DEFAULT NULL,
   `code` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) NOT NULL,
+  `idPaiement` varchar(255) DEFAULT NULL,
+  `infoPaiement` varchar(255) DEFAULT NULL,
+  `modePaiement` varchar(255) DEFAULT NULL,
+  `montant` double DEFAULT NULL,
+  `reference` varchar(255) NOT NULL,
+  `referenceCommande` varchar(255) DEFAULT NULL,
   `timestampIntention` datetime DEFAULT NULL,
   `timestampPaiement` datetime DEFAULT NULL,
+  `typePaiement` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
