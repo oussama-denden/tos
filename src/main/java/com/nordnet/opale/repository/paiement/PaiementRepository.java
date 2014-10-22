@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 
 /**
  * Outils de persistence pour l'entite {@link Paiement}.
@@ -37,7 +38,8 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	public Paiement findByReference(String reference);
 
 	/**
-	 * chercher un paiement avec sa reference et la reference de la commande associe.
+	 * chercher un paiement avec sa reference et la reference de la commande
+	 * associe.
 	 * 
 	 * @param reference
 	 *            reference.
@@ -66,5 +68,16 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	 */
 	@Query(name = "Paiement.getMontantComptantPayePourCommande", value = "SELECT SUM(montant) FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'COMPTANT'")
 	public Double getMontantComptantPayePourCommande(@Param("referenceCommande") String referenceCommande);
+
+	/**
+	 * retourner la liste des paiement d'une commande selon le type paiement.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @param typePaiement
+	 *            {@link TypePaiement}
+	 * @return Liste de {@link Paiement}
+	 */
+	public List<Paiement> findByReferenceCommandeAndTypePaiement(String referenceCommande, TypePaiement typePaiement);
 
 }

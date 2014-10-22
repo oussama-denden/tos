@@ -1,6 +1,7 @@
 package com.nordnet.opale.validator;
 
 import java.util.Date;
+import java.util.List;
 
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.paiement.Paiement;
@@ -64,8 +65,6 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.1", "Paiement.modePaiement"), "0.1.1");
 		}
 
-		validerDate(paiementInfo.getTimestampIntention(), "Intention");
-
 	}
 
 	/**
@@ -105,7 +104,6 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.infoPaiement"), "0.1.4");
 		}
 
-		validerDate(paiementInfo.getTimestampPaiement(), "Paiement");
 	}
 
 	/**
@@ -122,5 +120,32 @@ public class PaiementValidator {
 		if (date != null && Utils.compareDate(date, PropertiesUtil.getInstance().getDateDuJour()) < Constants.ZERO) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.3", nomDate), "3.1.3");
 		}
+	}
+
+	/**
+	 * validation lors de l'effectuation d'un paiement.
+	 * 
+	 * @param paiement
+	 *            {@link Paiement}.
+	 * @param paiementInfo
+	 *            {@link PaiementInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerPaiementRecurrent(List<Paiement> paiement, PaiementInfo paiementInfo)
+			throws OpaleException {
+
+		if (paiement.size() > 0) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.4", paiement.get(0).getReference()), "3.1.4");
+		}
+
+		if (paiementInfo.getModePaiement() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.modePaiement"), "0.1.4");
+		}
+
+		if (paiementInfo.getIdPaiement() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.idpaiement"), "0.1.4");
+		}
+
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
@@ -20,7 +21,6 @@ import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
-import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.validator.CommandeValidator;
 
 /**
@@ -166,6 +166,14 @@ public class CommandeServiceImpl implements CommandeService {
 		return commandeRepository.findByReference(reference);
 	}
 
+	@Override
+	@Transactional
+	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.getListePaiementComptant(referenceCommande);
+	}
+
 	/**
 	 * verifie si une {@link Commande} est totalement paye ou pas.
 	 * 
@@ -191,23 +199,54 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	private Double calculerCoutComptant(String referenceCommande) {
 		Double coutFrais = commandeRepository.calculerCoutFraisCreation(referenceCommande);
-		Double prixComptant = commandeRepository.calculerCoutPrixComptant(referenceCommande);
+		Double prixComptant = commandeRepository.calculerCoutTarifsComptant(referenceCommande);
 		Double coutComptant = (coutFrais != null ? coutFrais : 0d) + (prixComptant != null ? prixComptant : 0d);
 
 		return coutComptant;
 	}
 
 	/**
-	 * Verififier que dateStart et dateEnd ne sont pas Null.
-	 * 
-	 * @param dateStart
-	 *            date start
-	 * @param dateEnd
-	 *            date end
-	 * @return true, if successful
+	 * {@inheritDoc}
 	 */
-	private boolean dateStartAndDateEndNotNull(String dateStart, String dateEnd) {
-		return !Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd);
+	@Override
+	public Paiement getPaiementRecurrent(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return paiementService.getPaiementRecurrent(referenceCommande);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException {
+		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande);
+		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande);
+		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
+	}
+
+	/**
+	 * mapping paiement domain to paiement info.
+	 * 
+	 * @param paiementComptants
+	 *            {@link List<Paiement>}
+	 * @param paiementRecurrent
+	 *            {@link List<Paiement>}
+	 * @return {@link CommandePaiementInfo}
+	 */
+	private CommandePaiementInfo getCommandePaiementInfoFromPaiement(List<Paiement> paiementComptants,
+			Paiement paiementRecurrent) {
+		CommandePaiementInfo commandePaiementInfo = new CommandePaiementInfo();
+		List<PaiementInfo> paiementInfosComptant = new ArrayList<PaiementInfo>();
+		for (Paiement paiement : paiementComptants) {
+			paiementInfosComptant.add(paiement.fromPaiementToPaiementInfo());
+		}
+		commandePaiementInfo.setComptant(paiementInfosComptant);
+		if (paiementRecurrent != null) {
+			commandePaiementInfo.setRecurrent(paiementRecurrent.fromPaiementToPaiementInfo());
+		}
+
+		return commandePaiementInfo;
+
 	}
 
 }

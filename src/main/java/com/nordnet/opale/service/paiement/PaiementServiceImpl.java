@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
@@ -85,6 +86,8 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 		} else {
 			paiement = new Paiement();
+			Auteur auteur = new Auteur(paiementInfo.getAuteur());
+			paiement.setAuteur(auteur);
 			paiement.setTypePaiement(TypePaiement.COMPTANT);
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
@@ -113,15 +116,23 @@ public class PaiementServiceImpl implements PaiementService {
 	@Override
 	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
 			TypePaiement typePaiement) throws OpaleException {
-		Paiement paiement =
-				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
-		PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
+		Paiement paiement = paiementRepository
+				.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
+		if (typePaiement.equals(TypePaiement.COMPTANT)) {
+			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
+		} else {
+			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommande(referenceCommande);
+			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
+		}
 		if (referencePaiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());
 			paiement.setInfoPaiement(paiementInfo.getInfoPaiement());
+			paiement.setAuteur(new Auteur(paiementInfo.getAuteur()));
 		} else {
 			paiement = new Paiement(paiementInfo);
+			Auteur auteur = new Auteur(paiementInfo.getAuteur());
+			paiement.setAuteur(auteur);
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
 			paiement.setTypePaiement(typePaiement);
@@ -133,4 +144,22 @@ public class PaiementServiceImpl implements PaiementService {
 		return paiement;
 
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Paiement> getListePaiementComptant(String referenceCommande) {
+		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Paiement getPaiementRecurrent(String referenceCommande) {
+		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT)
+				.get(0);
+	}
+
 }

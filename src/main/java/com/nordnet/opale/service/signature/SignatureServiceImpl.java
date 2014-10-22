@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.SignatureInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.exception.OpaleException;
@@ -173,12 +174,13 @@ public class SignatureServiceImpl implements SignatureService {
 
 		LOGGER.info("Debut methode privee ajouterSignature");
 
-		if (signature.getMode() != null) {
+		if (signatureInfo.getMode() != null) {
 			signature.setMode(signatureInfo.getMode());
 		}
 		signature.setIdSignature(signatureInfo.getIdSignature());
 		signature.setFootprint(signatureInfo.getFootprint());
-		signature.setTimestamp(signatureInfo.getTimestamp());
+		signature.setTimestampSignature(signatureInfo.getTimestamp());
+		signature.setAuteur(new Auteur(signatureInfo.getAuteur()));
 		signatureRepository.save(signature);
 
 		return signature.getReference();
@@ -204,15 +206,21 @@ public class SignatureServiceImpl implements SignatureService {
 		LOGGER.info("Debut methode privee creerSignature");
 
 		Signature signature = new Signature();
+		Auteur auteur = null;
+		;
 		if (ajoutSignatureInfo != null) {
 			signature.setMode(ajoutSignatureInfo.getMode());
+			auteur = new Auteur(ajoutSignatureInfo.getAuteur());
 		} else if (signatureInfo != null) {
 			SignatureValidator.validerSignature(signatureInfo);
 			signature.setMode(signatureInfo.getMode());
 			signature.setIdSignature(signatureInfo.getIdSignature());
 			signature.setFootprint(signatureInfo.getFootprint());
-			signature.setTimestamp(signatureInfo.getTimestamp());
+			signature.setTimestampSignature(signatureInfo.getTimestamp());
+			auteur = new Auteur(signatureInfo.getAuteur());
 		}
+
+		signature.setAuteur(auteur);
 		signature.setReference(keygenService.getNextKey(Signature.class));
 		signatureRepository.save(signature);
 		commande.setReferenceSignature(signature.getReference());

@@ -1,5 +1,14 @@
 {
   "modePaiement": "CB",
   "montant": "5",
-  "infoPaiement": "123"
+  "infoPaiement": "123",
+   "auteur": {
+    "code": "part_123456",
+    "qui": "GRC.WEL-JOHNDOE",
+    "canal": "welcome",
+    "ip": {
+      "ts": "1411654933",
+      "ip": "127.0.0.1"
+    }
+  }
 }

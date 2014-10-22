@@ -2,6 +2,7 @@ package com.nordnet.opale.domain.paiement;
 
 import java.util.Date;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,8 +12,10 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypePaiement;
@@ -25,6 +28,7 @@ import com.nordnet.opale.enums.TypePaiement;
  */
 @Table(name = "paiement")
 @Entity
+@JsonIgnoreProperties({ "id", "intension", "paye" })
 public class Paiement {
 
 	/**
@@ -62,6 +66,11 @@ public class Paiement {
 	private String infoPaiement;
 
 	/**
+	 * id paiement.
+	 */
+	private String idPaiement;
+
+	/**
 	 * {@link TypePaiement}.
 	 */
 	@Enumerated(EnumType.STRING)
@@ -76,6 +85,12 @@ public class Paiement {
 	 * date de paiement.
 	 */
 	private Date timestampPaiement;
+
+	/**
+	 * l'auteur.
+	 */
+	@Embedded
+	private Auteur auteur;
 
 	/**
 	 * constructeur par defaut.
@@ -93,6 +108,7 @@ public class Paiement {
 		this.modePaiement = paiementInfo.getModePaiement();
 		this.montant = paiementInfo.getMontant();
 		this.infoPaiement = paiementInfo.getInfoPaiement();
+		this.idPaiement = paiementInfo.getIdPaiement();
 	}
 
 	@Override
@@ -223,6 +239,22 @@ public class Paiement {
 
 	/**
 	 * 
+	 * @return {@link #idPaiement}
+	 */
+	public String getIdPaiement() {
+		return idPaiement;
+	}
+
+	/**
+	 * 
+	 * @param idPaiement
+	 *            {@link #idPaiement}
+	 */
+	public void setIdPaiement(String idPaiement) {
+		this.idPaiement = idPaiement;
+	}
+
+	/**
 	 * @return {@link #timestampIntention}.
 	 */
 	public Date getTimestampIntention() {
@@ -256,6 +288,23 @@ public class Paiement {
 	}
 
 	/**
+	 * 
+	 * @return {@link #auteur}.
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * 
+	 * @param auteur
+	 *            {@link #auteur}.
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
+	}
+
+	/**
 	 * verifier si le payment est encore un intension ou pas.
 	 * 
 	 * @return true si le payment est une intension.
@@ -278,4 +327,22 @@ public class Paiement {
 		return !isIntension();
 	}
 
+	/**
+	 * mapping paiement to business.
+	 * 
+	 * @return {@link PaiementInfo}
+	 */
+	public PaiementInfo fromPaiementToPaiementInfo() {
+		PaiementInfo paiementInfo = new PaiementInfo();
+		paiementInfo.setAuteur(auteur.toAuteurBusiness());
+		paiementInfo.setInfoPaiement(infoPaiement);
+		paiementInfo.setModePaiement(modePaiement);
+		paiementInfo.setMontant(montant);
+		paiementInfo.setTimestampIntention(timestampIntention);
+		paiementInfo.setTimestampPaiement(timestampPaiement);
+		paiementInfo.setReference(reference);
+
+		return paiementInfo;
+
+	}
 }
