@@ -105,6 +105,7 @@
 		<xsd:attribute name="secteur" use="optional" />
 		<xsd:attribute name="commandeId" use="optional" />
 		<xsd:attribute name="famille" use="optional" />
+		<xsd:attribute name="tarifId" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="commandeLigneDetail" type="commandeLigneDetail_type"/>
@@ -117,6 +118,7 @@
 		<xsd:attribute name="typeProduit" use="optional" />
 		<xsd:attribute name="dependDe" use="optional" />
 		<xsd:attribute name="commandeLigneId" use="optional" />
+		<xsd:attribute name="tarifId" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="tarif" type="tarif_type"/>
@@ -128,8 +130,6 @@
 		<xsd:attribute name="prix" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="typeTVA" use="optional" />
-		<xsd:attribute name="commandeLigneId" use="optional" />
-		<xsd:attribute name="commandeLigneDetailId" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="frais" type="frais_type"/>

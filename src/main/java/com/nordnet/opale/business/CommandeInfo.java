@@ -3,8 +3,7 @@ package com.nordnet.opale.business;
 import java.util.List;
 
 /**
- * Cette classe regroupe les informations qui definissent un
- * {@link CommandeInfo}.
+ * Cette classe regroupe les informations qui definissent un {@link CommandeInfo}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -65,7 +64,7 @@ public class CommandeInfo {
 	 *            the new {@link List<CommandeLigneInfo>}
 	 */
 	public void setLignes(List<CommandeLigneInfo> lignes) {
-		lignes = this.lignes;
+		this.lignes = lignes;
 	}
 
 }

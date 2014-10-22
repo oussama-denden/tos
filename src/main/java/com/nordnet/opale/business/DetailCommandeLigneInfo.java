@@ -1,10 +1,7 @@
 package com.nordnet.opale.business;
 
-import java.util.List;
-
 /**
- * Cette classe regroupe les informations qui definissent un
- * {@link DetailCommandeLigneInfo}.
+ * Cette classe regroupe les informations qui definissent un {@link DetailCommandeLigneInfo}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -22,9 +19,9 @@ public class DetailCommandeLigneInfo {
 	private String label;
 
 	/**
-	 * le tarif.
+	 * {@link TarifInfo}.
 	 */
-	private List<TarifInfo> tarif;
+	private TarifInfo tarif;
 
 	/**
 	 * constructeur par defaut.
@@ -72,21 +69,19 @@ public class DetailCommandeLigneInfo {
 	}
 
 	/**
-	 * get the tarif.
 	 * 
-	 * @return {@link TarifInfo}
+	 * @return {@link #tarif}.
 	 */
-	public List<TarifInfo> getTarif() {
+	public TarifInfo getTarif() {
 		return tarif;
 	}
 
 	/**
-	 * set the tarif.
 	 * 
 	 * @param tarif
-	 *            the new {@link TarifInfo}
+	 *            {@link #tarif}.
 	 */
-	public void setTarif(List<TarifInfo> tarif) {
+	public void setTarif(TarifInfo tarif) {
 		this.tarif = tarif;
 	}
 
