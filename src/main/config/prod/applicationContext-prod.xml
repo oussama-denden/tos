@@ -21,7 +21,6 @@
 		<property name="location" value="classpath:rest-url.properties" />
 	</bean>
 	
-
 	<bean id="opaleExceptionsProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:opale-exceptions.properties" />
@@ -39,7 +38,6 @@
 	</bean>
 
 	<!-- Bean d'acces au Contexte -->
-
 	<bean id="applicationContextHolder"
 		class="com.nordnet.opale.util.spring.ApplicationContextHolder" />
 
