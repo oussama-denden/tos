@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
@@ -217,6 +218,41 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	private boolean dateStartAndDateEndNotNull(String dateStart, String dateEnd) {
 		return !Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException {
+		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande);
+		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande);
+		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
+	}
+
+	/**
+	 * mapping paiement domain to paiement info.
+	 * 
+	 * @param paiementComptants
+	 *            {@link List<Paiement>}
+	 * @param paiementRecurrent
+	 *            {@link List<Paiement>}
+	 * @return {@link CommandePaiementInfo}
+	 */
+	private CommandePaiementInfo getCommandePaiementInfoFromPaiement(List<Paiement> paiementComptants,
+			Paiement paiementRecurrent) {
+		CommandePaiementInfo commandePaiementInfo = new CommandePaiementInfo();
+		List<PaiementInfo> paiementInfosComptant = new ArrayList<PaiementInfo>();
+		for (Paiement paiement : paiementComptants) {
+			paiementInfosComptant.add(paiement.fromPaiementToPaiementInfo());
+		}
+		commandePaiementInfo.setComptant(paiementInfosComptant);
+		if (paiementRecurrent != null) {
+			commandePaiementInfo.setRecurrent(paiementRecurrent.fromPaiementToPaiementInfo());
+		}
+
+		return commandePaiementInfo;
+
 	}
 
 }

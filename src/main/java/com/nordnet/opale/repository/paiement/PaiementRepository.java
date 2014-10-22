@@ -77,4 +77,14 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	@Query(value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'COMPTANT'")
 	public List<Paiement> getListePaiementComptant(@Param("referenceCommande") String referenceCommande);
 
+	/**
+	 * retourner la liste des paiement recurrent d'une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @return liste {@link Paiement}.
+	 */
+	@Query(value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'RECURRENT'")
+	public Paiement getListePaiementRecurrent(@Param("referenceCommande") String referenceCommande);
+
 }

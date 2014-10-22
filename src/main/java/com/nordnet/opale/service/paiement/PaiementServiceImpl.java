@@ -147,4 +147,12 @@ public class PaiementServiceImpl implements PaiementService {
 	public List<Paiement> getListePaiementComptant(String referenceCommande) {
 		return paiementRepository.getListePaiementComptant(referenceCommande);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Paiement getPaiementRecurrent(String referenceCommande) {
+		return paiementRepository.getListePaiementRecurrent(referenceCommande);
+	}
 }

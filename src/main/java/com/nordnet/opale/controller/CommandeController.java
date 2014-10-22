@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
@@ -248,6 +249,23 @@ public class CommandeController {
 	public List<CommandeInfo> chercherCommande(@RequestBody CriteresCommande criteresCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::chercherCommande");
 		return commandeService.find(criteresCommande);
+
+	}
+
+	/**
+	 * recuperer la liste des paiements lies a une commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * 
+	 * @return {@link CommandePaiementInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public CommandePaiementInfo getListeDePaiement(@PathVariable String refCommande) throws OpaleException {
+		return commandeService.getListeDePaiement(refCommande);
 
 	}
 

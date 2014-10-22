@@ -2,6 +2,8 @@ package com.nordnet.opale.business;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypePaiement;
@@ -14,12 +16,18 @@ import com.nordnet.opale.enums.deserializer.TypePaiementDeserializer;
  * @author akram-moncer
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class PaiementInfo {
 
 	/**
 	 * l'auteur.
 	 */
 	private Auteur auteur;
+
+	/**
+	 * reference de paiement.
+	 */
+	private String reference;
 
 	/**
 	 * {@link ModePaiement}.
@@ -87,6 +95,25 @@ public class PaiementInfo {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * get the reference.
+	 * 
+	 * @return {@link #reference}
+	 */
+	public String getReference() {
+		return reference;
+	}
+
+	/**
+	 * set the reference.
+	 * 
+	 * @param reference
+	 *            the new {@link #reference}
+	 */
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 	/**
