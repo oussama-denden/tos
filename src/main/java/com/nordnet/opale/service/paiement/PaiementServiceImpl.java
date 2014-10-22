@@ -129,6 +129,7 @@ public class PaiementServiceImpl implements PaiementService {
 			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommandeAndTypePaiement(
 					referenceCommande, typePaiement);
 			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
+
 		}
 
 		if (referencePaiement != null) {

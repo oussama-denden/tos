@@ -363,6 +363,7 @@ public class Paiement {
 		paiementInfo.setTimestampIntention(timestampIntention);
 		paiementInfo.setTimestampPaiement(timestampPaiement);
 		paiementInfo.setReference(reference);
+		paiementInfo.setIdPaiement(idPaiement);
 
 		return paiementInfo;
 
