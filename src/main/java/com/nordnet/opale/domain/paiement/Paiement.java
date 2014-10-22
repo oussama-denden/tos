@@ -82,7 +82,7 @@ public class Paiement {
 	private Date timestampPaiement;
 
 	/**
-	 * l'auteur
+	 * l'auteur.
 	 */
 	@Embedded
 	private Auteur auteur;
@@ -318,6 +318,8 @@ public class Paiement {
 		paiementInfo.setMontant(montant);
 		paiementInfo.setTimestampIntention(timestampIntention);
 		paiementInfo.setTimestampPaiement(timestampPaiement);
+		paiementInfo.setReference(reference);
+
 		return paiementInfo;
 
 	}
