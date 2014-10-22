@@ -29,21 +29,21 @@
 
 	<draftLigneDetail />
 	<draftLigneDetail id="1000" referenceSelection="kitsat" referenceChoix="trafic10g"
-		reference="kitsat" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		reference="kitsat" referenceTarif="mensuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1000" />
 	<draftLigneDetail id="1001" referenceSelection="jet" referenceChoix="trafic10g"
-		reference="jet" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		reference="jet" referenceTarif="mensuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1000" dependDe="1000" />
 
 	<draftLigneDetail id="1002" referenceSelection="kitsat" referenceChoix="trafic10g"
-		reference="kitsat" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		reference="kitsat" referenceTarif="mensuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1001" />
 	<draftLigneDetail id="1003" referenceSelection="jet" referenceChoix="trafic10g"
-		reference="jet" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		reference="jet" referenceTarif="mensuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1001" dependDe="1000" />
 
 	<draftLigneDetail id="1004" referenceSelection="kitsat10" referenceChoix="trafic10g"
-		reference="kitsat10" referenceTarif="achat_kit_mensuel" modePaiement="CB"
+		reference="kitsat10" referenceTarif="mensuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1002" />
 
 </dataset>

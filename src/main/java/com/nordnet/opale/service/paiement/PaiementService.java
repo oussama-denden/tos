@@ -119,12 +119,12 @@ public interface PaiementService {
 	public List<Paiement> getListePaiementComptant(String referenceCommande);
 
 	/**
-	 * retourner la liste des paiement recurrent d'une commande.
+	 * retourner le paiement recurrent d'une commande.
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
-	 * @return liste {@link Paiement}.
+	 * @return {@link Paiement}.
 	 */
-	public List<Paiement> getListePaiementRecurrent(String referenceCommande);
+	public Paiement getPaiementRecurrent(String referenceCommande);
 
 }

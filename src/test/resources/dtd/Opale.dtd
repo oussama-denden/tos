@@ -101,6 +101,7 @@
     secteur CDATA #IMPLIED
     commandeId CDATA #IMPLIED
     famille CDATA #IMPLIED
+    tarifId CDATA #IMPLIED
 >
 
 <!ELEMENT commandeLigneDetail EMPTY>
@@ -113,6 +114,7 @@
     typeProduit CDATA #IMPLIED
     dependDe CDATA #IMPLIED
     commandeLigneId CDATA #IMPLIED
+    tarifId CDATA #IMPLIED
 >
 
 <!ELEMENT tarif EMPTY>
@@ -124,8 +126,6 @@
     prix CDATA #IMPLIED
     reference CDATA #IMPLIED
     typeTVA CDATA #IMPLIED
-    commandeLigneId CDATA #IMPLIED
-    commandeLigneDetailId CDATA #IMPLIED
 >
 
 <!ELEMENT frais EMPTY>

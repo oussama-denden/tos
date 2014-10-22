@@ -13,11 +13,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
-import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
@@ -101,9 +101,9 @@ public class CommandeLigne {
 	/**
 	 * liste des {@link Tarif} associe a la ligne de commande.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "commandeLigneId")
-	private List<Tarif> tarifs = new ArrayList<Tarif>();
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "tarifId")
+	private Tarif tarif;
 
 	/**
 	 * la famille de l'offre.
@@ -133,15 +133,11 @@ public class CommandeLigne {
 		this.modeFacturation = draftLigne.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
+		this.tarif = new Tarif(draftLigne.getReferenceTarif(), trameCatalogue);
 
 		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
 			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, referenceOffre, trameCatalogue);
 			addCommandeLigneDetail(commandeLigneDetail);
-		}
-
-		for (String refTarif : offreCatalogue.getTarifs()) {
-			Tarif tarif = new Tarif(refTarif, trameCatalogue);
-			addTarif(tarif);
 		}
 	}
 
@@ -341,6 +337,23 @@ public class CommandeLigne {
 	}
 
 	/**
+	 * 
+	 * @return {@link Tarif}.
+	 */
+	public Tarif getTarif() {
+		return tarif;
+	}
+
+	/**
+	 * 
+	 * @param tarif
+	 *            {@link Tarif}.
+	 */
+	public void setTarif(Tarif tarif) {
+		this.tarif = tarif;
+	}
+
+	/**
 	 * ajouter un {@link CommandeLigneDetail} a ligne de commande.
 	 * 
 	 * @param commandeLigneDetail
@@ -348,33 +361,6 @@ public class CommandeLigne {
 	 */
 	public void addCommandeLigneDetail(CommandeLigneDetail commandeLigneDetail) {
 		this.commandeLigneDetails.add(commandeLigneDetail);
-	}
-
-	/**
-	 * 
-	 * @return {@link #tarifs}.
-	 */
-	public List<Tarif> getTarifs() {
-		return tarifs;
-	}
-
-	/**
-	 * 
-	 * @param tarifs
-	 *            {@link #tarifs}.
-	 */
-	public void setTarifs(List<Tarif> tarifs) {
-		this.tarifs = tarifs;
-	}
-
-	/**
-	 * associe un {@link Tarif} a l'offre dans la commande.
-	 * 
-	 * @param tarif
-	 *            {@link Tarif}.
-	 */
-	public void addTarif(Tarif tarif) {
-		tarifs.add(tarif);
 	}
 
 	/**
@@ -409,11 +395,7 @@ public class CommandeLigne {
 		offreCatalogueInfo.setFammille(secteur);
 		offreCatalogueInfo.setModeFacturation(modeFacturation);
 
-		List<TarifInfo> tarifInfos = new ArrayList<TarifInfo>();
-		for (Tarif tarif : tarifs) {
-			tarifInfos.add(tarif.toTarifInfo());
-		}
-		offreCatalogueInfo.setTarif(tarifInfos);
+		offreCatalogueInfo.setTarif(tarif.toTarifInfo());
 
 		List<DetailCommandeLigneInfo> detailCommandeLigneInfos = new ArrayList<DetailCommandeLigneInfo>();
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigneDetails) {
@@ -432,12 +414,9 @@ public class CommandeLigne {
 	 */
 	public boolean isRecurrent() {
 
-		for (Tarif tarif : tarifs) {
-			if (tarif.isRecurrent()) {
-				return true;
-			}
+		if (tarif.isRecurrent()) {
+			return true;
 		}
-
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigneDetails) {
 			if (commandeLigneDetail.isRecurrent()) {
 				return true;

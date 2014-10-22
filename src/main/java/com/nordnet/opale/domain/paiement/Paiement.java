@@ -327,4 +327,22 @@ public class Paiement {
 		return !isIntension();
 	}
 
+	/**
+	 * mapping paiement to business.
+	 * 
+	 * @return {@link PaiementInfo}
+	 */
+	public PaiementInfo fromPaiementToPaiementInfo() {
+		PaiementInfo paiementInfo = new PaiementInfo();
+		paiementInfo.setAuteur(auteur.toAuteurBusiness());
+		paiementInfo.setInfoPaiement(infoPaiement);
+		paiementInfo.setModePaiement(modePaiement);
+		paiementInfo.setMontant(montant);
+		paiementInfo.setTimestampIntention(timestampIntention);
+		paiementInfo.setTimestampPaiement(timestampPaiement);
+		paiementInfo.setReference(reference);
+
+		return paiementInfo;
+
+	}
 }

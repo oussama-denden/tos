@@ -1,6 +1,5 @@
 package com.nordnet.opale.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -148,6 +148,17 @@ public class CommandeController {
 		return response.toString();
 	}
 
+	/**
+	 * retourner la liste des paiements comptant d'une commande.
+	 * 
+	 * @param refCommande
+	 *            reference commande
+	 * @return la liste liste paiement recurrent
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             the jSON exception {@link JSONException}
+	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande) throws OpaleException,
@@ -168,16 +179,10 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public List<PaiementRecurrentInfo> getListePaiementRecurrent(@PathVariable String refCommande)
-			throws OpaleException, JSONException {
-		List<Paiement> paiements = commandeService.getListePaiementRecurrent(refCommande);
-		List<PaiementRecurrentInfo> recurrentInfos = new ArrayList<>();
-		for (Paiement paiement : paiements) {
-
-			recurrentInfos.add(new PaiementRecurrentInfo(paiement));
-		}
-
-		return recurrentInfos;
+	public PaiementRecurrentInfo getListePaiementRecurrent(@PathVariable String refCommande) throws OpaleException,
+			JSONException {
+		Paiement paiement = commandeService.getPaiementRecurrent(refCommande);
+		return new PaiementRecurrentInfo(paiement);
 	}
 
 	/**
@@ -300,6 +305,23 @@ public class CommandeController {
 	public List<CommandeInfo> chercherCommande(@RequestBody CriteresCommande criteresCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::chercherCommande");
 		return commandeService.find(criteresCommande);
+
+	}
+
+	/**
+	 * recuperer la liste des paiements lies a une commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * 
+	 * @return {@link CommandePaiementInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public CommandePaiementInfo getListeDePaiement(@PathVariable String refCommande) throws OpaleException {
+		return commandeService.getListeDePaiement(refCommande);
 
 	}
 
