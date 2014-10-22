@@ -22,7 +22,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	public final static String COUT_FRAIS_CREATION_QUERY =
 			"SELECT sum(montant) FROM ("
-					+ " SELECT distinct f.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t, Frais f where "
+					+ " SELECT distinct f.* FROM commande c, commandeligne cl, commandelignedetail cld, tarif t, frais f where "
 					+ "c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId "
 					+ "AND (cl.tarifId = t.id OR cld.tarifId = t.id) AND t.id = f.tarifId AND f.typeFrais = 'CREATION'"
 					+ ") fraiss";
@@ -32,7 +32,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	public final static String COUT_TARIFS_COMPTANT =
 			"SELECT sum(prix) FROM ("
-					+ "SELECT distinct t.* FROM Commande c, Commandeligne cl, Commandelignedetail cld, Tarif t where "
+					+ "SELECT distinct t.* FROM commande c, commandeligne cl, commandelignedetail cld, tarif t where "
 					+ "c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) "
 					+ "AND (t.frequence = t.duree OR t.frequence is NULL)) tarifs";
 

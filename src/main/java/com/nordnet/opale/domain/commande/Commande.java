@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
@@ -358,10 +359,11 @@ public class Commande {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
-						.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
-						.getDraftLigneDetailParent().getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetail =
+						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent =
+						commandeLigneDetailMap
+								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
@@ -388,5 +390,28 @@ public class Commande {
 		commandeInfo.setLignes(lignes);
 		return commandeInfo;
 
+	}
+
+	/**
+	 * verifier si la commande a besoin d'un paiement recurrent ou non.
+	 * 
+	 * @return true si la comande a besoin d'un paiement recurrent.
+	 */
+	public boolean needPaiementRecurrent() {
+		for (CommandeLigne commandeLigne : commandeLignes) {
+			if (commandeLigne.isRecurrent())
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * retourner si la commande est signe ou non.
+	 * 
+	 * @return true si la commande est signe.
+	 */
+	public boolean isSigne() {
+		Optional<String> referenceSignatureOp = Optional.fromNullable(referenceSignature);
+		return referenceSignatureOp.isPresent();
 	}
 }
