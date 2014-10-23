@@ -58,7 +58,7 @@ public class SupprimerDraftTest extends GlobalTestCase {
 		try {
 			draftService.supprimerDraft("00000001");
 			draftLigneRepository.flush();
-			Draft draft = draftService.getDraftByReference("00000001");
+			Draft draft = draftService.findDraftByReference("00000001");
 			assertNull(draft);
 
 		} catch (Exception e) {

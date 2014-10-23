@@ -31,7 +31,7 @@ import com.nordnet.opale.domain.commande.Commande;
  */
 @Entity
 @Table(name = "draft")
-@JsonIgnoreProperties({ "id" })
+@JsonIgnoreProperties({ "id", "annule", "transforme" })
 public class Draft {
 
 	/**
