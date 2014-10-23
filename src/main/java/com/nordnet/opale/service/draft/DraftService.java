@@ -25,11 +25,24 @@ import com.nordnet.opale.exception.OpaleException;
 public interface DraftService {
 
 	/**
+	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere une exception si le draft n'existe pas.
+	 * 
 	 * @param reference
 	 *            reference du draft.
 	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
-	public Draft getDraftByReference(String reference);
+	public Draft getDraftByReference(String reference) throws OpaleException;
+
+	/**
+	 * retourne un {@link Draft} a partir de ca reference.
+	 * 
+	 * @param reference
+	 *            reference {@link Draft}.
+	 * @return {@link Draft}
+	 */
+	public Draft findDraftByReference(String reference);
 
 	/**
 	 * Supprimer draft.

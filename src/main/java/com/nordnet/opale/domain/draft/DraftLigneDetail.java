@@ -26,7 +26,7 @@ import com.nordnet.opale.enums.ModePaiement;
  */
 @Table(name = "draftlignedetail")
 @Entity
-@JsonIgnoreProperties({ "id" })
+@JsonIgnoreProperties({ "id", "draftLigneDetailParent" })
 public class DraftLigneDetail {
 
 	/**
