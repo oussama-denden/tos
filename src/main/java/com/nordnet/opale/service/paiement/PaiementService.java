@@ -127,4 +127,17 @@ public interface PaiementService {
 	 */
 	public Paiement getPaiementRecurrent(String referenceCommande);
 
+	/**
+	 * Applique une suppression physiquement un intention et logique pour un
+	 * paiement.
+	 * 
+	 * @param refCommande
+	 *            reference commande
+	 * @param refPaiement
+	 *            reference paiement
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void supprimer(String refCommande, String refPaiement) throws OpaleException;
+
 }

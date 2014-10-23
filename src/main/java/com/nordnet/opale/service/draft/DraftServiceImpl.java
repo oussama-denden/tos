@@ -262,7 +262,7 @@ public class DraftServiceImpl implements DraftService {
 		LOGGER.info("Debut methode ajouterReferenceExterne");
 		DraftValidator.checkUser(referenceExterneInfo.getUser());
 		Draft draft = getDraftByReference(referenceDraft);
-		DraftValidator.isExistDraft(draft, referenceDraft);
+		DraftValidator.checkReferenceExterne(draft, referenceDraft);
 		draft.setReferenceExterne(referenceExterneInfo.getReferenceExterne());
 		draftRepository.save(draft);
 		tracageService.ajouterTrace(Constants.INTERNAL_USER, referenceDraft, "ajout de reference externe au draft  "

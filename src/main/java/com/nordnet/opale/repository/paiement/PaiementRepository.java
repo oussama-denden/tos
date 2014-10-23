@@ -56,7 +56,7 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	 *            reference commande.
 	 * @return {@link Paiement}.
 	 */
-	@Query(name = "Paiement.findIntentionPaiement", value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.montant IS null")
+	@Query(name = "Paiement.findIntentionPaiement", value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.timestampPaiement IS null")
 	public Paiement findIntentionPaiement(@Param("referenceCommande") String referenceCommande);
 
 	/**

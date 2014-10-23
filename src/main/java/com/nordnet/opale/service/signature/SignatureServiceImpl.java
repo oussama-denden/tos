@@ -70,6 +70,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.validerAuteur(refCommande, ajoutSignatureInfo.getAuteur());
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {
 			signatureReference = creerSignature(ajoutSignatureInfo, null, commande);
@@ -98,6 +99,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
 
 		Signature signature = signatureRepository.findByReference(refSignature);
 		SignatureValidator.checkSignatureExiste(signature, refSignature, refCommande);
@@ -121,6 +123,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {
 			signatureReference = creerSignature(null, signatureInfo, commande);
@@ -180,7 +183,9 @@ public class SignatureServiceImpl implements SignatureService {
 		signature.setIdSignature(signatureInfo.getIdSignature());
 		signature.setFootprint(signatureInfo.getFootprint());
 		signature.setTimestampSignature(signatureInfo.getTimestamp());
-		signature.setAuteur(new Auteur(signatureInfo.getAuteur()));
+		if (signatureInfo.getAuteur() != null) {
+			signature.setAuteur(new Auteur(signatureInfo.getAuteur()));
+		}
 		signatureRepository.save(signature);
 
 		return signature.getReference();
@@ -210,14 +215,14 @@ public class SignatureServiceImpl implements SignatureService {
 		;
 		if (ajoutSignatureInfo != null) {
 			signature.setMode(ajoutSignatureInfo.getMode());
-			auteur = new Auteur(ajoutSignatureInfo.getAuteur());
+			auteur = ajoutSignatureInfo.getAuteur() != null ? new Auteur(ajoutSignatureInfo.getAuteur()) : null;
 		} else if (signatureInfo != null) {
 			SignatureValidator.validerSignature(signatureInfo);
 			signature.setMode(signatureInfo.getMode());
 			signature.setIdSignature(signatureInfo.getIdSignature());
 			signature.setFootprint(signatureInfo.getFootprint());
 			signature.setTimestampSignature(signatureInfo.getTimestamp());
-			auteur = new Auteur(signatureInfo.getAuteur());
+			auteur = signatureInfo.getAuteur() != null ? new Auteur(signatureInfo.getAuteur()) : null;
 		}
 
 		signature.setAuteur(auteur);
