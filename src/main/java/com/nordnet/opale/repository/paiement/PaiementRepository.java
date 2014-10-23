@@ -76,8 +76,13 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	 *            reference commande.
 	 * @param typePaiement
 	 *            {@link TypePaiement}
+	 * @param isAnnule
+	 *            si annule
 	 * @return Liste de {@link Paiement}
 	 */
-	public List<Paiement> findByReferenceCommandeAndTypePaiement(String referenceCommande, TypePaiement typePaiement);
+	// @Query(name = "Paiement.getMontantComptantPayePourCommande", value =
+	// "SELECT SUM(montant) FROM Paiement p WHERE p.referenceCommande LIKE :?1 AND p.typePaiement LIKE ?2 and ")
+	public List<Paiement> findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(String referenceCommande,
+			TypePaiement typePaiement);
 
 }

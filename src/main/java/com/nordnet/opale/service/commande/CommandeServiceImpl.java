@@ -138,10 +138,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes =
-				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
-						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
+		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
+				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+				.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {
@@ -172,10 +171,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 	@Override
 	@Transactional
-	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException {
+	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
-		return paiementService.getListePaiementComptant(referenceCommande);
+		return paiementService.getListePaiementComptant(referenceCommande, isAnnule);
 	}
 
 	/**
@@ -213,10 +212,10 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement getPaiementRecurrent(String referenceCommande) throws OpaleException {
+	public Paiement getPaiementRecurrent(String referenceCommande, boolean isAnnule) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
-		return paiementService.getPaiementRecurrent(referenceCommande);
+		return paiementService.getPaiementRecurrent(referenceCommande, isAnnule);
 	}
 
 	/**
@@ -227,8 +226,8 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.checkReferenceCommande(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande);
-		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande);
+		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande, false);
+		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande, false);
 		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
 	}
 

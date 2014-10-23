@@ -36,7 +36,8 @@ import com.nordnet.opale.service.signature.SignatureService;
 import com.wordnik.swagger.annotations.Api;
 
 /**
- * Gerer l'ensemble des requetes qui ont en rapport avec le {@link CommandeController}.
+ * Gerer l'ensemble des requetes qui ont en rapport avec le
+ * {@link CommandeController}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -125,8 +126,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -159,11 +160,11 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande)
+	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande, @PathVariable boolean isAnnule)
 			throws OpaleException, JSONException {
-		return commandeService.getListePaiementComptant(refCommande);
+		return commandeService.getListePaiementComptant(refCommande, isAnnule);
 	}
 
 	/**
@@ -171,23 +172,26 @@ public class CommandeController {
 	 * 
 	 * @param refCommande
 	 *            reference commande
+	 * @param isAnnule
+	 *            the is annule
 	 * @return la liste liste paiement recurrent
 	 * @throws OpaleException
-	 *             {@link OpaleException}
+	 *             the opale exception{@link OpaleException}
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
+	 * 
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public PaiementRecurrentInfo getListePaiementRecurrent(@PathVariable String refCommande)
-			throws OpaleException, JSONException {
-		Paiement paiement = commandeService.getPaiementRecurrent(refCommande);
+	public PaiementRecurrentInfo getListePaiementRecurrent(@PathVariable String refCommande,
+			@PathVariable boolean isAnnule) throws OpaleException, JSONException {
+		Paiement paiement = commandeService.getPaiementRecurrent(refCommande, isAnnule);
 		return new PaiementRecurrentInfo(paiement);
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.

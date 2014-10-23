@@ -114,18 +114,22 @@ public interface PaiementService {
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
+	 * @param isAnnule
+	 *            si annule
 	 * @return liste {@link Paiement}.
 	 */
-	public List<Paiement> getListePaiementComptant(String referenceCommande);
+	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule);
 
 	/**
 	 * retourner le paiement recurrent d'une commande.
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
+	 * @param isAnnule
+	 *            si annule
 	 * @return {@link Paiement}.
 	 */
-	public Paiement getPaiementRecurrent(String referenceCommande);
+	public Paiement getPaiementRecurrent(String referenceCommande, boolean isAnnule);
 
 	/**
 	 * Applique une suppression physiquement un intention et logique pour un
