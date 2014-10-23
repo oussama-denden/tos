@@ -88,6 +88,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Double coutCommandeComptant = calculerCoutComptant(refCommande);
 		CommandeValidator.validerCreerIntentionPaiement(refCommande, commande, coutCommandeComptant,
 				montantComptantPaye);
+		CommandeValidator.validerAuteur(refCommande, paiementInfo.getAuteur());
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
 
@@ -100,6 +101,7 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
+		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
@@ -114,6 +116,7 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
+		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
@@ -135,9 +138,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
-				.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
+		commandes =
+				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
+						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {
@@ -218,7 +222,11 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException {
+		Commande commande = commandeRepository.findByReference(refCommande);
+		CommandeValidator.checkReferenceCommande(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
 		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande);
 		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande);
 		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
@@ -227,6 +235,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException {
 
 		Commande commande = getCommandeByReference(refCommande);
@@ -248,10 +257,12 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandePaiementInfo commandePaiementInfo = new CommandePaiementInfo();
 		List<PaiementInfo> paiementInfosComptant = new ArrayList<PaiementInfo>();
 		for (Paiement paiement : paiementComptants) {
-			paiementInfosComptant.add(paiement.fromPaiementToPaiementInfo());
+			if (!paiement.isAnnule()) {
+				paiementInfosComptant.add(paiement.fromPaiementToPaiementInfo());
+			}
 		}
 		commandePaiementInfo.setComptant(paiementInfosComptant);
-		if (paiementRecurrent != null) {
+		if (paiementRecurrent != null && !paiementRecurrent.isAnnule()) {
 			commandePaiementInfo.setRecurrent(paiementRecurrent.fromPaiementToPaiementInfo());
 		}
 

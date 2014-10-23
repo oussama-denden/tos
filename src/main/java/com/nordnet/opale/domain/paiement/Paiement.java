@@ -350,6 +350,15 @@ public class Paiement {
 	}
 
 	/**
+	 * Verifier si le pâiement est annule.
+	 * 
+	 * @return true si le paiement est annule.
+	 */
+	public Boolean isAnnule() {
+		return (dateAnnulation != null);
+	}
+
+	/**
 	 * mapping paiement to business.
 	 * 
 	 * @return {@link PaiementInfo}

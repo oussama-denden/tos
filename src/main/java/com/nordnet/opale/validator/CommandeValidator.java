@@ -1,5 +1,6 @@
 package com.nordnet.opale.validator;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.exception.OpaleException;
@@ -93,4 +94,40 @@ public class CommandeValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.3"), "2.1.3");
 		}
 	}
+
+	/**
+	 * valider l'auteur.
+	 * 
+	 * @param refCommande
+	 *            reference de commande.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerAuteur(String refCommande, Auteur auteur) throws OpaleException {
+
+		if (auteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
+		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
+		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.canal"), "0.1.4");
+		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.Ip.ip"), "0.1.4");
+		}
+
+	}
+
 }
