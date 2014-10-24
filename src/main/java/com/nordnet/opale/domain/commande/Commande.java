@@ -19,7 +19,6 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
-import com.google.common.base.Optional;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
@@ -90,16 +89,16 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
+	 * date de transformation du commande vers contrat.
+	 */
+	private Date dateTransformationContrat;
+
+	/**
 	 * listes des {@link CommandeLigne} de la commande.
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "commandeId")
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
-
-	/**
-	 * la reference signature du client associe au commande.
-	 */
-	private String referenceSignature;
 
 	/**
 	 * si commande paye, paye=true.
@@ -281,6 +280,21 @@ public class Commande {
 	}
 
 	/**
+	 * @return {@link #dateTransformationContrat}.
+	 */
+	public Date getDateTransformationContrat() {
+		return dateTransformationContrat;
+	}
+
+	/**
+	 * @param dateTransformationContrat
+	 *            {@link #dateTransformationContrat}.
+	 */
+	public void setDateTransformationContrat(Date dateTransformationContrat) {
+		this.dateTransformationContrat = dateTransformationContrat;
+	}
+
+	/**
 	 * 
 	 * @return {@link #commandeLignes}.
 	 */
@@ -305,25 +319,6 @@ public class Commande {
 	 */
 	public void addLigne(CommandeLigne commandeLigne) {
 		this.commandeLignes.add(commandeLigne);
-	}
-
-	/**
-	 * get the reference de signature.
-	 * 
-	 * @return {@link #referenceSignature}
-	 */
-	public String getReferenceSignature() {
-		return referenceSignature;
-	}
-
-	/**
-	 * set the referense de signature.
-	 * 
-	 * @param referenceSignature
-	 *            the new {@link #referenceSignature}
-	 */
-	public void setReferenceSignature(String referenceSignature) {
-		this.referenceSignature = referenceSignature;
 	}
 
 	/**
@@ -403,15 +398,5 @@ public class Commande {
 				return true;
 		}
 		return false;
-	}
-
-	/**
-	 * retourner si la commande est signe ou non.
-	 * 
-	 * @return true si la commande est signe.
-	 */
-	public boolean isSigne() {
-		Optional<String> referenceSignatureOp = Optional.fromNullable(referenceSignature);
-		return referenceSignatureOp.isPresent();
 	}
 }

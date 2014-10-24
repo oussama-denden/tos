@@ -57,6 +57,11 @@ public class CommandeLigne {
 	private String referenceOffre;
 
 	/**
+	 * reference du contrat.
+	 */
+	private String referenceContrat;
+
+	/**
 	 * label de l'offre dans le catalogue.
 	 */
 	private String label;
@@ -201,6 +206,21 @@ public class CommandeLigne {
 	 */
 	public void setReferenceOffre(String referenceOffre) {
 		this.referenceOffre = referenceOffre;
+	}
+
+	/**
+	 * @return {@link #referenceContrat}.
+	 */
+	public String getReferenceContrat() {
+		return referenceContrat;
+	}
+
+	/**
+	 * @param referenceContrat
+	 *            {@link #referenceContrat}.
+	 */
+	public void setReferenceContrat(String referenceContrat) {
+		this.referenceContrat = referenceContrat;
 	}
 
 	/**

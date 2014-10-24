@@ -126,8 +126,8 @@ public class PaiementServiceImpl implements PaiementService {
 		if (typePaiement.equals(TypePaiement.COMPTANT)) {
 			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		} else {
-			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommandeAndTypePaiement(
-					referenceCommande, typePaiement);
+			List<Paiement> paiementRecurrent = paiementRepository
+					.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande, typePaiement);
 			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
 
 		}
@@ -157,17 +157,26 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Paiement> getListePaiementComptant(String referenceCommande) {
-		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
+	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) {
+		if (isAnnule) {
+			return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
+		}
+		return paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
+				TypePaiement.COMPTANT);
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement getPaiementRecurrent(String referenceCommande) {
-		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT)
-				.get(0);
+	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) {
+
+		if (isAnnule) {
+			return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT);
+		}
+		return paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
+				TypePaiement.RECURRENT);
 	}
 
 	/**

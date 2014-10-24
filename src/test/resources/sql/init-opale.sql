@@ -31,10 +31,10 @@ CREATE TABLE  `opale_test`.`commande` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
+  `dateTransformationContrat` datetime DEFAULT NULL,
   `paye` bit(1) DEFAULT 0,
   `reference` varchar(255) NOT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
-  `referenceSignature` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
@@ -58,6 +58,8 @@ CREATE TABLE `signature` (
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) NOT NULL,
+  `referenceCommande` varchar(255) DEFAULT NULL,
+   `dateAnnulation` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -80,6 +82,7 @@ CREATE TABLE `commandeligne` (
   `modePaiement` varchar(255) DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
   `referenceOffre` varchar(255) DEFAULT NULL,
+  `referenceContrat` varchar(255) DEFAULT NULL,
   `secteur` varchar(255) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,

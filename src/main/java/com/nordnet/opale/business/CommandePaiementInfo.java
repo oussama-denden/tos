@@ -21,7 +21,7 @@ public class CommandePaiementInfo {
 	/**
 	 * liste de paiements recurrents.
 	 */
-	private PaiementInfo recurrent;
+	private List<PaiementInfo> recurrent;
 
 	/**
 	 * constructeur par defaut .
@@ -54,7 +54,7 @@ public class CommandePaiementInfo {
 	 * 
 	 * @return {@link List<PaiementInfo> }
 	 */
-	public PaiementInfo getRecurrent() {
+	public List<PaiementInfo> getRecurrent() {
 		return recurrent;
 	}
 
@@ -64,7 +64,7 @@ public class CommandePaiementInfo {
 	 * @param recurrent
 	 *            the new {@link List<PaiementInfo> }
 	 */
-	public void setRecurrent(PaiementInfo recurrent) {
+	public void setRecurrent(List<PaiementInfo> recurrent) {
 		this.recurrent = recurrent;
 	}
 

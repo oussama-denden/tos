@@ -81,7 +81,6 @@
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
-    referenceSignature CDATA #IMPLIED
 >
 
 <!ELEMENT commandeLigne EMPTY>
@@ -154,6 +153,8 @@
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
+    referenceCommande CDATA #IMPLIED
+    dateAnnulation  CDATA #IMPLIED
 >
 
 <!ELEMENT paiement EMPTY>
