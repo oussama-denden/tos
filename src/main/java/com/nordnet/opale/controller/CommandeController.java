@@ -3,7 +3,6 @@ package com.nordnet.opale.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -32,7 +31,7 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
-import com.nordnet.opale.service.signature.SignatureService;
+import com.nordnet.opale.validator.CommandeValidator;
 import com.wordnik.swagger.annotations.Api;
 
 /**
@@ -56,12 +55,6 @@ public class CommandeController {
 	 */
 	@Autowired
 	private CommandeService commandeService;
-
-	/**
-	 * signature service. {@link SignatureService}
-	 */
-	@Autowired
-	private SignatureService signatureService;
 
 	/**
 	 * recuperer la commande.
@@ -225,10 +218,10 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/signature", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object signerCommande(@PathVariable String refCommande, @RequestBody AjoutSignatureInfo ajoutSignatureInfo)
-			throws OpaleException, JSONException {
+	public Object creerIntentionDeSignature(@PathVariable String refCommande,
+			@RequestBody AjoutSignatureInfo ajoutSignatureInfo) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::signerCommande");
-		return signatureService.signerCommande(refCommande, ajoutSignatureInfo);
+		return commandeService.creerIntentionDeSignature(refCommande, ajoutSignatureInfo);
 
 	}
 
@@ -243,13 +236,21 @@ public class CommandeController {
 	 *            {@link SignatureInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void transmettreSignature(@PathVariable String refCommande, @PathVariable String refSignature,
-			@RequestBody SignatureInfo signatureInfo) throws OpaleException {
-		LOGGER.info(":::ws-rec:::transmettreSignature");
-		signatureService.transmettreSignature(refCommande, refSignature, signatureInfo);
+	public void signerCommande(@PathVariable String refCommande, @PathVariable String refSignature,
+			@RequestBody SignatureInfo signatureInfo) throws OpaleException, JSONException {
+
+		LOGGER.info("Debut methode signerCommande");
+
+		Commande commande = commandeService.getCommandeByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
+
+		commandeService.signerCommande(refCommande, refSignature, signatureInfo);
 	}
 
 	/**
@@ -265,12 +266,12 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/signature/transmettre", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refCommande:.+}/signature/Direct", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object transmettreNouvelleSignature(@PathVariable String refCommande,
-			@RequestBody SignatureInfo signatureInfo) throws OpaleException, JSONException {
+	public Object signerCommandeDirect(@PathVariable String refCommande, @RequestBody SignatureInfo signatureInfo)
+			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transmettreNouvelleSignature");
-		return signatureService.transmettreSignature(refCommande, signatureInfo);
+		return commandeService.signerCommande(refCommande, null, signatureInfo);
 
 	}
 
@@ -279,16 +280,19 @@ public class CommandeController {
 	 * 
 	 * @param refCommande
 	 *            reference du commande.
+	 * @param afficheAnnule
+	 *            indiquer q'un doit affiche ou non les signatures annuler.
 	 * 
 	 * @return {@link SignatureInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/signature", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/signature/{afficheAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public SignatureInfo getSignature(@PathVariable String refCommande) throws OpaleException {
+	public List<SignatureInfo> getSignature(@PathVariable String refCommande, @PathVariable Boolean afficheAnnule)
+			throws OpaleException {
 		LOGGER.info(":::ws-rec:::getSignature");
-		return signatureService.getSignature(refCommande);
+		return commandeService.getSignature(refCommande, afficheAnnule);
 	}
 
 	/**
@@ -333,15 +337,33 @@ public class CommandeController {
 	 * @param refPaiement
 	 *            reference paiement
 	 * @throws Exception
-	 *             exception {@link Exception}.
+	 *             exception {@link OpaleException}.
 	 */
-	@DELETE
 	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerPaiement");
 		commandeService.supprimerPaiement(refCommande, refPaiement);
+	}
+
+	/**
+	 * supprimer une signature.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * @param refSignature
+	 *            refrence du signature.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerSignature(@PathVariable String refCommande, @PathVariable String refSignature)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::supprimerSignature");
+		commandeService.supprimerSignature(refCommande, refSignature);
+
 	}
 
 	/**

@@ -79,4 +79,19 @@ public class SignatureValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.3", "timestamp"), "4.1.3");
 		}
 	}
+
+	/**
+	 * Verifier si la signature est deja annulé.
+	 * 
+	 * @param signature
+	 *            {@link Signature}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkIfSignatureAnnule(Signature signature) throws OpaleException {
+		if (signature.isAnnule()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.6", signature.getReference()), "4.1.6");
+		}
+
+	}
 }
