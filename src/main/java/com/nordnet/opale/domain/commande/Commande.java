@@ -102,11 +102,6 @@ public class Commande {
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
 
 	/**
-	 * la reference signature du client associe au commande.
-	 */
-	private String referenceSignature;
-
-	/**
 	 * si commande paye, paye=true.
 	 */
 	private boolean paye;
@@ -330,25 +325,6 @@ public class Commande {
 	}
 
 	/**
-	 * get the reference de signature.
-	 * 
-	 * @return {@link #referenceSignature}
-	 */
-	public String getReferenceSignature() {
-		return referenceSignature;
-	}
-
-	/**
-	 * set the referense de signature.
-	 * 
-	 * @param referenceSignature
-	 *            the new {@link #referenceSignature}
-	 */
-	public void setReferenceSignature(String referenceSignature) {
-		this.referenceSignature = referenceSignature;
-	}
-
-	/**
 	 * 
 	 * @return {@link #paye}
 	 */
@@ -425,16 +401,6 @@ public class Commande {
 				return true;
 		}
 		return false;
-	}
-
-	/**
-	 * retourner si la commande est signe ou non.
-	 * 
-	 * @return true si la commande est signe.
-	 */
-	public boolean isSigne() {
-		Optional<String> referenceSignatureOp = Optional.fromNullable(referenceSignature);
-		return referenceSignatureOp.isPresent();
 	}
 
 	/**

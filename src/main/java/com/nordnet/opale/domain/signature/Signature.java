@@ -1,5 +1,7 @@
 package com.nordnet.opale.domain.signature;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -45,6 +47,11 @@ public class Signature {
 	private String reference;
 
 	/**
+	 * refrence du commande.
+	 */
+	private String referenceCommande;
+
+	/**
 	 * l'id de signature.
 	 */
 	private String idSignature;
@@ -65,6 +72,11 @@ public class Signature {
 	 */
 	@Embedded
 	private Auteur auteur;
+
+	/**
+	 * la date d'annulation.
+	 */
+	private Date dateAnnulation;
 
 	/**
 	 * contrcteur par defaut.
@@ -130,6 +142,25 @@ public class Signature {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * get the reference commande.
+	 * 
+	 * @return {@link #referenceCommande}
+	 */
+	public String getReferenceCommande() {
+		return referenceCommande;
+	}
+
+	/**
+	 * set the reference commande.
+	 * 
+	 * @param referenceCommande
+	 *            the new {@link #referenceCommande}
+	 */
+	public void setReferenceCommande(String referenceCommande) {
+		this.referenceCommande = referenceCommande;
 	}
 
 	/**
@@ -207,12 +238,41 @@ public class Signature {
 	}
 
 	/**
+	 * get date d'annulation.
+	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * set date d'annulation.
+	 * 
+	 * @param dateAnnulation
+	 *            the new {@link #dateAnnulation}
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
 	 * verfier si la signature associe a une commande est signe.
 	 * 
 	 * @return {@link Boolean}
 	 */
 	public Boolean isSigne() {
 		return (mode != null && idSignature != null && timestampSignature != null);
+	}
+
+	/**
+	 * Verifer si la signature est annule.
+	 * 
+	 * @return return true si la signature est annule.
+	 */
+	public Boolean isAnnule() {
+		return dateAnnulation != null;
+
 	}
 
 	/**
@@ -226,6 +286,7 @@ public class Signature {
 		signatureInfo.setIdSignature(idSignature);
 		signatureInfo.setFootprint(footprint);
 		signatureInfo.setTimestamp(timestampSignature);
+		signatureInfo.setAuteur(auteur.toAuteurBusiness());
 
 		return signatureInfo;
 	}

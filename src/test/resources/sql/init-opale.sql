@@ -35,7 +35,6 @@ CREATE TABLE  `opale_test`.`commande` (
   `paye` bit(1) DEFAULT 0,
   `reference` varchar(255) NOT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
-  `referenceSignature` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
@@ -59,6 +58,8 @@ CREATE TABLE `signature` (
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) NOT NULL,
+  `referenceCommande` varchar(255) DEFAULT NULL,
+   `dateAnnulation` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 

@@ -14,7 +14,6 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.paiement.PaiementRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
-import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.PaiementValidator;
 
@@ -128,7 +127,8 @@ public class PaiementServiceImpl implements PaiementService {
 			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		} else {
 			List<Paiement> paiementRecurrent =
-					paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, typePaiement);
+					paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
+							typePaiement);
 			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
 
 		}
@@ -158,22 +158,26 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Paiement> getListePaiementComptant(String referenceCommande) {
-		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
+	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) {
+		if (isAnnule) {
+			return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
+		}
+		return paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
+				TypePaiement.COMPTANT);
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement getPaiementRecurrent(String referenceCommande) {
-		List<Paiement> paiements =
-				paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT);
-		if (paiements.size() > Constants.ZERO) {
-			return paiements.get(Constants.ZERO);
-		} else {
-			return null;
+	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) {
+
+		if (isAnnule) {
+			return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT);
 		}
+		return paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
+				TypePaiement.RECURRENT);
 	}
 
 	/**
