@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
-import com.nordnet.opale.business.ValidationInfo;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -55,7 +55,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertTrue(validationInfo.isValide());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -91,7 +91,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-3", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-3", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.TROIS), Double.valueOf(validationInfo.getReasons().size()));
 			assertEquals("36.3.1.2", validationInfo.getReasons().get(Constants.DEUX).getError());
 		} catch (Exception e) {
@@ -109,7 +109,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-4", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-4", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.TROIS), Double.valueOf(validationInfo.getReasons().size()));
 			assertEquals("36.3.1.3", validationInfo.getReasons().get(Constants.DEUX).getError());
 		} catch (Exception e) {
@@ -128,7 +128,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
 			assertEquals("1.1.14", validationInfo.getReasons().get(Constants.ZERO).getError());
 		} catch (Exception e) {
@@ -147,7 +147,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(validationInfo.getReasons().size()));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -165,7 +165,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
 			assertEquals("1.1.16", validationInfo.getReasons().get(Constants.ZERO).getError());
 		} catch (Exception e) {
@@ -184,7 +184,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
 			assertEquals("1.1.12", validationInfo.getReasons().get(Constants.ZERO).getError());
 		} catch (Exception e) {
@@ -203,7 +203,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 		try {
 			TrameCatalogue trameCatalogue = draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 					"./requests/validerDraft.json");
-			ValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
+			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
 			assertEquals("1.1.13", validationInfo.getReasons().get(Constants.ZERO).getError());
 		} catch (Exception e) {

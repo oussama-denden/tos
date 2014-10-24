@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.nordnet.opale.business.ValidationInfo;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.draft.Draft;
@@ -31,10 +31,10 @@ public class CatalogueValidator {
 	 *            {@link Draft}.
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
-	 * @return {@link ValidationInfo}.
+	 * @return {@link DraftValidationInfo}.
 	 */
-	public ValidationInfo validerDraft(Draft draft, TrameCatalogue trameCatalogue) {
-		ValidationInfo validationInfo = new ValidationInfo();
+	public DraftValidationInfo validerDraft(Draft draft, TrameCatalogue trameCatalogue) {
+		DraftValidationInfo validationInfo = new DraftValidationInfo();
 		List<String> values;
 		int i = 0, j = 0;
 		boolean isPossedeBiens = false;

@@ -121,13 +121,14 @@ public class PaiementServiceImpl implements PaiementService {
 	@Override
 	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
 			TypePaiement typePaiement) throws OpaleException {
-		Paiement paiement = paiementRepository
-				.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
+		Paiement paiement =
+				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
 		if (typePaiement.equals(TypePaiement.COMPTANT)) {
 			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		} else {
-			List<Paiement> paiementRecurrent = paiementRepository
-					.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande, typePaiement);
+			List<Paiement> paiementRecurrent =
+					paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
+							typePaiement);
 			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
 
 		}

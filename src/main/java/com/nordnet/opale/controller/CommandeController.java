@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
+import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -32,6 +33,7 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
+import com.nordnet.opale.service.signature.SignatureService;
 import com.nordnet.opale.validator.CommandeValidator;
 import com.wordnik.swagger.annotations.Api;
 
@@ -56,6 +58,12 @@ public class CommandeController {
 	 */
 	@Autowired
 	private CommandeService commandeService;
+
+	/**
+	 * signature service. {@link SignatureService}
+	 */
+	@Autowired
+	private SignatureService signatureService;
 
 	/**
 	 * recuperer la commande.
@@ -151,11 +159,11 @@ public class CommandeController {
 	 *            the is annule
 	 * @return la liste liste paiement recurrent
 	 * @throws OpaleException
-	 *             the opale exception
+	 *             {@link OpaleException}
 	 * @throws JSONException
-	 *             the jSON exception {@link JSONException} {@link OpaleException}
+	 *             the jSON exception {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande, @PathVariable boolean isAnnule)
 			throws OpaleException, JSONException {
@@ -171,10 +179,9 @@ public class CommandeController {
 	 *            the is annule
 	 * @return la liste paiements recurrents
 	 * @throws OpaleException
-	 *             the opale exception{@link OpaleException}
+	 *             {@link OpaleException}
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
-	 * 
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -334,7 +341,7 @@ public class CommandeController {
 	 *            the is annule
 	 * @return {@link CommandePaiementInfo}
 	 * @throws OpaleException
-	 *             the opale exception {@link OpaleException}
+	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -342,6 +349,41 @@ public class CommandeController {
 			throws OpaleException {
 		return commandeService.getListeDePaiement(refCommande, isAnnule);
 
+	}
+
+	/**
+	 * supprimer draft.
+	 * 
+	 * @param refCommande
+	 *            reference commande
+	 * @param refPaiement
+	 *            reference paiement
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::supprimerPaiement");
+		commandeService.supprimerPaiement(refCommande, refPaiement);
+	}
+
+	/**
+	 * valider une {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return {@link CommandeValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/valider", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public CommandeValidationInfo validerCommande(@PathVariable("refCommande") String referenceCommande)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::validerCommande");
+		return commandeService.validerCommande(referenceCommande);
 	}
 
 	/**
@@ -363,43 +405,6 @@ public class CommandeController {
 		JSONObject rsc = new JSONObject();
 		rsc.put("referencesContrats", referencesContrats);
 		return rsc.toString();
-	}
-
-	/**
-	 * supprimer draft.
-	 * 
-	 * @param refCommande
-	 *            reference commande
-	 * @param refPaiement
-	 *            reference paiement
-	 * @throws OpaleException
-	 *             exception {@link Exception}.
-	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
-	@ResponseBody
-	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement)
-			throws OpaleException {
-		LOGGER.info(":::ws-rec:::supprimerPaiement");
-		commandeService.supprimerPaiement(refCommande, refPaiement);
-	}
-
-	/**
-	 * supprimer une signature.
-	 * 
-	 * @param refCommande
-	 *            reference du commande.
-	 * @param refSignature
-	 *            refrence du signature.
-	 * @throws OpaleException
-	 *             exception {@link OpaleException}.
-	 */
-	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
-	@ResponseBody
-	public void supprimerSignature(@PathVariable String refCommande, @PathVariable String refSignature)
-			throws OpaleException {
-		LOGGER.info(":::ws-rec:::supprimerSignature");
-		commandeService.supprimerSignature(refCommande, refSignature);
-
 	}
 
 	/**

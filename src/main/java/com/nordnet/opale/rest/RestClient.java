@@ -12,7 +12,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.ContratValidationInfo;
 import com.nordnet.opale.exception.InfoErreur;

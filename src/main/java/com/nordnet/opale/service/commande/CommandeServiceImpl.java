@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
+import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
@@ -24,6 +25,7 @@ import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
@@ -97,8 +99,7 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode getCommande");
 
 		CommandeValidator.checkReferenceCommande(refCommande);
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		Commande commande = getCommandeByReference(refCommande);
 		return commande.toCommandInfo();
 	}
 
@@ -122,11 +123,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		LOGGER.info("Debut methode creerIntentionPaiement");
 
-		Commande commande = commandeRepository.findByReference(refCommande);
-		Double montantComptantPaye = paiementService.montantComptantPaye(refCommande);
-		Double coutCommandeComptant = calculerCoutComptant(refCommande);
-		CommandeValidator.validerCreerIntentionPaiement(refCommande, commande, coutCommandeComptant,
-				montantComptantPaye);
+		getCommandeByReference(refCommande);
 		CommandeValidator.validerAuteur(refCommande, paiementInfo.getAuteur());
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
@@ -141,8 +138,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		LOGGER.info("Debut methode payerIntentionPaiement");
 
-		Commande commande = commandeRepository.findByReference(referenceCommande);
-		CommandeValidator.isExiste(referenceCommande, commande);
+		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
 		commande.setPaye(isPayeTotalement(referenceCommande));
@@ -159,8 +155,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		LOGGER.info("Debut methode paiementDirect");
 
-		Commande commande = commandeRepository.findByReference(referenceCommande);
-		CommandeValidator.isExiste(referenceCommande, commande);
+		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 		commande.setPaye(isPayeTotalement(referenceCommande));
@@ -213,11 +208,13 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
-	public Commande getCommandeByReference(String reference) {
+	public Commande getCommandeByReference(String referenceCommande) throws OpaleException {
 
 		LOGGER.info("Debut methode getCommandeByReference");
 
-		return commandeRepository.findByReference(reference);
+		Commande commande = commandeRepository.findByReference(referenceCommande);
+		CommandeValidator.isExiste(referenceCommande, commande);
+		return commande;
 	}
 
 	@Override
@@ -270,8 +267,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) throws OpaleException {
-		Commande commande = getCommandeByReference(referenceCommande);
-		CommandeValidator.isExiste(referenceCommande, commande);
+		getCommandeByReference(referenceCommande);
 		return paiementService.getPaiementRecurrent(referenceCommande, isAnnule);
 	}
 
@@ -280,9 +276,8 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException {
-		Commande commande = commandeRepository.findByReference(refCommande);
+		getCommandeByReference(refCommande);
 		CommandeValidator.checkReferenceCommande(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
 		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande, isAnnule);
 		List<Paiement> paiementRecurrent = paiementService.getPaiementRecurrent(refCommande, isAnnule);
 		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
@@ -296,8 +291,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		LOGGER.info("Debut methode supprimerPaiement");
 
-		Commande commande = getCommandeByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		getCommandeByReference(refCommande);
 		paiementService.supprimer(refCommande, refPaiement);
 	}
 
@@ -388,6 +382,54 @@ public class CommandeServiceImpl implements CommandeService {
 
 	/**
 	 * {@inheritDoc}
+	 */
+	@Override
+	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException {
+		CommandeValidationInfo validationInfo = new CommandeValidationInfo();
+		Commande commande = getCommandeByReference(referenceCommande);
+
+		/*
+		 * valider si la commande est annule ou non.
+		 */
+		if (commande.isAnnule()) {
+			validationInfo.addReason("Commande", "2.1.3",
+					PropertiesUtil.getInstance().getErrorMessage("2.1.3", referenceCommande));
+		} else {
+
+			/*
+			 * valider que la commande est bien signe.
+			 */
+			Signature signature = signatureService.getSignatureByReferenceCommande(commande.getReference());
+			if (signature == null) {
+				validationInfo.addReason("Signature", "2.1.4", PropertiesUtil.getInstance().getErrorMessage("2.1.4"));
+			} else if (!signature.isSigne()) {
+				validationInfo.addReason("Signature", "2.1.5", PropertiesUtil.getInstance().getErrorMessage("2.1.5"));
+			}
+
+			/*
+			 * valider que les cout comptant associe a la commande sont paye.
+			 */
+			if (!isPayeTotalement(referenceCommande)) {
+				validationInfo.addReason("Paiement", "2.1.6", PropertiesUtil.getInstance().getErrorMessage("2.1.6"));
+			}
+
+			/*
+			 * verifier an cas de besoin qu'il y a un paiement recurrent est bien associe a la commande.
+			 */
+			if (commande.needPaiementRecurrent()) {
+				List<Paiement> paiements = getPaiementRecurrent(referenceCommande, false);
+				if (paiements.size() > Constants.ZERO) {
+					validationInfo
+							.addReason("Paiement", "2.1.7", PropertiesUtil.getInstance().getErrorMessage("2.1.7"));
+				}
+			}
+		}
+
+		return validationInfo;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 */
 	@Override
@@ -395,7 +437,7 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.isNotTransformed(commande);
+		CommandeValidator.testerCommandeNonTransforme(commande);
 		List<String> referencesContrats = new ArrayList<>();
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			ContratPreparationInfo preparationInfo = ligne.toContratPreparationInfo(refCommande);
