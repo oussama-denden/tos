@@ -28,7 +28,7 @@ import com.nordnet.opale.enums.TypePaiement;
  */
 @Table(name = "paiement")
 @Entity
-@JsonIgnoreProperties({ "id", "intension", "paye" })
+@JsonIgnoreProperties({ "id", "intension", "paye", "reference" })
 public class Paiement {
 
 	/**

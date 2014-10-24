@@ -129,7 +129,7 @@ public interface PaiementService {
 	 *            si annule
 	 * @return {@link Paiement}.
 	 */
-	public Paiement getPaiementRecurrent(String referenceCommande, boolean isAnnule);
+	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule);
 
 	/**
 	 * Applique une suppression physiquement un intention et logique pour un

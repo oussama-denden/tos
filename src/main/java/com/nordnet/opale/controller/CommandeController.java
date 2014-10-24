@@ -1,5 +1,6 @@
 package com.nordnet.opale.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,11 +155,14 @@ public class CommandeController {
 	 * 
 	 * @param refCommande
 	 *            reference commande
+	 * @param isAnnule
+	 *            the is annule
 	 * @return la liste liste paiement recurrent
 	 * @throws OpaleException
-	 *             {@link OpaleException}
+	 *             the opale exception
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
+	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -174,7 +178,7 @@ public class CommandeController {
 	 *            reference commande
 	 * @param isAnnule
 	 *            the is annule
-	 * @return la liste liste paiement recurrent
+	 * @return la liste paiements recurrents
 	 * @throws OpaleException
 	 *             the opale exception{@link OpaleException}
 	 * @throws JSONException
@@ -183,10 +187,17 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public PaiementRecurrentInfo getListePaiementRecurrent(@PathVariable String refCommande,
+	public List<PaiementRecurrentInfo> getListePaiementRecurrent(@PathVariable String refCommande,
 			@PathVariable boolean isAnnule) throws OpaleException, JSONException {
-		Paiement paiement = commandeService.getPaiementRecurrent(refCommande, isAnnule);
-		return new PaiementRecurrentInfo(paiement);
+		List<Paiement> paiements = commandeService.getPaiementRecurrent(refCommande, isAnnule);
+
+		List<PaiementRecurrentInfo> paiementRecurrentInfos = new ArrayList<PaiementRecurrentInfo>();
+
+		for (Paiement paiement : paiements) {
+			paiementRecurrentInfos.add(new PaiementRecurrentInfo(paiement));
+		}
+
+		return paiementRecurrentInfos;
 	}
 
 	/**
@@ -317,15 +328,17 @@ public class CommandeController {
 	 * 
 	 * @param refCommande
 	 *            reference du commande.
-	 * 
+	 * @param isAnnule
+	 *            the is annule
 	 * @return {@link CommandePaiementInfo}
 	 * @throws OpaleException
-	 *             {@link OpaleException}
+	 *             the opale exception {@link OpaleException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public CommandePaiementInfo getListeDePaiement(@PathVariable String refCommande) throws OpaleException {
-		return commandeService.getListeDePaiement(refCommande);
+	public CommandePaiementInfo getListeDePaiement(@PathVariable String refCommande, @PathVariable boolean isAnnule)
+			throws OpaleException {
+		return commandeService.getListeDePaiement(refCommande, isAnnule);
 
 	}
 

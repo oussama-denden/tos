@@ -158,17 +158,25 @@ public class PaiementServiceImpl implements PaiementService {
 	 */
 	@Override
 	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) {
+		if (isAnnule) {
+			return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.COMPTANT);
+		}
 		return paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
 				TypePaiement.COMPTANT);
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement getPaiementRecurrent(String referenceCommande, boolean isAnnule) {
+	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) {
+
+		if (isAnnule) {
+			return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT);
+		}
 		return paiementRepository.findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(referenceCommande,
-				TypePaiement.RECURRENT).get(0);
+				TypePaiement.RECURRENT);
 	}
 
 	/**
