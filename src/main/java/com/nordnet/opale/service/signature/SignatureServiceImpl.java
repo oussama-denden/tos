@@ -69,7 +69,6 @@ public class SignatureServiceImpl implements SignatureService {
 		LOGGER.info("Debut methode signerCommande");
 
 		Commande commande = commandeService.getCommandeByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.validerAuteur(refCommande, ajoutSignatureInfo.getAuteur());
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {
@@ -97,8 +96,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 		LOGGER.info("Debut methode transmettreSignature");
 
-		Commande commande = commandeService.getCommandeByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
 
 		Signature signature = signatureRepository.findByReference(refSignature);
@@ -122,7 +120,6 @@ public class SignatureServiceImpl implements SignatureService {
 		LOGGER.info("Debut methode transmettreSignature");
 
 		Commande commande = commandeService.getCommandeByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
 		String signatureReference = null;
 		if (commande.getReferenceSignature() == null) {

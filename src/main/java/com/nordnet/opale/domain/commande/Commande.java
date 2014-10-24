@@ -90,6 +90,11 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
+	 * date d'annulation de la commande.
+	 */
+	private Date dateAnnulation;
+
+	/**
 	 * listes des {@link CommandeLigne} de la commande.
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
@@ -282,6 +287,23 @@ public class Commande {
 
 	/**
 	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}.
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
+	 * 
 	 * @return {@link #commandeLignes}.
 	 */
 	public List<CommandeLigne> getCommandeLignes() {
@@ -413,5 +435,15 @@ public class Commande {
 	public boolean isSigne() {
 		Optional<String> referenceSignatureOp = Optional.fromNullable(referenceSignature);
 		return referenceSignatureOp.isPresent();
+	}
+
+	/**
+	 * varifier si la commande est annule ou non.
+	 * 
+	 * @return true si la commande est annule.
+	 */
+	public boolean isAnnule() {
+		Optional<Date> dateAnnulationOptional = Optional.fromNullable(dateAnnulation);
+		return dateAnnulationOptional.isPresent();
 	}
 }

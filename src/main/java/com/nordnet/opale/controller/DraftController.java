@@ -25,7 +25,7 @@ import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.ValidationInfo;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -212,13 +212,13 @@ public class DraftController {
 	 *            reference du draft.
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
-	 * @return {@link ValidationInfo}.
+	 * @return {@link DraftValidationInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/valider", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public ValidationInfo validerDraft(@PathVariable String refDraft, @RequestBody TrameCatalogue trameCatalogue)
+	public DraftValidationInfo validerDraft(@PathVariable String refDraft, @RequestBody TrameCatalogue trameCatalogue)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::validerDraft");
 		return draftService.validerDraft(refDraft, trameCatalogue);
@@ -231,7 +231,7 @@ public class DraftController {
 	 *            reference draft.
 	 * @param transformationInfo
 	 *            {@link TransformationInfo}.
-	 * @return reference commande ou {@link ValidationInfo}
+	 * @return reference commande ou {@link DraftValidationInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException

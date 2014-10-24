@@ -1,27 +1,28 @@
 package com.nordnet.opale.business;
 
+import java.security.cert.CertPathValidatorException.Reason;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.commande.Commande;
 
 /**
- * contient les resultats de la validation du {@link Draft} avec la {@link CatalogueTrame}.
+ * contient les resultats de la validation du {@link Commande}.
  * 
  * @author akram-moncer
  * 
  */
-public class ValidationInfo {
+public class CommandeValidationInfo {
 
 	/**
-	 * liste des cause des erreur lors de la validation d'un {@link Draft}.
+	 * liste des cause des erreur lors de la validation d'un {@link Commande}.
 	 */
-	private List<Reason> reasons = new ArrayList<Reason>();
+	private List<ReasonCommande> reasons = new ArrayList<ReasonCommande>();
 
 	/**
 	 * constructeur par default.
 	 */
-	public ValidationInfo() {
+	public CommandeValidationInfo() {
 	}
 
 	/**
@@ -29,7 +30,7 @@ public class ValidationInfo {
 	 * @param reasons
 	 *            {@link #reasons}.
 	 */
-	public ValidationInfo(List<Reason> reasons) {
+	public CommandeValidationInfo(List<ReasonCommande> reasons) {
 		super();
 		this.reasons = reasons;
 	}
@@ -50,7 +51,7 @@ public class ValidationInfo {
 	 * 
 	 * @return {@link #reasons}.
 	 */
-	public List<Reason> getReasons() {
+	public List<ReasonCommande> getReasons() {
 		return reasons;
 	}
 
@@ -59,7 +60,7 @@ public class ValidationInfo {
 	 * @param reasons
 	 *            {@link #reasons}.
 	 */
-	public void setReasons(List<Reason> reasons) {
+	public void setReasons(List<ReasonCommande> reasons) {
 		this.reasons = reasons;
 	}
 
@@ -72,11 +73,9 @@ public class ValidationInfo {
 	 *            code erreur.
 	 * @param errorMessage
 	 *            message d'erreur.
-	 * @param values
-	 *            {@link #values}.
 	 */
-	public void addReason(String source, String error, String errorMessage, List<String> values) {
-		Reason reason = new Reason(source, error, errorMessage, values);
+	public void addReason(String source, String error, String errorMessage) {
+		ReasonCommande reason = new ReasonCommande(source, error, errorMessage);
 		reasons.add(reason);
 	}
 

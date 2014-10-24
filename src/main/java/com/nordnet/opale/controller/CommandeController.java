@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
+import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -332,8 +333,8 @@ public class CommandeController {
 	 *            reference commande
 	 * @param refPaiement
 	 *            reference paiement
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	@DELETE
 	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
@@ -342,6 +343,23 @@ public class CommandeController {
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerPaiement");
 		commandeService.supprimerPaiement(refCommande, refPaiement);
+	}
+
+	/**
+	 * valider une {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return {@link CommandeValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/valider", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public CommandeValidationInfo validerCommande(@PathVariable("refCommande") String referenceCommande)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::validerCommande");
+		return commandeService.validerCommande(referenceCommande);
 	}
 
 	/**

@@ -14,6 +14,7 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.paiement.PaiementRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.PaiementValidator;
 
@@ -121,13 +122,13 @@ public class PaiementServiceImpl implements PaiementService {
 	@Override
 	public Paiement effectuerPaiement(String referencePaiement, String referenceCommande, PaiementInfo paiementInfo,
 			TypePaiement typePaiement) throws OpaleException {
-		Paiement paiement = paiementRepository
-				.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
+		Paiement paiement =
+				paiementRepository.findByReferenceAndReferenceCommande(referencePaiement, referenceCommande);
 		if (typePaiement.equals(TypePaiement.COMPTANT)) {
 			PaiementValidator.validerEffectuerPaiement(referencePaiement, referenceCommande, paiement, paiementInfo);
 		} else {
-			List<Paiement> paiementRecurrent = paiementRepository.findByReferenceCommandeAndTypePaiement(
-					referenceCommande, typePaiement);
+			List<Paiement> paiementRecurrent =
+					paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, typePaiement);
 			PaiementValidator.validerPaiementRecurrent(paiementRecurrent, paiementInfo);
 
 		}
@@ -166,8 +167,13 @@ public class PaiementServiceImpl implements PaiementService {
 	 */
 	@Override
 	public Paiement getPaiementRecurrent(String referenceCommande) {
-		return paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT)
-				.get(0);
+		List<Paiement> paiements =
+				paiementRepository.findByReferenceCommandeAndTypePaiement(referenceCommande, TypePaiement.RECURRENT);
+		if (paiements.size() > Constants.ZERO) {
+			return paiements.get(Constants.ZERO);
+		} else {
+			return null;
+		}
 	}
 
 	/**

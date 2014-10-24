@@ -6,6 +6,7 @@ import javax.activation.CommandInfo;
 
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
+import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
@@ -81,8 +82,8 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la
-	 * creation d'un intention de paiement en avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -107,13 +108,16 @@ public interface CommandeService {
 	public List<CommandeInfo> find(CriteresCommande criteresCommande);
 
 	/**
-	 * recherche une commande a partir du reference.
+	 * retourne un {@link Commande} a partir de ca reference. Cette methode genere une exception si le draft n'existe
+	 * pas.
 	 * 
-	 * @param reference
+	 * @param referenceCommande
 	 *            reference du commande.
 	 * @return {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public Commande getCommandeByReference(String reference);
+	public Commande getCommandeByReference(String referenceCommande) throws OpaleException;
 
 	/**
 	 * retourner la liste des paiement comptant d'une commande.
@@ -150,8 +154,7 @@ public interface CommandeService {
 	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException;
 
 	/**
-	 * Applique une suppression physiquement un intention et logique pour un
-	 * paiement.
+	 * Applique une suppression physiquement un intention et logique pour un paiement.
 	 * 
 	 * @param refCommande
 	 *            reference commande
@@ -161,4 +164,15 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException;
+
+	/**
+	 * valider une {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return {@link CommandeValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
 }
