@@ -1,5 +1,7 @@
 package com.nordnet.opale.business;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.enums.ModeSignature;
 import com.nordnet.opale.enums.deserializer.ModeSignatureDeserialiser;
@@ -22,6 +24,11 @@ public class AjoutSignatureInfo {
 	 */
 	@JsonDeserialize(using = ModeSignatureDeserialiser.class)
 	private ModeSignature mode;
+
+	/**
+	 * date de l'intention.
+	 */
+	private Date timestamp;
 
 	/**
 	 * constructeur par defaut.
@@ -67,6 +74,25 @@ public class AjoutSignatureInfo {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * get the timeStamps.
+	 * 
+	 * @return {@link #timestamp}
+	 */
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	/**
+	 * set the timeStamp.
+	 * 
+	 * @param timestamp
+	 *            the new {@link #timestamp}
+	 */
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }

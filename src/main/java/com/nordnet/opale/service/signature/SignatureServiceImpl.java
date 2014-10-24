@@ -75,6 +75,7 @@ public class SignatureServiceImpl implements SignatureService {
 			signatureReference = creerSignature(ajoutSignatureInfo, null, refCommande);
 		} else {
 			SignatureValidator.checkSignatureComplete(refCommande, signature, true);
+			SignatureValidator.checkIfSignatureAnnule(signature);
 			signature.setMode(ajoutSignatureInfo.getMode());
 			signature.setAuteur(new Auteur(ajoutSignatureInfo.getAuteur()));
 			signatureRepository.save(signature);
@@ -104,12 +105,14 @@ public class SignatureServiceImpl implements SignatureService {
 			SignatureValidator.checkSignatureExiste(signature, refSignature, refCommande);
 			SignatureValidator.checkSignatureComplete(refCommande, signature, false);
 			SignatureValidator.validerSignature(signatureInfo);
+			SignatureValidator.checkIfSignatureAnnule(signature);
 			ajouterSignature(signature, signatureInfo);
 		} else {
 			Signature signature = getSignatureByReferenceCommande(refCommande);
 			if (signature != null) {
 				SignatureValidator.checkSignatureComplete(refCommande, signature, false);
 				SignatureValidator.validerSignature(signatureInfo);
+				SignatureValidator.checkIfSignatureAnnule(signature);
 				referenceSignature = ajouterSignature(signature, signatureInfo);
 			}
 
@@ -202,6 +205,7 @@ public class SignatureServiceImpl implements SignatureService {
 		Auteur auteur = null;
 		if (ajoutSignatureInfo != null) {
 			signature.setMode(ajoutSignatureInfo.getMode());
+			signature.setTimestampIntention(ajoutSignatureInfo.getTimestamp());
 			auteur = ajoutSignatureInfo.getAuteur() != null ? new Auteur(ajoutSignatureInfo.getAuteur()) : null;
 		} else if (signatureInfo != null) {
 			SignatureValidator.validerSignature(signatureInfo);

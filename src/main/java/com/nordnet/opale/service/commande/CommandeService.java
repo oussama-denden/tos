@@ -228,4 +228,11 @@ public interface CommandeService {
 	 *             {@link OpaleException}.
 	 */
 	public List<SignatureInfo> getSignature(String refCommand, Boolean afficheAnnule) throws OpaleException;
+
+	/**
+	 * recuperer la list des commandes non transformes et non annules.
+	 * 
+	 * @return {@link List<Commande}
+	 */
+	public List<Commande> getCommandeNonAnnuleEtNonTransformes();
 }

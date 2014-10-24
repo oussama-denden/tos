@@ -36,6 +36,8 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 					+ "c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) "
 					+ "AND (t.frequence = t.duree OR t.frequence is NULL)) tarifs";
 
+	public final static String MAX_DATE_ACTIVATION = "SELECT MAX(SELECT MAX()";
+
 	/**
 	 * Find by reference.
 	 * 
@@ -73,5 +75,14 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	@Query(nativeQuery = true, value = COUT_TARIFS_COMPTANT)
 	public Double calculerCoutTarifsComptant(@Param("referenceCommande") String referenceCommande);
+
+	/**
+	 * recuperer la list des commandes non transformes et non annules.
+	 * 
+	 * @return {@link List<Commande>}
+	 */
+	// @Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value =
+	// "SELECT c FROM Commande c WHERE c.dateAnnulation IS NOT NULL")
+	// public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
 
 }

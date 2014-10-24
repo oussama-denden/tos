@@ -371,4 +371,13 @@ public class CommandeServiceImpl implements CommandeService {
 
 		return signatureService.getSignatures(refCommande, afficheAnnule);
 	}
+
+	@Override
+	public List<Commande> getCommandeNonAnnuleEtNonTransformes() {
+
+		LOGGER.info("Debut methode  getCommandeNonAnnuleEtNonTransformes");
+
+		// return commandeRepository.recupererCommandeNonTransformeeEtNonAnnulee();
+		return null;
+	}
 }
