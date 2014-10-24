@@ -326,13 +326,34 @@ public class CommandeController {
 	}
 
 	/**
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * @return liste des references des contrat cree.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformeEnContrat", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public String transformeEnContrat(@PathVariable String refCommande) throws OpaleException, JSONException {
+		List<String> referencesContrats = commandeService.transformeEnContrat(refCommande);
+		JSONObject rsc = new JSONObject();
+		rsc.put("referencesContrats", referencesContrats);
+		return rsc.toString();
+	}
+
+	/**
 	 * supprimer draft.
 	 * 
 	 * @param refCommande
 	 *            reference commande
 	 * @param refPaiement
 	 *            reference paiement
-	 * @throws Exception
+	 * @throws OpaleException
 	 *             exception {@link Exception}.
 	 */
 	@DELETE

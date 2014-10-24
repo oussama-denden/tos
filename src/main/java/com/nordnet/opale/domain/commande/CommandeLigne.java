@@ -20,11 +20,14 @@ import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.ContratPreparationInfo;
+import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.util.Constants;
 
 /**
  * Classe represente une ligne (offre) dans la {@link Commande}.
@@ -424,6 +427,32 @@ public class CommandeLigne {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Transformer un {@link CommandeLigne} en un {@link ContratPreparationInfo}.
+	 * 
+	 * @param referenceCommande
+	 *            reference du commande.
+	 * @return {@link ContratPreparationInfo}.
+	 */
+	public ContratPreparationInfo toContratPreparationInfo(String referenceCommande) {
+		ContratPreparationInfo contrat = new ContratPreparationInfo();
+
+		contrat.setUser(auteur.getQui());
+		List<Produit> produits = new ArrayList<>();
+		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
+			Integer numECParent = null;
+			if (ligneDetail.getCommandeLigneDetailParent() != null) {
+				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.UN;
+			}
+
+			produits.add(ligneDetail.toProduit(referenceCommande, commandeLigneDetails.indexOf(ligneDetail)
+					+ Constants.UN, numECParent, modeFacturation));
+		}
+		contrat.setProduits(produits);
+
+		return contrat;
 	}
 
 }

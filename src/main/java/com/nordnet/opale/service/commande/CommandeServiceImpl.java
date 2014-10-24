@@ -5,6 +5,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,14 +14,21 @@ import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.commande.ContratPreparationInfo;
+import com.nordnet.opale.business.commande.ContratValidationInfo;
+import com.nordnet.opale.business.commande.PolitiqueValidation;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
+import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.validator.CommandeValidator;
 
 /**
@@ -49,6 +57,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private KeygenService keygenService;
+
+	/**
+	 * {@link RestClient}.
+	 */
+	@Autowired
+	private RestClient restClient;
 
 	/**
 	 * {@inheritDoc}
@@ -224,8 +238,8 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException {
-		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.checkReferenceCommande(refCommande);
+		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande);
 		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande);
@@ -270,4 +284,69 @@ public class CommandeServiceImpl implements CommandeService {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ContratPreparationInfo transformerComandeLigneContrat(String referenceCommande, CommandeLigne commandeLigne)
+			throws OpaleException {
+		return commandeLigne.toContratPreparationInfo(referenceCommande);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException {
+		CommandeValidator.checkReferenceCommande(refCommande);
+		Commande commande = commandeRepository.findByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		List<String> referencesContrats = new ArrayList<>();
+		for (CommandeLigne ligne : commande.getCommandeLignes()) {
+			ContratPreparationInfo preparationInfo = ligne.toContratPreparationInfo(refCommande);
+			String refContrat = restClient.preparerContrat(preparationInfo);
+
+			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
+
+			restClient.validerContrat(refContrat, validationInfo);
+
+			referencesContrats.add(refContrat);
+
+		}
+
+		return referencesContrats;
+	}
+
+	/**
+	 * Creer les information de validation de contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param ligne
+	 *            {@link CommandeLigne}.
+	 * @param refContrat
+	 *            refrence de commande.
+	 * @return {@link ContratValidationInfo}.
+	 */
+	private ContratValidationInfo creeContratValidationInfo(Commande commande, CommandeLigne ligne, String refContrat) {
+		ContratValidationInfo validationInfo = new ContratValidationInfo();
+		validationInfo.setIdAdrFacturation(commande.getClientAFacturer().getAdresseId());
+		validationInfo.setIdClient(commande.getClientAFacturer().getClientId());
+		PolitiqueValidation politiqueValidation = new PolitiqueValidation();
+		politiqueValidation.setCheckIsPackagerCreationPossible(true);
+		politiqueValidation.setFraisCreation(true);
+		validationInfo.setUser(ligne.getAuteur().getQui());
+
+		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
+			com.nordnet.opale.business.commande.PaiementInfo paiementInfo =
+					new com.nordnet.opale.business.commande.PaiementInfo();
+			paiementInfo.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
+			paiementInfo.setNumEC(ligne.getCommandeLigneDetails().indexOf(ligneDetail) + Constants.UN);
+			// PaiementInfo paiementRecurrent = paiementService.getPaiementRecurrent(referenceCommande);
+			// paiementInfo.setReferenceModePaiement();
+			paiementInfo.setReferenceProduit(ligneDetail.getReferenceProduit());
+		}
+		return validationInfo;
+	}
 }

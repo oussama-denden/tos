@@ -4,11 +4,15 @@ import java.util.List;
 
 import javax.activation.CommandInfo;
 
+import org.json.JSONException;
+
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
@@ -81,8 +85,8 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la
-	 * creation d'un intention de paiement en avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -150,8 +154,7 @@ public interface CommandeService {
 	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException;
 
 	/**
-	 * Applique une suppression physiquement un intention et logique pour un
-	 * paiement.
+	 * Applique une suppression physiquement un intention et logique pour un paiement.
 	 * 
 	 * @param refCommande
 	 *            reference commande
@@ -161,4 +164,32 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException;
+
+	/**
+	 * Transformer un {@link CommandeLigne} en {@link ContratInfo}.
+	 * 
+	 * @param referenceCommande
+	 *            reference de commande.
+	 * @param commandeLigne
+	 *            {@link CommandeLigne}.
+	 * @return {@link ContratPreparationInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public ContratPreparationInfo transformerComandeLigneContrat(String referenceCommande, CommandeLigne commandeLigne)
+			throws OpaleException;
+
+	/**
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * @return liste des references des contrat cree.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException;
 }
