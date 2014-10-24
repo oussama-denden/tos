@@ -208,13 +208,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 	@Override
 	@Transactional
-	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException {
-
-		LOGGER.info("Debut methode getListePaiementComptant");
-
+	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
-		return paiementService.getListePaiementComptant(referenceCommande);
+		return paiementService.getListePaiementComptant(referenceCommande, isAnnule);
 	}
 
 	/**
@@ -258,28 +255,22 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement getPaiementRecurrent(String referenceCommande) throws OpaleException {
-
-		LOGGER.info("Debut methode getPaiementRecurrent");
-
+	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
-		return paiementService.getPaiementRecurrent(referenceCommande);
+		return paiementService.getPaiementRecurrent(referenceCommande, isAnnule);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException {
-
-		LOGGER.info("Debut methode getListeDePaiement");
-
+	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.checkReferenceCommande(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande);
-		Paiement paiementRecurrent = paiementService.getPaiementRecurrent(refCommande);
+		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande, isAnnule);
+		List<Paiement> paiementRecurrent = paiementService.getPaiementRecurrent(refCommande, isAnnule);
 		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
 	}
 
@@ -301,24 +292,25 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 * @param paiementComptants
 	 *            {@link List<Paiement>}
-	 * @param paiementRecurrent
+	 * @param paiementRecurrents
 	 *            {@link List<Paiement>}
 	 * @return {@link CommandePaiementInfo}
 	 */
 	private CommandePaiementInfo getCommandePaiementInfoFromPaiement(List<Paiement> paiementComptants,
-			Paiement paiementRecurrent) {
-
+			List<Paiement> paiementRecurrents) {
 		CommandePaiementInfo commandePaiementInfo = new CommandePaiementInfo();
 		List<PaiementInfo> paiementInfosComptant = new ArrayList<PaiementInfo>();
 		for (Paiement paiement : paiementComptants) {
-			if (!paiement.isAnnule()) {
-				paiementInfosComptant.add(paiement.fromPaiementToPaiementInfo());
-			}
+			paiementInfosComptant.add(paiement.fromPaiementToPaiementInfo());
 		}
 		commandePaiementInfo.setComptant(paiementInfosComptant);
-		if (paiementRecurrent != null && !paiementRecurrent.isAnnule()) {
-			commandePaiementInfo.setRecurrent(paiementRecurrent.fromPaiementToPaiementInfo());
+
+		List<PaiementInfo> paiementInfosRecurrent = new ArrayList<PaiementInfo>();
+		for (Paiement paiementReccurent : paiementRecurrents) {
+			paiementInfosRecurrent.add(paiementReccurent.fromPaiementToPaiementInfo());
 		}
+
+		commandePaiementInfo.setRecurrent(paiementInfosRecurrent);
 
 		return commandePaiementInfo;
 

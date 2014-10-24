@@ -124,34 +124,39 @@ public interface CommandeService {
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
+	 * @param isAnnule
+	 *            si annule
 	 * @return liste des paiement comptant.
 	 * @throws OpaleException
-	 *             {@link OpaleException}.
+	 *             the opale exception {@link OpaleException}.
 	 */
-	public List<Paiement> getListePaiementComptant(String referenceCommande) throws OpaleException;
+	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) throws OpaleException;
 
 	/**
 	 * retourner la liste des paiement recurrent d'une commande.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
-	 * @return liste des paiement comptant.
+	 * @param isAnnule
+	 *            si annule
+	 * @return liste des paiements recurrent.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Paiement getPaiementRecurrent(String referenceCommande) throws OpaleException;
+	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) throws OpaleException;
 
 	/**
 	 * recuperer la liste de paiement lies a une commande.
 	 * 
 	 * @param refCommande
 	 *            reference du commande.
-	 * 
+	 * @param isAnnule
+	 *            the is annule
 	 * @return {@link CommandePaiementInfo}
 	 * @throws OpaleException
-	 *             {@link OpaleException}
+	 *             the opale exception {@link OpaleException}
 	 */
-	public CommandePaiementInfo getListeDePaiement(String refCommande) throws OpaleException;
+	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException;
 
 	/**
 	 * Applique une suppression physiquement un intention et logique pour un paiement.

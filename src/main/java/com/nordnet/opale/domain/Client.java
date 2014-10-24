@@ -99,4 +99,14 @@ public class Client {
 		this.adresseId = adresseId;
 	}
 
+	/**
+	 * 
+	 * @param client
+	 *            {@link com.nordnet.opale.business.Client}
+	 */
+	public void setFromBusiness(com.nordnet.opale.business.Client client) {
+		adresseId = client.getAdresseId();
+		clientId = client.getClientId();
+	}
+
 }

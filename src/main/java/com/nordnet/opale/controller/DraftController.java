@@ -63,8 +63,8 @@ public class DraftController {
 	 * @param reference
 	 *            reference du draft.
 	 * @return {@link Draft}.
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -81,9 +81,9 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{reference:.+}/annuler", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	@ResponseBody
-	public void annulerDraft(@PathVariable String reference) throws OpaleException {
+	public void supprimerDraft(@PathVariable String reference) throws OpaleException {
 		LOGGER.info(":::ws-rec:::annulerDraft");
 		draftService.annulerDraft(reference);
 	}
@@ -94,8 +94,8 @@ public class DraftController {
 	 * @param draftInfo
 	 *            auteur informations.
 	 * @return {@link Contrat}.
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/draft", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -112,8 +112,8 @@ public class DraftController {
 	 *            reference du draft.
 	 * @param referenceExterneInfo
 	 *            reference externe info {@link ReferenceExterneInfo}
-	 * @throws Exception
-	 *             exception {@link Exception}
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/draft/{referenceDraft:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -177,8 +177,8 @@ public class DraftController {
 	 *            reference du ligne.
 	 * @param deleteInfo
 	 *            {@link DeleteInfo}
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
@@ -198,7 +198,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             the opale exception
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/associerClient", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/associerClient", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public void associerClient(@PathVariable String refDraft, @RequestBody ClientInfo clientInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::associerClient");
