@@ -28,6 +28,7 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.InfoErreur;
@@ -384,6 +385,22 @@ public class CommandeController {
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::validerCommande");
 		return commandeService.validerCommande(referenceCommande);
+	}
+
+	/**
+	 * transformer une {@link Commande} en {@link Draft}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformerEnDraft", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Draft transformerEnDraft(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::transformerEnDraft");
+		return commandeService.transformerEnDraft(refCommande);
 	}
 
 	/**

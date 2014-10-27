@@ -2,7 +2,9 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -139,6 +141,7 @@ public class CommandeLigne {
 			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, referenceOffre, trameCatalogue);
 			addCommandeLigneDetail(commandeLigneDetail);
 		}
+		creerArborescence(draftLigne.getDraftLigneDetails(), this.commandeLigneDetails);
 	}
 
 	@Override
@@ -424,6 +427,32 @@ public class CommandeLigne {
 		}
 
 		return false;
+	}
+
+	/**
+	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
+	 * 
+	 * @param draftDetails
+	 *            liste des {@link DraftLigneDetail}.
+	 * @param commandeDetails
+	 *            liste des {@link CommandeLigneDetail}.
+	 */
+	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
+		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
+		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
+			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceProduit(), commandeLigneDetail);
+		}
+
+		for (DraftLigneDetail draftLigneDetail : draftDetails) {
+			if (!draftLigneDetail.isParent()) {
+				CommandeLigneDetail commandeLigneDetail =
+						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent =
+						commandeLigneDetailMap
+								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
+			}
+		}
 	}
 
 }

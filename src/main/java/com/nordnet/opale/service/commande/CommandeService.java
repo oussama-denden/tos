@@ -240,4 +240,15 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
+
+	/**
+	 * transformer une {@link Commande} en {@link Draft}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public Draft transformerEnDraft(String referenceCommande) throws OpaleException;
 }

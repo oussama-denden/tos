@@ -19,12 +19,15 @@ import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
+import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.service.signature.SignatureService;
@@ -69,6 +72,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private SignatureService signatureService;
+
+	/**
+	 * {@link DraftService}.
+	 */
+	@Autowired
+	private DraftService draftService;
 
 	/**
 	 * {@inheritDoc}
@@ -414,5 +423,22 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		return validationInfo;
+	}
+
+	@Override
+	public Draft transformerEnDraft(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		Draft draft = new Draft(commande);
+
+		/*
+		 * attribution des reference au draft/draftLigne.
+		 */
+		draft.setReference(keygenService.getNextKey(Draft.class));
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
+		}
+		draftService.save(draft);
+
+		return draft;
 	}
 }

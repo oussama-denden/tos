@@ -2,9 +2,7 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -27,7 +25,6 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.domain.draft.DraftLigneDetail;
 
 /**
  * Classe qui represente la commande.
@@ -131,7 +128,7 @@ public class Commande {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
-			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
+			// creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
 			addLigne(commandeLigne);
 		}
 	}
@@ -339,32 +336,6 @@ public class Commande {
 	 */
 	public void setPaye(boolean paye) {
 		this.paye = paye;
-	}
-
-	/**
-	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
-	 * 
-	 * @param draftDetails
-	 *            liste des {@link DraftLigneDetail}.
-	 * @param commandeDetails
-	 *            liste des {@link CommandeLigneDetail}.
-	 */
-	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
-		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
-		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
-			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceProduit(), commandeLigneDetail);
-		}
-
-		for (DraftLigneDetail draftLigneDetail : draftDetails) {
-			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
-				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
-			}
-		}
 	}
 
 	/**
