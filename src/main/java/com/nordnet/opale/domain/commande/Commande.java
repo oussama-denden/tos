@@ -123,8 +123,11 @@ public class Commande {
 	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
 
 		this.clientAFacturer = draft.getClientAFacturer();
+		this.clientAFacturer.setAuteur(draft.getAuteur());
 		this.clientALivrer = draft.getClientALivrer();
+		this.clientALivrer.setAuteur(draft.getAuteur());
 		this.clientSouscripteur = draft.getClientSouscripteur();
+		this.clientSouscripteur.setAuteur(draft.getAuteur());
 
 		this.auteur = draft.getAuteur();
 		this.referenceDraft = draft.getReference();
@@ -359,11 +362,10 @@ public class Commande {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
+						.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
+						.getDraftLigneDetailParent().getReferenceSelection());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}

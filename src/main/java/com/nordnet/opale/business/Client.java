@@ -79,4 +79,21 @@ public class Client {
 		return client;
 	}
 
+	/**
+	 * convertir un {@link ClientInfo} en.
+	 * 
+	 * @param auteur
+	 *            l auteur
+	 * @return {@link com.nordnet.opale.domain.Client}.
+	 *         {@link com.nordnet.opale.domain.Client}.
+	 */
+	public com.nordnet.opale.domain.Client toDomain(com.nordnet.opale.business.Auteur auteur) {
+		com.nordnet.opale.domain.Client client = new com.nordnet.opale.domain.Client();
+
+		client.setAdresseId(adresseId);
+		client.setClientId(clientId);
+		client.setAuteur(auteur.toDomain());
+		return client;
+	}
+
 }

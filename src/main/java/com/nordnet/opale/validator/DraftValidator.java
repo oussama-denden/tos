@@ -124,7 +124,8 @@ public class DraftValidator {
 		}
 
 		for (DraftLigneInfo draftLigneInfo : draftLignesInfos) {
-			checkUser(draftLigneInfo.getUser());
+			// checkUser(draftLigneInfo.getUser());
+			validerAuteur(draftLigneInfo.getAuteur());
 			DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 			DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 		}
@@ -200,6 +201,42 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void isAuteurValide(Auteur auteur) throws OpaleException {
+
+		if (auteur != null) {
+			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
+			}
+
+			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+			}
+		}
+		// if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
+		// throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4",
+		// "Auteur.canal"), "0.1.4");
+		// }
+		//
+		// if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
+		// throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4",
+		// "Auteur.Ip.ip"), "0.1.4");
+		// }
+
+	}
+
+	/**
+	 * valider l'auteur.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerAuteur(Auteur auteur) throws OpaleException {
+
+		if (auteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
+		}
+
 		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
 		}
@@ -208,13 +245,15 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
 		}
 
-		if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.canal"), "0.1.4");
-		}
-
-		if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.Ip.ip"), "0.1.4");
-		}
+		// if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
+		// throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4",
+		// "Auteur.canal"), "0.1.4");
+		// }
+		//
+		// if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
+		// throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4",
+		// "Auteur.Ip.ip"), "0.1.4");
+		// }
 
 	}
 
@@ -233,24 +272,8 @@ public class DraftValidator {
 	}
 
 	/**
-	 * tester si le code n est pas null.
-	 * 
-	 * @param auteur
-	 *            {@link com.nordnet.opale.domain.Auteur}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public static void codeNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
-		if (auteur != null) {
-			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14", "code"), "0.1.14");
-			}
-		}
-
-	}
-
-	/**
-	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est
+	 * possible ou non.
 	 * 
 	 * 
 	 * @param draft

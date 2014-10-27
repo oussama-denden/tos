@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
@@ -21,6 +22,7 @@ import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
+import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.validator.CommandeValidator;
 
 /**
@@ -49,6 +51,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private KeygenService keygenService;
+
+	/**
+	 * {@link TracageService}.
+	 */
+	@Autowired
+	private TracageService tracageService;
 
 	/**
 	 * {@inheritDoc}
@@ -89,6 +97,8 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.validerCreerIntentionPaiement(refCommande, commande, coutCommandeComptant,
 				montantComptantPaye);
 		CommandeValidator.validerAuteur(refCommande, paiementInfo.getAuteur());
+		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), refCommande,
+				"Créer une intention de paiement pour la commande " + refCommande);
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
 
@@ -101,10 +111,13 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
-		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
+		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
+		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
+				"Payer l'intention de paiement de reference " + referencePaiement + " de la commande "
+						+ referenceCommande);
 	}
 
 	/**
@@ -116,10 +129,12 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException {
 		Commande commande = commandeRepository.findByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
-		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
+		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
+		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
+				"Paiement directe de la commande de reference" + referenceCommande);
 		return paiement;
 
 	}
@@ -235,11 +250,14 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException {
+	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException {
 
 		Commande commande = getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.isAuteurValide(auteur);
 		paiementService.supprimer(refCommande, refPaiement);
+		tracageService.ajouterTrace(auteur.getQui(), refCommande, "Supprimer le paiement de reference " + refPaiement
+				+ "de la commande de reference" + refCommande);
 	}
 
 	/**

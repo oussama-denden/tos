@@ -120,12 +120,26 @@ public class CommandeValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
 		}
 
-		if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.canal"), "0.1.4");
-		}
+	}
 
-		if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.Ip.ip"), "0.1.4");
+	/**
+	 * Valider l {@link Auteur}.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isAuteurValide(Auteur auteur) throws OpaleException {
+
+		if (auteur != null) {
+			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
+			}
+
+			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+			}
 		}
 
 	}

@@ -16,6 +16,7 @@ import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.signature.SignatureRepository;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
+import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.validator.CommandeValidator;
 import com.nordnet.opale.validator.SignatureValidator;
 
@@ -58,13 +59,19 @@ public class SignatureServiceImpl implements SignatureService {
 	private KeygenService keygenService;
 
 	/**
+	 * {@link TracageService}.
+	 */
+	@Autowired
+	private TracageService tracageService;
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * 
 	 */
 	@Override
-	public Object signerCommande(String refCommande, AjoutSignatureInfo ajoutSignatureInfo)
-			throws OpaleException, JSONException {
+	public Object signerCommande(String refCommande, AjoutSignatureInfo ajoutSignatureInfo) throws OpaleException,
+			JSONException {
 
 		LOGGER.info("Debut methode signerCommande");
 
@@ -82,6 +89,9 @@ public class SignatureServiceImpl implements SignatureService {
 			signatureReference = signature.getReference();
 
 		}
+
+		tracageService.ajouterTrace(ajoutSignatureInfo.getAuteur().getQui(), refCommande,
+				"Signer la commande de reference " + refCommande);
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("signatureReference", signatureReference);
 		return jsonResponse.toString();
@@ -99,13 +109,15 @@ public class SignatureServiceImpl implements SignatureService {
 
 		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
+		CommandeValidator.isAuteurValide(signatureInfo.getAuteur());
 
 		Signature signature = signatureRepository.findByReference(refSignature);
 		SignatureValidator.checkSignatureExiste(signature, refSignature, refCommande);
 		SignatureValidator.checkSignatureComplete(refCommande, signature, false);
 		SignatureValidator.validerSignature(signatureInfo);
 		ajouterSignature(signature, signatureInfo);
+		tracageService.ajouterTrace(signatureInfo.getAuteur().getQui(), refCommande,
+				"Transmettre la signer de reference " + refSignature + " de la commande de reference " + refCommande);
 		LOGGER.info("Fin methode transmettreSignature");
 
 	}
@@ -116,8 +128,8 @@ public class SignatureServiceImpl implements SignatureService {
 	 * @throws JSONException
 	 */
 	@Override
-	public Object transmettreSignature(String refCommande, SignatureInfo signatureInfo)
-			throws OpaleException, JSONException {
+	public Object transmettreSignature(String refCommande, SignatureInfo signatureInfo) throws OpaleException,
+			JSONException {
 
 		LOGGER.info("Debut methode transmettreSignature");
 
@@ -134,6 +146,10 @@ public class SignatureServiceImpl implements SignatureService {
 			SignatureValidator.validerSignature(signatureInfo);
 			signatureReference = ajouterSignature(signature, signatureInfo);
 		}
+
+		tracageService.ajouterTrace(signatureInfo.getAuteur().getQui(), refCommande,
+				"Transmettre la signer de la commande de reference " + refCommande);
+
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("signatureReference", signatureReference);
 		return jsonResponse.toString();

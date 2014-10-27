@@ -2,6 +2,7 @@ package com.nordnet.opale.service.draft;
 
 import java.util.List;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
@@ -25,7 +26,8 @@ import com.nordnet.opale.exception.OpaleException;
 public interface DraftService {
 
 	/**
-	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere une exception si le draft n'existe pas.
+	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere
+	 * une exception si le draft n'existe pas.
 	 * 
 	 * @param reference
 	 *            reference du draft.
@@ -98,10 +100,12 @@ public interface DraftService {
 	 * 
 	 * @param refDraft
 	 *            la reference du draft.
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void annulerDraft(String refDraft) throws OpaleException;
+	public void annulerDraft(String refDraft, Auteur auteur) throws OpaleException;
 
 	/**
 	 * ajouter une reference externe a un draft.

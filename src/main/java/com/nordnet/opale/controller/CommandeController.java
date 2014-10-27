@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
@@ -349,16 +350,18 @@ public class CommandeController {
 	 *            reference commande
 	 * @param refPaiement
 	 *            reference paiement
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @param auteur
+	 *            l auteur
+	 * @throws OpaleException
+	 *             the opale exception
 	 */
 	@DELETE
 	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
-	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement)
-			throws OpaleException {
+	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
+			@RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerPaiement");
-		commandeService.supprimerPaiement(refCommande, refPaiement);
+		commandeService.supprimerPaiement(refCommande, refPaiement, auteur);
 	}
 
 	/**

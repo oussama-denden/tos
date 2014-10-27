@@ -11,7 +11,7 @@ public class DeleteInfo {
 	/**
 	 * L utilisateur.
 	 */
-	private String user;
+	private Auteur auteur;
 
 	/**
 	 * constructeur par defaut.
@@ -22,19 +22,19 @@ public class DeleteInfo {
 
 	/**
 	 * 
-	 * @return {@link #user}.
+	 * @return {@link #auteur}
 	 */
-	public String getUser() {
-		return user;
+	public Auteur getAuteur() {
+		return auteur;
 	}
 
 	/**
 	 * 
-	 * @param user
-	 *            {@link #user}.
+	 * @param auteur
+	 *            {@link #auteur}
 	 */
-	public void setUser(String user) {
-		this.user = user;
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 }

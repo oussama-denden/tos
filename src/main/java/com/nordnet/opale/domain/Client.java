@@ -1,5 +1,6 @@
 package com.nordnet.opale.domain;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -34,6 +35,12 @@ public class Client {
 	 * L adresse.
 	 */
 	private String adresseId;
+
+	/**
+	 * l auteur.
+	 */
+	@Embedded
+	private Auteur auteur;
 
 	@Override
 	public String toString() {
@@ -101,12 +108,34 @@ public class Client {
 
 	/**
 	 * 
-	 * @param client
-	 *            {@link com.nordnet.opale.business.Client}
+	 * @return {@link #auteur}
 	 */
-	public void setFromBusiness(com.nordnet.opale.business.Client client) {
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * 
+	 * @param auteur
+	 *            {@link #auteur}
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
+	}
+
+	/**
+	 * Sets client from business.
+	 * 
+	 * @param client
+	 *            the client{@link com.nordnet.opale.business.Client}
+	 * @param auteur
+	 *            the auteur{@link com.nordnet.opale.business.Auteur}
+	 * 
+	 */
+	public void setFromBusiness(com.nordnet.opale.business.Client client, com.nordnet.opale.business.Auteur auteur) {
 		adresseId = client.getAdresseId();
 		clientId = client.getClientId();
+		this.auteur = auteur.toDomain();
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.activation.CommandInfo;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CriteresCommande;
@@ -162,8 +163,10 @@ public interface CommandeService {
 	 *            reference commande
 	 * @param refPaiement
 	 *            reference paiement
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
-	 *             {@link OpaleException}
+	 *             the opale exception {@link OpaleException}
 	 */
-	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException;
+	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException;
 }
