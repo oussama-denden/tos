@@ -378,7 +378,7 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/valider", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refCommande:.+}/valider", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public CommandeValidationInfo validerCommande(@PathVariable("refCommande") String referenceCommande)
 			throws OpaleException {

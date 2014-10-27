@@ -76,6 +76,7 @@
     clientALivrerId CDATA #IMPLIED
     clientSouscripteurId CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
+    dateAnnulation CDATA #IMPLIED
     code CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
@@ -165,11 +166,13 @@
     montant CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
-     code CDATA #IMPLIED
+    code CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
+    timestampIntention CDATA #IMPLIED
+    timestampPaiement CDATA #IMPLIED
     typePaiement CDATA #IMPLIED
 >
 
