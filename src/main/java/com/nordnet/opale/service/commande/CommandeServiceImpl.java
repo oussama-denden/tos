@@ -416,8 +416,19 @@ public class CommandeServiceImpl implements CommandeService {
 		return validationInfo;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Commande> getCommandeNonAnnuleEtNonTransformes() {
-		return null;
+		return commandeRepository.recupererCommandeNonTransformeeEtNonAnnulee();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getRecentDate(String refCommande) throws OpaleException {
+		return commandeRepository.getRecentDate(refCommande);
 	}
 }

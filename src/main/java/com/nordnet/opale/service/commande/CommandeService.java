@@ -1,5 +1,6 @@
 package com.nordnet.opale.service.commande;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.activation.CommandInfo;
@@ -117,6 +118,8 @@ public interface CommandeService {
 	 * @param referenceCommande
 	 *            reference du commande.
 	 * @return {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	public Commande getCommandeByReference(String referenceCommande) throws OpaleException;
 
@@ -247,4 +250,16 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
+
+	/**
+	 * recuperer le dernier date d'accee sur une commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * 
+	 * @return {@link Date}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public String getRecentDate(String refCommande) throws OpaleException;
 }

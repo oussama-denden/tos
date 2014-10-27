@@ -1,5 +1,6 @@
 package com.nordnet.opale.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -89,6 +90,31 @@ public class PropertiesUtil {
 			}
 
 		}
+	}
+
+	/**
+	 * Recuperer la duree inactive.
+	 * 
+	 * @return {@link Integer}
+	 */
+	public Integer getDureeInactive() {
+		Integer delaiCancel = Integer.valueOf(dynamicProperties.getMessage(Constants.DELAI_INACTIVE, null, null));
+		return delaiCancel;
+	}
+
+	/**
+	 * adapter le date a une froam precise.
+	 * 
+	 * @param date
+	 *            date string.
+	 * @return {@link Date}
+	 * @throws ParseException
+	 *             {@link ParseException}
+	 */
+	public Date parseDate(String date) throws ParseException {
+		SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
+		Date dateFormatte = formatter.parse(date);
+		return dateFormatte;
 	}
 
 }

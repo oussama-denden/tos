@@ -111,4 +111,18 @@ public class CommandeValidator {
 
 	}
 
+	/**
+	 * Verifer si une command est annulé.
+	 * 
+	 * @param commande
+	 *            {@link Commande}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkIsCommandeAnnule(Commande commande) throws OpaleException {
+		if (commande.isAnnule()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8"), "2.1.8");
+		}
+	}
+
 }

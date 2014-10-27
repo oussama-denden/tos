@@ -67,4 +67,9 @@ public final class Constants {
 	 */
 	public static final String REF_DRAFT_INIT = "00000001";
 
+	/**
+	 * duree pour que une commande inactive sera annulee.
+	 */
+	public static final String DELAI_INACTIVE = "_delai.inactive";
+
 }
