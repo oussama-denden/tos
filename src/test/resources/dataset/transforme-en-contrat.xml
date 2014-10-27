@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<dataset>
+
+<client id="1000" clientId="1000" adresseId="1000"/>
+<client id="1001" clientId="1001" adresseId="1001"/>
+
+<commande id="1000" canal="welcome" code="part_123456" ip="GRC.WEL-JOHNDOE" qui="GRC.WEL-JOHNDOE" timestamp="1411654933" reference="00000004" referenceDraft="00000004" clientAFacturerId="1000" clientALivrerId="1001"/>
+
+<commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" timestamp="1411654933" gamme="jet" modeFacturation="PREMIER_MOIS" modePaiement="CB" referenceOffre="jet_surf10" commandeId="1000" famille="sat" tarifId="1006" />
+
+<commandeLigneDetail id="1000" modePaiement="CB" referenceProduit="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" dependDe="1001" commandeLigneId="1000" tarifId="1000" />
+<commandeLigneDetail id="1001" modePaiement="CB" referenceProduit="kitsat" label="Trafic 10 Gigas" typeProduit="BIEN" commandeLigneId="1000" tarifId="1001" />
+
+
+<tarif id="1000" duree="5" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1001" duree="5" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1002" duree="5" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1004" duree="5" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1005" duree="5" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1006" duree="5" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+
+<frais id="1000" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1000" />
+<frais id="1001" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1001" />
+<frais id="1002" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1002" />
+<frais id="1003" montant="50" typeTVA="S" typeFrais="CREATION" tarifId="1003" />
+<frais id="1004" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1004" />
+<frais id="1005" montant="50" typeTVA="S" typeFrais="CREATION" tarifId="1005" />
+<frais id="1006" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1006" />
+<frais id="1007" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1007" />
+
+<paiement id="1000" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="1411654933" code="part_123456" />
+
+</dataset>

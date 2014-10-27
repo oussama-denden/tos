@@ -488,7 +488,7 @@ public class CommandeServiceImpl implements CommandeService {
 			if (paiementRecurrents.size() > Constants.ZERO) {
 				paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
 			}
-			if (paiementInfo != null) {
+			if (paiementRecurrent != null) {
 				paiementInfo.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
 			}
 
