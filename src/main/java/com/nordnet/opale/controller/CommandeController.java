@@ -164,7 +164,7 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande, @PathVariable boolean isAnnule)
 			throws OpaleException, JSONException {
