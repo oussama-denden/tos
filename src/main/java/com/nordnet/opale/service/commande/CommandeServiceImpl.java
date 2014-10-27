@@ -418,7 +418,7 @@ public class CommandeServiceImpl implements CommandeService {
 			 */
 			if (commande.needPaiementRecurrent()) {
 				List<Paiement> paiements = getPaiementRecurrent(referenceCommande, false);
-				if (paiements.size() > Constants.ZERO) {
+				if (paiements.size() == Constants.ZERO) {
 					validationInfo
 							.addReason("Paiement", "2.1.7", PropertiesUtil.getInstance().getErrorMessage("2.1.7"));
 				}
