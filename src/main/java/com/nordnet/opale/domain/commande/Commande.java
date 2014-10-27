@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
@@ -87,6 +88,11 @@ public class Commande {
 	 * date creation de la commande.
 	 */
 	private Date dateCreation;
+
+	/**
+	 * date d'annulation de la commande.
+	 */
+	private Date dateAnnulation;
 
 	/**
 	 * listes des {@link CommandeLigne} de la commande.
@@ -276,6 +282,23 @@ public class Commande {
 
 	/**
 	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}.
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
+	 * 
 	 * @return {@link #commandeLignes}.
 	 */
 	public List<CommandeLigne> getCommandeLignes() {
@@ -378,5 +401,15 @@ public class Commande {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * varifier si la commande est annule ou non.
+	 * 
+	 * @return true si la commande est annule.
+	 */
+	public boolean isAnnule() {
+		Optional<Date> dateAnnulationOptional = Optional.fromNullable(dateAnnulation);
+		return dateAnnulationOptional.isPresent();
 	}
 }

@@ -31,6 +31,7 @@ CREATE TABLE  `opale_test`.`commande` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
+  `dateAnnulation` datetime DEFAULT NULL,
   `paye` bit(1) DEFAULT 0,
   `reference` varchar(255) NOT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,

@@ -11,7 +11,7 @@ import com.nordnet.opale.domain.draft.Draft;
  * @author akram-moncer
  * 
  */
-public class Reason {
+public class ReasonDraft {
 
 	/**
 	 * source de l'erreur.
@@ -36,7 +36,7 @@ public class Reason {
 	/**
 	 * constructeur par defaut.
 	 */
-	public Reason() {
+	public ReasonDraft() {
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class Reason {
 	 * @param values
 	 *            {@link #values}.
 	 */
-	public Reason(String source, String error, String errorMessage, List<String> values) {
+	public ReasonDraft(String source, String error, String errorMessage, List<String> values) {
 		super();
 		this.source = source;
 		this.error = error;

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
+import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
@@ -27,7 +28,7 @@ import com.nordnet.opale.exception.OpaleException;
 public interface CommandeService {
 
 	/**
-	 * sauver un {@link Commande} dans la base de données.
+	 * sauver un {@link Commande} dans la base de donnÃ©es.
 	 * 
 	 * @param commande
 	 *            {@link Commande}.
@@ -102,7 +103,7 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * chercher une commande sur base de critères.
+	 * chercher une commande sur base de critÃ¨res.
 	 * 
 	 * @param criteresCommande
 	 *            the criteres commande
@@ -113,11 +114,11 @@ public interface CommandeService {
 	/**
 	 * recherche une commande a partir du reference.
 	 * 
-	 * @param reference
+	 * @param referenceCommande
 	 *            reference du commande.
 	 * @return {@link Commande}.
 	 */
-	public Commande getCommandeByReference(String reference);
+	public Commande getCommandeByReference(String referenceCommande) throws OpaleException;
 
 	/**
 	 * retourner la liste des paiement comptant d'une commande.
@@ -217,7 +218,7 @@ public interface CommandeService {
 			throws OpaleException, JSONException;
 
 	/**
-	 * recuprer la signature associé a une commande.
+	 * recuprer la signature associÃ© a une commande.
 	 * 
 	 * @param refCommand
 	 *            reference du commande;
@@ -235,4 +236,15 @@ public interface CommandeService {
 	 * @return {@link List<Commande}
 	 */
 	public List<Commande> getCommandeNonAnnuleEtNonTransformes();
+
+	/**
+	 * valider une {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return {@link CommandeValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
 }

@@ -53,25 +53,6 @@ public class CommandeValidator {
 	}
 
 	/**
-	 * verifier si une commande est deja paye ou non.
-	 * 
-	 * @param refCommande
-	 *            reference {@link Commande}.
-	 * @param commande
-	 *            {@link Commande}.
-	 * @param coutCommandeComptant
-	 *            cout comtant de la commande.
-	 * @param montantComptantPaye
-	 *            montant comptant deja paye.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	public static void validerCreerIntentionPaiement(String refCommande, Commande commande,
-			Double coutCommandeComptant, Double montantComptantPaye) throws OpaleException {
-		isExiste(refCommande, commande);
-	}
-
-	/**
 	 * valider si le paiement est possible ou pas.
 	 * 
 	 * @param referenceCommande

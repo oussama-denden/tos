@@ -1,5 +1,7 @@
 package com.nordnet.opale.repository.commande;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -36,7 +38,10 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 					+ "c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) "
 					+ "AND (t.frequence = t.duree OR t.frequence is NULL)) tarifs";
 
-	public final static String MAX_DATE_ACTIVATION = "SELECT MAX(SELECT MAX()";
+	public final static String MAX_DATE_ACTIVATION =
+			"SELECT MAX((SELECT MAX(timestampIntention,timestampPaiement) FROM Paiement where"
+					+ "referenceCommande LIKE :referenceCommande),(SELECT MAX(timestampSignature,timestampIntention) FROM Signature"
+					+ "where referenceCommande LIKE :referenceCommande) )";
 
 	/**
 	 * Find by reference.
@@ -81,8 +86,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 * 
 	 * @return {@link List<Commande>}
 	 */
-	// @Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value =
-	// "SELECT c FROM Commande c WHERE c.dateAnnulation IS NOT NULL")
-	// public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
+	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c FROM Commande c WHERE c.dateAnnulation IS NOT NULL")
+	public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee(String referenceCommande);
 
 }
