@@ -1,5 +1,4 @@
-{
-  "auteur": {
+ {
     "code": "part_123456",
     "qui": "GRC.WEL-JOHNDOE",
     "canal": "welcome",
@@ -8,4 +7,4 @@
       "ip": "127.0.0.1"
     }
   }
-}
+
