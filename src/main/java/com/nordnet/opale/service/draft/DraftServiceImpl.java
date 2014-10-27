@@ -16,9 +16,9 @@ import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
@@ -136,6 +136,8 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = new Draft();
 
+		DraftValidator.codeNotNull(auteur);
+
 		draft.setAuteur(auteur);
 
 		// verifier si le clientId n'est pas null ou empty.
@@ -241,6 +243,7 @@ public class DraftServiceImpl implements DraftService {
 
 		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
 				+ refDraft + " modifiée");
+
 	}
 
 	/**
@@ -259,7 +262,6 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 
 		tracageService.ajouterTrace(auteur.getQui(), refDraft, "le draft " + refDraft + " annulé");
-
 		LOGGER.info("Fin methode annulerDraft");
 	}
 
@@ -359,6 +361,7 @@ public class DraftServiceImpl implements DraftService {
 
 		tracageService.ajouterTrace(clientInfo.getAuteur().getQui(), refDraft, "associer le client souscripteur "
 				+ idClientSouscripteur + " client facturation " + idClientFacturation + " client livraison "
+
 				+ idClientLivraison + " au draft" + refDraft);
 
 		LOGGER.info("fin methode associerClient");
@@ -369,7 +372,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isAuteurValide(trameCatalogue.getAuteur());
 		tracageService.ajouterTrace(trameCatalogue.getAuteur().getQui(), referenceDraft,
@@ -393,8 +396,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
 		draft.setClientSouscripteur(transformationInfo.getClientInfo().getSouscripteur().toDomain());
 
-		ValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
-
+		DraftValidationInfo validationInfo = catalogueValidator.validerDraft(draft,
+				transformationInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
 			commande.setReference(keygenService.getNextKey(Commande.class));

@@ -8,19 +8,19 @@
       {
         "reference": "kitsat",
         "referenceSelection": "kitsat",
-        "referenceChoix": "trafic10g",
         "referenceTarif": "mensuel_jet10_base",
         "modePaiement": "CB",
         "configurationJson": "",
+        "referenceChoix" :"trafic10g",
         "dependDe": ""
       },
       {
         "reference": "jet",
         "referenceSelection": "jet",
-        "referenceChoix": "trafic10g",
         "referenceTarif": "mensuel_jet10_base",
         "modePaiement": "CB",
         "configurationJson": "",
+        "referenceChoix" :"trafic10g",
         "dependDe": "kitsat"
       }
     ]

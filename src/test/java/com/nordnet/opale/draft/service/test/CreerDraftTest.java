@@ -112,7 +112,7 @@ public class CreerDraftTest extends GlobalTestCase {
 
 			fail("Unexpected error");
 		} catch (OpaleException e) {
-			assertEquals("0.1.4", e.getErrorCode());
+			assertEquals("0.1.14", e.getErrorCode());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

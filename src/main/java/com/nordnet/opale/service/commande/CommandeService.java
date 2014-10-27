@@ -4,11 +4,16 @@ import java.util.List;
 
 import javax.activation.CommandInfo;
 
+import org.json.JSONException;
+
+import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
+import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
@@ -24,7 +29,7 @@ import com.nordnet.opale.exception.OpaleException;
 public interface CommandeService {
 
 	/**
-	 * sauver un {@link Commande} dans la base de données.
+	 * sauver un {@link Commande} dans la base de donnÃ©es.
 	 * 
 	 * @param commande
 	 *            {@link Commande}.
@@ -99,7 +104,7 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * chercher une commande sur base de critères.
+	 * chercher une commande sur base de critÃ¨res.
 	 * 
 	 * @param criteresCommande
 	 *            the criteres commande
@@ -110,11 +115,13 @@ public interface CommandeService {
 	/**
 	 * recherche une commande a partir du reference.
 	 * 
-	 * @param reference
+	 * @param referenceCommande
 	 *            reference du commande.
 	 * @return {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
-	public Commande getCommandeByReference(String reference);
+	public Commande getCommandeByReference(String referenceCommande) throws OpaleException;
 
 	/**
 	 * retourner la liste des paiement comptant d'une commande.
@@ -167,6 +174,95 @@ public interface CommandeService {
 	 *            l auteur
 	 * @throws OpaleException
 	 *             the opale exception {@link OpaleException}
+	 *             {@link OpaleException}.
 	 */
 	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException;
+
+	/**
+	 * Supprimer un signature.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * @param refSignature
+	 *            reference du signature.
+	 * @param auteur
+	 *            l auteur
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void supprimerSignature(String refCommande, String refSignature, Auteur auteur) throws OpaleException;
+
+	/**
+	 * ajouter une intention de signature.
+	 * 
+	 * @param refCommande
+	 *            refernece du commande.
+	 * @param ajoutSignatureInfo
+	 *            {@link AjoutSignatureInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 * @return {@link Object}
+	 */
+	public Object creerIntentionDeSignature(String refCommande, AjoutSignatureInfo ajoutSignatureInfo)
+			throws OpaleException, JSONException;
+
+	/**
+	 * signer une commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * @param signatureInfo
+	 *            {@link SignatureInfo}
+	 * @param refrenceSignature
+	 *            reference du signature.
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object signerCommande(String refCommande, String refrenceSignature, SignatureInfo signatureInfo)
+			throws OpaleException, JSONException;
+
+	/**
+	 * recuprer la signature associÃ© a une commande.
+	 * 
+	 * @param refCommand
+	 *            reference du commande;
+	 * @param afficheAnnule
+	 *            true pour afficher les signature annules
+	 * @return {@link SignatureInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public List<SignatureInfo> getSignature(String refCommand, Boolean afficheAnnule) throws OpaleException;
+
+	/**
+	 * valider une {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return {@link CommandeValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
+
+	/**
+	 * Transformer une commande en contrats Afin de passer à la
+	 * contractualisation de la commande, sa livraison, et sa facturation
+	 * finale.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * @return liste des references des contrat cree.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException;
 }

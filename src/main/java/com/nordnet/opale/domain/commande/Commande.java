@@ -90,6 +90,16 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
+	 * date de transformation du commande vers contrat.
+	 */
+	private Date dateTransformationContrat;
+
+	/**
+	 * date d'annulation de la commande.
+	 */
+	private Date dateAnnulation;
+
+	/**
 	 * listes des {@link CommandeLigne} de la commande.
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
@@ -97,11 +107,11 @@ public class Commande {
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
 
 	/**
-	 * la reference signature du client associe au commande.
-	 */
-	private String referenceSignature;
-
-	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * si commande paye, paye=true.
 	 */
 	private boolean paye;
@@ -284,6 +294,38 @@ public class Commande {
 	}
 
 	/**
+	 * @return {@link #dateTransformationContrat}.
+	 */
+	public Date getDateTransformationContrat() {
+		return dateTransformationContrat;
+	}
+
+	/**
+	 * @param dateTransformationContrat
+	 *            {@link #dateTransformationContrat}.
+	 */
+	public void setDateTransformationContrat(Date dateTransformationContrat) {
+		this.dateTransformationContrat = dateTransformationContrat;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}.
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
 	 * 
 	 * @return {@link #commandeLignes}.
 	 */
@@ -311,25 +353,25 @@ public class Commande {
 	}
 
 	/**
-	 * get the reference de signature.
 	 * 
-	 * @return {@link #referenceSignature}
-	 */
-	public String getReferenceSignature() {
-		return referenceSignature;
-	}
-
-	/**
-	 * set the referense de signature.
 	 * 
-	 * @param referenceSignature
-	 *            the new {@link #referenceSignature}
-	 */
-	public void setReferenceSignature(String referenceSignature) {
-		this.referenceSignature = referenceSignature;
-	}
-
-	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * @return {@link #paye}
 	 */
@@ -362,6 +404,7 @@ public class Commande {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
+
 				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
 						.getReferenceSelection());
 				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
@@ -408,12 +451,12 @@ public class Commande {
 	}
 
 	/**
-	 * retourner si la commande est signe ou non.
+	 * varifier si la commande est annule ou non.
 	 * 
-	 * @return true si la commande est signe.
+	 * @return true si la commande est annule.
 	 */
-	public boolean isSigne() {
-		Optional<String> referenceSignatureOp = Optional.fromNullable(referenceSignature);
-		return referenceSignatureOp.isPresent();
+	public boolean isAnnule() {
+		Optional<Date> dateAnnulationOptional = Optional.fromNullable(dateAnnulation);
+		return dateAnnulationOptional.isPresent();
 	}
 }

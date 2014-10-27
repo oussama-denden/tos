@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -24,6 +23,7 @@ import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
+import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -35,6 +35,7 @@ import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.signature.SignatureService;
+import com.nordnet.opale.validator.CommandeValidator;
 import com.wordnik.swagger.annotations.Api;
 
 /**
@@ -160,12 +161,11 @@ public class CommandeController {
 	 *            the is annule
 	 * @return la liste liste paiement recurrent
 	 * @throws OpaleException
-	 *             the opale exception
+	 *             {@link OpaleException}
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
-	 *             {@link OpaleException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande, @PathVariable boolean isAnnule)
 			throws OpaleException, JSONException {
@@ -181,10 +181,9 @@ public class CommandeController {
 	 *            the is annule
 	 * @return la liste paiements recurrents
 	 * @throws OpaleException
-	 *             the opale exception{@link OpaleException}
+	 *             {@link OpaleException}
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
-	 * 
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -241,10 +240,10 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/signature", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object signerCommande(@PathVariable String refCommande, @RequestBody AjoutSignatureInfo ajoutSignatureInfo)
-			throws OpaleException, JSONException {
+	public Object creerIntentionDeSignature(@PathVariable String refCommande,
+			@RequestBody AjoutSignatureInfo ajoutSignatureInfo) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::signerCommande");
-		return signatureService.signerCommande(refCommande, ajoutSignatureInfo);
+		return commandeService.creerIntentionDeSignature(refCommande, ajoutSignatureInfo);
 
 	}
 
@@ -259,13 +258,21 @@ public class CommandeController {
 	 *            {@link SignatureInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void transmettreSignature(@PathVariable String refCommande, @PathVariable String refSignature,
-			@RequestBody SignatureInfo signatureInfo) throws OpaleException {
-		LOGGER.info(":::ws-rec:::transmettreSignature");
-		signatureService.transmettreSignature(refCommande, refSignature, signatureInfo);
+	public void signerCommande(@PathVariable String refCommande, @PathVariable String refSignature,
+			@RequestBody SignatureInfo signatureInfo) throws OpaleException, JSONException {
+
+		LOGGER.info("Debut methode signerCommande");
+
+		Commande commande = commandeService.getCommandeByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
+
+		commandeService.signerCommande(refCommande, refSignature, signatureInfo);
 	}
 
 	/**
@@ -281,12 +288,12 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/signature/transmettre", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refCommande:.+}/signature/Direct", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object transmettreNouvelleSignature(@PathVariable String refCommande,
-			@RequestBody SignatureInfo signatureInfo) throws OpaleException, JSONException {
+	public Object signerCommandeDirect(@PathVariable String refCommande, @RequestBody SignatureInfo signatureInfo)
+			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transmettreNouvelleSignature");
-		return signatureService.transmettreSignature(refCommande, signatureInfo);
+		return commandeService.signerCommande(refCommande, null, signatureInfo);
 
 	}
 
@@ -295,16 +302,19 @@ public class CommandeController {
 	 * 
 	 * @param refCommande
 	 *            reference du commande.
+	 * @param afficheAnnule
+	 *            indiquer q'un doit affiche ou non les signatures annuler.
 	 * 
 	 * @return {@link SignatureInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/signature", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/signature/{afficheAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public SignatureInfo getSignature(@PathVariable String refCommande) throws OpaleException {
+	public List<SignatureInfo> getSignature(@PathVariable String refCommande, @PathVariable Boolean afficheAnnule)
+			throws OpaleException {
 		LOGGER.info(":::ws-rec:::getSignature");
-		return signatureService.getSignature(refCommande);
+		return commandeService.getSignature(refCommande, afficheAnnule);
 	}
 
 	/**
@@ -333,7 +343,7 @@ public class CommandeController {
 	 *            the is annule
 	 * @return {@link CommandePaiementInfo}
 	 * @throws OpaleException
-	 *             the opale exception {@link OpaleException}
+	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -353,15 +363,53 @@ public class CommandeController {
 	 * @param auteur
 	 *            l auteur
 	 * @throws OpaleException
-	 *             the opale exception
+	 *             the opale exception {@link OpaleException}.
 	 */
-	@DELETE
 	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
 			@RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerPaiement");
 		commandeService.supprimerPaiement(refCommande, refPaiement, auteur);
+	}
+
+	/**
+	 * valider une {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return {@link CommandeValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/valider", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public CommandeValidationInfo validerCommande(@PathVariable("refCommande") String referenceCommande)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::validerCommande");
+		return commandeService.validerCommande(referenceCommande);
+	}
+
+	/**
+	 * Transformer une commande en contrats Afin de passer à la
+	 * contractualisation de la commande, sa livraison, et sa facturation
+	 * finale.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * @return liste des references des contrat cree.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformeEnContrat", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public String transformeEnContrat(@PathVariable String refCommande) throws OpaleException, JSONException {
+		List<String> referencesContrats = commandeService.transformeEnContrat(refCommande);
+		JSONObject rsc = new JSONObject();
+		rsc.put("referencesContrats", referencesContrats);
+		return rsc.toString();
 	}
 
 	/**

@@ -37,10 +37,11 @@ CREATE TABLE `commande` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
+  `dateTransformationContrat` datetime DEFAULT NULL,
+  `dateAnnulation` datetime DEFAULT NULL,
   `paye` bit(1) DEFAULT 0,
   `reference` varchar(255) DEFAULT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
-  `referenceSignature` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
@@ -49,6 +50,28 @@ CREATE TABLE `commande` (
   KEY `FKDC160A7A2A2C2866` (`clientALivrerId`),
   KEY `FKDC160A7AD6AADB33` (`clientSouscripteurId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Definition of table `signature`
+--
+
+DROP TABLE IF EXISTS `signature`;
+CREATE TABLE `signature` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(255) NOT NULL,
+  `footprint` longtext,
+  `idSignature` varchar(255) DEFAULT NULL,
+  `timestampSignature` bigint(20) DEFAULT NULL,
+  `mode` varchar(255) DEFAULT NULL,
+   `canal` varchar(255) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `qui` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) NOT NULL,
+  `referenceCommande` varchar(255) DEFAULT NULL,
+   `dateAnnulation` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `commandeligne`
@@ -70,6 +93,7 @@ CREATE TABLE `commandeligne` (
   `modePaiement` varchar(255) DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
   `referenceOffre` varchar(255) DEFAULT NULL,
+  `referenceContrat` varchar(255) DEFAULT NULL,
   `secteur` varchar(255) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
@@ -224,26 +248,6 @@ CREATE TABLE `paiement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Definition of table `signature`
---
-
-DROP TABLE IF EXISTS `signature`;
-CREATE TABLE `signature` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `canal` varchar(255) DEFAULT NULL,
-  `code` varchar(255) DEFAULT NULL,
-  `ip` varchar(255) DEFAULT NULL,
-  `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
-  `footprint` tinytext,
-  `idSignature` varchar(255) DEFAULT NULL,
-  `mode` varchar(255) DEFAULT NULL,
-  `reference` varchar(255) DEFAULT NULL,
-  `timestampSignature` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Definition of table `tarif`
 --
 
@@ -272,8 +276,5 @@ CREATE TABLE `tracage` (
   `user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
-
-
 
 SET FOREIGN_KEY_CHECKS=1;

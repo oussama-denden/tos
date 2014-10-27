@@ -53,25 +53,6 @@ public class CommandeValidator {
 	}
 
 	/**
-	 * verifier si une commande est deja paye ou non.
-	 * 
-	 * @param refCommande
-	 *            reference {@link Commande}.
-	 * @param commande
-	 *            {@link Commande}.
-	 * @param coutCommandeComptant
-	 *            cout comtant de la commande.
-	 * @param montantComptantPaye
-	 *            montant comptant deja paye.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	public static void validerCreerIntentionPaiement(String refCommande, Commande commande,
-			Double coutCommandeComptant, Double montantComptantPaye) throws OpaleException {
-		isExiste(refCommande, commande);
-	}
-
-	/**
 	 * valider si le paiement est possible ou pas.
 	 * 
 	 * @param referenceCommande
@@ -112,10 +93,6 @@ public class CommandeValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
 		}
 
-		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
-		}
-
 		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
 		}
@@ -133,13 +110,25 @@ public class CommandeValidator {
 	public static void isAuteurValide(Auteur auteur) throws OpaleException {
 
 		if (auteur != null) {
-			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
-			}
 
 			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
 			}
+		}
+
+	}
+
+	/**
+	 * Tester si une commande est ransformee en contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void testerCommandeNonTransforme(Commande commande) throws OpaleException {
+		if (commande.getDateTransformationContrat() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8", commande.getReference()), "2.1.8");
 		}
 
 	}

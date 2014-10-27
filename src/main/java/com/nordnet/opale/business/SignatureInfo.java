@@ -1,5 +1,7 @@
 package com.nordnet.opale.business;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.nordnet.opale.enums.ModeSignature;
 
 /**
@@ -8,6 +10,7 @@ import com.nordnet.opale.enums.ModeSignature;
  * @author mahjoub-MARZOUGUI
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class SignatureInfo {
 
 	/**

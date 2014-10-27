@@ -21,6 +21,10 @@ public class TrameCatalogue {
 	 */
 	private Auteur auteur;
 	/**
+	 * 
+	 * 
+	 * 
+	 * 
 	 * list des {@link Frais}.
 	 */
 	private List<Frais> frais = new ArrayList<Frais>();
@@ -59,6 +63,23 @@ public class TrameCatalogue {
 	}
 
 	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * @return {@link #frais}.
 	 */
