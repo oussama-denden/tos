@@ -251,4 +251,19 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException;
+
+	/**
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * @return liste des references des contrat cree.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException;
 }

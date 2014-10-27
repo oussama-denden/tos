@@ -68,7 +68,7 @@ public class Draft {
 	 * date de transformation du draft en {@link Commande}.
 	 */
 	private Date dateTransformationCommande;
-
+	
 	/**
 	 * reference de la commande source du draft.
 	 */
@@ -108,7 +108,7 @@ public class Draft {
 	public Draft() {
 
 	}
-
+	
 	/**
 	 * creation d'un draft a partir d'un {@link Commande}.
 	 * 
@@ -248,7 +248,7 @@ public class Draft {
 	public void setDateTransformationCommande(Date dateTransformationCommande) {
 		this.dateTransformationCommande = dateTransformationCommande;
 	}
-
+	
 	/**
 	 * 
 	 * @return {@link #commandeSource}.

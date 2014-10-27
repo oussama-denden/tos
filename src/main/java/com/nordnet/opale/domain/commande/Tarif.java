@@ -1,7 +1,9 @@
 package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -19,6 +21,9 @@ import com.google.common.base.Optional;
 import com.nordnet.opale.business.FraisInfo;
 import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Prix;
+import com.nordnet.opale.enums.ModeFacturation;
+import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeTVA;
 
 /**
@@ -277,6 +282,32 @@ public class Tarif {
 
 		return tarifInfo;
 
+	}
+
+	/**
+	 * Transformer une {@link Tarif} en un {@link Prix}.
+	 * 
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}.
+	 * @param modePaiement
+	 *            {@link ModePaiement}.
+	 * @return {@link Prix}.
+	 */
+	public Prix toPrix(ModeFacturation modeFacturation, ModePaiement modePaiement) {
+		Prix prix = new Prix();
+		prix.setDuree(duree);
+		prix.setEngagement(engagement);
+		prix.setMontant(this.prix);
+		prix.setPeriodicite(frequence);
+		prix.setTypeTVA(typeTVA);
+		Set<com.nordnet.opale.business.commande.Frais> fraisSet = new HashSet<>();
+		for (Frais frais : this.frais) {
+			fraisSet.add(frais.toFraisContrat());
+		}
+		prix.setFrais(fraisSet);
+		prix.setModeFacturation(modeFacturation);
+		prix.setModePaiement(modePaiement);
+		return prix;
 	}
 
 	/**

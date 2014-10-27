@@ -2,7 +2,9 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -25,6 +27,7 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 
 /**
  * Classe qui represente la commande.
@@ -87,6 +90,11 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
+	 * date de transformation du commande vers contrat.
+	 */
+	private Date dateTransformationContrat;
+
+	/**
 	 * date d'annulation de la commande.
 	 */
 	private Date dateAnnulation;
@@ -128,7 +136,7 @@ public class Commande {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
-			// creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
+//			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
 			addLigne(commandeLigne);
 		}
 	}
@@ -275,6 +283,21 @@ public class Commande {
 	 */
 	public void setDateCreation(Date dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+
+	/**
+	 * @return {@link #dateTransformationContrat}.
+	 */
+	public Date getDateTransformationContrat() {
+		return dateTransformationContrat;
+	}
+
+	/**
+	 * @param dateTransformationContrat
+	 *            {@link #dateTransformationContrat}.
+	 */
+	public void setDateTransformationContrat(Date dateTransformationContrat) {
+		this.dateTransformationContrat = dateTransformationContrat;
 	}
 
 	/**

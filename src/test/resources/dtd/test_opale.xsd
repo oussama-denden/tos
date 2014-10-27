@@ -77,6 +77,7 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceDraft" use="optional" />
+		<xsd:attribute name="dateTransformationContrat" use="optional" />
 		<xsd:attribute name="clientAFacturerId" use="optional" />
 		<xsd:attribute name="clientALivrerId" use="optional" />
 		<xsd:attribute name="clientSouscripteurId" use="optional" />
@@ -103,6 +104,7 @@
 		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="numero" use="optional" />
 		<xsd:attribute name="referenceOffre" use="optional" />
+		<xsd:attribute name="referenceContrat" use="optional" />
 		<xsd:attribute name="secteur" use="optional" />
 		<xsd:attribute name="commandeId" use="optional" />
 		<xsd:attribute name="famille" use="optional" />
