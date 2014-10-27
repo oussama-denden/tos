@@ -241,7 +241,7 @@ public class DraftValidator {
 	public static void codeNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
 		if (auteur != null) {
 			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14", "code"), "0.1.14");
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "code"), "0.1.4");
 			}
 		}
 
