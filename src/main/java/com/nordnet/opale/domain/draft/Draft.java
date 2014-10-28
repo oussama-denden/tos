@@ -125,15 +125,18 @@ public class Draft {
 			this.clientAFacturer = new Client();
 			this.clientAFacturer.setAdresseId(clientAFacturer.getAdresseId());
 			this.clientAFacturer.setClientId(clientAFacturer.getClientId());
+			this.clientAFacturer.setAuteur(clientAFacturer.getAuteur());
 
 		}
 		Client clientSouscripteur = commande.getClientSouscripteur();
 		if (clientSouscripteur != null) {
-			this.clientSouscripteur = new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId());
+			this.clientSouscripteur = new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId(),
+					clientSouscripteur.getAuteur());
 		}
 		Client clientALivrer = commande.getClientALivrer();
 		if (clientALivrer != null) {
-			this.clientALivrer = new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId());
+			this.clientALivrer = new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId(),
+					clientALivrer.getAuteur());
 		}
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			addLigne(new DraftLigne(commandeLigne));

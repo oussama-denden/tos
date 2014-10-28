@@ -69,6 +69,23 @@ public class Client {
 	}
 
 	/**
+	 * creation du client.
+	 * 
+	 * @param clientId
+	 *            client id.
+	 * @param adresseId
+	 *            the adresse id
+	 * @param auteur
+	 *            l auteur
+	 */
+	public Client(String clientId, String adresseId, Auteur auteur) {
+		super();
+		this.clientId = clientId;
+		this.adresseId = adresseId;
+		this.auteur = auteur;
+	}
+
+	/**
 	 * 
 	 * @return {@link #id}.
 	 */
