@@ -340,7 +340,7 @@ public class Draft {
 	}
 
 	/**
-	 * ajouter une {@link DraftLigne} au draft.
+	 * Ajouter une {@link DraftLigne} au draft.
 	 * 
 	 * @param draftLigne
 	 *            {@link DraftLigne}.
@@ -350,7 +350,7 @@ public class Draft {
 	}
 
 	/**
-	 * tester si le draft est annule.
+	 * Tester si le draft est annule.
 	 * 
 	 * @return true si le draft est annule.
 	 */
@@ -360,7 +360,7 @@ public class Draft {
 	}
 
 	/**
-	 * tester si le draft a ete transforme en {@link Commande}.
+	 * Tester si le draft a ete transforme en {@link Commande}.
 	 * 
 	 * @return true si le draft a ete transforme en draft.
 	 */
