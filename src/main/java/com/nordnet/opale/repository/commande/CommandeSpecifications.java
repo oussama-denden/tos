@@ -11,6 +11,7 @@ import org.joda.time.LocalDate;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.Utils;
@@ -116,12 +117,17 @@ public class CommandeSpecifications {
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				if (paye != null) {
-					if(paye){
-				return cb.isTrue(commandeRoot.<Boolean> get("isPaye"));
-				} else {
-					return cb.isFalse(commandeRoot.<Boolean> get("isPaye"));
+					Root<Paiement> paiement = query.from(Paiement.class);
+					Predicate paiementDeCommande = cb.equal(paiement.get("referenceCommande"),
+							commandeRoot.get("reference"));
+
+					if (paye) {
+						Predicate commandePaye = cb.isNotNull(paiement.get("timestampPaiement"));
+						return cb.and(paiementDeCommande, commandePaye);
+					}
+					Predicate commandeNonPaye = cb.isNull(paiement.get("timestampPaiement"));
+					return cb.and(paiementDeCommande, commandeNonPaye);
 				}
-			}
 				return null;
 
 			}
