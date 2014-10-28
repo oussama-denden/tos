@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -36,9 +35,9 @@ public class CommandeSpecifications {
 			@Override
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				if (!Utils.isStringNullOrEmpty(clientId)) {
-					return cb.or(cb.equal(commandeRoot.get("clientSouscripteur").get("clientId"), clientId),
-							cb.equal(commandeRoot.get("clientALivrer").get("clientId"), clientId),
-							cb.equal(commandeRoot.get("clientAFacturer").get("clientId"), clientId));
+					return cb.or(cb.equal(commandeRoot.<String> get("clientSouscripteur").get("clientId"), clientId),
+							cb.equal(commandeRoot.<String>get("clientALivrer").get("clientId"), clientId),
+							cb.equal(commandeRoot.<String>get("clientAFacturer").get("clientId"), clientId));
 				}
 				return null;
 			}
@@ -86,11 +85,17 @@ public class CommandeSpecifications {
 
 				if (signe != null) {
 					Root<Signature> signature = query.from(Signature.class);
-					Path<Boolean> isSigne = signature.get("isSigne");
+					Predicate signatureDeCommande = cb.equal(signature.get("referenceCommande"),
+							commandeRoot.get("reference"));
+
 					if (signe) {
-						return cb.isTrue(isSigne);
+						Predicate signatureSigner = cb.and(cb.isNotNull(signature.get("idSignature")),
+								cb.isNotNull(signature.get("timestampSignature")));
+						return cb.and(signatureDeCommande, signatureSigner);
 					}
-					return cb.isFalse(commandeRoot.<Boolean> get("isPaye"));
+					Predicate signatureNonSigner = cb.and(cb.isNull(signature.get("idSignature")),
+							cb.isNull(signature.get("timestampSignature")));
+					return cb.and(signatureDeCommande, signatureNonSigner);
 				}
 				return null;
 			}
