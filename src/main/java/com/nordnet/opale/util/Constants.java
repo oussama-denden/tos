@@ -68,7 +68,12 @@ public final class Constants {
 	public static final String REF_DRAFT_INIT = "00000001";
 
 	/**
-	 * constante indique le paiement.
+	 * chaine vide.
+	 */
+	public static final String CHAINE_VIDE = "";
+
+	/**
+	* constante indique le paiement.
 	 */
 	public static final String PAIEMENT = "PAIEMENT";
 
