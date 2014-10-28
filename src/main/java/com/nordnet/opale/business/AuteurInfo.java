@@ -14,11 +14,6 @@ public class AuteurInfo {
 	private Auteur auteur;
 
 	/**
-	 * L utilisateur.
-	 */
-	private String user;
-
-	/**
 	 * constructeur par defaut.
 	 */
 	public AuteurInfo() {
@@ -42,21 +37,5 @@ public class AuteurInfo {
 		this.auteur = auteur;
 	}
 
-	/**
-	 * 
-	 * @return {@link #user}.
-	 */
-	public String getUser() {
-		return user;
-	}
-
-	/**
-	 * 
-	 * @param user
-	 *            {@link #user}.
-	 */
-	public void setUser(String user) {
-		this.user = user;
-	}
 
 }

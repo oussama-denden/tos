@@ -36,11 +36,6 @@ public class DraftInfo {
 	private Client facturation;
 
 	/**
-	 * L utilisateur.
-	 */
-	private String user;
-
-	/**
 	 * constructeur par defaut.
 	 */
 	public DraftInfo() {
@@ -130,23 +125,6 @@ public class DraftInfo {
 	 */
 	public void setFacturation(Client facturation) {
 		this.facturation = facturation;
-	}
-
-	/**
-	 * 
-	 * @return {@link #user}.
-	 */
-	public String getUser() {
-		return user;
-	}
-
-	/**
-	 * 
-	 * @param user
-	 *            {@link #user}.
-	 */
-	public void setUser(String user) {
-		this.user = user;
 	}
 
 }

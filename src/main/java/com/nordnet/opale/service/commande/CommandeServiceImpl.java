@@ -165,7 +165,6 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
-		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
 				"Payer l'intention de paiement de reference " + referencePaiement + " de la commande "
@@ -187,7 +186,7 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
-		commande.setPaye(isPayeTotalement(referenceCommande));
+
 		commandeRepository.save(commande);
 
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
