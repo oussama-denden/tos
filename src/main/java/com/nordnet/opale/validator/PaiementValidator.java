@@ -144,7 +144,7 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.modePaiement"), "0.1.4");
 		}
 
-		if (paiementInfo.getIdPaiement() == null) {
+		if (Utils.isStringNullOrEmpty(paiementInfo.getIdPaiement())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.idpaiement"), "0.1.4");
 		}
 
