@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 <dataset>
-<client id="1000" adresseId="adr-fac" clientId="cl-fac" />
-<client id="1001" adresseId="adr-sousc" clientId="cl-sousc" />
-<client id="1002" adresseId="adr-liv" clientId="cl-livc" />
+<client id="1000" adresseId="adr-fac" clientId="cl-fac" code="code" qui="someone" timestamp="1411654933"/>
+<client id="1001" adresseId="adr-sousc" clientId="cl-sousc"  code="code" qui="someone" timestamp="1411654933"/>
+<client id="1002" adresseId="adr-liv" clientId="cl-livc"  code="code" qui="someone" timestamp="1411654933"/>
 
 <commande id="1000" canal="welcome" code="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="1411654933" reference="00000001" referenceDraft="00000001" clientAFacturerId="1000" clientSouscripteurId="1001" clientALivrerId="1002" />
 

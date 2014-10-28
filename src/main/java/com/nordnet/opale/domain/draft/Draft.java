@@ -68,7 +68,7 @@ public class Draft {
 	 * date de transformation du draft en {@link Commande}.
 	 */
 	private Date dateTransformationCommande;
-	
+
 	/**
 	 * reference de la commande source du draft.
 	 */
@@ -108,7 +108,7 @@ public class Draft {
 	public Draft() {
 
 	}
-	
+
 	/**
 	 * creation d'un draft a partir d'un {@link Commande}.
 	 * 
@@ -120,18 +120,23 @@ public class Draft {
 		this.auteur = commande.getAuteur();
 		Client clientAFacturer = commande.getClientAFacturer();
 		if (clientAFacturer != null) {
-			// this.clientAFacturer = new Client(clientAFacturer.getClientId(), clientALivrer.getAdresseId());
+			// this.clientAFacturer = new Client(clientAFacturer.getClientId(),
+			// clientALivrer.getAdresseId());
 			this.clientAFacturer = new Client();
 			this.clientAFacturer.setAdresseId(clientAFacturer.getAdresseId());
 			this.clientAFacturer.setClientId(clientAFacturer.getClientId());
+			this.clientAFacturer.setAuteur(clientAFacturer.getAuteur());
+
 		}
 		Client clientSouscripteur = commande.getClientSouscripteur();
 		if (clientSouscripteur != null) {
-			this.clientSouscripteur = new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId());
+			this.clientSouscripteur = new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId(),
+					clientSouscripteur.getAuteur());
 		}
 		Client clientALivrer = commande.getClientALivrer();
 		if (clientALivrer != null) {
-			this.clientALivrer = new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId());
+			this.clientALivrer = new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId(),
+					clientALivrer.getAuteur());
 		}
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			addLigne(new DraftLigne(commandeLigne));
@@ -248,7 +253,7 @@ public class Draft {
 	public void setDateTransformationCommande(Date dateTransformationCommande) {
 		this.dateTransformationCommande = dateTransformationCommande;
 	}
-	
+
 	/**
 	 * 
 	 * @return {@link #commandeSource}.

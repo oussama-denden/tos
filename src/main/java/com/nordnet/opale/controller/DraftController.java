@@ -18,14 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -78,14 +79,16 @@ public class DraftController {
 	 * 
 	 * @param reference
 	 *            reference du draft.
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	@ResponseBody
-	public void supprimerDraft(@PathVariable String reference) throws OpaleException {
+	public void supprimerDraft(@PathVariable String reference, @RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::annulerDraft");
-		draftService.annulerDraft(reference);
+		draftService.annulerDraft(reference, auteur);
 	}
 
 	/**

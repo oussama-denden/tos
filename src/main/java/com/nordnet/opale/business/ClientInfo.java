@@ -27,10 +27,6 @@ public class ClientInfo {
 	 * Le client pour la facturation.
 	 */
 	private Client facturation;
-	/**
-	 * L utilisateur.
-	 */
-	private String user;
 
 	/**
 	 * constructeur par defaut.
@@ -105,23 +101,6 @@ public class ClientInfo {
 	 */
 	public void setFacturation(Client facturation) {
 		this.facturation = facturation;
-	}
-
-	/**
-	 * 
-	 * @return {@link #user}
-	 */
-	public String getUser() {
-		return user;
-	}
-
-	/**
-	 * 
-	 * @param user
-	 *            {@link #user}
-	 */
-	public void setUser(String user) {
-		this.user = user;
 	}
 
 }

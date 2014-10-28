@@ -110,25 +110,51 @@ public class DraftLigne {
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
 		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
 		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
-		this.auteur = new Auteur(draftLigneInfo.getAuteur());
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
 		}
 	}
 
 	/**
+	 * creation de {@link DraftLigne} a partir d'une {@link draftLigneInfo} et.
+	 * 
+	 * @param draftLigneInfo
+	 *            the draft ligne info
+	 * @param auteur
+	 *            l auteur {@link Auteur}. {@link DraftLigneInfo}.
+	 */
+	public DraftLigne(DraftLigneInfo draftLigneInfo, com.nordnet.opale.business.Auteur auteur) {
+		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
+		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
+		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
+		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
+		this.auteur = auteur.toDomain();
+		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
+			draftLigneDetails.add(new DraftLigneDetail(detail));
+		}
+	}
+
+	/**
+	 * 
 	 * creation d'un draftLigne a partir d'un {@link CommandeLigne}.
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * @param commandeLigne
 	 *            {@link CommandeLigne}.
 	 */
+
 	public DraftLigne(CommandeLigne commandeLigne) {
 		this.referenceOffre = commandeLigne.getReferenceOffre();
+
 		Tarif tarif = commandeLigne.getTarif();
 		this.referenceTarif = tarif != null ? tarif.getReference() : null;
 		this.modePaiement = commandeLigne.getModePaiement();
 		this.modeFacturation = commandeLigne.getModeFacturation();
 		this.auteur = commandeLigne.getAuteur();
+
 		this.dateCreation = commandeLigne.getDateCreation();
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
 			addDraftLigneDetail(new DraftLigneDetail(commandeLigneDetail));
@@ -334,8 +360,8 @@ public class DraftLigne {
 		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
 			if (!commandeLigneDetail.isParent()) {
 				DraftLigneDetail draftLigneDetail = draftDetailsMap.get(commandeLigneDetail.getReferenceProduit());
-				DraftLigneDetail draftLigneDetailParent =
-						draftDetailsMap.get(commandeLigneDetail.getCommandeLigneDetailParent().getReferenceProduit());
+				DraftLigneDetail draftLigneDetailParent = draftDetailsMap.get(commandeLigneDetail
+						.getCommandeLigneDetailParent().getReferenceProduit());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}

@@ -7,6 +7,7 @@ import javax.activation.CommandInfo;
 import org.json.JSONException;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
@@ -86,8 +87,8 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -117,6 +118,8 @@ public interface CommandeService {
 	 * @param referenceCommande
 	 *            reference du commande.
 	 * @return {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
 	public Commande getCommandeByReference(String referenceCommande) throws OpaleException;
 
@@ -160,16 +163,20 @@ public interface CommandeService {
 	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException;
 
 	/**
-	 * Applique une suppression physiquement un intention et logique pour un paiement.
+	 * Applique une suppression physiquement un intention et logique pour un
+	 * paiement.
 	 * 
 	 * @param refCommande
 	 *            reference commande
 	 * @param refPaiement
 	 *            reference paiement
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
+	 *             the opale exception {@link OpaleException}
 	 *             {@link OpaleException}.
 	 */
-	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException;
+	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException;
 
 	/**
 	 * Supprimer un signature.
@@ -178,10 +185,12 @@ public interface CommandeService {
 	 *            reference du commande.
 	 * @param refSignature
 	 *            reference du signature.
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void supprimerSignature(String refCommande, String refSignature) throws OpaleException;
+	public void supprimerSignature(String refCommande, String refSignature, Auteur auteur) throws OpaleException;
 
 	/**
 	 * ajouter une intention de signature.
@@ -242,7 +251,8 @@ public interface CommandeService {
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
 
 	/**
-	 * transformer une {@link Commande} en {@link Draft}.
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale. transformer une {@link Commande} en {@link Draft}.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
