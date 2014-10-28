@@ -12,7 +12,7 @@ public class Auteur {
 	/**
 	 * code auteur.
 	 */
-	private String code;
+	private String codePartenaire;
 
 	/**
 	 * nom de l auteur.
@@ -37,21 +37,24 @@ public class Auteur {
 	}
 
 	/**
+	 * the code partenaire.
 	 * 
-	 * @return {@link Auteur#code}.
+	 * @return {@link #codePartenaire}
 	 */
-	public String getCode() {
-		return code;
+	public String getCodePartenaire() {
+		return codePartenaire;
 	}
 
 	/**
+	 * set the code partenaire.
 	 * 
-	 * @param code
-	 *            {@link #code}
+	 * @param codePartenaire
+	 *            the new {@link #codePartenaire}
 	 */
-	public void setCode(String code) {
-		this.code = code;
+	public void setCodePartenaire(String codePartenaire) {
+		this.codePartenaire = codePartenaire;
 	}
+
 
 	/**
 	 * 
@@ -112,7 +115,7 @@ public class Auteur {
 	public com.nordnet.opale.domain.Auteur toDomain() {
 		com.nordnet.opale.domain.Auteur auteur = new com.nordnet.opale.domain.Auteur();
 		auteur.setCanal(canal);
-		auteur.setCode(code);
+		auteur.setCodePartenaire(codePartenaire);
 		auteur.setIp(ip.getIp());
 		auteur.setQui(qui);
 		auteur.setTimestamp(ip.getTs());

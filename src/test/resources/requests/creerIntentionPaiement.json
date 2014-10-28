@@ -1,7 +1,7 @@
 {
   "modePaiement": "CB",
    "auteur": {
-    "code": "part_123456",
+    "codePartenaire": "part_123456",
     "qui": "GRC.WEL-JOHNDOE",
     "canal": "welcome",
     "ip": {

@@ -62,7 +62,7 @@ public class SignatureInfoGenerator {
 		ip.setIp("127.0.0.1");
 		ip.setTs(1411654933);
 		auteur.setCanal("welcome");
-		auteur.setCode("part_123456");
+		auteur.setCodePartenaire("part_123456");
 		auteur.setIp(ip);
 		auteur.setQui("GRC.WEL-JOHNDOE");
 
