@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
+import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
@@ -190,5 +191,17 @@ public interface DraftService {
 	 *            {@link Draft}.
 	 */
 	public void save(Draft draft);
+
+	/**
+	 * Associer un code partenaire a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference draft
+	 * @param codePartenaireInfo
+	 *            {@link CodePartenaireInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException;
 
 }

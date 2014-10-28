@@ -110,10 +110,17 @@ public class PropertiesUtil {
 	 * @return {@link Date}
 	 * @throws ParseException
 	 *             {@link ParseException}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
-	public Date parseDate(String date) throws ParseException {
+	public Date parseDate(String date) throws ParseException, OpaleException {
 		SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
-		Date dateFormatte = formatter.parse(date);
+		Date dateFormatte;
+		if (!(date.length() == Constants.UN)) {
+			dateFormatte = formatter.parse(date);
+		} else {
+			dateFormatte = PropertiesUtil.getInstance().getDateDuJour();
+		}
 		return dateFormatte;
 	}
 

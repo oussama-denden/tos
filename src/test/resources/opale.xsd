@@ -23,7 +23,7 @@
 		<xsd:attribute name="clientId" use="optional" />
 		<xsd:attribute name="AdresseFacturationId" use="optional" />
 		<xsd:attribute name="AdresseLivraisonId" use="optional" />
-		<xsd:attribute name="code" use="optional" />
+		<xsd:attribute name="codePartenaire" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
@@ -38,7 +38,7 @@
 		<xsd:attribute name="referenceTarif" use="optional" />
 		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="dateCreation" use="optional" />
-		<xsd:attribute name="code" use="optional" />
+		<xsd:attribute name="codePartenaire" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
@@ -75,7 +75,7 @@
 		<xsd:attribute name="footprint" use="optional" />
 		<xsd:attribute name="timestampSignature" use="optional" />
 		<xsd:attribute name="idSignature" use="optional" />
-		<xsd:attribute name="code" use="optional" />
+		<xsd:attribute name="codePartenaire" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />

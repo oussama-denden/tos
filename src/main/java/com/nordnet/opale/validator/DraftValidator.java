@@ -238,10 +238,10 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void codeNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
+	public static void codePartenaireNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
 		if (auteur != null) {
-			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "code"), "0.1.4");
+			if (Utils.isStringNullOrEmpty(auteur.getCodePartenaire())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.21"), "1.1.21");
 			}
 		}
 

@@ -7,7 +7,7 @@
     clientAFacturerId CDATA #IMPLIED
     clientALivrerId CDATA #IMPLIED
     clientSouscripteurId CDATA #IMPLIED
-    code CDATA #IMPLIED
+    codePartenaire CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
@@ -23,7 +23,7 @@
     modePaiement CDATA #IMPLIED
     modeFacturation CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
-    code CDATA #IMPLIED
+    codePartenaire CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
@@ -66,7 +66,7 @@
     adresseId CDATA #IMPLIED
     clientId CDATA #IMPLIED
     canal CDATA #IMPLIED
-  code CDATA #IMPLIED
+  codePartenaire CDATA #IMPLIED
   ip  CDATA #IMPLIED
   qui  CDATA #IMPLIED
   timestamp  CDATA #IMPLIED
@@ -83,7 +83,7 @@
     dateCreation CDATA #IMPLIED
     dateTransformationContrat CDATA #IMPLIED
     dateAnnulation CDATA #IMPLIED
-    code CDATA #IMPLIED
+    codePartenaire CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
@@ -94,7 +94,7 @@
 <!ATTLIST commandeLigne
     id CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
-    code CDATA #IMPLIED
+    codePartenaire CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
@@ -156,7 +156,7 @@
     timestampSignature CDATA #IMPLIED
     footprint CDATA #IMPLIED
     idSignature  CDATA #IMPLIED
-     code CDATA #IMPLIED
+     codePartenaire CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
@@ -174,7 +174,7 @@
     montant CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
-    code CDATA #IMPLIED
+    codePartenaire CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED

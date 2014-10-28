@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.ClientInfo;
+import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
@@ -136,7 +137,6 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = new Draft();
 
-		DraftValidator.codeNotNull(auteur);
 
 		draft.setAuteur(auteur);
 
@@ -377,6 +377,7 @@ public class DraftServiceImpl implements DraftService {
 	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isAuteurValide(trameCatalogue.getAuteur());
+		DraftValidator.codePartenaireNotNull(draft.getAuteur());
 		tracageService.ajouterTrace(trameCatalogue.getAuteur().getQui(), referenceDraft,
 				"la validation du draft de reference " + referenceDraft);
 		return catalogueValidator.validerDraft(draft, trameCatalogue);
@@ -393,6 +394,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerAuteur(transformationInfo.getTrameCatalogue().getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
+		DraftValidator.codePartenaireNotNull(draft.getAuteur());
 
 		draft.setClientAFacturer(transformationInfo.getClientInfo().getFacturation().toDomain());
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
@@ -443,9 +445,27 @@ public class DraftServiceImpl implements DraftService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void save(Draft draft) {
 		draftRepository.save(draft);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException {
+		LOGGER.info("Debut methode service associerCodePartenaire");
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+		Auteur auteur = draft.getAuteur();
+		auteur.setCodePartenaire(codePartenaireInfo.getCodePartenaire());
+		draftRepository.save(draft);
+		LOGGER.info("Fin methode service associerCodePartenaire");
+
 	}
 
 }

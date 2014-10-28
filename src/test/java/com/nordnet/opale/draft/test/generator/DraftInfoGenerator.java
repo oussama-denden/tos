@@ -72,7 +72,7 @@ public class DraftInfoGenerator {
 		offre.setDetails(details);
 
 		Auteur auteur = new Auteur();
-		auteur.setCode("part_123456");
+		auteur.setCodePartenaire("part_123456");
 		auteur.setCanal("Welcome");
 		auteur.setQui("GRC.WEL-JOHNDOE");
 		Ip ip = new Ip();
@@ -135,7 +135,7 @@ public class DraftInfoGenerator {
 			JsonMappingException, IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File json = new File(classLoader.getResource(jsonFilePath).getFile());
-		return (T) new ObjectMapper().readValue(json, valueType);
+		return new ObjectMapper().readValue(json, valueType);
 	}
 
 }

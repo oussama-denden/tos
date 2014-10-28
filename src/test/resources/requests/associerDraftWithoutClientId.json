@@ -9,7 +9,7 @@
     "adresseId": "Adr_Livraison_1"
   },
   "auteur": {
-    "code": "part_123456",
+    "codePartenaire": "part_123456",
     "qui": "GRC.WEL-JOHNDOE",
     "canal": "welcome",
     "ip": {

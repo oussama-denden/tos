@@ -43,8 +43,8 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 * requette pour recuper le max du date d'acce a ne commande.
 	 */
 	public final static String MAX_DATE_ACTIVATION =
-			"SELECT GREATEST( IFNULL((SELECT GREATEST(IFNULL(timestampIntention,0),IFNULL(timestampPaiement,0)) FROM Paiement p where"
-					+ " p.referenceCommande LIKE :referenceCommande LIMIT 1),0),IFNULL((SELECT GREATEST(IFNULL(timestampSignature,0),IFNULL(timestampIntention,0)) FROM Signature s"
+			"SELECT GREATEST( IFNULL((SELECT GREATEST(IFNULL(timestampIntention,0),IFNULL(timestampPaiement,0)) FROM paiement p where"
+					+ " p.referenceCommande LIKE :referenceCommande LIMIT 1),0),IFNULL((SELECT GREATEST(IFNULL(timestampSignature,0),IFNULL(timestampIntention,0)) FROM signature s"
 					+ " where s.referenceCommande LIKE :referenceCommande),0 )) ";
 
 	/**

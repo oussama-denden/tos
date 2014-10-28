@@ -2,8 +2,6 @@ package com.nordnet.opale.domain;
 
 import javax.persistence.Embeddable;
 
-import org.hibernate.validator.NotNull;
-
 import com.nordnet.opale.business.Ip;
 
 /**
@@ -18,8 +16,7 @@ public class Auteur {
 	/**
 	 * code auteur.
 	 */
-	@NotNull
-	private String code;
+	private String codePartenaire;
 
 	/**
 	 * nom de l auteur.
@@ -55,27 +52,29 @@ public class Auteur {
 	 */
 	public Auteur(com.nordnet.opale.business.Auteur auteur) {
 		this.setCanal(auteur.getCanal());
-		this.setCode(auteur.getCode());
+		this.setCodePartenaire(auteur.getCodePartenaire());
 		this.setIp(auteur.getIp().getIp());
 		this.setQui(auteur.getQui());
 		this.setTimestamp(auteur.getIp().getTs());
 	}
 
 	/**
+	 * the code partenaire.
 	 * 
-	 * @return {@link #code}.
+	 * @return {@link #codePartenaire}
 	 */
-	public String getCode() {
-		return code;
+	public String getCodePartenaire() {
+		return codePartenaire;
 	}
 
 	/**
+	 * set the code partenaire.
 	 * 
-	 * @param code
-	 *            {@link #code}.
+	 * @param codePartenaire
+	 *            the new {@link #codePartenaire}
 	 */
-	public void setCode(String code) {
-		this.code = code;
+	public void setCodePartenaire(String codePartenaire) {
+		this.codePartenaire = codePartenaire;
 	}
 
 	/**
@@ -154,7 +153,7 @@ public class Auteur {
 	public com.nordnet.opale.business.Auteur toAuteurBusiness() {
 		com.nordnet.opale.business.Auteur auteur = new com.nordnet.opale.business.Auteur();
 		auteur.setCanal(canal);
-		auteur.setCode(code);
+		auteur.setCodePartenaire(codePartenaire);
 		Ip ipBusiness = new Ip();
 		ipBusiness.setIp(ip);
 		auteur.setIp(ipBusiness);

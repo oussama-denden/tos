@@ -5,27 +5,27 @@
 <client id="1" clientId="client-1245" adresseId="Adr_Facturation_1"/>
 <client id="2" clientId="client-1245" adresseId="Adr_Souscripteur_1"/>
 <client id="3" clientId="client-1245" adresseId="Adr_Livraison_1"/>
-	<draft id="1" reference="REF-DRAFT-1" code="000111"
+	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
 		timestamp="100" clientAFacturerId="1" clientALivrerId="3" clientSouscripteurId="2"/>
-	<draft id="2" reference="REF-DRAFT-3" code="000111"
+	<draft id="2" reference="REF-DRAFT-3" codePartenaire="000111"
 		timestamp="100" />
 
-	<draft id="3" reference="REF-DRAFT-4" code="000111"
+	<draft id="3" reference="REF-DRAFT-4" codePartenaire="000111"
 		timestamp="100" />
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
-		code="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
+		codePartenaire="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
 		timestamp="1411654933" draftId="1" />
 
 	<draftLigne id="1001" reference="00000002" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf100" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
-		code="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
+		codePartenaire="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
 		timestamp="1411654933" draftId="2" />
 
 	<draftLigne id="1002" reference="00000003" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
-		code="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
+		codePartenaire="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
 		timestamp="1411654933" draftId="3" />
 
 

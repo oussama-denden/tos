@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
+import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
@@ -262,6 +263,25 @@ public class DraftController {
 			return jsonResponse.toString();
 		}
 		return object;
+	}
+
+	/**
+	 * asscoier un code partenaire a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft
+	 * @param codePartenaireInfo
+	 *            {@link CodePartenaireInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/associerCodePartenaire", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void associerCodePartenaire(@PathVariable String refDraft, @RequestBody CodePartenaireInfo codePartenaireInfo)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::associerCodePartenaire");
+		draftService.associerCodePartenaire(refDraft, codePartenaireInfo);
+
 	}
 
 	/**

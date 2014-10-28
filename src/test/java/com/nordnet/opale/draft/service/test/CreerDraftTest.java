@@ -99,24 +99,24 @@ public class CreerDraftTest extends GlobalTestCase {
 		}
 	}
 
-	/**
-	 * Creer un draft incomplet.
-	 */
-	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
-	public void GivenWithoutCodeWhenCreerDraftCompletThenFail() {
-
-		try {
-			draftService.creerDraft(draftInfoGenerator.getObjectFromJsonFile(DraftInfo.class,
-					"./requests/creerDraftCompletWithoutCode.json"));
-
-			fail("Unexpected error");
-		} catch (OpaleException e) {
-			assertEquals("0.1.4", e.getErrorCode());
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			fail(e.getMessage());
-		}
-	}
+	// /**
+	// * Creer un draft incomplet.
+	// */
+	// @Test
+	// @DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
+	// public void GivenWithoutCodeWhenCreerDraftCompletThenFail() {
+	//
+	// try {
+	// draftService.creerDraft(draftInfoGenerator.getObjectFromJsonFile(DraftInfo.class,
+	// "./requests/creerDraftCompletWithoutCode.json"));
+	//
+	// fail("Unexpected error");
+	// } catch (OpaleException e) {
+	// assertEquals("0.1.4", e.getErrorCode());
+	// } catch (Exception e) {
+	// LOGGER.error(e.getMessage());
+	// fail(e.getMessage());
+	// }
+	// }
 
 }
