@@ -263,6 +263,13 @@
 			<artifactId>commons-pool</artifactId>
 			<version>1.6</version>
 		</dependency>
+		
+		<!-- client saphir -->
+		<dependency>
+			<groupId>com.nordnet.saphir</groupId>
+			<artifactId>saphir.ws.client</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 	<build>

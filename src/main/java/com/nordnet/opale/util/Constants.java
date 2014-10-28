@@ -67,4 +67,9 @@ public final class Constants {
 	 */
 	public static final String REF_DRAFT_INIT = "00000001";
 
+	/**
+	 * chaine vide.
+	 */
+	public static final String CHAINE_VIDE = "";
+
 }

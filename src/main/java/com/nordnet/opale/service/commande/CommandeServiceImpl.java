@@ -169,6 +169,11 @@ public class CommandeServiceImpl implements CommandeService {
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
+
+		/*
+		 * envoi d'un mouvement vers saphir.
+		 */
+
 		return paiement;
 
 	}
