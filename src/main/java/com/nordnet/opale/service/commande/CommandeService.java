@@ -280,7 +280,7 @@ public interface CommandeService {
 	/**
 	 * recuperer la list des commandes non transformes et non annules.
 	 * 
-	 * @return {@link List<Commande}
+	 * @return {@link List<Commande>}
 	 */
 	public List<Commande> getCommandeNonAnnuleEtNonTransformes();
 
@@ -307,4 +307,15 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException;
+
+	/**
+	 * retourner si la commande a besoin d'un paiement comptant ou non.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return true si la commande a besoin d'un paiement comptant.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException;
 }
