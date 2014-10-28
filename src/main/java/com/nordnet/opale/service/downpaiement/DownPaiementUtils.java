@@ -1,4 +1,4 @@
-package com.nordnet.opale.service.mouvement;
+package com.nordnet.opale.service.downpaiement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,10 +16,10 @@ import com.nordnet.saphir.ws.client.entity.TMovementAppendixItem;
 /**
  * Une classe qui regroupe des methodes utiles a la facturation.
  * 
- * @author Oussama Denden
+ * @author akram-moncer
  * 
  */
-public final class DowPaiementUtils {
+public final class DownPaiementUtils {
 
 	/**
 	 * Changer le {@link ModePaiement} du paiement vers le {@link PaymentType} de saphir.

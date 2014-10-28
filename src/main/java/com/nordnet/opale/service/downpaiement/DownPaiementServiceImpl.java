@@ -1,4 +1,4 @@
-package com.nordnet.opale.service.mouvement;
+package com.nordnet.opale.service.downpaiement;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class DownPaiementServiceImpl implements DownPaiementService {
 	public void envoiePaiement(Commande commande, Paiement paiement) {
 		Price price = new Price(paiement.getMontant(), CurrencyCode.EUR);
 		PaymentReference paymentReference =
-				new PaymentReference(DowPaiementUtils.getPayementType(paiement.getModePaiement()),
+				new PaymentReference(DownPaiementUtils.getPayementType(paiement.getModePaiement()),
 						paiement.getReference());
 		try {
 			getSaphirClient().addDownPayment(Identifier.build(commande.getClientAFacturer().getClientId()), price,
