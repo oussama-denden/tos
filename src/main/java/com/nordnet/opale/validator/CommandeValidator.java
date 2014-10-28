@@ -116,13 +116,33 @@ public class CommandeValidator {
 	 * 
 	 * @param commande
 	 *            {@link Commande}
+	 * @param type
+	 *            d'action.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void checkIsCommandeAnnule(Commande commande) throws OpaleException {
-		if (commande.isAnnule()) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8"), "2.1.8");
+	public static void checkIsCommandeAnnule(Commande commande, String action) throws OpaleException {
+		if (commande.isAnnule() && action.equalsIgnoreCase("PAIEMENT")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.10", action), "2.1.10");
+		} else if (commande.isAnnule() && action.equalsIgnoreCase("SIGNATURE")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.9", action), "2.1.9");
+		} else if (commande.isAnnule() && action.equalsIgnoreCase("TRANSFORMER_EN_CONTRAT")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.11", action), "2.1.11");
 		}
 	}
 
+	/**
+	 * Tester si une commande est ransformee en contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void testerCommandeNonTransforme(Commande commande) throws OpaleException {
+		if (commande.getDateTransformationContrat() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8", commande.getReference()), "2.1.8");
+		}
+
+	}
 }

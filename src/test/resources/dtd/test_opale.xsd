@@ -77,6 +77,7 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceDraft" use="optional" />
+		<xsd:attribute name="dateTransformationContrat" use="optional" />
 		<xsd:attribute name="clientAFacturerId" use="optional" />
 		<xsd:attribute name="clientALivrerId" use="optional" />
 		<xsd:attribute name="clientSouscripteurId" use="optional" />
@@ -85,6 +86,7 @@
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
 		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="dateAnnulation" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="commandeLigne" type="commandeLigne_type"/>
@@ -102,6 +104,7 @@
 		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="numero" use="optional" />
 		<xsd:attribute name="referenceOffre" use="optional" />
+		<xsd:attribute name="referenceContrat" use="optional" />
 		<xsd:attribute name="secteur" use="optional" />
 		<xsd:attribute name="commandeId" use="optional" />
 		<xsd:attribute name="famille" use="optional" />
@@ -158,6 +161,8 @@
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
 		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="timestampIntention" use="optional" />
+		<xsd:attribute name="timestampPaiement" use="optional" />
 		<xsd:attribute name="typePaiement" use="optional" />
 	</xsd:complexType>
 	
@@ -178,6 +183,7 @@
 		<xsd:attribute name="timestamp" use="optional" />
 		<xsd:attribute name="referenceCommande" use="optional" />
 		<xsd:attribute name="dateAnnulation" use="optional" />
+		<xsd:attribute name="timestampIntention" use="optional" />
 	</xsd:complexType>
 	
 	

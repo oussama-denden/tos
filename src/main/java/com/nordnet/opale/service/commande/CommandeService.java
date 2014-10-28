@@ -1,6 +1,5 @@
 package com.nordnet.opale.service.commande;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.activation.CommandInfo;
@@ -118,8 +117,6 @@ public interface CommandeService {
 	 * @param referenceCommande
 	 *            reference du commande.
 	 * @return {@link Commande}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
 	 */
 	public Commande getCommandeByReference(String referenceCommande) throws OpaleException;
 
@@ -234,13 +231,6 @@ public interface CommandeService {
 	public List<SignatureInfo> getSignature(String refCommand, Boolean afficheAnnule) throws OpaleException;
 
 	/**
-	 * recuperer la list des commandes non transformes et non annules.
-	 * 
-	 * @return {@link List<Commande}
-	 */
-	public List<Commande> getCommandeNonAnnuleEtNonTransformes();
-
-	/**
 	 * valider une {@link Commande}.
 	 * 
 	 * @param referenceCommande
@@ -250,6 +240,28 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
+
+	/**
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * @return liste des references des contrat cree.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException;
+
+	/**
+	 * recuperer la list des commandes non transformes et non annules.
+	 * 
+	 * @return {@link List<Commande}
+	 */
+	public List<Commande> getCommandeNonAnnuleEtNonTransformes();
 
 	/**
 	 * recuperer le dernier date d'accee sur une commande.

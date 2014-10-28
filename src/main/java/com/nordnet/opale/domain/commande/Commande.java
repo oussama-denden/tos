@@ -90,6 +90,11 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
+	 * date de transformation du commande vers contrat.
+	 */
+	private Date dateTransformationContrat;
+
+	/**
 	 * date d'annulation de la commande.
 	 */
 	private Date dateAnnulation;
@@ -278,6 +283,21 @@ public class Commande {
 	 */
 	public void setDateCreation(Date dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+
+	/**
+	 * @return {@link #dateTransformationContrat}.
+	 */
+	public Date getDateTransformationContrat() {
+		return dateTransformationContrat;
+	}
+
+	/**
+	 * @param dateTransformationContrat
+	 *            {@link #dateTransformationContrat}.
+	 */
+	public void setDateTransformationContrat(Date dateTransformationContrat) {
+		this.dateTransformationContrat = dateTransformationContrat;
 	}
 
 	/**

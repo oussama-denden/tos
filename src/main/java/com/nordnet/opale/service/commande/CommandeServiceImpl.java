@@ -18,13 +18,19 @@ import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
+import com.nordnet.opale.business.commande.ContratPreparationInfo;
+import com.nordnet.opale.business.commande.ContratValidationInfo;
+import com.nordnet.opale.business.commande.PolitiqueValidation;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
+import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.service.signature.SignatureService;
@@ -71,6 +77,12 @@ public class CommandeServiceImpl implements CommandeService {
 	private SignatureService signatureService;
 
 	/**
+	 * {@link RestClient}.
+	 */
+	@Autowired
+	private RestClient restClient;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -111,7 +123,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		LOGGER.info("Debut methode creerIntentionPaiement");
 
-		getCommandeByReference(refCommande);
+		Commande commande = getCommandeByReference(refCommande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 		CommandeValidator.validerAuteur(refCommande, paiementInfo.getAuteur());
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
@@ -127,6 +140,7 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode payerIntentionPaiement");
 
 		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
 		commande.setPaye(isPayeTotalement(referenceCommande));
@@ -144,6 +158,7 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode paiementDirect");
 
 		Commande commande = getCommandeByReference(referenceCommande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 		commande.setPaye(isPayeTotalement(referenceCommande));
@@ -337,6 +352,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.SIGNATURE);
 		CommandeValidator.validerAuteur(refCommande, ajoutSignatureInfo.getAuteur());
 		return signatureService.ajouterIntentionDeSignature(refCommande, ajoutSignatureInfo);
 	}
@@ -354,6 +370,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.SIGNATURE);
 		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
 		return signatureService.ajouterSignatureCommande(refCommande, refrenceSignature, signatureInfo);
 	}
@@ -406,13 +423,87 @@ public class CommandeServiceImpl implements CommandeService {
 			 */
 			if (commande.needPaiementRecurrent()) {
 				List<Paiement> paiements = getPaiementRecurrent(referenceCommande, false);
-				if (paiements.size() > Constants.ZERO) {
+				if (paiements.size() == Constants.ZERO) {
 					validationInfo
 							.addReason("Paiement", "2.1.7", PropertiesUtil.getInstance().getErrorMessage("2.1.7"));
 				}
 			}
 		}
 
+		return validationInfo;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException {
+		CommandeValidator.checkReferenceCommande(refCommande);
+		Commande commande = commandeRepository.findByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
+		CommandeValidator.testerCommandeNonTransforme(commande);
+		List<String> referencesContrats = new ArrayList<>();
+		for (CommandeLigne ligne : commande.getCommandeLignes()) {
+			ContratPreparationInfo preparationInfo = ligne.toContratPreparationInfo(refCommande);
+			String refContrat = restClient.preparerContrat(preparationInfo);
+			ligne.setReferenceContrat(refContrat);
+			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
+
+			restClient.validerContrat(refContrat, validationInfo);
+
+			referencesContrats.add(refContrat);
+
+		}
+
+		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		commandeRepository.save(commande);
+		return referencesContrats;
+	}
+
+	/**
+	 * Creer les information de validation de contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param ligne
+	 *            {@link CommandeLigne}.
+	 * @param refContrat
+	 *            refrence de commande.
+	 * @return {@link ContratValidationInfo}.
+	 */
+	private ContratValidationInfo creeContratValidationInfo(Commande commande, CommandeLigne ligne, String refContrat) {
+		ContratValidationInfo validationInfo = new ContratValidationInfo();
+		validationInfo.setIdAdrFacturation(commande.getClientAFacturer().getAdresseId());
+		validationInfo.setIdClient(commande.getClientAFacturer().getClientId());
+		PolitiqueValidation politiqueValidation = new PolitiqueValidation();
+		politiqueValidation.setCheckIsPackagerCreationPossible(true);
+		politiqueValidation.setFraisCreation(true);
+		validationInfo.setPolitiqueValidation(politiqueValidation);
+		validationInfo.setUser(ligne.getAuteur().getQui());
+
+		List<com.nordnet.opale.business.commande.PaiementInfo> paiementInfos = new ArrayList<>();
+		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
+			com.nordnet.opale.business.commande.PaiementInfo paiementInfo =
+					new com.nordnet.opale.business.commande.PaiementInfo();
+			paiementInfo.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
+			paiementInfo.setNumEC(ligne.getCommandeLigneDetails().indexOf(ligneDetail) + Constants.UN);
+			List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(commande.getReference(), false);
+			Paiement paiementRecurrent = null;
+			if (paiementRecurrents.size() > Constants.ZERO) {
+				paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+			}
+			if (paiementRecurrent != null) {
+				paiementInfo.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
+			}
+
+			paiementInfo.setReferenceProduit(ligneDetail.getReferenceProduit());
+
+			paiementInfos.add(paiementInfo);
+		}
+
+		validationInfo.setPaiementInfos(paiementInfos);
 		return validationInfo;
 	}
 

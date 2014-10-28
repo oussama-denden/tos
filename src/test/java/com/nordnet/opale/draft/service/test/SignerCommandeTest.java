@@ -61,13 +61,11 @@ public class SignerCommandeTest extends GlobalTestCase {
 		try {
 			commande = commandeService.getCommandeByReference("REF-COMMANDE-2");
 			assertNotNull(commande);
-			signature = signatureService.getSignatureByReference("REF-SIGNATURE-1");
-			assertNotNull(signature);
 
 			SignatureInfo signatureInfo = SignatureInfoGenerator.getSignatureInfo();
-			commandeService.signerCommande(commande.getReference(), signature.getReference(), signatureInfo);
+			commandeService.signerCommande(commande.getReference(), "REF-SIGNATURE-1", signatureInfo);
 			// recuperer la signature une autre fois pour verifer l'ajout des informations.
-			signature = signatureService.getSignatureByReference("REF-SIGNATURE-1");
+			signature = signatureService.getSignatureByReferenceCommande(commande.getReference());
 			assertTrue(signature.isSigne());
 
 		} catch (Exception exception) {

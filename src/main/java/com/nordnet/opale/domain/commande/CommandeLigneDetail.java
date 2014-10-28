@@ -19,7 +19,9 @@ import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.Choice;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeProduit;
 
@@ -297,6 +299,33 @@ public class CommandeLigneDetail {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * transfromer un {@link CommandeLigneDetail} vers un {@link Produit}.
+	 * 
+	 * @param referenceCommande
+	 *            refrence du commande.
+	 * @param numEC
+	 *            le numero d'offre.
+	 * @param numECParent
+	 *            numero d'offre parent.
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}.
+	 * @return {@link Produit}.
+	 */
+	public Produit toProduit(String referenceCommande, int numEC, Integer numECParent, ModeFacturation modeFacturation) {
+		Produit produit = new Produit();
+		produit.setLabel(label);
+		produit.setNumEC(numEC);
+		produit.setNumeroCommande(referenceCommande);
+		produit.setTypeProduit(typeProduit);
+		produit.setReference(referenceProduit);
+		produit.setNumECParent(numECParent);
+		if (tarif != null) {
+			produit.setPrix(tarif.toPrix(modeFacturation, modePaiement));
+		}
+		return produit;
 	}
 
 }

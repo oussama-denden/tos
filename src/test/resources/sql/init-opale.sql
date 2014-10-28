@@ -31,6 +31,7 @@ CREATE TABLE  `opale_test`.`commande` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
+  `dateTransformationContrat` datetime DEFAULT NULL,
   `dateAnnulation` datetime DEFAULT NULL,
   `paye` bit(1) DEFAULT 0,
   `reference` varchar(255) NOT NULL,
@@ -51,7 +52,7 @@ CREATE TABLE `signature` (
   `reference` varchar(255) NOT NULL,
   `footprint` longtext,
   `idSignature` varchar(255) DEFAULT NULL,
-  `timestampSignature` bigint(20) DEFAULT NULL,
+  `timestampSignature` datetime DEFAULT NULL,
   `mode` varchar(255) DEFAULT NULL,
    `canal` varchar(255) DEFAULT NULL,
   `code` varchar(255) DEFAULT NULL,
@@ -60,6 +61,7 @@ CREATE TABLE `signature` (
   `timestamp` bigint(20) NOT NULL,
   `referenceCommande` varchar(255) DEFAULT NULL,
    `dateAnnulation` datetime DEFAULT NULL,
+    `timestampIntention` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -82,6 +84,7 @@ CREATE TABLE `commandeligne` (
   `modePaiement` varchar(255) DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
   `referenceOffre` varchar(255) DEFAULT NULL,
+  `referenceContrat` varchar(255) DEFAULT NULL,
   `secteur` varchar(255) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
@@ -249,8 +252,8 @@ CREATE TABLE  `opale_test`.`paiement` (
   `code` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) NOT NULL,
   `idPaiement` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) DEFAULT NULL,
   `infoPaiement` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
   `montant` double DEFAULT NULL,

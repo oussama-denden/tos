@@ -378,12 +378,52 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/valider", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refCommande:.+}/valider", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public CommandeValidationInfo validerCommande(@PathVariable("refCommande") String referenceCommande)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::validerCommande");
 		return commandeService.validerCommande(referenceCommande);
+	}
+
+	/**
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * @return liste des references des contrat cree.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformeEnContrat", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public String transformeEnContrat(@PathVariable String refCommande) throws OpaleException, JSONException {
+		List<String> referencesContrats = commandeService.transformeEnContrat(refCommande);
+		JSONObject rsc = new JSONObject();
+		rsc.put("referencesContrats", referencesContrats);
+		return rsc.toString();
+	}
+
+	/**
+	 * supprimer une signature.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * @param refSignature
+	 *            refrence du signature.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerSignature(@PathVariable String refCommande, @PathVariable String refSignature)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::supprimerSignature");
+		commandeService.supprimerSignature(refCommande, refSignature);
+
 	}
 
 	/**

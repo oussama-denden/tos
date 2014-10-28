@@ -72,4 +72,19 @@ public final class Constants {
 	 */
 	public static final String DELAI_INACTIVE = "_delai.inactive";
 
+	/**
+	 * constante indique le paiement.
+	 */
+	public static final String PAIEMENT = "PAIEMENT";
+
+	/**
+	 * constante indique la signature.
+	 */
+	public static final String SIGNATURE = "SIGNATURE";
+
+	/**
+	 * constante indique la transformation en contrat.
+	 */
+	public static final String TRANSFORMER_EN_CONTRAT = "TRANSFORMER_EN_CONTRAT";
+
 }

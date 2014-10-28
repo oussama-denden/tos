@@ -44,8 +44,8 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	public final static String MAX_DATE_ACTIVATION =
 			"SELECT GREATEST( IFNULL((SELECT GREATEST(IFNULL(timestampIntention,0),IFNULL(timestampPaiement,0)) FROM Paiement p where"
-					+ " p.referenceCommande LIKE :referenceCommande),0),IFNULL((SELECT GREATEST(IFNULL(timestampSignature,0),IFNULL(timestampIntention,0)) FROM Signature s"
-					+ " where s.referenceCommande LIKE :referenceCommande),0 ))";
+					+ " p.referenceCommande LIKE :referenceCommande LIMIT 1),0),IFNULL((SELECT GREATEST(IFNULL(timestampSignature,0),IFNULL(timestampIntention,0)) FROM Signature s"
+					+ " where s.referenceCommande LIKE :referenceCommande),0 )) ";
 
 	/**
 	 * Find by reference.
@@ -90,7 +90,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 * 
 	 * @return {@link List<Commande>}
 	 */
-	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c FROM Commande c WHERE c.dateAnnulation=null")
+	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c FROM Commande c WHERE c.dateAnnulation=null AND dateTransformationContrat=null")
 	public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
 
 	/**
