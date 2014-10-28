@@ -1,9 +1,11 @@
 package com.nordnet.opale.validator;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 
 /**
  * cette classe responsable de valider les informations liés a une signature.
@@ -91,6 +93,47 @@ public class SignatureValidator {
 	public static void checkIfSignatureAnnule(Signature signature) throws OpaleException {
 		if (signature.isAnnule()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.6", signature.getReference()), "4.1.6");
+		}
+
+	}
+
+	/**
+	 * valider l'auteur.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerAuteur(Auteur auteur) throws OpaleException {
+
+		if (auteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
+		}
+		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+		}
+
+	}
+
+	/**
+	 * Valider l {@link Auteur}.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isAuteurValide(Auteur auteur) throws OpaleException {
+
+		if (auteur != null) {
+			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
+			}
+
+			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+			}
 		}
 
 	}

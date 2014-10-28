@@ -1,5 +1,8 @@
 package com.nordnet.opale.repository.commande;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -35,6 +38,14 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 					+ "SELECT distinct t.* FROM commande c, commandeligne cl, commandelignedetail cld, tarif t where "
 					+ "c.reference LIKE :referenceCommande AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND (cl.tarifId = t.id OR cld.tarifId = t.id) "
 					+ "AND (t.frequence = t.duree OR t.frequence is NULL)) tarifs";
+
+	/**
+	 * requette pour recuper le max du date d'acce a ne commande.
+	 */
+	public final static String MAX_DATE_ACTIVATION =
+			"SELECT GREATEST( IFNULL((SELECT GREATEST(IFNULL(timestampIntention,0),IFNULL(timestampPaiement,0)) FROM Paiement p where"
+					+ " p.referenceCommande LIKE :referenceCommande LIMIT 1),0),IFNULL((SELECT GREATEST(IFNULL(timestampSignature,0),IFNULL(timestampIntention,0)) FROM Signature s"
+					+ " where s.referenceCommande LIKE :referenceCommande),0 )) ";
 
 	/**
 	 * Find by reference.
@@ -74,4 +85,22 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	@Query(nativeQuery = true, value = COUT_TARIFS_COMPTANT)
 	public Double calculerCoutTarifsComptant(@Param("referenceCommande") String referenceCommande);
 
+	/**
+	 * recuperer la list des commandes non transformes et non annules.
+	 * 
+	 * @return {@link List<Commande>}
+	 */
+	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c FROM Commande c WHERE c.dateAnnulation=null AND dateTransformationContrat=null")
+	public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
+
+	/**
+	 * recuperer la date de d'accee sur une commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * 
+	 * @return {@link Date}
+	 */
+	@Query(nativeQuery = true, value = MAX_DATE_ACTIVATION)
+	public String getRecentDate(@Param("referenceCommande") String refCommande);
 }

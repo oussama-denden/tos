@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
@@ -37,6 +38,7 @@ import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.service.signature.SignatureService;
+import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CommandeValidator;
@@ -74,6 +76,13 @@ public class CommandeServiceImpl implements CommandeService {
 	private KeygenService keygenService;
 
 	/**
+	 * {@link TracageService}.
+	 */
+	@Autowired
+	private TracageService tracageService;
+
+	/**
+	 * 
 	 * {@link SignatureService}.
 	 */
 	@Autowired
@@ -92,6 +101,7 @@ public class CommandeServiceImpl implements CommandeService {
 	private DraftService draftService;
 
 	/**
+	 * 
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -108,6 +118,7 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode getCommande");
 
 		CommandeValidator.checkReferenceCommande(refCommande);
+
 		Commande commande = getCommandeByReference(refCommande);
 		return commande.toCommandInfo();
 	}
@@ -134,6 +145,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 		getCommandeByReference(refCommande);
 		CommandeValidator.validerAuteur(refCommande, paiementInfo.getAuteur());
+		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), refCommande,
+				"Créer une intention de paiement pour la commande " + refCommande);
+
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
 
@@ -148,10 +162,15 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode payerIntentionPaiement");
 
 		Commande commande = getCommandeByReference(referenceCommande);
-		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
+		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
+
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
+		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
+				"Payer l'intention de paiement de reference " + referencePaiement + " de la commande "
+						+ referenceCommande);
+
 	}
 
 	/**
@@ -165,14 +184,14 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode paiementDirect");
 
 		Commande commande = getCommandeByReference(referenceCommande);
-		CommandeValidator.validerAuteur(referenceCommande, paiementInfo.getAuteur());
+		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
+
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
 
-		/*
-		 * envoi d'un mouvement vers saphir.
-		 */
+		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
+				"Paiement directe de la commande de reference" + referenceCommande);
 
 		return paiement;
 
@@ -194,10 +213,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes =
-				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
-						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
+		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
+
+		.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd)).and(CommandeSpecifications.isSigne(signe))
+				.and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {
@@ -282,6 +301,7 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) throws OpaleException {
 		getCommandeByReference(referenceCommande);
+
 		return paiementService.getPaiementRecurrent(referenceCommande, isAnnule);
 	}
 
@@ -290,8 +310,10 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException {
+
 		getCommandeByReference(refCommande);
 		CommandeValidator.checkReferenceCommande(refCommande);
+
 		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande, isAnnule);
 		List<Paiement> paiementRecurrent = paiementService.getPaiementRecurrent(refCommande, isAnnule);
 		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
@@ -301,12 +323,16 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void supprimerPaiement(String refCommande, String refPaiement) throws OpaleException {
+	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException {
 
 		LOGGER.info("Debut methode supprimerPaiement");
+		CommandeValidator.isAuteurValide(auteur);
 
 		getCommandeByReference(refCommande);
 		paiementService.supprimer(refCommande, refPaiement);
+		tracageService.ajouterTrace(auteur.getQui(), refCommande, "Supprimer le paiement de reference " + refPaiement
+				+ "de la commande de reference" + refCommande);
+
 	}
 
 	/**
@@ -342,13 +368,13 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void supprimerSignature(String refCommande, String refSignature) throws OpaleException {
+	public void supprimerSignature(String refCommande, String refSignature, Auteur auteur) throws OpaleException {
 
 		LOGGER.info("Debut methode supprimerSignature");
 
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		signatureService.supprimer(refCommande, refSignature);
+		signatureService.supprimer(refCommande, refSignature, auteur);
 
 	}
 
@@ -428,7 +454,8 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 
 			/*
-			 * verifier an cas de besoin qu'il y a un paiement recurrent est bien associe a la commande.
+			 * verifier an cas de besoin qu'il y a un paiement recurrent est
+			 * bien associe a la commande.
 			 */
 			if (commande.needPaiementRecurrent()) {
 				List<Paiement> paiements = getPaiementRecurrent(referenceCommande, false);
@@ -493,8 +520,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<com.nordnet.opale.business.commande.PaiementInfo> paiementInfos = new ArrayList<>();
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
-			com.nordnet.opale.business.commande.PaiementInfo paiementInfo =
-					new com.nordnet.opale.business.commande.PaiementInfo();
+			com.nordnet.opale.business.commande.PaiementInfo paiementInfo = new com.nordnet.opale.business.commande.PaiementInfo();
+
 			paiementInfo.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
 			paiementInfo.setNumEC(ligne.getCommandeLigneDetails().indexOf(ligneDetail) + Constants.UN);
 			List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(commande.getReference(), false);
@@ -542,5 +569,21 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Commande> getCommandeNonAnnuleEtNonTransformes() {
+		return commandeRepository.recupererCommandeNonTransformeeEtNonAnnulee();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getRecentDate(String refCommande) throws OpaleException {
+		return commandeRepository.getRecentDate(refCommande);
 	}
 }

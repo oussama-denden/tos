@@ -65,7 +65,12 @@ public class Signature {
 	/**
 	 * date de signature.
 	 */
-	private Long timestampSignature;
+	private Date timestampSignature;
+
+	/**
+	 * date de l'inention de signature.
+	 */
+	private Date timestampIntention;
 
 	/**
 	 * l auteur du draft.
@@ -206,7 +211,7 @@ public class Signature {
 	 * 
 	 * @return {@link #timestamp}
 	 */
-	public Long getTimestampSignature() {
+	public Date getTimestampSignature() {
 		return timestampSignature;
 	}
 
@@ -216,8 +221,27 @@ public class Signature {
 	 * @param timestampSignature
 	 *            set the new {@link #timestampSignature}
 	 */
-	public void setTimestampSignature(Long timestampSignature) {
+	public void setTimestampSignature(Date timestampSignature) {
 		this.timestampSignature = timestampSignature;
+	}
+
+	/**
+	 * <<<<<<< HEAD get date de l'intention.
+	 * 
+	 * @return {@link #timestampIntention}
+	 */
+	public Date getTimestampIntention() {
+		return timestampIntention;
+	}
+
+	/**
+	 * set the date de l'intention.
+	 * 
+	 * @param timestampIntention
+	 *            the new {@link #dateAnnulation}
+	 */
+	public void setTimestampIntention(Date timestampIntention) {
+		this.timestampIntention = timestampIntention;
 	}
 
 	/**

@@ -1,92 +1,101 @@
 {
   "trameCatalogue": {
-  "frais": [
-    {
-      "reference": "std_cloture",
-      "typeFrais": "RESILIATION",
-      "montant": "50",
-      "typeTVA": "S",
-      "label": "Frais de cloture de dossier"
+    "auteur": {
+      "code": "aaaaa",
+      "canal": "welcome",
+      "qui": "anis",
+      "ip": {
+        "ip": "10.10.0.19"
+      }
     },
-    {
-      "reference": "engagement_kitsat",
-      "typeFrais": "CREATION",
-      "montant": "50",
-      "typeTVA": "S",
-      "label": "Frais de dossier"
-    }
-  ],
-  "tarifs": [
-    {
-      "reference": "mensuel_jet10_base",
-      "engagement": "0",
-      "prix": "34.9",
-      "typeTVA": "S",
-      "duree": "5",
-      "frais": [
-        "std_cloture"
-      ],
-      "frequence": "1"
-    },
-    {
-      "reference": "annuel_jet10_base",
-      "engagement": "12",
-      "prix": "34.9",
-      "typeTVA": "S",
-      "duree": "5",
-      "frais": [
-        "std_cloture"
-      ],
-      "frequence": "12"
-    }
-  ],
-  "offres": [
-    {
-      "reference": "jet_surf10",
-      "gamme": "jet",
-      "famille": "sat",
-      "modeFacturation": "PREMIER_MOIS",
-      "tarifs": [
-        "annuel_jet10_base","mensuel_jet10_base"
-      ],
-      "tranches": [
-        "A"
-      ],
-      "details": [
-        {
-          "referenceSelection": "kitsat",
-          "label": "Trafic",
-          "type": "ONLY_ONE",
-          "nature": "BIEN",
-          "choices": [
-            {
-              "reference": "trafic10g",
-              "label": "Trafic 10 Gigas (Inclus)",
-              "tarifs": [
-                "annuel_jet10_base"
-              ]
-            }
-          ]
-        },
-         {
-          "referenceSelection": "jet",
-          "label": "Trafic",
-          "type": "ONLY_ONE",
-          "nature": "SERVICE",
-          "choices": [
-            {
-              "reference": "trafic10g",
-              "label": "Trafic 10 Gigas (Inclus)",
-              "tarifs": [
-                "annuel_jet10_base"
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-},
+    "frais": [
+      {
+        "reference": "std_cloture",
+        "typeFrais": "RESILIATION",
+        "montant": "50",
+        "typeTVA": "S",
+        "label": "Frais de cloture de dossier"
+      },
+      {
+        "reference": "engagement_kitsat",
+        "typeFrais": "CREATION",
+        "montant": "50",
+        "typeTVA": "S",
+        "label": "Frais de dossier"
+      }
+    ],
+    "tarifs": [
+      {
+        "reference": "mensuel_jet10_base",
+        "engagement": "0",
+        "prix": "34.9",
+        "typeTVA": "S",
+        "duree": "5",
+        "frais": [
+          "std_cloture"
+        ],
+        "frequence": "1"
+      },
+      {
+        "reference": "annuel_jet10_base",
+        "engagement": "12",
+        "prix": "34.9",
+        "typeTVA": "S",
+        "duree": "5",
+        "frais": [
+          "std_cloture"
+        ],
+        "frequence": "12"
+      }
+    ],
+    "offres": [
+      {
+        "reference": "jet_surf10",
+        "gamme": "jet",
+        "famille": "sat",
+        "modeFacturation": "PREMIER_MOIS",
+        "tarifs": [
+          "annuel_jet10_base",
+          "mensuel_jet10_base"
+        ],
+        "tranches": [
+          "A"
+        ],
+        "details": [
+          {
+            "referenceSelection": "kitsat",
+            "label": "Trafic",
+            "type": "ONLY_ONE",
+            "nature": "BIEN",
+            "choices": [
+              {
+                "reference": "trafic10g",
+                "label": "Trafic 10 Gigas (Inclus)",
+                "tarifs": [
+                  "annuel_jet10_base"
+                ]
+              }
+            ]
+          },
+          {
+            "referenceSelection": "jet",
+            "label": "Trafic",
+            "type": "ONLY_ONE",
+            "nature": "SERVICE",
+            "choices": [
+              {
+                "reference": "trafic10g",
+                "label": "Trafic 10 Gigas (Inclus)",
+                "tarifs": [
+                  "annuel_jet10_base"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "clientInfo": {
     "souscripteur": {
       "clientId": "client-1245",

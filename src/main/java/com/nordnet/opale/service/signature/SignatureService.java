@@ -95,9 +95,12 @@ public interface SignatureService {
 	 *            reference du commande.
 	 * @param refSignature
 	 *            reference du signature.
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
-	 *             {@link OpaleException}.
+	 *             the opale exception {@link OpaleException}.
 	 */
-	public void supprimer(String refCommande, String refSignature) throws OpaleException;
+	public void supprimer(String refCommande, String refSignature, com.nordnet.opale.business.Auteur auteur)
+			throws OpaleException;
 
 }

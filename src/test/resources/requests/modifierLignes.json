@@ -1,4 +1,4 @@
-[{
+{
   "offre": {
     "modePaiement": "CB",
     "referenceTarif": "mensuel_jet10_base",
@@ -26,12 +26,12 @@
     ]
   },
   "auteur": {
-    "code": "string",
-    "qui": "string",
+    "code": "string2",
+    "qui": "string2",
     "ip": {
-      "ip": "string",
+      "ip": "string2",
       "ts": 0.1
     },
-    "canal": "string"
+    "canal": "string2"
   }
-}]
+}

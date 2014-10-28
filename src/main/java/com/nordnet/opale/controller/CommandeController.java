@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
@@ -39,7 +40,9 @@ import com.nordnet.opale.validator.CommandeValidator;
 import com.wordnik.swagger.annotations.Api;
 
 /**
- * Gerer l'ensemble des requetes qui ont en rapport avec le {@link CommandeController}.
+ * Gerer l'ensemble des requetes qui ont en rapport avec le
+ * {@link CommandeController}.
+ * 
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -128,8 +131,10 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
+	 * 
+	 * 
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -200,8 +205,10 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
-	 * avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la
+	 * creation d'un intention de paiement en avance.
+	 * 
+	 * 
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -359,15 +366,17 @@ public class CommandeController {
 	 *            reference commande
 	 * @param refPaiement
 	 *            reference paiement
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
-	 *             {@link OpaleException}.
+	 *             the opale exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
-	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement)
-			throws OpaleException {
+	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
+			@RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerPaiement");
-		commandeService.supprimerPaiement(refCommande, refPaiement);
+		commandeService.supprimerPaiement(refCommande, refPaiement, auteur);
 	}
 
 	/**
@@ -389,7 +398,9 @@ public class CommandeController {
 
 	/**
 	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
-	 * facturation finale.
+	 * facturation
+	 * 
+	 * finale.
 	 * 
 	 * @param refCommande
 	 *            refrence du commande.
@@ -425,6 +436,28 @@ public class CommandeController {
 	}
 
 	/**
+	 * supprimer une signature.
+	 * 
+	 * @param refCommande
+	 *            reference du commande.
+	 * @param refSignature
+	 *            refrence du signature.
+	 * @param auteur
+	 *            l auteur
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerSignature(@PathVariable String refCommande, @PathVariable String refSignature,
+			@RequestBody Auteur auteur)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::supprimerSignature");
+		commandeService.supprimerSignature(refCommande, refSignature, auteur);
+
+	}
+	
+	/**
 	 * retourner si la commande a besoin d'un paiement recurrent ou non.
 	 * 
 	 * @param refCommande
@@ -446,6 +479,7 @@ public class CommandeController {
 	}
 
 	/**
+	 * 
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req
@@ -460,4 +494,5 @@ public class CommandeController {
 	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
 		return new InfoErreur(req.getRequestURI(), ((OpaleException) ex).getErrorCode(), ex.getLocalizedMessage());
 	}
+
 }

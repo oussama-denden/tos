@@ -93,20 +93,27 @@ public class CommandeValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
 		}
 
-		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.code"), "0.1.4");
-		}
-
 		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
 		}
 
-		if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.canal"), "0.1.4");
-		}
+	}
 
-		if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.Ip.ip"), "0.1.4");
+	/**
+	 * Valider l {@link Auteur}.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isAuteurValide(Auteur auteur) throws OpaleException {
+
+		if (auteur != null) {
+
+			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+			}
 		}
 
 	}
@@ -124,6 +131,28 @@ public class CommandeValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8", commande.getReference()), "2.1.8");
 		}
 
+	}
+
+	/**
+	 * Verifer si une command est annulé.
+	 * 
+	 * @param commande
+	 *            {@link Commande}
+	 * @param action
+	 *            type d action action
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * 
+	 * 
+	 */
+	public static void checkIsCommandeAnnule(Commande commande, String action) throws OpaleException {
+		if (commande.isAnnule() && action.equalsIgnoreCase("PAIEMENT")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.10", action), "2.1.10");
+		} else if (commande.isAnnule() && action.equalsIgnoreCase("SIGNATURE")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.9", action), "2.1.9");
+		} else if (commande.isAnnule() && action.equalsIgnoreCase("TRANSFORMER_EN_CONTRAT")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.11", action), "2.1.11");
+		}
 	}
 
 }

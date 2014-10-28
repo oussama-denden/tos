@@ -2,9 +2,7 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -27,7 +25,6 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.domain.draft.DraftLigneDetail;
 
 /**
  * Classe qui represente la commande.
@@ -128,15 +125,17 @@ public class Commande {
 	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
 
 		this.clientAFacturer = draft.getClientAFacturer();
+		this.clientAFacturer.setAuteur(draft.getAuteur());
 		this.clientALivrer = draft.getClientALivrer();
+		this.clientALivrer.setAuteur(draft.getAuteur());
 		this.clientSouscripteur = draft.getClientSouscripteur();
+		this.clientSouscripteur.setAuteur(draft.getAuteur());
 
 		this.auteur = draft.getAuteur();
 		this.referenceDraft = draft.getReference();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
-//			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
 			addLigne(commandeLigne);
 		}
 	}

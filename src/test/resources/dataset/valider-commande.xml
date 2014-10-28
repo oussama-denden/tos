@@ -27,7 +27,7 @@
 <frais id="1005" montant="50" typeTVA="S" typeFrais="CREATION" tarifId="1005" />
 <frais id="1006" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1006" />
 
-<signature id="1000" reference="00000001" referenceCommande="00000001" timestamp="1233123" timestampSignature="1233123" footprint="123564789" mode="OPEN_TRUST" idSignature="ID-SIGNATURE"  />
+<signature id="1000" reference="00000001" referenceCommande="00000001" timestamp="1233123" timestampSignature="[now]" footprint="123564789" mode="OPEN_TRUST" idSignature="ID-SIGNATURE"  />
 
 <paiement id="1000" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000001" typePaiement="COMPTANT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="123456879" timestampIntention="[now]" timestampPaiement="[now]" code="part_123456" />
 <paiement id="1001" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000001" typePaiement="RECURRENT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="123456879" timestampPaiement="[now]" code="part_123456" />
