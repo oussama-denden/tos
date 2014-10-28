@@ -39,7 +39,6 @@ CREATE TABLE `commande` (
   `dateCreation` datetime DEFAULT NULL,
   `dateTransformationContrat` datetime DEFAULT NULL,
   `dateAnnulation` datetime DEFAULT NULL,
-  `paye` bit(1) DEFAULT 0,
   `reference` varchar(255) DEFAULT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,

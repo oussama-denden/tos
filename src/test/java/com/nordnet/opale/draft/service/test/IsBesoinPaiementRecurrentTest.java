@@ -81,10 +81,10 @@ public class IsBesoinPaiementRecurrentTest extends GlobalTestCase {
 	 * tester pour une commande non existe.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/is-besoin-paiement-recurrent.xml" })
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/is-besoin-paiement-comptant.xml" })
 	public void testerIsBesoinPaiementRecurrentPourCommandeNonExiste() {
 		try {
-			commandeService.isBesoinPaiementRecurrent("00000000");
+			commandeService.isBesoinPaiementComptant("00000000");
 			fail("unexpected error");
 		} catch (OpaleException e) {
 			Assert.assertEquals("2.1.2", e.getErrorCode());

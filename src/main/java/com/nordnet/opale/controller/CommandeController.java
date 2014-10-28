@@ -479,6 +479,27 @@ public class CommandeController {
 	}
 
 	/**
+	 * retourner si la commande a besoin d'un paiement comptant ou non.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return true si la commande a besoin d'un paiement comptant.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/besoinPaiementComptant", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String isBesoinPaiementComptant(@PathVariable("refCommande") String refCommande)
+			throws OpaleException, JSONException {
+		boolean isBesoinPaiementComptant = commandeService.isBesoinPaiementComptant(refCommande);
+		JSONObject responce = new JSONObject();
+		responce.put("besoinPaiementComptant", isBesoinPaiementComptant);
+		return responce.toString();
+	}
+
+	/**
 	 * 
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 

@@ -34,6 +34,7 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.draft.DraftService;
 import com.wordnik.swagger.annotations.Api;
 
@@ -58,6 +59,12 @@ public class DraftController {
 	 */
 	@Autowired
 	private DraftService draftService;
+
+	/**
+	 * {@link CommandeService}.
+	 */
+	@Autowired
+	private CommandeService commandeService;
 
 	/**
 	 * chercher draft par reference.
@@ -248,8 +255,11 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::transformerEnCommande");
 		Object object = draftService.transformerEnCommande(refDraft, transformationInfo);
 		if (object instanceof Commande) {
+			Commande commande = (Commande) object;
 			JSONObject jsonResponse = new JSONObject();
-			jsonResponse.put("reference", ((Commande) object).getReference());
+			jsonResponse.put("reference", commande.getReference());
+			jsonResponse.put("besoinPaiementRecurrent", commandeService.isBesoinPaiementRecurrent(commande.getReference()));
+			jsonResponse.put("besoinPaiementComptant", commandeService.isBesoinPaiementComptant(commande.getReference()));
 			return jsonResponse.toString();
 		}
 		return object;
