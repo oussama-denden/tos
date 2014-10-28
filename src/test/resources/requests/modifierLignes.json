@@ -1,0 +1,37 @@
+{
+  "offre": {
+    "modePaiement": "CB",
+    "referenceTarif": "mensuel_jet10_base",
+    "referenceOffre": "jet_surf10",
+    "modeFacturation": "PREMIER_MOIS",
+    "details": [
+      {
+        "reference": "kitsat",
+        "referenceSelection": "kitsat",
+        "referenceTarif": "mensuel_jet10_base",
+        "modePaiement": "CB",
+        "configurationJson": "",
+        "referenceChoix" :"trafic10g",
+        "dependDe": ""
+      },
+      {
+        "reference": "jet",
+        "referenceSelection": "jet",
+        "referenceTarif": "mensuel_jet10_base",
+        "modePaiement": "CB",
+        "configurationJson": "",
+        "referenceChoix" :"trafic10g",
+        "dependDe": "kitsat"
+      }
+    ]
+  },
+  "auteur": {
+    "code": "string2",
+    "qui": "string2",
+    "ip": {
+      "ip": "string2",
+      "ts": 0.1
+    },
+    "canal": "string2"
+  }
+}

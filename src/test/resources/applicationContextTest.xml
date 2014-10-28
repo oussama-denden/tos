@@ -84,4 +84,7 @@
         </property>
     </bean>
     
+    <!-- Mock contrat rest -->
+	<bean id="restClient" class="com.nordnet.opale.test.mock.RestClientMock" />
+    
 </beans>

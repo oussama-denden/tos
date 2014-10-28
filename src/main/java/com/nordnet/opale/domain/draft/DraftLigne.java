@@ -2,7 +2,9 @@ package com.nordnet.opale.domain.draft;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -22,6 +24,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.domain.Auteur;
+import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
@@ -105,10 +110,56 @@ public class DraftLigne {
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
 		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
 		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
-		this.auteur = new Auteur(draftLigneInfo.getAuteur());
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
 		}
+	}
+
+	/**
+	 * creation de {@link DraftLigne} a partir d'une {@link draftLigneInfo} et.
+	 * 
+	 * @param draftLigneInfo
+	 *            the draft ligne info
+	 * @param auteur
+	 *            l auteur {@link Auteur}. {@link DraftLigneInfo}.
+	 */
+	public DraftLigne(DraftLigneInfo draftLigneInfo, com.nordnet.opale.business.Auteur auteur) {
+		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
+		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
+		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
+		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
+		this.auteur = auteur.toDomain();
+		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
+			draftLigneDetails.add(new DraftLigneDetail(detail));
+		}
+	}
+
+	/**
+	 * 
+	 * creation d'un draftLigne a partir d'un {@link CommandeLigne}.
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param commandeLigne
+	 *            {@link CommandeLigne}.
+	 */
+
+	public DraftLigne(CommandeLigne commandeLigne) {
+		this.referenceOffre = commandeLigne.getReferenceOffre();
+
+		Tarif tarif = commandeLigne.getTarif();
+		this.referenceTarif = tarif != null ? tarif.getReference() : null;
+		this.modePaiement = commandeLigne.getModePaiement();
+		this.modeFacturation = commandeLigne.getModeFacturation();
+		this.auteur = commandeLigne.getAuteur();
+
+		this.dateCreation = commandeLigne.getDateCreation();
+		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
+			addDraftLigneDetail(new DraftLigneDetail(commandeLigneDetail));
+		}
+		creerArborescence(commandeLigne.getCommandeLigneDetails(), this.draftLigneDetails);
 	}
 
 	@Override
@@ -290,6 +341,30 @@ public class DraftLigne {
 	 */
 	public void addDraftLigneDetail(DraftLigneDetail draftLigneDetail) {
 		this.draftLigneDetails.add(draftLigneDetail);
+	}
+
+	/**
+	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
+	 * 
+	 * @param commandeDetails
+	 *            liste des {@link CommandeLigneDetail}.
+	 * @param draftDetails
+	 *            liste des {@link DraftLigneDetail}.
+	 */
+	private void creerArborescence(List<CommandeLigneDetail> commandeDetails, List<DraftLigneDetail> draftDetails) {
+		Map<String, DraftLigneDetail> draftDetailsMap = new HashMap<String, DraftLigneDetail>();
+		for (DraftLigneDetail draftLigneDetail : draftDetails) {
+			draftDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
+		}
+
+		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
+			if (!commandeLigneDetail.isParent()) {
+				DraftLigneDetail draftLigneDetail = draftDetailsMap.get(commandeLigneDetail.getReferenceProduit());
+				DraftLigneDetail draftLigneDetailParent = draftDetailsMap.get(commandeLigneDetail
+						.getCommandeLigneDetailParent().getReferenceProduit());
+				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
+			}
+		}
 	}
 
 }

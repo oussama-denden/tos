@@ -65,6 +65,11 @@
      id CDATA #IMPLIED
     adresseId CDATA #IMPLIED
     clientId CDATA #IMPLIED
+    canal CDATA #IMPLIED
+  code CDATA #IMPLIED
+  ip  CDATA #IMPLIED
+  qui  CDATA #IMPLIED
+  timestamp  CDATA #IMPLIED
 >
 
 <!ELEMENT commande EMPTY>
@@ -76,12 +81,13 @@
     clientALivrerId CDATA #IMPLIED
     clientSouscripteurId CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
+    dateTransformationContrat CDATA #IMPLIED
+    dateAnnulation CDATA #IMPLIED
     code CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
-    referenceSignature CDATA #IMPLIED
 >
 
 <!ELEMENT commandeLigne EMPTY>
@@ -98,6 +104,7 @@
     modeFacturation CDATA #IMPLIED
     modePaiement CDATA #IMPLIED
     referenceOffre CDATA #IMPLIED
+    referenceContrat CDATA #IMPLIED
     secteur CDATA #IMPLIED
     commandeId CDATA #IMPLIED
     famille CDATA #IMPLIED
@@ -154,6 +161,9 @@
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
+    referenceCommande CDATA #IMPLIED
+    dateAnnulation  CDATA #IMPLIED
+    timestampIntention CDATA #IMPLIED
 >
 
 <!ELEMENT paiement EMPTY>
@@ -164,11 +174,13 @@
     montant CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
-     code CDATA #IMPLIED
+    code CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
+    timestampIntention CDATA #IMPLIED
+    timestampPaiement CDATA #IMPLIED
     typePaiement CDATA #IMPLIED
 >
 

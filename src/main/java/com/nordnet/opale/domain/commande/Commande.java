@@ -2,9 +2,7 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -27,7 +25,6 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.domain.draft.DraftLigneDetail;
 
 /**
  * Classe qui represente la commande.
@@ -90,16 +87,21 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
+	 * date de transformation du commande vers contrat.
+	 */
+	private Date dateTransformationContrat;
+
+	/**
+	 * date d'annulation de la commande.
+	 */
+	private Date dateAnnulation;
+
+	/**
 	 * listes des {@link CommandeLigne} de la commande.
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "commandeId")
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
-
-	/**
-	 * la reference signature du client associe au commande.
-	 */
-	private String referenceSignature;
 
 	/**
 	 * si commande paye, paye=true.
@@ -123,15 +125,17 @@ public class Commande {
 	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
 
 		this.clientAFacturer = draft.getClientAFacturer();
+		this.clientAFacturer.setAuteur(draft.getAuteur());
 		this.clientALivrer = draft.getClientALivrer();
+		this.clientALivrer.setAuteur(draft.getAuteur());
 		this.clientSouscripteur = draft.getClientSouscripteur();
+		this.clientSouscripteur.setAuteur(draft.getAuteur());
 
 		this.auteur = draft.getAuteur();
 		this.referenceDraft = draft.getReference();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
-			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
 			addLigne(commandeLigne);
 		}
 	}
@@ -281,6 +285,38 @@ public class Commande {
 	}
 
 	/**
+	 * @return {@link #dateTransformationContrat}.
+	 */
+	public Date getDateTransformationContrat() {
+		return dateTransformationContrat;
+	}
+
+	/**
+	 * @param dateTransformationContrat
+	 *            {@link #dateTransformationContrat}.
+	 */
+	public void setDateTransformationContrat(Date dateTransformationContrat) {
+		this.dateTransformationContrat = dateTransformationContrat;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}.
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
 	 * 
 	 * @return {@link #commandeLignes}.
 	 */
@@ -308,25 +344,6 @@ public class Commande {
 	}
 
 	/**
-	 * get the reference de signature.
-	 * 
-	 * @return {@link #referenceSignature}
-	 */
-	public String getReferenceSignature() {
-		return referenceSignature;
-	}
-
-	/**
-	 * set the referense de signature.
-	 * 
-	 * @param referenceSignature
-	 *            the new {@link #referenceSignature}
-	 */
-	public void setReferenceSignature(String referenceSignature) {
-		this.referenceSignature = referenceSignature;
-	}
-
-	/**
 	 * 
 	 * @return {@link #paye}
 	 */
@@ -341,32 +358,6 @@ public class Commande {
 	 */
 	public void setPaye(boolean paye) {
 		this.paye = paye;
-	}
-
-	/**
-	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
-	 * 
-	 * @param draftDetails
-	 *            liste des {@link DraftLigneDetail}.
-	 * @param commandeDetails
-	 *            liste des {@link CommandeLigneDetail}.
-	 */
-	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
-		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
-		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
-			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceProduit(), commandeLigneDetail);
-		}
-
-		for (DraftLigneDetail draftLigneDetail : draftDetails) {
-			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
-				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
-			}
-		}
 	}
 
 	/**
@@ -406,12 +397,12 @@ public class Commande {
 	}
 
 	/**
-	 * retourner si la commande est signe ou non.
+	 * varifier si la commande est annule ou non.
 	 * 
-	 * @return true si la commande est signe.
+	 * @return true si la commande est annule.
 	 */
-	public boolean isSigne() {
-		Optional<String> referenceSignatureOp = Optional.fromNullable(referenceSignature);
-		return referenceSignatureOp.isPresent();
+	public boolean isAnnule() {
+		Optional<Date> dateAnnulationOptional = Optional.fromNullable(dateAnnulation);
+		return dateAnnulationOptional.isPresent();
 	}
 }

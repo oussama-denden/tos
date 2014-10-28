@@ -10,9 +10,9 @@ package com.nordnet.opale.business;
 public class ReferenceExterneInfo {
 
 	/**
-	 * l'utilisateur qui invoke l'action.
+	 * l'auteur qui invoke l'action.
 	 */
-	private String user;
+	private Auteur auteur;
 
 	/**
 	 * la reference externe du draft.
@@ -29,22 +29,20 @@ public class ReferenceExterneInfo {
 	/* Getters and Setters */
 
 	/**
-	 * get the user.
 	 * 
-	 * @return {@link #user}
+	 * @return {@link Auteur}
 	 */
-	public String getUser() {
-		return user;
+	public Auteur getAuteur() {
+		return auteur;
 	}
 
 	/**
-	 * set the user.
 	 * 
-	 * @param user
-	 *            the new {@link #user}
+	 * @param auteur
+	 *            {@link Auteur}
 	 */
-	public void setUser(String user) {
-		this.user = user;
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**

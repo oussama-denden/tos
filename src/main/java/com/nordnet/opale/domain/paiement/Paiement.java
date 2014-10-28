@@ -28,7 +28,7 @@ import com.nordnet.opale.enums.TypePaiement;
  */
 @Table(name = "paiement")
 @Entity
-@JsonIgnoreProperties({ "id", "intension", "paye" })
+@JsonIgnoreProperties({ "id", "intension", "paye", "reference" })
 public class Paiement {
 
 	/**
@@ -91,6 +91,11 @@ public class Paiement {
 	 */
 	@Embedded
 	private Auteur auteur;
+
+	/**
+	 * date annulation.
+	 */
+	private Date dateAnnulation;
 
 	/**
 	 * constructeur par defaut.
@@ -305,13 +310,30 @@ public class Paiement {
 	}
 
 	/**
+	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @param dateAnnulation
+	 *            {@link #dateAnnulation}
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
 	 * verifier si le payment est encore un intension ou pas.
 	 * 
 	 * @return true si le payment est une intension.
 	 */
-	public Boolean isIntension() {
-		Optional<Double> montantOP = Optional.fromNullable(montant);
-		if (montantOP.isPresent()) {
+	public boolean isIntention() {
+		Optional<Date> timestampPaiementOP = Optional.fromNullable(timestampPaiement);
+		if (timestampPaiementOP.isPresent()) {
 			return false;
 		}
 
@@ -324,7 +346,16 @@ public class Paiement {
 	 * @return true si le paiement a ete paye.
 	 */
 	public Boolean isPaye() {
-		return !isIntension();
+		return !isIntention();
+	}
+
+	/**
+	 * Verifier si le pâiement est annule.
+	 * 
+	 * @return true si le paiement est annule.
+	 */
+	public Boolean isAnnule() {
+		return (dateAnnulation != null);
 	}
 
 	/**
@@ -341,8 +372,10 @@ public class Paiement {
 		paiementInfo.setTimestampIntention(timestampIntention);
 		paiementInfo.setTimestampPaiement(timestampPaiement);
 		paiementInfo.setReference(reference);
+		paiementInfo.setIdPaiement(idPaiement);
 
 		return paiementInfo;
 
 	}
+
 }

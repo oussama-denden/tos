@@ -22,6 +22,7 @@ import com.google.common.base.Optional;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.
@@ -31,7 +32,7 @@ import com.nordnet.opale.domain.commande.Commande;
  */
 @Entity
 @Table(name = "draft")
-@JsonIgnoreProperties({ "id" })
+@JsonIgnoreProperties({ "id", "annule", "transforme" })
 public class Draft {
 
 	/**
@@ -69,6 +70,11 @@ public class Draft {
 	private Date dateTransformationCommande;
 
 	/**
+	 * reference de la commande source du draft.
+	 */
+	private String commandeSource;
+
+	/**
 	 * la list des {@link DraftLigne} associe au draft.
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
@@ -101,6 +107,40 @@ public class Draft {
 	 */
 	public Draft() {
 
+	}
+
+	/**
+	 * creation d'un draft a partir d'un {@link Commande}.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 */
+	public Draft(Commande commande) {
+		this.commandeSource = commande.getReference();
+		this.auteur = commande.getAuteur();
+		Client clientAFacturer = commande.getClientAFacturer();
+		if (clientAFacturer != null) {
+			// this.clientAFacturer = new Client(clientAFacturer.getClientId(),
+			// clientALivrer.getAdresseId());
+			this.clientAFacturer = new Client();
+			this.clientAFacturer.setAdresseId(clientAFacturer.getAdresseId());
+			this.clientAFacturer.setClientId(clientAFacturer.getClientId());
+			this.clientAFacturer.setAuteur(clientAFacturer.getAuteur());
+
+		}
+		Client clientSouscripteur = commande.getClientSouscripteur();
+		if (clientSouscripteur != null) {
+			this.clientSouscripteur = new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId(),
+					clientSouscripteur.getAuteur());
+		}
+		Client clientALivrer = commande.getClientALivrer();
+		if (clientALivrer != null) {
+			this.clientALivrer = new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId(),
+					clientALivrer.getAuteur());
+		}
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			addLigne(new DraftLigne(commandeLigne));
+		}
 	}
 
 	@Override
@@ -216,6 +256,23 @@ public class Draft {
 
 	/**
 	 * 
+	 * @return {@link #commandeSource}.
+	 */
+	public String getCommandeSource() {
+		return commandeSource;
+	}
+
+	/**
+	 * 
+	 * @param commandeSource
+	 *            {@link #commandeSource}.
+	 */
+	public void setCommandeSource(String commandeSource) {
+		this.commandeSource = commandeSource;
+	}
+
+	/**
+	 * 
 	 * @return List {@link DraftLigne}.
 	 */
 	public List<DraftLigne> getDraftLignes() {
@@ -283,7 +340,7 @@ public class Draft {
 	}
 
 	/**
-	 * ajouter une {@link DraftLigne} au draft.
+	 * Ajouter une {@link DraftLigne} au draft.
 	 * 
 	 * @param draftLigne
 	 *            {@link DraftLigne}.
@@ -293,7 +350,7 @@ public class Draft {
 	}
 
 	/**
-	 * tester si le draft est annule.
+	 * Tester si le draft est annule.
 	 * 
 	 * @return true si le draft est annule.
 	 */
@@ -303,7 +360,7 @@ public class Draft {
 	}
 
 	/**
-	 * tester si le draft a ete transforme en {@link Commande}.
+	 * Tester si le draft a ete transforme en {@link Commande}.
 	 * 
 	 * @return true si le draft a ete transforme en draft.
 	 */

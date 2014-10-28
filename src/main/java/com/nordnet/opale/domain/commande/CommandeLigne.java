@@ -2,7 +2,9 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -20,11 +22,14 @@ import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.ContratPreparationInfo;
+import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.util.Constants;
 
 /**
  * Classe represente une ligne (offre) dans la {@link Commande}.
@@ -52,6 +57,11 @@ public class CommandeLigne {
 	 * reference de l'offre.
 	 */
 	private String referenceOffre;
+
+	/**
+	 * reference du contrat.
+	 */
+	private String referenceContrat;
 
 	/**
 	 * label de l'offre dans le catalogue.
@@ -139,6 +149,7 @@ public class CommandeLigne {
 			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, referenceOffre, trameCatalogue);
 			addCommandeLigneDetail(commandeLigneDetail);
 		}
+		creerArborescence(draftLigne.getDraftLigneDetails(), this.commandeLigneDetails);
 	}
 
 	@Override
@@ -198,6 +209,21 @@ public class CommandeLigne {
 	 */
 	public void setReferenceOffre(String referenceOffre) {
 		this.referenceOffre = referenceOffre;
+	}
+
+	/**
+	 * @return {@link #referenceContrat}.
+	 */
+	public String getReferenceContrat() {
+		return referenceContrat;
+	}
+
+	/**
+	 * @param referenceContrat
+	 *            {@link #referenceContrat}.
+	 */
+	public void setReferenceContrat(String referenceContrat) {
+		this.referenceContrat = referenceContrat;
 	}
 
 	/**
@@ -426,4 +452,55 @@ public class CommandeLigne {
 		return false;
 	}
 
+	/**
+	 * Transformer un {@link CommandeLigne} en un {@link ContratPreparationInfo}.
+	 * 
+	 * @param referenceCommande
+	 *            reference du commande.
+	 * @return {@link ContratPreparationInfo}.
+	 */
+	public ContratPreparationInfo toContratPreparationInfo(String referenceCommande) {
+		ContratPreparationInfo contrat = new ContratPreparationInfo();
+
+		contrat.setUser(auteur.getQui());
+		List<Produit> produits = new ArrayList<>();
+		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
+			Integer numECParent = null;
+			if (ligneDetail.getCommandeLigneDetailParent() != null) {
+				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.UN;
+			}
+
+			produits.add(ligneDetail.toProduit(referenceCommande, commandeLigneDetails.indexOf(ligneDetail)
+					+ Constants.UN, numECParent, modeFacturation));
+		}
+		contrat.setProduits(produits);
+
+		return contrat;
+	}
+
+	/**
+	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
+	 * 
+	 * @param draftDetails
+	 *            liste des {@link DraftLigneDetail}.
+	 * @param commandeDetails
+	 *            liste des {@link CommandeLigneDetail}.
+	 */
+	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
+		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
+		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
+			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceProduit(), commandeLigneDetail);
+		}
+
+		for (DraftLigneDetail draftLigneDetail : draftDetails) {
+			if (!draftLigneDetail.isParent()) {
+				CommandeLigneDetail commandeLigneDetail =
+						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent =
+						commandeLigneDetailMap
+								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
+			}
+		}
+	}
 }

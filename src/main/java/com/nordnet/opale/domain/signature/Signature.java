@@ -1,5 +1,7 @@
 package com.nordnet.opale.domain.signature;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -45,6 +47,11 @@ public class Signature {
 	private String reference;
 
 	/**
+	 * refrence du commande.
+	 */
+	private String referenceCommande;
+
+	/**
 	 * l'id de signature.
 	 */
 	private String idSignature;
@@ -58,13 +65,23 @@ public class Signature {
 	/**
 	 * date de signature.
 	 */
-	private Long timestampSignature;
+	private Date timestampSignature;
+
+	/**
+	 * date de l'inention de signature.
+	 */
+	private Date timestampIntention;
 
 	/**
 	 * l auteur du draft.
 	 */
 	@Embedded
 	private Auteur auteur;
+
+	/**
+	 * la date d'annulation.
+	 */
+	private Date dateAnnulation;
 
 	/**
 	 * contrcteur par defaut.
@@ -133,6 +150,25 @@ public class Signature {
 	}
 
 	/**
+	 * get the reference commande.
+	 * 
+	 * @return {@link #referenceCommande}
+	 */
+	public String getReferenceCommande() {
+		return referenceCommande;
+	}
+
+	/**
+	 * set the reference commande.
+	 * 
+	 * @param referenceCommande
+	 *            the new {@link #referenceCommande}
+	 */
+	public void setReferenceCommande(String referenceCommande) {
+		this.referenceCommande = referenceCommande;
+	}
+
+	/**
 	 * get the id of signature.
 	 * 
 	 * @return {@link #idSignature}
@@ -175,7 +211,7 @@ public class Signature {
 	 * 
 	 * @return {@link #timestamp}
 	 */
-	public Long getTimestampSignature() {
+	public Date getTimestampSignature() {
 		return timestampSignature;
 	}
 
@@ -185,8 +221,27 @@ public class Signature {
 	 * @param timestampSignature
 	 *            set the new {@link #timestampSignature}
 	 */
-	public void setTimestampSignature(Long timestampSignature) {
+	public void setTimestampSignature(Date timestampSignature) {
 		this.timestampSignature = timestampSignature;
+	}
+
+	/**
+	 * <<<<<<< HEAD get date de l'intention.
+	 * 
+	 * @return {@link #timestampIntention}
+	 */
+	public Date getTimestampIntention() {
+		return timestampIntention;
+	}
+
+	/**
+	 * set the date de l'intention.
+	 * 
+	 * @param timestampIntention
+	 *            the new {@link #dateAnnulation}
+	 */
+	public void setTimestampIntention(Date timestampIntention) {
+		this.timestampIntention = timestampIntention;
 	}
 
 	/**
@@ -207,12 +262,41 @@ public class Signature {
 	}
 
 	/**
+	 * get date d'annulation.
+	 * 
+	 * @return {@link #dateAnnulation}
+	 */
+	public Date getDateAnnulation() {
+		return dateAnnulation;
+	}
+
+	/**
+	 * set date d'annulation.
+	 * 
+	 * @param dateAnnulation
+	 *            the new {@link #dateAnnulation}
+	 */
+	public void setDateAnnulation(Date dateAnnulation) {
+		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
 	 * verfier si la signature associe a une commande est signe.
 	 * 
 	 * @return {@link Boolean}
 	 */
 	public Boolean isSigne() {
 		return (mode != null && idSignature != null && timestampSignature != null);
+	}
+
+	/**
+	 * Verifer si la signature est annule.
+	 * 
+	 * @return return true si la signature est annule.
+	 */
+	public Boolean isAnnule() {
+		return dateAnnulation != null;
+
 	}
 
 	/**
@@ -226,6 +310,7 @@ public class Signature {
 		signatureInfo.setIdSignature(idSignature);
 		signatureInfo.setFootprint(footprint);
 		signatureInfo.setTimestamp(timestampSignature);
+		signatureInfo.setAuteur(auteur.toAuteurBusiness());
 
 		return signatureInfo;
 	}

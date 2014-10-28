@@ -67,4 +67,29 @@ public final class Constants {
 	 */
 	public static final String REF_DRAFT_INIT = "00000001";
 
+	/**
+	 * chaine vide.
+	 */
+	public static final String CHAINE_VIDE = "";
+
+	/**
+	* constante indique le paiement.
+	 */
+	public static final String PAIEMENT = "PAIEMENT";
+
+	/**
+	 * constante indique la signature.
+	 */
+	public static final String SIGNATURE = "SIGNATURE";
+
+	/**
+	 * constante indique la transformation en contrat.
+	 */
+	public static final String TRANSFORMER_EN_CONTRAT = "TRANSFORMER_EN_CONTRAT";
+
+	/**
+	 * duree pour que une commande inactive sera annulee.
+	 */
+	public static final String DELAI_INACTIVE = "_delai.inactive";
+
 }

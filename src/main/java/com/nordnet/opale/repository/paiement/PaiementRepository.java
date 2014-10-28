@@ -56,7 +56,7 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	 *            reference commande.
 	 * @return {@link Paiement}.
 	 */
-	@Query(name = "Paiement.findIntentionPaiement", value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.montant IS null")
+	@Query(name = "Paiement.findIntentionPaiement", value = "SELECT p FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.timestampPaiement IS null")
 	public Paiement findIntentionPaiement(@Param("referenceCommande") String referenceCommande);
 
 	/**
@@ -66,11 +66,24 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	 *            reference commande.
 	 * @return somme des paiement pour une commande.
 	 */
-	@Query(name = "Paiement.getMontantComptantPayePourCommande", value = "SELECT SUM(montant) FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'COMPTANT'")
+	@Query(name = "Paiement.getMontantComptantPayePourCommande", value = "SELECT SUM(montant) FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'COMPTANT' AND p.dateAnnulation IS NULL")
 	public Double getMontantComptantPayePourCommande(@Param("referenceCommande") String referenceCommande);
 
 	/**
-	 * retourner la liste des paiement d'une commande selon le type paiement.
+	 * retourner la liste des paiements non annule d'une commande selon le type
+	 * paiement.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @param typePaiement
+	 *            {@link TypePaiement}
+	 * @return Liste de {@link Paiement}
+	 */
+	public List<Paiement> findByReferenceCommandeAndTypePaiementAndDateAnnulationIsNull(String referenceCommande,
+			TypePaiement typePaiement);
+
+	/**
+	 * retourner la liste des paiements d'une commandes selon le type paiement.
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.

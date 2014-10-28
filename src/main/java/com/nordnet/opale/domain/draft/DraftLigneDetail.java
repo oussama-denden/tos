@@ -16,6 +16,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -26,7 +28,7 @@ import com.nordnet.opale.enums.ModePaiement;
  */
 @Table(name = "draftlignedetail")
 @Entity
-@JsonIgnoreProperties({ "id" })
+@JsonIgnoreProperties({ "id", "draftLigneDetailParent", "parent" })
 public class DraftLigneDetail {
 
 	/**
@@ -99,6 +101,22 @@ public class DraftLigneDetail {
 		this.referenceChoix = detail.getReferenceChoix();
 		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
+	}
+
+	/**
+	 * creation d'un DraftLigneDetail a partir d'un {@link CommandeLigneDetail}.
+	 * 
+	 * @param commandeLigneDetail
+	 *            {@link CommandeLigneDetail}.
+	 */
+	public DraftLigneDetail(CommandeLigneDetail commandeLigneDetail) {
+		this.referenceSelection = commandeLigneDetail.getReferenceSelection();
+		this.reference = commandeLigneDetail.getReferenceProduit();
+		this.referenceChoix = commandeLigneDetail.getReferenceChoix();
+		Tarif tarif = commandeLigneDetail.getTarif();
+		this.referenceTarif = tarif != null ? tarif.getReference() : null;
+		this.modePaiement = commandeLigneDetail.getModePaiement();
+		this.configurationJson = commandeLigneDetail.getConfigurationJson();
 	}
 
 	@Override

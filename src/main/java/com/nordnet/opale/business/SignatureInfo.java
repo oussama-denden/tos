@@ -1,5 +1,9 @@
 package com.nordnet.opale.business;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.nordnet.opale.enums.ModeSignature;
 
 /**
@@ -8,6 +12,7 @@ import com.nordnet.opale.enums.ModeSignature;
  * @author mahjoub-MARZOUGUI
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class SignatureInfo {
 
 	/**
@@ -33,7 +38,7 @@ public class SignatureInfo {
 	/**
 	 * date de signature.
 	 */
-	private Long timestamp;
+	private Date timestamp;
 
 	/**
 	 * contrcteur par defaut.
@@ -125,7 +130,7 @@ public class SignatureInfo {
 	 * 
 	 * @return {@link #timestamp}
 	 */
-	public Long getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
@@ -135,7 +140,7 @@ public class SignatureInfo {
 	 * @param timestamp
 	 *            set the new {@link #timestamp}
 	 */
-	public void setTimestamp(Long timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 

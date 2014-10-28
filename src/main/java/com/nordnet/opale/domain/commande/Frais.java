@@ -244,4 +244,19 @@ public class Frais {
 		return fraisInfo;
 	}
 
+	/**
+	 * transformer un {@link Frais} en un frais contrat {@link com.nordnet.opale.business.commande.Frais}.
+	 * 
+	 * @return frais contrat {@link com.nordnet.opale.business.commande.Frais}.
+	 */
+	public com.nordnet.opale.business.commande.Frais toFraisContrat() {
+		com.nordnet.opale.business.commande.Frais frais = new com.nordnet.opale.business.commande.Frais();
+		frais.setMontant(montant);
+		// frais.setNombreMois(nombreMois);
+		// frais.setOrdre(ordre);
+		frais.setTitre(label);
+		frais.setTypeFrais(typeFrais);
+		return frais;
+	}
+
 }

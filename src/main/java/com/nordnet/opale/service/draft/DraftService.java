@@ -2,14 +2,15 @@ package com.nordnet.opale.service.draft;
 
 import java.util.List;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -25,11 +26,26 @@ import com.nordnet.opale.exception.OpaleException;
 public interface DraftService {
 
 	/**
+	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere
+	 * une exception si le draft n'existe pas.
+	 * 
+	 * 
 	 * @param reference
 	 *            reference du draft.
 	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
-	public Draft getDraftByReference(String reference);
+	public Draft getDraftByReference(String reference) throws OpaleException;
+
+	/**
+	 * retourne un {@link Draft} a partir de ca reference.
+	 * 
+	 * @param reference
+	 *            reference {@link Draft}.
+	 * @return {@link Draft}
+	 */
+	public Draft findDraftByReference(String reference);
 
 	/**
 	 * Supprimer draft.
@@ -85,10 +101,12 @@ public interface DraftService {
 	 * 
 	 * @param refDraft
 	 *            la reference du draft.
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void annulerDraft(String refDraft) throws OpaleException;
+	public void annulerDraft(String refDraft, Auteur auteur) throws OpaleException;
 
 	/**
 	 * ajouter une reference externe a un draft.
@@ -145,11 +163,11 @@ public interface DraftService {
 	 *            reference du draft.
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
-	 * @return {@link ValidationInfo}.
+	 * @return {@link DraftValidationInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public ValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException;
+	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException;
 
 	/**
 	 * transformer un {@link Draft} en {@link Commande}.
@@ -158,11 +176,19 @@ public interface DraftService {
 	 *            reference draft.
 	 * @param transformationInfo
 	 *            {@link TransformationInfo}.
-	 * @return reference commande ou {@link ValidationInfo}
+	 * @return reference commande ou {@link DraftValidationInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
 			throws OpaleException;
+
+	/**
+	 * sauver un {@link Draft} dans la base de donnee.
+	 * 
+	 * @param draft
+	 *            {@link Draft}.
+	 */
+	public void save(Draft draft);
 
 }

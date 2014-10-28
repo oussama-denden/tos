@@ -21,7 +21,8 @@ import com.nordnet.opale.test.utils.Constants;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * classe de test de la methode {@link CommandeService#getListePaiementComptant(String)}.
+ * classe de test de la methode
+ * {@link CommandeService#getListePaiementComptant(String)}.
  * 
  * @author akram-moncer
  * 
@@ -52,7 +53,7 @@ public class GetListPaiementComptantTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/get-list-paiement-comptant.xml" })
 	public void testerGetListPaiementComptantValide() {
 		try {
-			List<Paiement> paiementsComptant = commandeService.getListePaiementComptant("00000001");
+			List<Paiement> paiementsComptant = commandeService.getListePaiementComptant("00000001", false);
 			List<Paiement> paiementsTotal = paiementService.getPaiementByReferenceCommande("00000001");
 			assertEquals(Double.valueOf(Constants.TROIS), Double.valueOf(paiementsTotal.size()));
 			assertEquals(Double.valueOf(Constants.DEUX), Double.valueOf(paiementsComptant.size()));
@@ -73,7 +74,7 @@ public class GetListPaiementComptantTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/get-list-paiement-comptant.xml" })
 	public void testerGetListPaiementComptantAvecCommandeNonExiste() {
 		try {
-			commandeService.getListePaiementComptant("00000002");
+			commandeService.getListePaiementComptant("00000002", false);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("2.1.2", e.getErrorCode());

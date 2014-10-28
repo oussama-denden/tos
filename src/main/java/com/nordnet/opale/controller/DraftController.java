@@ -18,14 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.ValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -63,12 +64,12 @@ public class DraftController {
 	 * @param reference
 	 *            reference du draft.
 	 * @return {@link Draft}.
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public Draft getDraftByReference(@PathVariable String reference) throws Exception {
+	public Draft getDraftByReference(@PathVariable String reference) throws OpaleException {
 		LOGGER.info(":::ws-rec:::getDraftByReference");
 		return draftService.getDraftByReference(reference);
 	}
@@ -78,14 +79,16 @@ public class DraftController {
 	 * 
 	 * @param reference
 	 *            reference du draft.
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{reference:.+}/annuler", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	@ResponseBody
-	public void annulerDraft(@PathVariable String reference) throws OpaleException {
+	public void supprimerDraft(@PathVariable String reference, @RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::annulerDraft");
-		draftService.annulerDraft(reference);
+		draftService.annulerDraft(reference, auteur);
 	}
 
 	/**
@@ -94,12 +97,12 @@ public class DraftController {
 	 * @param draftInfo
 	 *            auteur informations.
 	 * @return {@link Contrat}.
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/draft", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public DraftReturn creerDraft(@RequestBody DraftInfo draftInfo) throws Exception {
+	public DraftReturn creerDraft(@RequestBody DraftInfo draftInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::creerDraft");
 		return draftService.creerDraft(draftInfo);
 
@@ -112,13 +115,13 @@ public class DraftController {
 	 *            reference du draft.
 	 * @param referenceExterneInfo
 	 *            reference externe info {@link ReferenceExterneInfo}
-	 * @throws Exception
-	 *             exception {@link Exception}
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/draft/{referenceDraft:.+}", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public void ajouterReferenceExterne(@PathVariable String referenceDraft,
-			@RequestBody ReferenceExterneInfo referenceExterneInfo) throws Exception {
+			@RequestBody ReferenceExterneInfo referenceExterneInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::ajouterReferenceExterne");
 		draftService.ajouterReferenceExterne(referenceDraft, referenceExterneInfo);
 	}
@@ -177,13 +180,13 @@ public class DraftController {
 	 *            reference du ligne.
 	 * @param deleteInfo
 	 *            {@link DeleteInfo}
-	 * @throws Exception
-	 *             exception {@link Exception}.
+	 * @throws OpaleException
+	 *             exception {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerLigneDraft(@PathVariable String refDraft, @PathVariable String refLigne,
-			@RequestBody DeleteInfo deleteInfo) throws Exception {
+			@RequestBody DeleteInfo deleteInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerDraft");
 		draftService.supprimerLigneDraft(refDraft, refLigne, deleteInfo);
 	}
@@ -198,7 +201,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             the opale exception
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/associerClient", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/associerClient", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public void associerClient(@PathVariable String refDraft, @RequestBody ClientInfo clientInfo) throws OpaleException {
 		LOGGER.info(":::ws-rec:::associerClient");
@@ -212,13 +215,13 @@ public class DraftController {
 	 *            reference du draft.
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
-	 * @return {@link ValidationInfo}.
+	 * @return {@link DraftValidationInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/valider", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public ValidationInfo validerDraft(@PathVariable String refDraft, @RequestBody TrameCatalogue trameCatalogue)
+	public DraftValidationInfo validerDraft(@PathVariable String refDraft, @RequestBody TrameCatalogue trameCatalogue)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::validerDraft");
 		return draftService.validerDraft(refDraft, trameCatalogue);
@@ -231,7 +234,7 @@ public class DraftController {
 	 *            reference draft.
 	 * @param transformationInfo
 	 *            {@link TransformationInfo}.
-	 * @return reference commande ou {@link ValidationInfo}
+	 * @return reference commande ou {@link DraftValidationInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException

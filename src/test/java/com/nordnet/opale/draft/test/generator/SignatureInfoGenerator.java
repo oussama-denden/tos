@@ -1,5 +1,7 @@
 package com.nordnet.opale.draft.test.generator;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
 import com.nordnet.opale.business.AjoutSignatureInfo;
@@ -42,7 +44,7 @@ public class SignatureInfoGenerator {
 		signatureInfo.setAuteur(getAuteur());
 		signatureInfo.setMode(ModeSignature.OPEN_TRUST);
 		signatureInfo.setIdSignature("opentrust_dfr2225tr3555");
-		signatureInfo.setTimestamp(1411654933L);
+		signatureInfo.setTimestamp(new Date());
 		signatureInfo.setFootprint("e2680542f77606f42f1cb06d6");
 		return signatureInfo;
 

@@ -5,7 +5,6 @@ import java.util.List;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Client;
 import com.nordnet.opale.business.Detail;
-import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.commande.Commande;
@@ -124,7 +123,6 @@ public class DraftValidator {
 		}
 
 		for (DraftLigneInfo draftLigneInfo : draftLignesInfos) {
-			checkUser(draftLigneInfo.getUser());
 			DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 			DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 		}
@@ -200,39 +198,39 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void isAuteurValide(Auteur auteur) throws OpaleException {
-		if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.code"), "0.1.4");
-		}
 
-		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.qui"), "0.1.4");
-		}
+		if (auteur != null) {
 
-		if (Utils.isStringNullOrEmpty(auteur.getCanal())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.canal"), "0.1.4");
-		}
-
-		if (Utils.isStringNullOrEmpty(auteur.getIp().getIp())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Acteur.Ip.ip"), "0.1.4");
+			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+			}
 		}
 
 	}
 
 	/**
-	 * verifer que l'user existe pour chaque appel web service.
+	 * valider l'auteur.
 	 * 
-	 * @param user
-	 *            {@link DraftInfo#getUser()}
+	 * @param auteur
+	 *            {@link Auteur}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void checkUser(String user) throws OpaleException {
-		if (Utils.isStringNullOrEmpty(user)) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14"), "0.1.14");
+	public static void validerAuteur(Auteur auteur) throws OpaleException {
+
+		if (auteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
 		}
+
+		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+		}
+
 	}
 
 	/**
+	 * 
+	 * 
 	 * tester si le code n est pas null.
 	 * 
 	 * @param auteur
@@ -243,7 +241,7 @@ public class DraftValidator {
 	public static void codeNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
 		if (auteur != null) {
 			if (Utils.isStringNullOrEmpty(auteur.getCode())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.14", "code"), "0.1.14");
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "code"), "0.1.4");
 			}
 		}
 
@@ -287,4 +285,25 @@ public class DraftValidator {
 
 	}
 
+	/**
+	 * Verfier si le draft a une reference externe.
+	 * 
+	 * @param referenceDraft
+	 *            reference du draft.
+	 * @param draft
+	 *            {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkReferenceExterne(Draft draft, String referenceDraft) throws OpaleException {
+
+		if (draft == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.1", referenceDraft), "1.1.1");
+		}
+		if (!Utils.isStringNullOrEmpty(draft.getReferenceExterne())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.20", referenceDraft,
+					draft.getReferenceExterne()), "1.1.20");
+		}
+
+	}
 }

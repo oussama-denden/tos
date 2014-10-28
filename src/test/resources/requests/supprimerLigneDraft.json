@@ -1,3 +1,9 @@
-{
-    "user": "someone"
+ {"auteur":{
+  "code": "aaaaa",
+  "canal": "welcome",
+  "qui": "anis",
+  "ip": {
+        "ip": "10.10.0.19"
+  }
+}
 }
