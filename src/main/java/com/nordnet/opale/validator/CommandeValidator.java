@@ -112,6 +112,21 @@ public class CommandeValidator {
 	}
 
 	/**
+	 * Tester si une commande est ransformee en contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void testerCommandeNonTransforme(Commande commande) throws OpaleException {
+		if (commande.getDateTransformationContrat() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8", commande.getReference()), "2.1.8");
+		}
+
+	}
+
+	/**
 	 * Verifer si une command est annulé.
 	 * 
 	 * @param commande
@@ -131,18 +146,4 @@ public class CommandeValidator {
 		}
 	}
 
-	/**
-	 * Tester si une commande est ransformee en contrat.
-	 * 
-	 * @param commande
-	 *            {@link Commande}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	public static void testerCommandeNonTransforme(Commande commande) throws OpaleException {
-		if (commande.getDateTransformationContrat() != null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8", commande.getReference()), "2.1.8");
-		}
-
-	}
 }

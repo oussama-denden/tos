@@ -136,7 +136,7 @@ public class Commande {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
-			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
+//			creerArborescence(draftLigne.getDraftLigneDetails(), commandeLigne.getCommandeLigneDetails());
 			addLigne(commandeLigne);
 		}
 	}
@@ -359,32 +359,6 @@ public class Commande {
 	 */
 	public void setPaye(boolean paye) {
 		this.paye = paye;
-	}
-
-	/**
-	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
-	 * 
-	 * @param draftDetails
-	 *            liste des {@link DraftLigneDetail}.
-	 * @param commandeDetails
-	 *            liste des {@link CommandeLigneDetail}.
-	 */
-	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
-		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
-		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
-			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceProduit(), commandeLigneDetail);
-		}
-
-		for (DraftLigneDetail draftLigneDetail : draftDetails) {
-			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
-				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
-			}
-		}
 	}
 
 	/**

@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.Choice;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
@@ -46,12 +47,22 @@ public class CommandeLigneDetail {
 	 * reference produit.
 	 */
 	private String referenceProduit;
+	
+	/**
+	 * reference selection.
+	 */
+	private String referenceSelection;
 
 	/**
 	 * {@link TypeProduit}.
 	 */
 	@Enumerated(EnumType.STRING)
 	private TypeProduit typeProduit;
+	
+	/**
+	 * reference choix.
+	 */
+	private String referenceChoix;
 
 	/**
 	 * label du produit.
@@ -109,10 +120,12 @@ public class CommandeLigneDetail {
 		DetailCatalogue detailCatalogue =
 				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
 		this.referenceProduit = detail.getReference();
+		this.referenceSelection = detail.getReferenceSelection();
 		this.typeProduit = detailCatalogue.getNature();
 		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
 		Choice choice = detailCatalogue.getChoiceMap().get(detail.getReferenceChoix());
+		this.referenceChoix = detail.getReferenceChoix();
 		this.label = choice.getLabel();
 		this.tarif = new Tarif(detail.getReferenceTarif(), trameCatalogue);
 	}
@@ -156,6 +169,23 @@ public class CommandeLigneDetail {
 	public void setReferenceProduit(String referenceProduit) {
 		this.referenceProduit = referenceProduit;
 	}
+	
+	/**
+	 * 
+	 * @return {@link #referenceSelection}.
+	 */
+	public String getReferenceSelection() {
+		return referenceSelection;
+	}
+
+	/**
+	 * 
+	 * @param referenceSelection
+	 *            {@link #referenceSelection}.
+	 */
+	public void setReferenceSelection(String referenceSelection) {
+		this.referenceSelection = referenceSelection;
+	}
 
 	/**
 	 * 
@@ -172,6 +202,23 @@ public class CommandeLigneDetail {
 	 */
 	public void setTypeProduit(TypeProduit typeProduit) {
 		this.typeProduit = typeProduit;
+	}
+	
+	/**
+	 * 
+	 * @return {@link #referenceChoix}.
+	 */
+	public String getReferenceChoix() {
+		return referenceChoix;
+	}
+
+	/**
+	 * 
+	 * @param referenceChoix
+	 *            {@link #referenceChoix}.
+	 */
+	public void setReferenceChoix(String referenceChoix) {
+		this.referenceChoix = referenceChoix;
 	}
 
 	/**
@@ -327,5 +374,18 @@ public class CommandeLigneDetail {
 		}
 		return produit;
 	}
-
+	
+	/**
+	 * verifier si un element est parent ou non.
+	 * 
+	 * @return true si l'element est parent.
+	 */
+	public boolean isParent() {
+		Optional<CommandeLigneDetail> commandeLigneDetailOptional = Optional.fromNullable(commandeLigneDetailParent);
+		if (commandeLigneDetailOptional.isPresent()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

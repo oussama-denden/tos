@@ -168,7 +168,7 @@
 	
 	
 	
-		<xsd:element name="signature" type="signature_type"/>
+			<xsd:element name="signature" type="signature_type"/>
 	<xsd:complexType name="signature_type">
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="reference" use="optional" />

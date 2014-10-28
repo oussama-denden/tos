@@ -16,9 +16,9 @@ import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
@@ -368,7 +368,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
 		draft.setClientSouscripteur(transformationInfo.getClientInfo().getSouscripteur().toDomain());
 
-		DraftValidationInfo validationInfo = catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
+		DraftValidationInfo validationInfo =
+				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
 			commande.setReference(keygenService.getNextKey(Commande.class));
@@ -406,6 +407,11 @@ public class DraftServiceImpl implements DraftService {
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}
+	}
+	
+	@Override
+	public void save(Draft draft) {
+		draftRepository.save(draft);
 	}
 
 }

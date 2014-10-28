@@ -103,5 +103,4 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	@Query(nativeQuery = true, value = MAX_DATE_ACTIVATION)
 	public String getRecentDate(@Param("referenceCommande") String refCommande);
-
 }

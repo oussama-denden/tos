@@ -28,6 +28,7 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.InfoErreur;
@@ -163,7 +164,7 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande, @PathVariable boolean isAnnule)
 			throws OpaleException, JSONException {
@@ -408,6 +409,22 @@ public class CommandeController {
 	}
 
 	/**
+	 * transformer une {@link Commande} en {@link Draft}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformerEnDraft", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Draft transformerEnDraft(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::transformerEnDraft");
+		return commandeService.transformerEnDraft(refCommande);
+	}
+
+	/**
 	 * supprimer une signature.
 	 * 
 	 * @param refCommande
@@ -441,5 +458,4 @@ public class CommandeController {
 	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
 		return new InfoErreur(req.getRequestURI(), ((OpaleException) ex).getErrorCode(), ex.getLocalizedMessage());
 	}
-
 }

@@ -1,3 +1,4 @@
+
 --
 -- Create schema opale_test
 --
@@ -104,6 +105,8 @@ CREATE TABLE `commandelignedetail` (
   `configurationJson` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
   `referenceProduit` varchar(255) DEFAULT NULL,
+  `referenceSelection` varchar(255) DEFAULT NULL,
+  `referenceChoix` varchar(255) DEFAULT NULL,
   `label` varchar(255) DEFAULT NULL,
   `typeProduit` varchar(255) DEFAULT NULL,
   `dependDe` int(11) DEFAULT NULL,
@@ -130,6 +133,7 @@ CREATE TABLE `draft` (
   `dateAnnulation` datetime DEFAULT NULL,
   `dateTransformationCommande` datetime DEFAULT NULL,
   `reference` varchar(255) NOT NULL,
+  `commandeSource` varchar(255) DEFAULT NULL,
   `referenceExterne` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
@@ -265,8 +269,6 @@ CREATE TABLE  `opale_test`.`paiement` (
   `dateAnnulation` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 
 
 SET FOREIGN_KEY_CHECKS=1;

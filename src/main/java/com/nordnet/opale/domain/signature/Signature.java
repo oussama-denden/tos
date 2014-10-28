@@ -226,7 +226,7 @@ public class Signature {
 	}
 
 	/**
-	 * get date de l'intention.
+	 * <<<<<<< HEAD get date de l'intention.
 	 * 
 	 * @return {@link #timestampIntention}
 	 */

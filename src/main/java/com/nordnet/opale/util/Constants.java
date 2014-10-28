@@ -68,11 +68,6 @@ public final class Constants {
 	public static final String REF_DRAFT_INIT = "00000001";
 
 	/**
-	 * duree pour que une commande inactive sera annulee.
-	 */
-	public static final String DELAI_INACTIVE = "_delai.inactive";
-
-	/**
 	 * constante indique le paiement.
 	 */
 	public static final String PAIEMENT = "PAIEMENT";
@@ -86,5 +81,10 @@ public final class Constants {
 	 * constante indique la transformation en contrat.
 	 */
 	public static final String TRANSFORMER_EN_CONTRAT = "TRANSFORMER_EN_CONTRAT";
+
+	/**
+	 * duree pour que une commande inactive sera annulee.
+	 */
+	public static final String DELAI_INACTIVE = "_delai.inactive";
 
 }

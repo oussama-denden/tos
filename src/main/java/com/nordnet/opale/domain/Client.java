@@ -48,6 +48,20 @@ public class Client {
 	}
 
 	/**
+	 * creation du client.
+	 * 
+	 * @param clientId
+	 *            client id.
+	 * @param addressId
+	 *            address id.
+	 */
+	public Client(String clientId, String addressId) {
+		super();
+		this.clientId = clientId;
+		this.adresseId = addressId;
+	}
+
+	/**
 	 * 
 	 * @return {@link #id}.
 	 */
