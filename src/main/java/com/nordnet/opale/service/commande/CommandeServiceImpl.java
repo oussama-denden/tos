@@ -571,6 +571,15 @@ public class CommandeServiceImpl implements CommandeService {
 		return false;
 	}
 
+	@Override
+	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException {
+		getCommandeByReference(referenceCommande);
+		if (calculerCoutComptant(referenceCommande) > 0d && !isPayeTotalement(referenceCommande)) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

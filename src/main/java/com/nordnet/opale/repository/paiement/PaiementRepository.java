@@ -66,7 +66,7 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	 *            reference commande.
 	 * @return somme des paiement pour une commande.
 	 */
-	@Query(name = "Paiement.getMontantComptantPayePourCommande", value = "SELECT SUM(montant) FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'COMPTANT'")
+	@Query(name = "Paiement.getMontantComptantPayePourCommande", value = "SELECT SUM(montant) FROM Paiement p WHERE p.referenceCommande LIKE :referenceCommande AND p.typePaiement LIKE 'COMPTANT' AND p.dateAnnulation IS NULL")
 	public Double getMontantComptantPayePourCommande(@Param("referenceCommande") String referenceCommande);
 
 	/**
