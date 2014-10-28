@@ -61,6 +61,9 @@ public class SupprimerCommandes extends QuartzJobBean {
 	 * @return true si la commande et eligible pour suppression.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
+	 * @throws ParseException
+	 *             {@link ParseException}
+	 * 
 	 */
 	private Boolean checkCommandeActive(String refCommande) throws OpaleException, ParseException {
 		LocalDate dateJour = LocalDate.fromDateFields(PropertiesUtil.getInstance().getDateDuJour());

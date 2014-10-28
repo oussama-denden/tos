@@ -138,10 +138,12 @@ public class CommandeValidator {
 	 * 
 	 * @param commande
 	 *            {@link Commande}
-	 * @param type
-	 *            d'action.
+	 * @param action
+	 *            type d action action
 	 * @throws OpaleException
 	 *             {@link OpaleException}
+	 * 
+	 * 
 	 */
 	public static void checkIsCommandeAnnule(Commande commande, String action) throws OpaleException {
 		if (commande.isAnnule() && action.equalsIgnoreCase("PAIEMENT")) {

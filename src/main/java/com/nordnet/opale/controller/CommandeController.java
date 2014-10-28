@@ -397,8 +397,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
-	 * facturation
+	 * Transformer une commande en contrats Afin de passer à la
+	 * contractualisation de la commande, sa livraison, et sa facturation
 	 * 
 	 * finale.
 	 * 
@@ -442,6 +442,8 @@ public class CommandeController {
 	 *            reference du commande.
 	 * @param refSignature
 	 *            refrence du signature.
+	 * @param auteur
+	 *            l auteur
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
