@@ -147,7 +147,7 @@ public class Auteur {
 	}
 
 	/**
-	 * convertir en objet business.
+	 * Convertir en objet business.
 	 * 
 	 * @return {@link com.nordnet.opale.business.Auteur}
 	 */
