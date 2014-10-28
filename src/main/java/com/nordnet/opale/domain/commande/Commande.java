@@ -104,11 +104,6 @@ public class Commande {
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
 
 	/**
-	 * si commande paye, paye=true.
-	 */
-	private boolean paye;
-
-	/**
 	 * constructeur par defaut.
 	 */
 	public Commande() {
@@ -341,23 +336,6 @@ public class Commande {
 	 */
 	public void addLigne(CommandeLigne commandeLigne) {
 		this.commandeLignes.add(commandeLigne);
-	}
-
-	/**
-	 * 
-	 * @return {@link #paye}
-	 */
-	public boolean isPaye() {
-		return paye;
-	}
-
-	/**
-	 * 
-	 * @param paye
-	 *            #pay
-	 */
-	public void setPaye(boolean paye) {
-		this.paye = paye;
 	}
 
 	/**
