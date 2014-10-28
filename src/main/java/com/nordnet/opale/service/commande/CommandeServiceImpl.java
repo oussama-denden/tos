@@ -189,6 +189,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 		commande.setPaye(isPayeTotalement(referenceCommande));
 		commandeRepository.save(commande);
+
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
 				"Paiement directe de la commande de reference" + referenceCommande);
 
@@ -558,6 +559,18 @@ public class CommandeServiceImpl implements CommandeService {
 		return draft;
 	}
 
+	@Override
+	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		if (commande.needPaiementRecurrent()) {
+			List<Paiement> paiementRecurrents = getPaiementRecurrent(referenceCommande, false);
+			if (paiementRecurrents.size() == Constants.ZERO) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -573,5 +586,4 @@ public class CommandeServiceImpl implements CommandeService {
 	public String getRecentDate(String refCommande) throws OpaleException {
 		return commandeRepository.getRecentDate(refCommande);
 	}
-
 }

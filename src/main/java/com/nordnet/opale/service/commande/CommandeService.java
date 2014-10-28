@@ -251,9 +251,7 @@ public interface CommandeService {
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la
-	 * contractualisation de la commande, sa livraison, et sa facturation
-	 * finale. transformer une {@link Commande} en {@link Draft}.
+	 *transformer une {@link Commande} en {@link Draft}.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -297,4 +295,16 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public String getRecentDate(String refCommande) throws OpaleException;
+	
+	/**
+	 * retourner si la commande a encore besoin d'un paiement recurrent ou non. si il ya un paiement recurrent annule,
+	 * il na compte pas.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return true si la commande a besoin d'un paiement recurrent.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException;
 }

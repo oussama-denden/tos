@@ -169,7 +169,7 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             the jSON exception {@link JSONException}
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande, @PathVariable boolean isAnnule)
 			throws OpaleException, JSONException {
@@ -397,8 +397,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la
-	 * contractualisation de la commande, sa livraison, et sa facturation
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation
 	 * 
 	 * finale.
 	 * 
@@ -455,6 +455,27 @@ public class CommandeController {
 		LOGGER.info(":::ws-rec:::supprimerSignature");
 		commandeService.supprimerSignature(refCommande, refSignature, auteur);
 
+	}
+	
+	/**
+	 * retourner si la commande a besoin d'un paiement recurrent ou non.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return {@link JSONObject}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/besoinPaiementRecurrent", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String isBesoinPaiementRecurrent(@PathVariable("refCommande") String refCommande)
+			throws OpaleException, JSONException {
+		boolean isBesoinPaiementRecurrent = commandeService.isBesoinPaiementRecurrent(refCommande);
+		JSONObject responce = new JSONObject();
+		responce.put("besoinPaiementRecurrent", isBesoinPaiementRecurrent);
+		return responce.toString();
 	}
 
 	/**
