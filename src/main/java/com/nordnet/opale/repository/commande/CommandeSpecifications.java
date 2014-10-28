@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -11,6 +12,7 @@ import org.joda.time.LocalDate;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.Utils;
 
@@ -83,12 +85,12 @@ public class CommandeSpecifications {
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				if (signe != null) {
+					Root<Signature> signature = query.from(Signature.class);
+					Path<Boolean> isSigne = signature.get("isSigne");
 					if (signe) {
-						return cb.or(cb.isNotNull(commandeRoot.get("referenceSignature")),
-								cb.notEqual(commandeRoot.<String> get("referenceSignature"), ""));
+						return cb.isTrue(isSigne);
 					}
-					return cb.or(cb.isNull(commandeRoot.get("referenceSignature")),
-							cb.equal(commandeRoot.<String> get("referenceSignature"), ""));
+					return cb.isFalse(commandeRoot.<Boolean> get("isPaye"));
 				}
 				return null;
 			}
@@ -109,8 +111,12 @@ public class CommandeSpecifications {
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 				if (paye != null) {
-					return cb.equal(commandeRoot.<Boolean> get("paye"), paye);
+					if(paye){
+				return cb.isTrue(commandeRoot.<Boolean> get("isPaye"));
+				} else {
+					return cb.isFalse(commandeRoot.<Boolean> get("isPaye"));
 				}
+			}
 				return null;
 
 			}
