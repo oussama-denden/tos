@@ -29,6 +29,7 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.InfoErreur;
@@ -41,6 +42,7 @@ import com.wordnik.swagger.annotations.Api;
 /**
  * Gerer l'ensemble des requetes qui ont en rapport avec le
  * {@link CommandeController}.
+ * 
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -132,6 +134,8 @@ public class CommandeController {
 	 * creer directement un nouveau paiement a associe a la commande, sans la
 	 * creation d'un intention de paiement en avance.
 	 * 
+	 * 
+	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
 	 * @param paiementInfo
@@ -203,6 +207,8 @@ public class CommandeController {
 	/**
 	 * creer directement un nouveau paiement a associe a la commande, sans la
 	 * creation d'un intention de paiement en avance.
+	 * 
+	 * 
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
@@ -393,6 +399,7 @@ public class CommandeController {
 	/**
 	 * Transformer une commande en contrats Afin de passer à la
 	 * contractualisation de la commande, sa livraison, et sa facturation
+	 * 
 	 * finale.
 	 * 
 	 * @param refCommande
@@ -413,6 +420,23 @@ public class CommandeController {
 	}
 
 	/**
+	 * transformer une {@link Commande} en {@link Draft}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformerEnDraft", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Draft transformerEnDraft(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::transformerEnDraft");
+		return commandeService.transformerEnDraft(refCommande);
+	}
+
+	/**
+	 * 
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req

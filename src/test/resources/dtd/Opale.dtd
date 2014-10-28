@@ -65,6 +65,11 @@
      id CDATA #IMPLIED
     adresseId CDATA #IMPLIED
     clientId CDATA #IMPLIED
+    canal CDATA #IMPLIED
+  code CDATA #IMPLIED
+  ip  CDATA #IMPLIED
+  qui  CDATA #IMPLIED
+  timestamp  CDATA #IMPLIED
 >
 
 <!ELEMENT commande EMPTY>

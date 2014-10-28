@@ -67,7 +67,7 @@ CREATE TABLE `signature` (
   `code` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) NOT NULL,
+  `timestamp` bigint(20) DEFAULT NULL,
   `referenceCommande` varchar(255) DEFAULT NULL,
    `dateAnnulation` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -97,9 +97,12 @@ CREATE TABLE `commandeligne` (
   `secteur` varchar(255) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
+
   PRIMARY KEY (`id`),
   KEY `FK2872A7878D480C8F` (`tarifId`),
   KEY `FK2872A787B0909C9F` (`commandeId`)
+
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -113,6 +116,9 @@ CREATE TABLE `commandelignedetail` (
   `label` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
   `referenceProduit` varchar(255) DEFAULT NULL,
+`referenceSelection` varchar(255) DEFAULT NULL,
+  `referenceChoix` varchar(255) DEFAULT NULL,
+
   `typeProduit` varchar(255) DEFAULT NULL,
   `dependDe` int(11) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
@@ -121,6 +127,8 @@ CREATE TABLE `commandelignedetail` (
   KEY `FK516CBE981E3D9F39` (`commandeLigneId`),
   KEY `FK516CBE988D480C8F` (`tarifId`),
   KEY `FK516CBE9883CC4F75` (`dependDe`)
+
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -138,6 +146,7 @@ CREATE TABLE `draft` (
   `dateAnnulation` datetime DEFAULT NULL,
   `dateTransformationCommande` datetime DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
+  `commandeSource` varchar(255) DEFAULT NULL,
   `referenceExterne` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
@@ -183,6 +192,7 @@ CREATE TABLE `draftlignedetail` (
   `reference` varchar(255) DEFAULT NULL,
   `referenceChoix` varchar(255) DEFAULT NULL,
   `referenceSelection` varchar(255) DEFAULT NULL,
+
   `referenceTarif` varchar(255) DEFAULT NULL,
   `dependDe` int(11) DEFAULT NULL,
   `draftLigneId` int(11) DEFAULT NULL,
@@ -190,6 +200,7 @@ CREATE TABLE `draftlignedetail` (
   KEY `FK169121114A02D58C` (`draftLigneId`),
   KEY `FK16912111B160934F` (`dependDe`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
 
 --
 -- Definition of table `frais`
@@ -205,6 +216,7 @@ CREATE TABLE `frais` (
   `reference` varchar(255) DEFAULT NULL,
   `typeFrais` varchar(255) DEFAULT NULL,
   `typeTVA` varchar(255) DEFAULT NULL,
+
   `tarifId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK5D2A8FF8D480C8F` (`tarifId`)
@@ -222,30 +234,6 @@ CREATE TABLE `keygen` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
---
--- Definition of table `paiement`
---
-
-DROP TABLE IF EXISTS `paiement`;
-CREATE TABLE `paiement` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `canal` varchar(255) DEFAULT NULL,
-  `code` varchar(255) DEFAULT NULL,
-  `ip` varchar(255) DEFAULT NULL,
-  `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
-  `dateAnnulation` datetime DEFAULT NULL,
-  `idPaiement` varchar(255) DEFAULT NULL,
-  `infoPaiement` varchar(255) DEFAULT NULL,
-  `modePaiement` varchar(255) DEFAULT NULL,
-  `montant` double DEFAULT NULL,
-  `reference` varchar(255) DEFAULT NULL,
-  `referenceCommande` varchar(255) DEFAULT NULL,
-  `timestampIntention` datetime DEFAULT NULL,
-  `timestampPaiement` datetime DEFAULT NULL,
-  `typePaiement` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `tarif`
@@ -263,6 +251,7 @@ CREATE TABLE `tarif` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 --
 -- Definition of table `tracage`
 --
@@ -276,5 +265,36 @@ CREATE TABLE `tracage` (
   `user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+-- Definition of table `paiement`
+--
+
+
+DROP TABLE IF EXISTS `paiement`;
+CREATE TABLE `paiement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `canal` varchar(255) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `qui` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) DEFAULT NULL,
+  `dateAnnulation` datetime DEFAULT NULL,
+  `idPaiement` varchar(255) DEFAULT NULL,
+
+  `infoPaiement` varchar(255) DEFAULT NULL,
+  `modePaiement` varchar(255) DEFAULT NULL,
+  `montant` double DEFAULT NULL,
+  `reference` varchar(255) DEFAULT NULL,
+  `referenceCommande` varchar(255) DEFAULT NULL,
+  `timestampIntention` datetime DEFAULT NULL,
+  `timestampPaiement` datetime DEFAULT NULL,
+  `typePaiement` varchar(255) DEFAULT NULL,
+
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 
 SET FOREIGN_KEY_CHECKS=1;

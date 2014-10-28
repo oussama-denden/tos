@@ -8,9 +8,9 @@ import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
+import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -28,6 +28,7 @@ public interface DraftService {
 	/**
 	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere
 	 * une exception si le draft n'existe pas.
+	 * 
 	 * 
 	 * @param reference
 	 *            reference du draft.
@@ -181,5 +182,13 @@ public interface DraftService {
 	 */
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
 			throws OpaleException;
+
+	/**
+	 * sauver un {@link Draft} dans la base de donnee.
+	 * 
+	 * @param draft
+	 *            {@link Draft}.
+	 */
+	public void save(Draft draft);
 
 }

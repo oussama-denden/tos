@@ -210,6 +210,7 @@ public class DraftServiceImpl implements DraftService {
 	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = getDraftByReference(refDraft);
+
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
@@ -280,6 +281,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 		tracageService.ajouterTrace(referenceExterneInfo.getAuteur().getQui(), referenceDraft,
 				"ajout de reference externe au draft  " + referenceDraft);
+
 		LOGGER.info("Fin methode ajouterReferenceExterne");
 
 	}
@@ -398,6 +400,7 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftValidationInfo validationInfo = catalogueValidator.validerDraft(draft,
 				transformationInfo.getTrameCatalogue());
+
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
 			commande.setReference(keygenService.getNextKey(Commande.class));
@@ -438,6 +441,11 @@ public class DraftServiceImpl implements DraftService {
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}
+	}
+
+	@Override
+	public void save(Draft draft) {
+		draftRepository.save(draft);
 	}
 
 }
