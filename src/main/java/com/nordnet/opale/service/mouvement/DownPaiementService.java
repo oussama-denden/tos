@@ -9,16 +9,16 @@ import com.nordnet.opale.domain.paiement.Paiement;
  * @author akram-moncer
  * 
  */
-public interface MouvementService {
+public interface DownPaiementService {
 
 	/**
-	 * Envoie d'un mouvement vers saphir pour chaque {@link Paiement} reçue.
+	 * Envoie d'un paiement vers saphir pour chaque {@link Paiement} reçue.
 	 * 
 	 * @param commande
 	 *            {@link Commande}.
 	 * @param paiement
 	 *            {@link Paiement}.
 	 */
-	public void envoieMouvement(Commande commande, Paiement paiement);
+	public void envoiePaiement(Commande commande, Paiement paiement);
 
 }

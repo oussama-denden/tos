@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.nordnet.common.valueObject.constants.CurrencyCode;
+import com.nordnet.common.valueObject.constants.PaymentType;
 import com.nordnet.common.valueObject.constants.TransactionType;
 import com.nordnet.common.valueObject.identifier.Identifier;
 import com.nordnet.common.valueObject.money.Price;
 import com.nordnet.common.valueObject.money.Transaction;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.saphir.ws.client.constants.TMovementAppendixItemType;
-import com.nordnet.saphir.ws.client.constants.TPaymentType;
 import com.nordnet.saphir.ws.client.entity.TMovementAppendixItem;
 
 /**
@@ -19,25 +19,23 @@ import com.nordnet.saphir.ws.client.entity.TMovementAppendixItem;
  * @author Oussama Denden
  * 
  */
-public final class MouvementUtils {
+public final class DowPaiementUtils {
 
 	/**
-	 * Changer le {@link ModePaiement} de Topaze vers le {@link TPaymentType} de saphir.
+	 * Changer le {@link ModePaiement} du paiement vers le {@link PaymentType} de saphir.
 	 * 
 	 * @param modePaiement
 	 *            {@link ModePaiement}.
-	 * @return {@link TPaymentType}.
+	 * @return {@link PaymentType}.
 	 */
-	public static final TPaymentType getTPayementType(ModePaiement modePaiement) {
+	public static final PaymentType getPayementType(ModePaiement modePaiement) {
 		switch (modePaiement) {
 		case CB:
-			return TPaymentType.CB;
+			return PaymentType.CB;
 		case CHEQUE:
-			return TPaymentType.CHECK;
+			return PaymentType.CHECK;
 		case SEPA:
-			return TPaymentType.SEPA;
-		case TROIS_FOIS_SANS_FRAIS:
-			return TPaymentType.INSTALLMENTS;
+			return PaymentType.SEPA;
 		default:
 			return null;
 		}

@@ -425,6 +425,27 @@ public class CommandeController {
 	}
 
 	/**
+	 * retourner si la commande a besoin d'un paiement recurrent ou non.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return {@link JSONObject}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/besoinPaiementRecurrent", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String isBesoinPaiementRecurrent(@PathVariable("refCommande") String refCommande)
+			throws OpaleException, JSONException {
+		boolean isBesoinPaiementRecurrent = commandeService.isBesoinPaiementRecurrent(refCommande);
+		JSONObject responce = new JSONObject();
+		responce.put("besoinPaiementRecurrent", isBesoinPaiementRecurrent);
+		return responce.toString();
+	}
+
+	/**
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req

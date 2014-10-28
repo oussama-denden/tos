@@ -531,4 +531,16 @@ public class CommandeServiceImpl implements CommandeService {
 
 		return draft;
 	}
+
+	@Override
+	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		if (commande.needPaiementRecurrent()) {
+			List<Paiement> paiementRecurrents = getPaiementRecurrent(referenceCommande, false);
+			if (paiementRecurrents.size() == Constants.ZERO) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

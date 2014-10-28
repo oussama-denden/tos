@@ -266,4 +266,16 @@ public interface CommandeService {
 	 *             {@link JSONException}.
 	 */
 	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException;
+
+	/**
+	 * retourner si la commande a encore besoin d'un paiement recurrent ou non. si il ya un paiement recurrent annule,
+	 * il na compte pas.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return true si la commande a besoin d'un paiement recurrent.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException;
 }
