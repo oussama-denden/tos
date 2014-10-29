@@ -145,6 +145,7 @@ CREATE TABLE `draft` (
   `dateAnnulation` datetime DEFAULT NULL,
   `dateTransformationCommande` datetime DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
+  `geste` varchar(255) DEFAULT NULL,
   `commandeSource` varchar(255) DEFAULT NULL,
   `referenceExterne` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
