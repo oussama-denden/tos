@@ -1,3 +1,4 @@
+
 package com.nordnet.opale.service.draft;
 
 import java.util.ArrayList;
@@ -173,8 +174,8 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftReturn draftReturn = new DraftReturn();
 		draftReturn.setReference(draft.getReference());
-		tracageService.ajouterTrace(draft.getAuteur().getQui(), draft.getReference(), "Draft " + draft.getReference()
-				+ " crée");
+		tracageService.ajouterTrace(draft.getAuteur() != null ? draft.getAuteur().getQui() : null,
+				draft.getReference(), "Draft " + draft.getReference() + " crée");
 		LOGGER.info("Fin methode creerDraft");
 		return draftReturn;
 	}
