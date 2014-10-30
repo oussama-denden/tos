@@ -131,7 +131,7 @@ public class Commande {
 		this.clientSouscripteur = draft.getClientSouscripteur();
 		this.clientSouscripteur.setAuteur(draft.getAuteur());
 
-		this.auteur = draft.getAuteur();
+		this.auteur = new Auteur(trameCatalogue.getAuteur());
 		this.codePartenaire = draft.getCodePartenaire();
 		this.referenceDraft = draft.getReference();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
