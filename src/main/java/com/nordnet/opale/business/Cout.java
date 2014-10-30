@@ -46,7 +46,7 @@ public class Cout {
 	public Cout(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
 		Map<String, Tarif> tarifMap = trameCatalogue.getTarifsMap();
 		Tarif tarif = tarifMap.get(draftLigne.getReferenceTarif());
-		coutTotal += !tarif.isRecurrent() ? tarif.getPrix() : 0d;
+		coutTotal += tarif.getPrix();
 
 		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
 		for (String refFrais : tarif.getFrais()) {

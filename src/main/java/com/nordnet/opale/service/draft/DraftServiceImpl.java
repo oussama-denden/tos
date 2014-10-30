@@ -384,6 +384,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.codePartenaireNotNull(draft.getAuteur());
 		tracageService.ajouterTrace(trameCatalogue.getAuteur().getQui(), referenceDraft,
 				"la validation du draft de reference " + referenceDraft);
+
 		return catalogueValidator.validerDraft(draft, trameCatalogue);
 	}
 
@@ -475,7 +476,7 @@ public class DraftServiceImpl implements DraftService {
 	@Override
 	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(refDraft);
-		DraftValidationInfo validationInfo = catalogueValidator.validerDraft(draft, trameCatalogue);
+		DraftValidationInfo validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
 		if (validationInfo.isValide()) {
 			List<Cout> couts = new ArrayList<Cout>();
 			for (DraftLigne draftLigne : draft.getDraftLignes()) {
