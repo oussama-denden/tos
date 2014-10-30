@@ -134,18 +134,19 @@ public class DraftServiceImpl implements DraftService {
 		LOGGER.info("Enter methode creerDraft");
 		DraftValidator.validerAuteur(draftInfo.getAuteur());
 
-		Auteur auteur = new Auteur(draftInfo.getAuteur());
 
 		Draft draft = new Draft();
-
-
-		draft.setAuteur(auteur);
 
 		// verifier si le clientId n'est pas null ou empty.
 		DraftValidator.clientIdNotNull(draftInfo.getFacturation());
 		DraftValidator.clientIdNotNull(draftInfo.getLivraison());
 		DraftValidator.clientIdNotNull(draftInfo.getSouscripteur());
 
+		if (draftInfo.getAuteur() != null) {
+			DraftValidator.validerAuteur(draftInfo.getAuteur());
+			Auteur auteur = new Auteur(draftInfo.getAuteur());
+			draft.setAuteur(auteur);
+		}
 		if (draftInfo.getFacturation() != null) {
 			draft.setClientAFacturer(draftInfo.getFacturation().toDomain(draftInfo.getAuteur()));
 		}
@@ -381,7 +382,7 @@ public class DraftServiceImpl implements DraftService {
 	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isAuteurValide(trameCatalogue.getAuteur());
-		DraftValidator.codePartenaireNotNull(draft.getAuteur());
+		DraftValidator.codePartenaireNotNull(draft, Constants.VALIDER_DRAFT);
 		tracageService.ajouterTrace(trameCatalogue.getAuteur().getQui(), referenceDraft,
 				"la validation du draft de reference " + referenceDraft);
 
@@ -399,7 +400,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerAuteur(transformationInfo.getTrameCatalogue().getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
-		DraftValidator.codePartenaireNotNull(draft.getAuteur());
+		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
 
 		draft.setClientAFacturer(transformationInfo.getClientInfo().getFacturation().toDomain());
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
@@ -466,13 +467,16 @@ public class DraftServiceImpl implements DraftService {
 		LOGGER.info("Debut methode service associerCodePartenaire");
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
-		Auteur auteur = draft.getAuteur();
-		auteur.setCodePartenaire(codePartenaireInfo.getCodePartenaire());
+		DraftValidator.isDraftTransformer(draft);
+		draft.setCodePartenaire(codePartenaireInfo.getCodePartenaire());
 		draftRepository.save(draft);
 		LOGGER.info("Fin methode service associerCodePartenaire");
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(refDraft);
@@ -486,6 +490,16 @@ public class DraftServiceImpl implements DraftService {
 		} else {
 			return validationInfo;
 		}
+	}
+
+	public void associerAuteur(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
+		LOGGER.info("De ut methode associerAuteur");
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+		DraftValidator.validerAuteur(auteur);
+		draft.setAuteur(auteur.toDomain());
+		LOGGER.info("Fin methode associerAuteur ");
+
 	}
 
 }

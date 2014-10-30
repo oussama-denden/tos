@@ -75,10 +75,10 @@ public class SignatureValidator {
 	 */
 	public static void validerSignature(SignatureInfo signatureInfo) throws OpaleException {
 		if (signatureInfo.getIdSignature() == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.3", "idSignature"), "4.1.3");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.4", "idSignature"), "4.1.4");
 		}
 		if (signatureInfo.getTimestamp() == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.3", "timestamp"), "4.1.3");
+			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.4", "timestamp"), "4.1.4");
 		}
 	}
 

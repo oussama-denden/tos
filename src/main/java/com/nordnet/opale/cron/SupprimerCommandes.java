@@ -14,6 +14,7 @@ import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 
 /**
  * Cron responsable de supprimer automatiquement les commandes inactives.
@@ -67,7 +68,7 @@ public class SupprimerCommandes extends QuartzJobBean {
 	 */
 	private Boolean checkCommandeActive(String refCommande) throws OpaleException, ParseException {
 		LocalDate dateJour = LocalDate.fromDateFields(PropertiesUtil.getInstance().getDateDuJour());
-		Date dateAction = PropertiesUtil.getInstance().parseDate(commandeService.getRecentDate(refCommande));
+		Date dateAction = Utils.parseDate(commandeService.getRecentDate(refCommande));
 		LocalDate dateDerniereAction = LocalDate.fromDateFields(dateAction);
 		Integer delaiInactive = PropertiesUtil.getInstance().getDureeInactive();
 		if (dateDerniereAction.plusDays(delaiInactive).isBefore(dateJour)) {

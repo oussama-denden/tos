@@ -203,6 +203,18 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException;
+	
+	/**
+	 * Asscier un auteur aux draft.
+	 * 
+	 * @param refDraft
+	 * reference draft
+	 * @param auteur
+	 * {@link Auteur}
+	 * @throws OpaleException
+	 * {@link OpaleException}.
+	 */
+	public void associerAuteur(String refDraft, Auteur auteur) throws OpaleException;
 
 	/**
 	 * calculer le cout dans {@link Draft}.

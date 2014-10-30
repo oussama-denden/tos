@@ -2,7 +2,6 @@
   "lignes": [
     {
       "auteur": {
-        "codePartenaire": "part_123456",
         "qui": "GRC.WEL-JOHNDOE",
         "canal": "welcome",
         "ip": {
@@ -42,7 +41,6 @@
     
   },
   "auteur": {
-    "codePartenaire": "part_123456",
     "qui": "GRC.WEL-JOHNDOE",
     "canal": "welcome",
     "ip": {
