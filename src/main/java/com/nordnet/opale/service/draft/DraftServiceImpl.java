@@ -492,6 +492,10 @@ public class DraftServiceImpl implements DraftService {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void associerAuteur(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		LOGGER.info("De ut methode associerAuteur");
 		Draft draft = draftRepository.findByReference(refDraft);
