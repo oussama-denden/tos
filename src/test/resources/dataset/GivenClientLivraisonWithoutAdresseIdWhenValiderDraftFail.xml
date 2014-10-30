@@ -10,7 +10,7 @@
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
-		codePartenaire="part_123456" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
+		 qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
 		timestamp="1411654933" draftId="1" />
 
 		<draftLigneDetail id="1000" referenceSelection="kitsat"

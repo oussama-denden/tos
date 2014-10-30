@@ -10,6 +10,7 @@ import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
@@ -326,4 +327,18 @@ public class DraftValidator {
 		}
 	}
 
+	/**
+	 * tester si le geste existe.
+	 * 
+	 * @param geste
+	 *            geste
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isExsteGeste(Geste geste) throws OpaleException {
+		if (geste == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "geste"), "0.1.4");
+		}
+
+	}
 }

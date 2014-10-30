@@ -167,7 +167,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 					"./requests/validerDraft.json");
 			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
-			assertEquals("1.1.16", validationInfo.getReasons().get(Constants.ZERO).getError());
+			assertEquals("1.1.17", validationInfo.getReasons().get(Constants.ZERO).getError());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

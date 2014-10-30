@@ -34,6 +34,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
 import com.nordnet.opale.rest.RestClient;
+import com.nordnet.opale.service.downpaiement.DownPaiementService;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
@@ -101,6 +102,12 @@ public class CommandeServiceImpl implements CommandeService {
 	private DraftService draftService;
 
 	/**
+	 * {@link DownPaiementService}.
+	 */
+	@Autowired
+	private DownPaiementService downPaiementService;
+
+	/**
 	 * 
 	 * {@inheritDoc}
 	 */
@@ -165,6 +172,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
 		commandeRepository.save(commande);
+
+		downPaiementService.envoiePaiement(commande, paiementService.getPaiementByReference(referencePaiement));
+
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
 				"Payer l'intention de paiement de reference " + referencePaiement + " de la commande "
 						+ referenceCommande);
@@ -190,6 +200,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
 				"Paiement directe de la commande de reference" + referenceCommande);
+
+		if (typePaiement == TypePaiement.COMPTANT) {
+			downPaiementService.envoiePaiement(commande, paiement);
+		}
 
 		return paiement;
 

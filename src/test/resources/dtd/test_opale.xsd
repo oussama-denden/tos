@@ -16,6 +16,7 @@
 		<xsd:attribute name="timestamp" use="optional" />
 		<xsd:attribute name="referenceExterne" use="optional" />
 		<xsd:attribute name="dateAnnulation" use="optional" />
+		<xsd:attribute name="geste" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="draftLigne" type="draftLigne_type"/>
@@ -25,7 +26,7 @@
 		<xsd:attribute name="referenceTarif" use="optional" />
 		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="dateCreation" use="optional" />
-		<xsd:attribute name="codePartenaire" use="optional" />
+		
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
@@ -70,7 +71,7 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="adresseId" use="optional" />
 		<xsd:attribute name="clientId" use="optional" />
-		<xsd:attribute name="codePartenaire" use="optional" />
+		
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="timestamp" use="optional" />
@@ -97,7 +98,7 @@
 	<xsd:complexType name="commandeLigne_type">
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="dateCreation" use="optional" />
-		<xsd:attribute name="codePartenaire" use="optional" />
+		
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
@@ -160,7 +161,7 @@
 		<xsd:attribute name="montant" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceCommande" use="optional" />
-		<xsd:attribute name="codePartenaire" use="optional" />
+		
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
@@ -180,7 +181,7 @@
 		<xsd:attribute name="footprint" use="optional" />
 		<xsd:attribute name="timestampSignature" use="optional" />
 		<xsd:attribute name="idSignature" use="optional" />
-		<xsd:attribute name="codePartenaire" use="optional" />
+		
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />

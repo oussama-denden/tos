@@ -36,6 +36,6 @@
 <frais id="1008" montant="50" typeTVA="S" typeFrais="CREATION" tarifId="1008" />
 <frais id="1009" montant="50" typeTVA="S" typeFrais="RESILIATION" tarifId="1009" />
 
-<paiement id="1000" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000001" typePaiement="COMPTANT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="123456879" timestampIntention="[now]" timestampPaiement="[now]" codePartenaire="part_123456" />
-<paiement id="1001" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000003" typePaiement="RECURRENT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="123456879" timestampPaiement="[now]" codePartenaire="part_123456" />
+<paiement id="1000" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000001" typePaiement="COMPTANT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="123456879" timestampIntention="[now]" timestampPaiement="[now]" />
+<paiement id="1001" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000003" typePaiement="RECURRENT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="123456879" timestampPaiement="[now]"  />
 </dataset>

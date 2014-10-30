@@ -54,12 +54,8 @@ public abstract class GlobalTestCase extends UnitilsJUnit4 {
 	 * init methode.
 	 */
 	public void init() {
-		System.setProperty("references.option.non.envoyer.packager", "option.plus.50g,option.plus.20g");
-		System.setProperty("reference.voip", "voip");
-		System.setProperty("reference.option.plus.20g", "option.plus.20g");
-		System.setProperty("reference.option.plus.50g", "option.plus.50g");
 		System.setProperty(com.nordnet.opale.util.Constants.ENV_PROPERTY, "dev");
-		System.setProperty("ws.netEquipment.useMock", "true");
+		System.setProperty("ws.saphir.useMock", "true");
 	}
 
 }

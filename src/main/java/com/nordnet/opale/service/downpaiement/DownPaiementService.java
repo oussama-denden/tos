@@ -1,4 +1,4 @@
-package com.nordnet.opale.service.mouvement;
+package com.nordnet.opale.service.downpaiement;
 
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;

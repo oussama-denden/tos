@@ -15,7 +15,7 @@ CREATE TABLE `client` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `adresseId` varchar(255) DEFAULT NULL,
   `canal` varchar(255) DEFAULT NULL,
-  `codePartenaire` varchar(255) DEFAULT NULL,
+  
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `signature` (
   `timestampSignature` datetime DEFAULT NULL,
   `mode` varchar(255) DEFAULT NULL,
    `canal` varchar(255) DEFAULT NULL,
-  `codePartenaire` varchar(255) DEFAULT NULL,
+  
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) NOT NULL,
@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS `commandeligne`;
 CREATE TABLE `commandeligne` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
-  `codePartenaire` varchar(255) DEFAULT NULL,
+  
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
@@ -145,6 +145,7 @@ CREATE TABLE `draft` (
   `dateAnnulation` datetime DEFAULT NULL,
   `dateTransformationCommande` datetime DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
+  `geste` varchar(255) DEFAULT NULL,
   `commandeSource` varchar(255) DEFAULT NULL,
   `referenceExterne` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
@@ -164,7 +165,7 @@ DROP TABLE IF EXISTS `draftligne`;
 CREATE TABLE `draftligne` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
-  `codePartenaire` varchar(255) DEFAULT NULL,
+  
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,
@@ -274,7 +275,7 @@ DROP TABLE IF EXISTS `paiement`;
 CREATE TABLE `paiement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
-  `codePartenaire` varchar(255) DEFAULT NULL,
+  
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` bigint(20) DEFAULT NULL,

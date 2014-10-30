@@ -92,13 +92,13 @@ public class CatalogueValidator {
 		} else if (isPossedeBiens) {
 			if (Utils.isStringNullOrEmpty(draft.getClientALivrer().getClientId())
 					|| Utils.isStringNullOrEmpty(draft.getClientALivrer().getAdresseId())) {
-				validationInfo.addReason("commande", "1.1.16", PropertiesUtil.getInstance().getErrorMessage("1.1.16"),
+				validationInfo.addReason("commande", "1.1.17", PropertiesUtil.getInstance().getErrorMessage("1.1.17"),
 						null);
 			}
 		} else if (draft.getClientALivrer() != null) {
 			if (Utils.isStringNullOrEmpty(draft.getClientALivrer().getClientId())
 					|| Utils.isStringNullOrEmpty(draft.getClientALivrer().getAdresseId())) {
-				validationInfo.addReason("commande", "1.1.16", PropertiesUtil.getInstance().getErrorMessage("1.1.16"),
+				validationInfo.addReason("commande", "1.1.17", PropertiesUtil.getInstance().getErrorMessage("1.1.17"),
 						null);
 			}
 		}
