@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
+import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
@@ -172,7 +173,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftReturn draftReturn = new DraftReturn();
 		draftReturn.setReference(draft.getReference());
 		tracageService.ajouterTrace(draft.getAuteur().getQui(), draft.getReference(), "Draft " + draft.getReference()
- + " crée");
+				+ " crée");
 		LOGGER.info("Fin methode creerDraft");
 		return draftReturn;
 	}
@@ -246,7 +247,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 
 		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
- + refDraft + " modifiée");
+				+ refDraft + " modifiée");
 
 	}
 
@@ -310,7 +311,7 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(deleteInfo.getAuteur().getQui(), reference, "la ligne " + referenceLigne
- + " du draft " + reference + " supprimée");
+				+ " du draft " + reference + " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
 	}
@@ -469,6 +470,21 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 		LOGGER.info("Fin methode service associerCodePartenaire");
 
+	}
+
+	@Override
+	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+		Draft draft = getDraftByReference(refDraft);
+		DraftValidationInfo validationInfo = catalogueValidator.validerDraft(draft, trameCatalogue);
+		if (validationInfo.isValide()) {
+			List<Cout> couts = new ArrayList<Cout>();
+			for (DraftLigne draftLigne : draft.getDraftLignes()) {
+				couts.add(new Cout(draftLigne, trameCatalogue));
+			}
+			return couts;
+		} else {
+			return validationInfo;
+		}
 	}
 
 }
