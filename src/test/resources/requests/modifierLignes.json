@@ -30,7 +30,7 @@
     "qui": "string2",
     "ip": {
       "ip": "string2",
-      "ts": 0.1
+      "ts": "123456789123"
     },
     "canal": "string2"
   }

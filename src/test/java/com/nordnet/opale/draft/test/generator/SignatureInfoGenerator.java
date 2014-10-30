@@ -60,7 +60,7 @@ public class SignatureInfoGenerator {
 		Auteur auteur = new Auteur();
 		Ip ip = new Ip();
 		ip.setIp("127.0.0.1");
-		ip.setTs(1411654933);
+		ip.setTs(new Date());
 		auteur.setCanal("welcome");
 		auteur.setCodePartenaire("part_123456");
 		auteur.setIp(ip);
