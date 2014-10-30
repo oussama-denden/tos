@@ -2,6 +2,10 @@ package com.nordnet.opale.business;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.enums.Geste;
+import com.nordnet.opale.enums.deserializer.GesteDeserializer;
+
 /**
  * Contient les info de l auteur.
  * 
@@ -34,6 +38,12 @@ public class DraftInfo {
 	 * Le client pour la facturation.
 	 */
 	private Client facturation;
+
+	/**
+	 * Le geste effectue.
+	 */
+	@JsonDeserialize(using = GesteDeserializer.class)
+	private Geste geste;
 
 	/**
 	 * constructeur par defaut.
@@ -125,6 +135,23 @@ public class DraftInfo {
 	 */
 	public void setFacturation(Client facturation) {
 		this.facturation = facturation;
+	}
+
+	/**
+	 * 
+	 * @return {@link #geste}
+	 */
+	public Geste getGeste() {
+		return geste;
+	}
+
+	/**
+	 * 
+	 * @param geste
+	 *            {@link #geste}
+	 */
+	public void setGeste(Geste geste) {
+		this.geste = geste;
 	}
 
 }

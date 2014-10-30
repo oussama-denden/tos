@@ -16,6 +16,7 @@
 		<xsd:attribute name="timestamp" use="optional" />
 		<xsd:attribute name="referenceExterne" use="optional" />
 		<xsd:attribute name="dateAnnulation" use="optional" />
+		<xsd:attribute name="geste" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="draftLigne" type="draftLigne_type"/>

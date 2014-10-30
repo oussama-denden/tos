@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,6 +25,7 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.enums.Geste;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.
@@ -101,6 +104,12 @@ public class Draft {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "clientAFacturerId", nullable = true)
 	private Client clientAFacturer;
+
+	/**
+	 * Le geste effectue.
+	 */
+	@Enumerated(EnumType.STRING)
+	private Geste geste;
 
 	/**
 	 * constructeur par defaut.
@@ -337,6 +346,23 @@ public class Draft {
 	 */
 	public void setClientAFacturer(Client clientAFacturer) {
 		this.clientAFacturer = clientAFacturer;
+	}
+
+	/**
+	 * 
+	 * @return {@link #geste}
+	 */
+	public Geste getGeste() {
+		return geste;
+	}
+
+	/**
+	 * 
+	 * @param geste
+	 *            {@link #geste}
+	 */
+	public void setGeste(Geste geste) {
+		this.geste = geste;
 	}
 
 	/**

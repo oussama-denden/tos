@@ -164,12 +164,15 @@ public class DraftServiceImpl implements DraftService {
 
 		draft.setReference(keygenService.getNextKey(Draft.class));
 
+		DraftValidator.isExsteGeste(draftInfo.getGeste());
+		draft.setGeste(draftInfo.getGeste());
+
 		draftRepository.save(draft);
 
 		DraftReturn draftReturn = new DraftReturn();
 		draftReturn.setReference(draft.getReference());
 		tracageService.ajouterTrace(draft.getAuteur().getQui(), draft.getReference(), "Draft " + draft.getReference()
-				+ " crée");
+ + " crée");
 		LOGGER.info("Fin methode creerDraft");
 		return draftReturn;
 	}
@@ -243,7 +246,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 
 		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
-				+ refDraft + " modifiée");
+ + refDraft + " modifiée");
 
 	}
 
@@ -307,7 +310,7 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(deleteInfo.getAuteur().getQui(), reference, "la ligne " + referenceLigne
-				+ " du draft " + reference + " supprimée");
+ + " du draft " + reference + " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
 	}
