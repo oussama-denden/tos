@@ -285,6 +285,24 @@ public class DraftController {
 	}
 
 	/**
+	 * calculer le cout dans {@link Draft}.
+	 * 
+	 * @param refDraft
+	 *            reference {@link Draft}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return soit le cout du draft soit les info de non validation.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/costCalculation", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogue trameCatalogue)
+			throws OpaleException {
+		return draftService.calculerCout(refDraft, trameCatalogue);
+	}
+
+	/**
 	 * Associer un auteur a un draft.
 	 * 
 	 * @param refDraft

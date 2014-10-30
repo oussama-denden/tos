@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
+import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
@@ -384,6 +385,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.codePartenaireNotNull(draft, Constants.VALIDER_DRAFT);
 		tracageService.ajouterTrace(trameCatalogue.getAuteur().getQui(), referenceDraft,
 				"la validation du draft de reference " + referenceDraft);
+
 		return catalogueValidator.validerDraft(draft, trameCatalogue);
 	}
 
@@ -470,6 +472,24 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 		LOGGER.info("Fin methode service associerCodePartenaire");
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+		Draft draft = getDraftByReference(refDraft);
+		DraftValidationInfo validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
+		if (validationInfo.isValide()) {
+			List<Cout> couts = new ArrayList<Cout>();
+			for (DraftLigne draftLigne : draft.getDraftLignes()) {
+				couts.add(new Cout(draftLigne, trameCatalogue));
+			}
+			return couts;
+		} else {
+			return validationInfo;
+		}
 	}
 
 	@Override

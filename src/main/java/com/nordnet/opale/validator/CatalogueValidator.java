@@ -35,9 +35,9 @@ public class CatalogueValidator {
 	 */
 	public DraftValidationInfo validerDraft(Draft draft, TrameCatalogue trameCatalogue) {
 		DraftValidationInfo validationInfo = new DraftValidationInfo();
-		List<String> values;
-		int i = 0, j = 0;
 		boolean isPossedeBiens = false;
+
+		validationInfo = validerReferenceDraft(draft, trameCatalogue);
 
 		if (draft.getClientAFacturer() == null) {
 			validationInfo
@@ -61,29 +61,16 @@ public class CatalogueValidator {
 
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
-			if (offreCatalogue == null) {
-				values = new ArrayList<String>();
-				values.add(draftLigne.getReferenceOffre());
-				validationInfo.addReason("lignes[" + i + "].offre.reference", "36.3.1.2", PropertiesUtil.getInstance()
-						.getErrorMessage("1.1.6", draftLigne.getReferenceOffre()), values);
-			} else {
+			if (offreCatalogue != null) {
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					if (!trameCatalogue.isDetailExist(offreCatalogue, detail.getReferenceSelection())) {
-						values = new ArrayList<String>();
-						values.add(detail.getReferenceSelection());
-						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].reference", "36.3.1.3",
-								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
-								values);
-					} else {
+					if (trameCatalogue.isDetailExist(offreCatalogue, detail.getReferenceSelection())) {
 						if (!isPossedeBiens) {
 							isPossedeBiens = trameCatalogue.isPossedeBiens(offreCatalogue,
 									detail.getReferenceSelection());
 						}
 					}
-					j++;
 				}
 			}
-			i++;
 		}
 
 		if (isPossedeBiens && draft.getClientALivrer() == null) {
@@ -101,6 +88,47 @@ public class CatalogueValidator {
 				validationInfo.addReason("commande", "1.1.17", PropertiesUtil.getInstance().getErrorMessage("1.1.17"),
 						null);
 			}
+		}
+
+		return validationInfo;
+	}
+
+	/**
+	 * valide les references indique dans le draft (reference offre, reference selection...) avec la
+	 * {@link TrameCatalogue}.
+	 * 
+	 * @param draft
+	 *            {@link Draft}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return {@link DraftValidationInfo}.
+	 */
+	public DraftValidationInfo validerReferenceDraft(Draft draft, TrameCatalogue trameCatalogue) {
+
+		DraftValidationInfo validationInfo = new DraftValidationInfo();
+		List<String> values;
+		int i = 0, j = 0;
+
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
+			if (offreCatalogue == null) {
+				values = new ArrayList<String>();
+				values.add(draftLigne.getReferenceOffre());
+				validationInfo.addReason("lignes[" + i + "].offre.reference", "36.3.1.2", PropertiesUtil.getInstance()
+						.getErrorMessage("1.1.6", draftLigne.getReferenceOffre()), values);
+			} else {
+				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
+					if (!trameCatalogue.isDetailExist(offreCatalogue, detail.getReferenceSelection())) {
+						values = new ArrayList<String>();
+						values.add(detail.getReferenceSelection());
+						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].reference", "36.3.1.3",
+								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
+								values);
+					}
+					j++;
+				}
+			}
+			i++;
 		}
 
 		return validationInfo;

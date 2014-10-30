@@ -93,7 +93,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 					"./requests/validerDraft.json");
 			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-3", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.TROIS), Double.valueOf(validationInfo.getReasons().size()));
-			assertEquals("36.3.1.2", validationInfo.getReasons().get(Constants.DEUX).getError());
+			assertEquals("36.3.1.2", validationInfo.getReasons().get(Constants.ZERO).getError());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -111,7 +111,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 					"./requests/validerDraft.json");
 			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-4", trameCatalogue);
 			assertEquals(Double.valueOf(Constants.TROIS), Double.valueOf(validationInfo.getReasons().size()));
-			assertEquals("36.3.1.3", validationInfo.getReasons().get(Constants.DEUX).getError());
+			assertEquals("36.3.1.3", validationInfo.getReasons().get(Constants.ZERO).getError());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
