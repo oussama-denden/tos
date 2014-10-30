@@ -24,6 +24,7 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
+import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -497,6 +498,22 @@ public class CommandeController {
 		JSONObject responce = new JSONObject();
 		responce.put("besoinPaiementComptant", isBesoinPaiementComptant);
 		return responce.toString();
+	}
+
+	/**
+	 * Calculer le cout de la {@link Commande}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une ligne de la {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/costCalculation", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public List<Cout> calculerCout(@PathVariable("refCommande") String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::calculerCout");
+		return commandeService.calculerCout(refCommande);
 	}
 
 	/**

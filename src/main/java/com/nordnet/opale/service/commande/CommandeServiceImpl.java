@@ -16,6 +16,7 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
+import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
@@ -601,5 +602,15 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public String getRecentDate(String refCommande) throws OpaleException {
 		return commandeRepository.getRecentDate(refCommande);
+	}
+
+	@Override
+	public List<Cout> calculerCout(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		List<Cout> couts = new ArrayList<Cout>();
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			couts.add(new Cout(commandeLigne));
+		}
+		return couts;
 	}
 }

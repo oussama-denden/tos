@@ -11,6 +11,7 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
+import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
@@ -262,9 +263,8 @@ public interface CommandeService {
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException;
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la
-	 * contractualisation de la commande, sa livraison, et sa facturation
-	 * finale.
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
 	 * 
 	 * @param refCommande
 	 *            refrence du commande.
@@ -318,4 +318,15 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException;
+
+	/**
+	 * Calculer le cout de la {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une ligne de la {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public List<Cout> calculerCout(String referenceCommande) throws OpaleException;
 }

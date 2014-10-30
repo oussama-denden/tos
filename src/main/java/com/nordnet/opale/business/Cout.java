@@ -7,6 +7,8 @@ import java.util.Map;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.TypeFrais;
@@ -57,6 +59,27 @@ public class Cout {
 
 		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
 			DetailCout detailCout = new DetailCout(draftLigneDetail, trameCatalogue);
+			coutTotal += detailCout.getCoutTotal();
+			addDetail(detailCout);
+		}
+	}
+
+	/**
+	 * Creation du {@link Cout} a partir de la {@link CommandeLigne}.
+	 * 
+	 * @param commandeLigne
+	 *            {@link CommandeLigne}.
+	 */
+	public Cout(CommandeLigne commandeLigne) {
+		com.nordnet.opale.domain.commande.Tarif tarif = commandeLigne.getTarif();
+		coutTotal += tarif.getPrix();
+		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
+			if (frais.getTypeFrais() == TypeFrais.CREATION)
+				coutTotal += frais.getMontant();
+		}
+
+		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
+			DetailCout detailCout = new DetailCout(commandeLigneDetail);
 			coutTotal += detailCout.getCoutTotal();
 			addDetail(detailCout);
 		}
