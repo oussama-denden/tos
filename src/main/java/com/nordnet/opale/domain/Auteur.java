@@ -13,10 +13,7 @@ import com.nordnet.opale.business.Ip;
 @Embeddable
 public class Auteur {
 
-	/**
-	 * code auteur.
-	 */
-	private String codePartenaire;
+
 
 	/**
 	 * nom de l auteur.
@@ -52,30 +49,12 @@ public class Auteur {
 	 */
 	public Auteur(com.nordnet.opale.business.Auteur auteur) {
 		this.setCanal(auteur.getCanal());
-		this.setCodePartenaire(auteur.getCodePartenaire());
 		this.setIp(auteur.getIp().getIp());
 		this.setQui(auteur.getQui());
 		this.setTimestamp(auteur.getIp().getTs());
 	}
 
-	/**
-	 * the code partenaire.
-	 * 
-	 * @return {@link #codePartenaire}
-	 */
-	public String getCodePartenaire() {
-		return codePartenaire;
-	}
 
-	/**
-	 * set the code partenaire.
-	 * 
-	 * @param codePartenaire
-	 *            the new {@link #codePartenaire}
-	 */
-	public void setCodePartenaire(String codePartenaire) {
-		this.codePartenaire = codePartenaire;
-	}
 
 	/**
 	 * 
@@ -153,7 +132,6 @@ public class Auteur {
 	public com.nordnet.opale.business.Auteur toAuteurBusiness() {
 		com.nordnet.opale.business.Auteur auteur = new com.nordnet.opale.business.Auteur();
 		auteur.setCanal(canal);
-		auteur.setCodePartenaire(codePartenaire);
 		Ip ipBusiness = new Ip();
 		ipBusiness.setIp(ip);
 		auteur.setIp(ipBusiness);

@@ -144,7 +144,6 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode creerIntentionPaiement");
 
 		getCommandeByReference(refCommande);
-		CommandeValidator.validerAuteur(refCommande, paiementInfo.getAuteur());
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), refCommande,
 				"Créer une intention de paiement pour la commande " + refCommande);
 
@@ -388,7 +387,6 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.validerAuteur(refCommande, ajoutSignatureInfo.getAuteur());
 		return signatureService.ajouterIntentionDeSignature(refCommande, ajoutSignatureInfo);
 	}
 
@@ -402,10 +400,6 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode signerCommande");
-
-		Commande commande = getCommandeByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
 		return signatureService.ajouterSignatureCommande(refCommande, refrenceSignature, signatureInfo);
 	}
 

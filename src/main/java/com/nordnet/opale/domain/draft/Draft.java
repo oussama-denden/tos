@@ -103,6 +103,11 @@ public class Draft {
 	private Client clientAFacturer;
 
 	/**
+	 * code auteur.
+	 */
+	private String codePartenaire;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Draft() {
@@ -339,6 +344,24 @@ public class Draft {
 		this.clientAFacturer = clientAFacturer;
 	}
 
+	/**
+	 * the code partenaire.
+	 * 
+	 * @return {@link #codePartenaire}
+	 */
+	public String getCodePartenaire() {
+		return codePartenaire;
+	}
+
+	/**
+	 * set the code partenaire.
+	 * 
+	 * @param codePartenaire
+	 *            the new {@link #codePartenaire}
+	 */
+	public void setCodePartenaire(String codePartenaire) {
+		this.codePartenaire = codePartenaire;
+	}
 	/**
 	 * Ajouter une {@link DraftLigne} au draft.
 	 * 

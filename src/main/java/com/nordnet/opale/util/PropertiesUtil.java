@@ -1,6 +1,5 @@
 package com.nordnet.opale.util;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -98,30 +97,10 @@ public class PropertiesUtil {
 	 * @return {@link Integer}
 	 */
 	public Integer getDureeInactive() {
-		Integer delaiCancel = Integer.valueOf(dynamicProperties.getMessage(Constants.DELAI_INACTIVE, null, null));
-		return delaiCancel;
+		Integer delaiInactive = Integer.valueOf(dynamicProperties.getMessage(Constants.DELAI_INACTIVE, null, null));
+		return delaiInactive;
 	}
 
-	/**
-	 * adapter le date a une froam precise.
-	 * 
-	 * @param date
-	 *            date string.
-	 * @return {@link Date}
-	 * @throws ParseException
-	 *             {@link ParseException}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public Date parseDate(String date) throws ParseException, OpaleException {
-		SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
-		Date dateFormatte;
-		if (!(date.length() == Constants.UN)) {
-			dateFormatte = formatter.parse(date);
-		} else {
-			dateFormatte = PropertiesUtil.getInstance().getDateDuJour();
-		}
-		return dateFormatte;
-	}
+
 
 }

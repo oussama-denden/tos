@@ -285,6 +285,22 @@ public class DraftController {
 	}
 
 	/**
+	 * Associer un auteur a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void associerAuteur(@PathVariable String refDraft, @RequestBody Auteur auteur) throws OpaleException {
+		LOGGER.info(":::ws-rec:::associerAuteur");
+		draftService.associerAuteur(refDraft, auteur);
+
+	}
+
+	/**
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req

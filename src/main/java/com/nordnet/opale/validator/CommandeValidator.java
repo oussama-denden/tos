@@ -109,11 +109,12 @@ public class CommandeValidator {
 	 */
 	public static void isAuteurValide(Auteur auteur) throws OpaleException {
 
-		if (auteur != null) {
+		if (auteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
+		}
 
 			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
-			}
 		}
 
 	}

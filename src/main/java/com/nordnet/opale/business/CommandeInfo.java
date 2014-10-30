@@ -16,6 +16,11 @@ public class CommandeInfo {
 	private Auteur auteur;
 
 	/**
+	 * code auteur.
+	 */
+	private String codePartenaire;
+
+	/**
 	 * la liste de ligne de la commande.
 	 */
 	private List<CommandeLigneInfo> lignes;
@@ -46,6 +51,25 @@ public class CommandeInfo {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * the code partenaire.
+	 * 
+	 * @return {@link #codePartenaire}
+	 */
+	public String getCodePartenaire() {
+		return codePartenaire;
+	}
+
+	/**
+	 * set the code partenaire.
+	 * 
+	 * @param codePartenaire
+	 *            the new {@link #codePartenaire}
+	 */
+	public void setCodePartenaire(String codePartenaire) {
+		this.codePartenaire = codePartenaire;
 	}
 
 	/**
