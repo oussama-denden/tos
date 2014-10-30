@@ -109,9 +109,9 @@ public class Draft {
 	 * code auteur.
 	 */
 	private String codePartenaire;
-
+	
 	/**
-	 * Le geste effectue.
+	* Le geste effectue.
 	 */
 	@Enumerated(EnumType.STRING)
 	private Geste geste;
@@ -371,8 +371,8 @@ public class Draft {
 	public void setCodePartenaire(String codePartenaire) {
 		this.codePartenaire = codePartenaire;
 	}
-
-	/**
+	
+	/** 
 	 * @return {@link #geste}
 	 */
 	public Geste getGeste() {

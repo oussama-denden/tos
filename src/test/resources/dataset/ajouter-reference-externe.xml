@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 <dataset>
-<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111" timestamp="100"/>
+<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111" timestamp="[now]"/>
 <draftLigne/>
 <draftLigneDetail/>
 

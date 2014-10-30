@@ -18,7 +18,7 @@ CREATE TABLE `client` (
   
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
+  `timestamp` datetime DEFAULT NULL,
   `clientId` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
@@ -35,7 +35,7 @@ CREATE TABLE `commande` (
   `codePartenaire` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
+  `timestamp` datetime DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
   `dateTransformationContrat` datetime DEFAULT NULL,
   `dateAnnulation` datetime DEFAULT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `signature` (
   
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) NOT NULL,
+  `timestamp` datetime DEFAULT NULL,
   `referenceCommande` varchar(255) DEFAULT NULL,
    `dateAnnulation` datetime DEFAULT NULL,
     `timestampIntention` datetime DEFAULT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE `commandeligne` (
   
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
+  `timestamp` datetime DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
   `famille` varchar(255) DEFAULT NULL,
   `gamme` varchar(255) DEFAULT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE `draft` (
   `codePartenaire` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
+  `timestamp` datetime DEFAULT NULL,
   `dateAnnulation` datetime DEFAULT NULL,
   `dateTransformationCommande` datetime DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
@@ -168,7 +168,7 @@ CREATE TABLE `draftligne` (
   
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
+  `timestamp` datetime DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
   `modeFacturation` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
@@ -278,7 +278,7 @@ CREATE TABLE `paiement` (
   
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
-  `timestamp` bigint(20) DEFAULT NULL,
+  `timestamp` datetime DEFAULT NULL,
   `dateAnnulation` datetime DEFAULT NULL,
   `idPaiement` varchar(255) DEFAULT NULL,
 

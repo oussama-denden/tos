@@ -1,6 +1,10 @@
 package com.nordnet.opale.domain;
 
+import java.util.Date;
+
 import javax.persistence.Embeddable;
+
+import org.hibernate.validator.NotNull;
 
 import com.nordnet.opale.business.Ip;
 
@@ -33,7 +37,8 @@ public class Auteur {
 	/**
 	 * date de l ip.
 	 */
-	private long timestamp;
+	@NotNull
+	private Date timestamp;
 
 	/**
 	 * constructeur par defaut.
@@ -111,7 +116,7 @@ public class Auteur {
 	 * 
 	 * @return {@link #timestamp}.
 	 */
-	public long getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
@@ -120,7 +125,7 @@ public class Auteur {
 	 * @param timestamp
 	 *            {@link #timestamp}.
 	 */
-	public void setTimestamp(long timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 

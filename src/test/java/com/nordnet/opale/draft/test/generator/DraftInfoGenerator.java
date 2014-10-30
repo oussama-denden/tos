@@ -3,6 +3,7 @@ package com.nordnet.opale.draft.test.generator;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -76,7 +77,7 @@ public class DraftInfoGenerator {
 		auteur.setQui("GRC.WEL-JOHNDOE");
 		Ip ip = new Ip();
 		ip.setIp("127.0.0.1");
-		ip.setTs(1411654933);
+		ip.setTs(new Date());
 		auteur.setIp(ip);
 
 		draftLigneInfo.setOffre(offre);

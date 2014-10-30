@@ -1,5 +1,9 @@
 package com.nordnet.opale.business;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.enums.deserializer.TimeStampDeserializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Ip}.
@@ -17,7 +21,8 @@ public class Ip {
 	/**
 	 * date de l ip.
 	 */
-	private long ts;
+	@JsonDeserialize(using = TimeStampDeserializer.class)
+	private Date ts;
 
 	/**
 	 * constructeur par defaut.
@@ -47,7 +52,7 @@ public class Ip {
 	 * 
 	 * @return {@link #ts}.
 	 */
-	public long getTs() {
+	public Date getTs() {
 		return ts;
 	}
 
@@ -56,7 +61,7 @@ public class Ip {
 	 * @param ts
 	 *            {@link #ts}.
 	 */
-	public void setTs(long ts) {
+	public void setTs(Date ts) {
 		this.ts = ts;
 	}
 
