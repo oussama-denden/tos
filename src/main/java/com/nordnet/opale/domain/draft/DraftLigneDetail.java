@@ -39,6 +39,11 @@ public class DraftLigneDetail {
 	private Integer id;
 
 	/**
+	 * numero element contractuel, utilise dans topaze.
+	 */
+	private Integer numEC;
+
+	/**
 	 * reference selection.
 	 */
 	private String referenceSelection;
@@ -141,6 +146,23 @@ public class DraftLigneDetail {
 	 */
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	/**
+	 * 
+	 * @return {@link #numEC}.
+	 */
+	public Integer getNumEC() {
+		return numEC;
+	}
+
+	/**
+	 * 
+	 * @param numEC
+	 *            {@link #numEC}.
+	 */
+	public void setNumEC(Integer numEC) {
+		this.numEC = numEC;
 	}
 
 	/**
