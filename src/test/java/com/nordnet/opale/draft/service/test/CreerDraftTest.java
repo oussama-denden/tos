@@ -52,8 +52,8 @@ public class CreerDraftTest extends GlobalTestCase {
 			draftService.creerDraft(draftInfoGenerator.getObjectFromJsonFile(DraftInfo.class,
 					"./requests/creerDraftIncomplet.json"));
 
-			Draft draft = draftService.getDraftByReference("00000001");
-			assertEquals("00000001", draft.getReference());
+			Draft draft = draftService.getDraftByReference("Dra-00000001");
+			assertEquals("Dra-00000001", draft.getReference());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -71,8 +71,8 @@ public class CreerDraftTest extends GlobalTestCase {
 			draftService.creerDraft(draftInfoGenerator.getObjectFromJsonFile(DraftInfo.class,
 					"./requests/creerDraftComplet.json"));
 
-			Draft draft = draftService.getDraftByReference("00000001");
-			assertEquals("00000001", draft.getReference());
+			Draft draft = draftService.getDraftByReference("Dra-00000001");
+			assertEquals("Dra-00000001", draft.getReference());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

@@ -231,6 +231,7 @@ CREATE TABLE `keygen` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `entite` varchar(255) DEFAULT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
+  `prefix` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 

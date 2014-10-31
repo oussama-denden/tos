@@ -33,6 +33,6 @@ public interface KeygenRepository extends JpaRepository<Keygen, Integer> {
 	 * @return {@link Keygen}.
 	 */
 
-	@Query(value = "SELECT getReference(?1)", nativeQuery = true)
-	public String getReference(String nom);
+	@Query(value = "SELECT getReference(?1,?2)", nativeQuery = true)
+	public String getReference(String nom, String prefix);
 }
