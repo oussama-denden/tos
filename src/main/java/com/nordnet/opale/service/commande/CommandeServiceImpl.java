@@ -661,10 +661,9 @@ public class CommandeServiceImpl implements CommandeService {
 			produitRenouvellement.setLabel(ligneDetail.getLabel());
 			produitRenouvellement.setNumeroCommande(commande.getReference());
 			produitRenouvellement.setPrix(getPrixRenouvellement(ligne, ligneDetail, commande.getReference()));
-			if (ligneDetail.getReferenceProduit().equals("kit-sat")) {
-				produitRenouvellement.setNumEC(3);
-			} else {
-				produitRenouvellement.setNumEC(1);
+			produitRenouvellement.setNumEC(ligneDetail.getNumEC());
+			if (ligneDetail.getCommandeLigneDetailParent() != null) {
+				produitRenouvellement.setNumECParent(ligneDetail.getCommandeLigneDetailParent().getNumEC());
 			}
 			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceProduit());
 			produitRenouvellement.setRemboursable(true);
