@@ -46,6 +46,11 @@ public class DraftInfo {
 	private Geste geste;
 
 	/**
+	 * le code partenaire.
+	 */
+	private String codePartenaire;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public DraftInfo() {
@@ -152,6 +157,25 @@ public class DraftInfo {
 	 */
 	public void setGeste(Geste geste) {
 		this.geste = geste;
+	}
+
+	/**
+	 * the code partenaire.
+	 * 
+	 * @return {@link #codePartenaire}
+	 */
+	public String getCodePartenaire() {
+		return codePartenaire;
+	}
+
+	/**
+	 * set the code partenaire.
+	 * 
+	 * @param codePartenaire
+	 *            the new {@link #codePartenaire}
+	 */
+	public void setCodePartenaire(String codePartenaire) {
+		this.codePartenaire = codePartenaire;
 	}
 
 }

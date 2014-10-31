@@ -317,13 +317,15 @@ public class DraftValidator {
 	 * 
 	 * @param draft
 	 *            {@link Draft}
+	 * @param commande
+	 *            {@link Commande}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isDraftTransformer(Draft draft) throws OpaleException {
+	public static void isDraftTransformer(Draft draft, Commande commande) throws OpaleException {
 		if (draft.isTransforme()) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.21", draft.getReference(),
-					draft.getReferenceExterne()), "1.1.21");
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.22", draft.getReference(),
+					commande.getReference()), "1.1.22");
 		}
 	}
 

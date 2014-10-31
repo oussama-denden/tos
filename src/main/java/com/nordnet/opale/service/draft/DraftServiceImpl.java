@@ -166,6 +166,7 @@ public class DraftServiceImpl implements DraftService {
 		}
 
 		draft.setReference(keygenService.getNextKey(Draft.class));
+		draft.setCodePartenaire(draftInfo.getCodePartenaire());
 
 		DraftValidator.isExsteGeste(draftInfo.getGeste());
 		draft.setGeste(draftInfo.getGeste());
@@ -468,7 +469,8 @@ public class DraftServiceImpl implements DraftService {
 		LOGGER.info("Debut methode service associerCodePartenaire");
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
-		DraftValidator.isDraftTransformer(draft);
+		Commande commande = commandeService.getCommandeByReferenceDraft(refDraft);
+		DraftValidator.isDraftTransformer(draft, commande);
 		draft.setCodePartenaire(codePartenaireInfo.getCodePartenaire());
 		draftRepository.save(draft);
 		LOGGER.info("Fin methode service associerCodePartenaire");
