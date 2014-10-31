@@ -3,7 +3,9 @@ package com.nordnet.opale.service.commande;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -20,11 +22,16 @@ import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
+import com.nordnet.opale.business.commande.ContratRenouvellementInfo;
 import com.nordnet.opale.business.commande.ContratValidationInfo;
+import com.nordnet.opale.business.commande.FraisRenouvellement;
+import com.nordnet.opale.business.commande.PolitiqueRenouvellement;
 import com.nordnet.opale.business.commande.PolitiqueValidation;
+import com.nordnet.opale.business.commande.PrixRenouvellemnt;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.commande.Frais;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
@@ -608,4 +615,139 @@ public class CommandeServiceImpl implements CommandeService {
 	public String getRecentDate(String refCommande) throws OpaleException {
 		return commandeRepository.getRecentDate(refCommande);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException {
+		CommandeValidator.checkReferenceCommande(refCommande);
+		Commande commande = commandeRepository.findByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.testerCommandeNonTransforme(commande);
+		for (CommandeLigne ligne : commande.getCommandeLignes()) {
+
+			ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
+
+			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
+
+
+		}
+
+	}
+
+	/**
+	 * Creer les informations de renouvellement de contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param ligne
+	 *            {@link CommandeLigne}.
+	 * @return {@link ContratRenouvellementInfo}.
+	 */
+	private ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne) {
+		ContratRenouvellementInfo renouvellementInfo = new ContratRenouvellementInfo();
+
+		// Creer la politique de renouvellement.
+		PolitiqueRenouvellement politiqueRenouvellement = new PolitiqueRenouvellement();
+		politiqueRenouvellement.setConserverAncienneReduction(true);
+		politiqueRenouvellement.setForce(false);
+
+		renouvellementInfo.setPolitiqueRenouvellement(politiqueRenouvellement);
+
+		// l user.
+		renouvellementInfo.setUser(ligne.getAuteur().getQui());
+
+		// Liste de produit renouvelement.
+		List<com.nordnet.opale.business.commande.ProduitRenouvellement> produitRenouvellements = new ArrayList<>();
+		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
+			com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement = new com.nordnet.opale.business.commande.ProduitRenouvellement();
+
+			produitRenouvellement.setLabel(ligneDetail.getLabel());
+			produitRenouvellement.setNumeroCommande(commande.getReference());
+			produitRenouvellement.setPrix(getPrixRenouvellement(ligne, ligneDetail, commande.getReference()));
+			if (ligneDetail.getReferenceProduit().equals("kit-sat")) {
+				produitRenouvellement.setNumEC(3);
+			} else {
+				produitRenouvellement.setNumEC(1);
+			}
+			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceProduit());
+			produitRenouvellement.setRemboursable(true);
+			produitRenouvellement.setTypeProduit(ligneDetail.getTypeProduit());
+
+			produitRenouvellements.add(produitRenouvellement);
+
+		}
+
+		renouvellementInfo.setProduitRenouvellements(produitRenouvellements);
+
+		return renouvellementInfo;
+	}
+
+	/**
+	 * Creer prix renouvellement.
+	 * 
+	 * @param ligne
+	 *            {@link CommandeLigne}
+	 * @param ligneDetail
+	 *            {@link CommandeLigneDetail}
+	 * @param referenceCommande
+	 *            reference commande
+	 * @return {@link PrixRenouvellemnt}
+	 */
+	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigne ligne, CommandeLigneDetail ligneDetail,
+			String referenceCommande) {
+
+		// creer le prix
+		PrixRenouvellemnt prix = new PrixRenouvellemnt();
+		prix.setModeFacturation(ligne.getModeFacturation());
+		prix.setMontant(ligneDetail.getTarif().getPrix());
+		prix.setPeriodicite(ligneDetail.getTarif().getFrequence());
+		prix.setTypeTVA(ligneDetail.getTarif().getTypeTVA());
+
+		// affecter la duree.
+
+		prix.setDuree(ligneDetail.getTarif().getDuree());
+		prix.setModePaiement(ligne.getModePaiement());
+
+		// affecter la reference mode de paiement.
+		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
+		Paiement paiementRecurrent = null;
+		if (paiementRecurrents.size() > Constants.ZERO) {
+			paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		}
+		if (paiementRecurrent != null) {
+			prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
+		}
+
+		// creer le frais
+		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
+		for (Frais fraisCommande : ligneDetail.getTarif().getFrais()) {
+			frais.add(mappingToFraisRenouvellement(fraisCommande));
+		}
+
+		prix.setFrais(frais);
+
+		return prix;
+	}
+
+	/**
+	 * Mapping frais commade à frais renouvellement.
+	 * 
+	 * @param fraisCommande
+	 *            {@link Frais}
+	 * @return {@link FraisRenouvellement}
+	 */
+	private FraisRenouvellement mappingToFraisRenouvellement(Frais fraisCommande) {
+		FraisRenouvellement fraisRenouvellement = new FraisRenouvellement();
+		fraisRenouvellement.setMontant(fraisCommande.getMontant());
+		// fraisRenouvellement.setNombreMois(fraisCommande.getNombreMois());
+		// fraisRenouvellement.setOrdre(fraisCommande.getOrdre());
+
+		fraisRenouvellement.setTypeFrais(fraisCommande.getTypeFrais());
+
+		return fraisRenouvellement;
+
+	}
+
 }

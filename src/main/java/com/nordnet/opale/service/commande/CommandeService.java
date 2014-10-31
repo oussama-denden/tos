@@ -318,4 +318,18 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException;
+
+	/**
+	 * Transformer une commande en ordre de renouvellement afin d'acter le
+	 * renouvellement pour un contrat donné.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException;
 }

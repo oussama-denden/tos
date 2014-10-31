@@ -397,8 +397,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
-	 * facturation
+	 * Transformer une commande en contrats Afin de passer à la
+	 * contractualisation de la commande, sa livraison, et sa facturation
 	 * 
 	 * finale.
 	 * 
@@ -497,6 +497,25 @@ public class CommandeController {
 		JSONObject responce = new JSONObject();
 		responce.put("besoinPaiementComptant", isBesoinPaiementComptant);
 		return responce.toString();
+	}
+
+	/**
+	 * Transformer une commande en ordre de renouvellement afin d'acter le
+	 * renouvellement pour un contrat donné.
+	 * 
+	 * @param refCommande
+	 *            refrence commande.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformeEnOrdereRenouvellement", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void transformeEnOrdereRenouvellement(@PathVariable String refCommande) throws OpaleException,
+			JSONException {
+		commandeService.transformeEnOrdereRenouvellement(refCommande);
+
 	}
 
 	/**

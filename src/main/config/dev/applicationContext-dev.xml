@@ -40,5 +40,5 @@
 	<!-- Bean d'acces au Contexte -->
 	<bean id="applicationContextHolder"
 		class="com.nordnet.opale.util.spring.ApplicationContextHolder" />
-
+		
 </beans>

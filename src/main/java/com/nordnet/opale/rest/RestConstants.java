@@ -30,4 +30,9 @@ public final class RestConstants {
 	 */
 	public static final String VALIDER_CONTRAT = "VALIDER_CONTRAT";
 
+	/**
+	 * Service rest de la brique contrat: revouvelerContrat.
+	 */
+	public static final String RENOUVELER_CONTRAT = "RENOUVELER_CONTRAT";
+
 }
