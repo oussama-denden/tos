@@ -2,6 +2,8 @@ package com.nordnet.opale.service.draft;
 
 import java.util.List;
 
+import org.json.JSONException;
+
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
@@ -10,6 +12,7 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
+import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
@@ -228,5 +231,38 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException;
+
+	/**
+	 * associer une reduction a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReduction(String refDraft, ReductionInfo reductionInfo) throws OpaleException, JSONException;
+
+	/**
+	 * associer une reduction a une ligne du draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @param refLigne
+	 *            reference du ligne
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
+			throws OpaleException, JSONException;
 
 }
