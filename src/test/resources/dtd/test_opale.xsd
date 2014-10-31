@@ -64,6 +64,7 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="entite" use="optional" />
 		<xsd:attribute name="referenceDraft" use="optional" />
+		<xsd:attribute name="prefix" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="client" type="client_type"/>

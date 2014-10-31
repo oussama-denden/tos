@@ -33,6 +33,11 @@ public class Keygen {
 	private String entite;
 
 	/**
+	 * Le prefix.
+	 */
+	private String prefix;
+
+	/**
 	 * constructeur par default.
 	 */
 	public Keygen() {
@@ -89,4 +94,22 @@ public class Keygen {
 	public void setEntite(String entite) {
 		this.entite = entite;
 	}
+
+	/**
+	 * 
+	 * @return {@link Keygen#prefix}
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	/**
+	 * 
+	 * @param prefix
+	 *            the new {@link #prefix}
+	 */
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
 }

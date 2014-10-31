@@ -95,7 +95,7 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setAuteur(auteur);
 			paiement.setTypePaiement(TypePaiement.COMPTANT);
 			paiement.setModePaiement(paiementInfo.getModePaiement());
-			paiement.setReference(keygenService.getNextKey(Paiement.class));
+			paiement.setReference(keygenService.getNextKey(Paiement.class, null));
 			paiement.setReferenceCommande(referenceCommande);
 		}
 		Date dateIntention = paiementInfo.getTimestampIntention();
@@ -142,7 +142,7 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement = new Paiement(paiementInfo);
 			Auteur auteur = new Auteur(paiementInfo.getAuteur());
 			paiement.setAuteur(auteur);
-			paiement.setReference(keygenService.getNextKey(Paiement.class));
+			paiement.setReference(keygenService.getNextKey(Paiement.class, null));
 			paiement.setReferenceCommande(referenceCommande);
 			paiement.setTypePaiement(typePaiement);
 		}

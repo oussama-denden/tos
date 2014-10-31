@@ -37,6 +37,7 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.signature.Signature;
+import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
@@ -565,9 +566,9 @@ public class CommandeServiceImpl implements CommandeService {
 		/*
 		 * attribution des reference au draft/draftLigne.
 		 */
-		draft.setReference(keygenService.getNextKey(Draft.class));
+		draft.setReference(Prefix.Dra + "-" + keygenService.getNextKey(Draft.class, null));
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class, null));
 		}
 		draftService.save(draft);
 

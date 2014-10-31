@@ -28,6 +28,7 @@ import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
@@ -165,7 +166,7 @@ public class DraftServiceImpl implements DraftService {
 			}
 		}
 
-		draft.setReference(keygenService.getNextKey(Draft.class));
+		draft.setReference(Prefix.Dra + "-" + keygenService.getNextKey(Draft.class, Prefix.Dra));
 		draft.setCodePartenaire(draftInfo.getCodePartenaire());
 
 		DraftValidator.isExsteGeste(draftInfo.getGeste());
@@ -196,7 +197,7 @@ public class DraftServiceImpl implements DraftService {
 			DraftValidator.validerAuteur(draftLigneInfo.getAuteur());
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
-			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class, null));
 			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			draftLigne.setAuteur(draftLigneInfo.getAuteur().toDomain());
 			draft.addLigne(draftLigne);
@@ -413,7 +414,7 @@ public class DraftServiceImpl implements DraftService {
 
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
-			commande.setReference(keygenService.getNextKey(Commande.class));
+			commande.setReference(Prefix.Cmd + "-" + keygenService.getNextKey(Commande.class, Prefix.Cmd));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
