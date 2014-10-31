@@ -263,8 +263,9 @@ public interface CommandeService {
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException;
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
-	 * facturation finale.
+	 * Transformer une commande en contrats Afin de passer à la
+	 * contractualisation de la commande, sa livraison, et sa facturation
+	 * finale.
 	 * 
 	 * @param refCommande
 	 *            refrence du commande.
@@ -320,11 +321,26 @@ public interface CommandeService {
 	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException;
 
 	/**
+	 * Transformer une commande en ordre de renouvellement afin d'acter le
+	 * renouvellement pour un contrat donné.
+	 * 
+	 * @param refCommande
+	 *            refrence du commande.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException;
+
+	/**
 	 * Calculer le cout de la {@link Commande}.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
-	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une ligne de la {@link Commande}.
+	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une
+	 *         ligne de la {@link Commande}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */

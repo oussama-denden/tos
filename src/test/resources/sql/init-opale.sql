@@ -111,6 +111,7 @@ CREATE TABLE `commandeligne` (
 DROP TABLE IF EXISTS `commandelignedetail`;
 CREATE TABLE `commandelignedetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `numEC` int(11) DEFAULT NULL,
   `configurationJson` varchar(255) DEFAULT NULL,
   `label` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
@@ -187,6 +188,7 @@ CREATE TABLE `draftligne` (
 DROP TABLE IF EXISTS `draftlignedetail`;
 CREATE TABLE `draftlignedetail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `numEC` int(11) DEFAULT NULL,
   `configurationJson` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,

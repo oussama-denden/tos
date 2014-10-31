@@ -229,12 +229,10 @@ public class DraftValidator {
 	}
 
 	/**
-	 * 
-	 * 
 	 * tester si le code n est pas null.
 	 * 
-	 * @param auteur
-	 *            {@link com.nordnet.opale.domain.Auteur}
+	 * @param draft
+	 *            {@link Draft}
 	 * @param action
 	 *            l'action
 	 * @throws OpaleException
