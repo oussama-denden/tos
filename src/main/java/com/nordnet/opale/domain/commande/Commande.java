@@ -104,6 +104,11 @@ public class Commande {
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
 
 	/**
+	 * code auteur.
+	 */
+	private String codePartenaire;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Commande() {
@@ -126,7 +131,8 @@ public class Commande {
 		this.clientSouscripteur = draft.getClientSouscripteur();
 		this.clientSouscripteur.setAuteur(draft.getAuteur());
 
-		this.auteur = draft.getAuteur();
+		this.auteur = new Auteur(trameCatalogue.getAuteur());
+		this.codePartenaire = draft.getCodePartenaire();
 		this.referenceDraft = draft.getReference();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
@@ -329,6 +335,25 @@ public class Commande {
 	}
 
 	/**
+	 * the code partenaire.
+	 * 
+	 * @return {@link #codePartenaire}
+	 */
+	public String getCodePartenaire() {
+		return codePartenaire;
+	}
+
+	/**
+	 * set the code partenaire.
+	 * 
+	 * @param codePartenaire
+	 *            the new {@link #codePartenaire}
+	 */
+	public void setCodePartenaire(String codePartenaire) {
+		this.codePartenaire = codePartenaire;
+	}
+
+	/**
 	 * ajouter une ligne a la commande.
 	 * 
 	 * @param commandeLigne
@@ -346,6 +371,7 @@ public class Commande {
 	public CommandeInfo toCommandInfo() {
 		CommandeInfo commandeInfo = new CommandeInfo();
 		commandeInfo.setAuteur(auteur.toAuteurBusiness());
+		commandeInfo.setCodePartenaire(codePartenaire);
 		List<CommandeLigneInfo> lignes = new ArrayList<CommandeLigneInfo>();
 
 		for (CommandeLigne commandeLigne : commandeLignes) {

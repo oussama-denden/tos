@@ -64,23 +64,6 @@ public class TrameCatalogue {
 
 	/**
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * @return {@link #frais}.
 	 */
 	public List<Frais> getFrais() {

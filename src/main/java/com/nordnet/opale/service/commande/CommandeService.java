@@ -11,6 +11,7 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
+import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
@@ -332,4 +333,16 @@ public interface CommandeService {
 	 *             {@link JSONException}.
 	 */
 	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException;
+
+	/**
+	 * Calculer le cout de la {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une
+	 *         ligne de la {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public List<Cout> calculerCout(String referenceCommande) throws OpaleException;
 }

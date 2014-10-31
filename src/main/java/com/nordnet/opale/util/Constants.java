@@ -92,4 +92,14 @@ public final class Constants {
 	 */
 	public static final String DELAI_INACTIVE = "_delai.inactive";
 
+	/**
+	 * constante indique la transformation du dratf en commande.
+	 */
+	public static final String TRANSFORMER_EN_COMMANDE = "TRANSFORMER_EN_COMMANDE";
+
+	/**
+	 * constante indique la validation du draft.
+	 */
+	public static final String VALIDER_DRAFT = "VALIDER_DRAFT";
+
 }

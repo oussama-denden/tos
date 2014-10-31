@@ -26,7 +26,6 @@
     ]
   },
   "auteur": {
-    "codePartenaire": "string",
     "qui": "string",
     "ip": {
       "ip": "string",

@@ -1,5 +1,14 @@
 package com.nordnet.opale.business;
 
+import java.util.Map;
+
+import com.nordnet.opale.business.catalogue.Frais;
+import com.nordnet.opale.business.catalogue.Tarif;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.enums.TypeFrais;
+
 /**
  * contient les cout en detail pour un profuit.
  * 
@@ -21,7 +30,7 @@ public class DetailCout {
 	/**
 	 * cout total de l'offre.
 	 */
-	public Double coutTotal;
+	public double coutTotal;
 
 	/**
 	 * {@link Plan}.
@@ -32,6 +41,71 @@ public class DetailCout {
 	 * constructeur par defaut.
 	 */
 	public DetailCout() {
+	}
+
+	/**
+	 * creation a partir d'un {@link DraftLigneDetail} et {@link TrameCatalogue}.
+	 * 
+	 * @param draftLigneDetail
+	 *            {@link DraftLigneDetail}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public DetailCout(DraftLigneDetail draftLigneDetail, TrameCatalogue trameCatalogue) {
+		Map<String, Tarif> trifMap = trameCatalogue.getTarifsMap();
+		label = draftLigneDetail.getReference();
+		Tarif tarif = trifMap.get(draftLigneDetail.getReferenceTarif());
+		if (tarif.isRecurrent()) {
+			/*
+			 * si le tarif est recurrent alors il fait partie du plan.
+			 */
+			plan = new Plan(tarif.getFrequence(), tarif.getPrix());
+		} else {
+			/*
+			 * si comptant il sera calcule pour le coutTotal.
+			 */
+			coutTotal += tarif.getPrix();
+		}
+
+		/*
+		 * ajouter les frais de creation au coutTotal s'il existe.
+		 */
+		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
+		for (String refFrais : tarif.getFrais()) {
+			Frais frais = fraisMap.get(refFrais);
+			if (frais.getTypeFrais() == TypeFrais.CREATION)
+				coutTotal += frais.getMontant();
+		}
+	}
+
+	/**
+	 * creation du {@link DetailCout} a partir du {@link CommandeLigneDetail}.
+	 * 
+	 * @param commandeLigneDetail
+	 *            {@link CommandeLigneDetail}.
+	 */
+	public DetailCout(CommandeLigneDetail commandeLigneDetail) {
+		label = commandeLigneDetail.getReferenceProduit();
+		com.nordnet.opale.domain.commande.Tarif tarif = commandeLigneDetail.getTarif();
+		if (tarif.isRecurrent()) {
+			/*
+			 * si le tarif est recurrent alors il fait partie du plan.
+			 */
+			plan = new Plan(tarif.getFrequence(), tarif.getPrix());
+		} else {
+			/*
+			 * si comptant il sera calcule pour le coutTotal.
+			 */
+			coutTotal += tarif.getPrix();
+		}
+
+		/*
+		 * ajouter les frais de creation au coutTotal s'il existe.
+		 */
+		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
+			if (frais.getTypeFrais() == TypeFrais.CREATION)
+				coutTotal += frais.getMontant();
+		}
 	}
 
 	/**

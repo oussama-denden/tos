@@ -9,10 +9,6 @@ package com.nordnet.opale.business;
  */
 public class Auteur {
 
-	/**
-	 * code auteur.
-	 */
-	private String codePartenaire;
 
 	/**
 	 * nom de l auteur.
@@ -34,25 +30,6 @@ public class Auteur {
 	 */
 	public Auteur() {
 
-	}
-
-	/**
-	 * the code partenaire.
-	 * 
-	 * @return {@link #codePartenaire}
-	 */
-	public String getCodePartenaire() {
-		return codePartenaire;
-	}
-
-	/**
-	 * set the code partenaire.
-	 * 
-	 * @param codePartenaire
-	 *            the new {@link #codePartenaire}
-	 */
-	public void setCodePartenaire(String codePartenaire) {
-		this.codePartenaire = codePartenaire;
 	}
 
 
@@ -115,7 +92,6 @@ public class Auteur {
 	public com.nordnet.opale.domain.Auteur toDomain() {
 		com.nordnet.opale.domain.Auteur auteur = new com.nordnet.opale.domain.Auteur();
 		auteur.setCanal(canal);
-		auteur.setCodePartenaire(codePartenaire);
 		auteur.setIp(ip.getIp());
 		auteur.setQui(qui);
 		auteur.setTimestamp(ip.getTs());

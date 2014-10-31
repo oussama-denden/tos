@@ -285,6 +285,43 @@ public class DraftController {
 	}
 
 	/**
+	 * calculer le cout dans {@link Draft}.
+	 * 
+	 * @param refDraft
+	 *            reference {@link Draft}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return soit le cout du draft soit les info de non validation.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/costCalculation", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogue trameCatalogue)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::calculerCout");
+		return draftService.calculerCout(refDraft, trameCatalogue);
+	}
+
+	/**
+	 * Associer un auteur a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/AssocierAuteur", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void associerAuteur(@PathVariable String refDraft, @RequestBody Auteur auteur) throws OpaleException {
+		LOGGER.info(":::ws-rec:::associerAuteur");
+		draftService.associerAuteur(refDraft, auteur);
+
+	}
+
+	/**
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req

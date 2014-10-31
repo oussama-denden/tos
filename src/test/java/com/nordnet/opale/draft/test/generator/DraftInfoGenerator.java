@@ -73,7 +73,6 @@ public class DraftInfoGenerator {
 		offre.setDetails(details);
 
 		Auteur auteur = new Auteur();
-		auteur.setCodePartenaire("part_123456");
 		auteur.setCanal("Welcome");
 		auteur.setQui("GRC.WEL-JOHNDOE");
 		Ip ip = new Ip();

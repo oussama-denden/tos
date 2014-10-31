@@ -1,5 +1,7 @@
 package com.nordnet.opale.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -7,6 +9,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.LocalDate;
+
+import com.nordnet.opale.exception.OpaleException;
 
 /**
  * Utils class.
@@ -96,6 +100,28 @@ public final class Utils {
 			return LocalDate.fromDateFields(date).minusMonths(i).toDate();
 		}
 		return null;
+	}
+
+	/**
+	 * adapter le date a une froam precise.
+	 * 
+	 * @param date
+	 *            date string.
+	 * @return {@link Date}
+	 * @throws ParseException
+	 *             {@link ParseException}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static Date parseDate(String date) throws ParseException, OpaleException {
+		SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
+		Date dateFormatte;
+		if (!(date.length() == Constants.UN)) {
+			dateFormatte = formatter.parse(date);
+		} else {
+			dateFormatte = PropertiesUtil.getInstance().getDateDuJour();
+		}
+		return dateFormatte;
 	}
 
 }

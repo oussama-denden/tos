@@ -203,5 +203,30 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException;
+	
+	/**
+	 * Asscier un auteur aux draft.
+	 * 
+	 * @param refDraft
+	 * reference draft
+	 * @param auteur
+	 * {@link Auteur}
+	 * @throws OpaleException
+	 * {@link OpaleException}.
+	 */
+	public void associerAuteur(String refDraft, Auteur auteur) throws OpaleException;
+
+	/**
+	 * calculer le cout dans {@link Draft}.
+	 * 
+	 * @param refDraft
+	 *            reference {@link Draft}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return soit le cout du draft soit les info de non validation.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException;
 
 }

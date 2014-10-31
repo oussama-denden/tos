@@ -18,6 +18,7 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
+import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.SignatureInfo;
@@ -158,7 +159,6 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Debut methode creerIntentionPaiement");
 
 		getCommandeByReference(refCommande);
-		CommandeValidator.validerAuteur(refCommande, paiementInfo.getAuteur());
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), refCommande,
 				"Créer une intention de paiement pour la commande " + refCommande);
 
@@ -409,7 +409,6 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.validerAuteur(refCommande, ajoutSignatureInfo.getAuteur());
 		return signatureService.ajouterIntentionDeSignature(refCommande, ajoutSignatureInfo);
 	}
 
@@ -423,10 +422,6 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode signerCommande");
-
-		Commande commande = getCommandeByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
 		return signatureService.ajouterSignatureCommande(refCommande, refrenceSignature, signatureInfo);
 	}
 
@@ -750,4 +745,13 @@ public class CommandeServiceImpl implements CommandeService {
 
 	}
 
+	@Override
+	public List<Cout> calculerCout(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		List<Cout> couts = new ArrayList<Cout>();
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			couts.add(new Cout(commandeLigne));
+		}
+		return couts;
+	}
 }

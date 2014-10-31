@@ -86,6 +86,8 @@ public class SignatureServiceImpl implements SignatureService {
 			SignatureValidator.checkIfSignatureAnnule(signature);
 			signature.setMode(ajoutSignatureInfo.getMode());
 			signature.setAuteur(new Auteur(ajoutSignatureInfo.getAuteur()));
+			signature.setTimestampIntention(ajoutSignatureInfo.getTimestamp() != null ? ajoutSignatureInfo
+					.getTimestamp() : PropertiesUtil.getInstance().getDateDuJour());
 			signatureRepository.save(signature);
 			signatureReference = signature.getReference();
 
@@ -108,7 +110,7 @@ public class SignatureServiceImpl implements SignatureService {
 	public Object ajouterSignatureCommande(String refCommande, String refSignature, SignatureInfo signatureInfo)
 			throws OpaleException, JSONException {
 
-		LOGGER.info("Debut methode transmettreSignature");
+		LOGGER.info("Debut methode ajouterSignatureCommande");
 		SignatureValidator.validerAuteur(signatureInfo.getAuteur());
 		String referenceSignature = null;
 		if (refSignature != null) {
@@ -218,7 +220,8 @@ public class SignatureServiceImpl implements SignatureService {
 		Auteur auteur = null;
 		if (ajoutSignatureInfo != null) {
 			signature.setMode(ajoutSignatureInfo.getMode());
-			signature.setTimestampIntention(ajoutSignatureInfo.getTimestamp());
+			signature.setTimestampIntention(ajoutSignatureInfo.getTimestamp() != null ? ajoutSignatureInfo
+					.getTimestamp() : PropertiesUtil.getInstance().getDateDuJour());
 			auteur = ajoutSignatureInfo.getAuteur() != null ? new Auteur(ajoutSignatureInfo.getAuteur()) : null;
 		} else if (signatureInfo != null) {
 			SignatureValidator.validerSignature(signatureInfo);

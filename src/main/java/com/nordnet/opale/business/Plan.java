@@ -14,19 +14,27 @@ public class Plan {
 	public Integer frequence;
 
 	/**
-	 * plan avec promotion.
+	 * plan.
 	 */
-	public Integer planAvecPromo;
-
-	/**
-	 * plan sans promotion.
-	 */
-	public Integer planSansPromo;
+	public double plan;
 
 	/**
 	 * constructeur par defaut.
 	 */
 	public Plan() {
+	}
+
+	/**
+	 * creation du plan.
+	 * 
+	 * @param frequence
+	 *            frequence du tarif.
+	 * @param plan
+	 *            montant du tarif.
+	 */
+	public Plan(Integer frequence, double plan) {
+		this.frequence = frequence;
+		this.plan = plan;
 	}
 
 	/**
@@ -48,36 +56,19 @@ public class Plan {
 
 	/**
 	 * 
-	 * @return {@link #planAvecPromo}.
+	 * @return {@link #plan}.
 	 */
-	public Integer getPlanAvecPromo() {
-		return planAvecPromo;
+	public double getPlan() {
+		return plan;
 	}
 
 	/**
 	 * 
-	 * @param planAvecPromo
-	 *            {@link #planAvecPromo}.
+	 * @param plan
+	 *            {@link #plan}.
 	 */
-	public void setPlanAvecPromo(Integer planAvecPromo) {
-		this.planAvecPromo = planAvecPromo;
-	}
-
-	/**
-	 * 
-	 * @return {@link #planSansPromo}.
-	 */
-	public Integer getPlanSansPromo() {
-		return planSansPromo;
-	}
-
-	/**
-	 * 
-	 * @param planSansPromo
-	 *            {@link #planSansPromo}.
-	 */
-	public void setPlanSansPromo(Integer planSansPromo) {
-		this.planSansPromo = planSansPromo;
+	public void setPlan(double plan) {
+		this.plan = plan;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.nordnet.opale.business.catalogue;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.base.Optional;
 import com.nordnet.opale.enums.TypeTVA;
 import com.nordnet.opale.enums.deserializer.TypeTVADeserializer;
 
@@ -179,6 +180,21 @@ public class Tarif {
 	 */
 	public void setFrais(List<String> frais) {
 		this.frais = frais;
+	}
+
+	/**
+	 * verifie si le tarif est recurrent ou non.
+	 * 
+	 * @return true si le tarif est recurrent.
+	 */
+	public boolean isRecurrent() {
+		Optional<Integer> dureeOp = Optional.fromNullable(duree);
+		Optional<Integer> frequenceOp = Optional.fromNullable(frequence);
+		if ((!dureeOp.isPresent() && frequenceOp.isPresent())
+				|| (frequenceOp.isPresent() && dureeOp.isPresent() && frequence < duree)) {
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -219,32 +219,34 @@ public class DraftValidator {
 	 */
 	public static void validerAuteur(Auteur auteur) throws OpaleException {
 
-		if (auteur == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
-		}
+		if (auteur != null) {
 
 		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+		}
 		}
 
 	}
 
 	/**
-	 * 
-	 * 
 	 * tester si le code n est pas null.
 	 * 
-	 * @param auteur
-	 *            {@link com.nordnet.opale.domain.Auteur}
+	 * @param draft
+	 *            {@link Draft}
+	 * @param action
+	 *            l'action
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void codePartenaireNotNull(com.nordnet.opale.domain.Auteur auteur) throws OpaleException {
-		if (auteur != null) {
-			if (Utils.isStringNullOrEmpty(auteur.getCodePartenaire())) {
+	public static void codePartenaireNotNull(Draft draft, String action)
+			throws OpaleException {
+			if (Utils.isStringNullOrEmpty(draft.getCodePartenaire()) && action.equals("VALIDER_DRAFT")) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.21"), "1.1.21");
-			}
 		}
+ else if (Utils.isStringNullOrEmpty(draft.getCodePartenaire())
+					&& action.equals("TRANSFORMER_EN_COMMANDE")) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.23"), "1.1.23");
+			}
 
 	}
 
@@ -294,7 +296,7 @@ public class DraftValidator {
 	 * @param draft
 	 *            {@link Draft}.
 	 * @throws OpaleException
-	 *             {@link OpaleException}
+	 *             {@link OpaleException}.
 	 */
 	public static void checkReferenceExterne(Draft draft, String referenceDraft) throws OpaleException {
 
@@ -306,6 +308,23 @@ public class DraftValidator {
 					draft.getReferenceExterne()), "1.1.20");
 		}
 
+	}
+
+	/**
+	 * Verifier si un draft est deja tranforme en commande avant de lui associer un code partenaire.
+	 * 
+	 * @param draft
+	 *            {@link Draft}
+	 * @param commande
+	 *            {@link Commande}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isDraftTransformer(Draft draft, Commande commande) throws OpaleException {
+		if (draft.isTransforme()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.22", draft.getReference(),
+					commande.getReference()), "1.1.22");
+		}
 	}
 
 	/**
