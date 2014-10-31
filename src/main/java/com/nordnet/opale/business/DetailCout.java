@@ -5,6 +5,7 @@ import java.util.Map;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.TypeFrais;
 
@@ -56,12 +57,12 @@ public class DetailCout {
 		Tarif tarif = trifMap.get(draftLigneDetail.getReferenceTarif());
 		if (tarif.isRecurrent()) {
 			/*
-			 * si le tarif est recurrent alors il faut parti du plan.
+			 * si le tarif est recurrent alors il fait partie du plan.
 			 */
 			plan = new Plan(tarif.getFrequence(), tarif.getPrix());
 		} else {
 			/*
-			 * si comptant il sera calculé pour le coutTotal.
+			 * si comptant il sera calcule pour le coutTotal.
 			 */
 			coutTotal += tarif.getPrix();
 		}
@@ -72,6 +73,36 @@ public class DetailCout {
 		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
 		for (String refFrais : tarif.getFrais()) {
 			Frais frais = fraisMap.get(refFrais);
+			if (frais.getTypeFrais() == TypeFrais.CREATION)
+				coutTotal += frais.getMontant();
+		}
+	}
+
+	/**
+	 * creation du {@link DetailCout} a partir du {@link CommandeLigneDetail}.
+	 * 
+	 * @param commandeLigneDetail
+	 *            {@link CommandeLigneDetail}.
+	 */
+	public DetailCout(CommandeLigneDetail commandeLigneDetail) {
+		label = commandeLigneDetail.getReferenceProduit();
+		com.nordnet.opale.domain.commande.Tarif tarif = commandeLigneDetail.getTarif();
+		if (tarif.isRecurrent()) {
+			/*
+			 * si le tarif est recurrent alors il fait partie du plan.
+			 */
+			plan = new Plan(tarif.getFrequence(), tarif.getPrix());
+		} else {
+			/*
+			 * si comptant il sera calcule pour le coutTotal.
+			 */
+			coutTotal += tarif.getPrix();
+		}
+
+		/*
+		 * ajouter les frais de creation au coutTotal s'il existe.
+		 */
+		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
 			if (frais.getTypeFrais() == TypeFrais.CREATION)
 				coutTotal += frais.getMontant();
 		}

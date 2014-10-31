@@ -299,6 +299,7 @@ public class DraftController {
 	@ResponseBody
 	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogue trameCatalogue)
 			throws OpaleException {
+		LOGGER.info(":::ws-rec:::calculerCout");
 		return draftService.calculerCout(refDraft, trameCatalogue);
 	}
 
