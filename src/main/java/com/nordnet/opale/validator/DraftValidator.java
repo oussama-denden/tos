@@ -360,7 +360,7 @@ public class DraftValidator {
 	public static void isExistDetailLigneDraft(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
 			String refProduit) throws OpaleException {
 		if (draftLigneDetail == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", refDraft, refLigne, refProduit), "1.1.24");
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", refProduit, refLigne, refDraft), "1.1.24");
 		}
 
 	}
