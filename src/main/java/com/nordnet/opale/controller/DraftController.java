@@ -370,6 +370,33 @@ public class DraftController {
 	}
 
 	/**
+	 * associer une reduction a un frais.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refProduit
+	 *            reference du produit.
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReductionFrais(@PathVariable String refDraft, @PathVariable String refLigne,
+			@PathVariable String refProduit, @PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReductionFrais");
+		return draftService.associerReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+
+	}
+
+	/**
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req

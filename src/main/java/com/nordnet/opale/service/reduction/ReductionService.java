@@ -41,4 +41,24 @@ public interface ReductionService {
 	public String ajouterReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException;
 
+	/**
+	 * Ajouter une reduction a une frais.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refProduit
+	 *            reference du produit.
+	 * @param refFrais
+	 *            reference du frais.
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public String ajouterReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException;
+
 }

@@ -265,4 +265,26 @@ public interface DraftService {
 	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException, JSONException;
 
+	/**
+	 * Associer une reduction a une ligne.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refProduit
+	 *            reference du produit.
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException, JSONException;
+
 }

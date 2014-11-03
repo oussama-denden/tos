@@ -43,7 +43,7 @@ public class Reduction {
 	private String referenceDraft;
 
 	/**
-	 * reference draft.
+	 * reference ligne draft.
 	 */
 	private String referenceLigne;
 
@@ -77,6 +77,11 @@ public class Reduction {
 	 * date de fin.
 	 */
 	private Date dateFin;
+
+	/**
+	 * reference du fras.
+	 */
+	private String referenceFrais;
 
 	/**
 	 * constructeur par defaut.
@@ -252,6 +257,23 @@ public class Reduction {
 	 */
 	public void setDateFin(Date dateFin) {
 		this.dateFin = dateFin;
+	}
+
+	/**
+	 * 
+	 * @return {@link Reduction#referenceFrais}
+	 */
+	public String getReferenceFrais() {
+		return referenceFrais;
+	}
+
+	/**
+	 * 
+	 * @param referenceFrais
+	 *            the new {@link #referenceFrais}
+	 */
+	public void setReferenceFrais(String referenceFrais) {
+		this.referenceFrais = referenceFrais;
 	}
 
 }

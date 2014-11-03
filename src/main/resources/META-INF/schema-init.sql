@@ -19,7 +19,7 @@ end if;
 set x=CAST(reference AS  UNSIGNED);
 set newReference=LPAD( x+1,8,'0') ;
 
-Insert into keygen values(0,class,newReference,prefix);
+Insert into keygen values(0,class,prefix,newReference);
 
  RETURN reference;
 END
