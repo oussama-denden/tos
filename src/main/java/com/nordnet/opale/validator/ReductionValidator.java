@@ -71,6 +71,23 @@ public class ReductionValidator {
 		}
 
 	}
+
+	/**
+	 * Tester si la reduction existe.
+	 * 
+	 * @param reduction
+	 *            la reduction
+	 * @param refReduction
+	 *            reference reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void isExiste(Reduction reduction, String refReduction) throws OpaleException {
+		if (reduction == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.4", refReduction), "5.1.4");
+		}
+
+	}
 }
 
 

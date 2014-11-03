@@ -590,7 +590,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object associerReductionFraisLigneDtaille(String refDraft, String refLigne, String refProduit,
+	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
 			String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
@@ -635,6 +635,19 @@ public class DraftServiceImpl implements DraftService {
 		reductionResponse.put("referenceReduction", referenceReduction);
 
 		return reductionResponse;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException {
+		LOGGER.info("Debut methode supprimerReduction");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		reductionService.supprimer(refReduction);
 	}
 
 }

@@ -14,4 +14,12 @@ import com.nordnet.opale.domain.reduction.Reduction;
 @Repository("reductionRepository")
 public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 
+	/**
+	 * Rechercher une reduction par reference.
+	 * 
+	 * @param reference
+	 *            reference reduction
+	 * @return {@link Reduction}
+	 */
+	public Reduction findByReference(String reference);
 }

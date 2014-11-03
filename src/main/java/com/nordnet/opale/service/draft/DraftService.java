@@ -284,7 +284,7 @@ public interface DraftService {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public Object associerReductionFraisLigneDtaille(String refDraft, String refLigne, String refProduit,
+	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
 			String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
 	
@@ -326,5 +326,17 @@ public interface DraftService {
 	 */
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
+
+	/**
+	 * Supprimer une reduction.
+	 * 
+	 * @param refDraft
+	 *            reference draft
+	 * @param refReduction
+	 *            reference reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException;
 
 }

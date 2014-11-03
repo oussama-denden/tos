@@ -104,6 +104,7 @@ public class ReductionServiceImpl implements ReductionService {
 		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
 		reduction.setReferenceFrais(refFrais);
 		reduction.setReferenceTarif(draftLigneDetail.getReferenceTarif());
+		reduction.setReferenceLigneDetail(draftLigneDetail.getReference());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
 	}
@@ -136,13 +137,24 @@ public class ReductionServiceImpl implements ReductionService {
 
 		LOGGER.info("Debut methode ajouterReductionFraisLigne ");
 
-		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.FRAIS);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
 		reduction.setReferenceFrais(refFrais);
 		reduction.setReferenceTarif(draftLigne.getReferenceTarif());
+		reduction.setReferenceLigne(draftLigne.getReference());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void supprimer(String refReduction) throws OpaleException {
+		Reduction reduction = reductionRepository.findByReference(refReduction);
+		ReductionValidator.isExiste(reduction, refReduction);
+		reductionRepository.delete(reduction);
 	}
 
 }
