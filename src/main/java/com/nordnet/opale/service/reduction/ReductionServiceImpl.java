@@ -9,6 +9,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
@@ -46,6 +47,12 @@ public class ReductionServiceImpl implements ReductionService {
 	 */
 	@Autowired
 	private DraftLigneRepository draftLigneRepository;
+
+	/**
+	 * {@link DraftLigneDetailRepository}
+	 */
+	@Autowired
+	private DraftLigneDetailRepository draftLigneDetailRepository;
 
 	/**
 	 * {@inheritDoc}
@@ -86,7 +93,8 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String ajouterReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+	public String ajouterReductionFraisLigneDetaille(String refDraft, DraftLigneDetail draftLigneDetail,
+			String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException {
 
 		LOGGER.info("Debut methode ajouterReductionFrais ");
@@ -95,6 +103,7 @@ public class ReductionServiceImpl implements ReductionService {
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
 		reduction.setReferenceFrais(refFrais);
+		reduction.setReferenceTarif(draftLigneDetail.getReferenceTarif());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
 	}
@@ -106,12 +115,32 @@ public class ReductionServiceImpl implements ReductionService {
 	public String ajouterReductionDetailLigne(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
 			ReductionInfo reductionInfo) throws OpaleException {
 
+		LOGGER.info("Debut methode ajouterReductionDetailLigne ");
+
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigneDetail);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
 		reduction.setReferenceLigne(refLigne);
 		reduction.setReferenceDraft(refDraft);
 		reduction.setReferenceLigneDetail(draftLigneDetail.getReference());
+		reductionRepository.save(reduction);
+		return reduction.getReference();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String ajouterReductionFraisLigne(String refDraft, DraftLigne draftLigne, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException {
+
+		LOGGER.info("Debut methode ajouterReductionFraisLigne ");
+
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
+		Reduction reduction = reductionInfo.toDomain();
+		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReferenceFrais(refFrais);
+		reduction.setReferenceTarif(draftLigne.getReferenceTarif());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
 	}

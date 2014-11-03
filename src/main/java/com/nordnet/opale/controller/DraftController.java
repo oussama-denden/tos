@@ -385,23 +385,42 @@ public class DraftController {
 	 *            {@link ReductionInfo}
 	 * @return {@link Object}
 	 *            reference du ligne
-	 * @param refProduit
-	 *            reference produit
-	 * @param reductionInfo
-	 *            {@link ReductionInfo}
-	 * @return {@link object}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public Object associerReductionFrais(@PathVariable String refDraft, @PathVariable String refLigne,
+	public Object associerReductionFraisLigneDetaile(@PathVariable String refDraft, @PathVariable String refLigne,
 			@PathVariable String refProduit, @PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionFrais");
-		return draftService.associerReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+		return draftService.associerReductionFraisLigneDtaille(refDraft, refLigne, refProduit, refFrais, reductionInfo);
 	}
 	 
+	/**
+	 * associer une reduction a un frais. associer une reduction a un detail ligne draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object} reference du ligne
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReductionFraisLigne(@PathVariable String refDraft, @PathVariable String refLigne,
+			@PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReductionFraisLigne");
+		return draftService.associerReductionFraisLigne(refDraft, refLigne, refFrais, reductionInfo);
+	}
+
 	/** associer une reduction a un detail ligne draft.
 	 * 
 	 * @param refDraft
@@ -410,17 +429,10 @@ public class DraftController {
 	 *            reference du ligne.
 	 * @param refProduit
 	 *            reference du produit.
-	 * @param refFrais
-	 *            reference du frais
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
 	 * @return {@link Object}
 	 *            reference du ligne
-	 * @param refProduit
-	 *            reference produit
-	 * @param reductionInfo
-	 *            {@link ReductionInfo}
-	 * @return {@link object}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException

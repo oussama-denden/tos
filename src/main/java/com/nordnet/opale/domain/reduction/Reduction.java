@@ -89,6 +89,11 @@ public class Reduction {
 	private String referenceFrais;
 
 	/**
+	 * reference du tarif.
+	 */
+	private String referenceTarif;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Reduction() {
@@ -296,5 +301,21 @@ public class Reduction {
 		this.referenceLigneDetail = referenceLigneDetail;
 	}
 
+	/**
+	 * 
+	 * @return {@link #referenceTarif}
+	 */
+	public String getReferenceTarif() {
+		return referenceTarif;
+	}
+
+	/**
+	 * 
+	 * @param referenceTarif
+	 *            the new {@link #referenceTarif}
+	 */
+	public void setReferenceTarif(String referenceTarif) {
+		this.referenceTarif = referenceTarif;
+	}
 
 }

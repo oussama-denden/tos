@@ -551,9 +551,8 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
-		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
-		DraftValidator.isLigneDraftAppartientAuDraft(refDraft, draft, refLigne, draftLigne);
 
 		String referenceReduction = reductionService.ajouterReductionLigne(refDraft, refLigne, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
@@ -591,7 +590,8 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object associerReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+	public Object associerReductionFraisLigneDtaille(String refDraft, String refLigne, String refProduit,
+			String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFrais ");
@@ -599,16 +599,38 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
-		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
-		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
-		DraftValidator.isLigneDraftAppartientAuDraft(refDraft, draft, refLigne, draftLigne);
+		DraftLigneDetail draftLigneDetail =
+				draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft, refLigne, refProduit);
 
-		DraftLigneDetail draftLigneDetail = draftLigneDetailRepository.findByReference(refProduit);
-		DraftValidator.isExistLigneDetailDraft(refProduit, draftLigneDetail);
-		DraftValidator.isLigneDetailleDraftAppartientAuDraft(refDraft, draft, refProduit, draftLigneDetail);
+		DraftValidator.isExistDetailLigneDraft(draftLigneDetail, refDraft, refLigne, refProduit);
 
 		String referenceReduction =
-				reductionService.ajouterReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+				reductionService
+						.ajouterReductionFraisLigneDetaille(refDraft, draftLigneDetail, refFrais,
+						reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object associerReductionFraisLigne(String refDraft, String refLigne, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException, JSONException {
+
+		LOGGER.info("Debut methode associerReductionFraisLigne ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+
+		String referenceReduction =
+				reductionService.ajouterReductionFraisLigne(refDraft, draftLigne, refFrais, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
