@@ -234,10 +234,11 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Commande> commandes = new ArrayList<>();
 
-		commandes = commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
+		commandes =
+				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
 
-		.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd)).and(CommandeSpecifications.isSigne(signe))
-				.and(CommandeSpecifications.isPaye(paye)));
+				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
 		for (Commande commande : commandes) {
@@ -470,8 +471,7 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 
 			/*
-			 * verifier an cas de besoin qu'il y a un paiement recurrent est
-			 * bien associe a la commande.
+			 * verifier an cas de besoin qu'il y a un paiement recurrent est bien associe a la commande.
 			 */
 			if (commande.needPaiementRecurrent()) {
 				List<Paiement> paiements = getPaiementRecurrent(referenceCommande, false);
@@ -490,14 +490,15 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 */
 	@Override
-	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException {
+	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
+		CommandeValidator.isAuteurValide(auteur);
 		List<String> referencesContrats = new ArrayList<>();
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			ContratPreparationInfo preparationInfo = ligne.toContratPreparationInfo(refCommande);
+			ContratPreparationInfo preparationInfo = ligne.toContratPreparationInfo(refCommande, auteur.getQui());
 			String refContrat = restClient.preparerContrat(preparationInfo);
 			ligne.setReferenceContrat(refContrat);
 			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
@@ -536,7 +537,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<com.nordnet.opale.business.commande.PaiementInfo> paiementInfos = new ArrayList<>();
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
-			com.nordnet.opale.business.commande.PaiementInfo paiementInfo = new com.nordnet.opale.business.commande.PaiementInfo();
+			com.nordnet.opale.business.commande.PaiementInfo paiementInfo =
+					new com.nordnet.opale.business.commande.PaiementInfo();
 
 			paiementInfo.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
 			paiementInfo.setNumEC(ligne.getCommandeLigneDetails().indexOf(ligneDetail) + Constants.UN);
@@ -627,7 +629,6 @@ public class CommandeServiceImpl implements CommandeService {
 
 			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
 
-
 		}
 
 	}
@@ -657,7 +658,8 @@ public class CommandeServiceImpl implements CommandeService {
 		// Liste de produit renouvelement.
 		List<com.nordnet.opale.business.commande.ProduitRenouvellement> produitRenouvellements = new ArrayList<>();
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
-			com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement = new com.nordnet.opale.business.commande.ProduitRenouvellement();
+			com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement =
+					new com.nordnet.opale.business.commande.ProduitRenouvellement();
 
 			produitRenouvellement.setLabel(ligneDetail.getLabel());
 			produitRenouvellement.setNumeroCommande(commande.getReference());

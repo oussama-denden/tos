@@ -457,12 +457,14 @@ public class CommandeLigne {
 	 * 
 	 * @param referenceCommande
 	 *            reference du commande.
+	 * @param qui
+	 *            {@link Auteur#getQui()}.
 	 * @return {@link ContratPreparationInfo}.
 	 */
-	public ContratPreparationInfo toContratPreparationInfo(String referenceCommande) {
+	public ContratPreparationInfo toContratPreparationInfo(String referenceCommande, String qui) {
 		ContratPreparationInfo contrat = new ContratPreparationInfo();
 
-		contrat.setUser(auteur.getQui());
+		contrat.setUser(qui);
 		List<Produit> produits = new ArrayList<>();
 		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
 			Integer numECParent = null;
