@@ -10,6 +10,7 @@ import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
@@ -338,6 +339,28 @@ public class DraftValidator {
 	public static void isExsteGeste(Geste geste) throws OpaleException {
 		if (geste == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "geste"), "0.1.4");
+		}
+
+	}
+
+	/**
+	 * Tester si le detail ligne draft existe.
+	 * 
+	 * @param draftLigneDetail
+	 *            {@link DraftLigneDetail}
+	 * @param refDraft
+	 *            reference draft
+	 * @param refLigne
+	 *            reference ligne draft
+	 * @param refProduit
+	 *            reference produit
+	 * @throws OpaleException
+	 *             {@link OpaleExceptionee}
+	 */
+	public static void isExistDetailLigneDraft(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
+			String refProduit) throws OpaleException {
+		if (draftLigneDetail == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", refDraft, refLigne, refProduit), "1.1.24");
 		}
 
 	}

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
@@ -40,7 +41,7 @@ public class ReductionServiceImpl implements ReductionService {
 	private KeygenService keygenService;
 
 	/**
-	 * {@link DraftLigneRepository}
+	 * {@link DraftLigneRepository}.
 	 */
 	@Autowired
 	private DraftLigneRepository draftLigneRepository;
@@ -66,10 +67,24 @@ public class ReductionServiceImpl implements ReductionService {
 			throws OpaleException {
 		
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
-		ReductionValidator.chekReductionLigneValide(reductionInfo, draftLigne);
+		ReductionValidator.chekReductionValide(reductionInfo, draftLigne);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
 		reduction.setReferenceLigne(refLigne);
+		reductionRepository.save(reduction);
+		return reduction.getReference();
+	}
+
+	@Override
+	public String ajouterReductionDetailLigne(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
+			ReductionInfo reductionInfo) throws OpaleException {
+
+		ReductionValidator.chekReductionValide(reductionInfo, draftLigneDetail);
+		Reduction reduction = reductionInfo.toDomain();
+		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReferenceLigne(refLigne);
+		reduction.setReferenceDraft(refDraft);
+		reduction.setReferenceLigneDetail(draftLigneDetail.getReference());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
 	}

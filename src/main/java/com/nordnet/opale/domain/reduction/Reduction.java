@@ -48,6 +48,11 @@ public class Reduction {
 	private String referenceLigne;
 
 	/**
+	 * reference detail ligne draft.
+	 */
+	private String referenceLigneDetail;
+
+	/**
 	 * label du reduction.
 	 */
 	private String label;
@@ -253,5 +258,23 @@ public class Reduction {
 	public void setDateFin(Date dateFin) {
 		this.dateFin = dateFin;
 	}
+
+	/**
+	 * 
+	 * @return {@link #referenceLigneDetail}
+	 */
+	public String getReferenceLigneDetail() {
+		return referenceLigneDetail;
+	}
+
+	/**
+	 * 
+	 * @param referenceLigneDetail
+	 *            {@link #referenceLigneDetail}
+	 */
+	public void setReferenceLigneDetail(String referenceLigneDetail) {
+		this.referenceLigneDetail = referenceLigneDetail;
+	}
+
 
 }
