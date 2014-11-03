@@ -1,4 +1,3 @@
-
 package com.nordnet.opale.service.draft;
 
 import java.util.ArrayList;
@@ -26,7 +25,9 @@ import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.Auteur;
+import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -36,6 +37,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
+import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.reduction.ReductionService;
@@ -94,6 +96,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private CommandeService commandeService;
+
+	/**
+	 * {@link RestClient}.
+	 */
+	@Autowired
+	private RestClient restClient;
 
 	/**
 	 * {@link ReductionService}.
@@ -268,7 +276,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 
 		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
- + refDraft + " modifiée");
+				+ refDraft + " modifiée");
 
 	}
 
@@ -332,7 +340,7 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(deleteInfo.getAuteur().getQui(), reference, "la ligne " + referenceLigne
- + " du draft " + reference + " supprimée");
+				+ " du draft " + reference + " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
 	}
@@ -503,11 +511,8 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = getDraftByReference(refDraft);
 		DraftValidationInfo validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
 		if (validationInfo.isValide()) {
-			List<Cout> couts = new ArrayList<Cout>();
-			for (DraftLigne draftLigne : draft.getDraftLignes()) {
-				couts.add(new Cout(draftLigne, trameCatalogue));
-			}
-			return couts;
+			Cout cout = new Cout(draft, trameCatalogue);
+			return cout;
 		} else {
 			return validationInfo;
 		}
@@ -627,4 +632,18 @@ public class DraftServiceImpl implements DraftService {
 		reductionService.supprimer(refReduction);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue) throws OpaleException {
+		Contrat contrat = restClient.getContratByReference(referenceContrat);
+		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
+		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
+		Draft draft = new Draft();
+		Client clientAFacturer =
+				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation(),
+						auteur);
+
+	}
 }

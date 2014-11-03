@@ -30,6 +30,7 @@ import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -440,6 +441,15 @@ public class DraftController {
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerReduction");
 		draftService.supprimerReduction(refDraft, refReduction);
+	}
+
+	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public void transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
+		draftService.transformerContratEnDraft(refContrat, trameCatalogue);
+
 	}
 
 	/**
