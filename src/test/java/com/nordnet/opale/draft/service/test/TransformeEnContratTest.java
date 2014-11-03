@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -60,7 +61,9 @@ public class TransformeEnContratTest extends GlobalTestCase {
 		}
 
 		try {
-			List<String> referencesContrats = commandeService.transformeEnContrat("00000004");
+			Auteur auteur = new Auteur();
+			auteur.setQui("test");
+			List<String> referencesContrats = commandeService.transformeEnContrat("00000004", auteur);
 			assertTrue(referencesContrats.size() == Constants.UN);
 			commande = commandeService.getCommandeByReference("00000004");
 			assertNotNull(commande.getDateTransformationContrat());

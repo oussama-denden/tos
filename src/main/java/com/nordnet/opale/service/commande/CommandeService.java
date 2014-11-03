@@ -88,8 +88,8 @@ public interface CommandeService {
 			throws OpaleException;
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la
-	 * creation d'un intention de paiement en avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -164,8 +164,7 @@ public interface CommandeService {
 	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException;
 
 	/**
-	 * Applique une suppression physiquement un intention et logique pour un
-	 * paiement.
+	 * Applique une suppression physiquement un intention et logique pour un paiement.
 	 * 
 	 * @param refCommande
 	 *            reference commande
@@ -174,8 +173,7 @@ public interface CommandeService {
 	 * @param auteur
 	 *            l auteur
 	 * @throws OpaleException
-	 *             the opale exception {@link OpaleException}
-	 *             {@link OpaleException}.
+	 *             the opale exception {@link OpaleException} {@link OpaleException}.
 	 */
 	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException;
 
@@ -252,7 +250,7 @@ public interface CommandeService {
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
 
 	/**
-	 *transformer une {@link Commande} en {@link Draft}.
+	 * transformer une {@link Commande} en {@link Draft}.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -263,12 +261,13 @@ public interface CommandeService {
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException;
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la
-	 * contractualisation de la commande, sa livraison, et sa facturation
-	 * finale.
+	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
 	 * 
 	 * @param refCommande
 	 *            refrence du commande.
+	 * @param auteur
+	 *            {@link Auteur}.
 	 * @return liste des references des contrat cree.
 	 * 
 	 * @throws OpaleException
@@ -276,7 +275,7 @@ public interface CommandeService {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public List<String> transformeEnContrat(String refCommande) throws OpaleException, JSONException;
+	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException;
 
 	/**
 	 * recuperer la list des commandes non transformes et non annules.
@@ -296,7 +295,7 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public String getRecentDate(String refCommande) throws OpaleException;
-	
+
 	/**
 	 * retourner si la commande a encore besoin d'un paiement recurrent ou non. si il ya un paiement recurrent annule,
 	 * il na compte pas.
@@ -321,8 +320,7 @@ public interface CommandeService {
 	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException;
 
 	/**
-	 * Transformer une commande en ordre de renouvellement afin d'acter le
-	 * renouvellement pour un contrat donné.
+	 * Transformer une commande en ordre de renouvellement afin d'acter le renouvellement pour un contrat donné.
 	 * 
 	 * @param refCommande
 	 *            refrence du commande.
@@ -339,8 +337,7 @@ public interface CommandeService {
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
-	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une
-	 *         ligne de la {@link Commande}.
+	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une ligne de la {@link Commande}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
