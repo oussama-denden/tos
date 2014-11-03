@@ -344,6 +344,74 @@ public class DraftValidator {
 	}
 
 	/**
+<<<<<<< HEAD
+	 * Verifer que la ligne detail existe.
+	 * 
+	 * @param refProduit
+	 *            reference du produit.
+	 * @param draftLigneDetail
+	 *            reference du draft ligne detail
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isExistLigneDetailDraft(String refProduit, DraftLigneDetail draftLigneDetail)
+			throws OpaleException {
+		if (draftLigneDetail == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", draftLigneDetail), "1.1.24");
+		}
+	}
+
+	/**
+	 * Verifer si la ligne appartient aux draft mentionné.
+	 * 
+	 * @param refDraft
+	 *            reference draft.
+	 * @param draft
+	 *            {@link Draft}
+	 * @param refLigne
+	 *            reference du ligne
+	 * @param draftLigne
+	 *            {@link DraftLigne}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isLigneDraftAppartientAuDraft(String refDraft, Draft draft, String refLigne,
+			DraftLigne draftLigne) throws OpaleException {
+		if (!draft.getDraftLignes().contains(draftLigne)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.25", refLigne, refDraft), "1.1.25");
+
+		}
+
+	}
+
+	/**
+	 * Verifer si la ligne appartient aux draft mentionné.
+	 * 
+	 * @param refDraft
+	 *            reference draft.
+	 * @param draft
+	 *            {@link Draft}
+	 * @param refProduit
+	 *            reference du produit
+	 * @param draftLigneDetail
+	 *            {@link DraftLigneDetail}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isLigneDetailleDraftAppartientAuDraft(String refDraft, Draft draft, String refProduit,
+			DraftLigneDetail draftLigneDetail) throws OpaleException {
+		boolean isExiste = false;
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			if (draftLigne.getDraftLigneDetails().contains(draftLigneDetail)) {
+				isExiste = true;
+			}
+		}
+		if (!isExiste) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.25", refProduit, refDraft), "1.1.25");
+		}
+	}
+
+	/**
 	 * Tester si le detail ligne draft existe.
 	 * 
 	 * @param draftLigneDetail
@@ -360,7 +428,7 @@ public class DraftValidator {
 	public static void isExistDetailLigneDraft(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
 			String refProduit) throws OpaleException {
 		if (draftLigneDetail == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", refProduit, refLigne, refDraft), "1.1.24");
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.27", refProduit, refLigne, refDraft), "1.1.27");
 		}
 
 	}

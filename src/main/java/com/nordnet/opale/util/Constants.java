@@ -102,4 +102,14 @@ public final class Constants {
 	 */
 	public static final String VALIDER_DRAFT = "VALIDER_DRAFT";
 
+	/**
+	 * constante indique le draft.
+	 */
+	public static final String DRAFT = "Draft";
+
+	/**
+	 * constante indique le produit.
+	 */
+	public static final String PRODUIT = "Produit";
+
 }

@@ -107,7 +107,6 @@ public class DraftServiceImpl implements DraftService {
 	@Autowired
 	private DraftLigneDetailRepository draftLigneDetailRepository;
 
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -269,7 +268,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 
 		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
- + refDraft + " modifiée");
+				+ refDraft + " modifiée");
 
 	}
 
@@ -333,7 +332,7 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(deleteInfo.getAuteur().getQui(), reference, "la ligne " + referenceLigne
- + " du draft " + reference + " supprimée");
+				+ " du draft " + reference + " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
 	}
@@ -554,6 +553,7 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+		DraftValidator.isLigneDraftAppartientAuDraft(refDraft, draft, refLigne, draftLigne);
 
 		String referenceReduction = reductionService.ajouterReductionLigne(refDraft, refLigne, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
@@ -585,6 +585,34 @@ public class DraftServiceImpl implements DraftService {
 		reductionResponse.put("referenceReduction", referenceReduction);
 
 		return reductionResponse.toString();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object associerReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException, JSONException {
+
+		LOGGER.info("Debut methode associerReductionFrais ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+		DraftValidator.isLigneDraftAppartientAuDraft(refDraft, draft, refLigne, draftLigne);
+
+		DraftLigneDetail draftLigneDetail = draftLigneDetailRepository.findByReference(refProduit);
+		DraftValidator.isExistLigneDetailDraft(refProduit, draftLigneDetail);
+		DraftValidator.isLigneDetailleDraftAppartientAuDraft(refDraft, draft, refProduit, draftLigneDetail);
+
+		String referenceReduction =
+				reductionService.ajouterReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse;
 	}
 
 }

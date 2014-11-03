@@ -30,9 +30,9 @@ public class ReductionValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void chekReductionValide(ReductionInfo reductionInfo) throws OpaleException {
+	public static void chekReductionValide(ReductionInfo reductionInfo, String type) throws OpaleException {
 		if (reductionInfo.getTypeValeur().equals(TypeValeur.MOIS)) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1"), "5.1.1");
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1", type), "5.1.1");
 		}
 		
 	}

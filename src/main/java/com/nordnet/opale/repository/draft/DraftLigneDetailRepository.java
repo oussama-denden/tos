@@ -9,20 +9,23 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 /**
  * Outils de persistence pour l'entite {@link DraftLigneDetail}.
  * 
+ * @author mahjoub-MARZOUGUI
+ * 
  * @author anisselmane.
  */
 @Repository("draftLigneDetailRepository")
 public interface DraftLigneDetailRepository extends JpaRepository<DraftLigneDetail, Integer> {
 
 	/**
-	 * cherecher le detail ligne draft par reference.
+	 * Recuperer draft ligne detail par reference.
 	 * 
 	 * @param reference
-	 *            reference detail ligne draft.
-	 * @return {@link referenceLigne}.
+	 *            reference du draft.
+	 * @return {@link DraftLigneDetail}
 	 */
 	public DraftLigneDetail findByReference(String reference);
 	
+
 	/**
 	 * cherecher le detail ligne draft par reference.
 	 * 
