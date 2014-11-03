@@ -1,4 +1,3 @@
-
 package com.nordnet.opale.service.draft;
 
 import java.util.ArrayList;
@@ -7,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
+import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
@@ -30,12 +32,15 @@ import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
 import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
+import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
@@ -97,6 +102,18 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private RestClient restClient;
+
+	/**
+	 * {@link ReductionService}.
+	 */
+	@Autowired
+	private ReductionService reductionService;
+
+	/**
+	 * {@link DraftLigneDetailRepository}.
+	 */
+	@Autowired
+	private DraftLigneDetailRepository draftLigneDetailRepository;
 
 	/**
 	 * {@inheritDoc}
@@ -174,7 +191,7 @@ public class DraftServiceImpl implements DraftService {
 			}
 		}
 
-		draft.setReference(keygenService.getNextKey(Draft.class));
+		draft.setReference(Prefix.Dra + "-" + keygenService.getNextKey(Draft.class, Prefix.Dra));
 		draft.setCodePartenaire(draftInfo.getCodePartenaire());
 
 		DraftValidator.isExsteGeste(draftInfo.getGeste());
@@ -205,7 +222,7 @@ public class DraftServiceImpl implements DraftService {
 			DraftValidator.validerAuteur(draftLigneInfo.getAuteur());
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
-			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class, null));
 			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			draftLigne.setAuteur(draftLigneInfo.getAuteur().toDomain());
 			draft.addLigne(draftLigne);
@@ -422,7 +439,7 @@ public class DraftServiceImpl implements DraftService {
 
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
-			commande.setReference(keygenService.getNextKey(Commande.class));
+			commande.setReference(Prefix.Cmd + "-" + keygenService.getNextKey(Commande.class, Prefix.Cmd));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
@@ -506,7 +523,7 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	public void associerAuteur(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
-		LOGGER.info("Debut methode associerAuteur");
+		LOGGER.info("De ut methode associerAuteur");
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftValidator.validerAuteur(auteur);
@@ -515,6 +532,109 @@ public class DraftServiceImpl implements DraftService {
 
 	}
 
+	/**
+	 * {@inheritDoc }.
+	 */
+	@Override
+	public Object associerReduction(String refDraft, ReductionInfo reductionInfo) throws OpaleException, JSONException {
+		LOGGER.info("Debut methode associerReduction ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+		String referenceReduction = reductionService.ajouterReduction(refDraft, reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse.toString();
+	}
+
+	@Override
+	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info("Debut methode associerReductionLigne ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+		DraftValidator.isLigneDraftAppartientAuDraft(refDraft, draft, refLigne, draftLigne);
+
+		String referenceReduction = reductionService.ajouterReductionLigne(refDraft, refLigne, reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse.toString();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
+			ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info("Debut methode associerReductionDetailLigne ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigneDetail draftLigneDetail = draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft,
+				refLigne, refProduit);
+
+		DraftValidator.isExistDetailLigneDraft(draftLigneDetail, refDraft, refLigne, refProduit);
+
+		String referenceReduction = reductionService.ajouterReductionDetailLigne(draftLigneDetail, refDraft, refLigne,
+				reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse.toString();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object associerReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException, JSONException {
+
+		LOGGER.info("Debut methode associerReductionFrais ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+		DraftValidator.isLigneDraftAppartientAuDraft(refDraft, draft, refLigne, draftLigne);
+
+		DraftLigneDetail draftLigneDetail = draftLigneDetailRepository.findByReference(refProduit);
+		DraftValidator.isExistLigneDetailDraft(refProduit, draftLigneDetail);
+		DraftValidator.isLigneDetailleDraftAppartientAuDraft(refDraft, draft, refProduit, draftLigneDetail);
+
+		String referenceReduction =
+				reductionService.ajouterReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException {
+		LOGGER.info("Debut methode supprimerReduction");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		reductionService.supprimer(refReduction);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue) throws OpaleException {
 		Contrat contrat = restClient.getContratByReference(referenceContrat);
@@ -526,5 +646,4 @@ public class DraftServiceImpl implements DraftService {
 						auteur);
 
 	}
-
 }

@@ -41,8 +41,7 @@ import com.nordnet.opale.validator.CommandeValidator;
 import com.wordnik.swagger.annotations.Api;
 
 /**
- * Gerer l'ensemble des requetes qui ont en rapport avec le
- * {@link CommandeController}.
+ * Gerer l'ensemble des requetes qui ont en rapport avec le {@link CommandeController}.
  * 
  * 
  * @author mahjoub-MARZOUGUI
@@ -132,8 +131,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la
-	 * creation d'un intention de paiement en avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
 	 * 
 	 * 
 	 * 
@@ -206,8 +205,8 @@ public class CommandeController {
 	}
 
 	/**
-	 * creer directement un nouveau paiement a associe a la commande, sans la
-	 * creation d'un intention de paiement en avance.
+	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
+	 * avance.
 	 * 
 	 * 
 	 * 
@@ -405,6 +404,8 @@ public class CommandeController {
 	 * 
 	 * @param refCommande
 	 *            refrence du commande.
+	 * @param auteur
+	 *            {@link Auteur}.
 	 * @return liste des references des contrat cree.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
@@ -413,8 +414,10 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/transformeEnContrat", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public String transformeEnContrat(@PathVariable String refCommande) throws OpaleException, JSONException {
-		List<String> referencesContrats = commandeService.transformeEnContrat(refCommande);
+	public String transformeEnContrat(@PathVariable String refCommande, @RequestBody Auteur auteur)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::transformeEnContrat");
+		List<String> referencesContrats = commandeService.transformeEnContrat(refCommande, auteur);
 		JSONObject rsc = new JSONObject();
 		rsc.put("referencesContrats", referencesContrats);
 		return rsc.toString();
@@ -451,13 +454,12 @@ public class CommandeController {
 	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerSignature(@PathVariable String refCommande, @PathVariable String refSignature,
-			@RequestBody Auteur auteur)
-			throws OpaleException {
+			@RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::supprimerSignature");
 		commandeService.supprimerSignature(refCommande, refSignature, auteur);
 
 	}
-	
+
 	/**
 	 * retourner si la commande a besoin d'un paiement recurrent ou non.
 	 * 
@@ -498,6 +500,22 @@ public class CommandeController {
 		JSONObject responce = new JSONObject();
 		responce.put("besoinPaiementComptant", isBesoinPaiementComptant);
 		return responce.toString();
+	}
+
+	/**
+	 * Transformer une commande en ordre de renouvellement afin d'acter le renouvellement pour un contrat donné.
+	 * 
+	 * @param refCommande
+	 *            refrence commande.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/transformeEnOrdereRenouvellement", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void transformeEnOrdereRenouvellement(@PathVariable String refCommande) throws OpaleException, JSONException {
+		commandeService.transformeEnOrdereRenouvellement(refCommande);
 	}
 
 	/**

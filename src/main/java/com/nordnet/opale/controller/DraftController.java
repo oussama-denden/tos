@@ -26,6 +26,7 @@ import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
+import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
@@ -320,6 +321,126 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::associerAuteur");
 		draftService.associerAuteur(refDraft, auteur);
 
+	}
+
+	/**
+	 * associer une reduction a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object associerReduction(@PathVariable String refDraft, @RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReduction");
+		return draftService.associerReduction(refDraft, reductionInfo);
+
+	}
+
+	/**
+	 * associer une reduction a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @param refLigne
+	 *            reference du ligne
+	 * @return {@link object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/{refLigne:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object associerReductionLigne(@PathVariable String refDraft, @PathVariable String refLigne,
+			@RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReductionLigne");
+		return draftService.associerReductionLigne(refDraft, refLigne, reductionInfo);
+
+	}
+
+	/**
+	 * associer une reduction a un frais.
+	 * associer une reduction a un detail ligne draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refProduit
+	 *            reference du produit.
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object}
+	 *            reference du ligne
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReductionFrais(@PathVariable String refDraft, @PathVariable String refLigne,
+			@PathVariable String refProduit, @PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReductionFrais");
+		return draftService.associerReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+	}
+	 
+	/** associer une reduction a un detail ligne draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refProduit
+	 *            reference du produit.
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object}
+	 *            reference du ligne
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/detail/{refProduit:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object associerReductionDetailLigne(@PathVariable String refDraft, @PathVariable String refLigne,
+			@PathVariable String refProduit,
+			@RequestBody ReductionInfo reductionInfo) throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReductionDetailLigne");
+		return draftService.associerReductionDetailLigne(refDraft, refLigne, refProduit, reductionInfo);
+
+	}
+
+	/**
+	 * supprimer reduction.
+	 * 
+	 * @param refDraft
+	 *            reference draft
+	 * @param refReduction
+	 *            reference reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/reduction/{refReduction:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerReduction(@PathVariable String refDraft, @PathVariable String refReduction)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::supprimerReduction");
+		draftService.supprimerReduction(refDraft, refReduction);
 	}
 
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.GET, produces = "application/json")

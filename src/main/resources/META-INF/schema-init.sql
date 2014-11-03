@@ -3,7 +3,7 @@
 --
 
 DROP FUNCTION IF EXISTS getReference#
-CREATE FUNCTION getReference(class VARCHAR(255)) RETURNS varchar(8) CHARSET utf8
+CREATE FUNCTION getReference(class VARCHAR(255),prefix VARCHAR(255)) RETURNS varchar(8) CHARSET utf8
 BEGIN
  DECLARE reference VARCHAR(8);
  DECLARE  newReference  VARCHAR(8);
@@ -19,7 +19,7 @@ end if;
 set x=CAST(reference AS  UNSIGNED);
 set newReference=LPAD( x+1,8,'0') ;
 
-Insert into keygen values(0,class,newReference);
+Insert into keygen (id,entite,prefix,referenceDraft) values(0,class,prefix,newReference);
 
  RETURN reference;
 END

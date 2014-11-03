@@ -28,11 +28,12 @@ public interface KeygenRepository extends JpaRepository<Keygen, Integer> {
 	/**
 	 * cherecher la dernier référence.
 	 * 
+	 * @param prefix
+	 *            le prefix du draft
 	 * @param nom
 	 *            le nom de l entite.
 	 * @return {@link Keygen}.
 	 */
-
-	@Query(value = "SELECT getReference(?1)", nativeQuery = true)
-	public String getReference(String nom);
+	@Query(value = "SELECT getReference(?1,?2)", nativeQuery = true)
+	public String getReference(String nom, String prefix);
 }

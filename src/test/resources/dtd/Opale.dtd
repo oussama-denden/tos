@@ -58,6 +58,7 @@
      id CDATA #IMPLIED
     referenceDraft CDATA #IMPLIED
     entite CDATA #IMPLIED
+    prefix CDATA #IMPLIED
 >
 
 <!ELEMENT client EMPTY>

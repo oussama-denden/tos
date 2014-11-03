@@ -233,7 +233,7 @@ public class SignatureServiceImpl implements SignatureService {
 		}
 
 		signature.setAuteur(auteur);
-		signature.setReference(keygenService.getNextKey(Signature.class));
+		signature.setReference(keygenService.getNextKey(Signature.class, null));
 		signature.setReferenceCommande(refCommande);
 		signatureRepository.save(signature);
 		return signature.getReference();

@@ -20,6 +20,7 @@
 		<class>com.nordnet.opale.domain.Tracage</class>
 		<class>com.nordnet.opale.domain.Client</class>
 		<class>com.nordnet.opale.domain.signature.Signature</class>
+		<class>com.nordnet.opale.domain.reduction.Reduction</class>
 		
 		<properties>
 <!--			<property name="hibernate.hbm2ddl.auto" value="update" />-->
