@@ -561,6 +561,31 @@ public class DraftServiceImpl implements DraftService {
 
 		return reductionResponse.toString();
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
+			ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info("Debut methode associerReductionDetailLigne ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigneDetail draftLigneDetail = draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft,
+				refLigne, refProduit);
+
+		DraftValidator.isExistDetailLigneDraft(draftLigneDetail, refDraft, refLigne, refProduit);
+
+		String referenceReduction = reductionService.ajouterReductionDetailLigne(draftLigneDetail, refDraft, refLigne,
+				reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse.toString();
+	}
 
 	/**
 	 * {@inheritDoc}

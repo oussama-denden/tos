@@ -1,6 +1,7 @@
 package com.nordnet.opale.service.reduction;
 
 import com.nordnet.opale.business.ReductionInfo;
+import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -59,6 +60,23 @@ public interface ReductionService {
 	 *             {@link OpaleException}
 	 */
 	public String ajouterReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException;
+	
+			/** ajouter reduction a un detail ligne draft.
+	 * 
+	 * @param draftLigneDetail
+	 *            draft ligne detail
+	 * @param refDraft
+	 *            reference du draft
+	 * @param refLigne
+	 *            reference du ligne ligne.
+	 * @param reductionInfo
+	 *            reduction information
+	 * @return reference du reduction {@link ReductionInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public String ajouterReductionDetailLigne(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
 			ReductionInfo reductionInfo) throws OpaleException;
 
 }

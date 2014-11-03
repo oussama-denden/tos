@@ -344,6 +344,7 @@ public class DraftValidator {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Verifer que la ligne detail existe.
 	 * 
 	 * @param refProduit
@@ -407,6 +408,27 @@ public class DraftValidator {
 		}
 		if (!isExiste) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.25", refProduit, refDraft), "1.1.25");
+		}
+	}
+
+	/**
+	 * Tester si le detail ligne draft existe.
+	 * 
+	 * @param draftLigneDetail
+	 *            {@link DraftLigneDetail}
+	 * @param refDraft
+	 *            reference draft
+	 * @param refLigne
+	 *            reference ligne draft
+	 * @param refProduit
+	 *            reference produit
+	 * @throws OpaleException
+	 *             {@link OpaleExceptionee}
+	 */
+	public static void isExistDetailLigneDraft(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
+			String refProduit) throws OpaleException {
+		if (draftLigneDetail == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.27", refProduit, refLigne, refDraft), "1.1.27");
 		}
 
 	}

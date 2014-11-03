@@ -48,6 +48,11 @@ public class Reduction {
 	private String referenceLigne;
 
 	/**
+	 * reference detail ligne draft.
+	 */
+	private String referenceLigneDetail;
+
+	/**
 	 * label du reduction.
 	 */
 	private String label;
@@ -268,6 +273,13 @@ public class Reduction {
 	}
 
 	/**
+	 * @return {@link #referenceLigneDetail}
+	 */
+	public String getReferenceLigneDetail() {
+		return referenceLigneDetail;
+	}
+
+	/**
 	 * 
 	 * @param referenceFrais
 	 *            the new {@link #referenceFrais}
@@ -275,5 +287,14 @@ public class Reduction {
 	public void setReferenceFrais(String referenceFrais) {
 		this.referenceFrais = referenceFrais;
 	}
+
+	/**
+	 * @param referenceLigneDetail
+	 *            {@link #referenceLigneDetail}
+	 */
+	public void setReferenceLigneDetail(String referenceLigneDetail) {
+		this.referenceLigneDetail = referenceLigneDetail;
+	}
+
 
 }
