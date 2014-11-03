@@ -29,6 +29,7 @@ import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -318,6 +319,15 @@ public class DraftController {
 	public void associerAuteur(@PathVariable String refDraft, @RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::associerAuteur");
 		draftService.associerAuteur(refDraft, auteur);
+
+	}
+
+	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public void transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
+		draftService.transformerContratEnDraft(refContrat, trameCatalogue);
 
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.ContratValidationInfo;
 import com.nordnet.opale.exception.InfoErreur;
@@ -109,6 +110,42 @@ public class RestClient {
 		} catch (RestClientException e) {
 			throw new OpaleException("404 Introuvable", "404");
 		}
+
+	}
+
+	/**
+	 * Appel vers Topaze pour recuperer un contrat.
+	 * 
+	 * @param referenceContrat
+	 *            reference contrat.
+	 * @return {@link Contrat}.
+	 */
+	public Contrat getContratByReference(String referenceContrat) {
+		LOGGER.info(":::ws-call:::getContratByReference");
+		RestTemplate rt = new RestTemplate();
+
+		/*
+		 * configurer restTemplate pour ignorer les proprietes inconnu
+		 */
+		// MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
+		// jsonConverter.getObjectMapper().configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+		// jsonConverter.getObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// final List<HttpMessageConverter<?>> listHttpMessageConverters = rt.getMessageConverters();
+		//
+		// listHttpMessageConverters.add(jsonConverter);
+		// rt.setMessageConverters(listHttpMessageConverters);
+
+		String url =
+				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
+						RestConstants.GET_CONTRAT_BY_REFERENCE, referenceContrat);
+		try {
+		ResponseEntity<Contrat> responseEntity = rt.getForEntity(url, Contrat.class);
+		return responseEntity.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
 
 	}
 

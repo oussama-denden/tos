@@ -605,12 +605,9 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
-	public List<Cout> calculerCout(String referenceCommande) throws OpaleException {
+	public Cout calculerCout(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
-		List<Cout> couts = new ArrayList<Cout>();
-		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			couts.add(new Cout(commandeLigne));
-		}
-		return couts;
+		Cout cout = new Cout(commande);
+		return cout;
 	}
 }

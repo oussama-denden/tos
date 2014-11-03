@@ -5,7 +5,9 @@ import java.util.Map;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.TypeFrais;
 
@@ -44,68 +46,63 @@ public class DetailCout {
 	}
 
 	/**
-	 * creation a partir d'un {@link DraftLigneDetail} et {@link TrameCatalogue}.
+	 * creation du cout pour un {@link DraftLigne}.
 	 * 
-	 * @param draftLigneDetail
-	 *            {@link DraftLigneDetail}.
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public DetailCout(DraftLigneDetail draftLigneDetail, TrameCatalogue trameCatalogue) {
-		Map<String, Tarif> trifMap = trameCatalogue.getTarifsMap();
-		label = draftLigneDetail.getReference();
-		Tarif tarif = trifMap.get(draftLigneDetail.getReferenceTarif());
-		if (tarif.isRecurrent()) {
-			/*
-			 * si le tarif est recurrent alors il fait partie du plan.
-			 */
-			plan = new Plan(tarif.getFrequence(), tarif.getPrix());
-		} else {
-			/*
-			 * si comptant il sera calcule pour le coutTotal.
-			 */
-			coutTotal += tarif.getPrix();
-		}
-
-		/*
-		 * ajouter les frais de creation au coutTotal s'il existe.
-		 */
+	public DetailCout(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
+		Map<String, Tarif> tarifMap = trameCatalogue.getTarifsMap();
 		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
-		for (String refFrais : tarif.getFrais()) {
-			Frais frais = fraisMap.get(refFrais);
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutTotal += frais.getMontant();
+		numero = draftLigne.getReference();
+		label = draftLigne.getReferenceOffre();
+		double plan = 0d;
+		Integer frequence = null;
+		Tarif tarif = null;
+		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
+			tarif = tarifMap.get(draftLigneDetail.getReferenceTarif());
+			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
+			coutTotal += detailCoutTarif.getCoutTotal();
+			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+			frequence = tarif.getFrequence();
 		}
+		
+		tarif = tarifMap.get(draftLigne.getReferenceTarif());
+		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
+		coutTotal += detailCoutTarif.getCoutTotal();
+		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+
+		this.plan = new Plan(frequence, plan);
 	}
 
 	/**
-	 * creation du {@link DetailCout} a partir du {@link CommandeLigneDetail}.
+	 * creation du cout pour une {@link CommandeLigne}.
 	 * 
-	 * @param commandeLigneDetail
-	 *            {@link CommandeLigneDetail}.
+	 * @param commandeLigne
+	 *            {@link CommandeLigne}.
 	 */
-	public DetailCout(CommandeLigneDetail commandeLigneDetail) {
-		label = commandeLigneDetail.getReferenceProduit();
-		com.nordnet.opale.domain.commande.Tarif tarif = commandeLigneDetail.getTarif();
-		if (tarif.isRecurrent()) {
-			/*
-			 * si le tarif est recurrent alors il fait partie du plan.
-			 */
-			plan = new Plan(tarif.getFrequence(), tarif.getPrix());
-		} else {
-			/*
-			 * si comptant il sera calcule pour le coutTotal.
-			 */
-			coutTotal += tarif.getPrix();
+	public DetailCout(CommandeLigne commandeLigne) {
+		numero = String.valueOf(commandeLigne.getNumero());
+		label = commandeLigne.getReferenceOffre();
+		double plan = 0d;
+		Integer frequence = null;
+		com.nordnet.opale.domain.commande.Tarif tarif = null;
+		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
+			tarif = commandeLigneDetail.getTarif();
+			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+			coutTotal += detailCoutTarif.getCoutTotal();
+			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+			frequence = tarif.getFrequence();
 		}
+		
+		tarif = commandeLigne.getTarif();
+		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+		coutTotal += detailCoutTarif.getCoutTotal();
+		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 
-		/*
-		 * ajouter les frais de creation au coutTotal s'il existe.
-		 */
-		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutTotal += frais.getMontant();
-		}
+		this.plan = new Plan(frequence, plan);
 	}
 
 	/**
@@ -174,6 +171,55 @@ public class DetailCout {
 	 */
 	public void setPlan(Plan plan) {
 		this.plan = plan;
+	}
+
+	/**
+	 * calcule du {@link DetailCout} pour un {@link Tarif}.
+	 * 
+	 * @param tarif
+	 *            {@link Tarif}.
+	 * @param fraisMap
+	 *            liste des {@link Frais} du catalogue.
+	 * @return {@link DetailCout}.
+	 */
+	private DetailCout calculerDetailCoutTarif(Tarif tarif,Map<String, Frais> fraisMap) {
+		DetailCout detailCout = new DetailCout();
+		double coutTotal = 0d;
+		if (tarif.isRecurrent()) {
+			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix()));
+		} else {
+			coutTotal += tarif.getPrix();
+		}
+		for(String refFrais : tarif.getFrais()){
+			Frais frais = fraisMap.get(refFrais);
+			if(frais.getTypeFrais() == TypeFrais.CREATION)
+				coutTotal += frais.getMontant();
+		}
+		detailCout.setCoutTotal(coutTotal);
+		return detailCout;
+	}
+
+	/**
+	 * calcule du {@link DetailCout} pour un {@link com.nordnet.opale.domain.commande.Tarif}.
+	 * 
+	 * @param tarif
+	 *            {@link com.nordnet.opale.domain.commande.Tarif}.
+	 * @return {@link DetailCout}.
+	 */
+	private DetailCout calculerDetailCoutTarif(com.nordnet.opale.domain.commande.Tarif tarif) {
+		DetailCout detailCout = new DetailCout();
+		double coutTotal = 0d;
+		if (tarif.isRecurrent()) {
+			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix()));
+		} else {
+			coutTotal += tarif.getPrix();
+		}
+		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
+			if (frais.getTypeFrais() == TypeFrais.CREATION)
+				coutTotal += frais.getMontant();
+		}
+		detailCout.setCoutTotal(coutTotal);
+		return detailCout;
 	}
 
 }

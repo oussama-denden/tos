@@ -229,4 +229,16 @@ public interface DraftService {
 	 */
 	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException;
 
+	/**
+	 * Transformer un contrat en draft.
+	 * 
+	 * @param referenceContrat
+	 *            reference contrat dans Topaze
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue) throws OpaleException;
+
 }

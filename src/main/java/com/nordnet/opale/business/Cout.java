@@ -2,16 +2,12 @@ package com.nordnet.opale.business;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.nordnet.opale.business.catalogue.Frais;
-import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
-import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.domain.draft.DraftLigneDetail;
-import com.nordnet.opale.enums.TypeFrais;
 
 /**
  * contient les couts d'une commande.
@@ -38,48 +34,30 @@ public class Cout {
 	}
 
 	/**
-	 * creation du cout a partir du {@link DraftLigne} et {@link TrameCatalogue}.
+	 * creation du cout d'un {@link Draft}.
 	 * 
-	 * @param draftLigne
-	 *            {@link DraftLigne}.
+	 * @param draft
+	 *            {@link Draft}.
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public Cout(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
-		Map<String, Tarif> tarifMap = trameCatalogue.getTarifsMap();
-		Tarif tarif = tarifMap.get(draftLigne.getReferenceTarif());
-		coutTotal += tarif.getPrix();
-
-		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
-		for (String refFrais : tarif.getFrais()) {
-			Frais frais = fraisMap.get(refFrais);
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutTotal += frais.getMontant();
-		}
-
-		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-			DetailCout detailCout = new DetailCout(draftLigneDetail, trameCatalogue);
+	public Cout(Draft draft, TrameCatalogue trameCatalogue) {
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			DetailCout detailCout = new DetailCout(draftLigne, trameCatalogue);
 			coutTotal += detailCout.getCoutTotal();
 			addDetail(detailCout);
 		}
 	}
 
 	/**
-	 * Creation du {@link Cout} a partir de la {@link CommandeLigne}.
+	 * creation du cout d'une {@link Commande}.
 	 * 
-	 * @param commandeLigne
-	 *            {@link CommandeLigne}.
+	 * @param commande
+	 *            {@link Commande}.
 	 */
-	public Cout(CommandeLigne commandeLigne) {
-		com.nordnet.opale.domain.commande.Tarif tarif = commandeLigne.getTarif();
-		coutTotal += tarif.getPrix();
-		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutTotal += frais.getMontant();
-		}
-
-		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
-			DetailCout detailCout = new DetailCout(commandeLigneDetail);
+	public Cout(Commande commande) {
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			DetailCout detailCout = new DetailCout(commandeLigne);
 			coutTotal += detailCout.getCoutTotal();
 			addDetail(detailCout);
 		}

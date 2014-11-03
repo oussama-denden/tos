@@ -1,5 +1,6 @@
 package com.nordnet.opale.business.commande;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.util.Utils;
 
@@ -9,6 +10,7 @@ import com.nordnet.opale.util.Utils;
  * @author Denden-OUSSAMA
  * 
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Frais {
 
 	/**
