@@ -442,15 +442,25 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException {
-		CommandeValidationInfo validationInfo = new CommandeValidationInfo();
 		Commande commande = getCommandeByReference(referenceCommande);
+		return validerCommande(commande);
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CommandeValidationInfo validerCommande(Commande commande) throws OpaleException {
+
+		CommandeValidationInfo validationInfo = new CommandeValidationInfo();
 
 		/*
 		 * valider si la commande est annule ou non.
 		 */
 		if (commande.isAnnule()) {
 			validationInfo.addReason("Commande", "2.1.3",
-					PropertiesUtil.getInstance().getErrorMessage("2.1.3", referenceCommande));
+					PropertiesUtil.getInstance().getErrorMessage("2.1.3", commande.getReference()));
 		} else {
 
 			/*
@@ -466,7 +476,7 @@ public class CommandeServiceImpl implements CommandeService {
 			/*
 			 * valider que les cout comptant associe a la commande sont paye.
 			 */
-			if (!isPayeTotalement(referenceCommande)) {
+			if (!isPayeTotalement(commande.getReference())) {
 				validationInfo.addReason("Paiement", "2.1.6", PropertiesUtil.getInstance().getErrorMessage("2.1.6"));
 			}
 
@@ -474,7 +484,7 @@ public class CommandeServiceImpl implements CommandeService {
 			 * verifier an cas de besoin qu'il y a un paiement recurrent est bien associe a la commande.
 			 */
 			if (commande.needPaiementRecurrent()) {
-				List<Paiement> paiements = getPaiementRecurrent(referenceCommande, false);
+				List<Paiement> paiements = getPaiementRecurrent(commande.getReference(), false);
 				if (paiements.size() == Constants.ZERO) {
 					validationInfo
 							.addReason("Paiement", "2.1.7", PropertiesUtil.getInstance().getErrorMessage("2.1.7"));
@@ -496,9 +506,19 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
 		CommandeValidator.isAuteurValide(auteur);
+		return transformeEnContrat(commande, auteur);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
 		List<String> referencesContrats = new ArrayList<>();
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			ContratPreparationInfo preparationInfo = ligne.toContratPreparationInfo(refCommande, auteur.getQui());
+			ContratPreparationInfo preparationInfo =
+					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui());
 			String refContrat = restClient.preparerContrat(preparationInfo);
 			ligne.setReferenceContrat(refContrat);
 			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
