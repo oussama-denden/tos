@@ -306,4 +306,16 @@ public interface DraftService {
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
 
+	/**
+	 * Supprimer une reduction.
+	 * 
+	 * @param refDraft
+	 *            reference draft
+	 * @param refReduction
+	 *            reference reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException;
+
 }

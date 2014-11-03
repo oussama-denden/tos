@@ -385,11 +385,6 @@ public class DraftController {
 	 *            {@link ReductionInfo}
 	 * @return {@link Object}
 	 *            reference du ligne
-	 * @param refProduit
-	 *            reference produit
-	 * @param reductionInfo
-	 *            {@link ReductionInfo}
-	 * @return {@link object}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
@@ -410,17 +405,10 @@ public class DraftController {
 	 *            reference du ligne.
 	 * @param refProduit
 	 *            reference du produit.
-	 * @param refFrais
-	 *            reference du frais
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
 	 * @return {@link Object}
 	 *            reference du ligne
-	 * @param refProduit
-	 *            reference produit
-	 * @param reductionInfo
-	 *            {@link ReductionInfo}
-	 * @return {@link object}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
@@ -434,6 +422,24 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::associerReductionDetailLigne");
 		return draftService.associerReductionDetailLigne(refDraft, refLigne, refProduit, reductionInfo);
 
+	}
+
+	/**
+	 * supprimer reduction.
+	 * 
+	 * @param refDraft
+	 *            reference draft
+	 * @param refReduction
+	 *            reference reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/reduction/{refReduction:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@ResponseBody
+	public void supprimerReduction(@PathVariable String refDraft, @PathVariable String refReduction)
+			throws OpaleException {
+		LOGGER.info(":::ws-rec:::supprimerReduction");
+		draftService.supprimerReduction(refDraft, refReduction);
 	}
 
 	/**

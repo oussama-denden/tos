@@ -268,7 +268,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 
 		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
-				+ refDraft + " modifiée");
+ + refDraft + " modifiée");
 
 	}
 
@@ -332,7 +332,7 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(deleteInfo.getAuteur().getQui(), reference, "la ligne " + referenceLigne
-				+ " du draft " + reference + " supprimée");
+ + " du draft " + reference + " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
 	}
@@ -613,6 +613,18 @@ public class DraftServiceImpl implements DraftService {
 		reductionResponse.put("referenceReduction", referenceReduction);
 
 		return reductionResponse;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException {
+		LOGGER.info("Debut methode supprimerReduction");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		reductionService.supprimer(refReduction);
 	}
 
 }

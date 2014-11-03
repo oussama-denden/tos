@@ -116,4 +116,13 @@ public class ReductionServiceImpl implements ReductionService {
 		return reduction.getReference();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public void supprimer(String refReduction) throws OpaleException {
+		Reduction reduction = reductionRepository.findByReference(refReduction);
+		ReductionValidator.isExiste(reduction, refReduction);
+		reductionRepository.delete(reduction);
+	}
+
 }

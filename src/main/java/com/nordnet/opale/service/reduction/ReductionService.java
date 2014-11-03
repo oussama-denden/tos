@@ -79,4 +79,14 @@ public interface ReductionService {
 	public String ajouterReductionDetailLigne(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
 			ReductionInfo reductionInfo) throws OpaleException;
 
+	/**
+	 * Supprimer une reduction.
+	 * 
+	 * @param refReduction
+	 *            reference reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void supprimer(String refReduction) throws OpaleException;
+
 }
