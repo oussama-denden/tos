@@ -10,6 +10,7 @@ import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.TypeFrais;
+import com.nordnet.opale.util.Constants;
 
 /**
  * contient les cout en detail pour un profuit.
@@ -68,13 +69,15 @@ public class DetailCout {
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 		}
-		
+
 		tarif = tarifMap.get(draftLigne.getReferenceTarif());
 		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
 		coutTotal += detailCoutTarif.getCoutTotal();
 		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 
-		this.plan = new Plan(frequence, plan);
+		if (plan > Constants.ZERO) {
+			this.plan = new Plan(frequence, plan);
+		}
 	}
 
 	/**
@@ -96,13 +99,15 @@ public class DetailCout {
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 		}
-		
+
 		tarif = commandeLigne.getTarif();
 		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 		coutTotal += detailCoutTarif.getCoutTotal();
 		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 
-		this.plan = new Plan(frequence, plan);
+		if (plan > Constants.ZERO) {
+			this.plan = new Plan(frequence, plan);
+		}
 	}
 
 	/**
@@ -182,7 +187,7 @@ public class DetailCout {
 	 *            liste des {@link Frais} du catalogue.
 	 * @return {@link DetailCout}.
 	 */
-	private DetailCout calculerDetailCoutTarif(Tarif tarif,Map<String, Frais> fraisMap) {
+	private DetailCout calculerDetailCoutTarif(Tarif tarif, Map<String, Frais> fraisMap) {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		if (tarif.isRecurrent()) {
@@ -190,9 +195,9 @@ public class DetailCout {
 		} else {
 			coutTotal += tarif.getPrix();
 		}
-		for(String refFrais : tarif.getFrais()){
+		for (String refFrais : tarif.getFrais()) {
 			Frais frais = fraisMap.get(refFrais);
-			if(frais.getTypeFrais() == TypeFrais.CREATION)
+			if (frais.getTypeFrais() == TypeFrais.CREATION)
 				coutTotal += frais.getMontant();
 		}
 		detailCout.setCoutTotal(coutTotal);

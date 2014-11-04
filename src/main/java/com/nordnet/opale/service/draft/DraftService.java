@@ -30,8 +30,7 @@ import com.nordnet.opale.exception.OpaleException;
 public interface DraftService {
 
 	/**
-	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere
-	 * une exception si le draft n'existe pas.
+	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere une exception si le draft n'existe pas.
 	 * 
 	 * 
 	 * @param reference
@@ -206,16 +205,16 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException;
-	
+
 	/**
 	 * Asscier un auteur aux draft.
 	 * 
 	 * @param refDraft
-	 * reference draft
+	 *            reference draft
 	 * @param auteur
-	 * {@link Auteur}
+	 *            {@link Auteur}
 	 * @throws OpaleException
-	 * {@link OpaleException}.
+	 *             {@link OpaleException}.
 	 */
 	public void associerAuteur(String refDraft, Auteur auteur) throws OpaleException;
 
@@ -239,10 +238,12 @@ public interface DraftService {
 	 *            reference contrat dans Topaze
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
+	 * @return {@link DraftValidationInfo} ou .
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue) throws OpaleException;
+	public Object transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
+			throws OpaleException;
 
 	/**
 	 * associer une reduction a un draft.
@@ -298,8 +299,9 @@ public interface DraftService {
 	 */
 	public Object associerReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
-	
-/** Associer une reduction a un detail ligne draft.
+
+	/**
+	 * Associer une reduction a un detail ligne draft.
 	 * 
 	 * @param refDraft
 	 *            reference draft

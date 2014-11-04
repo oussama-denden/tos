@@ -1,6 +1,7 @@
 package com.nordnet.opale.service.draft;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,10 @@ import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
+import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.Auteur;
-import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -160,7 +161,6 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Enter methode creerDraft");
 		DraftValidator.validerAuteur(draftInfo.getAuteur());
-
 
 		Draft draft = new Draft();
 
@@ -434,8 +434,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
 		draft.setClientSouscripteur(transformationInfo.getClientInfo().getSouscripteur().toDomain());
 
-		DraftValidationInfo validationInfo = catalogueValidator.validerDraft(draft,
-				transformationInfo.getTrameCatalogue());
+		DraftValidationInfo validationInfo =
+				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
@@ -566,26 +566,25 @@ public class DraftServiceImpl implements DraftService {
 
 		return reductionResponse.toString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
-			ReductionInfo reductionInfo)
-			throws OpaleException, JSONException {
+			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionDetailLigne ");
 
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
-		DraftLigneDetail draftLigneDetail = draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft,
-				refLigne, refProduit);
+		DraftLigneDetail draftLigneDetail =
+				draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft, refLigne, refProduit);
 
 		DraftValidator.isExistDetailLigneDraft(draftLigneDetail, refDraft, refLigne, refProduit);
 
-		String referenceReduction = reductionService.ajouterReductionDetailLigne(draftLigneDetail, refDraft, refLigne,
-				reductionInfo);
+		String referenceReduction =
+				reductionService.ajouterReductionDetailLigne(draftLigneDetail, refDraft, refLigne, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
@@ -636,14 +635,33 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue) throws OpaleException {
+	public Object transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
+			throws OpaleException {
+		LOGGER.info("Debut methode transformerContratEnDraft");
 		Contrat contrat = restClient.getContratByReference(referenceContrat);
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
-		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
-		Draft draft = new Draft();
-		Client clientAFacturer =
-				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation(),
-						auteur);
-
+		String referenceOffre = contrat.getParent().getReferenceProduit();
+		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(contrat.getParent().getReferenceProduit());
+		DraftValidationInfo validationInfo = new DraftValidationInfo();
+		if (offreCatalogue == null) {
+			validationInfo.addReason("offre.reference", "36.3.1.2",
+					PropertiesUtil.getInstance().getErrorMessage("1.1.6", referenceOffre),
+					Arrays.asList(referenceOffre));
+			return validationInfo;
+		} else {
+			Draft draft = new Draft(contrat, trameCatalogue);
+			validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
+			if (validationInfo.isValide()) {
+				validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
+				if (validationInfo.isValide()) {
+					draftRepository.save(draft);
+					return draft;
+				} else {
+					return validationInfo;
+				}
+			} else {
+				return validationInfo;
+			}
+		}
 	}
 }

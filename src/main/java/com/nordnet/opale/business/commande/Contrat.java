@@ -130,4 +130,18 @@ public class Contrat {
 	public void setSousContrats(List<ElementContractuel> sousContrats) {
 		this.sousContrats = sousContrats;
 	}
+
+	/**
+	 * retourner l'{@link ElementContractuel} parent du contrat.
+	 * 
+	 * @return {@link ElementContractuel}.
+	 */
+	public ElementContractuel getParent() {
+		for (ElementContractuel elementContractuel : sousContrats) {
+			if (elementContractuel.isParent())
+				return elementContractuel;
+		}
+
+		return null;
+	}
 }

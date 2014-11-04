@@ -23,6 +23,10 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
+import com.nordnet.opale.business.catalogue.OffreCatalogue;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Contrat;
+import com.nordnet.opale.business.commande.ElementContractuel;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
@@ -112,6 +116,25 @@ public class DraftLigne {
 		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
+		}
+	}
+
+	/**
+	 * Creation d'un DraftLigne a partir du {@link Contrat} et {@link TrameCatalogue}.
+	 * 
+	 * @param contrat
+	 *            {@link Contrat}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public DraftLigne(Contrat contrat, TrameCatalogue trameCatalogue) {
+		ElementContractuel elementContractuelParent = contrat.getParent();
+		this.referenceOffre = elementContractuelParent.getReferenceProduit();
+		this.modeFacturation = elementContractuelParent.getModeFacturation();
+		this.modePaiement = elementContractuelParent.getModePaiement();
+		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(this.referenceOffre);
+		for (ElementContractuel elementContractuel : contrat.getSousContrats()) {
+			addDraftLigneDetail(new DraftLigneDetail(elementContractuel, ""));
 		}
 	}
 
@@ -360,8 +383,8 @@ public class DraftLigne {
 		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
 			if (!commandeLigneDetail.isParent()) {
 				DraftLigneDetail draftLigneDetail = draftDetailsMap.get(commandeLigneDetail.getReferenceProduit());
-				DraftLigneDetail draftLigneDetailParent = draftDetailsMap.get(commandeLigneDetail
-						.getCommandeLigneDetailParent().getReferenceProduit());
+				DraftLigneDetail draftLigneDetailParent =
+						draftDetailsMap.get(commandeLigneDetail.getCommandeLigneDetailParent().getReferenceProduit());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}
