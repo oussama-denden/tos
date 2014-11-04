@@ -429,7 +429,7 @@ public class DraftServiceImpl implements DraftService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
-			throws OpaleException {
+			throws OpaleException, CloneNotSupportedException {
 
 		DraftValidator.validerAuteur(transformationInfo.getTrameCatalogue().getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
@@ -440,8 +440,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
 		draft.setClientSouscripteur(transformationInfo.getClientInfo().getSouscripteur().toDomain());
 
-		DraftValidationInfo validationInfo = catalogueValidator.validerDraft(draft,
-				transformationInfo.getTrameCatalogue());
+		DraftValidationInfo validationInfo =
+				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
@@ -472,8 +472,11 @@ public class DraftServiceImpl implements DraftService {
 	 *            {@link Draft}
 	 * @param commande
 	 *            {@link Commande}
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}
 	 */
-	private void associerReductionCommande(Draft draft, Commande commande) {
+	@Transactional
+	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
 		// coper reduction draft
 		List<Reduction> reductionDraft = reductionService.findReductionDraft(draft.getReference());
 
@@ -482,8 +485,8 @@ public class DraftServiceImpl implements DraftService {
 		// coper reduction ligne draft
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			// coper reduction ligne draft
-			List<Reduction> reductionLigneDraft = reductionService.findReductionLigneDraft(draft.getReference(),
-					draftLigne.getReference());
+			List<Reduction> reductionLigneDraft =
+					reductionService.findReductionLigneDraft(draft.getReference(), draftLigne.getReference());
 
 			CommandeLigne commandeLigneEnReduction = null;
 			for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
@@ -499,8 +502,9 @@ public class DraftServiceImpl implements DraftService {
 			// coper reduction detail ligne draft
 			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
 				// coper reduction ligne draft
-				List<Reduction> reductionDetailLigneDraft = reductionService.findReductionDetailLigneDraft(
-						draft.getReference(), draftLigne.getReference(), draftLigneDetail.getReference());
+				List<Reduction> reductionDetailLigneDraft =
+						reductionService.findReductionDetailLigneDraft(draft.getReference(), draftLigne.getReference(),
+								draftLigneDetail.getReference());
 
 				if (reductionDetailLigneDraft.size() > 0) {
 					CommandeLigneDetail commandeLigneDetailEnReduction = null;
@@ -530,15 +534,18 @@ public class DraftServiceImpl implements DraftService {
 	 *            reference ligne commande
 	 * @param refCommandeLigneDetail
 	 *            reference detail ligne commande
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}
 	 */
 	private void ajouterReductionCommande(List<Reduction> reductions, String refCommande, String refLigneCommande,
-			String refCommandeLigneDetail) {
+			String refCommandeLigneDetail) throws CloneNotSupportedException {
 		for (Reduction reduction : reductions) {
-			reduction.setId(null);
-			reduction.setReferenceDraft(refCommande);
-			reduction.setReferenceLigne(refLigneCommande);
-			reduction.setReferenceLigneDetail(refCommandeLigneDetail);
-			reductionService.save(reduction);
+			Reduction reductionCommande = reduction.copy();
+			reductionCommande.setReferenceDraft(refCommande);
+			reductionCommande.setReferenceLigne(refLigneCommande);
+			reductionCommande.setReferenceLigneDetail(refCommandeLigneDetail);
+			reductionCommande.setReference(keygenService.getNextKey(Reduction.class, null));
+			reductionService.save(reductionCommande);
 		}
 	}
 
@@ -667,13 +674,13 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
-		DraftLigneDetail draftLigneDetail = draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft,
-				refLigne, refProduit);
+		DraftLigneDetail draftLigneDetail =
+				draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft, refLigne, refProduit);
 
 		DraftValidator.isExistDetailLigneDraft(draftLigneDetail, refDraft, refLigne, refProduit);
 
-		String referenceReduction = reductionService.ajouterReductionDetailLigne(draftLigneDetail, refDraft, refLigne,
-				reductionInfo);
+		String referenceReduction =
+				reductionService.ajouterReductionDetailLigne(draftLigneDetail, refDraft, refLigne, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
@@ -700,8 +707,8 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistLigneDetailDraft(refProduit, draftLigneDetail);
 		DraftValidator.isLigneDetailleDraftAppartientAuDraft(refDraft, draft, refProduit, draftLigneDetail);
 
-		String referenceReduction = reductionService.ajouterReductionFrais(refDraft, refLigne, refProduit, refFrais,
-				reductionInfo);
+		String referenceReduction =
+				reductionService.ajouterReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
@@ -729,8 +736,9 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
 		Draft draft = new Draft();
-		Client clientAFacturer = new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO)
-				.getIdAdrFacturation(), auteur);
+		Client clientAFacturer =
+				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation(),
+						auteur);
 
 	}
 }

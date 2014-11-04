@@ -249,19 +249,24 @@ public class DraftController {
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/transformerEnCommande", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object transformerEnCommande(@PathVariable String refDraft,
-			@RequestBody TransformationInfo transformationInfo) throws OpaleException, JSONException {
+			@RequestBody TransformationInfo transformationInfo)
+			throws OpaleException, JSONException, CloneNotSupportedException {
 		LOGGER.info(":::ws-rec:::transformerEnCommande");
 		Object object = draftService.transformerEnCommande(refDraft, transformationInfo);
 		if (object instanceof Commande) {
 			Commande commande = (Commande) object;
 			JSONObject jsonResponse = new JSONObject();
 			jsonResponse.put("reference", commande.getReference());
-			jsonResponse.put("besoinPaiementRecurrent", commandeService.isBesoinPaiementRecurrent(commande.getReference()));
-			jsonResponse.put("besoinPaiementComptant", commandeService.isBesoinPaiementComptant(commande.getReference()));
+			jsonResponse.put("besoinPaiementRecurrent",
+					commandeService.isBesoinPaiementRecurrent(commande.getReference()));
+			jsonResponse.put("besoinPaiementComptant",
+					commandeService.isBesoinPaiementComptant(commande.getReference()));
 			return jsonResponse.toString();
 		}
 		return object;
@@ -363,16 +368,14 @@ public class DraftController {
 	@RequestMapping(value = "/{refDraft:.+}/{refLigne:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object associerReductionLigne(@PathVariable String refDraft, @PathVariable String refLigne,
-			@RequestBody ReductionInfo reductionInfo)
-			throws OpaleException, JSONException {
+			@RequestBody ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionLigne");
 		return draftService.associerReductionLigne(refDraft, refLigne, reductionInfo);
 
 	}
 
 	/**
-	 * associer une reduction a un frais.
-	 * associer une reduction a un detail ligne draft.
+	 * associer une reduction a un frais. associer une reduction a un detail ligne draft.
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
@@ -384,8 +387,7 @@ public class DraftController {
 	 *            reference du frais
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
-	 * @return {@link Object}
-	 *            reference du ligne
+	 * @return {@link Object} reference du ligne
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
@@ -397,8 +399,9 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::associerReductionFrais");
 		return draftService.associerReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
 	}
-	 
-	/** associer une reduction a un detail ligne draft.
+
+	/**
+	 * associer une reduction a un detail ligne draft.
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
@@ -408,8 +411,7 @@ public class DraftController {
 	 *            reference du produit.
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
-	 * @return {@link Object}
-	 *            reference du ligne
+	 * @return {@link Object} reference du ligne
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
@@ -418,8 +420,8 @@ public class DraftController {
 	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/detail/{refProduit:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object associerReductionDetailLigne(@PathVariable String refDraft, @PathVariable String refLigne,
-			@PathVariable String refProduit,
-			@RequestBody ReductionInfo reductionInfo) throws OpaleException, JSONException {
+			@PathVariable String refProduit, @RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionDetailLigne");
 		return draftService.associerReductionDetailLigne(refDraft, refLigne, refProduit, reductionInfo);
 
