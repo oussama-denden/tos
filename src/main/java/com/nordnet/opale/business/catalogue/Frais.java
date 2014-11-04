@@ -1,10 +1,10 @@
 package com.nordnet.opale.business.catalogue;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.TypeFraisDeserializer;
+import com.nordnet.opale.deserializer.TypeTVADeserializer;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypeTVA;
-import com.nordnet.opale.enums.deserializer.TypeFraisDeserializer;
-import com.nordnet.opale.enums.deserializer.TypeTVADeserializer;
 
 /**
  * represente les frais associe a une offre.

@@ -361,7 +361,7 @@ public class DraftController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/{refLigne:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object associerReductionLigne(@PathVariable String refDraft, @PathVariable String refLigne,
 			@RequestBody ReductionInfo reductionInfo)
@@ -402,8 +402,7 @@ public class DraftController {
 				.associerReductionFraisLigneDetaille(refDraft, refLigne, refProduit, refFrais, reductionInfo);
 	}
 
-	 
-		/**
+	/**
 	 * associer une reduction a un frais. associer une reduction a un detail ligne draft.
 	 * 
 	 * @param refDraft
@@ -428,6 +427,7 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::associerReductionFraisLigne");
 		return draftService.associerReductionFraisLigne(refDraft, refLigne, refFrais, reductionInfo);
 		}
+	 
 	 
 	/** associer une reduction a un detail ligne draft.
 	 * 
@@ -474,15 +474,6 @@ public class DraftController {
 		draftService.supprimerReduction(refDraft, refReduction);
 	}
 
-	/**
-	 * 
-	 * @param refContrat
-	 *            .
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public void transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)

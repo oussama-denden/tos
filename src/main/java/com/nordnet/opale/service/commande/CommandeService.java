@@ -250,6 +250,17 @@ public interface CommandeService {
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException;
 
 	/**
+	 * valider une {@link Commande}.
+	 * 
+	 * @param commande
+	 *            {@link Commande} a valider.
+	 * @return {@link CommandeValidationInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandeValidationInfo validerCommande(Commande commande) throws OpaleException;
+
+	/**
 	 * transformer une {@link Commande} en {@link Draft}.
 	 * 
 	 * @param referenceCommande
@@ -261,7 +272,7 @@ public interface CommandeService {
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException;
 
 	/**
-	 * Transformer une commande en contrats Afin de passer à la contractualisation de la commande, sa livraison, et sa
+	 * Transformer une commande en contrats Afin de passer a la contractualisation de la commande, sa livraison, et sa
 	 * facturation finale.
 	 * 
 	 * @param refCommande
@@ -276,6 +287,23 @@ public interface CommandeService {
 	 *             {@link JSONException}.
 	 */
 	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException;
+
+	/**
+	 * Transformer une commande en contrats Afin de passer a la contractualisation de la commande, sa livraison, et sa
+	 * facturation finale.
+	 * 
+	 * @param commande
+	 *            {@link Commande} a transformer.
+	 * @param auteur
+	 *            {@link Auteur}.
+	 * @return liste des references des contrat cree.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException;
 
 	/**
 	 * recuperer la list des commandes non transformes et non annules.

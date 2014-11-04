@@ -550,9 +550,6 @@ public class DraftServiceImpl implements DraftService {
 		return reductionResponse.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
@@ -563,7 +560,6 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
-
 
 		String referenceReduction = reductionService.ajouterReductionLigne(refDraft, refLigne, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
@@ -611,13 +607,16 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, refDraft);
 
 
+
 		DraftLigneDetail draftLigneDetail =
 				draftLigneDetailRepository.findByRefDraftAndRefLigneAndRef(refDraft, refLigne, refProduit);
+
 
 
 		DraftValidator.isExistDetailLigneDraft(draftLigneDetail, refDraft, refLigne, refProduit);
 
 		String referenceReduction =
+
 
 				reductionService
 						.ajouterReductionFraisLigneDetaille(refDraft, draftLigneDetail, refFrais,
@@ -626,19 +625,6 @@ public class DraftServiceImpl implements DraftService {
 		reductionResponse.put("referenceReduction", referenceReduction);
 
 		return reductionResponse.toString();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException {
-		LOGGER.info("Debut methode supprimerReduction");
-
-		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.isExistDraft(draft, refDraft);
-
-		reductionService.supprimer(refReduction);
 	}
 	
 	/**
@@ -662,6 +648,19 @@ public class DraftServiceImpl implements DraftService {
 		reductionResponse.put("referenceReduction", referenceReduction);
 
 		return reductionResponse.toString();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException {
+		LOGGER.info("Debut methode supprimerReduction");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		reductionService.supprimer(refReduction);
 	}
 
 	/**

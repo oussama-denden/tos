@@ -3,9 +3,9 @@ package com.nordnet.opale.business;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
 
 /**
  * classe pour transferer les info de paiement recurrent.

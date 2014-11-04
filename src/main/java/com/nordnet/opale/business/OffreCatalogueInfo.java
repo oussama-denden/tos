@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
+import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link OffreCatalogue}.

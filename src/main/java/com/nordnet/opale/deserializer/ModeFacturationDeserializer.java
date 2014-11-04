@@ -1,4 +1,4 @@
-package com.nordnet.opale.enums.deserializer;
+package com.nordnet.opale.deserializer;
 
 import java.io.IOException;
 
@@ -6,20 +6,20 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.nordnet.opale.enums.TypePaiement;
+import com.nordnet.opale.enums.ModeFacturation;
 
 /**
  * Definir notre propre logique de deserialisation.
  * 
- * @author akram-moncer
+ * @author Denden-OUSSAMA
  * 
  */
-public class TypePaiementDeserializer extends JsonDeserializer<TypePaiement> {
+public class ModeFacturationDeserializer extends JsonDeserializer<ModeFacturation> {
 
 	@Override
-	public TypePaiement deserialize(JsonParser parser, DeserializationContext ctxt)
+	public ModeFacturation deserialize(JsonParser parser, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
-		return TypePaiement.fromString(parser.getText().toUpperCase());
+		return ModeFacturation.fromString(parser.getText().toUpperCase());
 	}
 
 }

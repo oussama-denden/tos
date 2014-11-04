@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
+import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
-import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
 
 /**
  * classe business contien les information necassaire pour la creation d'une ligne draft.

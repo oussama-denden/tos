@@ -1,3 +1,4 @@
+
 package com.nordnet.opale.validator;
 
 import com.nordnet.opale.business.ReductionInfo;
@@ -26,8 +27,6 @@ public class ReductionValidator {
 	 * 
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
-	 * @param type
-	 *            type de reduction
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
