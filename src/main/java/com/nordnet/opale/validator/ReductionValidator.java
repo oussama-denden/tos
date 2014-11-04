@@ -21,14 +21,12 @@ public class ReductionValidator {
 	 * properties util. {@link PropertiesUtil}.
 	 */
 	private static PropertiesUtil propertiesUtil = PropertiesUtil.getInstance();
-	
+
 	/**
 	 * Verifier qu'une reduction sur tous le draft.
 	 * 
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
-	 * @param type
-	 *            type reduction
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
@@ -36,9 +34,8 @@ public class ReductionValidator {
 		if (reductionInfo.getTypeValeur().equals(TypeValeur.MOIS)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1", type), "5.1.1");
 		}
-		
+
 	}
-	
 
 	/**
 	 * Verifier qu'une reduction une ligne du draft.
@@ -91,5 +88,3 @@ public class ReductionValidator {
 
 	}
 }
-
-

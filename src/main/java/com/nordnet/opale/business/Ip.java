@@ -3,7 +3,7 @@ package com.nordnet.opale.business;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nordnet.opale.enums.deserializer.TimeStampDeserializer;
+import com.nordnet.opale.deserializer.TimeStampDeserializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Ip}.

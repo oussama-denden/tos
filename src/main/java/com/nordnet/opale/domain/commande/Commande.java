@@ -99,7 +99,7 @@ public class Commande {
 	/**
 	 * listes des {@link CommandeLigne} de la commande.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "commandeId")
 	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
 

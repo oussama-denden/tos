@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Optional;
+import com.nordnet.opale.deserializer.TypeTVADeserializer;
 import com.nordnet.opale.enums.TypeTVA;
-import com.nordnet.opale.enums.deserializer.TypeTVADeserializer;
 
 /**
  * classe contenant les info du tarif.

@@ -3,8 +3,8 @@ package com.nordnet.opale.business;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.GesteDeserializer;
 import com.nordnet.opale.enums.Geste;
-import com.nordnet.opale.enums.deserializer.GesteDeserializer;
 
 /**
  * Contient les info de l auteur.

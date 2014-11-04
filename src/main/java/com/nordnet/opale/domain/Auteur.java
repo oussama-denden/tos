@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Embeddable;
 
-import org.hibernate.validator.NotNull;
-
 import com.nordnet.opale.business.Ip;
 
 /**
@@ -37,7 +35,6 @@ public class Auteur {
 	/**
 	 * date de l ip.
 	 */
-	@NotNull
 	private Date timestamp;
 
 	/**

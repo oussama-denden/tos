@@ -1,4 +1,4 @@
-package com.nordnet.opale.enums.deserializer;
+package com.nordnet.opale.deserializer;
 
 import java.io.IOException;
 
@@ -6,20 +6,20 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.nordnet.opale.enums.ModeSignature;
+import com.nordnet.opale.enums.TypeValeur;
 
 /**
+ * Desrialisation du type de valeur.
  * 
  * @author mahjoub-MARZOUGUI
  * 
  */
-public class ModeSignatureDeserialiser extends JsonDeserializer<ModeSignature> {
+public class TypeValeurDeserialiser extends JsonDeserializer<TypeValeur> {
 
 	@Override
-	public ModeSignature deserialize(JsonParser parser, DeserializationContext context)
+	public TypeValeur deserialize(JsonParser parser, DeserializationContext context)
 			throws IOException, JsonProcessingException {
-
-		return ModeSignature.fromSting(parser.getText().toUpperCase());
+		return TypeValeur.fromSting(parser.getText().toUpperCase());
 	}
 
 }

@@ -13,9 +13,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.business.SignatureInfo;
+import com.nordnet.opale.deserializer.ModeSignatureDeserialiser;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.enums.ModeSignature;
-import com.nordnet.opale.enums.deserializer.ModeSignatureDeserialiser;
 
 /**
  * Classi qui groupe les informations de signature.

@@ -3,8 +3,8 @@ package com.nordnet.opale.business;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.ModeSignatureDeserialiser;
 import com.nordnet.opale.enums.ModeSignature;
-import com.nordnet.opale.enums.deserializer.ModeSignatureDeserialiser;
 
 /**
  * Classe regroupe les informations necessaires pour valider une signature.

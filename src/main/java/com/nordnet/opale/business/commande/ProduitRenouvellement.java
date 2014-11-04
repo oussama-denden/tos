@@ -1,8 +1,8 @@
 package com.nordnet.opale.business.commande;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.TypeProduitDeserializer;
 import com.nordnet.opale.enums.TypeProduit;
-import com.nordnet.opale.enums.deserializer.TypeProduitDeserializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link produitRenouvellement}.
