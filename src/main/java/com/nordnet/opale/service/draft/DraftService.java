@@ -31,8 +31,7 @@ import com.nordnet.opale.exception.OpaleException;
 public interface DraftService {
 
 	/**
-	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere
-	 * une exception si le draft n'existe pas.
+	 * retourne un {@link Draft} a partir de ca reference. Cette methode genere une exception si le draft n'existe pas.
 	 * 
 	 * 
 	 * @param reference
@@ -184,9 +183,11 @@ public interface DraftService {
 	 * @return reference commande ou {@link DraftValidationInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}
 	 */
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
-			throws OpaleException;
+			throws OpaleException, CloneNotSupportedException;
 
 	/**
 	 * sauver un {@link Draft} dans la base de donnee.
@@ -207,16 +208,16 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException;
-	
+
 	/**
 	 * Asscier un auteur aux draft.
 	 * 
 	 * @param refDraft
-	 * reference draft
+	 *            reference draft
 	 * @param auteur
-	 * {@link Auteur}
+	 *            {@link Auteur}
 	 * @throws OpaleException
-	 * {@link OpaleException}.
+	 *             {@link OpaleException}.
 	 */
 	public void associerAuteur(String refDraft, Auteur auteur) throws OpaleException;
 
@@ -320,8 +321,9 @@ public interface DraftService {
 	 */
 	public Object associerReductionFraisLigne(String refDraft, String refLigne, String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
-	
-/** Associer une reduction a un detail ligne draft.
+
+	/**
+	 * Associer une reduction a un detail ligne draft.
 	 * 
 	 * @param refDraft
 	 *            reference draft

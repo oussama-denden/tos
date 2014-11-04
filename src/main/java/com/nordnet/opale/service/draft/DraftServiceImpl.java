@@ -237,6 +237,7 @@ public class DraftServiceImpl implements DraftService {
 			draft.addLigne(draftLigne);
 
 			draftRepository.save(draft);
+
 			tracageService.ajouterTrace(draftLigneInfo.getAuteur().getQui(), refDraft, "ajout de ligne aux draft "
 					+ refDraft);
 			referencesLignes.add(draftLigne.getReference());
@@ -432,7 +433,7 @@ public class DraftServiceImpl implements DraftService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
-			throws OpaleException {
+			throws OpaleException, CloneNotSupportedException {
 
 		DraftValidator.validerAuteur(transformationInfo.getTrameCatalogue().getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
@@ -456,6 +457,7 @@ public class DraftServiceImpl implements DraftService {
 
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
+
 			tracageService.ajouterTrace(transformationInfo.getTrameCatalogue().getAuteur().getQui(), referenceDraft,
 					"la transformation du draft de reference " + referenceDraft + " en commande de reference "
 							+ commande.getReference());
@@ -472,8 +474,11 @@ public class DraftServiceImpl implements DraftService {
 	 *            {@link Draft}
 	 * @param commande
 	 *            {@link Commande}
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}
 	 */
-	private void associerReductionCommande(Draft draft, Commande commande) {
+	@Transactional
+	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
 		// coper reduction draft
 		List<Reduction> reductionDraft = reductionService.findReductionDraft(draft.getReference());
 
@@ -531,15 +536,18 @@ public class DraftServiceImpl implements DraftService {
 	 *            reference ligne commande
 	 * @param refCommandeLigneDetail
 	 *            reference detail ligne commande
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}
 	 */
 	private void ajouterReductionCommande(List<Reduction> reductions, String refCommande, String refLigneCommande,
-			String refCommandeLigneDetail) {
+			String refCommandeLigneDetail) throws CloneNotSupportedException {
 		for (Reduction reduction : reductions) {
-			reduction.setId(null);
-			reduction.setReferenceDraft(refCommande);
-			reduction.setReferenceLigne(refLigneCommande);
-			reduction.setReferenceLigneDetail(refCommandeLigneDetail);
-			reductionService.save(reduction);
+			Reduction reductionCommande = reduction.copy();
+			reductionCommande.setReferenceDraft(refCommande);
+			reductionCommande.setReferenceLigne(refLigneCommande);
+			reductionCommande.setReferenceLigneDetail(refCommandeLigneDetail);
+			reductionCommande.setReference(keygenService.getNextKey(Reduction.class, null));
+			reductionService.save(reductionCommande);
 		}
 	}
 

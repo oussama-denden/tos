@@ -55,7 +55,7 @@ public class ReductionServiceImpl implements ReductionService {
 	private DraftLigneRepository draftLigneRepository;
 
 	/**
-	 * {@link DraftLigneDetailRepository}
+	 * {@link DraftLigneDetailRepository}.
 	 */
 	@Autowired
 	private DraftLigneDetailRepository draftLigneDetailRepository;
