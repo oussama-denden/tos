@@ -147,6 +147,36 @@ public interface ReductionService {
 			String referenceLigneDetail);
 
 	/**
+	 * Rechercher les reductions d'un detail ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceTarif
+	 *            reference tarif
+	 * @param referenceFrais
+	 *            reference frais
+	 * @param referenceLigneDetail
+	 *            reference detail ligne
+	 * @return {@link List}
+	 */
+	public List<Reduction> findReductionDetailLigneDraftFrais(String referenceDraft, String referenceLigneDetail,
+			String referenceTarif, String referenceFrais);
+
+	/**
+	 * Rechercher les reductions d'un detail ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceLigne
+	 *            reference ligne * @param referenceTarif reference tarif
+	 * @param referenceFrais
+	 *            reference frais
+	 * @return {@link List}
+	 */
+	public List<Reduction> findReductionlLigneDraftFrais(String referenceDraft, String referenceLigne,
+			String referenceTarif, String referenceFrais);
+
+	/**
 	 * Ajouter reduction.
 	 * 
 	 * @param reduction

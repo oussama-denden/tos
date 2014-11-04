@@ -908,11 +908,13 @@ public class DraftServiceImpl implements DraftService {
 	private Double caculerReductionDetaille(String refDraft, String refLinge, String refDetailLigne, Double coutDetail,
 			Tarif tarif, Map<String, Frais> fraisMap, boolean isLigne) {
 		double coutReduction = 0d;
-		Reduction reductionProduit = null;
-		Reduction reductionFrais = null;
+		List<Reduction> reductionProduits = null;
+		List<Reduction> reductionFrais = null;
 		if (isLigne) {
-			reductionProduit = null;
-			reductionFrais = null;
+			reductionProduits = reductionService.findReductionLigneDraft(refDraft, refLinge);
+			reductionFrais =
+					reductionService.findReductionlLigneDraftFrais(refDraft, refLinge, tarif.getReference(),
+							referenceFrais);
 		} else {
 			reductionProduit = null;
 			reductionFrais = null;

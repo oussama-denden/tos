@@ -240,4 +240,24 @@ public class ReductionServiceImpl implements ReductionService {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Reduction> findReductionDetailLigneDraftFrais(String referenceDraft, String referenceLigneDetail,
+			String referenceTarif, String referenceFrais) {
+		return reductionRepository.findReductionLigneDetailleFrais(referenceDraft, referenceLigneDetail,
+				referenceFrais, referenceTarif);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Reduction> findReductionlLigneDraftFrais(String referenceDraft, String referenceLigne,
+			String referenceTarif, String referenceFrais) {
+		return reductionRepository.findReductionLigneFrais(referenceDraft, referenceLigne, referenceFrais,
+				referenceTarif);
+	}
+
 }
