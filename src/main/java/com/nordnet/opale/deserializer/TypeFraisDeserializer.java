@@ -1,4 +1,4 @@
-package com.nordnet.opale.enums.deserializer;
+package com.nordnet.opale.deserializer;
 
 import java.io.IOException;
 

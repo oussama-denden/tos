@@ -1,6 +1,6 @@
 package com.nordnet.opale.enums;
 
-import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
+import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 
 
 /**

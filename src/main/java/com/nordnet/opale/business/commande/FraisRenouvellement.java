@@ -1,8 +1,8 @@
 package com.nordnet.opale.business.commande;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.TypeFraisDeserializer;
 import com.nordnet.opale.enums.TypeFrais;
-import com.nordnet.opale.enums.deserializer.TypeFraisDeserializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link f}.

@@ -3,8 +3,8 @@ package com.nordnet.opale.business;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.util.Utils;
 
 /**

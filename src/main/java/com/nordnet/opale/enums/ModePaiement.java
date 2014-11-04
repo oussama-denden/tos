@@ -1,6 +1,6 @@
 package com.nordnet.opale.enums;
 
-import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
+import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 
 /**
  * Enumeration que definit le type de {@link ModePaiement}.

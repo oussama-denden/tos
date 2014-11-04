@@ -8,14 +8,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
+import com.nordnet.opale.deserializer.ModePaiementDeserializer;
+import com.nordnet.opale.deserializer.TypeProduitDeserializer;
+import com.nordnet.opale.deserializer.TypeTVADeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.enums.TypeTVA;
-import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
-import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
-import com.nordnet.opale.enums.deserializer.TypeProduitDeserializer;
-import com.nordnet.opale.enums.deserializer.TypeTVADeserializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link ElementContractuel}.

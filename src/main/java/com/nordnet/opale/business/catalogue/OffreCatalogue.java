@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.deserializer.ModeFacturationDeserializer;
 
 /**
  * Classe reprensente une offre dans le catalogue.

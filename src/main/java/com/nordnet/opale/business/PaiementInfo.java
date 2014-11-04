@@ -5,8 +5,8 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.deserializer.ModePaiementDeserializer;
 
 /**
  * classe pour transferer les info de paiement.
