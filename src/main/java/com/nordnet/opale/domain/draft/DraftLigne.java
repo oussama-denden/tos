@@ -360,8 +360,8 @@ public class DraftLigne {
 		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
 			if (!commandeLigneDetail.isParent()) {
 				DraftLigneDetail draftLigneDetail = draftDetailsMap.get(commandeLigneDetail.getReferenceProduit());
-				DraftLigneDetail draftLigneDetailParent = draftDetailsMap.get(commandeLigneDetail
-						.getCommandeLigneDetailParent().getReferenceProduit());
+				DraftLigneDetail draftLigneDetailParent =
+						draftDetailsMap.get(commandeLigneDetail.getCommandeLigneDetailParent().getReferenceProduit());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}

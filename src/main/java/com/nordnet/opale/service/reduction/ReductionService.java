@@ -3,6 +3,8 @@ package com.nordnet.opale.service.reduction;
 import java.util.List;
 
 import com.nordnet.opale.business.ReductionInfo;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
@@ -51,10 +53,8 @@ public interface ReductionService {
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
-	 * @param refLigne
-	 *            reference du ligne.
-	 * @param refProduit
-	 *            reference du produit.
+	 * @param draftLigneDetail
+	 *            {@link DraftLigneDetail}
 	 * @param refFrais
 	 *            reference du frais.
 	 * @param reductionInfo
@@ -75,6 +75,8 @@ public interface ReductionService {
 	 *            reference du frais.
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
+	 * @param draftLigne
+	 *            {@link DraftLigne}
 	 * @return {@link Object}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
@@ -151,5 +153,18 @@ public interface ReductionService {
 	 *            reduction
 	 */
 	public void save(Reduction reduction);
+
+	/**
+	 * cacluler reduction.
+	 * 
+	 * @param draft
+	 *            {@link Draft}
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}
+	 * @return cout totale du reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public Double calculerReduction(Draft draft, TrameCatalogue trameCatalogue) throws OpaleException;
 
 }

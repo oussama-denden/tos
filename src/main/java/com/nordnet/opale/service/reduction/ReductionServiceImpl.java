@@ -6,10 +6,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.ReductionInfo;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
+import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
@@ -192,6 +196,48 @@ public class ReductionServiceImpl implements ReductionService {
 	@Override
 	public void save(Reduction reduction) {
 		reductionRepository.save(reduction);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Double calculerReduction(Draft draft, TrameCatalogue trameCatalogue) throws OpaleException {
+
+		double reduction = 0d;
+		double coutTotal = 0d;
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			DetailCout detailCout = new DetailCout(draft.getReference(), draftLigne, trameCatalogue);
+			coutTotal += detailCout.getCoutTotal();
+			reduction += detailCout.getReduction();
+			// addDetail(detailCout);
+		}
+		reduction = +calculerReduction(draft.getReference(), coutTotal);
+		return null;
+	}
+
+	/**
+	 * calculer reduction sur draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft
+	 * @param coutTotal
+	 *            cout total
+	 * @return cout du reduction
+	 */
+	private Double calculerReduction(String refDraft, double coutTotal) {
+		Reduction reductionDraft = new Reduction();
+		double coutReduction = 0d;
+
+		if (reductionDraft != null) {
+			if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
+				coutReduction += (coutTotal * 100) / reductionDraft.getValeur();
+			} else if (reductionDraft.getTypeValeur().equals(TypeValeur.MONTANT)) {
+				coutReduction += coutTotal - reductionDraft.getValeur();
+			}
+		}
+		return coutReduction;
+
 	}
 
 }
