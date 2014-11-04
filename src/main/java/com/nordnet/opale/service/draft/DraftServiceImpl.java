@@ -529,6 +529,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, refDraft);
 		DraftValidator.validerAuteur(auteur);
 		draft.setAuteur(auteur.toDomain());
+		draftRepository.save(draft);
 		LOGGER.info("Fin methode associerAuteur ");
 
 	}
