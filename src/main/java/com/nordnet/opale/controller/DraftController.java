@@ -202,7 +202,7 @@ public class DraftController {
 	}
 
 	/**
-	 * Associe une draft à un client.
+	 * Associe une draft Ã  un client.
 	 * 
 	 * @param refDraft
 	 *            the ref draft
@@ -249,11 +249,14 @@ public class DraftController {
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/transformerEnCommande", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object transformerEnCommande(@PathVariable String refDraft,
-			@RequestBody TransformationInfo transformationInfo) throws OpaleException, JSONException {
+			@RequestBody TransformationInfo transformationInfo)
+			throws OpaleException, JSONException, CloneNotSupportedException {
 		LOGGER.info(":::ws-rec:::transformerEnCommande");
 		Object object = draftService.transformerEnCommande(refDraft, transformationInfo);
 		if (object instanceof Commande) {
@@ -390,11 +393,40 @@ public class DraftController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public Object associerReductionFrais(@PathVariable String refDraft, @PathVariable String refLigne,
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/detail/{refProduit}/frais/{refFrais}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object associerReductionFraisLigneDetaille(@PathVariable String refDraft, @PathVariable String refLigne,
 			@PathVariable String refProduit, @PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionFrais");
-		return draftService.associerReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+		return draftService
+				.associerReductionFraisLigneDetaille(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+	}
+
+	/**
+	 * associer une reduction a un frais. associer une reduction a un detail ligne draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object} reference du ligne
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/frais/{refFrais:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object associerReductionFraisLigne(@PathVariable String refDraft, @PathVariable String refLigne,
+			@PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReductionFraisLigne");
+		return draftService.associerReductionFraisLigne(refDraft, refLigne, refFrais, reductionInfo);
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package com.nordnet.opale.service.reduction;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,6 +11,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
@@ -48,6 +51,12 @@ public class ReductionServiceImpl implements ReductionService {
 	private DraftLigneRepository draftLigneRepository;
 
 	/**
+	 * {@link DraftLigneDetailRepository}.
+	 */
+	@Autowired
+	private DraftLigneDetailRepository draftLigneDetailRepository;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -70,13 +79,14 @@ public class ReductionServiceImpl implements ReductionService {
 	@Override
 	public String ajouterReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException {
-		
+
 		LOGGER.info("Debut methode ajouterReductionLigne ");
 
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigne);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReferenceDraft(refDraft);
 		reduction.setReferenceLigne(refLigne);
 		reductionRepository.save(reduction);
 		return reduction.getReference();
@@ -86,15 +96,18 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String ajouterReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
-			ReductionInfo reductionInfo) throws OpaleException {
+	public String ajouterReductionFraisLigneDetaille(String refDraft, DraftLigneDetail draftLigneDetail,
+			String refFrais, ReductionInfo reductionInfo) throws OpaleException {
 
 		LOGGER.info("Debut methode ajouterReductionFrais ");
 
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReferenceDraft(refDraft);
 		reduction.setReferenceFrais(refFrais);
+		reduction.setReferenceTarif(draftLigneDetail.getReferenceTarif());
+		reduction.setReferenceLigneDetail(draftLigneDetail.getReference());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
 	}
@@ -105,6 +118,8 @@ public class ReductionServiceImpl implements ReductionService {
 	@Override
 	public String ajouterReductionDetailLigne(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
 			ReductionInfo reductionInfo) throws OpaleException {
+
+		LOGGER.info("Debut methode ajouterReductionDetailLigne ");
 
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigneDetail);
 		Reduction reduction = reductionInfo.toDomain();
@@ -119,10 +134,64 @@ public class ReductionServiceImpl implements ReductionService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
+	public String ajouterReductionFraisLigne(String refDraft, DraftLigne draftLigne, String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException {
+
+		LOGGER.info("Debut methode ajouterReductionFraisLigne ");
+
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.FRAIS);
+		Reduction reduction = reductionInfo.toDomain();
+		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReferenceDraft(refDraft);
+		reduction.setReferenceFrais(refFrais);
+		reduction.setReferenceTarif(draftLigne.getReferenceTarif());
+		reduction.setReferenceLigne(draftLigne.getReference());
+		reductionRepository.save(reduction);
+		return reduction.getReference();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void supprimer(String refReduction) throws OpaleException {
 		Reduction reduction = reductionRepository.findByReference(refReduction);
 		ReductionValidator.isExiste(reduction, refReduction);
 		reductionRepository.delete(reduction);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Reduction> findReductionDraft(String referenceDraft) {
+		return reductionRepository.findReductionDraft(referenceDraft);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Reduction> findReductionLigneDraft(String referenceDraft, String referenceLigne) {
+		return reductionRepository.findReductionLigne(referenceDraft, referenceLigne);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Reduction> findReductionDetailLigneDraft(String referenceDraft, String referenceLigne,
+			String referenceLigneDetail) {
+		return reductionRepository.findReductionLigneDetaille(referenceDraft, referenceLigne, referenceLigneDetail);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void save(Reduction reduction) {
+		reductionRepository.save(reduction);
 	}
 
 }

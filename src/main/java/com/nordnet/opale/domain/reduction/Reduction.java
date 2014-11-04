@@ -22,7 +22,7 @@ import com.nordnet.opale.enums.TypeValeur;
  */
 @Table(name = "reduction")
 @Entity
-public class Reduction {
+public class Reduction implements Cloneable {
 
 	/**
 	 * cle primaire.
@@ -87,6 +87,11 @@ public class Reduction {
 	 * reference du fras.
 	 */
 	private String referenceFrais;
+
+	/**
+	 * reference du tarif.
+	 */
+	private String referenceTarif;
 
 	/**
 	 * constructeur par defaut.
@@ -296,5 +301,52 @@ public class Reduction {
 		this.referenceLigneDetail = referenceLigneDetail;
 	}
 
+	/**
+	 * @return {@link #referenceTarif}
+	 */
+	public String getReferenceTarif() {
+		return referenceTarif;
+	}
+
+	/**
+	 * 
+	 * @param referenceTarif
+	 *            the new {@link #referenceTarif}
+	 */
+	public void setReferenceTarif(String referenceTarif) {
+		this.referenceTarif = referenceTarif;
+	}
+
+	/**
+	 * cloner la reduction.
+	 * 
+	 * @return {@link Reduction}.
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}
+	 */
+	public Reduction clone() throws CloneNotSupportedException {
+		return (Reduction) super.clone();
+	}
+
+	/**
+	 * creer une copie avec id = null.
+	 * 
+	 * @return {@link Reduction}.
+	 */
+	public Reduction copy() {
+		Reduction reduction = new Reduction();
+		reduction.setDateDebut(dateDebut);
+		reduction.setDateFin(dateFin);
+		reduction.setNbUtilisationMax(nbUtilisationMax);
+		reduction.setTypeValeur(typeValeur);
+		reduction.setValeur(valeur);
+		reduction.setLabel(label);
+		reduction.setReference(reference);
+		reduction.setReferenceDraft(referenceDraft);
+		reduction.setReferenceFrais(referenceFrais);
+		reduction.setReferenceLigne(referenceLigne);
+		reduction.setReferenceLigneDetail(referenceLigneDetail);
+		return reduction;
+	}
 
 }

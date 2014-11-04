@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
@@ -127,7 +130,8 @@ public class CommandeLigne {
 	}
 
 	/**
-	 * creation d'une ligne de commande a partir du {@link DraftLigne} et de {@link TrameCatalogue}.
+	 * creation d'une ligne de commande a partir du {@link DraftLigne} et de
+	 * {@link TrameCatalogue}.
 	 * 
 	 * @param draftLigne
 	 *            {@link DraftLigne}.
@@ -154,10 +158,7 @@ public class CommandeLigne {
 
 	@Override
 	public String toString() {
-		return "CommandeLigne [id=" + id + ", numero=" + numero + ", referenceOffre=" + referenceOffre + ", label="
-				+ label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement
-				+ ", modeFacturation=" + modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur
-				+ "]";
+		return "CommandeLigne [id=" + id + ", numero=" + numero + ", referenceOffre=" + referenceOffre + ", label=" + label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement + ", modeFacturation=" + modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur + "]";
 	}
 
 	/**
@@ -453,7 +454,8 @@ public class CommandeLigne {
 	}
 
 	/**
-	 * Transformer un {@link CommandeLigne} en un {@link ContratPreparationInfo}.
+	 * Transformer un {@link CommandeLigne} en un {@link ContratPreparationInfo}
+	 * .
 	 * 
 	 * @param referenceCommande
 	 *            reference du commande.
@@ -472,8 +474,8 @@ public class CommandeLigne {
 				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.UN;
 			}
 
-			produits.add(ligneDetail.toProduit(referenceCommande, commandeLigneDetails.indexOf(ligneDetail)
-					+ Constants.UN, numECParent, modeFacturation));
+			produits.add(ligneDetail.toProduit(referenceCommande,
+					commandeLigneDetails.indexOf(ligneDetail) + Constants.UN, numECParent, modeFacturation));
 		}
 		contrat.setProduits(produits);
 
@@ -496,13 +498,54 @@ public class CommandeLigne {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
+						.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
+						.getDraftLigneDetailParent().getReferenceSelection());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof CommandeLigne || obj instanceof DraftLigne)) {
+			return false;
+		}
+
+		if (obj instanceof CommandeLigne) {
+			CommandeLigne commmandeLigne = (CommandeLigne) obj;
+			return new EqualsBuilder().append(referenceOffre, commmandeLigne.referenceOffre)
+					.append(modeFacturation, commmandeLigne.modeFacturation)
+					.append(modePaiement, commmandeLigne.modePaiement).isEquals();
+		} else {
+			DraftLigne draftLigne = (DraftLigne) obj;
+			return new EqualsBuilder().append(referenceOffre, draftLigne.getReferenceOffre())
+					.append(modeFacturation, draftLigne.getModeFacturation())
+					.append(modePaiement, draftLigne.getModePaiement()).isEquals();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(id).append(referenceOffre).append(modeFacturation)
+				.append(modePaiement).toHashCode();
+	}
+
 }

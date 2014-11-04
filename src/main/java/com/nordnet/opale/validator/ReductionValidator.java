@@ -1,3 +1,4 @@
+
 package com.nordnet.opale.validator;
 
 import com.nordnet.opale.business.ReductionInfo;
@@ -9,8 +10,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 
 /**
- * cette classe responsable de valider les informations liés a une
- * {@link Reduction}.
+ * cette classe responsable de valider les informations liés a une {@link Reduction}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -21,7 +21,7 @@ public class ReductionValidator {
 	 * properties util. {@link PropertiesUtil}.
 	 */
 	private static PropertiesUtil propertiesUtil = PropertiesUtil.getInstance();
-	
+
 	/**
 	 * Verifier qu'une reduction sur tous le draft.
 	 * 
@@ -34,9 +34,8 @@ public class ReductionValidator {
 		if (reductionInfo.getTypeValeur().equals(TypeValeur.MOIS)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1", type), "5.1.1");
 		}
-		
+
 	}
-	
 
 	/**
 	 * Verifier qu'une reduction une ligne du draft.
@@ -89,5 +88,3 @@ public class ReductionValidator {
 
 	}
 }
-
-

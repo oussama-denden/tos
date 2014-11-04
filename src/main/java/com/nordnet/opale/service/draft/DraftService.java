@@ -1,3 +1,4 @@
+
 package com.nordnet.opale.service.draft;
 
 import java.util.List;
@@ -182,9 +183,11 @@ public interface DraftService {
 	 * @return reference commande ou {@link DraftValidationInfo}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
+	 * @throws CloneNotSupportedException
+	 *             {@link CloneNotSupportedException}
 	 */
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
-			throws OpaleException;
+			throws OpaleException, CloneNotSupportedException;
 
 	/**
 	 * sauver un {@link Draft} dans la base de donnee.
@@ -279,7 +282,7 @@ public interface DraftService {
 			throws OpaleException, JSONException;
 
 	/**
-	 * Associer une reduction a une ligne.
+	 * Associer une reduction a un frais associe aux produit.
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
@@ -297,7 +300,28 @@ public interface DraftService {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public Object associerReductionFrais(String refDraft, String refLigne, String refProduit, String refFrais,
+	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
+			String refFrais,
+			ReductionInfo reductionInfo) throws OpaleException, JSONException;
+	
+	/**
+	 * Associer une reduction a un frais associe aux ligne du draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference du ligne.
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReductionFraisLigne(String refDraft, String refLigne, String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
 
 	/**
