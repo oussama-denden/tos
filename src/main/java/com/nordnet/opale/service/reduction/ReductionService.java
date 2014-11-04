@@ -1,8 +1,11 @@
 package com.nordnet.opale.service.reduction;
 
+import java.util.List;
+
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -61,9 +64,8 @@ public interface ReductionService {
 	 *             {@link OpaleException}
 	 */
 	public String ajouterReductionFraisLigneDetaille(String refDraft, DraftLigneDetail draftLigneDetail,
-			String refFrais,
-			ReductionInfo reductionInfo) throws OpaleException;
-	
+			String refFrais, ReductionInfo reductionInfo) throws OpaleException;
+
 	/**
 	 * Ajouter une reduction a une frais.
 	 * 
@@ -80,7 +82,8 @@ public interface ReductionService {
 	public String ajouterReductionFraisLigne(String refDraft, DraftLigne draftLigne, String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException;
 
-			/** ajouter reduction a un detail ligne draft.
+	/**
+	 * ajouter reduction a un detail ligne draft.
 	 * 
 	 * @param draftLigneDetail
 	 *            draft ligne detail
@@ -106,5 +109,47 @@ public interface ReductionService {
 	 *             {@link OpaleException}
 	 */
 	public void supprimer(String refReduction) throws OpaleException;
+
+	/**
+	 * Rechercher les reductions d'une commande.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @return {@link List}
+	 */
+	public List<Reduction> findReductionDraft(String referenceDraft);
+
+	/**
+	 * Rechercher les reductions d'une ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceLigne
+	 *            reference ligne
+	 * @return {@link List}
+	 */
+	public List<Reduction> findReductionLigneDraft(String referenceDraft, String referenceLigne);
+
+	/**
+	 * Rechercher les reductions d'un detail ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceLigne
+	 *            reference ligne
+	 * @param referenceLigneDetail
+	 *            reference detail ligne
+	 * @return {@link List}
+	 */
+	public List<Reduction> findReductionDetailLigneDraft(String referenceDraft, String referenceLigne,
+			String referenceLigneDetail);
+
+	/**
+	 * Ajouter reduction.
+	 * 
+	 * @param reduction
+	 *            reduction
+	 */
+	public void save(Reduction reduction);
 
 }

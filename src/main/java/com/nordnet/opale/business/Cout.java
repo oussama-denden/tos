@@ -52,8 +52,10 @@ public class Cout {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			DetailCout detailCout = new DetailCout(draft.getReference(), draftLigne, trameCatalogue);
 			coutTotal += detailCout.getCoutTotal();
+			reduction += detailCout.getReduction();
 			addDetail(detailCout);
 		}
+		reduction = +calculerReduction(draft.getReference(), coutTotal);
 	}
 
 	/**
@@ -132,13 +134,15 @@ public class Cout {
 	}
 
 	/**
+	 * calculer reduction sur draft.
 	 * 
 	 * @param refDraft
+	 *            reference du draft
 	 * @param coutTotal
-	 * @return
+	 *            cout total
+	 * @return cout du reduction
 	 */
 	private Double calculerReduction(String refDraft, double coutTotal) {
-		return coutTotal;
 		Reduction reductionDraft = new Reduction();
 		double coutReduction = 0d;
 
