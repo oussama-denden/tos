@@ -53,6 +53,8 @@ public interface ReductionService {
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
+	 * @param draftLigneDetail
+	 *            {@link DraftLigneDetail}
 	 * @param refFrais
 	 *            reference du frais.
 	 * @param reductionInfo

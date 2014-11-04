@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
+import com.nordnet.opale.business.commande.ElementContractuel;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.enums.ModePaiement;
@@ -122,6 +123,21 @@ public class DraftLigneDetail {
 		this.referenceTarif = tarif != null ? tarif.getReference() : null;
 		this.modePaiement = commandeLigneDetail.getModePaiement();
 		this.configurationJson = commandeLigneDetail.getConfigurationJson();
+	}
+
+	/**
+	 * creation draftLigneDetail a partir de l'{@link ElementContractuel}.
+	 * 
+	 * @param elementContractuel
+	 *            {@link ElementContractuel}.
+	 * @param referenceSelection
+	 *            reference selection.
+	 */
+	public DraftLigneDetail(ElementContractuel elementContractuel, String referenceSelection) {
+		this.referenceSelection = referenceSelection;
+		this.reference = elementContractuel.getReferenceProduit();
+		this.modePaiement = elementContractuel.getModePaiement();
+		this.numEC = elementContractuel.getNumEC();
 	}
 
 	@Override

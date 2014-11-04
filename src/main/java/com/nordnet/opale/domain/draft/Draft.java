@@ -21,11 +21,14 @@ import org.hibernate.validator.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.enums.Geste;
+import com.nordnet.opale.util.Constants;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.
@@ -109,9 +112,9 @@ public class Draft {
 	 * code auteur.
 	 */
 	private String codePartenaire;
-	
+
 	/**
-	* Le geste effectue.
+	 * Le geste effectue.
 	 */
 	@Enumerated(EnumType.STRING)
 	private Geste geste;
@@ -144,17 +147,40 @@ public class Draft {
 		}
 		Client clientSouscripteur = commande.getClientSouscripteur();
 		if (clientSouscripteur != null) {
-			this.clientSouscripteur = new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId(),
-					clientSouscripteur.getAuteur());
+			this.clientSouscripteur =
+					new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId(),
+							clientSouscripteur.getAuteur());
 		}
 		Client clientALivrer = commande.getClientALivrer();
 		if (clientALivrer != null) {
-			this.clientALivrer = new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId(),
-					clientALivrer.getAuteur());
+			this.clientALivrer =
+					new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId(), clientALivrer.getAuteur());
 		}
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			addLigne(new DraftLigne(commandeLigne));
 		}
+	}
+
+	/**
+	 * creation du {@link Draft} a partir du {@link Contrat} et de la {@link TrameCatalogue}.
+	 * 
+	 * @param contrat
+	 *            {@link Contrat}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 */
+	public Draft(Contrat contrat, TrameCatalogue trameCatalogue) {
+		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
+		this.auteur = auteur;
+		Client clientAFacturer =
+				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation(),
+						auteur);
+		this.clientAFacturer = clientAFacturer;
+		Client clientALivrer =
+				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrLivraison(),
+						auteur);
+		this.clientALivrer = clientALivrer;
+		addLigne(new DraftLigne(contrat, trameCatalogue));
 	}
 
 	@Override
@@ -371,8 +397,8 @@ public class Draft {
 	public void setCodePartenaire(String codePartenaire) {
 		this.codePartenaire = codePartenaire;
 	}
-	
-	/** 
+
+	/**
 	 * @return {@link #geste}
 	 */
 	public Geste getGeste() {

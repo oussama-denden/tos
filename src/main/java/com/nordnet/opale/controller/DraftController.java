@@ -474,13 +474,23 @@ public class DraftController {
 		draftService.supprimerReduction(refDraft, refReduction);
 	}
 
-	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.GET, produces = "application/json")
+	/**
+	 * transformer un {@link Contrat} en {@link Draft}.
+	 * 
+	 * @param refContrat
+	 *            reference {@link Contrat}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return {@link DraftValidationInfo} ou {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public void transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
+	public Object transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
-		draftService.transformerContratEnDraft(refContrat, trameCatalogue);
-
+		return draftService.transformerContratEnDraft(refContrat, trameCatalogue);
 	}
 
 	/**

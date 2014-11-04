@@ -12,6 +12,7 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypeValeur;
+import com.nordnet.opale.util.Constants;
 
 /**
  * contient les cout en detail pour un profuit.
@@ -88,7 +89,9 @@ public class DetailCout {
 				+caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(),
 						detailCoutTarif.getCoutTotal(), tarif, fraisMap, true);
 
-		this.plan = new Plan(frequence, plan);
+		if (plan > Constants.ZERO) {
+			this.plan = new Plan(frequence, plan);
+		}
 	}
 
 	/**
@@ -116,7 +119,9 @@ public class DetailCout {
 		coutTotal += detailCoutTarif.getCoutTotal();
 		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 
-		this.plan = new Plan(frequence, plan);
+		if (plan > Constants.ZERO) {
+			this.plan = new Plan(frequence, plan);
+		}
 	}
 
 	/**

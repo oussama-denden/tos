@@ -8,6 +8,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.base.Optional;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.deserializer.TypeProduitDeserializer;
@@ -126,7 +127,6 @@ public class ElementContractuel {
 				+ referenceModePaiement + ", modeFacturation=" + modeFacturation + ", frais=" + frais + "]";
 	}
 
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -145,8 +145,7 @@ public class ElementContractuel {
 		}
 		ElementContractuel rhs = (ElementContractuel) obj;
 		return new EqualsBuilder().append(idAdrFacturation, rhs.idAdrFacturation)
-				.append(idAdrLivraison, rhs.idAdrLivraison).append(numEC, rhs.numEC)
-				.isEquals();
+				.append(idAdrLivraison, rhs.idAdrLivraison).append(numEC, rhs.numEC).isEquals();
 	}
 
 	/*
@@ -472,6 +471,18 @@ public class ElementContractuel {
 	 */
 	public void setModeFacturation(ModeFacturation modeFacturation) {
 		this.modeFacturation = modeFacturation;
+	}
+
+	/**
+	 * 
+	 * @return true si l'element est un parent.
+	 */
+	public boolean isParent() {
+		Optional<Integer> numECParent = Optional.fromNullable(this.numECParent);
+		if (numECParent.isPresent()) {
+			return true;
+		}
+		return false;
 	}
 
 }
