@@ -1,5 +1,7 @@
 package com.nordnet.opale.service.reduction;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -70,7 +72,7 @@ public class ReductionServiceImpl implements ReductionService {
 	@Override
 	public String ajouterReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException {
-		
+
 		LOGGER.info("Debut methode ajouterReductionLigne ");
 
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
@@ -123,6 +125,38 @@ public class ReductionServiceImpl implements ReductionService {
 		Reduction reduction = reductionRepository.findByReference(refReduction);
 		ReductionValidator.isExiste(reduction, refReduction);
 		reductionRepository.delete(reduction);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Reduction> findReductionDraft(String referenceDraft) {
+		return reductionRepository
+				.findByReferenceDraftAndReferenceLigneIsNullAndReferenceLigneDetailIsNull(referenceDraft);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Reduction> findReductionLigneDraft(String referenceDraft, String referenceLigne) {
+		return reductionRepository.findByReferenceDraftAndReferenceLigneAndReferenceLigneDetailIsNull(referenceDraft,
+				referenceLigne);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Reduction> findReductionDetailLigneDraft(String referenceDraft, String referenceLigne,
+			String referenceLigneDetail) {
+		return reductionRepository.findByReferenceDraftAndReferenceLigneAndReferenceLigneDetail(referenceDraft,
+				referenceLigne, referenceLigneDetail);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void save(Reduction reduction) {
+		reductionRepository.save(reduction);
 	}
 
 }

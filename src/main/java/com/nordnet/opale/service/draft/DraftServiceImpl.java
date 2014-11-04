@@ -1,4 +1,3 @@
-
 package com.nordnet.opale.service.draft;
 
 import java.util.ArrayList;
@@ -28,9 +27,12 @@ import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
@@ -153,7 +155,6 @@ public class DraftServiceImpl implements DraftService {
 		LOGGER.info("Enter methode creerDraft");
 		DraftValidator.validerAuteur(draftInfo.getAuteur());
 
-
 		Draft draft = new Draft();
 
 		// verifier si le clientId n'est pas null ou empty.
@@ -179,6 +180,7 @@ public class DraftServiceImpl implements DraftService {
 		if (draftInfo.getLignes() != null) {
 			for (DraftLigneInfo draftLigneInfo : draftInfo.getLignes()) {
 				DraftLigne draftLigne = new DraftLigne(draftLigneInfo, draftInfo.getAuteur());
+				draftLigne.setReference(keygenService.getNextKey(DraftLigne.class, null));
 				draft.addLigne(draftLigne);
 			}
 		}
@@ -220,8 +222,8 @@ public class DraftServiceImpl implements DraftService {
 			draft.addLigne(draftLigne);
 
 			draftRepository.save(draft);
-			tracageService.ajouterTrace(draftLigneInfo.getAuteur().getQui(), refDraft, "ajout de ligne aux draft "
-					+ refDraft);
+			tracageService.ajouterTrace(draftLigneInfo.getAuteur().getQui(), refDraft,
+					"ajout de ligne aux draft " + refDraft);
 			referencesLignes.add(draftLigne.getReference());
 		}
 
@@ -267,8 +269,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.addLigne(nouveauDraftLigne);
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
- + refDraft + " modifiée");
+		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft,
+				"la ligne " + refLigne + " du draft " + refDraft + " modifiée");
 
 	}
 
@@ -331,8 +333,8 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.delete(draftLigne);
 		draftLigneRepository.flush();
 
-		tracageService.ajouterTrace(deleteInfo.getAuteur().getQui(), reference, "la ligne " + referenceLigne
- + " du draft " + reference + " supprimée");
+		tracageService.ajouterTrace(deleteInfo.getAuteur().getQui(), reference,
+				"la ligne " + referenceLigne + " du draft " + reference + " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
 	}
@@ -386,10 +388,13 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(clientInfo.getAuteur().getQui(), refDraft, "associer le client souscripteur "
-				+ idClientSouscripteur + " client facturation " + idClientFacturation + " client livraison "
+		tracageService
+				.ajouterTrace(
+						clientInfo.getAuteur().getQui(),
+						refDraft,
+						"associer le client souscripteur " + idClientSouscripteur + " client facturation " + idClientFacturation + " client livraison "
 
-				+ idClientLivraison + " au draft" + refDraft);
+						+ idClientLivraison + " au draft" + refDraft);
 
 		LOGGER.info("fin methode associerClient");
 
@@ -434,14 +439,97 @@ public class DraftServiceImpl implements DraftService {
 			commande.setReference(Prefix.Cmd + "-" + keygenService.getNextKey(Commande.class, Prefix.Cmd));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
+
+			associerReductionCommande(draft, commande);
+
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
-			tracageService.ajouterTrace(transformationInfo.getTrameCatalogue().getAuteur().getQui(), referenceDraft,
-					"la transformation du draft de reference " + referenceDraft + " en commande de reference "
-							+ commande.getReference());
+			tracageService
+					.ajouterTrace(
+							transformationInfo.getTrameCatalogue().getAuteur().getQui(),
+							referenceDraft,
+							"la transformation du draft de reference " + referenceDraft + " en commande de reference " + commande
+									.getReference());
 			return commande;
 		} else {
 			return validationInfo;
+		}
+	}
+
+	/**
+	 * Ajouer reduction commande.
+	 * 
+	 * @param draft
+	 *            {@link Draft}
+	 * @param commande
+	 *            {@link Commande}
+	 */
+	private void associerReductionCommande(Draft draft, Commande commande) {
+		// coper reduction draft
+		List<Reduction> reductionDraft = reductionService.findReductionDraft(draft.getReference());
+
+		ajouterReductionCommande(reductionDraft, commande.getReference(), null, null);
+
+		// coper reduction ligne draft
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			// coper reduction ligne draft
+			List<Reduction> reductionLigneDraft = reductionService.findReductionLigneDraft(draft.getReference(),
+					draftLigne.getReference());
+
+			CommandeLigne commandeLigneEnReduction = null;
+			for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+				if (commandeLigne.equals(draftLigne)) {
+					commandeLigneEnReduction = commandeLigne;
+					break;
+				}
+			}
+
+			ajouterReductionCommande(reductionLigneDraft, commande.getReference(),
+					commandeLigneEnReduction.getReferenceOffre(), null);
+
+			// coper reduction detail ligne draft
+			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
+				// coper reduction ligne draft
+				List<Reduction> reductionDetailLigneDraft = reductionService.findReductionDetailLigneDraft(
+						draft.getReference(), draftLigne.getReference(), draftLigneDetail.getReference());
+
+				if (reductionDetailLigneDraft.size() > 0) {
+					CommandeLigneDetail commandeLigneDetailEnReduction = null;
+
+					for (CommandeLigneDetail commandeLigneDetail : commandeLigneEnReduction.getCommandeLigneDetails()) {
+						if (commandeLigneDetail.equals(draftLigneDetail)) {
+							commandeLigneDetailEnReduction = commandeLigneDetail;
+							break;
+						}
+					}
+					ajouterReductionCommande(reductionDetailLigneDraft, commande.getReference(),
+							commandeLigneEnReduction.getReferenceOffre(),
+							commandeLigneDetailEnReduction.getReferenceProduit());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Ajouter une reduction commande.
+	 * 
+	 * @param reductions
+	 *            {@link List}
+	 * @param refCommande
+	 *            refrence commande
+	 * @param refLigneCommande
+	 *            reference ligne commande
+	 * @param refCommandeLigneDetail
+	 *            reference detail ligne commande
+	 */
+	private void ajouterReductionCommande(List<Reduction> reductions, String refCommande, String refLigneCommande,
+			String refCommandeLigneDetail) {
+		for (Reduction reduction : reductions) {
+			reduction.setId(null);
+			reduction.setReferenceDraft(refCommande);
+			reduction.setReferenceLigne(refLigneCommande);
+			reduction.setReferenceLigneDetail(refCommandeLigneDetail);
+			reductionService.save(reduction);
 		}
 	}
 
@@ -561,14 +649,13 @@ public class DraftServiceImpl implements DraftService {
 
 		return reductionResponse.toString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
-			ReductionInfo reductionInfo)
-			throws OpaleException, JSONException {
+			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionDetailLigne ");
 
 		Draft draft = draftRepository.findByReference(refDraft);
@@ -607,8 +694,8 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistLigneDetailDraft(refProduit, draftLigneDetail);
 		DraftValidator.isLigneDetailleDraftAppartientAuDraft(refDraft, draft, refProduit, draftLigneDetail);
 
-		String referenceReduction =
-				reductionService.ajouterReductionFrais(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+		String referenceReduction = reductionService.ajouterReductionFrais(refDraft, refLigne, refProduit, refFrais,
+				reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 

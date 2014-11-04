@@ -15,6 +15,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.Choice;
@@ -52,7 +55,7 @@ public class CommandeLigneDetail {
 	 * reference produit.
 	 */
 	private String referenceProduit;
-	
+
 	/**
 	 * reference selection.
 	 */
@@ -63,7 +66,7 @@ public class CommandeLigneDetail {
 	 */
 	@Enumerated(EnumType.STRING)
 	private TypeProduit typeProduit;
-	
+
 	/**
 	 * reference choix.
 	 */
@@ -122,8 +125,8 @@ public class CommandeLigneDetail {
 	 *            {@link TrameCatalogue}.
 	 */
 	public CommandeLigneDetail(DraftLigneDetail detail, String referenceOffre, TrameCatalogue trameCatalogue) {
-		DetailCatalogue detailCatalogue =
-				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
+		DetailCatalogue detailCatalogue = trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap()
+				.get(detail.getReferenceSelection());
 		this.referenceProduit = detail.getReference();
 		this.referenceSelection = detail.getReferenceSelection();
 		this.typeProduit = detailCatalogue.getNature();
@@ -137,8 +140,7 @@ public class CommandeLigneDetail {
 
 	@Override
 	public String toString() {
-		return "CommandeLigneDetail [id=" + id + ", referenceProduit=" + referenceProduit + ", modePaiement="
-				+ modePaiement + ", configurationJson=" + configurationJson + "]";
+		return "CommandeLigneDetail [id=" + id + ", referenceProduit=" + referenceProduit + ", modePaiement=" + modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
 	/**
@@ -191,7 +193,7 @@ public class CommandeLigneDetail {
 	public void setReferenceProduit(String referenceProduit) {
 		this.referenceProduit = referenceProduit;
 	}
-	
+
 	/**
 	 * 
 	 * @return {@link #referenceSelection}.
@@ -225,7 +227,7 @@ public class CommandeLigneDetail {
 	public void setTypeProduit(TypeProduit typeProduit) {
 		this.typeProduit = typeProduit;
 	}
-	
+
 	/**
 	 * 
 	 * @return {@link #referenceChoix}.
@@ -396,7 +398,7 @@ public class CommandeLigneDetail {
 		}
 		return produit;
 	}
-	
+
 	/**
 	 * verifier si un element est parent ou non.
 	 * 
@@ -409,5 +411,46 @@ public class CommandeLigneDetail {
 		} else {
 			return true;
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof CommandeLigneDetail || obj instanceof DraftLigneDetail)) {
+			return false;
+		}
+		if (obj instanceof CommandeLigneDetail) {
+			CommandeLigneDetail rhs = (CommandeLigneDetail) obj;
+			return new EqualsBuilder().append(referenceProduit, rhs.referenceProduit)
+					.append(referenceSelection, rhs.referenceSelection).append(referenceChoix, rhs.referenceChoix)
+					.isEquals();
+		} else {
+			DraftLigneDetail draftLigneDetail = (DraftLigneDetail) obj;
+			return new EqualsBuilder().append(referenceProduit, draftLigneDetail.getReference())
+					.append(referenceSelection, draftLigneDetail.getReferenceSelection())
+					.append(referenceChoix, draftLigneDetail.getReferenceChoix()).isEquals();
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(id).append(referenceProduit).append(referenceSelection)
+				.append(referenceChoix).toHashCode();
 	}
 }
