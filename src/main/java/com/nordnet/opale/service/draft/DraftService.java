@@ -1,3 +1,4 @@
+
 package com.nordnet.opale.service.draft;
 
 import java.util.List;
@@ -233,6 +234,18 @@ public interface DraftService {
 	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException;
 
 	/**
+	 * Transformer un contrat en draft.
+	 * 
+	 * @param referenceContrat
+	 *            reference contrat dans Topaze
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue) throws OpaleException;
+
+	/**
 	 * associer une reduction a un draft.
 	 * 
 	 * @param refDraft
@@ -289,7 +302,7 @@ public interface DraftService {
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
 	
 	/**
-	 * Associer une reduction a un frais associa aux ligne du draft.
+	 * Associer une reduction a un frais associe aux ligne du draft.
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
@@ -307,7 +320,7 @@ public interface DraftService {
 	 */
 	public Object associerReductionFraisLigne(String refDraft, String refLigne, String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
-
+	
 /** Associer une reduction a un detail ligne draft.
 	 * 
 	 * @param refDraft

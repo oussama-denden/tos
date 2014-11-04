@@ -31,8 +31,12 @@ public final class RestConstants {
 	public static final String VALIDER_CONTRAT = "VALIDER_CONTRAT";
 
 	/**
+	 * Service rest de Topaze : getContratByReference.
+	 */
+	public static final String GET_CONTRAT_BY_REFERENCE = "GET_CONTRAT_BY_REFERENCE";
+
+	/**
 	 * Service rest de la brique contrat: revouvelerContrat.
 	 */
 	public static final String RENOUVELER_CONTRAT = "RENOUVELER_CONTRAT";
-
 }

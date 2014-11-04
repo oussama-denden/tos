@@ -9,8 +9,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 
 /**
- * cette classe responsable de valider les informations liés a une
- * {@link Reduction}.
+ * cette classe responsable de valider les informations liés a une {@link Reduction}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
@@ -27,6 +26,8 @@ public class ReductionValidator {
 	 * 
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
+	 * @param type
+	 *            type de reduction
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */

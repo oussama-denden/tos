@@ -529,7 +529,7 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/costCalculation", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public List<Cout> calculerCout(@PathVariable("refCommande") String refCommande) throws OpaleException {
+	public Cout calculerCout(@PathVariable("refCommande") String refCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::calculerCout");
 		return commandeService.calculerCout(refCommande);
 	}

@@ -337,9 +337,9 @@ public interface CommandeService {
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
-	 * @return liste des {@link Cout}, chaque {@link Cout} corresponds a une ligne de la {@link Commande}.
+	 * @return {@link Cout}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public List<Cout> calculerCout(String referenceCommande) throws OpaleException;
+	public Cout calculerCout(String referenceCommande) throws OpaleException;
 }
