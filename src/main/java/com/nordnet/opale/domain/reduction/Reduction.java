@@ -89,6 +89,11 @@ public class Reduction implements Cloneable {
 	private String referenceFrais;
 
 	/**
+	 * reference du tarif.
+	 */
+	private String referenceTarif;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Reduction() {
@@ -294,6 +299,22 @@ public class Reduction implements Cloneable {
 	 */
 	public void setReferenceLigneDetail(String referenceLigneDetail) {
 		this.referenceLigneDetail = referenceLigneDetail;
+	}
+
+	/**
+	 * @return {@link #referenceTarif}
+	 */
+	public String getReferenceTarif() {
+		return referenceTarif;
+	}
+
+	/**
+	 * 
+	 * @param referenceTarif
+	 *            the new {@link #referenceTarif}
+	 */
+	public void setReferenceTarif(String referenceTarif) {
+		this.referenceTarif = referenceTarif;
 	}
 
 	/**

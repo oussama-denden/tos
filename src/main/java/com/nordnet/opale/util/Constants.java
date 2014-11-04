@@ -112,4 +112,10 @@ public final class Constants {
 	 */
 	public static final String PRODUIT = "Produit";
 
+
+	/**
+	 * constante indique le frais.
+	 */
+	public static final String FRAIS = "Frais";
+
 }

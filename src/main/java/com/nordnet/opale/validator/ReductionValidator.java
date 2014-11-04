@@ -1,3 +1,4 @@
+
 package com.nordnet.opale.validator;
 
 import com.nordnet.opale.business.ReductionInfo;
@@ -9,8 +10,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 
 /**
- * cette classe responsable de valider les informations liés a une
- * {@link Reduction}.
+ * cette classe responsable de valider les informations liés a une {@link Reduction}.
  * 
  * @author mahjoub-MARZOUGUI
  * 
