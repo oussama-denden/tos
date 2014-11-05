@@ -20,11 +20,13 @@ public class SaphirMock extends SaphirClient {
 	private static final Logger LOGGER = Logger.getLogger(SaphirMock.class);
 
 	@Override
-	public void addDownPayment(Identifier accountId, Price price, PaymentReference paymentReference) throws Exception {
-		LOGGER.info("\n*******************DownPaiement Ajouté*******************\n" + "Account ID: " + accountId
-				+ "\nPrice.Amount: " + price.getPrice().getAmount() + "\nPrice.Currency: " + price.getCurrency()
-				+ "\nPaymentReference.PaymentType: " + paymentReference.getPaymentType()
-				+ "\nPaymentReference.PaymentId: " + paymentReference.getPaymentId());
+	public void addDownPayment(Identifier accountId, Price price, PaymentReference paymentReference, String billingGroup)
+			throws Exception {
+		LOGGER.info("\n*******************DownPaiement Ajouté*******************\n" + "Billing Group: " + billingGroup
+				+ "\nAccount ID: " + accountId + "\nPrice.Amount: " + price.getPrice().getAmount()
+				+ "\nPrice.Currency: " + price.getCurrency() + "\nPaymentReference.PaymentType: "
+				+ paymentReference.getPaymentType() + "\nPaymentReference.PaymentId: "
+				+ paymentReference.getPaymentId());
 	}
 
 }
