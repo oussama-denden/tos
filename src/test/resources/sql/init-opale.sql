@@ -297,6 +297,23 @@ CREATE TABLE `paiement` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `opale_test`.`reduction`;
+CREATE TABLE  `opale_test`.`reduction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dateDebut` datetime DEFAULT NULL,
+  `dateFin` datetime DEFAULT NULL,
+  `label` varchar(255) DEFAULT NULL,
+  `nbUtilisationMax` int(11) DEFAULT NULL,
+  `reference` varchar(255) NOT NULL,
+  `referenceDraft` varchar(255) DEFAULT NULL,
+  `referenceFrais` varchar(255) DEFAULT NULL,
+  `referenceLigne` varchar(255) DEFAULT NULL,
+  `referenceLigneDetail` varchar(255) DEFAULT NULL,
+  `referenceTarif` varchar(255) DEFAULT NULL,
+  `typeValeur` varchar(255) DEFAULT NULL,
+  `valeur` double DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 SET FOREIGN_KEY_CHECKS=1;
