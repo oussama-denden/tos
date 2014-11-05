@@ -27,7 +27,7 @@ public class SupprimerCommandes extends QuartzJobBean {
 	/**
 	 * Declaration du log.
 	 */
-	private final static Logger LOGGER = Logger.getLogger(NettoyerDB.class);
+	private final static Logger LOGGER = Logger.getLogger(SupprimerCommandes.class);
 
 	/**
 	 * {@link CommandeService}.

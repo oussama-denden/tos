@@ -638,6 +638,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 * 
 	 */
+	@Override
 	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -767,6 +768,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Cout calculerCout(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);

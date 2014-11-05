@@ -63,8 +63,8 @@ public interface ReductionService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public String ajouterReductionFraisLigneDetaille(String refDraft, DraftLigneDetail draftLigneDetail,
-			String refFrais, ReductionInfo reductionInfo) throws OpaleException;
+	public String ajouterReductionFraisLigneDetaille(String refDraft, String refLigne,
+			DraftLigneDetail draftLigneDetail, String refFrais, ReductionInfo reductionInfo) throws OpaleException;
 
 	/**
 	 * Ajouter une reduction a une frais.
@@ -147,6 +147,31 @@ public interface ReductionService {
 			String referenceLigneDetail);
 
 	/**
+	 * Rechercher les reductions d'une ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceLigne
+	 *            reference ligne
+	 * @return {@link List}
+	 */
+	public List<Reduction> findReductionLigneDraftSansFrais(String referenceDraft, String referenceLigne);
+
+	/**
+	 * Rechercher les reductions d'un detail ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceLigne
+	 *            reference ligne
+	 * @param referenceLigneDetail
+	 *            reference detail ligne
+	 * @return {@link List}
+	 */
+	public List<Reduction> findReductionDetailLigneDraftSansFrais(String referenceDraft, String referenceLigne,
+			String referenceLigneDetail);
+
+	/**
 	 * Rechercher les reductions d'un detail ligne.
 	 * 
 	 * @param referenceDraft
@@ -157,10 +182,12 @@ public interface ReductionService {
 	 *            reference frais
 	 * @param referenceLigneDetail
 	 *            reference detail ligne
+	 * @param refLigne
+	 *            reference ligne
 	 * @return {@link List}
 	 */
-	public List<Reduction> findReductionDetailLigneDraftFrais(String referenceDraft, String referenceLigneDetail,
-			String referenceTarif, String referenceFrais);
+	public List<Reduction> findReductionDetailLigneDraftFrais(String referenceDraft, String refLigne,
+			String referenceLigneDetail, String referenceTarif, String referenceFrais);
 
 	/**
 	 * Rechercher les reductions d'un detail ligne.
