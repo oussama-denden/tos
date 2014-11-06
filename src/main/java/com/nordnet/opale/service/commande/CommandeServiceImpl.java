@@ -36,6 +36,7 @@ import com.nordnet.opale.domain.commande.Frais;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.enums.TypePaiement;
@@ -47,6 +48,7 @@ import com.nordnet.opale.service.downpaiement.DownPaiementService;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
+import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.signature.SignatureService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
@@ -115,6 +117,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private DownPaiementService downPaiementService;
+
+	/**
+	 * {@link ReductionService}.
+	 */
+	@Autowired
+	private ReductionService reductionService;
 
 	/**
 	 * 
@@ -521,6 +529,12 @@ public class CommandeServiceImpl implements CommandeService {
 					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui());
 			String refContrat = restClient.preparerContrat(preparationInfo);
 			ligne.setReferenceContrat(refContrat);
+
+			/*
+			 * association des reductions au nouveau contrat cre.
+			 */
+			List<Reduction> reductions = reductionService.findReductionDraft(commande.getReference());
+
 			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
 
 			restClient.validerContrat(refContrat, validationInfo);

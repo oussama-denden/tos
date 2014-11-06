@@ -54,8 +54,7 @@ public class RestClient {
 	 * preparer un contrat.
 	 * 
 	 * @param contratPreparationInfo
-	 *            information de prepartion du contrat
-	 *            {@link ContratPreparationInfo}.
+	 *            information de prepartion du contrat {@link ContratPreparationInfo}.
 	 * @return reference du contrat preparer.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
@@ -97,8 +96,9 @@ public class RestClient {
 	public void validerContrat(String refContrat, ContratValidationInfo validationInfo) throws OpaleException {
 		LOGGER.info(":::ws-call:::validerContrat");
 		RestTemplate rt = new RestTemplate();
-		String url = restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.VALIDER_CONTRAT,
-				refContrat);
+		String url =
+				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.VALIDER_CONTRAT,
+						refContrat);
 
 		try {
 			@SuppressWarnings("unused")
@@ -126,25 +126,14 @@ public class RestClient {
 	 */
 	public Contrat getContratByReference(String referenceContrat) {
 		LOGGER.info(":::ws-call:::getContratByReference");
-		RestTemplate rt = new RestTemplate();
-
-		/*
-		 * configurer restTemplate pour ignorer les proprietes inconnu
-		 */
-		// MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-		// jsonConverter.getObjectMapper().configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
-		// jsonConverter.getObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		// final List<HttpMessageConverter<?>> listHttpMessageConverters = rt.getMessageConverters();
-		//
-		// listHttpMessageConverters.add(jsonConverter);
-		// rt.setMessageConverters(listHttpMessageConverters);
-
-		String url =
-				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
-						RestConstants.GET_CONTRAT_BY_REFERENCE, referenceContrat);
 		try {
-		ResponseEntity<Contrat> responseEntity = rt.getForEntity(url, Contrat.class);
-		return responseEntity.getBody();
+			RestTemplate rt = new RestTemplate();
+
+			String url =
+					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
+							RestConstants.GET_CONTRAT_BY_REFERENCE, referenceContrat);
+			ResponseEntity<Contrat> responseEntity = rt.getForEntity(url, Contrat.class);
+			return responseEntity.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -166,12 +155,14 @@ public class RestClient {
 			throws OpaleException {
 		LOGGER.info(":::ws-call:::renouvelerContrat");
 		RestTemplate rt = new RestTemplate();
-		String url = restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.RENOUVELER_CONTRAT,
-				referenceContrat);
+		String url =
+				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.RENOUVELER_CONTRAT,
+						referenceContrat);
 
 		try {
 
-			HttpEntity<ContratRenouvellementInfo> entity = new HttpEntity<ContratRenouvellementInfo>(renouvellementInfo);
+			HttpEntity<ContratRenouvellementInfo> entity =
+					new HttpEntity<ContratRenouvellementInfo>(renouvellementInfo);
 			ResponseEntity<String> response = rt.exchange(url, HttpMethod.POST, entity, String.class);
 			String responseBody = response.getBody();
 
@@ -188,6 +179,14 @@ public class RestClient {
 		} catch (JSONException e) {
 			throw new OpaleException("404 Introuvable", "404");
 		}
+	}
+
+	public void ajouterReductionContrat(String referenceContrat) {
+		LOGGER.info(":::ws-call:::ajouterReductionContrat");
+		RestTemplate rt = new RestTemplate();
+		String url =
+				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
+						RestConstants.AJOUTER_REDUCTION_CONTRAT, referenceContrat);
 	}
 
 	/**

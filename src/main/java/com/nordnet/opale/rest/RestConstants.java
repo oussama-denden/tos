@@ -39,4 +39,14 @@ public final class RestConstants {
 	 * Service rest de la brique contrat: revouvelerContrat.
 	 */
 	public static final String RENOUVELER_CONTRAT = "RENOUVELER_CONTRAT";
+
+	/**
+	 * Service rest de Topaze : ajouterReductionContrat.
+	 */
+	public static final String AJOUTER_REDUCTION_CONTRAT = "AJOUTER_REDUCTION_CONTRAT";
+
+	/**
+	 * Service rest de Topaze : ajouterReductionElementContractuelle.
+	 */
+	public static final String AJOUTER_REDUCTION_ELEMENT_CONTRACTUEL = "AJOUTER_REDUCTION_ELEMENT_CONTRACTUEL";
 }

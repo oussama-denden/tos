@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeValeur;
 
@@ -22,6 +23,7 @@ import com.nordnet.opale.enums.TypeValeur;
  */
 @Table(name = "reduction")
 @Entity
+@JsonIgnoreProperties({ "id" })
 public class Reduction implements Cloneable {
 
 	/**
