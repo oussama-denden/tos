@@ -192,5 +192,23 @@
 		<xsd:attribute name="timestampIntention" use="optional" />
 	</xsd:complexType>
 	
+	<xsd:element name="reduction" type="reduction_type"/>
+	<xsd:complexType name="reduction_type">
+	   <xsd:attribute name="id" use="optional" />
+		<xsd:attribute name="dateDebut" use="optional" />
+		<xsd:attribute name="dateFin" use="optional" />
+		<xsd:attribute name="label" use="optional" />
+		<xsd:attribute name="nbUtilisationMax" use="optional" />
+		<xsd:attribute name="reference" use="optional" />
+		
+		<xsd:attribute name="referenceDraft" use="optional" />
+		<xsd:attribute name="referenceFrais" use="optional" />
+		<xsd:attribute name="referenceLigne" use="optional" />
+		<xsd:attribute name="referenceLigneDetail" use="optional" />
+		<xsd:attribute name="referenceTarif" use="optional" />
+		<xsd:attribute name="typeValeur" use="optional" />
+		<xsd:attribute name="valeur" use="optional" />
+	</xsd:complexType>
+	
 	
 </xsd:schema>

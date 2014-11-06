@@ -188,7 +188,7 @@ public class DetailCout {
 	 * 
 	 * @return {@link #reduction}
 	 */
-	public double getReduction() {
+	public Double getReduction() {
 		return reduction;
 	}
 
@@ -197,7 +197,7 @@ public class DetailCout {
 	 * @param reduction
 	 *            the new {@link #reduction}
 	 */
-	public void setReduction(double reduction) {
+	public void setReduction(Double reduction) {
 		this.reduction = reduction;
 	}
 
