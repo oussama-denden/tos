@@ -37,7 +37,6 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.signature.Signature;
-import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
@@ -159,7 +158,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		LOGGER.info("Debut methode creerIntentionPaiement");
 
-		getCommandeByReference(refCommande);
+		Commande commande = getCommandeByReference(refCommande);
+		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
+
 		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), refCommande,
 				"Créer une intention de paiement pour la commande " + refCommande);
 
@@ -178,6 +180,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 
 		paiementService.effectuerPaiement(referencePaiement, referenceCommande, paiementInfo, TypePaiement.COMPTANT);
 		commandeRepository.save(commande);
@@ -202,6 +205,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 
@@ -411,6 +415,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.SIGNATURE);
 		return signatureService.ajouterIntentionDeSignature(refCommande, ajoutSignatureInfo);
 	}
 
@@ -424,6 +429,11 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode signerCommande");
+
+		Commande commande = getCommandeByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.SIGNATURE);
+
 		return signatureService.ajouterSignatureCommande(refCommande, refrenceSignature, signatureInfo);
 	}
 
@@ -506,6 +516,7 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
 		CommandeValidator.isAuteurValide(auteur);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 		return transformeEnContrat(commande, auteur);
 	}
 
@@ -588,9 +599,9 @@ public class CommandeServiceImpl implements CommandeService {
 		/*
 		 * attribution des reference au draft/draftLigne.
 		 */
-		draft.setReference(Prefix.Dra + "-" + keygenService.getNextKey(Draft.class, null));
+		draft.setReference(keygenService.getNextKey(Draft.class));
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class, null));
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 		}
 		draftService.save(draft);
 

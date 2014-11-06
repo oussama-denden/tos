@@ -37,8 +37,7 @@ public final class Utils {
 	 * 
 	 * @param str
 	 *            the string.
-	 * @return <code>true</code> if the string is null or empty,
-	 *         <code>false</code> otherwise.
+	 * @return <code>true</code> if the string is null or empty, <code>false</code> otherwise.
 	 */
 	public static boolean isStringNullOrEmpty(String str) {
 		return (str == null) ? true : str.trim().length() == 0;
@@ -49,8 +48,7 @@ public final class Utils {
 	 * 
 	 * @param list
 	 *            the list of objects
-	 * @return <code>false</code> if the list is null or empty,
-	 *         <code>true</code> otherwise.
+	 * @return <code>false</code> if the list is null or empty, <code>true</code> otherwise.
 	 */
 	public static boolean isListNullOrEmpty(List<?> list) {
 		return (list == null) ? true : list.size() == 0;
@@ -63,8 +61,7 @@ public final class Utils {
 	 *            la premiere date.
 	 * @param seconDate
 	 *            la deuxiemement date.
-	 * @return int (-1 first date is less then second date, 0 equals , first
-	 *         date is great then second date)
+	 * @return int (-1 first date is less then second date, 0 equals , first date is great then second date)
 	 */
 	public static int compareDate(Date firstDate, Date seconDate) {
 		LocalDate firstLocalDate = new LocalDate(firstDate);
@@ -77,8 +74,7 @@ public final class Utils {
 	 * 
 	 * @param str
 	 *            the string.
-	 * @return <code>true</code> if the string contain whitespace,
-	 *         <code>false</code> otherwise.
+	 * @return <code>true</code> if the string contain whitespace, <code>false</code> otherwise.
 	 */
 	public static boolean containsWhiteSpace(final String str) {
 		Pattern pattern = Pattern.compile("\\s");
@@ -116,7 +112,7 @@ public final class Utils {
 	public static Date parseDate(String date) throws ParseException, OpaleException {
 		SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
 		Date dateFormatte;
-		if (!(date.length() == Constants.UN)) {
+		if (!(date == null)) {
 			dateFormatte = formatter.parse(date);
 		} else {
 			dateFormatte = PropertiesUtil.getInstance().getDateDuJour();

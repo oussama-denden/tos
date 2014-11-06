@@ -70,7 +70,7 @@ public class ReductionServiceImpl implements ReductionService {
 
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.DRAFT);
 		Reduction reduction = reductionInfo.toDomain();
-		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
 		reductionRepository.save(reduction);
 		return reduction.getReference();
@@ -89,7 +89,7 @@ public class ReductionServiceImpl implements ReductionService {
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigne);
 		Reduction reduction = reductionInfo.toDomain();
-		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
 		reduction.setReferenceLigne(refLigne);
 		reductionRepository.save(reduction);
@@ -107,7 +107,7 @@ public class ReductionServiceImpl implements ReductionService {
 
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
 		Reduction reduction = reductionInfo.toDomain();
-		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
 		reduction.setReferenceLigne(refLigne);
 		reduction.setReferenceTarif(draftLigneDetail.getReferenceTarif());
@@ -128,7 +128,7 @@ public class ReductionServiceImpl implements ReductionService {
 
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigneDetail);
 		Reduction reduction = reductionInfo.toDomain();
-		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceLigne(refLigne);
 		reduction.setReferenceDraft(refDraft);
 		reduction.setReferenceLigneDetail(draftLigneDetail.getReference());
@@ -147,7 +147,7 @@ public class ReductionServiceImpl implements ReductionService {
 
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.FRAIS);
 		Reduction reduction = reductionInfo.toDomain();
-		reduction.setReference(keygenService.getNextKey(Reduction.class, null));
+		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
 		reduction.setReferenceLigne(draftLigne.getReference());
 		reduction.setReferenceFrais(refFrais);

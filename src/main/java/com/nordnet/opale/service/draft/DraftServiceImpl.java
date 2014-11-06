@@ -40,7 +40,6 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
-import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
@@ -196,12 +195,12 @@ public class DraftServiceImpl implements DraftService {
 		if (draftInfo.getLignes() != null) {
 			for (DraftLigneInfo draftLigneInfo : draftInfo.getLignes()) {
 				DraftLigne draftLigne = new DraftLigne(draftLigneInfo, draftInfo.getAuteur());
-				draftLigne.setReference(keygenService.getNextKey(DraftLigne.class, null));
+				draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 				draft.addLigne(draftLigne);
 			}
 		}
 
-		draft.setReference(Prefix.Dra + "-" + keygenService.getNextKey(Draft.class, Prefix.Dra));
+		draft.setReference(keygenService.getNextKey(Draft.class));
 		draft.setCodePartenaire(draftInfo.getCodePartenaire());
 
 		DraftValidator.isExsteGeste(draftInfo.getGeste());
@@ -232,7 +231,7 @@ public class DraftServiceImpl implements DraftService {
 			DraftValidator.validerAuteur(draftLigneInfo.getAuteur());
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
-			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class, null));
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			draftLigne.setAuteur(draftLigneInfo.getAuteur().toDomain());
 			draft.addLigne(draftLigne);
@@ -450,7 +449,7 @@ public class DraftServiceImpl implements DraftService {
 
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
-			commande.setReference(Prefix.Cmd + "-" + keygenService.getNextKey(Commande.class, Prefix.Cmd));
+			commande.setReference(keygenService.getNextKey(Commande.class));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
 
@@ -547,7 +546,7 @@ public class DraftServiceImpl implements DraftService {
 			reductionCommande.setReferenceDraft(refCommande);
 			reductionCommande.setReferenceLigne(refLigneCommande);
 			reductionCommande.setReferenceLigneDetail(refCommandeLigneDetail);
-			reductionCommande.setReference(keygenService.getNextKey(Reduction.class, null));
+			reductionCommande.setReference(keygenService.getNextKey(Reduction.class));
 			reductionService.save(reductionCommande);
 		}
 	}
@@ -796,7 +795,7 @@ public class DraftServiceImpl implements DraftService {
 	 *            {@link TrameCatalogue}
 	 * @return {@link Cout}
 	 */
-	public Cout calculerCoutLigne(Draft draft, TrameCatalogue trameCatalogue) {
+	private Cout calculerCoutLigne(Draft draft, TrameCatalogue trameCatalogue) {
 		Cout cout = new Cout();
 		Double coutTotal = 0d;
 		double reduction = 0d;
@@ -826,7 +825,7 @@ public class DraftServiceImpl implements DraftService {
 	 *            {@link TrameCatalogue}
 	 * @return {@link DetailCout}
 	 */
-	public DetailCout calculerCoutLigneDetail(String refDraft, DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
+	private DetailCout calculerCoutLigneDetail(String refDraft, DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		double reduction = 0d;
@@ -853,8 +852,8 @@ public class DraftServiceImpl implements DraftService {
 		coutTotal += detailCoutTarif.getCoutTotal();
 		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 		reduction +=
-				caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(),
-						detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan().getPlan(), tarif, fraisMap, true);
+				caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
+						plan, tarif, fraisMap, true);
 
 		detailCout.setPlan(new Plan(frequence, plan));
 		detailCout.setCoutTotal(coutTotal);
@@ -925,11 +924,7 @@ public class DraftServiceImpl implements DraftService {
 		if (reductionProduits != null && reductionProduits.size() != Constants.ZERO) {
 			for (Reduction reductionProduit : reductionProduits) {
 				if (reductionProduit.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-					if (tarif.isRecurrent()) {
-						coutReduction += (plan * reductionProduit.getValeur()) / 100;
-					} else {
-						coutReduction += (coutDetail * reductionProduit.getValeur()) / 100;
-					}
+					coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
 				} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
 					coutReduction += reductionProduit.getValeur();
 				}
@@ -952,7 +947,7 @@ public class DraftServiceImpl implements DraftService {
 			for (Reduction reduction : reductionFrais) {
 				if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
 					if (reduction.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-						coutReduction += (coutDetail * reduction.getValeur()) / 100;
+						coutReduction += (frais.getMontant() * reduction.getValeur()) / 100;
 					} else if (reduction.getTypeValeur().equals(TypeValeur.MONTANT)) {
 						coutReduction += reduction.getValeur();
 					}
