@@ -46,6 +46,7 @@ import com.nordnet.opale.service.downpaiement.DownPaiementService;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
+import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.signature.SignatureService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
@@ -114,6 +115,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private DownPaiementService downPaiementService;
+
+	/**
+	 * {@link ReductionService}.
+	 */
+	@Autowired
+	private ReductionService reductionService;
 
 	/**
 	 * 
@@ -532,6 +539,13 @@ public class CommandeServiceImpl implements CommandeService {
 					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui());
 			String refContrat = restClient.preparerContrat(preparationInfo);
 			ligne.setReferenceContrat(refContrat);
+
+			/*
+			 * association des reductions au nouveau contrat cre.
+			 */
+			// il y seulement un seule reduction pour un draft
+			// List<Reduction> reductions = reductionService.findReductionDraft(commande.getReference());
+
 			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
 
 			restClient.validerContrat(refContrat, validationInfo);

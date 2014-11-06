@@ -3,11 +3,8 @@ package com.nordnet.opale.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
-import com.nordnet.opale.domain.draft.Draft;
-import com.nordnet.opale.domain.draft.DraftLigne;
 
 /**
  * contient les couts d'une commande.
@@ -36,22 +33,6 @@ public class Cout {
 	 * constructeur par defaut.
 	 */
 	public Cout() {
-	}
-
-	/**
-	 * creation du cout d'un {@link Draft}.
-	 * 
-	 * @param draft
-	 *            {@link Draft}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
-	 */
-	public Cout(Draft draft, TrameCatalogue trameCatalogue) {
-		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			DetailCout detailCout = new DetailCout(draft.getReference(), draftLigne, trameCatalogue);
-			coutTotal += detailCout.getCoutTotal();
-			addDetail(detailCout);
-		}
 	}
 
 	/**
