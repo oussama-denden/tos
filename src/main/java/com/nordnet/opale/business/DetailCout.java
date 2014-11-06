@@ -9,9 +9,7 @@ import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
-import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.enums.TypeFrais;
-import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.util.Constants;
 
 /**
@@ -76,18 +74,12 @@ public class DetailCout {
 			coutTotal += detailCoutTarif.getCoutTotal();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
-			reduction =
-					+caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReference(),
-							detailCoutTarif.getCoutTotal(), tarif, fraisMap, false);
 		}
 
 		tarif = tarifMap.get(draftLigne.getReferenceTarif());
 		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
 		coutTotal += detailCoutTarif.getCoutTotal();
 		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-		reduction =
-				+caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(),
-						detailCoutTarif.getCoutTotal(), tarif, fraisMap, true);
 
 		if (plan > Constants.ZERO) {
 			this.plan = new Plan(frequence, plan);
@@ -258,54 +250,4 @@ public class DetailCout {
 		return detailCout;
 	}
 
-	/**
-	 * Calculer le cout du reduction.
-	 * 
-	 * @param refDraft
-	 * @param refLinge
-	 * @param refDetailleLigne
-	 * @param coutDetaille
-	 * @param tarif
-	 * @param fraisMap
-	 * @return
-	 */
-	private Double caculerReductionDetaille(String refDraft, String refLinge, String refDetailleLigne,
-			Double coutDetaille, Tarif tarif, Map<String, Frais> fraisMap, boolean isLigne) {
-		double coutReduction = 0d;
-		Reduction reductionProduit = null;
-		Reduction reductionFrais = null;
-		if (isLigne) {
-			reductionProduit = null;
-			reductionFrais = null;
-		} else {
-			reductionProduit = null;
-			reductionFrais = null;
-		}
-
-		// calculer la reduction
-		if (reductionProduit != null) {
-			if (reductionProduit.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-				coutReduction += (coutDetaille * 100) / reductionProduit.getValeur();
-			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
-				coutReduction += coutDetaille - reductionProduit.getValeur();
-			}
-		}
-
-		// calculer reduction su frais de detaille ligne draft.
-
-		for (String refFrais : tarif.getFrais()) {
-			Frais frais = fraisMap.get(refFrais);
-			// Reduction reductionFrais = new Reduction();
-			if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
-				if (reductionFrais.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-					coutReduction += (coutDetaille * 100) / reductionFrais.getValeur();
-				} else if (reductionFrais.getTypeValeur().equals(TypeValeur.MONTANT)) {
-					coutReduction += coutDetaille - reductionFrais.getValeur();
-				}
-
-			}
-		}
-		return coutReduction;
-
-	}
 }

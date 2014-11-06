@@ -233,11 +233,12 @@ public class SignatureServiceImpl implements SignatureService {
 		}
 
 		signature.setAuteur(auteur);
-		signature.setReference(keygenService.getNextKey(Signature.class, null));
+		signature.setReference(keygenService.getNextKey(Signature.class));
 		signature.setReferenceCommande(refCommande);
 		signatureRepository.save(signature);
 		return signature.getReference();
 	}
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -259,8 +260,8 @@ public class SignatureServiceImpl implements SignatureService {
 			signature.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());
 			signatureRepository.save(signature);
 		}
-			tracageService.ajouterTrace(auteur.getQui(), refCommande, "Supprimer la signature de reference "
-					+ refSignature);
+		tracageService
+				.ajouterTrace(auteur.getQui(), refCommande, "Supprimer la signature de reference " + refSignature);
 
 		LOGGER.info("Fin methode supprimer");
 	}

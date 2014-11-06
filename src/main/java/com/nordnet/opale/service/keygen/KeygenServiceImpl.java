@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.repository.KeygenRepository;
 
@@ -32,13 +34,17 @@ public class KeygenServiceImpl implements KeygenService {
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
-	public String getNextKey(Class clazz, Prefix prefix) {
+	public String getNextKey(Class clazz) {
 
 		LOGGER.info("Enter methode getNextKey– Class = " + clazz.getName());
+		String prefix =
+				clazz.equals(Draft.class) ? Prefix.Dra.toString() : clazz.equals(Commande.class) ? Prefix.Cmd
+						.toString() : null;
 
 		String reference = keygenRepository.getReference(clazz.getName(), prefix != null ? prefix.toString() : null);
 
 		LOGGER.info("Fin methode getNextKey – Class = " + clazz.getName());
-		return reference;
+		return clazz.equals(Draft.class) ? Prefix.Dra + "-" + reference : clazz.equals(Commande.class) ? Prefix.Cmd
+				+ "-" + reference : reference;
 	}
 }
