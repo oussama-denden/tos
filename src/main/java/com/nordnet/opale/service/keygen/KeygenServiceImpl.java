@@ -36,7 +36,7 @@ public class KeygenServiceImpl implements KeygenService {
 	@SuppressWarnings("rawtypes")
 	public String getNextKey(Class clazz) {
 
-		LOGGER.info("Enter methode getNextKey– Class = " + clazz.getTypeName());
+		LOGGER.info("Enter methode getNextKey– Class = " + clazz.getName());
 		String prefix =
 				clazz.equals(Draft.class) ? Prefix.Dra.toString() : clazz.equals(Commande.class) ? Prefix.Cmd
 						.toString() : null;
