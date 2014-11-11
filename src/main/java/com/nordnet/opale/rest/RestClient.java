@@ -14,6 +14,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.nordnet.opale.business.ContratReductionInfo;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.ContratRenouvellementInfo;
@@ -153,13 +154,13 @@ public class RestClient {
 	 */
 	public void renouvelerContrat(String referenceContrat, ContratRenouvellementInfo renouvellementInfo)
 			throws OpaleException {
-		LOGGER.info(":::ws-call:::renouvelerContrat");
-		RestTemplate rt = new RestTemplate();
-		String url =
-				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.RENOUVELER_CONTRAT,
-						referenceContrat);
 
 		try {
+			LOGGER.info(":::ws-call:::renouvelerContrat");
+			RestTemplate rt = new RestTemplate();
+			String url =
+					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.RENOUVELER_CONTRAT,
+							referenceContrat);
 
 			HttpEntity<ContratRenouvellementInfo> entity =
 					new HttpEntity<ContratRenouvellementInfo>(renouvellementInfo);
@@ -181,12 +182,81 @@ public class RestClient {
 		}
 	}
 
-	public void ajouterReductionContrat(String referenceContrat) {
-		LOGGER.info(":::ws-call:::ajouterReductionContrat");
-		RestTemplate rt = new RestTemplate();
-		String url =
-				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
-						RestConstants.AJOUTER_REDUCTION_CONTRAT, referenceContrat);
+	/**
+	 * appel vers Topaze pour ajouter une reduction au contrat global.
+	 * 
+	 * @param referenceContrat
+	 *            reference {@link Contrat} dans topaze.
+	 * @param contratReductionInfo
+	 *            {@link ContratReductionInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void ajouterReductionSurContrat(String referenceContrat, ContratReductionInfo contratReductionInfo)
+			throws OpaleException {
+		try {
+
+			LOGGER.info(":::ws-call:::ajouterReductionSurContrat");
+			RestTemplate rt = new RestTemplate();
+			String url =
+					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
+							RestConstants.AJOUTER_REDUCTION_CONTRAT, referenceContrat);
+			HttpEntity<ContratReductionInfo> entity = new HttpEntity<ContratReductionInfo>(contratReductionInfo);
+			ResponseEntity<String> response = rt.exchange(url, HttpMethod.POST, entity, String.class);
+			String responseBody = response.getBody();
+			if (!Utils.isStringNullOrEmpty(responseBody)) {
+				InfoErreur infoErreur = new InfoErreur();
+				JSONObject object = new JSONObject(responseBody);
+				infoErreur.setErrorCode(object.getString("errorCode"));
+				infoErreur.setErrorMessage(object.getString("errorMessage"));
+				if (!Utils.isStringNullOrEmpty(infoErreur.getErrorCode())) {
+					throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+				}
+			}
+
+		} catch (JSONException e) {
+			throw new OpaleException("404 Introuvable", "404");
+		}
+	}
+
+	/**
+	 * appel vers Topaze pour ajouter une reduction a l'element contractuel.
+	 * 
+	 * @param referenceContrat
+	 *            reference {@link Contrat} dans topaze.
+	 * @param contratReductionInfo
+	 *            {@link ContratReductionInfo}.
+	 * @param numEC
+	 *            numero element contractuel.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void ajouterReductionSurElementContractuel(String referenceContrat, Integer numEC,
+			ContratReductionInfo contratReductionInfo) throws OpaleException {
+		try {
+
+			LOGGER.info(":::ws-call:::ajouterReductionSurElementContractuel");
+			RestTemplate rt = new RestTemplate();
+			String url =
+					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
+							RestConstants.AJOUTER_REDUCTION_ELEMENT_CONTRACTUEL, referenceContrat, numEC);
+			HttpEntity<ContratReductionInfo> entity = new HttpEntity<ContratReductionInfo>(contratReductionInfo);
+			ResponseEntity<String> response = rt.exchange(url, HttpMethod.POST, entity, String.class);
+			String responseBody = response.getBody();
+
+			if (!Utils.isStringNullOrEmpty(responseBody)) {
+				InfoErreur infoErreur = new InfoErreur();
+				JSONObject object = new JSONObject(responseBody);
+				infoErreur.setErrorCode(object.getString("errorCode"));
+				infoErreur.setErrorMessage(object.getString("errorMessage"));
+				if (!Utils.isStringNullOrEmpty(infoErreur.getErrorCode())) {
+					throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+				}
+			}
+
+		} catch (JSONException e) {
+			throw new OpaleException("404 Introuvable", "404");
+		}
 	}
 
 	/**

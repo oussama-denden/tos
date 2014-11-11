@@ -138,6 +138,7 @@ public class DraftLigneDetail {
 		this.reference = elementContractuel.getReferenceProduit();
 		this.modePaiement = elementContractuel.getModePaiement();
 		this.numEC = elementContractuel.getNumEC();
+		this.referenceTarif = elementContractuel.getReferenceTarif();
 	}
 
 	@Override

@@ -106,6 +106,11 @@ public class ElementContractuel {
 	private ModeFacturation modeFacturation;
 
 	/**
+	 * reference du tarif associe a l'element contractuel, dans le catalogue.
+	 */
+	private String referenceTarif;
+
+	/**
 	 * liste des frais.
 	 */
 	private Set<Frais> frais = new HashSet<Frais>();
@@ -376,6 +381,23 @@ public class ElementContractuel {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceTarif}.
+	 */
+	public String getReferenceTarif() {
+		return referenceTarif;
+	}
+
+	/**
+	 * 
+	 * @param referenceTarif
+	 *            {@link #referenceTarif}.
+	 */
+	public void setReferenceTarif(String referenceTarif) {
+		this.referenceTarif = referenceTarif;
 	}
 
 	/**

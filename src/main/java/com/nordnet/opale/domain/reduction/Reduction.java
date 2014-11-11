@@ -347,6 +347,7 @@ public class Reduction implements Cloneable {
 		reduction.setReferenceDraft(referenceDraft);
 		reduction.setReferenceFrais(referenceFrais);
 		reduction.setReferenceLigne(referenceLigne);
+		reduction.setReferenceTarif(referenceTarif);
 		reduction.setReferenceLigneDetail(referenceLigneDetail);
 		return reduction;
 	}

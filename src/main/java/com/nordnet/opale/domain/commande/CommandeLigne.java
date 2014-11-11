@@ -130,8 +130,7 @@ public class CommandeLigne {
 	}
 
 	/**
-	 * creation d'une ligne de commande a partir du {@link DraftLigne} et de
-	 * {@link TrameCatalogue}.
+	 * creation d'une ligne de commande a partir du {@link DraftLigne} et de {@link TrameCatalogue}.
 	 * 
 	 * @param draftLigne
 	 *            {@link DraftLigne}.
@@ -158,7 +157,10 @@ public class CommandeLigne {
 
 	@Override
 	public String toString() {
-		return "CommandeLigne [id=" + id + ", numero=" + numero + ", referenceOffre=" + referenceOffre + ", label=" + label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement + ", modeFacturation=" + modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur + "]";
+		return "CommandeLigne [id=" + id + ", numero=" + numero + ", referenceOffre=" + referenceOffre + ", label="
+				+ label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement
+				+ ", modeFacturation=" + modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur
+				+ "]";
 	}
 
 	/**
@@ -454,8 +456,7 @@ public class CommandeLigne {
 	}
 
 	/**
-	 * Transformer un {@link CommandeLigne} en un {@link ContratPreparationInfo}
-	 * .
+	 * Transformer un {@link CommandeLigne} en un {@link ContratPreparationInfo} .
 	 * 
 	 * @param referenceCommande
 	 *            reference du commande.
@@ -470,12 +471,13 @@ public class CommandeLigne {
 		List<Produit> produits = new ArrayList<>();
 		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
 			Integer numECParent = null;
+			Integer numEC = commandeLigneDetails.indexOf(ligneDetail) + Constants.UN;
 			if (ligneDetail.getCommandeLigneDetailParent() != null) {
 				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.UN;
 			}
 
-			produits.add(ligneDetail.toProduit(referenceCommande,
-					commandeLigneDetails.indexOf(ligneDetail) + Constants.UN, numECParent, modeFacturation));
+			produits.add(ligneDetail.toProduit(referenceCommande, numEC, numECParent, modeFacturation));
+			ligneDetail.setNumEC(numEC);
 		}
 		contrat.setProduits(produits);
 
@@ -498,10 +500,11 @@ public class CommandeLigne {
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail = commandeLigneDetailMap.get(draftLigneDetail
-						.getReferenceSelection());
-				CommandeLigneDetail commandeLigneDetailParent = commandeLigneDetailMap.get(draftLigneDetail
-						.getDraftLigneDetailParent().getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetail =
+						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
+				CommandeLigneDetail commandeLigneDetailParent =
+						commandeLigneDetailMap
+								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
