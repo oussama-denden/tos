@@ -134,7 +134,7 @@ public class DraftLigne {
 		this.modePaiement = elementContractuelParent.getModePaiement();
 		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(this.referenceOffre);
 		for (ElementContractuel elementContractuel : contrat.getSousContrats()) {
-			addDraftLigneDetail(new DraftLigneDetail(elementContractuel, ""));
+			addDraftLigneDetail(new DraftLigneDetail(elementContractuel));
 		}
 	}
 

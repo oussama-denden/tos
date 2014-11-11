@@ -22,6 +22,16 @@ public class Produit {
 	private String reference;
 
 	/**
+	 * la reference de la selection du produit dans le catalogue.
+	 */
+	private String referenceSelection;
+
+	/**
+	 * reference choix du produit dans le catalogue.
+	 */
+	private String referenceChoix;
+
+	/**
 	 * reference du tarif associe au Ec dans le catalogue.
 	 */
 	private String referenceTarif;
@@ -132,6 +142,40 @@ public class Produit {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceSelection}.
+	 */
+	public String getReferenceSelection() {
+		return referenceSelection;
+	}
+
+	/**
+	 * 
+	 * @param referenceSelection
+	 *            {@link #referenceSelection}.
+	 */
+	public void setReferenceSelection(String referenceSelection) {
+		this.referenceSelection = referenceSelection;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceChoix}.
+	 */
+	public String getReferenceChoix() {
+		return referenceChoix;
+	}
+
+	/**
+	 * 
+	 * @param referenceChoix
+	 *            {@link #referenceChoix}.
+	 */
+	public void setReferenceChoix(String referenceChoix) {
+		this.referenceChoix = referenceChoix;
 	}
 
 	/**

@@ -130,12 +130,11 @@ public class DraftLigneDetail {
 	 * 
 	 * @param elementContractuel
 	 *            {@link ElementContractuel}.
-	 * @param referenceSelection
-	 *            reference selection.
 	 */
-	public DraftLigneDetail(ElementContractuel elementContractuel, String referenceSelection) {
-		this.referenceSelection = referenceSelection;
+	public DraftLigneDetail(ElementContractuel elementContractuel) {
 		this.reference = elementContractuel.getReferenceProduit();
+		this.referenceSelection = elementContractuel.getReferenceSelection();
+		this.referenceChoix = elementContractuel.getReferenceChoix();
 		this.referenceTarif = elementContractuel.getReferenceTarif();
 		this.modePaiement = elementContractuel.getModePaiement();
 		this.numEC = elementContractuel.getNumEC();
