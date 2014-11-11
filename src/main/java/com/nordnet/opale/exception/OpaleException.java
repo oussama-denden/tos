@@ -7,6 +7,7 @@ package com.nordnet.opale.exception;
  * 
  */
 public class OpaleException extends Exception {
+
 	/**
 	 * Serialization token.
 	 */
@@ -28,6 +29,19 @@ public class OpaleException extends Exception {
 	public OpaleException(String s, String errorCode) {
 		super(s);
 		this.errorCode = errorCode;
+	}
+
+	/**
+	 * constructeur avec message d'erreur et l'exception.
+	 * 
+	 * @param message
+	 *            message de l'erreur
+	 * @param cause
+	 *            {@link Throwable}
+	 */
+	public OpaleException(String message, Throwable cause) {
+		super(message, cause);
+		this.errorCode = null;
 	}
 
 	/**

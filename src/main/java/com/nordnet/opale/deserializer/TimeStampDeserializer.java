@@ -38,11 +38,11 @@ public class TimeStampDeserializer extends JsonDeserializer<Date> {
 			try {
 				date = PropertiesUtil.getInstance().getDateDuJour();
 			} catch (OpaleException e) {
-				LOGGER.error(e.getMessage());
+				LOGGER.error("erreur lors de la recuperation de la date du jour", e);
 			}
 		} else {
 			try {
-			date = new Date(Long.parseLong(timeStamp));
+				date = new Date(Long.parseLong(timeStamp));
 			} catch (NumberFormatException e) {
 				try {
 					date = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT.parse(timeStamp);

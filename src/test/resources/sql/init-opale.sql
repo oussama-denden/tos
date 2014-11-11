@@ -174,6 +174,7 @@ CREATE TABLE `draftligne` (
   `modeFacturation` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
+  `referenceContrat` varchar(255) DEFAULT NULL,
   `referenceOffre` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) DEFAULT NULL,
   `draftId` int(11) DEFAULT NULL,

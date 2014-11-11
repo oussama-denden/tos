@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
@@ -66,6 +67,11 @@ public class DraftLigne {
 	 * reference tarif.
 	 */
 	private String referenceTarif;
+
+	/**
+	 * reference {@link Contrat}.
+	 */
+	private String referenceContrat;
 
 	/**
 	 * {@link ModePaiement}.
@@ -129,6 +135,7 @@ public class DraftLigne {
 	 */
 	public DraftLigne(Contrat contrat, TrameCatalogue trameCatalogue) {
 		ElementContractuel elementContractuelParent = contrat.getParent();
+		this.referenceContrat = contrat.getReference();
 		this.referenceOffre = elementContractuelParent.getReferenceProduit();
 		this.modeFacturation = elementContractuelParent.getModeFacturation();
 		this.modePaiement = elementContractuelParent.getModePaiement();
@@ -136,6 +143,7 @@ public class DraftLigne {
 		for (ElementContractuel elementContractuel : contrat.getSousContrats()) {
 			addDraftLigneDetail(new DraftLigneDetail(elementContractuel));
 		}
+		creerArboressence(contrat.getSousContrats());
 	}
 
 	/**
@@ -178,7 +186,7 @@ public class DraftLigne {
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
 			addDraftLigneDetail(new DraftLigneDetail(commandeLigneDetail));
 		}
-		creerArborescence(commandeLigne.getCommandeLigneDetails(), this.draftLigneDetails);
+		creerArborescence(commandeLigne.getCommandeLigneDetails());
 	}
 
 	@Override
@@ -188,6 +196,11 @@ public class DraftLigne {
 				+ modeFacturation + ", dateCreation=" + dateCreation + "]";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(Object obj)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -197,6 +210,16 @@ public class DraftLigne {
 		DraftLigne rhs = (DraftLigne) obj;
 		return new EqualsBuilder().append(id, rhs.id).append(referenceOffre, rhs.referenceOffre)
 				.append(referenceTarif, rhs.referenceTarif).isEquals();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(referenceOffre).append(referenceTarif).toHashCode();
 	}
 
 	/**
@@ -265,6 +288,23 @@ public class DraftLigne {
 	 */
 	public void setReferenceTarif(String referenceTarif) {
 		this.referenceTarif = referenceTarif;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceContrat}.
+	 */
+	public String getReferenceContrat() {
+		return referenceContrat;
+	}
+
+	/**
+	 * 
+	 * @param referenceContrat
+	 *            {@link #referenceContrat}.
+	 */
+	public void setReferenceContrat(String referenceContrat) {
+		this.referenceContrat = referenceContrat;
 	}
 
 	/**
@@ -363,27 +403,59 @@ public class DraftLigne {
 	}
 
 	/**
-	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
+	 * creer l'arborescence entre les {@link DraftLigneDetail}.
 	 * 
 	 * @param commandeDetails
 	 *            liste des {@link CommandeLigneDetail}.
-	 * @param draftDetails
-	 *            liste des {@link DraftLigneDetail}.
 	 */
-	private void creerArborescence(List<CommandeLigneDetail> commandeDetails, List<DraftLigneDetail> draftDetails) {
-		Map<String, DraftLigneDetail> draftDetailsMap = new HashMap<String, DraftLigneDetail>();
-		for (DraftLigneDetail draftLigneDetail : draftDetails) {
-			draftDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
-		}
+	private void creerArborescence(List<CommandeLigneDetail> commandeDetails) {
+		Map<String, DraftLigneDetail> draftLigneDetailsMap = getDraftLigneDetailsMap();
 
 		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
 			if (!commandeLigneDetail.isParent()) {
-				DraftLigneDetail draftLigneDetail = draftDetailsMap.get(commandeLigneDetail.getReferenceProduit());
+				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(commandeLigneDetail.getReferenceProduit());
 				DraftLigneDetail draftLigneDetailParent =
-						draftDetailsMap.get(commandeLigneDetail.getCommandeLigneDetailParent().getReferenceProduit());
+						draftLigneDetailsMap.get(commandeLigneDetail.getCommandeLigneDetailParent()
+								.getReferenceProduit());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}
 	}
 
+	/**
+	 * creer l'arborescence entre les {@link DraftLigneDetail}.
+	 * 
+	 * @param elementContractuels
+	 *            liste des {@link ElementContractuel}.
+	 */
+	private void creerArboressence(List<ElementContractuel> elementContractuels) {
+		Map<String, DraftLigneDetail> draftLigneDetailsMap = getDraftLigneDetailsMap();
+		Map<Integer, ElementContractuel> elementContractuelsMap = new HashMap<Integer, ElementContractuel>();
+		for (ElementContractuel elementContractuel : elementContractuels) {
+			elementContractuelsMap.put(elementContractuel.getNumEC(), elementContractuel);
+		}
+		for (ElementContractuel elementContractuel : elementContractuels) {
+			if (!elementContractuel.isParent()) {
+				ElementContractuel elementContractuelParent =
+						elementContractuelsMap.get(elementContractuel.getNumECParent());
+				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(elementContractuel.getReferenceProduit());
+				DraftLigneDetail draftLigneDetailParent =
+						draftLigneDetailsMap.get(elementContractuelParent.getReferenceProduit());
+				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
+			}
+		}
+	}
+
+	/**
+	 * transformer la liste des {@link DraftLigneDetail} en Map.
+	 * 
+	 * @return map des {@link DraftLigneDetail}.
+	 */
+	private Map<String, DraftLigneDetail> getDraftLigneDetailsMap() {
+		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
+		for (DraftLigneDetail draftLigneDetail : this.draftLigneDetails) {
+			draftLigneDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
+		}
+		return draftLigneDetailsMap;
+	}
 }

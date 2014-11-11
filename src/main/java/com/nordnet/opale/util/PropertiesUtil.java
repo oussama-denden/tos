@@ -85,7 +85,7 @@ public class PropertiesUtil {
 						time.millisOfSecond().get()).toDate();
 
 			} catch (Exception e) {
-				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("0.1"), "0.1");
+				throw new OpaleException("erreur lors de la recuperation de la date du jour", e);
 			}
 
 		}
@@ -100,7 +100,5 @@ public class PropertiesUtil {
 		Integer delaiInactive = Integer.valueOf(dynamicProperties.getMessage(Constants.DELAI_INACTIVE, null, null));
 		return delaiInactive;
 	}
-
-
 
 }

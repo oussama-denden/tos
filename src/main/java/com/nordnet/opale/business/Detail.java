@@ -1,6 +1,7 @@
 package com.nordnet.opale.business;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.deserializer.ModePaiementDeserializer;
@@ -65,6 +66,16 @@ public class Detail {
 			return false;
 		Detail rhs = (Detail) obj;
 		return new EqualsBuilder().append(reference, rhs.reference).isEquals();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(reference).toHashCode();
 	}
 
 	/**

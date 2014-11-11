@@ -546,9 +546,9 @@ public class ElementContractuel {
 	public boolean isParent() {
 		Optional<Integer> numECParent = Optional.fromNullable(this.numECParent);
 		if (numECParent.isPresent()) {
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 }

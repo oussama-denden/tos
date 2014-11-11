@@ -29,7 +29,7 @@ import com.nordnet.opale.enums.ModePaiement;
  */
 @Table(name = "draftlignedetail")
 @Entity
-@JsonIgnoreProperties({ "id", "draftLigneDetailParent", "parent" })
+@JsonIgnoreProperties({ "id", "sousDraftLigneDetails", "draftLigneDetailParent", "parent" })
 public class DraftLigneDetail {
 
 	/**
@@ -328,6 +328,18 @@ public class DraftLigneDetail {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * reference du produit parent de draft ligne detail.
+	 * 
+	 * @return reference produit parent.
+	 */
+	public String getdependDe() {
+		if (draftLigneDetailParent != null) {
+			return draftLigneDetailParent.getReference();
+		}
+		return null;
 	}
 
 }

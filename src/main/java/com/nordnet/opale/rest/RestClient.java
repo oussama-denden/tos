@@ -80,7 +80,7 @@ public class RestClient {
 				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (RestClientException e) {
-			throw new OpaleException("404 Introuvable", "404");
+			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class RestClient {
 				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (RestClientException e) {
-			throw new OpaleException("404 Introuvable", "404");
+			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 
 	}
@@ -124,8 +124,10 @@ public class RestClient {
 	 * @param referenceContrat
 	 *            reference contrat.
 	 * @return {@link Contrat}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public Contrat getContratByReference(String referenceContrat) {
+	public Contrat getContratByReference(String referenceContrat) throws OpaleException {
 		LOGGER.info(":::ws-call:::getContratByReference");
 		try {
 			RestTemplate rt = new RestTemplate();
@@ -136,10 +138,8 @@ public class RestClient {
 			ResponseEntity<Contrat> responseEntity = rt.getForEntity(url, Contrat.class);
 			return responseEntity.getBody();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
-
-		return null;
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class RestClient {
 			}
 
 		} catch (JSONException e) {
-			throw new OpaleException("404 Introuvable", "404");
+			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
 
@@ -215,7 +215,7 @@ public class RestClient {
 			}
 
 		} catch (JSONException e) {
-			throw new OpaleException("404 Introuvable", "404");
+			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
 
@@ -255,7 +255,7 @@ public class RestClient {
 			}
 
 		} catch (JSONException e) {
-			throw new OpaleException("404 Introuvable", "404");
+			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
 

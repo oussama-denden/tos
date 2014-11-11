@@ -52,7 +52,7 @@ public class TransformerEnContrat extends QuartzJobBean {
 			}
 
 		} catch (OpaleException | JSONException ex) {
-			LOGGER.error("Error : " + ex.getMessage());
+			LOGGER.error("erreur lors de la transformation des commandes en contrats", ex);
 		}
 
 	}
