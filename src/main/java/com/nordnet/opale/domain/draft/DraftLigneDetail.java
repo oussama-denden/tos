@@ -136,6 +136,7 @@ public class DraftLigneDetail {
 	public DraftLigneDetail(ElementContractuel elementContractuel, String referenceSelection) {
 		this.referenceSelection = referenceSelection;
 		this.reference = elementContractuel.getReferenceProduit();
+		this.referenceTarif = elementContractuel.getReferenceTarif();
 		this.modePaiement = elementContractuel.getModePaiement();
 		this.numEC = elementContractuel.getNumEC();
 		this.referenceTarif = elementContractuel.getReferenceTarif();
@@ -143,9 +144,9 @@ public class DraftLigneDetail {
 
 	@Override
 	public String toString() {
-		return "DraftLigneDetail [id=" + id + ", referenceSelection=" + referenceSelection + ", reference=" + reference
-				+ ", referenceChoix=" + referenceChoix + ", referenceTarif=" + referenceTarif + ", modePaiement="
-				+ modePaiement + ", configurationJson=" + configurationJson + "]";
+		return "DraftLigneDetail [id=" + id + ", numEC=" + numEC + ", referenceSelection=" + referenceSelection
+				+ ", reference=" + reference + ", referenceChoix=" + referenceChoix + ", referenceTarif="
+				+ referenceTarif + ", modePaiement=" + modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
 	/**

@@ -162,13 +162,9 @@ public class DraftLigne {
 	 * creation d'un draftLigne a partir d'un {@link CommandeLigne}.
 	 * 
 	 * 
-	 * 
-	 * 
-	 * 
 	 * @param commandeLigne
 	 *            {@link CommandeLigne}.
 	 */
-
 	public DraftLigne(CommandeLigne commandeLigne) {
 		this.referenceOffre = commandeLigne.getReferenceOffre();
 
@@ -189,7 +185,7 @@ public class DraftLigne {
 	public String toString() {
 		return "DraftLigne [id=" + id + ", reference=" + reference + ", referenceOffre=" + referenceOffre
 				+ ", referenceTarif=" + referenceTarif + ", modePaiement=" + modePaiement + ", modeFacturation="
-				+ modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur + "]";
+				+ modeFacturation + ", dateCreation=" + dateCreation + "]";
 	}
 
 	@Override

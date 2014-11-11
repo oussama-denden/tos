@@ -22,6 +22,11 @@ public class Produit {
 	private String reference;
 
 	/**
+	 * reference du tarif associe au Ec dans le catalogue.
+	 */
+	private String referenceTarif;
+
+	/**
 	 * Numero de l' element Contractuel.
 	 */
 	private Integer numEC;
@@ -127,6 +132,23 @@ public class Produit {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceTarif}.
+	 */
+	public String getReferenceTarif() {
+		return referenceTarif;
+	}
+
+	/**
+	 * 
+	 * @param referenceTarif
+	 *            {@link #referenceTarif}.
+	 */
+	public void setReferenceTarif(String referenceTarif) {
+		this.referenceTarif = referenceTarif;
 	}
 
 	/**

@@ -125,8 +125,8 @@ public class CommandeLigneDetail {
 	 *            {@link TrameCatalogue}.
 	 */
 	public CommandeLigneDetail(DraftLigneDetail detail, String referenceOffre, TrameCatalogue trameCatalogue) {
-		DetailCatalogue detailCatalogue = trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap()
-				.get(detail.getReferenceSelection());
+		DetailCatalogue detailCatalogue =
+				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
 		this.referenceProduit = detail.getReference();
 		this.referenceSelection = detail.getReferenceSelection();
 		this.typeProduit = detailCatalogue.getNature();
@@ -140,7 +140,8 @@ public class CommandeLigneDetail {
 
 	@Override
 	public String toString() {
-		return "CommandeLigneDetail [id=" + id + ", referenceProduit=" + referenceProduit + ", modePaiement=" + modePaiement + ", configurationJson=" + configurationJson + "]";
+		return "CommandeLigneDetail [id=" + id + ", referenceProduit=" + referenceProduit + ", modePaiement="
+				+ modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
 	/**
@@ -392,6 +393,7 @@ public class CommandeLigneDetail {
 		produit.setNumeroCommande(referenceCommande);
 		produit.setTypeProduit(typeProduit);
 		produit.setReference(referenceProduit);
+		produit.setReferenceTarif(tarif.getReference());
 		produit.setNumECParent(numECParent);
 		if (tarif != null) {
 			produit.setPrix(tarif.toPrix(modeFacturation, modePaiement));

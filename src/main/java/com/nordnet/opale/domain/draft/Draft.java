@@ -185,7 +185,10 @@ public class Draft {
 
 	@Override
 	public String toString() {
-		return "Draft [id=" + id + ", reference=" + reference + "]";
+		return "Draft [id=" + id + ", reference=" + reference + ", referenceExterne=" + referenceExterne
+				+ ", dateAnnulation=" + dateAnnulation + ", dateTransformationCommande=" + dateTransformationCommande
+				+ ", commandeSource=" + commandeSource + ", codePartenaire=" + codePartenaire + ", geste=" + geste
+				+ "]";
 	}
 
 	/**

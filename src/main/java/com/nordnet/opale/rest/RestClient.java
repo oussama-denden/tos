@@ -70,7 +70,7 @@ public class RestClient {
 		try {
 			ResponseEntity<String> response = rt.postForEntity(url, contratPreparationInfo, String.class);
 			JSONObject contrat = new JSONObject(response.getBody());
-			return contrat.getString("reference");
+			return contrat.getString("referenceContrat");
 		} catch (HttpMessageNotReadableException exception) {
 			if (exception.getCause() instanceof UnrecognizedPropertyException) {
 				throw new OpaleException(exception.getMessage(), exception.getMessage());
