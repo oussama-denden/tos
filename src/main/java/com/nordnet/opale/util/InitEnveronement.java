@@ -37,7 +37,7 @@ public class InitEnveronement implements ServletContextListener {
 			final FileInputStream in = new FileInputStream(props);
 			propsFromFile.load(in);
 		} catch (final IOException e) {
-			LOGGER.error("Le fichier env.properties n'existe pas sous le serveur");
+			LOGGER.error("Le fichier env.properties n'existe pas sous le serveur", e);
 		}
 		for (String prop : propsFromFile.stringPropertyNames()) {
 			if (System.getProperty(prop) == null) {

@@ -18,10 +18,13 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
+import com.nordnet.opale.business.ContratReductionInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.ReductionContrat;
 import com.nordnet.opale.business.SignatureInfo;
+import com.nordnet.opale.business.TypeReduction;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.ContratRenouvellementInfo;
 import com.nordnet.opale.business.commande.ContratValidationInfo;
@@ -36,7 +39,9 @@ import com.nordnet.opale.domain.commande.Frais;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
+import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
@@ -46,6 +51,7 @@ import com.nordnet.opale.service.downpaiement.DownPaiementService;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.paiement.PaiementService;
+import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.signature.SignatureService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
@@ -114,6 +120,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private DownPaiementService downPaiementService;
+
+	/**
+	 * {@link ReductionService}.
+	 */
+	@Autowired
+	private ReductionService reductionService;
 
 	/**
 	 * 
@@ -532,6 +544,12 @@ public class CommandeServiceImpl implements CommandeService {
 					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui());
 			String refContrat = restClient.preparerContrat(preparationInfo);
 			ligne.setReferenceContrat(refContrat);
+
+			/*
+			 * association des reductions au nouveau contrat cre.
+			 */
+			transformerReductionCommandeEnReductionContrat(commande, ligne);
+
 			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
 
 			restClient.validerContrat(refContrat, validationInfo);
@@ -787,5 +805,61 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = getCommandeByReference(referenceCommande);
 		Cout cout = new Cout(commande);
 		return cout;
+	}
+
+	/**
+	 * transferer la liste des reduction associe a la {@link CommandeLigne} vers le contrat dans topaze.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param commandeLigne
+	 *            {@link CommandeLigne}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	private void transformerReductionCommandeEnReductionContrat(Commande commande, CommandeLigne commandeLigne)
+			throws OpaleException {
+		ReductionContrat reductionContrat = null;
+		List<Reduction> reductionsLigne =
+				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReferenceOffre());
+		for (Reduction reductionLigne : reductionsLigne) {
+			reductionContrat = new ReductionContrat(reductionLigne);
+			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+
+			/* il n ya pas de frais au niveau du contrat global dans Topaze, il faut revoir avec Gilles. */
+			/*
+			 * if (reductionLigne.getReferenceFrais() != null) { String typeFrais =
+			 * commandeRepository.findTypeFrais(reductionLigne.getReferenceDraft(), reductionLigne.getReferenceLigne(),
+			 * reductionLigne.getReferenceLigneDetail(), reductionLigne.getReferenceTarif(),
+			 * reductionLigne.getReferenceFrais()); reductionContrat.setTypeReduction(TypeReduction.FRAIS);
+			 * reductionContrat.setTypeFrais(TypeFrais.fromSting(typeFrais)); }
+			 */
+			ContratReductionInfo contratReductionInfo =
+					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
+			restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
+		}
+
+		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
+			List<Reduction> reductionsligneDetail =
+					reductionService.findReductionDetailLigneDraft(commande.getReference(),
+							commandeLigne.getReferenceOffre(), commandeLigneDetail.getReferenceProduit());
+			for (Reduction reductionligneDetail : reductionsligneDetail) {
+				reductionContrat = new ReductionContrat(reductionligneDetail);
+				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+				if (reductionligneDetail.getReferenceFrais() != null) {
+					String typeFrais =
+							commandeRepository.findTypeFrais(reductionligneDetail.getReferenceDraft(),
+									reductionligneDetail.getReferenceLigne(),
+									reductionligneDetail.getReferenceLigneDetail(),
+									reductionligneDetail.getReferenceTarif(), reductionligneDetail.getReferenceFrais());
+					reductionContrat.setTypeReduction(TypeReduction.FRAIS);
+					reductionContrat.setTypeFrais(TypeFrais.fromSting(typeFrais));
+				}
+				ContratReductionInfo contratReductionInfo =
+						new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
+				restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
+						commandeLigneDetail.getNumEC(), contratReductionInfo);
+			}
+		}
 	}
 }

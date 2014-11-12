@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.nordnet.opale.enums.TypeProduit;
 
 /**
@@ -61,6 +63,16 @@ public class DetailCatalogue {
 		} else if (!referenceSelection.equals(other.referenceSelection))
 			return false;
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(referenceSelection).toHashCode();
 	}
 
 	/**

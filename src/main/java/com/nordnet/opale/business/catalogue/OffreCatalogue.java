@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
@@ -59,6 +61,11 @@ public class OffreCatalogue {
 	public OffreCatalogue() {
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(Object obj)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -74,6 +81,16 @@ public class OffreCatalogue {
 		} else if (!reference.equals(other.reference))
 			return false;
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(reference).toHashCode();
 	}
 
 	/**

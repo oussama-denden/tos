@@ -48,6 +48,16 @@ public class ElementContractuel {
 	private String referenceProduit;
 
 	/**
+	 * la reference de la selection du produit dans le catalogue.
+	 */
+	private String referenceSelection;
+
+	/**
+	 * reference choix du produit dans le catalogue.
+	 */
+	private String referenceChoix;
+
+	/**
 	 * le ProductId que sera utilisé dans saphir.
 	 */
 	private String idProduit;
@@ -104,6 +114,11 @@ public class ElementContractuel {
 	/** The mode facturation. {@link ModeFacturation}. */
 	@JsonDeserialize(using = ModeFacturationDeserializer.class)
 	private ModeFacturation modeFacturation;
+
+	/**
+	 * reference du tarif associe a l'element contractuel, dans le catalogue.
+	 */
+	private String referenceTarif;
 
 	/**
 	 * liste des frais.
@@ -192,6 +207,40 @@ public class ElementContractuel {
 	 */
 	public void setReferenceProduit(String referenceProduit) {
 		this.referenceProduit = referenceProduit;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceSelection}.
+	 */
+	public String getReferenceSelection() {
+		return referenceSelection;
+	}
+
+	/**
+	 * 
+	 * @param referenceSelection
+	 *            {@link #referenceSelection}.
+	 */
+	public void setReferenceSelection(String referenceSelection) {
+		this.referenceSelection = referenceSelection;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceChoix}.
+	 */
+	public String getReferenceChoix() {
+		return referenceChoix;
+	}
+
+	/**
+	 * 
+	 * @param referenceChoix
+	 *            {@link #referenceChoix}.
+	 */
+	public void setReferenceChoix(String referenceChoix) {
+		this.referenceChoix = referenceChoix;
 	}
 
 	/**
@@ -379,6 +428,23 @@ public class ElementContractuel {
 	}
 
 	/**
+	 * 
+	 * @return {@link #referenceTarif}.
+	 */
+	public String getReferenceTarif() {
+		return referenceTarif;
+	}
+
+	/**
+	 * 
+	 * @param referenceTarif
+	 *            {@link #referenceTarif}.
+	 */
+	public void setReferenceTarif(String referenceTarif) {
+		this.referenceTarif = referenceTarif;
+	}
+
+	/**
 	 * Gets the reference mode paiement.
 	 * 
 	 * @return {@link referenceModePaiement}.
@@ -480,9 +546,9 @@ public class ElementContractuel {
 	public boolean isParent() {
 		Optional<Integer> numECParent = Optional.fromNullable(this.numECParent);
 		if (numECParent.isPresent()) {
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 }

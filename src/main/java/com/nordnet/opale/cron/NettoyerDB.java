@@ -43,8 +43,7 @@ public class NettoyerDB extends QuartzJobBean {
 			try {
 				draftService.supprimerDraft(draft.getReference());
 			} catch (OpaleException e) {
-
-				LOGGER.error(e.getMessage());
+				LOGGER.error("erreur lors du netoyage de la base de donnees", e);
 			}
 		}
 

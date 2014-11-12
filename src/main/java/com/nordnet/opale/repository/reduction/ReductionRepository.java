@@ -35,7 +35,7 @@ public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 	 * @return {@link List}
 	 */
 	@Query(name = "findReductionDraft", value = "SELECT r FROM Reduction r WHERE r.referenceLigne=null AND r.referenceLigneDetail=null AND referenceDraft LIKE :referenceDraft ")
-	public List<Reduction> findReductionDraft(@Param("referenceDraft") String referenceDraft);
+	public Reduction findReductionDraft(@Param("referenceDraft") String referenceDraft);
 
 	/**
 	 * Rechercher les reductions d'une ligne.
@@ -75,7 +75,7 @@ public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 	 * @return {@link List}
 	 */
 	@Query(name = "findReductionLigne", value = "SELECT r FROM Reduction r WHERE   r.referenceLigneDetail=null AND r.referenceFrais=null AND r.referenceTarif=null AND referenceDraft LIKE :referenceDraft  AND r.referenceLigne LIKE :referenceLigne")
-	public List<Reduction> findReductionLigneSanFrais(@Param("referenceDraft") String referenceDraft,
+	public Reduction findReductionLigneSanFrais(@Param("referenceDraft") String referenceDraft,
 			@Param("referenceLigne") String referenceLigne);
 
 	/**
@@ -90,7 +90,7 @@ public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 	 * @return {@link List}
 	 */
 	@Query(name = "findReductionLigneDetaille", value = "SELECT r FROM Reduction r WHERE r.referenceFrais=null AND r.referenceTarif=null AND referenceDraft LIKE :referenceDraft  AND r.referenceLigne LIKE :referenceLigne AND r.referenceLigneDetail LIKE :referenceLigneDetail ")
-	public List<Reduction> findReductionLigneDetailleSansFrais(@Param("referenceDraft") String referenceDraft,
+	public Reduction findReductionLigneDetailleSansFrais(@Param("referenceDraft") String referenceDraft,
 			@Param("referenceLigne") String referenceLigne, @Param("referenceLigneDetail") String referenceLigneDetail);
 
 	/**
@@ -107,7 +107,7 @@ public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 	 * @return {@link List}
 	 */
 	@Query(name = "findReductionLigneFrais", value = "SELECT r FROM Reduction r WHERE   r.referenceLigneDetail=null  AND referenceDraft LIKE :referenceDraft  AND r.referenceLigne LIKE :referenceLigne AND r.referenceFrais LIKE :referenceFrais AND r.referenceTarif LIKE :referenceTarif  ")
-	public List<Reduction> findReductionLigneFrais(@Param("referenceDraft") String referenceDraft,
+	public Reduction findReductionLigneFrais(@Param("referenceDraft") String referenceDraft,
 			@Param("referenceLigne") String referenceLigne, @Param("referenceFrais") String referenceFrais,
 			@Param("referenceTarif") String referenceTarif);
 
@@ -127,7 +127,7 @@ public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 	 * @return {@link List}
 	 */
 	@Query(name = "findReductionLigneDetailleFrais", value = "SELECT r FROM Reduction r WHERE    referenceDraft LIKE :referenceDraft AND r.referenceLigne LIKE :referenceLigne AND r.referenceLigneDetail LIKE :referenceLigneDetail AND r.referenceFrais LIKE :referenceFrais AND r.referenceTarif LIKE :referenceTarif  ")
-	public List<Reduction> findReductionLigneDetailleFrais(@Param("referenceDraft") String referenceDraft,
+	public Reduction findReductionLigneDetailleFrais(@Param("referenceDraft") String referenceDraft,
 			@Param("referenceLigne") String referenceLigne, @Param("referenceLigneDetail") String referenceLigneDetail,
 			@Param("referenceFrais") String referenceFrais, @Param("referenceTarif") String referenceTarif);
 

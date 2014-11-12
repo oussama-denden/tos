@@ -1,4 +1,4 @@
-<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, commandeLigne*, commandeLigneDetail*, tarif*, frais*,signature*,paiement*)>
+<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, commandeLigne*, commandeLigneDetail*, tarif*, frais*,signature*,paiement*,reduction*)>
 
 <!ELEMENT draft EMPTY>
 <!ATTLIST draft
@@ -181,3 +181,19 @@
     typePaiement CDATA #IMPLIED
 >
 
+<!ELEMENT reduction EMPTY>
+<!ATTLIST reduction
+    id CDATA #IMPLIED
+    dateDebut CDATA #IMPLIED
+    dateFin CDATA #IMPLIED
+    label CDATA #IMPLIED
+    nbUtilisationMax CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    referenceFrais CDATA #IMPLIED
+    referenceLigne CDATA #IMPLIED
+    referenceLigneDetail CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    typeValeur CDATA #IMPLIED
+    valeur CDATA #IMPLIED
+>

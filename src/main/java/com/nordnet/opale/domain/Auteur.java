@@ -15,8 +15,6 @@ import com.nordnet.opale.business.Ip;
 @Embeddable
 public class Auteur {
 
-
-
 	/**
 	 * nom de l auteur.
 	 */
@@ -56,7 +54,10 @@ public class Auteur {
 		this.setTimestamp(auteur.getIp().getTs());
 	}
 
-
+	@Override
+	public String toString() {
+		return "Auteur [qui=" + qui + ", canal=" + canal + ", ip=" + ip + ", timestamp=" + timestamp + "]";
+	}
 
 	/**
 	 * 

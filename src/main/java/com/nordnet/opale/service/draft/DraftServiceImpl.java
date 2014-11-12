@@ -480,7 +480,10 @@ public class DraftServiceImpl implements DraftService {
 	@Transactional
 	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
 		// coper reduction draft
-		List<Reduction> reductionDraft = reductionService.findReductionDraft(draft.getReference());
+		List<Reduction> reductionDraft = new ArrayList<Reduction>();
+		Reduction reduction = reductionService.findReductionDraft(draft.getReference());
+		if (reduction != null)
+			reductionDraft.add(reduction);
 
 		ajouterReductionCommande(reductionDraft, commande.getReference(), null, null);
 
@@ -775,6 +778,13 @@ public class DraftServiceImpl implements DraftService {
 			if (validationInfo.isValide()) {
 				validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
 				if (validationInfo.isValide()) {
+					/*
+					 * attribution des reference au draft/draftLigne.
+					 */
+					draft.setReference(keygenService.getNextKey(Draft.class));
+					for (DraftLigne draftLigne : draft.getDraftLignes()) {
+						draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
+					}
 					draftRepository.save(draft);
 					return draft;
 				} else {
@@ -844,7 +854,8 @@ public class DraftServiceImpl implements DraftService {
 			frequence = tarif.getFrequence();
 			reduction +=
 					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReference(),
-							detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan().getPlan(), tarif, fraisMap, false);
+							detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan() != null ? detailCoutTarif
+									.getPlan().getPlan() : Constants.ZERO, tarif, fraisMap, false);
 		}
 
 		tarif = tarifMap.get(draftLigne.getReferenceTarif());
@@ -912,28 +923,26 @@ public class DraftServiceImpl implements DraftService {
 	private Double caculerReductionDetaille(String refDraft, String refLinge, String refDetailLigne, Double coutDetail,
 			Double plan, Tarif tarif, Map<String, Frais> fraisMap, boolean isLigne) {
 		double coutReduction = 0d;
-		List<Reduction> reductionProduits = null;
+		Reduction reductionProduit = null;
 		if (isLigne) {
-			reductionProduits = reductionService.findReductionLigneDraftSansFrais(refDraft, refLinge);
+			reductionProduit = reductionService.findReductionLigneDraftSansFrais(refDraft, refLinge);
 		} else {
-			reductionProduits =
+			reductionProduit =
 					reductionService.findReductionDetailLigneDraftSansFrais(refDraft, refLinge, refDetailLigne);
 		}
 
 		// calculer la reduction
-		if (reductionProduits != null && reductionProduits.size() != Constants.ZERO) {
-			for (Reduction reductionProduit : reductionProduits) {
-				if (reductionProduit.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-					coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
-				} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
-					coutReduction += reductionProduit.getValeur();
-				}
+		if (reductionProduit != null) {
+			if (reductionProduit.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
+				coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
+			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
+				coutReduction += reductionProduit.getValeur();
 			}
 		}
 
 		// calculer reduction su frais de detaille ligne draft.
 		for (String refFrais : tarif.getFrais()) {
-			List<Reduction> reductionFrais = null;
+			Reduction reductionFrais = null;
 			Frais frais = fraisMap.get(refFrais);
 			if (isLigne) {
 				reductionFrais =
@@ -941,16 +950,14 @@ public class DraftServiceImpl implements DraftService {
 								refFrais);
 			} else {
 				reductionFrais =
-						reductionService.findReductionlLigneDraftFrais(refDraft, refLinge, tarif.getReference(),
-								refFrais);
+						reductionService.findReductionDetailLigneDraftFrais(refDraft, refLinge, refDetailLigne,
+								tarif.getReference(), refFrais);
 			}
-			for (Reduction reduction : reductionFrais) {
-				if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
-					if (reduction.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-						coutReduction += (frais.getMontant() * reduction.getValeur()) / 100;
-					} else if (reduction.getTypeValeur().equals(TypeValeur.MONTANT)) {
-						coutReduction += reduction.getValeur();
-					}
+			if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
+				if (reductionFrais.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
+					coutReduction += (frais.getMontant() * reductionFrais.getValeur()) / 100;
+				} else if (reductionFrais.getTypeValeur().equals(TypeValeur.MONTANT)) {
+					coutReduction += reductionFrais.getValeur();
 
 				}
 			}
@@ -971,14 +978,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	private double calculerReductionDraft(String refDraft, double coutTotale) {
 
-		List<Reduction> reductionDraft = reductionService.findReductionDraft(refDraft);
+		Reduction reductionDraft = reductionService.findReductionDraft(refDraft);
 		double coutReduction = 0d;
-		for (Reduction reduction : reductionDraft) {
-			if (reduction.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-				coutReduction += (coutTotale * reduction.getValeur()) / 100;
-			} else if (reduction.getTypeValeur().equals(TypeValeur.MONTANT)) {
-				coutReduction += reduction.getValeur();
-			}
+		if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
+			coutReduction += (coutTotale * reductionDraft.getValeur()) / 100;
+		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.MONTANT)) {
+			coutReduction += reductionDraft.getValeur();
 		}
 		return coutReduction;
 	}

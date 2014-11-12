@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.Frais;
+import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.domain.draft.Draft;
 
 /**
@@ -46,6 +48,16 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 			"SELECT DATE (GREATEST( IFNULL((SELECT GREATEST(IFNULL(timestampIntention,0),IFNULL(timestampPaiement,0)) FROM paiement p where"
 					+ " p.referenceCommande LIKE :referenceCommande LIMIT 1),0),IFNULL((SELECT GREATEST(IFNULL(timestampSignature,0),IFNULL(timestampIntention,0)) FROM signature s"
 					+ " where s.referenceCommande LIKE :referenceCommande),0 ))) ";
+
+	/**
+	 * recuperation de la liste de frais associe a une {@link Commande}.
+	 */
+	public final static String GET_FRAIS =
+			"SELECT distinct f.typeFrais FROM commande c, commandeligne cl, commandelignedetail cld, tarif t, frais f where"
+					+ " c.reference LIKE ?1 AND cl.referenceOffre LIKE ?2 AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND"
+					+ " (?3 IS NULL or (cld.referenceProduit LIKE ?3)) AND"
+					+ " (cl.tarifId = t.id OR cld.tarifId = t.id) AND t.reference LIKE ?4"
+					+ " AND (t.id = f.tarifId) AND f.reference LIKE ?5";
 
 	/**
 	 * Find by reference.
@@ -92,6 +104,25 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c FROM Commande c WHERE c.dateAnnulation=null AND dateTransformationContrat=null")
 	public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
+
+	/**
+	 * recuperation de la liste de {@link Frais} associe a la {@link Commande}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @param referenceOffre
+	 *            reference de l'offre.
+	 * @param referenceProduit
+	 *            reference produit.
+	 * @param referenceTarif
+	 *            reference {@link Tarif}.
+	 * @param referenceFrais
+	 *            reference {@link Frais}.
+	 * @return liste {@link Frais}.
+	 */
+	@Query(nativeQuery = true, value = GET_FRAIS)
+	public String findTypeFrais(String referenceCommande, String referenceOffre, String referenceProduit,
+			String referenceTarif, String referenceFrais);
 
 	/**
 	 * recuperer la date de d'accee sur une commande.

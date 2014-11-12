@@ -1,4 +1,3 @@
-
 package com.nordnet.opale.validator;
 
 import com.nordnet.opale.business.ReductionInfo;
@@ -86,5 +85,117 @@ public class ReductionValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.4", refReduction), "5.1.4");
 		}
 
+	}
+
+	/**
+	 * Verifer si une reduction est deja ajoute au draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param reduction
+	 *            {@link Reduction}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * 
+	 */
+	public static void checkReductionDraftExist(String refDraft, Reduction reduction) throws OpaleException {
+
+		if (reduction != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.5", refDraft), "5.1.5");
+		}
+	}
+
+	/**
+	 * Verifer si une reduction est deja ajoute au ligne du draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference ligne
+	 * @param reduction
+	 *            {@link Reduction}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * 
+	 */
+	public static void checkReductionDraftLigneExist(String refDraft, String refLigne, Reduction reduction)
+			throws OpaleException {
+
+		if (reduction != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.6", refLigne, refDraft), "5.1.6");
+		}
+	}
+
+	/**
+	 * Verifer si une reduction est deja ajoute au ligne detail du draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference ligne
+	 * @param refLigneDetail
+	 *            reference du ligne detail
+	 * @param reduction
+	 *            {@link Reduction}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * 
+	 */
+	public static void checkReductionDraftLigneDetailExist(String refDraft, String refLigne, String refLigneDetail,
+			Reduction reduction) throws OpaleException {
+
+		if (reduction != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.7", refLigneDetail, refLigne, refDraft),
+					"5.1.7");
+		}
+	}
+
+	/**
+	 * Verifer si une reduction est deja ajoute au frais di ligne du draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference ligne
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reduction
+	 *            {@link Reduction}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * 
+	 */
+	public static void checkReductionDraftLigneFraisExist(String refDraft, String refLigne, String refFrais,
+			Reduction reduction) throws OpaleException {
+
+		if (reduction != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.8", refFrais, refLigne, refDraft), "5.1.8");
+		}
+	}
+
+	/**
+	 * Verifer si une reduction est deja ajoute au ligne detail du draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param refLigne
+	 *            reference ligne
+	 * @param refLigneDetail
+	 *            reference du ligne detail
+	 * @param refFrais
+	 *            reference du frais
+	 * @param reduction
+	 *            {@link Reduction}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * 
+	 */
+	public static void checkReductionDraftLigneDetailFraisExist(String refDraft, String refLigne,
+			String refLigneDetail, String refFrais, Reduction reduction) throws OpaleException {
+
+		if (reduction != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.9", refFrais, refLigneDetail, refLigne,
+					refDraft), "5.1.9");
+		}
 	}
 }

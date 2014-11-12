@@ -4,11 +4,8 @@ import java.util.Map;
 
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.Tarif;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
-import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.util.Constants;
 
@@ -48,42 +45,6 @@ public class DetailCout {
 	 * constructeur par defaut.
 	 */
 	public DetailCout() {
-	}
-
-	/**
-	 * creation du cout pour un {@link DraftLigne}.
-	 * 
-	 * @param draftLigne
-	 *            {@link DraftLigne}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
-	 * @param refDraft
-	 *            reference du draft.
-	 */
-	public DetailCout(String refDraft, DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
-		Map<String, Tarif> tarifMap = trameCatalogue.getTarifsMap();
-		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
-		numero = draftLigne.getReference();
-		label = draftLigne.getReferenceOffre();
-		double plan = 0d;
-		Integer frequence = null;
-		Tarif tarif = null;
-		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-			tarif = tarifMap.get(draftLigneDetail.getReferenceTarif());
-			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
-			coutTotal += detailCoutTarif.getCoutTotal();
-			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-			frequence = tarif.getFrequence();
-		}
-
-		tarif = tarifMap.get(draftLigne.getReferenceTarif());
-		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
-		coutTotal += detailCoutTarif.getCoutTotal();
-		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-
-		if (plan > Constants.ZERO) {
-			this.plan = new Plan(frequence, plan);
-		}
 	}
 
 	/**
@@ -188,7 +149,7 @@ public class DetailCout {
 	 * 
 	 * @return {@link #reduction}
 	 */
-	public double getReduction() {
+	public Double getReduction() {
 		return reduction;
 	}
 
@@ -197,7 +158,7 @@ public class DetailCout {
 	 * @param reduction
 	 *            the new {@link #reduction}
 	 */
-	public void setReduction(double reduction) {
+	public void setReduction(Double reduction) {
 		this.reduction = reduction;
 	}
 

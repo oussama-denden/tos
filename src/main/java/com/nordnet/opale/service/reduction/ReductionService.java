@@ -3,8 +3,6 @@ package com.nordnet.opale.service.reduction;
 import java.util.List;
 
 import com.nordnet.opale.business.ReductionInfo;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
@@ -119,7 +117,7 @@ public interface ReductionService {
 	 *            reference draft
 	 * @return {@link List}
 	 */
-	public List<Reduction> findReductionDraft(String referenceDraft);
+	public Reduction findReductionDraft(String referenceDraft);
 
 	/**
 	 * Rechercher les reductions d'une ligne.
@@ -155,7 +153,7 @@ public interface ReductionService {
 	 *            reference ligne
 	 * @return {@link List}
 	 */
-	public List<Reduction> findReductionLigneDraftSansFrais(String referenceDraft, String referenceLigne);
+	public Reduction findReductionLigneDraftSansFrais(String referenceDraft, String referenceLigne);
 
 	/**
 	 * Rechercher les reductions d'un detail ligne.
@@ -168,7 +166,7 @@ public interface ReductionService {
 	 *            reference detail ligne
 	 * @return {@link List}
 	 */
-	public List<Reduction> findReductionDetailLigneDraftSansFrais(String referenceDraft, String referenceLigne,
+	public Reduction findReductionDetailLigneDraftSansFrais(String referenceDraft, String referenceLigne,
 			String referenceLigneDetail);
 
 	/**
@@ -186,7 +184,7 @@ public interface ReductionService {
 	 *            reference ligne
 	 * @return {@link List}
 	 */
-	public List<Reduction> findReductionDetailLigneDraftFrais(String referenceDraft, String refLigne,
+	public Reduction findReductionDetailLigneDraftFrais(String referenceDraft, String refLigne,
 			String referenceLigneDetail, String referenceTarif, String referenceFrais);
 
 	/**
@@ -200,8 +198,8 @@ public interface ReductionService {
 	 *            reference frais
 	 * @return {@link List}
 	 */
-	public List<Reduction> findReductionlLigneDraftFrais(String referenceDraft, String referenceLigne,
-			String referenceTarif, String referenceFrais);
+	public Reduction findReductionlLigneDraftFrais(String referenceDraft, String referenceLigne, String referenceTarif,
+			String referenceFrais);
 
 	/**
 	 * Ajouter reduction.
@@ -210,18 +208,5 @@ public interface ReductionService {
 	 *            reduction
 	 */
 	public void save(Reduction reduction);
-
-	/**
-	 * cacluler reduction.
-	 * 
-	 * @param draft
-	 *            {@link Draft}
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}
-	 * @return cout totale du reduction
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public Double calculerReduction(Draft draft, TrameCatalogue trameCatalogue) throws OpaleException;
 
 }

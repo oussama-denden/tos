@@ -53,7 +53,7 @@ public class DownPaiementServiceImpl implements DownPaiementService {
 			getSaphirClient().addDownPayment(Identifier.build(commande.getClientAFacturer().getClientId()), price,
 					paymentReference, commande.getReference());
 		} catch (Exception e) {
-			LOGGER.error("Erreur dans l'appel vers saphir: " + e.getMessage());
+			LOGGER.error("Erreur lors de l'appel vers saphir", e);
 		}
 	}
 }

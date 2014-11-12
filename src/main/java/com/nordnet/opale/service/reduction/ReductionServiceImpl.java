@@ -6,14 +6,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.ReductionInfo;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
-import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
@@ -68,7 +64,10 @@ public class ReductionServiceImpl implements ReductionService {
 
 		LOGGER.info("Debut methode ajouterReduction ");
 
+		Reduction reductionDraft = reductionRepository.findReductionDraft(refDraft);
+		ReductionValidator.checkReductionDraftExist(refDraft, reductionDraft);
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.DRAFT);
+
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
@@ -86,8 +85,11 @@ public class ReductionServiceImpl implements ReductionService {
 
 		LOGGER.info("Debut methode ajouterReductionLigne ");
 
+		Reduction reductionLigne = reductionRepository.findReductionLigneSanFrais(refDraft, refLigne);
+		ReductionValidator.checkReductionDraftLigneExist(refDraft, refLigne, reductionLigne);
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigne);
+
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
@@ -105,7 +107,13 @@ public class ReductionServiceImpl implements ReductionService {
 
 		LOGGER.info("Debut methode ajouterReductionFrais ");
 
+		Reduction reductionLigneDetailFrais =
+				reductionRepository.findReductionLigneDetailleFrais(refDraft, refLigne,
+						draftLigneDetail.getReference(), refFrais, draftLigneDetail.getReferenceTarif());
+		ReductionValidator.checkReductionDraftLigneDetailFraisExist(refDraft, refLigne,
+				draftLigneDetail.getReference(), refFrais, reductionLigneDetailFrais);
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
+
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
@@ -126,6 +134,11 @@ public class ReductionServiceImpl implements ReductionService {
 
 		LOGGER.info("Debut methode ajouterReductionDetailLigne ");
 
+		Reduction reductionLigneDetail =
+				reductionRepository.findReductionLigneDetailleSansFrais(refDraft, refLigne,
+						draftLigneDetail.getReference());
+		ReductionValidator.checkReductionDraftLigneDetailExist(refDraft, refLigne, draftLigneDetail.getReference(),
+				reductionLigneDetail);
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigneDetail);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
@@ -145,7 +158,13 @@ public class ReductionServiceImpl implements ReductionService {
 
 		LOGGER.info("Debut methode ajouterReductionFraisLigne ");
 
+		Reduction reductionLigneFrais =
+				reductionRepository.findReductionLigneFrais(refDraft, draftLigne.getReference(), refFrais,
+						draftLigne.getReferenceTarif());
+		ReductionValidator.checkReductionDraftLigneFraisExist(refDraft, draftLigne.getReference(), refFrais,
+				reductionLigneFrais);
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.FRAIS);
+
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceDraft(refDraft);
@@ -170,7 +189,7 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Reduction> findReductionDraft(String referenceDraft) {
+	public Reduction findReductionDraft(String referenceDraft) {
 		return reductionRepository.findReductionDraft(referenceDraft);
 	}
 
@@ -203,49 +222,7 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Double calculerReduction(Draft draft, TrameCatalogue trameCatalogue) throws OpaleException {
-
-		double reduction = 0d;
-		double coutTotal = 0d;
-		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			DetailCout detailCout = new DetailCout(draft.getReference(), draftLigne, trameCatalogue);
-			coutTotal += detailCout.getCoutTotal();
-			reduction += detailCout.getReduction();
-			// addDetail(detailCout);
-		}
-		reduction = +calculerReduction(draft.getReference(), coutTotal);
-		return null;
-	}
-
-	/**
-	 * calculer reduction sur draft.
-	 * 
-	 * @param refDraft
-	 *            reference du draft
-	 * @param coutTotal
-	 *            cout total
-	 * @return cout du reduction
-	 */
-	private Double calculerReduction(String refDraft, double coutTotal) {
-		Reduction reductionDraft = new Reduction();
-		double coutReduction = 0d;
-
-		if (reductionDraft != null) {
-			if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-				coutReduction += (coutTotal * 100) / reductionDraft.getValeur();
-			} else if (reductionDraft.getTypeValeur().equals(TypeValeur.MONTANT)) {
-				coutReduction += coutTotal - reductionDraft.getValeur();
-			}
-		}
-		return coutReduction;
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Reduction> findReductionDetailLigneDraftFrais(String referenceDraft, String refLigne,
+	public Reduction findReductionDetailLigneDraftFrais(String referenceDraft, String refLigne,
 			String referenceLigneDetail, String referenceTarif, String referenceFrais) {
 		return reductionRepository.findReductionLigneDetailleFrais(referenceDraft, refLigne, referenceLigneDetail,
 				referenceFrais, referenceTarif);
@@ -255,8 +232,8 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Reduction> findReductionlLigneDraftFrais(String referenceDraft, String referenceLigne,
-			String referenceTarif, String referenceFrais) {
+	public Reduction findReductionlLigneDraftFrais(String referenceDraft, String referenceLigne, String referenceTarif,
+			String referenceFrais) {
 		return reductionRepository.findReductionLigneFrais(referenceDraft, referenceLigne, referenceFrais,
 				referenceTarif);
 	}
@@ -265,7 +242,7 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Reduction> findReductionLigneDraftSansFrais(String referenceDraft, String referenceLigne) {
+	public Reduction findReductionLigneDraftSansFrais(String referenceDraft, String referenceLigne) {
 		return reductionRepository.findReductionLigneSanFrais(referenceDraft, referenceLigne);
 	}
 
@@ -273,7 +250,7 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Reduction> findReductionDetailLigneDraftSansFrais(String referenceDraft, String referenceLigne,
+	public Reduction findReductionDetailLigneDraftSansFrais(String referenceDraft, String referenceLigne,
 			String referenceLigneDetail) {
 		return reductionRepository.findReductionLigneDetailleSansFrais(referenceDraft, referenceLigne,
 				referenceLigneDetail);

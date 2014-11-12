@@ -37,14 +37,17 @@ public class KeygenServiceImpl implements KeygenService {
 	public String getNextKey(Class clazz) {
 
 		LOGGER.info("Enter methode getNextKey– Class = " + clazz.getName());
+		String referenceRetour = null;
 		String prefix =
 				clazz.equals(Draft.class) ? Prefix.Dra.toString() : clazz.equals(Commande.class) ? Prefix.Cmd
 						.toString() : null;
 
 		String reference = keygenRepository.getReference(clazz.getName(), prefix != null ? prefix.toString() : null);
+		referenceRetour =
+				clazz.equals(Draft.class) ? Prefix.Dra + "-" + reference : clazz.equals(Commande.class) ? Prefix.Cmd
+						+ "-" + reference : reference;
 
 		LOGGER.info("Fin methode getNextKey – Class = " + clazz.getName());
-		return clazz.equals(Draft.class) ? Prefix.Dra + "-" + reference : clazz.equals(Commande.class) ? Prefix.Cmd
-				+ "-" + reference : reference;
+		return referenceRetour;
 	}
 }

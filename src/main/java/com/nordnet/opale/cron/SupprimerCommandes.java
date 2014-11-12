@@ -48,7 +48,7 @@ public class SupprimerCommandes extends QuartzJobBean {
 					commandeService.save(commande);
 				}
 			} catch (OpaleException | ParseException ex) {
-				LOGGER.error("Error : " + ex.getMessage());
+				LOGGER.error("erreur lors de la suppression des commandes inactives", ex);
 			}
 		}
 
