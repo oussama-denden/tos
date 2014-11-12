@@ -72,6 +72,7 @@ public class RestClient {
 			JSONObject contrat = new JSONObject(response.getBody());
 			return contrat.getString("referenceContrat");
 		} catch (HttpMessageNotReadableException exception) {
+			LOGGER.error("failed to send REST request", exception);
 			if (exception.getCause() instanceof UnrecognizedPropertyException) {
 				throw new OpaleException(exception.getMessage(), exception.getMessage());
 			} else {
@@ -105,6 +106,7 @@ public class RestClient {
 			@SuppressWarnings("unused")
 			ResponseEntity<Void> response = rt.postForEntity(url, validationInfo, Void.class);
 		} catch (HttpMessageNotReadableException exception) {
+			LOGGER.error("failed to send REST request", exception);
 			if (exception.getCause() instanceof UnrecognizedPropertyException) {
 				throw new OpaleException(exception.getMessage(), exception.getMessage());
 			} else {
