@@ -47,6 +47,8 @@ public class TimeStampDeserializer extends JsonDeserializer<Date> {
 				try {
 					date = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT.parse(timeStamp);
 				} catch (ParseException e1) {
+					LOGGER.error(e.getMessage());
+					LOGGER.error(e1.getMessage());
 					throw new JsonMappingException(e1.getLocalizedMessage());
 				}
 			}
