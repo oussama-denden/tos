@@ -20,10 +20,8 @@ public class TrameCatalogue {
 	 * L auteur qui va lancer l operation.
 	 */
 	private Auteur auteur;
+
 	/**
-	 * 
-	 * 
-	 * 
 	 * 
 	 * list des {@link Frais}.
 	 */
@@ -114,8 +112,7 @@ public class TrameCatalogue {
 	}
 
 	/**
-	 * verifier si la reference de l' offre dans le draft existe dans la trame
-	 * du catalogue.
+	 * verifier si la reference de l' offre dans le draft existe dans la trame du catalogue.
 	 * 
 	 * @param referenceOffre
 	 *            reference offre.
@@ -134,7 +131,7 @@ public class TrameCatalogue {
 	}
 
 	/**
-	 * verifier si la selection existe dans l'offre du catalogue.
+	 * rechercher du detail catalogue a partir de la referenceSelection.
 	 * 
 	 * @param offreCatalogue
 	 *            {@link OffreCatalogue}.
@@ -142,16 +139,15 @@ public class TrameCatalogue {
 	 *            reference selection.
 	 * @return true si la selection existe dans l'offre.
 	 */
-	public boolean isDetailExist(OffreCatalogue offreCatalogue, String referenceSelection) {
+	public DetailCatalogue findDetailCatalogue(OffreCatalogue offreCatalogue, String referenceSelection) {
 
 		if (offreCatalogue != null) {
-			DetailCatalogue detailCatalogue = new DetailCatalogue();
-			detailCatalogue.setReferenceSelection(referenceSelection);
-			if (offreCatalogue.getDetails().contains(detailCatalogue)) {
-				return true;
+			for (DetailCatalogue detailCatalogue : offreCatalogue.getDetails()) {
+				if (detailCatalogue.getReferenceSelection().equals(referenceSelection))
+					return detailCatalogue;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**

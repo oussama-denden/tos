@@ -6,7 +6,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.nordnet.opale.business.DraftValidationInfo;
+import com.nordnet.opale.business.catalogue.Choice;
+import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
+import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -15,8 +18,7 @@ import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 
 /**
- * Classe responsable de faire la validation du {@link Draft} avec la trame du
- * catalogue.
+ * Classe responsable de faire la validation du {@link Draft} avec la trame du catalogue.
  * 
  * @author akram-moncer
  * 
@@ -63,10 +65,12 @@ public class CatalogueValidator {
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
 			if (offreCatalogue != null) {
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					if (trameCatalogue.isDetailExist(offreCatalogue, detail.getReferenceSelection())) {
+					DetailCatalogue detailCatalogue =
+							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());
+					if (detailCatalogue != null) {
 						if (!isPossedeBiens) {
-							isPossedeBiens = trameCatalogue.isPossedeBiens(offreCatalogue,
-									detail.getReferenceSelection());
+							isPossedeBiens =
+									trameCatalogue.isPossedeBiens(offreCatalogue, detail.getReferenceSelection());
 						}
 					}
 				}
@@ -117,13 +121,39 @@ public class CatalogueValidator {
 				validationInfo.addReason("lignes[" + i + "].offre.reference", "36.3.1.2", PropertiesUtil.getInstance()
 						.getErrorMessage("1.1.6", draftLigne.getReferenceOffre()), values);
 			} else {
+				Tarif tarifLigne = trameCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+				if (tarifLigne == null) {
+					values = new ArrayList<String>();
+					values.add(draftLigne.getReferenceTarif());
+					validationInfo.addReason("lignes[" + i + "].offre.tarif.reference", "36.3.1.4", PropertiesUtil
+							.getInstance().getErrorMessage("1.1.28", draftLigne.getReferenceTarif()), values);
+				}
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					if (!trameCatalogue.isDetailExist(offreCatalogue, detail.getReferenceSelection())) {
+					Tarif tarifDetail = trameCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+					if (tarifDetail == null) {
+						values = new ArrayList<String>();
+						values.add(draftLigne.getReferenceTarif());
+						validationInfo.addReason("lignes[" + i + "].offre.tarif.reference", "36.3.1.4", PropertiesUtil
+								.getInstance().getErrorMessage("1.1.28", detail.getReferenceTarif()), values);
+					}
+					DetailCatalogue detailCatalogue =
+							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());
+					if (detailCatalogue == null) {
 						values = new ArrayList<String>();
 						values.add(detail.getReferenceSelection());
 						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].reference", "36.3.1.3",
 								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
 								values);
+					} else {
+						Choice choice = detailCatalogue.getChoice(detail.getReferenceChoix());
+						if (choice == null) {
+							values = new ArrayList<String>();
+							values.add(detail.getReferenceChoix());
+							validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].referenceChoix",
+									"36.3.1.3",
+									PropertiesUtil.getInstance().getErrorMessage("1.1.29", detail.getReferenceChoix()),
+									values);
+						}
 					}
 					j++;
 				}

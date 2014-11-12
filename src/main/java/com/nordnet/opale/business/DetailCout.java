@@ -20,17 +20,17 @@ public class DetailCout {
 	/**
 	 * numero detail coincide avec le numero de ligne dans la commande.
 	 */
-	public String numero;
+	private String numero;
 
 	/**
 	 * label de l'offre.
 	 */
-	public String label;
+	private String label;
 
 	/**
 	 * cout total de l'offre.
 	 */
-	public double coutTotal;
+	private double coutTotal;
 	/**
 	 * cout totale du reduction.
 	 */

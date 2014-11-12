@@ -11,12 +11,12 @@ public class Plan {
 	/**
 	 * frequence/periodicite de paiement.
 	 */
-	public Integer frequence;
+	private Integer frequence;
 
 	/**
 	 * plan.
 	 */
-	public double plan;
+	private double plan;
 
 	/**
 	 * constructeur par defaut.

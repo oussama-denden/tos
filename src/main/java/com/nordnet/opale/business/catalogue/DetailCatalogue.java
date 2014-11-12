@@ -174,4 +174,15 @@ public class DetailCatalogue {
 		return choiceMap;
 	}
 
+	/**
+	 * trouver le {@link Choice} a partir de la referenceChoix.
+	 * 
+	 * @param refrenceChoix
+	 *            reference du choix.
+	 * @return {@link Choice}.
+	 */
+	public Choice getChoice(String refrenceChoix) {
+		return getChoiceMap().get(refrenceChoix);
+	}
+
 }

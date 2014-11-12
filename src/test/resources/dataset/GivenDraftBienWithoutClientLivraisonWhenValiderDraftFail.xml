@@ -12,10 +12,10 @@
 		 qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
 		timestamp="[now]" draftId="1" />
 
-	<draftLigneDetail id="1000" referenceSelection="kitsat"
+	<draftLigneDetail id="1000" referenceSelection="kitsat" referenceChoix="trafic10g"
 		reference="kitsat" referenceTarif="achat_kit_mensuel" modePaiement="CB"
 		configurationJson="" draftLigneId="1000" />
-	<draftLigneDetail id="1001" referenceSelection="jet"
+	<draftLigneDetail id="1001" referenceSelection="jet" referenceChoix="trafic10g"
 		reference="jet" referenceTarif="achat_kit_mensuel" modePaiement="CB"
 		configurationJson="" draftLigneId="1000" dependDe="1000" />
 

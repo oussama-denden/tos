@@ -180,6 +180,10 @@ public class Draft {
 				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrLivraison(),
 						auteur);
 		this.clientALivrer = clientALivrer;
+
+		Client clientSouscripteur = new Client(contrat.getIdClient(), null);
+		this.clientSouscripteur = clientSouscripteur;
+
 		addLigne(new DraftLigne(contrat, trameCatalogue));
 	}
 
