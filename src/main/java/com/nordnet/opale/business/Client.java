@@ -66,8 +66,7 @@ public class Client {
 	}
 
 	/**
-	 * convertir un {@link ClientInfo} en
-	 * {@link com.nordnet.opale.domain.Client}.
+	 * convertir un {@link ClientInfo} en {@link com.nordnet.opale.domain.Client}.
 	 * 
 	 * @return {@link com.nordnet.opale.domain.Client}.
 	 */
@@ -84,16 +83,14 @@ public class Client {
 	 * 
 	 * @param auteur
 	 *            l auteur
-	 * @return {@link com.nordnet.opale.domain.Client}.
-	 *         {@link com.nordnet.opale.domain.Client}.
+	 * @return {@link com.nordnet.opale.domain.Client}. {@link com.nordnet.opale.domain.Client}.
 	 */
 	public com.nordnet.opale.domain.Client toDomain(com.nordnet.opale.business.Auteur auteur) {
 		com.nordnet.opale.domain.Client client = new com.nordnet.opale.domain.Client();
 
 		client.setAdresseId(adresseId);
 		client.setClientId(clientId);
-		client.setAuteur(auteur.toDomain());
+		client.setAuteur(auteur != null ? auteur.toDomain() : null);
 		return client;
 	}
-
 }

@@ -49,9 +49,9 @@ public class Auteur {
 	 */
 	public Auteur(com.nordnet.opale.business.Auteur auteur) {
 		this.setCanal(auteur.getCanal());
-		this.setIp(auteur.getIp().getIp());
+		this.setIp(auteur.getIp() != null ? auteur.getIp().getIp() : null);
 		this.setQui(auteur.getQui());
-		this.setTimestamp(auteur.getIp().getTs());
+		this.setTimestamp(auteur.getIp() != null ? auteur.getIp().getTs() : null);
 	}
 
 	@Override
