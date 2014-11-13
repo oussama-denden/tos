@@ -13,10 +13,10 @@
 		timestamp="[now]" draftId="1" />
 
 	<draftLigneDetail id="1000" referenceSelection="kitsat" referenceChoix="trafic10g"
-		reference="kitsat" referenceTarif="annuel_jet10_base" modePaiement="CB"
+		referenceTarif="annuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1000" />
 	<draftLigneDetail id="1001" referenceSelection="jet" referenceChoix="trafic10g"
-		reference="jet" referenceTarif="annuel_jet10_base" modePaiement="CB"
+		referenceTarif="annuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1000" dependDe="1000" />
 
 </dataset>

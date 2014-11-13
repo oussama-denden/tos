@@ -35,7 +35,6 @@
 <!ATTLIST draftLigneDetail
      id CDATA #IMPLIED
     referenceSelection CDATA #IMPLIED
-    reference CDATA #IMPLIED
     referenceChoix CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
     modePaiement CDATA #IMPLIED
@@ -114,8 +113,9 @@
 <!ATTLIST commandeLigneDetail
     id CDATA #IMPLIED
     configurationJson CDATA #IMPLIED
+    referenceSelection CDATA #IMPLIED
+    referenceChoix CDATA #IMPLIED
     modePaiement CDATA #IMPLIED
-    referenceProduit CDATA #IMPLIED
     label CDATA #IMPLIED
     typeProduit CDATA #IMPLIED
     dependDe CDATA #IMPLIED

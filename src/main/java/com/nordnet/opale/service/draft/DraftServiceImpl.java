@@ -509,7 +509,7 @@ public class DraftServiceImpl implements DraftService {
 				// coper reduction ligne draft
 				List<Reduction> reductionDetailLigneDraft =
 						reductionService.findReductionDetailLigneDraft(draft.getReference(), draftLigne.getReference(),
-								draftLigneDetail.getReference());
+								draftLigneDetail.getReferenceChoix());
 
 				if (reductionDetailLigneDraft.size() > 0) {
 					CommandeLigneDetail commandeLigneDetailEnReduction = null;
@@ -522,7 +522,7 @@ public class DraftServiceImpl implements DraftService {
 					}
 					ajouterReductionCommande(reductionDetailLigneDraft, commande.getReference(),
 							commandeLigneEnReduction.getReferenceOffre(),
-							commandeLigneDetailEnReduction.getReferenceProduit());
+							commandeLigneDetailEnReduction.getReferenceChoix());
 				}
 			}
 		}
@@ -568,12 +568,12 @@ public class DraftServiceImpl implements DraftService {
 		 */
 		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
 		for (DraftLigneDetail draftLigneDetail : draftLigneDetails) {
-			draftLigneDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
+			draftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail);
 		}
 
 		for (Detail detail : details) {
 			if (!detail.isParent()) {
-				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(detail.getReference());
+				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(detail.getReferenceChoix());
 				DraftLigneDetail draftLigneDetailParent = draftLigneDetailsMap.get(detail.getDependDe());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
@@ -853,7 +853,7 @@ public class DraftServiceImpl implements DraftService {
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
-					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReference(),
+					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReferenceChoix(),
 							detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan() != null ? detailCoutTarif
 									.getPlan().getPlan() : Constants.ZERO, tarif, fraisMap, false);
 		}
@@ -980,6 +980,9 @@ public class DraftServiceImpl implements DraftService {
 
 		Reduction reductionDraft = reductionService.findReductionDraft(refDraft);
 		double coutReduction = 0d;
+		if (reductionDraft == null) {
+			return coutReduction;
+		}
 		if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
 			coutReduction += (coutTotale * reductionDraft.getValeur()) / 100;
 		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.MONTANT)) {

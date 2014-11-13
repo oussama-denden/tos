@@ -600,7 +600,7 @@ public class CommandeServiceImpl implements CommandeService {
 				paiementInfo.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
 			}
 
-			paiementInfo.setReferenceProduit(ligneDetail.getReferenceProduit());
+			paiementInfo.setReferenceProduit(ligneDetail.getReferenceChoix());
 
 			paiementInfos.add(paiementInfo);
 		}
@@ -718,7 +718,7 @@ public class CommandeServiceImpl implements CommandeService {
 			if (ligneDetail.getCommandeLigneDetailParent() != null) {
 				produitRenouvellement.setNumECParent(ligneDetail.getCommandeLigneDetailParent().getNumEC());
 			}
-			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceProduit());
+			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceChoix());
 			produitRenouvellement.setRemboursable(true);
 			produitRenouvellement.setTypeProduit(ligneDetail.getTypeProduit());
 
@@ -842,7 +842,7 @@ public class CommandeServiceImpl implements CommandeService {
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
 			List<Reduction> reductionsligneDetail =
 					reductionService.findReductionDetailLigneDraft(commande.getReference(),
-							commandeLigne.getReferenceOffre(), commandeLigneDetail.getReferenceProduit());
+							commandeLigne.getReferenceOffre(), commandeLigneDetail.getReferenceChoix());
 			for (Reduction reductionligneDetail : reductionsligneDetail) {
 				reductionContrat = new ReductionContrat(reductionligneDetail);
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);

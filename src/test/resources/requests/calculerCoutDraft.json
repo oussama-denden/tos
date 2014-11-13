@@ -59,7 +59,7 @@
           "nature": "BIEN",
           "choices": [
             {
-              "reference": "trafic10g",
+              "reference": "kitsat",
               "label": "Trafic 10 Gigas (Inclus)",
               "tarifs": [
                 "annuel_jet10_base"
@@ -74,7 +74,7 @@
            "nature": "BIEN",
           "choices": [
             {
-              "reference": "trafic10g",
+              "reference": "jet",
               "label": "Trafic 10 Gigas (Inclus)",
               "tarifs": [
                 "annuel_jet10_base"

@@ -13,7 +13,7 @@
 		timestamp="[now]" draftId="1" />
 
 	<draftLigneDetail id="1001" referenceSelection="jet" referenceChoix="trafic10g"
-		reference="jet" referenceTarif="annuel_jet10_base" modePaiement="CB"
+		referenceTarif="annuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1000" />
 
 </dataset>

@@ -495,16 +495,15 @@ public class CommandeLigne {
 	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
 		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
 		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
-			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceProduit(), commandeLigneDetail);
+			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceChoix(), commandeLigneDetail);
 		}
 
 		for (DraftLigneDetail draftLigneDetail : draftDetails) {
 			if (!draftLigneDetail.isParent()) {
 				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceSelection());
+						commandeLigneDetailMap.get(draftLigneDetail.getReferenceChoix());
 				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap
-								.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceSelection());
+						commandeLigneDetailMap.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceChoix());
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}

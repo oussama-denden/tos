@@ -17,14 +17,13 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 public interface DraftLigneDetailRepository extends JpaRepository<DraftLigneDetail, Integer> {
 
 	/**
-	 * Recuperer draft ligne detail par reference.
+	 * Recuperer draft ligne detail par reference choix.
 	 * 
-	 * @param reference
-	 *            reference du draft.
+	 * @param referenceChoix
+	 *            reference du choix asscie au draft ligne detail.
 	 * @return {@link DraftLigneDetail}
 	 */
-	public DraftLigneDetail findByReference(String reference);
-	
+	public DraftLigneDetail findByReferenceChoix(String referenceChoix);
 
 	/**
 	 * cherecher le detail ligne draft par reference.
@@ -37,7 +36,7 @@ public interface DraftLigneDetailRepository extends JpaRepository<DraftLigneDeta
 	 *            the reference produit
 	 * @return {@link referenceLigne}.
 	 */
-	@Query(name = "findByRefDraftAndRefLigneAndRef", nativeQuery = true, value = "SELECT dld.* FROM draft d INNER JOIN draftligne dl ON dl.draftId = d.id INNER JOIN draftlignedetail dld ON dld.draftLigneId = dl.id Where d.reference=?1 AND dl.reference=?2 AND dld.reference=?3")
+	@Query(name = "findByRefDraftAndRefLigneAndRef", nativeQuery = true, value = "SELECT dld.* FROM draft d INNER JOIN draftligne dl ON dl.draftId = d.id INNER JOIN draftlignedetail dld ON dld.draftLigneId = dl.id Where d.reference=?1 AND dl.reference=?2 AND dld.referenceChoix=?3")
 	public DraftLigneDetail findByRefDraftAndRefLigneAndRef(String refDraft, String refLigne, String refProduit);
 
 }

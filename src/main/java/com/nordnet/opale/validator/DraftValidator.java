@@ -75,11 +75,6 @@ public class DraftValidator {
 		for (int i = 0; i < details.size(); i++) {
 			Detail detail = details.get(i);
 
-			if (Utils.isStringNullOrEmpty(detail.getReference())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].reference"),
-						"0.1.4");
-			}
-
 			if (Utils.isStringNullOrEmpty(detail.getReferenceSelection())) {
 				throw new OpaleException(
 						propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].referenceSelection"), "0.1.4");
@@ -90,12 +85,12 @@ public class DraftValidator {
 						"0.1.4");
 			}
 
-			if (detail.getReference().equals(detail.getDependDe())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.4", detail.getReference()), "1.1.4");
+			if (detail.getReferenceChoix().equals(detail.getDependDe())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.4", detail.getReferenceChoix()), "1.1.4");
 			}
 
 			Detail detailElement = new Detail();
-			detailElement.setReference(detail.getDependDe());
+			detailElement.setReferenceChoix(detail.getDependDe());
 			if (!detail.isParent() && !details.contains(detailElement)) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.2", detail.getDependDe()), "0.1.2");
 			}
@@ -222,9 +217,9 @@ public class DraftValidator {
 
 		if (auteur != null) {
 
-		if (Utils.isStringNullOrEmpty(auteur.getQui())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
-		}
+			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
+			}
 		}
 
 	}
@@ -239,21 +234,17 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void codePartenaireNotNull(Draft draft, String action)
-			throws OpaleException {
-			if (Utils.isStringNullOrEmpty(draft.getCodePartenaire()) && action.equals("VALIDER_DRAFT")) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.21"), "1.1.21");
+	public static void codePartenaireNotNull(Draft draft, String action) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(draft.getCodePartenaire()) && action.equals("VALIDER_DRAFT")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.21"), "1.1.21");
+		} else if (Utils.isStringNullOrEmpty(draft.getCodePartenaire()) && action.equals("TRANSFORMER_EN_COMMANDE")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.23"), "1.1.23");
 		}
- else if (Utils.isStringNullOrEmpty(draft.getCodePartenaire())
-					&& action.equals("TRANSFORMER_EN_COMMANDE")) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.23"), "1.1.23");
-			}
 
 	}
 
 	/**
-	 * verifier si la transformation du {@link Draft} en {@link Commande} est
-	 * possible ou non.
+	 * verifier si la transformation du {@link Draft} en {@link Commande} est possible ou non.
 	 * 
 	 * 
 	 * @param draft
@@ -344,8 +335,7 @@ public class DraftValidator {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Verifer que la ligne detail existe.
+	 * <<<<<<< HEAD Verifer que la ligne detail existe.
 	 * 
 	 * @param refProduit
 	 *            reference du produit.
@@ -360,7 +350,6 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", draftLigneDetail), "1.1.24");
 		}
 	}
-
 
 	/**
 	 * Tester si le detail ligne draft existe.

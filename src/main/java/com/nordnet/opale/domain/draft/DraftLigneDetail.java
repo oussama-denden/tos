@@ -50,11 +50,6 @@ public class DraftLigneDetail {
 	private String referenceSelection;
 
 	/**
-	 * reference de la ligne dans le draft.
-	 */
-	private String reference;
-
-	/**
 	 * reference choix.
 	 */
 	private String referenceChoix;
@@ -102,7 +97,6 @@ public class DraftLigneDetail {
 	 */
 	public DraftLigneDetail(Detail detail) {
 		this.referenceSelection = detail.getReferenceSelection();
-		this.reference = detail.getReference();
 		this.referenceTarif = detail.getReferenceTarif();
 		this.referenceChoix = detail.getReferenceChoix();
 		this.modePaiement = detail.getModePaiement();
@@ -117,7 +111,6 @@ public class DraftLigneDetail {
 	 */
 	public DraftLigneDetail(CommandeLigneDetail commandeLigneDetail) {
 		this.referenceSelection = commandeLigneDetail.getReferenceSelection();
-		this.reference = commandeLigneDetail.getReferenceProduit();
 		this.referenceChoix = commandeLigneDetail.getReferenceChoix();
 		Tarif tarif = commandeLigneDetail.getTarif();
 		this.referenceTarif = tarif != null ? tarif.getReference() : null;
@@ -132,7 +125,6 @@ public class DraftLigneDetail {
 	 *            {@link ElementContractuel}.
 	 */
 	public DraftLigneDetail(ElementContractuel elementContractuel) {
-		this.reference = elementContractuel.getReferenceProduit();
 		this.referenceSelection = elementContractuel.getReferenceSelection();
 		this.referenceChoix = elementContractuel.getReferenceChoix();
 		this.referenceTarif = elementContractuel.getReferenceTarif();
@@ -144,8 +136,8 @@ public class DraftLigneDetail {
 	@Override
 	public String toString() {
 		return "DraftLigneDetail [id=" + id + ", numEC=" + numEC + ", referenceSelection=" + referenceSelection
-				+ ", reference=" + reference + ", referenceChoix=" + referenceChoix + ", referenceTarif="
-				+ referenceTarif + ", modePaiement=" + modePaiement + ", configurationJson=" + configurationJson + "]";
+				+ ", referenceChoix=" + referenceChoix + ", referenceTarif=" + referenceTarif + ", modePaiement="
+				+ modePaiement + ", configurationJson=" + configurationJson + "]";
 	}
 
 	/**
@@ -197,23 +189,6 @@ public class DraftLigneDetail {
 	 */
 	public void setReferenceSelection(String referenceSelection) {
 		this.referenceSelection = referenceSelection;
-	}
-
-	/**
-	 * 
-	 * @return {@link #reference}.
-	 */
-	public String getReference() {
-		return reference;
-	}
-
-	/**
-	 * 
-	 * @param reference
-	 *            {@link #reference}.
-	 */
-	public void setReference(String reference) {
-		this.reference = reference;
 	}
 
 	/**
@@ -337,7 +312,7 @@ public class DraftLigneDetail {
 	 */
 	public String getdependDe() {
 		if (draftLigneDetailParent != null) {
-			return draftLigneDetailParent.getReference();
+			return draftLigneDetailParent.getReferenceChoix();
 		}
 		return null;
 	}

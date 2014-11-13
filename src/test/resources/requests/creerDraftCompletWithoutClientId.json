@@ -16,8 +16,8 @@
         "modeFacturation": "PREMIER_MOIS",
         "details": [
           {
-            "reference": "kitsat",
-             "referenceSelection": "kitsat",
+            "referenceChoix": "kitsat",
+            "referenceSelection": "kitsat",
             "referenceTarif": "achat_kit_mensuel",
             "modePaiement": "FACTURE",
             "configurationJson": ""

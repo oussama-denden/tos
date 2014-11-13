@@ -9,7 +9,7 @@
 
 <commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" timestamp="[now]" referenceContrat="ref_contrat" gamme="jet" modeFacturation="PREMIER_MOIS" modePaiement="CB" referenceOffre="jet_surf10" commandeId="1000" famille="sat" tarifId="1006" />
 
-<commandeLigneDetail id="1000" modePaiement="CB"  referenceProduit="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" commandeLigneId="1000" tarifId="1000" />
+<commandeLigneDetail id="1000" modePaiement="CB"  referenceChoix="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" commandeLigneId="1000" tarifId="1000" />
 
 
 <tarif id="1000" duree="5" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />

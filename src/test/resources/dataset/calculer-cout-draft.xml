@@ -8,10 +8,10 @@
 <draftLigne id="1000" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" modeFacturation="PREMIER_MOIS" modePaiement="CB" reference="00000001" referenceOffre="jet_surf10" referenceTarif="annuel_jet10_base" draftId="1000" />
 <draftLigne id="1001" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" modeFacturation="PREMIER_MOIS" modePaiement="CB" reference="00000001" referenceOffre="jet_surf10" referenceTarif="annuel_jet10_base" draftId="1001" />
 
-<draftLigneDetail id="1000" modePaiement="CB" reference="kitsat" referenceChoix="trafic10g" referenceSelection="kitsat" referenceTarif="mensuel_jet10_base" draftLigneId="1000" />
-<draftLigneDetail id="1001" modePaiement="CB" reference="jet" referenceChoix="trafic10g" referenceSelection="jet" referenceTarif="mensuel_jet10_base" dependDe="1000" draftLigneId="1000" />
-<draftLigneDetail id="1002" modePaiement="CB" reference="kitsat" referenceChoix="trafic10g" referenceSelection="kitsat" referenceTarif="mensuel_jet10_base" draftLigneId="1001" />
-<draftLigneDetail id="1003" modePaiement="CB" reference="kitTlf" referenceChoix="trafic10g" referenceSelection="kitTlf" referenceTarif="mensuel_jet10_base" dependDe="1002" draftLigneId="1001" />
+<draftLigneDetail id="1000" modePaiement="CB" referenceChoix="kitsat" referenceSelection="kitsat" referenceTarif="mensuel_jet10_base" draftLigneId="1000" />
+<draftLigneDetail id="1001" modePaiement="CB" referenceChoix="jet" referenceSelection="jet" referenceTarif="mensuel_jet10_base" dependDe="1000" draftLigneId="1000" />
+<draftLigneDetail id="1002" modePaiement="CB" referenceChoix="trafic10g" referenceSelection="kitsat" referenceTarif="mensuel_jet10_base" draftLigneId="1001" />
+<draftLigneDetail id="1003" modePaiement="CB" referenceChoix="trafic10g" referenceSelection="kitTlf" referenceTarif="mensuel_jet10_base" dependDe="1002" draftLigneId="1001" />
 
 <tarif id="1000" duree="5" engagement="12" frequence="5" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
 <tarif id="1001" duree="12" engagement="12" frequence="5" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />

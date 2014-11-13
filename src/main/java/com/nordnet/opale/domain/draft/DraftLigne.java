@@ -413,10 +413,10 @@ public class DraftLigne {
 
 		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
 			if (!commandeLigneDetail.isParent()) {
-				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(commandeLigneDetail.getReferenceProduit());
+				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(commandeLigneDetail.getReferenceChoix());
 				DraftLigneDetail draftLigneDetailParent =
-						draftLigneDetailsMap.get(commandeLigneDetail.getCommandeLigneDetailParent()
-								.getReferenceProduit());
+						draftLigneDetailsMap
+								.get(commandeLigneDetail.getCommandeLigneDetailParent().getReferenceChoix());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
 			}
 		}
@@ -454,7 +454,7 @@ public class DraftLigne {
 	private Map<String, DraftLigneDetail> getDraftLigneDetailsMap() {
 		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
 		for (DraftLigneDetail draftLigneDetail : this.draftLigneDetails) {
-			draftLigneDetailsMap.put(draftLigneDetail.getReference(), draftLigneDetail);
+			draftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail);
 		}
 		return draftLigneDetailsMap;
 	}

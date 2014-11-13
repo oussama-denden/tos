@@ -52,11 +52,6 @@ public class CommandeLigneDetail {
 	private Integer numEC;
 
 	/**
-	 * reference produit.
-	 */
-	private String referenceProduit;
-
-	/**
 	 * reference selection.
 	 */
 	private String referenceSelection;
@@ -127,7 +122,6 @@ public class CommandeLigneDetail {
 	public CommandeLigneDetail(DraftLigneDetail detail, String referenceOffre, TrameCatalogue trameCatalogue) {
 		DetailCatalogue detailCatalogue =
 				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
-		this.referenceProduit = detail.getReference();
 		this.referenceSelection = detail.getReferenceSelection();
 		this.typeProduit = detailCatalogue.getNature();
 		this.modePaiement = detail.getModePaiement();
@@ -140,8 +134,8 @@ public class CommandeLigneDetail {
 
 	@Override
 	public String toString() {
-		return "CommandeLigneDetail [id=" + id + ", referenceProduit=" + referenceProduit + ", modePaiement="
-				+ modePaiement + ", configurationJson=" + configurationJson + "]";
+		return "CommandeLigneDetail [id=" + id + ", modePaiement=" + modePaiement + ", configurationJson="
+				+ configurationJson + "]";
 	}
 
 	/**
@@ -176,23 +170,6 @@ public class CommandeLigneDetail {
 	 */
 	public void setNumEC(Integer numEC) {
 		this.numEC = numEC;
-	}
-
-	/**
-	 * 
-	 * @return {@link #referenceProduit}.
-	 */
-	public String getReferenceProduit() {
-		return referenceProduit;
-	}
-
-	/**
-	 * 
-	 * @param referenceProduit
-	 *            {@link #referenceProduit}.
-	 */
-	public void setReferenceProduit(String referenceProduit) {
-		this.referenceProduit = referenceProduit;
 	}
 
 	/**
@@ -353,7 +330,7 @@ public class CommandeLigneDetail {
 	 */
 	public DetailCommandeLigneInfo toDetailCommandeLigneInfo() {
 		DetailCommandeLigneInfo detailCommandeLigneInfo = new DetailCommandeLigneInfo();
-		detailCommandeLigneInfo.setReference(referenceProduit);
+		detailCommandeLigneInfo.setReference(referenceChoix);
 		detailCommandeLigneInfo.setLabel(label);
 		detailCommandeLigneInfo.setTarif(tarif.toTarifInfo());
 
@@ -392,10 +369,9 @@ public class CommandeLigneDetail {
 		produit.setNumEC(numEC);
 		produit.setNumeroCommande(referenceCommande);
 		produit.setTypeProduit(typeProduit);
-		produit.setReference(referenceProduit);
+		produit.setReference(referenceChoix);
 		produit.setReferenceTarif(tarif.getReference());
 		produit.setReferenceSelection(referenceSelection);
-		produit.setReferenceChoix(referenceChoix);
 		produit.setNumECParent(numECParent);
 		if (tarif != null) {
 			produit.setPrix(tarif.toPrix(modeFacturation, modePaiement));
@@ -435,13 +411,11 @@ public class CommandeLigneDetail {
 		}
 		if (obj instanceof CommandeLigneDetail) {
 			CommandeLigneDetail rhs = (CommandeLigneDetail) obj;
-			return new EqualsBuilder().append(referenceProduit, rhs.referenceProduit)
-					.append(referenceSelection, rhs.referenceSelection).append(referenceChoix, rhs.referenceChoix)
-					.isEquals();
+			return new EqualsBuilder().append(referenceSelection, rhs.referenceSelection)
+					.append(referenceChoix, rhs.referenceChoix).isEquals();
 		} else {
 			DraftLigneDetail draftLigneDetail = (DraftLigneDetail) obj;
-			return new EqualsBuilder().append(referenceProduit, draftLigneDetail.getReference())
-					.append(referenceSelection, draftLigneDetail.getReferenceSelection())
+			return new EqualsBuilder().append(referenceSelection, draftLigneDetail.getReferenceSelection())
 					.append(referenceChoix, draftLigneDetail.getReferenceChoix()).isEquals();
 		}
 
@@ -454,7 +428,6 @@ public class CommandeLigneDetail {
 	 */
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(43, 11).append(id).append(referenceProduit).append(referenceSelection)
-				.append(referenceChoix).toHashCode();
+		return new HashCodeBuilder(43, 11).append(id).append(referenceSelection).append(referenceChoix).toHashCode();
 	}
 }

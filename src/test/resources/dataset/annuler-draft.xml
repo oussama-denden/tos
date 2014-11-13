@@ -10,8 +10,8 @@
 		 qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
 		timestamp="[now]" draftId="1" />
 		
-	<draftLigneDetail id="1000" reference="kitsat" referenceTarif="achat_kit_mensuel" modePaiement="CB" configurationJson="" draftLigneId="1000" />
-	<draftLigneDetail id="1001" reference="jet" referenceTarif="achat_kit_mensuel" modePaiement="CB" configurationJson="" draftLigneId="1000" />
-	<draftLigneDetail id="1002" reference="tlf" referenceTarif="achat_kit_mensuel" modePaiement="CB" configurationJson="" draftLigneId="1000" />
+	<draftLigneDetail id="1000" referenceChoix="kitsat" referenceTarif="achat_kit_mensuel" modePaiement="CB" configurationJson="" draftLigneId="1000" />
+	<draftLigneDetail id="1001" referenceChoix="jet" referenceTarif="achat_kit_mensuel" modePaiement="CB" configurationJson="" draftLigneId="1000" />
+	<draftLigneDetail id="1002" referenceChoix="tlf" referenceTarif="achat_kit_mensuel" modePaiement="CB" configurationJson="" draftLigneId="1000" />
 
 </dataset>

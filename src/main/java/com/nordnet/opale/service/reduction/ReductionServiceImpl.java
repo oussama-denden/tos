@@ -109,9 +109,9 @@ public class ReductionServiceImpl implements ReductionService {
 
 		Reduction reductionLigneDetailFrais =
 				reductionRepository.findReductionLigneDetailleFrais(refDraft, refLigne,
-						draftLigneDetail.getReference(), refFrais, draftLigneDetail.getReferenceTarif());
+						draftLigneDetail.getReferenceChoix(), refFrais, draftLigneDetail.getReferenceTarif());
 		ReductionValidator.checkReductionDraftLigneDetailFraisExist(refDraft, refLigne,
-				draftLigneDetail.getReference(), refFrais, reductionLigneDetailFrais);
+				draftLigneDetail.getReferenceChoix(), refFrais, reductionLigneDetailFrais);
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
 
 		Reduction reduction = reductionInfo.toDomain();
@@ -120,7 +120,7 @@ public class ReductionServiceImpl implements ReductionService {
 		reduction.setReferenceLigne(refLigne);
 		reduction.setReferenceTarif(draftLigneDetail.getReferenceTarif());
 		reduction.setReferenceFrais(refFrais);
-		reduction.setReferenceLigneDetail(draftLigneDetail.getReference());
+		reduction.setReferenceLigneDetail(draftLigneDetail.getReferenceChoix());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
 	}
@@ -136,15 +136,15 @@ public class ReductionServiceImpl implements ReductionService {
 
 		Reduction reductionLigneDetail =
 				reductionRepository.findReductionLigneDetailleSansFrais(refDraft, refLigne,
-						draftLigneDetail.getReference());
-		ReductionValidator.checkReductionDraftLigneDetailExist(refDraft, refLigne, draftLigneDetail.getReference(),
-				reductionLigneDetail);
+						draftLigneDetail.getReferenceChoix());
+		ReductionValidator.checkReductionDraftLigneDetailExist(refDraft, refLigne,
+				draftLigneDetail.getReferenceChoix(), reductionLigneDetail);
 		ReductionValidator.chekReductionValide(reductionInfo, draftLigneDetail);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceLigne(refLigne);
 		reduction.setReferenceDraft(refDraft);
-		reduction.setReferenceLigneDetail(draftLigneDetail.getReference());
+		reduction.setReferenceLigneDetail(draftLigneDetail.getReferenceChoix());
 		reductionRepository.save(reduction);
 		return reduction.getReference();
 	}

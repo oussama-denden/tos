@@ -40,7 +40,6 @@
 		<xsd:element name="draftLigneDetail" type="draftLigneDetail_type"/>
 	    <xsd:complexType name="draftLigneDetail_type">
 	   <xsd:attribute name="id" use="optional" />
-		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceSelection" use="optional" />
 		<xsd:attribute name="referenceChoix" use="optional" />
 		<xsd:attribute name="referenceTarif" use="optional" />
@@ -122,7 +121,8 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="configurationJson" use="optional" />
 		<xsd:attribute name="modePaiement" use="optional" />
-		<xsd:attribute name="referenceProduit" use="optional" />
+		<xsd:attribute name="referenceChoix" use="optional" />
+		<xsd:attribute name="referenceSelection" use="optional" />
 		<xsd:attribute name="label" use="optional" />
 		<xsd:attribute name="typeProduit" use="optional" />
 		<xsd:attribute name="dependDe" use="optional" />

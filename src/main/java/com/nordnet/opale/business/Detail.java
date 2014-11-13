@@ -22,11 +22,6 @@ public class Detail {
 	private String referenceSelection;
 
 	/**
-	 * reference de la ligne dans le draft.
-	 */
-	private String reference;
-
-	/**
 	 * reference choix.
 	 */
 	private String referenceChoix;
@@ -65,7 +60,7 @@ public class Detail {
 		if (obj == null)
 			return false;
 		Detail rhs = (Detail) obj;
-		return new EqualsBuilder().append(reference, rhs.reference).isEquals();
+		return new EqualsBuilder().append(referenceChoix, rhs.referenceChoix).isEquals();
 	}
 
 	/*
@@ -75,7 +70,7 @@ public class Detail {
 	 */
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(43, 11).append(reference).toHashCode();
+		return new HashCodeBuilder(43, 11).append(referenceChoix).toHashCode();
 	}
 
 	/**
@@ -93,23 +88,6 @@ public class Detail {
 	 */
 	public void setReferenceSelection(String referenceSelection) {
 		this.referenceSelection = referenceSelection;
-	}
-
-	/**
-	 * 
-	 * @return {@link #reference}.
-	 */
-	public String getReference() {
-		return reference;
-	}
-
-	/**
-	 * 
-	 * @param reference
-	 *            {@link #reference}.
-	 */
-	public void setReference(String reference) {
-		this.reference = reference;
 	}
 
 	/**
