@@ -233,13 +233,14 @@ public class DraftServiceImpl implements DraftService {
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
-			draftLigne.setAuteur(draftLigneInfo.getAuteur().toDomain());
+			draftLigne.setAuteur(draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur().toDomain() : null);
 			draft.addLigne(draftLigne);
 
 			draftRepository.save(draft);
 
-			tracageService.ajouterTrace(draftLigneInfo.getAuteur().getQui(), refDraft, "ajout de ligne aux draft "
-					+ refDraft);
+			tracageService.ajouterTrace(
+					draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur().getQui() : null, refDraft,
+					"ajout de ligne aux draft " + refDraft);
 			referencesLignes.add(draftLigne.getReference());
 		}
 
@@ -404,10 +405,11 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(clientInfo.getAuteur().getQui(), refDraft, "associer le client souscripteur "
-				+ idClientSouscripteur + " client facturation " + idClientFacturation + " client livraison "
+		tracageService.ajouterTrace(clientInfo.getAuteur() != null ? clientInfo.getAuteur().getQui() : null, refDraft,
+				"associer le client souscripteur " + idClientSouscripteur + " client facturation "
+						+ idClientFacturation + " client livraison "
 
-				+ idClientLivraison + " au draft" + refDraft);
+						+ idClientLivraison + " au draft" + refDraft);
 
 		LOGGER.info("fin methode associerClient");
 
