@@ -32,6 +32,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Constants;
 
 /**
@@ -57,6 +58,11 @@ public class CommandeLigne {
 	private Integer numero;
 
 	/**
+	 * numero element contractuel, utilise dans topaze.
+	 */
+	private Integer numEC;
+
+	/**
 	 * reference de l'offre.
 	 */
 	private String referenceOffre;
@@ -80,6 +86,11 @@ public class CommandeLigne {
 	 * secteur.
 	 */
 	private String secteur;
+
+	/**
+	 * {@link TypeProduit}.
+	 */
+	private TypeProduit typeProduit;
 
 	/**
 	 * {@link ModePaiement}.
@@ -199,6 +210,23 @@ public class CommandeLigne {
 
 	/**
 	 * 
+	 * @return {@link #numEC}.
+	 */
+	public Integer getNumEC() {
+		return numEC;
+	}
+
+	/**
+	 * 
+	 * @param numEC
+	 *            {@link #numEC}.
+	 */
+	public void setNumEC(Integer numEC) {
+		this.numEC = numEC;
+	}
+
+	/**
+	 * 
 	 * @return {@link #referenceOffre}.
 	 */
 	public String getReferenceOffre() {
@@ -278,6 +306,23 @@ public class CommandeLigne {
 	 */
 	public void setSecteur(String secteur) {
 		this.secteur = secteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link #typeProduit}.
+	 */
+	public TypeProduit getTypeProduit() {
+		return typeProduit;
+	}
+
+	/**
+	 * 
+	 * @param typeProduit
+	 *            {@link TypeProduit}.
+	 */
+	public void setTypeProduit(TypeProduit typeProduit) {
+		this.typeProduit = typeProduit;
 	}
 
 	/**

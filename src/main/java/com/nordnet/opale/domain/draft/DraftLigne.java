@@ -59,6 +59,11 @@ public class DraftLigne {
 	private String reference;
 
 	/**
+	 * numero element contractuel, utilise dans topaze.
+	 */
+	private Integer numEC;
+
+	/**
 	 * reference de l'offre.
 	 */
 	private String referenceOffre;
@@ -254,6 +259,23 @@ public class DraftLigne {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #numEC}.
+	 */
+	public Integer getNumEC() {
+		return numEC;
+	}
+
+	/**
+	 * 
+	 * @param numEC
+	 *            {@link #numEC}.
+	 */
+	public void setNumEC(Integer numEC) {
+		this.numEC = numEC;
 	}
 
 	/**
