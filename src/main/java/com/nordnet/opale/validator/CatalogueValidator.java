@@ -125,16 +125,18 @@ public class CatalogueValidator {
 				if (tarifLigne == null) {
 					values = new ArrayList<String>();
 					values.add(draftLigne.getReferenceTarif());
-					validationInfo.addReason("lignes[" + i + "].offre.tarif.reference", "36.3.1.4", PropertiesUtil
+					validationInfo.addReason("lignes[" + i + "].offre.referenceTarif", "36.3.1.4", PropertiesUtil
 							.getInstance().getErrorMessage("1.1.28", draftLigne.getReferenceTarif()), values);
 				}
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					Tarif tarifDetail = trameCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+					Tarif tarifDetail = trameCatalogue.getTarifsMap().get(detail.getReferenceTarif());
 					if (tarifDetail == null) {
 						values = new ArrayList<String>();
-						values.add(draftLigne.getReferenceTarif());
-						validationInfo.addReason("lignes[" + i + "].offre.tarif.reference", "36.3.1.4", PropertiesUtil
-								.getInstance().getErrorMessage("1.1.28", detail.getReferenceTarif()), values);
+						values.add(detail.getReferenceTarif());
+						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].referenceTarif",
+								"36.3.1.5",
+								PropertiesUtil.getInstance().getErrorMessage("1.1.28", detail.getReferenceTarif()),
+								values);
 					}
 					DetailCatalogue detailCatalogue =
 							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());
@@ -150,7 +152,7 @@ public class CatalogueValidator {
 							values = new ArrayList<String>();
 							values.add(detail.getReferenceChoix());
 							validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].referenceChoix",
-									"36.3.1.3",
+									"36.3.1.6",
 									PropertiesUtil.getInstance().getErrorMessage("1.1.29", detail.getReferenceChoix()),
 									values);
 						}
