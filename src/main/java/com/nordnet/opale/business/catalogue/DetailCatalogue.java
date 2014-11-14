@@ -185,4 +185,18 @@ public class DetailCatalogue {
 		return getChoiceMap().get(refrenceChoix);
 	}
 
+	/**
+	 * creation d'une {@link Map} avec la referenceChoix en cle et la referenceSelection en valeur, sert lors de la
+	 * recherche de la referenceSelection a partir de la referenceChoix.
+	 * 
+	 * @return une {@link Map} avec la referenceChoix en cle et la referenceSelection en valeur
+	 */
+	public Map<String, String> getReferenceChoixReferenceSelectionMap() {
+		Map<String, String> referenceChoixReferenceSelectionMap = new HashMap<String, String>();
+		for (Choice choice : choices) {
+			referenceChoixReferenceSelectionMap.put(choice.getReference(), referenceSelection);
+		}
+		return referenceChoixReferenceSelectionMap;
+	}
+
 }

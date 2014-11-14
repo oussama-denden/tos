@@ -825,18 +825,21 @@ public class CommandeServiceImpl implements CommandeService {
 		for (Reduction reductionLigne : reductionsLigne) {
 			reductionContrat = new ReductionContrat(reductionLigne);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
-
-			/* il n ya pas de frais au niveau du contrat global dans Topaze, il faut revoir avec Gilles. */
-			/*
-			 * if (reductionLigne.getReferenceFrais() != null) { String typeFrais =
-			 * commandeRepository.findTypeFrais(reductionLigne.getReferenceDraft(), reductionLigne.getReferenceLigne(),
-			 * reductionLigne.getReferenceLigneDetail(), reductionLigne.getReferenceTarif(),
-			 * reductionLigne.getReferenceFrais()); reductionContrat.setTypeReduction(TypeReduction.FRAIS);
-			 * reductionContrat.setTypeFrais(TypeFrais.fromSting(typeFrais)); }
-			 */
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
-			restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
+			if (reductionLigne.getReferenceFrais() == null) {
+				restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
+			} else {
+				String typeFrais =
+						commandeRepository.findTypeFrais(reductionLigne.getReferenceDraft(),
+								reductionLigne.getReferenceLigne(), reductionLigne.getReferenceLigneDetail(),
+								reductionLigne.getReferenceTarif(), reductionLigne.getReferenceFrais());
+				contratReductionInfo.getReduction().setTypeReduction(TypeReduction.FRAIS);
+				contratReductionInfo.getReduction().setTypeFrais(TypeFrais.fromSting(typeFrais));
+				restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
+						commandeLigne.getNumEC(), contratReductionInfo);
+			}
+
 		}
 
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {

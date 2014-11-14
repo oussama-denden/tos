@@ -55,7 +55,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	public final static String GET_FRAIS =
 			"SELECT distinct f.typeFrais FROM commande c, commandeligne cl, commandelignedetail cld, tarif t, frais f where"
 					+ " c.reference LIKE ?1 AND cl.referenceOffre LIKE ?2 AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND"
-					+ " (?3 IS NULL or (cld.referenceProduit LIKE ?3)) AND"
+					+ " (?3 IS NULL or (cld.referenceChoix LIKE ?3)) AND"
 					+ " (cl.tarifId = t.id OR cld.tarifId = t.id) AND t.reference LIKE ?4"
 					+ " AND (t.id = f.tarifId) AND f.reference LIKE ?5";
 

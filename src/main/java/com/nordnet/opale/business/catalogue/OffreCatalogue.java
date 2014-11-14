@@ -271,4 +271,19 @@ public class OffreCatalogue {
 		return detailsMap;
 	}
 
+	/**
+	 * retourner la referenceSelection associe a une referenceChoix donnee.
+	 * 
+	 * @param referenceChoix
+	 *            reference du Choix.
+	 * @return referenceSelection.
+	 */
+	public String findReferenceSelection(String referenceChoix) {
+		Map<String, String> refChoixRefSelectionMap = new HashMap<String, String>();
+		for (DetailCatalogue detailCatalogue : details) {
+			refChoixRefSelectionMap.putAll(detailCatalogue.getReferenceChoixReferenceSelectionMap());
+		}
+		return refChoixRefSelectionMap.get(referenceChoix);
+	}
+
 }

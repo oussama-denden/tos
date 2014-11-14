@@ -144,9 +144,13 @@ public class DraftLigne {
 		this.referenceOffre = elementContractuelParent.getReferenceProduit();
 		this.modeFacturation = elementContractuelParent.getModeFacturation();
 		this.modePaiement = elementContractuelParent.getModePaiement();
+		this.referenceTarif = elementContractuelParent.getReferenceTarif();
+		this.numEC = elementContractuelParent.getNumEC();
 		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(this.referenceOffre);
 		for (ElementContractuel elementContractuel : contrat.getSousContrats()) {
-			addDraftLigneDetail(new DraftLigneDetail(elementContractuel));
+			if (!elementContractuel.isParent()) {
+				addDraftLigneDetail(new DraftLigneDetail(elementContractuel, offreCatalogue));
+			}
 		}
 		creerArboressence(contrat.getSousContrats());
 	}
@@ -457,7 +461,11 @@ public class DraftLigne {
 			elementContractuelsMap.put(elementContractuel.getNumEC(), elementContractuel);
 		}
 		for (ElementContractuel elementContractuel : elementContractuels) {
-			if (!elementContractuel.isParent()) {
+			/*
+			 * definier la relation de dependance entre les detail. pas besoin de definir la relation de dependance
+			 * entre ligne et detail vue qu'elle est evidente.
+			 */
+			if (!elementContractuel.isParent() && elementContractuel.getNumECParent() != this.numEC) {
 				ElementContractuel elementContractuelParent =
 						elementContractuelsMap.get(elementContractuel.getNumECParent());
 				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(elementContractuel.getReferenceProduit());

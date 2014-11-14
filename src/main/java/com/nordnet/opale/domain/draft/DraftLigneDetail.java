@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
+import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.commande.ElementContractuel;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
@@ -123,10 +124,12 @@ public class DraftLigneDetail {
 	 * 
 	 * @param elementContractuel
 	 *            {@link ElementContractuel}.
+	 * @param offreCatalogue
+	 *            {@link OffreCatalogue}.
 	 */
-	public DraftLigneDetail(ElementContractuel elementContractuel) {
-		this.referenceSelection = elementContractuel.getReferenceSelection();
-		this.referenceChoix = elementContractuel.getReferenceChoix();
+	public DraftLigneDetail(ElementContractuel elementContractuel, OffreCatalogue offreCatalogue) {
+		this.referenceChoix = elementContractuel.getReferenceProduit();
+		this.referenceSelection = offreCatalogue.findReferenceSelection(elementContractuel.getReferenceProduit());
 		this.referenceTarif = elementContractuel.getReferenceTarif();
 		this.modePaiement = elementContractuel.getModePaiement();
 		this.numEC = elementContractuel.getNumEC();
