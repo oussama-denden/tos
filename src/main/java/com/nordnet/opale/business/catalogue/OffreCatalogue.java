@@ -36,6 +36,11 @@ public class OffreCatalogue {
 	private String famille;
 
 	/**
+	 * label de l'offre.
+	 */
+	private String label;
+
+	/**
 	 * {@link TypeProduit}.
 	 */
 	private TypeProduit nature;
@@ -148,6 +153,23 @@ public class OffreCatalogue {
 	 */
 	public void setFamille(String famille) {
 		this.famille = famille;
+	}
+
+	/**
+	 * 
+	 * @return {@link #label}.
+	 */
+	public String getLabel() {
+		return label;
+	}
+
+	/**
+	 * 
+	 * @param label
+	 *            {@link #label}.
+	 */
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	/**

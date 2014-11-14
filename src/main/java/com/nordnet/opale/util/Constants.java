@@ -53,6 +53,11 @@ public final class Constants {
 	public static final Integer UN = 1;
 
 	/**
+	 * entier de valeur 2.
+	 */
+	public static final Integer DEUX = 2;
+
+	/**
 	 * entier de valeur 0.
 	 */
 	public static final Integer ZERO = 0;
@@ -73,7 +78,7 @@ public final class Constants {
 	public static final String CHAINE_VIDE = "";
 
 	/**
-	* constante indique le paiement.
+	 * constante indique le paiement.
 	 */
 	public static final String PAIEMENT = "PAIEMENT";
 
@@ -111,7 +116,6 @@ public final class Constants {
 	 * constante indique le produit.
 	 */
 	public static final String PRODUIT = "Produit";
-
 
 	/**
 	 * constante indique le frais.

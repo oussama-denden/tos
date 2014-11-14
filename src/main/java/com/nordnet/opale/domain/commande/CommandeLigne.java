@@ -25,6 +25,7 @@ import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.Auteur;
@@ -154,6 +155,7 @@ public class CommandeLigne {
 		this.referenceOffre = draftLigne.getReferenceOffre();
 		this.gamme = offreCatalogue.getGamme();
 		this.famille = offreCatalogue.getFamille();
+		this.label = offreCatalogue.getLabel();
 		this.typeProduit = offreCatalogue.getNature();
 		this.modePaiement = draftLigne.getModePaiement();
 		this.modeFacturation = draftLigne.getModeFacturation();
@@ -516,11 +518,14 @@ public class CommandeLigne {
 
 		contrat.setUser(qui);
 		List<Produit> produits = new ArrayList<>();
+		produits.add(toProduitParent(referenceCommande));
 		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
 			Integer numECParent = null;
-			Integer numEC = commandeLigneDetails.indexOf(ligneDetail) + Constants.UN;
+			Integer numEC = commandeLigneDetails.indexOf(ligneDetail) + Constants.DEUX;
 			if (ligneDetail.getCommandeLigneDetailParent() != null) {
-				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.UN;
+				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.DEUX;
+			} else {
+				numECParent = Constants.UN;
 			}
 
 			produits.add(ligneDetail.toProduit(referenceCommande, numEC, numECParent, modeFacturation));
@@ -554,6 +559,27 @@ public class CommandeLigne {
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
+	}
+
+	/**
+	 * transfometion de la commande ligne en {@link Produit} parent dans le {@link Contrat} a prepare.
+	 * 
+	 * @param referenceCommande
+	 *            reference de la {@link Commande}.
+	 * @return {@link Produit}.
+	 */
+	private Produit toProduitParent(String referenceCommande) {
+		Produit produitParent = new Produit();
+		produitParent.setLabel(label);
+		produitParent.setNumEC(Constants.UN);
+		produitParent.setNumeroCommande(referenceCommande);
+		produitParent.setTypeProduit(typeProduit);
+		produitParent.setReference(referenceOffre);
+		produitParent.setReferenceTarif(tarif.getReference());
+		if (tarif != null) {
+			produitParent.setPrix(tarif.toPrix(modeFacturation, modePaiement));
+		}
+		return produitParent;
 	}
 
 	/*
