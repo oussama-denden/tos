@@ -993,4 +993,23 @@ public class DraftServiceImpl implements DraftService {
 		return coutReduction;
 	}
 
+	@Override
+	public Object associerReductionECParent(String refDraft, String refLigne, String refTarif,
+			ReductionInfo reductionInfo) throws OpaleException, JSONException {
+		LOGGER.info("Debut methode associerReductionECParent ");
+
+		Draft draft = draftRepository.findByReference(refDraft);
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+
+		String referenceReduction =
+				reductionService.ajouterReductionECParent(refDraft, refLigne, refTarif, reductionInfo);
+		JSONObject reductionResponse = new JSONObject();
+		reductionResponse.put("referenceReduction", referenceReduction);
+
+		return reductionResponse.toString();
+	}
+
 }

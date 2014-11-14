@@ -365,11 +365,38 @@ public class DraftController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/{refLigne:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object associerReductionLigne(@PathVariable String refDraft, @PathVariable String refLigne,
 			@RequestBody ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionLigne");
+		return draftService.associerReductionLigne(refDraft, refLigne, reductionInfo);
+
+	}
+
+	/**
+	 * associer une reduction a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft.
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @param refLigne
+	 *            reference du ligne
+	 * @param refTarif
+	 *            reference du tarif.
+	 * @return {@link object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/{refTarif:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Object associerReductionECParent(@PathVariable String refDraft, @PathVariable String refLigne,
+			@PathVariable String refTarif, @RequestBody ReductionInfo reductionInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::associerReductionECParent");
 		return draftService.associerReductionLigne(refDraft, refLigne, reductionInfo);
 
 	}

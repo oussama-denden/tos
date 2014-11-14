@@ -131,4 +131,19 @@ public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 			@Param("referenceLigne") String referenceLigne, @Param("referenceLigneDetail") String referenceLigneDetail,
 			@Param("referenceFrais") String referenceFrais, @Param("referenceTarif") String referenceTarif);
 
+	/**
+	 * Rechercher les reductions d'un detail ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceLigne
+	 *            reference ligne
+	 * @param referenceTarif
+	 *            reference du tarif
+	 * @return {@link List}
+	 */
+	@Query(name = "findReductionLigneFrais", value = "SELECT r FROM Reduction r WHERE  r.referenceFrais=null AND r.referenceLigneDetail=null  AND referenceDraft LIKE :referenceDraft  AND r.referenceLigne LIKE :referenceLigne AND r.referenceTarif LIKE :referenceTarif  ")
+	public Reduction findReductionECParent(@Param("referenceDraft") String referenceDraft,
+			@Param("referenceLigne") String referenceLigne, @Param("referenceTarif") String referenceTarif);
+
 }

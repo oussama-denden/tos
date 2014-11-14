@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+
+<dataset>
+<draft id="1" reference="REF-DRAFT-1"   codePartenaire="000111" timestamp="[now]" canal="welcome" qui="someone" />
+<draft id="2" reference="REF-DRAFT-2"   codePartenaire="000222" timestamp="[now]" canal="welcome" qui="someone" />
+
+<draftLigne id="3" reference="REF-LIGNE-1" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" modeFacturation="PREMIER_MOIS" modePaiement="CB"  referenceOffre="jet_surf10" referenceTarif="annuel_jet10_base" draftId="1" />
+<draftLigne id="4" reference="REF-LIGNE-2" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" modeFacturation="PREMIER_MOIS" modePaiement="CB"  referenceOffre="jet_surf10"  draftId="1" />
+
+<draftLigneDetail id="5"   modePaiement="CB" referenceChoix="kitsat" referenceSelection="kitsat" referenceTarif="mensuel_jet10_base" draftLigneId="3" />
+<draftLigneDetail id="6" modePaiement="CB" referenceChoix="jet" referenceSelection="jet"  dependDe="5" draftLigneId="3" />
+
+
+
+</dataset>

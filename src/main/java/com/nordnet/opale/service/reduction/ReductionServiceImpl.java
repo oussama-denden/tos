@@ -256,4 +256,24 @@ public class ReductionServiceImpl implements ReductionService {
 				referenceLigneDetail);
 	}
 
+	@Override
+	public String ajouterReductionECParent(String refDraft, String refLigne, String refTarif,
+			ReductionInfo reductionInfo) throws OpaleException {
+
+		LOGGER.info("Debut methode ajouterReductionECParent ");
+
+		Reduction reductionLigne = reductionRepository.findReductionECParent(refDraft, refLigne, refTarif);
+		ReductionValidator.checkReductionDraftLigneExist(refDraft, refLigne, reductionLigne);
+		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
+		ReductionValidator.chekReductionValide(reductionInfo, draftLigne);
+
+		Reduction reduction = reductionInfo.toDomain();
+		reduction.setReference(keygenService.getNextKey(Reduction.class));
+		reduction.setReferenceDraft(refDraft);
+		reduction.setReferenceLigne(refLigne);
+		reduction.setReferenceTarif(refTarif);
+		reductionRepository.save(reduction);
+		return reduction.getReference();
+	}
+
 }

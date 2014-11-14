@@ -1,4 +1,3 @@
-
 package com.nordnet.opale.service.draft;
 
 import java.util.List;
@@ -301,9 +300,8 @@ public interface DraftService {
 	 *             {@link JSONException}.
 	 */
 	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
-			String refFrais,
-			ReductionInfo reductionInfo) throws OpaleException, JSONException;
-	
+			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException;
+
 	/**
 	 * Associer une reduction a un frais associe aux ligne du draft.
 	 * 
@@ -355,5 +353,25 @@ public interface DraftService {
 	 *             {@link OpaleException}
 	 */
 	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException;
+
+	/**
+	 * associer une reduction a une ligne du draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @param refLigne
+	 *            reference du ligne
+	 * @param refTarif
+	 *            reference du tarif.
+	 * @return {@link Object}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 */
+	public Object associerReductionECParent(String refDraft, String refLigne, String refTarif,
+			ReductionInfo reductionInfo) throws OpaleException, JSONException;
 
 }
