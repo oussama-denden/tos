@@ -14,6 +14,7 @@ import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.draft.test.generator.ReductionInfoGenrator;
+import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
@@ -76,13 +77,14 @@ public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 	public void testajouterReductionFraisLigneInValide() {
 
 		ReductionInfo reductionInfo = reductionInfoGenrator.getReductionInfo();
+		reductionInfo.setTypeValeur(TypeValeur.MOIS);
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef("REF-DRAFT-1", "REF-LIGNE-1");
 
 		try {
 			reductionService.ajouterReductionFraisLigne("REF-DRAFT-1", draftLigne, "REF-FRAIS-1", reductionInfo);
 			fail("unexpected state");
 		} catch (OpaleException exception) {
-			assertEquals(exception.getErrorCode(), "5.1.8");
+			assertEquals(exception.getErrorCode(), "5.1.1");
 
 		}
 

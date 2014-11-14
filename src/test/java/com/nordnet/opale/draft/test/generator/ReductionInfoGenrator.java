@@ -21,7 +21,7 @@ public class ReductionInfoGenrator {
 	 * 
 	 * @return {@link ReductionInfo}
 	 */
-	public static ReductionInfo getReductionInfo() {
+	public ReductionInfo getReductionInfo() {
 		ReductionInfo reductionInfo = new ReductionInfo();
 		Auteur auteur = new Auteur();
 		auteur.setQui("test");

@@ -77,4 +77,37 @@ public class CreerIntentionDesignatureTest extends GlobalTestCase {
 		}
 
 	}
+
+	/**
+	 * tester la signautre d'une commande avec des informations valides.
+	 * 
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@Test
+	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
+	public void testCreerIntentionDesignatureValideAVecTimeNulle() throws OpaleException, JSONException {
+		Commande commande = null;
+		Signature signature = null;
+		try {
+			commande = commandeService.getCommandeByReference("REF-COMMANDE-1");
+			assertNotNull(commande);
+			AjoutSignatureInfo ajoutSignatureInfo = SignatureInfoGenerator.getAjoutSignatureInfo();
+			ajoutSignatureInfo.setTimestamp(null);
+			Object response = commandeService.creerIntentionDeSignature(commande.getReference(), ajoutSignatureInfo);
+			assertNotNull(response);
+
+			signature = signatureService.getSignatureByReferenceCommande("REF-COMMANDE-1");
+			assertNotNull(signature);
+			assertNotNull(signature.getTimestampIntention());
+			assertEquals(signature.getMode(), ModeSignature.OPEN_TRUST);
+		} catch (Exception ex) {
+			LOGGER.error("erreur dans l'ajout de signature  :" + ex.getMessage());
+			fail(ex.getMessage());
+		}
+
+	}
 }

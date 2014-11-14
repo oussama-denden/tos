@@ -12,6 +12,19 @@
 
 <commande id="4"  reference="REF-COMMANDE-4" timestamp="[now]" />
 
+<commande id="7"  reference="REF-COMMANDE-5" timestamp="[now]" />
+
+<commande id="10"  reference="REF-COMMANDE-6" timestamp="[now]" />
+
 <signature id="1"  reference="REF-SIGNATURE-1" mode="OPEN_TRUST" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-2" />
 <signature id="2"  reference="REF-SIGNATURE-2" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestampSignature="[now]" footprint="e2680542f77606f42f1cb06d6" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-4"/>
+
+
+<signature id="3"  reference="REF-SIGNATURE-3" mode="OPEN_TRUST" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-6" />
+<signature id="4"  reference="REF-SIGNATURE-4" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestampSignature="[now]" footprint="e2680542f77606f42f1cb06d6" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-5"/>
+
+<signature id="8"  reference="REF-SIGNATURE-7" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestampSignature="[now]" footprint="e2680542f77606f42f1cb06d6" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-7"/>
+<signature id="5"  reference="REF-SIGNATURE-8" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestampSignature="[now]" footprint="e2680542f77606f42f1cb06d6" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-7" dateAnnulation="[now]"/>
+<signature id="6"  reference="REF-SIGNATURE-9" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestampSignature="[now]" footprint="e2680542f77606f42f1cb06d6" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-7" dateAnnulation="[now]"/>
+
 </dataset>
