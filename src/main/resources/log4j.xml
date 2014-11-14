@@ -26,7 +26,7 @@
 	
         <appender name="ROLL" class="org.apache.log4j.rolling.RollingFileAppender">
                 <!-- The active file to log to -->
-                <param name="file" value="/tmp/opale.log" />
+                <param name="file" value="/tmp/opale/opale.log" />
                 <param name="append" value="true" />
                 <param name="encoding" value="UTF-8" />
 

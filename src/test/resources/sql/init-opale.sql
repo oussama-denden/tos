@@ -80,7 +80,8 @@ DROP TABLE IF EXISTS `commandeligne`;
 CREATE TABLE `commandeligne` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
-  
+  `numEC` int(11) DEFAULT NULL,
+  `typeProduit` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` datetime DEFAULT NULL,
@@ -164,7 +165,7 @@ DROP TABLE IF EXISTS `draftligne`;
 CREATE TABLE `draftligne` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `canal` varchar(255) DEFAULT NULL,
-  
+  `numEC` int(11) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` datetime DEFAULT NULL,

@@ -25,6 +25,7 @@ import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.Auteur;
@@ -32,6 +33,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
+import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Constants;
 
 /**
@@ -57,6 +59,11 @@ public class CommandeLigne {
 	private Integer numero;
 
 	/**
+	 * numero element contractuel, utilise dans topaze.
+	 */
+	private Integer numEC;
+
+	/**
 	 * reference de l'offre.
 	 */
 	private String referenceOffre;
@@ -80,6 +87,12 @@ public class CommandeLigne {
 	 * secteur.
 	 */
 	private String secteur;
+
+	/**
+	 * {@link TypeProduit}.
+	 */
+	@Enumerated(EnumType.STRING)
+	private TypeProduit typeProduit;
 
 	/**
 	 * {@link ModePaiement}.
@@ -142,6 +155,8 @@ public class CommandeLigne {
 		this.referenceOffre = draftLigne.getReferenceOffre();
 		this.gamme = offreCatalogue.getGamme();
 		this.famille = offreCatalogue.getFamille();
+		this.label = offreCatalogue.getLabel();
+		this.typeProduit = offreCatalogue.getNature();
 		this.modePaiement = draftLigne.getModePaiement();
 		this.modeFacturation = draftLigne.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
@@ -195,6 +210,23 @@ public class CommandeLigne {
 	 */
 	public void setNumero(Integer numero) {
 		this.numero = numero;
+	}
+
+	/**
+	 * 
+	 * @return {@link #numEC}.
+	 */
+	public Integer getNumEC() {
+		return numEC;
+	}
+
+	/**
+	 * 
+	 * @param numEC
+	 *            {@link #numEC}.
+	 */
+	public void setNumEC(Integer numEC) {
+		this.numEC = numEC;
 	}
 
 	/**
@@ -278,6 +310,23 @@ public class CommandeLigne {
 	 */
 	public void setSecteur(String secteur) {
 		this.secteur = secteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link #typeProduit}.
+	 */
+	public TypeProduit getTypeProduit() {
+		return typeProduit;
+	}
+
+	/**
+	 * 
+	 * @param typeProduit
+	 *            {@link TypeProduit}.
+	 */
+	public void setTypeProduit(TypeProduit typeProduit) {
+		this.typeProduit = typeProduit;
 	}
 
 	/**
@@ -469,11 +518,14 @@ public class CommandeLigne {
 
 		contrat.setUser(qui);
 		List<Produit> produits = new ArrayList<>();
+		produits.add(toProduitParent(referenceCommande));
 		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
 			Integer numECParent = null;
-			Integer numEC = commandeLigneDetails.indexOf(ligneDetail) + Constants.UN;
+			Integer numEC = commandeLigneDetails.indexOf(ligneDetail) + Constants.DEUX;
 			if (ligneDetail.getCommandeLigneDetailParent() != null) {
-				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.UN;
+				numECParent = commandeLigneDetails.indexOf(ligneDetail.getCommandeLigneDetailParent()) + Constants.DEUX;
+			} else {
+				numECParent = Constants.UN;
 			}
 
 			produits.add(ligneDetail.toProduit(referenceCommande, numEC, numECParent, modeFacturation));
@@ -507,6 +559,27 @@ public class CommandeLigne {
 				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
 			}
 		}
+	}
+
+	/**
+	 * transfometion de la commande ligne en {@link Produit} parent dans le {@link Contrat} a prepare.
+	 * 
+	 * @param referenceCommande
+	 *            reference de la {@link Commande}.
+	 * @return {@link Produit}.
+	 */
+	private Produit toProduitParent(String referenceCommande) {
+		Produit produitParent = new Produit();
+		produitParent.setLabel(label);
+		produitParent.setNumEC(Constants.UN);
+		produitParent.setNumeroCommande(referenceCommande);
+		produitParent.setTypeProduit(typeProduit);
+		produitParent.setReference(referenceOffre);
+		produitParent.setReferenceTarif(tarif.getReference());
+		if (tarif != null) {
+			produitParent.setPrix(tarif.toPrix(modeFacturation, modePaiement));
+		}
+		return produitParent;
 	}
 
 	/*
