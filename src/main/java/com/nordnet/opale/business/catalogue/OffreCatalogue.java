@@ -10,6 +10,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
+import com.nordnet.opale.enums.TypeProduit;
 
 /**
  * Classe reprensente une offre dans le catalogue.
@@ -33,6 +34,11 @@ public class OffreCatalogue {
 	 * le famille de l'offre.
 	 */
 	private String famille;
+
+	/**
+	 * {@link TypeProduit}.
+	 */
+	private TypeProduit nature;
 
 	/**
 	 * {@link ModeFacturation}.
@@ -142,6 +148,23 @@ public class OffreCatalogue {
 	 */
 	public void setFamille(String famille) {
 		this.famille = famille;
+	}
+
+	/**
+	 * 
+	 * @return {@link #nature}.
+	 */
+	public TypeProduit getNature() {
+		return nature;
+	}
+
+	/**
+	 * 
+	 * @param nature
+	 *            {@link #nature}.
+	 */
+	public void setNature(TypeProduit nature) {
+		this.nature = nature;
 	}
 
 	/**

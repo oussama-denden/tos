@@ -50,6 +50,7 @@
       "reference": "jet_surf10",
       "gamme": "jet",
       "famille": "sat",
+      "nature": "SERVICE",
       "modeFacturation": "PREMIER_MOIS",
       "tarifs": [
         "annuel_jet10_base","mensuel_jet10_base"

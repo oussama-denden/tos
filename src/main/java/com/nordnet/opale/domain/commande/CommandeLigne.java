@@ -90,6 +90,7 @@ public class CommandeLigne {
 	/**
 	 * {@link TypeProduit}.
 	 */
+	@Enumerated(EnumType.STRING)
 	private TypeProduit typeProduit;
 
 	/**
@@ -153,6 +154,7 @@ public class CommandeLigne {
 		this.referenceOffre = draftLigne.getReferenceOffre();
 		this.gamme = offreCatalogue.getGamme();
 		this.famille = offreCatalogue.getFamille();
+		this.typeProduit = offreCatalogue.getNature();
 		this.modePaiement = draftLigne.getModePaiement();
 		this.modeFacturation = draftLigne.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();

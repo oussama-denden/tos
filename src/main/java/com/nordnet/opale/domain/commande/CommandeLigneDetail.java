@@ -371,7 +371,6 @@ public class CommandeLigneDetail {
 		produit.setTypeProduit(typeProduit);
 		produit.setReference(referenceChoix);
 		produit.setReferenceTarif(tarif.getReference());
-		produit.setReferenceSelection(referenceSelection);
 		produit.setNumECParent(numECParent);
 		if (tarif != null) {
 			produit.setPrix(tarif.toPrix(modeFacturation, modePaiement));
