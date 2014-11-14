@@ -209,4 +209,23 @@ public interface ReductionService {
 	 */
 	public void save(Reduction reduction);
 
+	/**
+	 * ajouter reduction a un draft.
+	 * 
+	 * @param refDraft
+	 *            reference du draft
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @param refLigne
+	 *            reference du ligne ligne.
+	 * @param refTarif
+	 *            reference du tarif.
+	 * 
+	 * @return reference du reduction
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public String ajouterReductionECParent(String refDraft, String refLigne, String refTarif,
+			ReductionInfo reductionInfo) throws OpaleException;
+
 }

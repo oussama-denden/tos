@@ -26,6 +26,8 @@ public class ReductionValidator {
 	 * 
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
+	 * @param type
+	 *            type de reduction
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
