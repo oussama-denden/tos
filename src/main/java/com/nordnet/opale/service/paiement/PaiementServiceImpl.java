@@ -59,14 +59,6 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(Paiement paiement) {
-		paiementRepository.save(paiement);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public Double montantComptantPaye(String referenceCommande) {
 		Double montantTotal = paiementRepository.getMontantComptantPayePourCommande(referenceCommande);
 		return montantTotal == null ? 0d : montantTotal;
