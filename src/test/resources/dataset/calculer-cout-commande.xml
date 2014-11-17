@@ -5,10 +5,10 @@
 
 <commande id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="Cmd-00000001" referenceDraft="00000001" />
 
-<commandeLigne id="1000" gamme="jet" modeFacturation="PREMIER_MOIS" modePaiement="CB" referenceOffre="jet_surf10" commandeId="1000" famille="sat" tarifId="1002" />
+<commandeLigne id="1000" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" famille="sat" tarifId="1002" />
 
-<commandeLigneDetail id="1000" modePaiement="CB" referenceChoix="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" dependDe="1001" commandeLigneId="1000" tarifId="1000" />
-<commandeLigneDetail id="1001" modePaiement="CB" referenceChoix="kitsat" label="Trafic 10 Gigas" typeProduit="BIEN" commandeLigneId="1000" tarifId="1001" />
+<commandeLigneDetail id="1000" referenceChoix="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" dependDe="1001" commandeLigneId="1000" tarifId="1000" />
+<commandeLigneDetail id="1001" referenceChoix="kitsat" label="Trafic 10 Gigas" typeProduit="BIEN" commandeLigneId="1000" tarifId="1001" />
 
 <tarif id="1000" duree="1" engagement="12" frequence="1" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
 <tarif id="1001" duree="1" engagement="12" frequence="1" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />

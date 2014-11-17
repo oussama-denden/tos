@@ -23,7 +23,6 @@ import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Prix;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeTVA;
 
 /**
@@ -289,11 +288,9 @@ public class Tarif {
 	 * 
 	 * @param modeFacturation
 	 *            {@link ModeFacturation}.
-	 * @param modePaiement
-	 *            {@link ModePaiement}.
 	 * @return {@link Prix}.
 	 */
-	public Prix toPrix(ModeFacturation modeFacturation, ModePaiement modePaiement) {
+	public Prix toPrix(ModeFacturation modeFacturation) {
 		Prix prix = new Prix();
 		prix.setDuree(duree);
 		prix.setEngagement(engagement);
@@ -306,7 +303,6 @@ public class Tarif {
 		}
 		prix.setFrais(fraisSet);
 		prix.setModeFacturation(modeFacturation);
-		prix.setModePaiement(modePaiement);
 		return prix;
 	}
 

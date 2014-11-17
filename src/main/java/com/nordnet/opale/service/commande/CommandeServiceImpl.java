@@ -762,7 +762,7 @@ public class CommandeServiceImpl implements CommandeService {
 		// affecter la duree.
 
 		prix.setDuree(ligneDetail.getTarif().getDuree());
-		prix.setModePaiement(ligne.getModePaiement());
+		// prix.setModePaiement(ligne.getModePaiement());
 
 		// affecter la reference mode de paiement.
 		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);

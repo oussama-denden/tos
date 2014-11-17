@@ -97,7 +97,6 @@
     gamme CDATA #IMPLIED
     label CDATA #IMPLIED
     modeFacturation CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
     referenceOffre CDATA #IMPLIED
     referenceContrat CDATA #IMPLIED
     secteur CDATA #IMPLIED
@@ -112,7 +111,6 @@
     configurationJson CDATA #IMPLIED
     referenceSelection CDATA #IMPLIED
     referenceChoix CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
     label CDATA #IMPLIED
     typeProduit CDATA #IMPLIED
     dependDe CDATA #IMPLIED

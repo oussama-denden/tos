@@ -32,7 +32,6 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Constants;
 
@@ -93,12 +92,6 @@ public class CommandeLigne {
 	 */
 	@Enumerated(EnumType.STRING)
 	private TypeProduit typeProduit;
-
-	/**
-	 * {@link ModePaiement}.
-	 */
-	@Enumerated(EnumType.STRING)
-	private ModePaiement modePaiement;
 
 	/**
 	 * {@link ModeFacturation}.
@@ -172,9 +165,8 @@ public class CommandeLigne {
 	@Override
 	public String toString() {
 		return "CommandeLigne [id=" + id + ", numero=" + numero + ", referenceOffre=" + referenceOffre + ", label="
-				+ label + ", gamme=" + gamme + ", secteur=" + secteur + ", modePaiement=" + modePaiement
-				+ ", modeFacturation=" + modeFacturation + ", dateCreation=" + dateCreation + ", auteur=" + auteur
-				+ "]";
+				+ label + ", gamme=" + gamme + ", secteur=" + secteur + ", modeFacturation=" + modeFacturation
+				+ ", dateCreation=" + dateCreation + ", auteur=" + auteur + "]";
 	}
 
 	/**
@@ -326,23 +318,6 @@ public class CommandeLigne {
 	 */
 	public void setTypeProduit(TypeProduit typeProduit) {
 		this.typeProduit = typeProduit;
-	}
-
-	/**
-	 * 
-	 * @return {@link ModePaiement}.
-	 */
-	public ModePaiement getModePaiement() {
-		return modePaiement;
-	}
-
-	/**
-	 * 
-	 * @param modePaiement
-	 *            {@link ModePaiement}.
-	 */
-	public void setModePaiement(ModePaiement modePaiement) {
-		this.modePaiement = modePaiement;
 	}
 
 	/**
@@ -577,7 +552,7 @@ public class CommandeLigne {
 		produitParent.setReference(referenceOffre);
 		produitParent.setReferenceTarif(tarif.getReference());
 		if (tarif != null) {
-			produitParent.setPrix(tarif.toPrix(modeFacturation, modePaiement));
+			produitParent.setPrix(tarif.toPrix(modeFacturation));
 		}
 		return produitParent;
 	}
@@ -602,8 +577,7 @@ public class CommandeLigne {
 		if (obj instanceof CommandeLigne) {
 			CommandeLigne commmandeLigne = (CommandeLigne) obj;
 			return new EqualsBuilder().append(referenceOffre, commmandeLigne.referenceOffre)
-					.append(modeFacturation, commmandeLigne.modeFacturation)
-					.append(modePaiement, commmandeLigne.modePaiement).isEquals();
+					.append(modeFacturation, commmandeLigne.modeFacturation).isEquals();
 		} else {
 			DraftLigne draftLigne = (DraftLigne) obj;
 			return new EqualsBuilder().append(referenceOffre, draftLigne.getReferenceOffre()).isEquals();
@@ -617,8 +591,7 @@ public class CommandeLigne {
 	 */
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(43, 11).append(id).append(referenceOffre).append(modeFacturation)
-				.append(modePaiement).toHashCode();
+		return new HashCodeBuilder(43, 11).append(id).append(referenceOffre).append(modeFacturation).toHashCode();
 	}
 
 }

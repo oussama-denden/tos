@@ -103,7 +103,6 @@
 		<xsd:attribute name="gamme" use="optional" />
 		<xsd:attribute name="label" use="optional" />
 		<xsd:attribute name="modeFacturation" use="optional" />
-		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="numero" use="optional" />
 		<xsd:attribute name="referenceOffre" use="optional" />
 		<xsd:attribute name="referenceContrat" use="optional" />
@@ -117,7 +116,6 @@
 	<xsd:complexType name="commandeLigneDetail_type">
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="configurationJson" use="optional" />
-		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="referenceChoix" use="optional" />
 		<xsd:attribute name="referenceSelection" use="optional" />
 		<xsd:attribute name="label" use="optional" />
