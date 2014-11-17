@@ -2,21 +2,20 @@
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 
 <dataset>
-<client id="1" clientId="client-1245" adresseId="Adr_Facturation_1"/>
-<client id="3" clientId="client-1245" adresseId="Adr_Livraison_1"/>
+	<client id="1" clientId="client-1245" adresseId="Adr_Facturation_1" />
+	<client id="3" clientId="client-1245" adresseId="Adr_Livraison_1" />
 	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
-		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"/>
+		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3" />
 
-	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base" 
-		referenceOffre="jet_surf10" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
-		 qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
-		timestamp="[now]" draftId="1" />
+	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf10" modePaiement="CB" qui="GRC.WEL-JOHNDOE"
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="1" />
 
-	<draftLigneDetail id="1000" referenceSelection="kitsat" referenceChoix="trafic10g"
-		referenceTarif="annuel_jet10_base" modePaiement="CB"
-		configurationJson="" draftLigneId="1000" />
-	<draftLigneDetail id="1001" referenceSelection="jet" referenceChoix="trafic10g"
-		referenceTarif="annuel_jet10_base" modePaiement="CB"
-		configurationJson="" draftLigneId="1000" dependDe="1000" />
+	<draftLigneDetail id="1000" referenceSelection="kitsat"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		modePaiement="CB" configurationJson="" draftLigneId="1000" />
+	<draftLigneDetail id="1001" referenceSelection="jet"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		modePaiement="CB" configurationJson="" draftLigneId="1000" dependDe="1000" />
 
 </dataset>

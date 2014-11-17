@@ -22,7 +22,6 @@
     reference CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
     modePaiement CDATA #IMPLIED
-    modeFacturation CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED

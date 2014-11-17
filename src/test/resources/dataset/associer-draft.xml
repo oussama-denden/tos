@@ -6,7 +6,7 @@
 		timestamp="[now]" />
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="jet_surf10"
-		referenceOffre="mensuel_jet10_base" modePaiement="CB" modeFacturation="DATE_ANNIVERSAIRE"
+		referenceOffre="mensuel_jet10_base" modePaiement="CB" 
 		 qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
 		timestamp="[now]" draftId="1" />
 		

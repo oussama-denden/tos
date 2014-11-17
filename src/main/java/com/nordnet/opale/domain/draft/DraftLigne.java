@@ -32,7 +32,6 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
-import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -85,12 +84,6 @@ public class DraftLigne {
 	private ModePaiement modePaiement;
 
 	/**
-	 * {@link ModeFacturation}.
-	 */
-	@Enumerated(EnumType.STRING)
-	private ModeFacturation modeFacturation;
-
-	/**
 	 * date de creation de la ligne.
 	 */
 	private Date dateCreation;
@@ -124,7 +117,6 @@ public class DraftLigne {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
 		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
-		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
 		}
@@ -142,7 +134,6 @@ public class DraftLigne {
 		ElementContractuel elementContractuelParent = contrat.getParent();
 		this.referenceContrat = contrat.getReference();
 		this.referenceOffre = elementContractuelParent.getReferenceProduit();
-		this.modeFacturation = elementContractuelParent.getModeFacturation();
 		this.modePaiement = elementContractuelParent.getModePaiement();
 		this.referenceTarif = elementContractuelParent.getReferenceTarif();
 		this.numEC = elementContractuelParent.getNumEC();
@@ -167,7 +158,6 @@ public class DraftLigne {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
 		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
-		this.modeFacturation = draftLigneInfo.getOffre().getModeFacturation();
 		this.auteur = auteur.toDomain();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
@@ -188,7 +178,6 @@ public class DraftLigne {
 		Tarif tarif = commandeLigne.getTarif();
 		this.referenceTarif = tarif != null ? tarif.getReference() : null;
 		this.modePaiement = commandeLigne.getModePaiement();
-		this.modeFacturation = commandeLigne.getModeFacturation();
 		this.auteur = commandeLigne.getAuteur();
 
 		this.dateCreation = commandeLigne.getDateCreation();
@@ -201,8 +190,8 @@ public class DraftLigne {
 	@Override
 	public String toString() {
 		return "DraftLigne [id=" + id + ", reference=" + reference + ", referenceOffre=" + referenceOffre
-				+ ", referenceTarif=" + referenceTarif + ", modePaiement=" + modePaiement + ", modeFacturation="
-				+ modeFacturation + ", dateCreation=" + dateCreation + "]";
+				+ ", referenceTarif=" + referenceTarif + ", modePaiement=" + modePaiement + ", dateCreation="
+				+ dateCreation + "]";
 	}
 
 	/*
@@ -348,23 +337,6 @@ public class DraftLigne {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
-	}
-
-	/**
-	 * 
-	 * @return {@link ModeFacturation}.
-	 */
-	public ModeFacturation getModeFacturation() {
-		return modeFacturation;
-	}
-
-	/**
-	 * 
-	 * @param modeFacturation
-	 *            {@link ModeFacturation}.
-	 */
-	public void setModeFacturation(ModeFacturation modeFacturation) {
-		this.modeFacturation = modeFacturation;
 	}
 
 	/**

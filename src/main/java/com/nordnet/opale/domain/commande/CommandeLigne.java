@@ -158,7 +158,7 @@ public class CommandeLigne {
 		this.label = offreCatalogue.getLabel();
 		this.typeProduit = offreCatalogue.getNature();
 		this.modePaiement = draftLigne.getModePaiement();
-		this.modeFacturation = draftLigne.getModeFacturation();
+		this.modeFacturation = offreCatalogue.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
 		this.tarif = new Tarif(draftLigne.getReferenceTarif(), trameCatalogue);
@@ -608,7 +608,6 @@ public class CommandeLigne {
 		} else {
 			DraftLigne draftLigne = (DraftLigne) obj;
 			return new EqualsBuilder().append(referenceOffre, draftLigne.getReferenceOffre())
-					.append(modeFacturation, draftLigne.getModeFacturation())
 					.append(modePaiement, draftLigne.getModePaiement()).isEquals();
 		}
 	}

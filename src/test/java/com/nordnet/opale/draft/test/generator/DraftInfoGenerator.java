@@ -18,7 +18,6 @@ import com.nordnet.opale.business.Ip;
 import com.nordnet.opale.business.Offre;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -41,7 +40,6 @@ public class DraftInfoGenerator {
 		offre.setReferenceOffre("mensuel_jet10_base");
 		offre.setReferenceTarif("jet_surf10");
 		offre.setModePaiement(ModePaiement.CB);
-		offre.setModeFacturation(ModeFacturation.DATE_ANNIVERSAIRE);
 		List<Detail> details = new ArrayList<Detail>();
 		Detail detail = new Detail();
 		detail.setReferenceSelection("kitsat");
@@ -91,7 +89,6 @@ public class DraftInfoGenerator {
 	public static DraftLigneInfo getDraftLigneInfoModifier() {
 		DraftLigneInfo draftLigneInfo = getDraftLigneInfo();
 		Offre offre = draftLigneInfo.getOffre();
-		offre.setModeFacturation(ModeFacturation.PREMIER_MOIS);
 		offre.setModePaiement(ModePaiement.SEPA);
 
 		for (Detail detail : offre.getDetails()) {

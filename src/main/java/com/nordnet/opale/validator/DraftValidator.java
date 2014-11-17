@@ -64,7 +64,6 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Offre.referenceTarif"), "0.1.4");
 		}
 
-		isFormatValide(offre.getModeFacturation());
 		isFormatValide(offre.getModePaiement());
 
 		if (Utils.isListNullOrEmpty(offre.getDetails())) {

@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.deserializer.ModePaiementDeserializer;
-import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 
 /**
@@ -34,12 +32,6 @@ public class Offre {
 	private ModePaiement modePaiement;
 
 	/**
-	 * {@link ModeFacturation}.
-	 */
-	@JsonDeserialize(using = ModeFacturationDeserializer.class)
-	private ModeFacturation modeFacturation;
-
-	/**
 	 * liste des {@link Detail} associe a une offre.
 	 */
 	List<Detail> details = new ArrayList<Detail>();
@@ -53,7 +45,7 @@ public class Offre {
 	@Override
 	public String toString() {
 		return "Offre [referenceOffre=" + referenceOffre + ", referenceTarif=" + referenceTarif + ", modePaiement="
-				+ modePaiement + ", modeFacturation=" + modeFacturation + ", details=" + details + "]";
+				+ modePaiement + ", details=" + details + "]";
 	}
 
 	/**
@@ -105,23 +97,6 @@ public class Offre {
 	 */
 	public void setModePaiement(ModePaiement modePaiement) {
 		this.modePaiement = modePaiement;
-	}
-
-	/**
-	 * 
-	 * @return {@link ModeFacturation}.
-	 */
-	public ModeFacturation getModeFacturation() {
-		return modeFacturation;
-	}
-
-	/**
-	 * 
-	 * @param modeFacturation
-	 *            {@link ModeFacturation}.
-	 */
-	public void setModeFacturation(ModeFacturation modeFacturation) {
-		this.modeFacturation = modeFacturation;
 	}
 
 	/**
