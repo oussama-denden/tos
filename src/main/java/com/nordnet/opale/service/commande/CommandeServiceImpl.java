@@ -25,13 +25,16 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.ReductionContrat;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.business.TypeReduction;
+import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.ContratRenouvellementInfo;
 import com.nordnet.opale.business.commande.ContratValidationInfo;
 import com.nordnet.opale.business.commande.FraisRenouvellement;
 import com.nordnet.opale.business.commande.PolitiqueRenouvellement;
 import com.nordnet.opale.business.commande.PolitiqueValidation;
+import com.nordnet.opale.business.commande.Prix;
 import com.nordnet.opale.business.commande.PrixRenouvellemnt;
+import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
@@ -41,6 +44,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
+import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
@@ -542,6 +546,12 @@ public class CommandeServiceImpl implements CommandeService {
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			ContratPreparationInfo preparationInfo =
 					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui());
+
+			/*
+			 * ajout du mode de paiement au produits prepare.
+			 */
+			ajouterModePaiement(preparationInfo.getProduits());
+
 			String refContrat = restClient.preparerContrat(preparationInfo);
 			ligne.setReferenceContrat(refContrat);
 
@@ -874,6 +884,36 @@ public class CommandeServiceImpl implements CommandeService {
 						new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 				restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 						commandeLigneDetail.getNumEC(), contratReductionInfo);
+			}
+		}
+	}
+
+	/**
+	 * ajouter le {@link ModePaiement} au produit pour la preparation du {@link Contrat}.
+	 * 
+	 * @param produits
+	 *            liste des {@link Produit} a preparer.
+	 */
+	private void ajouterModePaiement(List<Produit> produits) {
+		List<Paiement> paiementsComptant =
+				paiementService.getListePaiementComptant(produits.get(Constants.ZERO).getNumeroCommande(), false);
+		ModePaiement modePaiementComptant = null;
+		ModePaiement modePaiementRecurrent = null;
+		if (paiementsComptant.size() > Constants.ZERO) {
+			modePaiementComptant = paiementsComptant.get(Constants.ZERO).getModePaiement();
+		}
+		List<Paiement> paiementsRecurrent =
+				paiementService.getPaiementRecurrent(produits.get(Constants.ZERO).getNumeroCommande(), false);
+		if (paiementsRecurrent.size() > Constants.ZERO) {
+			modePaiementRecurrent = paiementsRecurrent.get(Constants.ZERO).getModePaiement();
+		}
+		Prix prix = null;
+		for (Produit produit : produits) {
+			prix = produit.getPrix();
+			if (prix.isRecurrent()) {
+				prix.setModePaiement(modePaiementRecurrent);
+			} else {
+				prix.setModePaiement(modePaiementComptant);
 			}
 		}
 	}
