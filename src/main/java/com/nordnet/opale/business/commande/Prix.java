@@ -7,6 +7,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Optional;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeTVA;
@@ -22,7 +23,7 @@ import com.nordnet.opale.enums.TypeTVA;
  * @author Denden-OUSSAMA
  * 
  */
-@JsonIgnoreProperties({ "fraisCreations", "fraisResiliations" })
+@JsonIgnoreProperties({ "fraisCreations", "fraisResiliations", "recurrent" })
 public class Prix {
 
 	/**
@@ -219,6 +220,21 @@ public class Prix {
 	 */
 	public void setTypeTVA(TypeTVA typeTVA) {
 		this.typeTVA = typeTVA;
+	}
+
+	/**
+	 * verifie si le prix est recurrent ou non.
+	 * 
+	 * prix est recurrent.
+	 */
+	public boolean isRecurrent() {
+		Optional<Integer> dureeOp = Optional.fromNullable(duree);
+		Optional<Integer> periodiciteOp = Optional.fromNullable(periodicite);
+		if ((!dureeOp.isPresent() && periodiciteOp.isPresent())
+				|| (periodiciteOp.isPresent() && dureeOp.isPresent() && periodicite < duree)) {
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -26,7 +26,6 @@ import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeProduit;
 
 /**
@@ -71,12 +70,6 @@ public class CommandeLigneDetail {
 	 * label du produit.
 	 */
 	private String label;
-
-	/**
-	 * {@link ModePaiement}.
-	 */
-	@Enumerated(EnumType.STRING)
-	private ModePaiement modePaiement;
 
 	/**
 	 * configuration json.
@@ -124,7 +117,6 @@ public class CommandeLigneDetail {
 				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
 		this.referenceSelection = detail.getReferenceSelection();
 		this.typeProduit = detailCatalogue.getNature();
-		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
 		Choice choice = detailCatalogue.getChoiceMap().get(detail.getReferenceChoix());
 		this.referenceChoix = detail.getReferenceChoix();
@@ -134,8 +126,7 @@ public class CommandeLigneDetail {
 
 	@Override
 	public String toString() {
-		return "CommandeLigneDetail [id=" + id + ", modePaiement=" + modePaiement + ", configurationJson="
-				+ configurationJson + "]";
+		return "CommandeLigneDetail [id=" + id + ", configurationJson=" + configurationJson + "]";
 	}
 
 	/**
@@ -238,23 +229,6 @@ public class CommandeLigneDetail {
 	 */
 	public void setLabel(String label) {
 		this.label = label;
-	}
-
-	/**
-	 * 
-	 * @return {@link ModePaiement}.
-	 */
-	public ModePaiement getModePaiement() {
-		return modePaiement;
-	}
-
-	/**
-	 * 
-	 * @param modePaiement
-	 *            {@link ModePaiement}.
-	 */
-	public void setModePaiement(ModePaiement modePaiement) {
-		this.modePaiement = modePaiement;
 	}
 
 	/**
@@ -373,7 +347,7 @@ public class CommandeLigneDetail {
 		produit.setReferenceTarif(tarif.getReference());
 		produit.setNumECParent(numECParent);
 		if (tarif != null) {
-			produit.setPrix(tarif.toPrix(modeFacturation, modePaiement));
+			produit.setPrix(tarif.toPrix(modeFacturation));
 		}
 		return produit;
 	}

@@ -21,8 +21,6 @@
     id CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
-    modeFacturation CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
@@ -37,7 +35,6 @@
     referenceSelection CDATA #IMPLIED
     referenceChoix CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
     configurationJson CDATA #IMPLIED
     dependDe CDATA #IMPLIED
     draftLigneId CDATA #IMPLIED
@@ -100,7 +97,6 @@
     gamme CDATA #IMPLIED
     label CDATA #IMPLIED
     modeFacturation CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
     referenceOffre CDATA #IMPLIED
     referenceContrat CDATA #IMPLIED
     secteur CDATA #IMPLIED
@@ -115,7 +111,6 @@
     configurationJson CDATA #IMPLIED
     referenceSelection CDATA #IMPLIED
     referenceChoix CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
     label CDATA #IMPLIED
     typeProduit CDATA #IMPLIED
     dependDe CDATA #IMPLIED

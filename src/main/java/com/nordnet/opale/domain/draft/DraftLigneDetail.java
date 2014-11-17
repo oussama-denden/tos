@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -20,7 +18,6 @@ import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.commande.ElementContractuel;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
-import com.nordnet.opale.enums.ModePaiement;
 
 /**
  * contient les detail d'une {@link DraftLigne} dans un {@link Draft}.
@@ -61,12 +58,6 @@ public class DraftLigneDetail {
 	private String referenceTarif;
 
 	/**
-	 * {@link ModePaiement}.
-	 */
-	@Enumerated(EnumType.STRING)
-	private ModePaiement modePaiement;
-
-	/**
 	 * configuration json.
 	 */
 	private String configurationJson;
@@ -100,7 +91,6 @@ public class DraftLigneDetail {
 		this.referenceSelection = detail.getReferenceSelection();
 		this.referenceTarif = detail.getReferenceTarif();
 		this.referenceChoix = detail.getReferenceChoix();
-		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
 	}
 
@@ -115,7 +105,6 @@ public class DraftLigneDetail {
 		this.referenceChoix = commandeLigneDetail.getReferenceChoix();
 		Tarif tarif = commandeLigneDetail.getTarif();
 		this.referenceTarif = tarif != null ? tarif.getReference() : null;
-		this.modePaiement = commandeLigneDetail.getModePaiement();
 		this.configurationJson = commandeLigneDetail.getConfigurationJson();
 	}
 
@@ -131,7 +120,6 @@ public class DraftLigneDetail {
 		this.referenceChoix = elementContractuel.getReferenceProduit();
 		this.referenceSelection = offreCatalogue.findReferenceSelection(elementContractuel.getReferenceProduit());
 		this.referenceTarif = elementContractuel.getReferenceTarif();
-		this.modePaiement = elementContractuel.getModePaiement();
 		this.numEC = elementContractuel.getNumEC();
 		this.referenceTarif = elementContractuel.getReferenceTarif();
 	}
@@ -139,8 +127,8 @@ public class DraftLigneDetail {
 	@Override
 	public String toString() {
 		return "DraftLigneDetail [id=" + id + ", numEC=" + numEC + ", referenceSelection=" + referenceSelection
-				+ ", referenceChoix=" + referenceChoix + ", referenceTarif=" + referenceTarif + ", modePaiement="
-				+ modePaiement + ", configurationJson=" + configurationJson + "]";
+				+ ", referenceChoix=" + referenceChoix + ", referenceTarif=" + referenceTarif + ", configurationJson="
+				+ configurationJson + "]";
 	}
 
 	/**
@@ -226,23 +214,6 @@ public class DraftLigneDetail {
 	 */
 	public void setReferenceTarif(String referenceTarif) {
 		this.referenceTarif = referenceTarif;
-	}
-
-	/**
-	 * 
-	 * @return {@link ModePaiement}.
-	 */
-	public ModePaiement getModePaiement() {
-		return modePaiement;
-	}
-
-	/**
-	 * 
-	 * @param modePaiement
-	 *            {@link ModePaiement}.
-	 */
-	public void setModePaiement(ModePaiement modePaiement) {
-		this.modePaiement = modePaiement;
 	}
 
 	/**

@@ -1,14 +1,11 @@
 [{
   "offre": {
-    "modePaiement": "CB",
     "referenceTarif": "mensuel_jet10_base",
     "referenceOffre": "jet_surf10",
-    "modeFacturation": "PREMIER_MOIS",
     "details": [
       {
         "referenceSelection": "kitsat",
         "referenceTarif": "mensuel_jet10_base",
-        "modePaiement": "CB",
         "configurationJson": "",
         "referenceChoix" :"kitsat",
         "dependDe": ""
@@ -16,7 +13,6 @@
       {
         "referenceSelection": "jet",
         "referenceTarif": "mensuel_jet10_base",
-        "modePaiement": "CB",
         "configurationJson": "",
         "referenceChoix" :"jet",
         "dependDe": "kitsat"

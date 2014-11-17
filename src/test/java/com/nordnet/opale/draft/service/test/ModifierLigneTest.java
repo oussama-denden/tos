@@ -15,11 +15,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
-import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.Constants;
@@ -27,8 +24,7 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test pour la methode
- * {@link DraftService#modifierLigne(String, String, com.nordnet.opale.business.DraftLigneInfo)}
- * .
+ * {@link DraftService#modifierLigne(String, String, com.nordnet.opale.business.DraftLigneInfo)} .
  * 
  * @author akram-moncer
  * 
@@ -65,20 +61,15 @@ public class ModifierLigneTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
 	public void testerModifierLigneValide() throws JsonParseException, JsonMappingException, IOException {
-		DraftLigneInfo draftLigneInfo = draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class,
-				"./requests/modifierLignes.json");
+		DraftLigneInfo draftLigneInfo =
+				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");
 		try {
 			draftService.modifierLigne("REF-DRAFT-1", "00000001", draftLigneInfo);
 
 			Draft draft = draftService.getDraftByReference("REF-DRAFT-1");
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(draft.getDraftLignes().size()));
 			DraftLigne draftLigne = draft.getDraftLignes().get(Constants.ZERO);
-			assertEquals(ModePaiement.CB, draftLigne.getModePaiement());
-			assertEquals(ModeFacturation.PREMIER_MOIS, draftLigne.getModeFacturation());
 			assertEquals(Double.valueOf(Constants.DEUX), Double.valueOf(draftLigne.getDraftLigneDetails().size()));
-			for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-				assertEquals(ModePaiement.CB, detail.getModePaiement());
-			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -98,8 +89,8 @@ public class ModifierLigneTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
 	public void testerModifierLignePourDraftNonExist() throws JsonParseException, JsonMappingException, IOException {
-		DraftLigneInfo draftLigneInfo = draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class,
-				"./requests/modifierLignes.json");
+		DraftLigneInfo draftLigneInfo =
+				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");
 		try {
 			draftService.modifierLigne("REF-DRAFT-2", "00000001", draftLigneInfo);
 			fail("Unexpected error");
@@ -121,8 +112,8 @@ public class ModifierLigneTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
 	public void testerModifierLigneNonExist() throws JsonParseException, JsonMappingException, IOException {
-		DraftLigneInfo draftLigneInfo = draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class,
-				"./requests/modifierLignes.json");
+		DraftLigneInfo draftLigneInfo =
+				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");
 		try {
 			draftService.modifierLigne("REF-DRAFT-1", "00000002", draftLigneInfo);
 			fail("Unexpected error");
@@ -144,8 +135,8 @@ public class ModifierLigneTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
 	public void testModifierLigneAvecOffreNonValide() throws JsonParseException, JsonMappingException, IOException {
-		DraftLigneInfo draftLigneInfo = draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class,
-				"./requests/modifierLignes.json");
+		DraftLigneInfo draftLigneInfo =
+				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");
 		draftLigneInfo.getOffre().setReferenceOffre(null);
 		try {
 			draftService.modifierLigne("REF-DRAFT-1", "00000001", draftLigneInfo);

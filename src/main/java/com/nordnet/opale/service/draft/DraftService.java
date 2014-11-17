@@ -374,4 +374,11 @@ public interface DraftService {
 	public Object associerReductionECParent(String refDraft, String refLigne, String refTarif,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException;
 
+	/**
+	 * retourner la liste de tout les {@link Draft} dans la base de donnees.
+	 * 
+	 * @return liste des {@link Draft}.
+	 */
+	public List<Draft> findAllDraft();
+
 }

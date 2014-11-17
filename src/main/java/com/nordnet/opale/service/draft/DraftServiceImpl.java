@@ -778,20 +778,15 @@ public class DraftServiceImpl implements DraftService {
 			Draft draft = new Draft(contrat, trameCatalogue);
 			validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
 			if (validationInfo.isValide()) {
-				validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
-				if (validationInfo.isValide()) {
-					/*
-					 * attribution des reference au draft/draftLigne.
-					 */
-					draft.setReference(keygenService.getNextKey(Draft.class));
-					for (DraftLigne draftLigne : draft.getDraftLignes()) {
-						draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
-					}
-					draftRepository.save(draft);
-					return draft;
-				} else {
-					return validationInfo;
+				/*
+				 * attribution des reference au draft/draftLigne.
+				 */
+				draft.setReference(keygenService.getNextKey(Draft.class));
+				for (DraftLigne draftLigne : draft.getDraftLignes()) {
+					draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 				}
+				draftRepository.save(draft);
+				return draft;
 			} else {
 				return validationInfo;
 			}
@@ -1010,6 +1005,11 @@ public class DraftServiceImpl implements DraftService {
 		reductionResponse.put("referenceReduction", referenceReduction);
 
 		return reductionResponse.toString();
+	}
+
+	@Override
+	public List<Draft> findAllDraft() {
+		return draftRepository.findAll();
 	}
 
 }

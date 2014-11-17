@@ -3,9 +3,6 @@ package com.nordnet.opale.business;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nordnet.opale.deserializer.ModePaiementDeserializer;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.util.Utils;
 
 /**
@@ -30,12 +27,6 @@ public class Detail {
 	 * reference tarif.
 	 */
 	private String referenceTarif;
-
-	/**
-	 * {@link ModePaiement}.
-	 */
-	@JsonDeserialize(using = ModePaiementDeserializer.class)
-	private ModePaiement modePaiement;
 
 	/**
 	 * configuration json.
@@ -122,23 +113,6 @@ public class Detail {
 	 */
 	public void setReferenceTarif(String referenceTarif) {
 		this.referenceTarif = referenceTarif;
-	}
-
-	/**
-	 * 
-	 * @return {@link ModePaiement}.
-	 */
-	public ModePaiement getModePaiement() {
-		return modePaiement;
-	}
-
-	/**
-	 * 
-	 * @param modePaiement
-	 *            {@link ModePaiement}.
-	 */
-	public void setModePaiement(ModePaiement modePaiement) {
-		this.modePaiement = modePaiement;
 	}
 
 	/**

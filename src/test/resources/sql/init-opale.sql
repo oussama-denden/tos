@@ -170,7 +170,6 @@ CREATE TABLE `draftligne` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` datetime DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
-  `modeFacturation` varchar(255) DEFAULT NULL,
   `modePaiement` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `referenceContrat` varchar(255) DEFAULT NULL,
