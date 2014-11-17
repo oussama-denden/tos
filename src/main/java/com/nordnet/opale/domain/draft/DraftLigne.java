@@ -9,8 +9,6 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -32,7 +30,6 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
-import com.nordnet.opale.enums.ModePaiement;
 
 /**
  * entite qui represente une ligne d'un {@link Draft}.
@@ -78,12 +75,6 @@ public class DraftLigne {
 	private String referenceContrat;
 
 	/**
-	 * {@link ModePaiement}.
-	 */
-	@Enumerated(EnumType.STRING)
-	private ModePaiement modePaiement;
-
-	/**
 	 * date de creation de la ligne.
 	 */
 	private Date dateCreation;
@@ -116,7 +107,6 @@ public class DraftLigne {
 	public DraftLigne(DraftLigneInfo draftLigneInfo) {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
-		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
 		}
@@ -134,7 +124,6 @@ public class DraftLigne {
 		ElementContractuel elementContractuelParent = contrat.getParent();
 		this.referenceContrat = contrat.getReference();
 		this.referenceOffre = elementContractuelParent.getReferenceProduit();
-		this.modePaiement = elementContractuelParent.getModePaiement();
 		this.referenceTarif = elementContractuelParent.getReferenceTarif();
 		this.numEC = elementContractuelParent.getNumEC();
 		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(this.referenceOffre);
@@ -157,7 +146,6 @@ public class DraftLigne {
 	public DraftLigne(DraftLigneInfo draftLigneInfo, com.nordnet.opale.business.Auteur auteur) {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
-		this.modePaiement = draftLigneInfo.getOffre().getModePaiement();
 		this.auteur = auteur.toDomain();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
@@ -177,7 +165,6 @@ public class DraftLigne {
 
 		Tarif tarif = commandeLigne.getTarif();
 		this.referenceTarif = tarif != null ? tarif.getReference() : null;
-		this.modePaiement = commandeLigne.getModePaiement();
 		this.auteur = commandeLigne.getAuteur();
 
 		this.dateCreation = commandeLigne.getDateCreation();
@@ -190,8 +177,7 @@ public class DraftLigne {
 	@Override
 	public String toString() {
 		return "DraftLigne [id=" + id + ", reference=" + reference + ", referenceOffre=" + referenceOffre
-				+ ", referenceTarif=" + referenceTarif + ", modePaiement=" + modePaiement + ", dateCreation="
-				+ dateCreation + "]";
+				+ ", referenceTarif=" + referenceTarif + ", dateCreation=" + dateCreation + "]";
 	}
 
 	/*
@@ -320,23 +306,6 @@ public class DraftLigne {
 	 */
 	public void setReferenceContrat(String referenceContrat) {
 		this.referenceContrat = referenceContrat;
-	}
-
-	/**
-	 * 
-	 * @return {@link ModePaiement}.
-	 */
-	public ModePaiement getModePaiement() {
-		return modePaiement;
-	}
-
-	/**
-	 * 
-	 * @param modePaiement
-	 *            {@link ModePaiement}.
-	 */
-	public void setModePaiement(ModePaiement modePaiement) {
-		this.modePaiement = modePaiement;
 	}
 
 	/**

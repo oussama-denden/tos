@@ -24,7 +24,6 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceTarif" use="optional" />
-		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="dateCreation" use="optional" />
 		
 		<xsd:attribute name="qui" use="optional" />
@@ -42,7 +41,6 @@
 		<xsd:attribute name="referenceSelection" use="optional" />
 		<xsd:attribute name="referenceChoix" use="optional" />
 		<xsd:attribute name="referenceTarif" use="optional" />
-		<xsd:attribute name="modePaiement" use="optional" />
 		<xsd:attribute name="configurationJson" use="optional" />
 		<xsd:attribute name="dependDe" use="optional" />
 		<xsd:attribute name="draftLigneId" use="optional" />

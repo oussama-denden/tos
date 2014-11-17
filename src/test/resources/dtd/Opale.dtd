@@ -21,7 +21,6 @@
     id CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
@@ -36,7 +35,6 @@
     referenceSelection CDATA #IMPLIED
     referenceChoix CDATA #IMPLIED
     referenceTarif CDATA #IMPLIED
-    modePaiement CDATA #IMPLIED
     configurationJson CDATA #IMPLIED
     dependDe CDATA #IMPLIED
     draftLigneId CDATA #IMPLIED

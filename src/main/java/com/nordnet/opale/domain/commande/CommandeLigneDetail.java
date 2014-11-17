@@ -124,7 +124,6 @@ public class CommandeLigneDetail {
 				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
 		this.referenceSelection = detail.getReferenceSelection();
 		this.typeProduit = detailCatalogue.getNature();
-		this.modePaiement = detail.getModePaiement();
 		this.configurationJson = detail.getConfigurationJson();
 		Choice choice = detailCatalogue.getChoiceMap().get(detail.getReferenceChoix());
 		this.referenceChoix = detail.getReferenceChoix();
