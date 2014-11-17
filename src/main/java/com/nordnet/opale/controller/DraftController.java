@@ -397,7 +397,7 @@ public class DraftController {
 			@PathVariable String refTarif, @RequestBody ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionECParent");
-		return draftService.associerReductionLigne(refDraft, refLigne, reductionInfo);
+		return draftService.associerReductionECParent(refDraft, refLigne, refTarif, reductionInfo);
 
 	}
 

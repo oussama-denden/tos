@@ -585,23 +585,30 @@ public class CommandeServiceImpl implements CommandeService {
 		validationInfo.setUser(ligne.getAuteur().getQui());
 
 		List<com.nordnet.opale.business.commande.PaiementInfo> paiementInfos = new ArrayList<>();
+		com.nordnet.opale.business.commande.PaiementInfo paiementInfoParent =
+				new com.nordnet.opale.business.commande.PaiementInfo();
+		paiementInfoParent.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
+		paiementInfoParent.setNumEC(ligne.getNumEC());
+		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(commande.getReference(), false);
+		Paiement paiementRecurrent = null;
+		String referenceModePaiement = null;
+		if (paiementRecurrents.size() > Constants.ZERO) {
+			paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		}
+		if (paiementRecurrent != null) {
+			referenceModePaiement = paiementRecurrent.getIdPaiement();
+		}
+		paiementInfoParent.setReferenceModePaiement(referenceModePaiement);
+		paiementInfoParent.setReferenceProduit(ligne.getReferenceOffre());
+		paiementInfos.add(paiementInfoParent);
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
 			com.nordnet.opale.business.commande.PaiementInfo paiementInfo =
 					new com.nordnet.opale.business.commande.PaiementInfo();
 
 			paiementInfo.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
-			paiementInfo.setNumEC(ligne.getCommandeLigneDetails().indexOf(ligneDetail) + Constants.UN);
-			List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(commande.getReference(), false);
-			Paiement paiementRecurrent = null;
-			if (paiementRecurrents.size() > Constants.ZERO) {
-				paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
-			}
-			if (paiementRecurrent != null) {
-				paiementInfo.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
-			}
-
+			paiementInfo.setNumEC(ligneDetail.getNumEC());
+			paiementInfo.setReferenceModePaiement(referenceModePaiement);
 			paiementInfo.setReferenceProduit(ligneDetail.getReferenceChoix());
-
 			paiementInfos.add(paiementInfo);
 		}
 
@@ -828,7 +835,12 @@ public class CommandeServiceImpl implements CommandeService {
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			if (reductionLigne.getReferenceFrais() == null) {
-				restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
+				if (reductionLigne.getReferenceTarif() == null) {
+					restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
+				} else {
+					restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
+							commandeLigne.getNumEC(), contratReductionInfo);
+				}
 			} else {
 				String typeFrais =
 						commandeRepository.findTypeFrais(reductionLigne.getReferenceDraft(),

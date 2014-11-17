@@ -519,6 +519,7 @@ public class CommandeLigne {
 		contrat.setUser(qui);
 		List<Produit> produits = new ArrayList<>();
 		produits.add(toProduitParent(referenceCommande));
+		numEC = Constants.UN;
 		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
 			Integer numECParent = null;
 			Integer numEC = commandeLigneDetails.indexOf(ligneDetail) + Constants.DEUX;
