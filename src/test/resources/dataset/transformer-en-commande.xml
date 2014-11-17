@@ -45,5 +45,12 @@
 	<draftLigneDetail id="1004" referenceSelection="kitsat10" referenceChoix="trafic10g"
 		referenceTarif="mensuel_jet10_base" modePaiement="CB"
 		configurationJson="" draftLigneId="1002" />
+		
+	<reduction id="1005" label="reduction sur ligne" nbUtilisationMax="5" reference="00000001" referenceDraft="REF-DRAFT-1" typeValeur="POURCENTAGE" valeur="50" />	
+	<reduction id="1000" label="reduction sur ligne" nbUtilisationMax="5" reference="00000002" referenceDraft="REF-DRAFT-1" referenceLigne="00000001" typeValeur="POURCENTAGE" valeur="50" />
+	<reduction id="1001" label="reduction sur produit" nbUtilisationMax="5" reference="00000003" referenceDraft="REF-DRAFT-1" referenceLigne="00000001" referenceLigneDetail="trafic10g" typeValeur="POURCENTAGE" valeur="50" />
+	<reduction id="1002" label="reduction sur produit parent" nbUtilisationMax="5" reference="00000004" referenceDraft="REF-DRAFT-1" referenceLigne="00000001" referenceTarif="annuel_jet10_base" typeValeur="POURCENTAGE" valeur="50" />
+	<reduction id="1003" label="reduction sur frais ligne" nbUtilisationMax="5" reference="00000005" referenceDraft="REF-DRAFT-1" referenceLigne="00000001" referenceFrais="engagement_kitsat" referenceTarif="annuel_jet10_base" typeValeur="POURCENTAGE" valeur="50" />
+	<reduction id="1004" label="reduction sur frais detail" nbUtilisationMax="5" reference="00000006" referenceDraft="REF-DRAFT-1" referenceLigne="00000001" referenceFrais="std_Cloture" referenceLigneDetail="trafic10g" referenceTarif="mensuel_jet10_base" typeValeur="POURCENTAGE" valeur="50" />
 
 </dataset>
