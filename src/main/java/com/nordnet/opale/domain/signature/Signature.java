@@ -9,6 +9,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -16,6 +18,8 @@ import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.deserializer.ModeSignatureDeserialiser;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.enums.ModeSignature;
+import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.PropertiesUtil;
 
 /**
  * Classi qui groupe les informations de signature.
@@ -313,6 +317,20 @@ public class Signature {
 		signatureInfo.setAuteur(auteur.toAuteurBusiness());
 
 		return signatureInfo;
+	}
+
+	/**
+	 * methode appel avant la persistance de la signature.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	@PreUpdate
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
 	}
 
 }

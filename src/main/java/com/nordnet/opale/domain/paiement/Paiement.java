@@ -8,6 +8,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
@@ -19,6 +21,8 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypePaiement;
+import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.PropertiesUtil;
 
 /**
  * Represente un paiement d'une {@link Commande}.
@@ -376,6 +380,20 @@ public class Paiement {
 
 		return paiementInfo;
 
+	}
+
+	/**
+	 * methode appel avant la persistance du paiement.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	@PreUpdate
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
 	}
 
 }

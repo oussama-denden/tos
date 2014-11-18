@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
@@ -31,7 +32,9 @@ import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.enums.Geste;
+import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.PropertiesUtil;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.
@@ -41,7 +44,7 @@ import com.nordnet.opale.util.Constants;
  */
 @Entity
 @Table(name = "draft")
-@JsonIgnoreProperties({ "id", "annule", "transforme" })
+@JsonIgnoreProperties({ "id", "annule", "transforme", "toJSON", "prePersist" })
 public class Draft {
 
 	/**
@@ -496,5 +499,18 @@ public class Draft {
 		draftJsonObject.put("lignes", lignes);
 
 		return draftJsonObject;
+	}
+
+	/**
+	 * methode appel avant la persistance du draft.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
 	}
 }

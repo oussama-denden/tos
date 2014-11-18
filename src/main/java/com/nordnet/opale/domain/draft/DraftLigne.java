@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -30,6 +31,8 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
+import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.PropertiesUtil;
 
 /**
  * entite qui represente une ligne d'un {@link Draft}.
@@ -428,5 +431,18 @@ public class DraftLigne {
 			draftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail);
 		}
 		return draftLigneDetailsMap;
+	}
+
+	/**
+	 * methode appel avant la persistance du draft ligne.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
 	}
 }
