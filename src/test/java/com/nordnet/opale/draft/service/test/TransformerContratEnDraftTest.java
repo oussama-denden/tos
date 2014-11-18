@@ -9,12 +9,12 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
-import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
+import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.draft.DraftServiceImpl;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
@@ -73,13 +73,12 @@ public class TransformerContratEnDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-contrat-en-draft.xml" })
 	public void testerTransformerContratEnDraftNonValide() {
 		try {
-			int size = draftService.findAllDraft().size();
 			TrameCatalogue trameCatalogue =
 					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 							"./requests/transformerContratEnDraft.json");
-			Object object = draftService.transformerContratEnDraft("00000002", trameCatalogue);
-			assertTrue(object instanceof DraftValidationInfo);
-			assertEquals(Double.valueOf(size), Double.valueOf(draftService.findAllDraft().size()));
+			draftService.transformerContratEnDraft("00000002", trameCatalogue);
+		} catch (OpaleException e) {
+			assertEquals("1.1.30", e.getErrorCode());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

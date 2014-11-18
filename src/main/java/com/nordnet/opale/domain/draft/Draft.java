@@ -18,6 +18,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
@@ -451,4 +454,47 @@ public class Draft {
 		return dateTransfromationOp.isPresent();
 	}
 
+	/**
+	 * creation d'un resume du draft sur format JSON.
+	 * 
+	 * @return {@link JSONObject}
+	 * 
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	public JSONObject toJSON() throws JSONException {
+		JSONObject draftJsonObject = new JSONObject();
+		JSONArray lignes = new JSONArray();
+		JSONArray details = null;
+		JSONObject draftLigneJsonObject = null;
+		JSONObject offreJsonObject = null;
+		JSONObject detailJsonObject = null;
+		String referenceContrat = null;
+
+		draftJsonObject.put("refrence", reference);
+		for (DraftLigne draftLigne : draftLignes) {
+			draftLigneJsonObject = new JSONObject();
+			offreJsonObject = new JSONObject();
+			details = new JSONArray();
+			referenceContrat = draftLigne.getReferenceContrat();
+			draftLigneJsonObject.put("numero", draftLignes.indexOf(draftLigne) + Constants.UN);
+			offreJsonObject.put("reference", draftLigne.getReferenceOffre());
+			offreJsonObject.put("tarif", draftLigne.getReferenceTarif());
+			draftLigneJsonObject.put("offre", offreJsonObject);
+			for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
+				detailJsonObject = new JSONObject();
+				detailJsonObject.put("referenceSelection", detail.getReferenceSelection());
+				detailJsonObject.put("reference", detail.getReferenceChoix());
+				detailJsonObject.put("tarif", detail.getReferenceTarif());
+				detailJsonObject.put("dependDe", detail.getdependDe());
+				details.put(detailJsonObject);
+			}
+			draftLigneJsonObject.put("details", details);
+			lignes.put(draftLigneJsonObject);
+		}
+		draftJsonObject.put("referenceContrat", referenceContrat);
+		draftJsonObject.put("lignes", lignes);
+
+		return draftJsonObject;
+	}
 }

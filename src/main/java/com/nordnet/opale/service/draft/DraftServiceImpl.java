@@ -612,7 +612,7 @@ public class DraftServiceImpl implements DraftService {
 	@Override
 	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(refDraft);
-		DraftValidationInfo validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
+		DraftValidationInfo validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue);
 		if (validationInfo.isValide()) {
 			Cout cout = calculerCoutLigne(draft, trameCatalogue);
 			return cout;
@@ -761,7 +761,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
+	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
 			throws OpaleException {
 		LOGGER.info("Debut methode transformerContratEnDraft");
 		Contrat contrat = restClient.getContratByReference(referenceContrat);
@@ -773,10 +773,10 @@ public class DraftServiceImpl implements DraftService {
 			validationInfo.addReason("offre.reference", "36.3.1.2",
 					PropertiesUtil.getInstance().getErrorMessage("1.1.6", referenceOffre),
 					Arrays.asList(referenceOffre));
-			return validationInfo;
+			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 		} else {
 			Draft draft = new Draft(contrat, trameCatalogue);
-			validationInfo = catalogueValidator.validerReferenceDraft(draft, trameCatalogue);
+			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue);
 			if (validationInfo.isValide()) {
 				/*
 				 * attribution des reference au draft/draftLigne.
@@ -788,7 +788,7 @@ public class DraftServiceImpl implements DraftService {
 				draftRepository.save(draft);
 				return draft;
 			} else {
-				return validationInfo;
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 			}
 		}
 	}
