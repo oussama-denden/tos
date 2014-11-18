@@ -18,7 +18,6 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.draft.DraftServiceImpl;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
-import com.nordnet.opale.util.Constants;
 
 /**
  * classe de test de la methode
@@ -53,13 +52,14 @@ public class TransformerContratEnDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-contrat-en-draft.xml" })
 	public void testerTransformerContratEnDraftValide() {
 		try {
-			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(draftService.findAllDraft().size()));
+			int size = draftService.findAllDraft().size();
 			TrameCatalogue trameCatalogue =
 					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 							"./requests/transformerContratEnDraft.json");
 			Object object = draftService.transformerContratEnDraft("00000001", trameCatalogue);
 			assertTrue(object instanceof Draft);
-			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(draftService.findAllDraft().size()));
+			size++;
+			assertEquals(Double.valueOf(size), Double.valueOf(draftService.findAllDraft().size()));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -73,11 +73,13 @@ public class TransformerContratEnDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-contrat-en-draft.xml" })
 	public void testerTransformerContratEnDraftNonValide() {
 		try {
+			int size = draftService.findAllDraft().size();
 			TrameCatalogue trameCatalogue =
 					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
 							"./requests/transformerContratEnDraft.json");
 			Object object = draftService.transformerContratEnDraft("00000002", trameCatalogue);
 			assertTrue(object instanceof DraftValidationInfo);
+			assertEquals(Double.valueOf(size), Double.valueOf(draftService.findAllDraft().size()));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
