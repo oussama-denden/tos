@@ -203,6 +203,7 @@
 		<xsd:attribute name="referenceTarif" use="optional" />
 		<xsd:attribute name="typeValeur" use="optional" />
 		<xsd:attribute name="valeur" use="optional" />
+		<xsd:attribute name="referenceReduction" use="optional" />
 	</xsd:complexType>
 	
 	

@@ -309,6 +309,7 @@ CREATE TABLE `reduction` (
   `referenceTarif` varchar(255) DEFAULT NULL,
   `typeValeur` varchar(255) DEFAULT NULL,
   `valeur` double DEFAULT NULL,
+  `referenceReduction` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

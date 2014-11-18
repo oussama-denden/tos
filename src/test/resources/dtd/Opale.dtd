@@ -191,4 +191,5 @@
     referenceTarif CDATA #IMPLIED
     typeValeur CDATA #IMPLIED
     valeur CDATA #IMPLIED
+    referenceReduction CDATA #IMPLIED
 >
