@@ -18,6 +18,7 @@ import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.commande.ElementContractuel;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
+import com.nordnet.opale.util.Utils;
 
 /**
  * contient les detail d'une {@link DraftLigne} dans un {@link Draft}.
@@ -89,9 +90,13 @@ public class DraftLigneDetail {
 	 */
 	public DraftLigneDetail(Detail detail) {
 		this.referenceSelection = detail.getReferenceSelection();
-		this.referenceTarif = detail.getReferenceTarif();
+		if (!Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
+			this.referenceTarif = detail.getReferenceTarif();
+		}
 		this.referenceChoix = detail.getReferenceChoix();
-		this.configurationJson = detail.getConfigurationJson();
+		if (!Utils.isStringNullOrEmpty(detail.getConfigurationJson())) {
+			this.configurationJson = detail.getConfigurationJson();
+		}
 	}
 
 	/**

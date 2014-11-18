@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.nordnet.opale.business.ContratReductionInfo;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
 import com.nordnet.opale.business.commande.ContratRenouvellementInfo;
@@ -62,5 +63,15 @@ public class RestClientMock extends RestClient {
 			LOGGER.error("erreur lors de la recuperation des information du contrat.", e);
 		}
 		return null;
+	}
+
+	@Override
+	public void ajouterReductionSurContrat(String referenceContrat, ContratReductionInfo contratReductionInfo)
+			throws OpaleException {
+	}
+
+	@Override
+	public void ajouterReductionSurElementContractuel(String referenceContrat, Integer numEC,
+			ContratReductionInfo contratReductionInfo) throws OpaleException {
 	}
 }

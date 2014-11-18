@@ -910,10 +910,12 @@ public class CommandeServiceImpl implements CommandeService {
 		Prix prix = null;
 		for (Produit produit : produits) {
 			prix = produit.getPrix();
-			if (prix.isRecurrent()) {
-				prix.setModePaiement(modePaiementRecurrent);
-			} else {
-				prix.setModePaiement(modePaiementComptant);
+			if (prix != null) {
+				if (prix.isRecurrent()) {
+					prix.setModePaiement(modePaiementRecurrent);
+				} else {
+					prix.setModePaiement(modePaiementComptant);
+				}
 			}
 		}
 	}
