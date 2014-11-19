@@ -4,9 +4,12 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.PropertiesUtil;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Client}.
@@ -167,6 +170,19 @@ public class Client {
 		adresseId = client.getAdresseId();
 		clientId = client.getClientId();
 		this.auteur = auteur.toDomain();
+	}
+
+	/**
+	 * methode appel avant la persistance du client.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
 	}
 
 }

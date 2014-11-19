@@ -33,16 +33,6 @@
 		
 	</bean>
 	
-	<jee:jndi-lookup id="dataSource"
-   jndi-name="jdbc/OpaleDS"
-   expected-type="javax.sql.DataSource" />
-	
-	<!-- create job-meta tables automatically -->
-  <jdbc:initialize-database data-source="dataSource">
-	<jdbc:script separator="#" location="classpath:/META-INF/schema-init.sql"  encoding="UTF-8" />
-  </jdbc:initialize-database>
-	
-	
 	<jpa:repositories base-package="com.nordnet.opale.repository" />
 	
 </beans>

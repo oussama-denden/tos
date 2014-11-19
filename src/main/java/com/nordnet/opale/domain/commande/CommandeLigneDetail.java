@@ -116,6 +116,7 @@ public class CommandeLigneDetail {
 	public CommandeLigneDetail(DraftLigneDetail detail, String referenceOffre, TrameCatalogue trameCatalogue) {
 		DetailCatalogue detailCatalogue =
 				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
+		this.numEC = detail.getNumEC();
 		this.referenceSelection = detail.getReferenceSelection();
 		this.typeProduit = detailCatalogue.getNature();
 		this.configurationJson = detail.getConfigurationJson();

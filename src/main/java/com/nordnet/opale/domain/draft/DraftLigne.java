@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -34,6 +35,7 @@ import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.DraftValidator;
 
 /**
@@ -136,6 +138,8 @@ public class DraftLigne {
 	 *            {@link TrameCatalogue}.
 	 */
 	public DraftLigne(Contrat contrat, TrameCatalogue trameCatalogue) {
+		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
+		this.auteur = auteur;
 		ElementContractuel elementContractuelParent = contrat.getParent();
 		this.referenceContrat = contrat.getReference();
 		this.referenceOffre = elementContractuelParent.getReferenceProduit();
@@ -464,5 +468,18 @@ public class DraftLigne {
 			draftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail);
 		}
 		return draftLigneDetailsMap;
+	}
+
+	/**
+	 * methode appel avant la persistance du draft ligne.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
 	}
 }
