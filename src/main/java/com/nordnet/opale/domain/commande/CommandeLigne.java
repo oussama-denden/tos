@@ -145,7 +145,9 @@ public class CommandeLigne {
 	 */
 	public CommandeLigne(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
 		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
+		this.numEC = draftLigne.getNumEC();
 		this.referenceOffre = draftLigne.getReferenceOffre();
+		this.referenceContrat = draftLigne.getReferenceContrat();
 		this.gamme = offreCatalogue.getGamme();
 		this.famille = offreCatalogue.getFamille();
 		this.label = offreCatalogue.getLabel();

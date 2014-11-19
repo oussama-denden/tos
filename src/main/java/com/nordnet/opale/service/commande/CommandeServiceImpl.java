@@ -35,6 +35,7 @@ import com.nordnet.opale.business.commande.PolitiqueValidation;
 import com.nordnet.opale.business.commande.Prix;
 import com.nordnet.opale.business.commande.PrixRenouvellemnt;
 import com.nordnet.opale.business.commande.Produit;
+import com.nordnet.opale.business.commande.ProduitRenouvellement;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
@@ -550,7 +551,7 @@ public class CommandeServiceImpl implements CommandeService {
 			/*
 			 * ajout du mode de paiement au produits prepare.
 			 */
-			ajouterModePaiement(preparationInfo.getProduits());
+			ajouterModePaiementProduit(preparationInfo.getProduits());
 
 			String refContrat = restClient.preparerContrat(preparationInfo);
 			ligne.setReferenceContrat(refContrat);
@@ -742,7 +743,7 @@ public class CommandeServiceImpl implements CommandeService {
 			produitRenouvellements.add(produitRenouvellement);
 
 		}
-
+		ajouterModePaiementRenouvellement(produitRenouvellements);
 		renouvellementInfo.setProduitRenouvellements(produitRenouvellements);
 
 		return renouvellementInfo;
@@ -894,7 +895,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * @param produits
 	 *            liste des {@link Produit} a preparer.
 	 */
-	private void ajouterModePaiement(List<Produit> produits) {
+	private void ajouterModePaiementProduit(List<Produit> produits) {
 		List<Paiement> paiementsComptant =
 				paiementService.getListePaiementComptant(produits.get(Constants.ZERO).getNumeroCommande(), false);
 		ModePaiement modePaiementComptant = null;
@@ -910,6 +911,40 @@ public class CommandeServiceImpl implements CommandeService {
 		Prix prix = null;
 		for (Produit produit : produits) {
 			prix = produit.getPrix();
+			if (prix != null) {
+				if (prix.isRecurrent()) {
+					prix.setModePaiement(modePaiementRecurrent);
+				} else {
+					prix.setModePaiement(modePaiementComptant);
+				}
+			}
+		}
+	}
+
+	/**
+	 * ajouter le {@link ModePaiement} au produit pour la preparation du {@link Contrat}.
+	 * 
+	 * @param produitsRenouvellement
+	 *            liste des {@link ProduitRenouvellement} a preparer.
+	 */
+	private void ajouterModePaiementRenouvellement(List<ProduitRenouvellement> produitsRenouvellement) {
+		List<Paiement> paiementsComptant =
+				paiementService.getListePaiementComptant(
+						produitsRenouvellement.get(Constants.ZERO).getNumeroCommande(), false);
+		ModePaiement modePaiementComptant = null;
+		ModePaiement modePaiementRecurrent = null;
+		if (paiementsComptant.size() > Constants.ZERO) {
+			modePaiementComptant = paiementsComptant.get(Constants.ZERO).getModePaiement();
+		}
+		List<Paiement> paiementsRecurrent =
+				paiementService.getPaiementRecurrent(produitsRenouvellement.get(Constants.ZERO).getNumeroCommande(),
+						false);
+		if (paiementsRecurrent.size() > Constants.ZERO) {
+			modePaiementRecurrent = paiementsRecurrent.get(Constants.ZERO).getModePaiement();
+		}
+		PrixRenouvellemnt prix = null;
+		for (ProduitRenouvellement produitRenouvellement : produitsRenouvellement) {
+			prix = produitRenouvellement.getPrix();
 			if (prix != null) {
 				if (prix.isRecurrent()) {
 					prix.setModePaiement(modePaiementRecurrent);

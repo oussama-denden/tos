@@ -124,6 +124,8 @@ public class DraftLigne {
 	 *            {@link TrameCatalogue}.
 	 */
 	public DraftLigne(Contrat contrat, TrameCatalogue trameCatalogue) {
+		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
+		this.auteur = auteur;
 		ElementContractuel elementContractuelParent = contrat.getParent();
 		this.referenceContrat = contrat.getReference();
 		this.referenceOffre = elementContractuelParent.getReferenceProduit();

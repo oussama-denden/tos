@@ -226,6 +226,8 @@ public class Prix {
 	 * verifie si le prix est recurrent ou non.
 	 * 
 	 * prix est recurrent.
+	 * 
+	 * @return true si le prix est recurrent.
 	 */
 	public boolean isRecurrent() {
 		Optional<Integer> dureeOp = Optional.fromNullable(duree);
