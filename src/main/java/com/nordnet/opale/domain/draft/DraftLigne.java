@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,6 +32,9 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
+import com.nordnet.opale.enums.Geste;
+import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.validator.DraftValidator;
 
 /**
  * entite qui represente une ligne d'un {@link Draft}.
@@ -93,6 +98,12 @@ public class DraftLigne {
 	private List<DraftLigneDetail> draftLigneDetails = new ArrayList<DraftLigneDetail>();
 
 	/**
+	 * Le geste effectue.
+	 */
+	@Enumerated(EnumType.STRING)
+	private Geste geste;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public DraftLigne() {
@@ -103,10 +114,14 @@ public class DraftLigne {
 	 * 
 	 * @param draftLigneInfo
 	 *            {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public DraftLigne(DraftLigneInfo draftLigneInfo) {
+	public DraftLigne(DraftLigneInfo draftLigneInfo) throws OpaleException {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
+		DraftValidator.isExsteGeste(draftLigneInfo.getGeste());
+		this.geste = draftLigneInfo.getGeste();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
 		}
@@ -142,10 +157,15 @@ public class DraftLigne {
 	 *            the draft ligne info
 	 * @param auteur
 	 *            l auteur {@link Auteur}. {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public DraftLigne(DraftLigneInfo draftLigneInfo, com.nordnet.opale.business.Auteur auteur) {
+	public DraftLigne(DraftLigneInfo draftLigneInfo, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
+
+		DraftValidator.isExsteGeste(draftLigneInfo.getGeste());
+		this.geste = draftLigneInfo.getGeste();
 		this.auteur = auteur.toDomain();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
@@ -367,6 +387,22 @@ public class DraftLigne {
 	 */
 	public void addDraftLigneDetail(DraftLigneDetail draftLigneDetail) {
 		this.draftLigneDetails.add(draftLigneDetail);
+	}
+
+	/**
+	 * @return {@link #geste}
+	 */
+	public Geste getGeste() {
+		return geste;
+	}
+
+	/**
+	 * 
+	 * @param geste
+	 *            {@link #geste}
+	 */
+	public void setGeste(Geste geste) {
+		this.geste = geste;
 	}
 
 	/**

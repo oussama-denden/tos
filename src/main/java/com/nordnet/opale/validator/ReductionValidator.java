@@ -32,6 +32,13 @@ public class ReductionValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void chekReductionValide(ReductionInfo reductionInfo, String type) throws OpaleException {
+
+		if (reductionInfo.getValeur() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.Valeur"), "5.1.3");
+		} else if (reductionInfo.getTypeValeur() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.TypeValeur"), "5.1.3");
+		}
+
 		if (reductionInfo.getTypeValeur().equals(TypeValeur.MOIS)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1", type), "5.1.1");
 		}
@@ -58,16 +65,9 @@ public class ReductionValidator {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");
 			}
 		}
-
-		if (reductionInfo.getValeur() == null) {
-
-			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.Valeur"), "5.1.3");
-		} else if (reductionInfo.getTypeValeur() == null) {
-
-			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.TypeValeur"), "5.1.3");
-		} else if (reductionInfo.getNbUtilisationMax() == null) {
-
-			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.NbUtilisationMax"), "5.1.3");
+		if (reductionInfo.getNbUtilisationMax() == null || reductionInfo.getDateDebut() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3",
+					"Reduction.NbUtilisationMax ou Reduction.DateDebut "), "5.1.3");
 		}
 
 	}

@@ -122,4 +122,14 @@ public final class Constants {
 	 */
 	public static final String FRAIS = "Frais";
 
+	/**
+	 * constante indique la ligne.
+	 */
+	public static final String LIGNE = "Ligne";
+
+	/**
+	 * constante indique la EC parent.
+	 */
+	public static final String ECPARENT = "ECParent";
+
 }

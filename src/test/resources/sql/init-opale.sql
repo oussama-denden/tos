@@ -145,7 +145,6 @@ CREATE TABLE `draft` (
   `dateAnnulation` datetime DEFAULT NULL,
   `dateTransformationCommande` datetime DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
-  `geste` varchar(255) DEFAULT NULL,
   `commandeSource` varchar(255) DEFAULT NULL,
   `referenceExterne` varchar(255) DEFAULT NULL,
   `clientAFacturerId` int(11) DEFAULT NULL,
@@ -176,6 +175,7 @@ CREATE TABLE `draftligne` (
   `referenceOffre` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) DEFAULT NULL,
   `draftId` int(11) DEFAULT NULL,
+  `geste` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKAF4C98C0DB017E6C` (`draftId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

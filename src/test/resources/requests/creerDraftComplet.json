@@ -1,6 +1,7 @@
 {
   "lignes": [
     {
+     "geste" : "VENTE",
       "auteur": {
         "qui": "GRC.WEL-JOHNDOE",
         "canal": "welcome",
@@ -52,6 +53,5 @@
       "ts": "1411654933",
       "ip": "127.0.0.1"
     }
-  },
-  "geste" : "VENTE"
+  }
 }

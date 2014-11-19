@@ -10,7 +10,6 @@
     codePartenaire CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
-    geste CDATA #IMPLIED
     canal CDATA #IMPLIED
     timestamp CDATA #IMPLIED
     referenceExterne CDATA #IMPLIED
@@ -28,6 +27,7 @@
     timestamp CDATA #IMPLIED
     draftId CDATA #IMPLIED
     referenceOffre CDATA #IMPLIED
+     geste CDATA #IMPLIED
 >
 <!ELEMENT draftLigneDetail EMPTY>
 <!ATTLIST draftLigneDetail
