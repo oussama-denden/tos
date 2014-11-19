@@ -15,9 +15,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
@@ -28,7 +32,9 @@ import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.enums.Geste;
+import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.PropertiesUtil;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.
@@ -38,7 +44,7 @@ import com.nordnet.opale.util.Constants;
  */
 @Entity
 @Table(name = "draft")
-@JsonIgnoreProperties({ "id", "annule", "transforme" })
+@JsonIgnoreProperties({ "id", "annule", "transforme", "toJSON", "prePersist" })
 public class Draft {
 
 	/**
@@ -451,4 +457,60 @@ public class Draft {
 		return dateTransfromationOp.isPresent();
 	}
 
+	/**
+	 * creation d'un resume du draft sur format JSON.
+	 * 
+	 * @return {@link JSONObject}
+	 * 
+	 * @throws JSONException
+	 *             {@link JSONException}
+	 */
+	public JSONObject toJSON() throws JSONException {
+		JSONObject draftJsonObject = new JSONObject();
+		JSONArray lignes = new JSONArray();
+		JSONArray details = null;
+		JSONObject draftLigneJsonObject = null;
+		JSONObject offreJsonObject = null;
+		JSONObject detailJsonObject = null;
+		String referenceContrat = null;
+
+		draftJsonObject.put("refrence", reference);
+		for (DraftLigne draftLigne : draftLignes) {
+			draftLigneJsonObject = new JSONObject();
+			offreJsonObject = new JSONObject();
+			details = new JSONArray();
+			referenceContrat = draftLigne.getReferenceContrat();
+			draftLigneJsonObject.put("numero", draftLignes.indexOf(draftLigne) + Constants.UN);
+			offreJsonObject.put("reference", draftLigne.getReferenceOffre());
+			offreJsonObject.put("tarif", draftLigne.getReferenceTarif());
+			draftLigneJsonObject.put("offre", offreJsonObject);
+			for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
+				detailJsonObject = new JSONObject();
+				detailJsonObject.put("referenceSelection", detail.getReferenceSelection());
+				detailJsonObject.put("reference", detail.getReferenceChoix());
+				detailJsonObject.put("tarif", detail.getReferenceTarif());
+				detailJsonObject.put("dependDe", detail.getdependDe());
+				details.put(detailJsonObject);
+			}
+			draftLigneJsonObject.put("details", details);
+			lignes.put(draftLigneJsonObject);
+		}
+		draftJsonObject.put("referenceContrat", referenceContrat);
+		draftJsonObject.put("lignes", lignes);
+
+		return draftJsonObject;
+	}
+
+	/**
+	 * methode appel avant la persistance du draft.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
+	}
 }

@@ -136,7 +136,7 @@
     montant CDATA #IMPLIED
     politique CDATA #IMPLIED
     politiqueIndex CDATA #IMPLIED
-    refrence CDATA #IMPLIED
+    reference CDATA #IMPLIED
     typeTVA CDATA #IMPLIED
     typeFrais CDATA #IMPLIED
     tarifId CDATA #IMPLIED

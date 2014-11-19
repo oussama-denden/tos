@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.validator.NotNull;
@@ -25,6 +26,8 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.PropertiesUtil;
 
 /**
  * Classe qui represente la commande.
@@ -408,5 +411,18 @@ public class Commande {
 	public boolean isAnnule() {
 		Optional<Date> dateAnnulationOptional = Optional.fromNullable(dateAnnulation);
 		return dateAnnulationOptional.isPresent();
+	}
+
+	/**
+	 * methode appel avant la persistance du la commande.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@PrePersist
+	public void prePersist() throws OpaleException {
+		if (auteur != null && auteur.getTimestamp() == null) {
+			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
 	}
 }

@@ -27,6 +27,7 @@ import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypeProduit;
+import com.nordnet.opale.util.Utils;
 
 /**
  * Contient les informations lie a une offre dans la commande.
@@ -121,7 +122,9 @@ public class CommandeLigneDetail {
 		Choice choice = detailCatalogue.getChoiceMap().get(detail.getReferenceChoix());
 		this.referenceChoix = detail.getReferenceChoix();
 		this.label = choice.getLabel();
-		this.tarif = new Tarif(detail.getReferenceTarif(), trameCatalogue);
+		if (!Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
+			this.tarif = new Tarif(detail.getReferenceTarif(), trameCatalogue);
+		}
 	}
 
 	@Override
@@ -306,7 +309,10 @@ public class CommandeLigneDetail {
 		DetailCommandeLigneInfo detailCommandeLigneInfo = new DetailCommandeLigneInfo();
 		detailCommandeLigneInfo.setReference(referenceChoix);
 		detailCommandeLigneInfo.setLabel(label);
-		detailCommandeLigneInfo.setTarif(tarif.toTarifInfo());
+		Optional<Tarif> tarifOptional = Optional.fromNullable(tarif);
+		if (tarifOptional.isPresent()) {
+			detailCommandeLigneInfo.setTarif(tarif.toTarifInfo());
+		}
 
 		return detailCommandeLigneInfo;
 
@@ -344,11 +350,12 @@ public class CommandeLigneDetail {
 		produit.setNumeroCommande(referenceCommande);
 		produit.setTypeProduit(typeProduit);
 		produit.setReference(referenceChoix);
-		produit.setReferenceTarif(tarif.getReference());
-		produit.setNumECParent(numECParent);
-		if (tarif != null) {
+		Optional<Tarif> tarifOptional = Optional.fromNullable(tarif);
+		if (tarifOptional.isPresent()) {
+			produit.setReferenceTarif(tarif.getReference());
 			produit.setPrix(tarif.toPrix(modeFacturation));
 		}
+		produit.setNumECParent(numECParent);
 		return produit;
 	}
 

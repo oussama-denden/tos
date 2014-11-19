@@ -92,11 +92,6 @@ public class DraftValidator {
 				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.2", detail.getDependDe()), "0.1.2");
 			}
 
-			if (Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Detail[" + i + "].referenceTarif"),
-						"0.1.4");
-			}
-
 		}
 
 	}

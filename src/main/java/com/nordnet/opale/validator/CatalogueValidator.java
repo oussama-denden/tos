@@ -39,7 +39,7 @@ public class CatalogueValidator {
 		DraftValidationInfo validationInfo = new DraftValidationInfo();
 		boolean isPossedeBiens = false;
 
-		validationInfo = validerReferenceDraft(draft, trameCatalogue);
+		validationInfo = validerReferencesDraft(draft, trameCatalogue);
 
 		if (draft.getClientAFacturer() == null) {
 			validationInfo
@@ -107,7 +107,7 @@ public class CatalogueValidator {
 	 *            {@link TrameCatalogue}.
 	 * @return {@link DraftValidationInfo}.
 	 */
-	public DraftValidationInfo validerReferenceDraft(Draft draft, TrameCatalogue trameCatalogue) {
+	public DraftValidationInfo validerReferencesDraft(Draft draft, TrameCatalogue trameCatalogue) {
 
 		DraftValidationInfo validationInfo = new DraftValidationInfo();
 		List<String> values;
@@ -129,14 +129,16 @@ public class CatalogueValidator {
 							.getInstance().getErrorMessage("1.1.28", draftLigne.getReferenceTarif()), values);
 				}
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					Tarif tarifDetail = trameCatalogue.getTarifsMap().get(detail.getReferenceTarif());
-					if (tarifDetail == null) {
-						values = new ArrayList<String>();
-						values.add(detail.getReferenceTarif());
-						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].referenceTarif",
-								"36.3.1.5",
-								PropertiesUtil.getInstance().getErrorMessage("1.1.28", detail.getReferenceTarif()),
-								values);
+					if (!Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
+						Tarif tarifDetail = trameCatalogue.getTarifsMap().get(detail.getReferenceTarif());
+						if (tarifDetail == null) {
+							values = new ArrayList<String>();
+							values.add(detail.getReferenceTarif());
+							validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].referenceTarif",
+									"36.3.1.5",
+									PropertiesUtil.getInstance().getErrorMessage("1.1.28", detail.getReferenceTarif()),
+									values);
+						}
 					}
 					DetailCatalogue detailCatalogue =
 							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());

@@ -240,11 +240,11 @@ public interface DraftService {
 	 *            reference contrat dans Topaze
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
-	 * @return {@link DraftValidationInfo} ou .
+	 * @return {@link Draft}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Object transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
+	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
 			throws OpaleException;
 
 	/**

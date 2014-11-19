@@ -511,13 +511,17 @@ public class DraftController {
 	 * @return {@link DraftValidationInfo} ou {@link Draft}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
 	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public Object transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
-			throws OpaleException {
+	public String transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
+			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
-		return draftService.transformerContratEnDraft(refContrat, trameCatalogue);
+		Draft draft = draftService.transformerContratEnDraft(refContrat, trameCatalogue);
+
+		return draft.toJSON().toString();
 	}
 
 	/**
