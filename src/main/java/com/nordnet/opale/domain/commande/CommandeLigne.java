@@ -20,6 +20,8 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
@@ -115,6 +117,7 @@ public class CommandeLigne {
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "commandeLigneId")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<CommandeLigneDetail> commandeLigneDetails = new ArrayList<CommandeLigneDetail>();
 
 	/**
