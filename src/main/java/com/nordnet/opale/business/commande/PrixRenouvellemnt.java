@@ -6,7 +6,9 @@ import java.util.Set;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.base.Optional;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.deserializer.TypeTVADeserializer;
@@ -20,6 +22,7 @@ import com.nordnet.opale.enums.TypeTVA;
  * @author mahjoub-MARZOUGUI
  * 
  */
+@JsonIgnoreProperties({ "recurrent" })
 public class PrixRenouvellemnt {
 
 	/**
@@ -246,6 +249,23 @@ public class PrixRenouvellemnt {
 	 */
 	public void setModeFacturation(ModeFacturation modeFacturation) {
 		this.modeFacturation = modeFacturation;
+	}
+
+	/**
+	 * verifie si le prix est recurrent ou non.
+	 * 
+	 * prix est recurrent.
+	 * 
+	 * @return true si le prix est recurrent.
+	 */
+	public boolean isRecurrent() {
+		Optional<Integer> dureeOp = Optional.fromNullable(duree);
+		Optional<Integer> periodiciteOp = Optional.fromNullable(periodicite);
+		if ((!dureeOp.isPresent() && periodiciteOp.isPresent())
+				|| (periodiciteOp.isPresent() && dureeOp.isPresent() && periodicite < duree)) {
+			return true;
+		}
+		return false;
 	}
 
 }
