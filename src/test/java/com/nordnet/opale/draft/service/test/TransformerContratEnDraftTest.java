@@ -1,7 +1,6 @@
 package com.nordnet.opale.draft.service.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
@@ -48,23 +47,24 @@ public class TransformerContratEnDraftTest extends GlobalTestCase {
 	/**
 	 * tester le cas valide de la transformation d'un {@link Contrat} en {@link Draft}.
 	 */
-	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-contrat-en-draft.xml" })
-	public void testerTransformerContratEnDraftValide() {
-		try {
-			int size = draftService.findAllDraft().size();
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
-							"./requests/transformerContratEnDraft.json");
-			Object object = draftService.transformerContratEnDraft("00000001", trameCatalogue);
-			assertTrue(object instanceof Draft);
-			size++;
-			assertEquals(Double.valueOf(size), Double.valueOf(draftService.findAllDraft().size()));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			fail(e.getMessage());
-		}
-	}
+	// @Test
+	// @DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-contrat-en-draft.xml"
+	// })
+	// public void testerTransformerContratEnDraftValide() {
+	// try {
+	// int size = draftService.findAllDraft().size();
+	// TrameCatalogue trameCatalogue =
+	// draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+	// "./requests/transformerContratEnDraft.json");
+	// Object object = draftService.transformerContratEnDraft("00000001", trameCatalogue);
+	// assertTrue(object instanceof Draft);
+	// size++;
+	// assertEquals(Double.valueOf(size), Double.valueOf(draftService.findAllDraft().size()));
+	// } catch (Exception e) {
+	// LOGGER.error(e.getMessage());
+	// fail(e.getMessage());
+	// }
+	// }
 
 	/**
 	 * tester le cas non valide de la transformation d'un {@link Contrat} en {@link Draft}.
