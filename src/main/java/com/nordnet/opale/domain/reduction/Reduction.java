@@ -40,6 +40,11 @@ public class Reduction implements Cloneable {
 	private String reference;
 
 	/**
+	 * reference pour les reduction regulieres.
+	 */
+	private String referenceReduction;
+
+	/**
 	 * reference draft.
 	 */
 	private String referenceDraft;
@@ -133,6 +138,23 @@ public class Reduction implements Cloneable {
 	 */
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceReduction}
+	 */
+	public String getReferenceReduction() {
+		return referenceReduction;
+	}
+
+	/**
+	 * 
+	 * @param referenceReduction
+	 *            {@link #referenceReduction}
+	 */
+	public void setReferenceReduction(String referenceReduction) {
+		this.referenceReduction = referenceReduction;
 	}
 
 	/**
@@ -326,6 +348,7 @@ public class Reduction implements Cloneable {
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}
 	 */
+	@Override
 	public Reduction clone() throws CloneNotSupportedException {
 		return (Reduction) super.clone();
 	}
@@ -349,6 +372,7 @@ public class Reduction implements Cloneable {
 		reduction.setReferenceLigne(referenceLigne);
 		reduction.setReferenceTarif(referenceTarif);
 		reduction.setReferenceLigneDetail(referenceLigneDetail);
+		reduction.setReferenceReduction(referenceReduction);
 		return reduction;
 	}
 

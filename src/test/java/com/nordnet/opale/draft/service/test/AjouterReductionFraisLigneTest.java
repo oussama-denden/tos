@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
@@ -13,7 +14,6 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
-import com.nordnet.opale.draft.test.generator.ReductionInfoGenrator;
 import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
@@ -31,22 +31,27 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 
 	/**
+	 * Declaration du log.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(AjouterLignesTest.class);
+
+	/**
 	 * {@link DraftService}.
 	 */
 	@SpringBean("reductionService")
 	private ReductionService reductionService;
 
 	/**
-	 * {@link DraftInfoGenerator}.
-	 */
-	@SpringBean("reductionInfoGenrator")
-	private ReductionInfoGenrator reductionInfoGenrator;
-
-	/**
 	 * {@link DraftLigneDetailRepository}.
 	 */
 	@SpringBean("draftLigneRepository")
 	private DraftLigneRepository draftLigneRepository;
+
+	/**
+	 * {@link DraftInfoGenerator}.
+	 */
+	@SpringBean("draftInfoGenerator")
+	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * ajout reduction valide a un frais ligne du draft.
@@ -58,13 +63,19 @@ public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
 	public void testajouterReductionFraisLigneValide() throws OpaleException {
 
-		ReductionInfo reductionInfo = reductionInfoGenrator.getReductionInfo();
-		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef("REF-DRAFT-1", "REF-LIGNE-1");
-		reductionService.ajouterReductionFraisLigne("REF-DRAFT-1", draftLigne, "REF-FRAIS-1", reductionInfo);
-		Reduction reduction =
-				reductionService.findReductionlLigneDraftFrais("REF-DRAFT-1", "REF-LIGNE-1", "annuel_jet10_base",
-						"REF-FRAIS-1");
-		assertNotNull(reduction);
+		try {
+			ReductionInfo reductionInfo =
+					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");
+			DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef("REF-DRAFT-1", "REF-LIGNE-1");
+			reductionService.ajouterReductionFraisLigne("REF-DRAFT-1", draftLigne, "REF-FRAIS-1", reductionInfo);
+			Reduction reduction =
+					reductionService.findReductionlLigneDraftFrais("REF-DRAFT-1", "REF-LIGNE-1", "annuel_jet10_base",
+							"REF-FRAIS-1");
+			assertNotNull(reduction);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
 
 	}
 
@@ -76,16 +87,20 @@ public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
 	public void testajouterReductionFraisLigneInValide() {
 
-		ReductionInfo reductionInfo = reductionInfoGenrator.getReductionInfo();
-		reductionInfo.setTypeValeur(TypeValeur.MOIS);
-		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef("REF-DRAFT-1", "REF-LIGNE-1");
-
 		try {
+			ReductionInfo reductionInfo =
+					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");
+			reductionInfo.setTypeValeur(TypeValeur.MOIS);
+			DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef("REF-DRAFT-1", "REF-LIGNE-1");
+
 			reductionService.ajouterReductionFraisLigne("REF-DRAFT-1", draftLigne, "REF-FRAIS-1", reductionInfo);
 			fail("unexpected state");
 		} catch (OpaleException exception) {
 			assertEquals(exception.getErrorCode(), "5.1.1");
 
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
 		}
 
 	}

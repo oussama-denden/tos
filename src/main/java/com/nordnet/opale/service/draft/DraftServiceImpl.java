@@ -207,9 +207,6 @@ public class DraftServiceImpl implements DraftService {
 		draft.setReference(keygenService.getNextKey(Draft.class));
 		draft.setCodePartenaire(draftInfo.getCodePartenaire());
 
-		DraftValidator.isExsteGeste(draftInfo.getGeste());
-		draft.setGeste(draftInfo.getGeste());
-
 		draftRepository.save(draft);
 
 		DraftReturn draftReturn = new DraftReturn();

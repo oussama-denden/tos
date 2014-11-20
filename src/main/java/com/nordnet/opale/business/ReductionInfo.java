@@ -19,6 +19,11 @@ public class ReductionInfo {
 	private Auteur auteur;
 
 	/**
+	 * reference du reduction.
+	 */
+	private String referenceReduction;
+
+	/**
 	 * le label.
 	 */
 	private String label;
@@ -72,6 +77,23 @@ public class ReductionInfo {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceReduction}
+	 */
+	public String getReferenceReduction() {
+		return referenceReduction;
+	}
+
+	/**
+	 * 
+	 * @param referenceReduction
+	 *            {@link #referenceReduction}
+	 */
+	public void setReferenceReduction(String referenceReduction) {
+		this.referenceReduction = referenceReduction;
 	}
 
 	/**
@@ -188,6 +210,7 @@ public class ReductionInfo {
 		reduction.setNbUtilisationMax(nbUtilisationMax);
 		reduction.setDateDebut(dateDebut);
 		reduction.setDateFin(dateFin);
+		reduction.setReferenceReduction(referenceReduction);
 		return reduction;
 	}
 
