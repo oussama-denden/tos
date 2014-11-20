@@ -128,6 +128,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Draft getDraftByReference(String reference) throws OpaleException {
 		Draft draft = draftRepository.findByReference(reference);
 		DraftValidator.isExistDraft(draft, reference);
@@ -143,6 +144,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerDraft(String reference) throws OpaleException {
 
 		LOGGER.info("Enter methode supprimerDraft");
@@ -157,6 +159,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Draft> findDraftAnnule() {
 		return draftRepository.findDraftAnnule();
 	}
@@ -165,6 +168,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException {
 
 		LOGGER.info("Enter methode creerDraft");
@@ -217,7 +221,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public List<String> ajouterLignes(String refDraft, List<DraftLigneInfo> draftLignesInfo) throws OpaleException {
 
 		Draft draft = getDraftByReference(refDraft);
@@ -248,6 +252,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = getDraftByReference(refDraft);
@@ -292,6 +297,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void annulerDraft(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		LOGGER.info("Entrer methode annulerDraft");
 
@@ -312,6 +318,7 @@ public class DraftServiceImpl implements DraftService {
 	 * 
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo)
 			throws OpaleException {
 		LOGGER.info("Debut methode ajouterReferenceExterne");
@@ -331,6 +338,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
 			throws OpaleException {
 
@@ -357,6 +365,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void associerClient(String refDraft, ClientInfo clientInfo) throws OpaleException {
 		LOGGER.info("Enter methode associerClient");
 
@@ -416,6 +425,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isAuteurValide(trameCatalogue.getAuteur());
@@ -476,7 +486,6 @@ public class DraftServiceImpl implements DraftService {
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}
 	 */
-	@Transactional
 	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
 		// coper reduction draft
 		List<Reduction> reductionDraft = new ArrayList<Reduction>();
@@ -591,6 +600,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException {
 		LOGGER.info("Debut methode service associerCodePartenaire");
 		Draft draft = draftRepository.findByReference(refDraft);
@@ -607,6 +617,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(refDraft);
 		DraftValidationInfo validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue);
@@ -622,6 +633,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void associerAuteur(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		LOGGER.info("De ut methode associerAuteur");
 		Draft draft = draftRepository.findByReference(refDraft);
@@ -637,6 +649,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc }.
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReduction(String refDraft, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReduction ");
 
@@ -650,6 +663,7 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionLigne ");
@@ -671,6 +685,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionDetailLigne ");
@@ -695,6 +710,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
 			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
@@ -722,6 +738,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionFraisLigne(String refDraft, String refLigne, String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
@@ -745,6 +762,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException {
 		LOGGER.info("Debut methode supprimerReduction");
 
@@ -758,6 +776,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
 			throws OpaleException {
 		LOGGER.info("Debut methode transformerContratEnDraft");
@@ -986,6 +1005,7 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionECParent(String refDraft, String refLigne, String refTarif,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionECParent ");

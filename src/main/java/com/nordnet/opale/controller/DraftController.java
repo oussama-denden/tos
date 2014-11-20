@@ -87,18 +87,18 @@ public class DraftController {
 	/**
 	 * chercher draft par reference.
 	 * 
-	 * @param reference
+	 * @param referenceDraft
 	 *            reference du draft.
 	 * @param auteur
 	 *            l auteur
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	@RequestMapping(value = "/{referenceDraft:.+}/supprimer", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void supprimerDraft(@PathVariable String reference, @RequestBody Auteur auteur) throws OpaleException {
+	public void supprimerDraft(@PathVariable String referenceDraft, @RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::annulerDraft");
-		draftService.annulerDraft(reference, auteur);
+		draftService.annulerDraft(referenceDraft, auteur);
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/supprimer", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerLigneDraft(@PathVariable String refDraft, @PathVariable String refLigne,
 			@RequestBody DeleteInfo deleteInfo) throws OpaleException {
@@ -493,7 +493,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/reduction/{refReduction:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/reduction/{refReduction:.+}/supprimer", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerReduction(@PathVariable String refDraft, @PathVariable String refReduction)
 			throws OpaleException {
