@@ -145,7 +145,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 			TrameCatalogue trameCatalogue =
 					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/validerDraft.json");
 			DraftValidationInfo validationInfo = draftService.validerDraft("REF-DRAFT-1", trameCatalogue);
-			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(validationInfo.getReasons().size()));
+			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(validationInfo.getReasons().size()));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
+import com.nordnet.opale.deserializer.TypeProduitDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypeProduit;
 
@@ -36,6 +37,11 @@ public class OffreCatalogue {
 	private String famille;
 
 	/**
+	 * secteur.
+	 */
+	private String secteur;
+
+	/**
 	 * label de l'offre.
 	 */
 	private String label;
@@ -43,7 +49,8 @@ public class OffreCatalogue {
 	/**
 	 * {@link TypeProduit}.
 	 */
-	private TypeProduit nature;
+	@JsonDeserialize(using = TypeProduitDeserializer.class)
+	private TypeProduit type;
 
 	/**
 	 * {@link ModeFacturation}.
@@ -52,14 +59,9 @@ public class OffreCatalogue {
 	private ModeFacturation modeFacturation;
 
 	/**
-	 * liste des reference des {@link Tarif} associe a l'offre.
+	 * liste des {@link Tarif}.
 	 */
-	private List<String> tarifs = new ArrayList<String>();
-
-	/**
-	 * les tranches de tarification.
-	 */
-	private List<String> tranches = new ArrayList<String>();
+	private List<Tarif> tarifs = new ArrayList<Tarif>();
 
 	/**
 	 * liste des {@link DetailCatalogue} associe a l'offre.
@@ -157,6 +159,23 @@ public class OffreCatalogue {
 
 	/**
 	 * 
+	 * @return {@link #secteur}.
+	 */
+	public String getSecteur() {
+		return secteur;
+	}
+
+	/**
+	 * 
+	 * @param secteur
+	 *            {@link #secteur}.
+	 */
+	public void setSecteur(String secteur) {
+		this.secteur = secteur;
+	}
+
+	/**
+	 * 
 	 * @return {@link #label}.
 	 */
 	public String getLabel() {
@@ -176,8 +195,8 @@ public class OffreCatalogue {
 	 * 
 	 * @return {@link #nature}.
 	 */
-	public TypeProduit getNature() {
-		return nature;
+	public TypeProduit getType() {
+		return type;
 	}
 
 	/**
@@ -185,8 +204,8 @@ public class OffreCatalogue {
 	 * @param nature
 	 *            {@link #nature}.
 	 */
-	public void setNature(TypeProduit nature) {
-		this.nature = nature;
+	public void setType(TypeProduit type) {
+		this.type = type;
 	}
 
 	/**
@@ -210,7 +229,7 @@ public class OffreCatalogue {
 	 * 
 	 * @return {@link #tarifs}.
 	 */
-	public List<String> getTarifs() {
+	public List<Tarif> getTarifs() {
 		return tarifs;
 	}
 
@@ -219,25 +238,8 @@ public class OffreCatalogue {
 	 * @param tarifs
 	 *            {@link #tarifs}.
 	 */
-	public void setTarifs(List<String> tarifs) {
+	public void setTarifs(List<Tarif> tarifs) {
 		this.tarifs = tarifs;
-	}
-
-	/**
-	 * 
-	 * @return {@link #tranches}.
-	 */
-	public List<String> getTranches() {
-		return tranches;
-	}
-
-	/**
-	 * 
-	 * @param tranches
-	 *            {@link #tranches}.
-	 */
-	public void setTranches(List<String> tranches) {
-		this.tranches = tranches;
 	}
 
 	/**
@@ -284,6 +286,19 @@ public class OffreCatalogue {
 			refChoixRefSelectionMap.putAll(detailCatalogue.getReferenceChoixReferenceSelectionMap());
 		}
 		return refChoixRefSelectionMap.get(referenceChoix);
+	}
+
+	/**
+	 * transforme la {@link List} de tarif en un objet {@link Map}.
+	 * 
+	 * @return {@link Map<string, Tarif>}.
+	 */
+	public Map<String, Tarif> getTarifsMap() {
+		Map<String, Tarif> map = new HashMap<String, Tarif>();
+		for (Tarif tarif : tarifs) {
+			map.put(tarif.getIdTarif(), tarif);
+		}
+		return map;
 	}
 
 }

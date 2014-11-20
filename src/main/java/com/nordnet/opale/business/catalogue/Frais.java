@@ -1,5 +1,6 @@
 package com.nordnet.opale.business.catalogue;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.deserializer.TypeFraisDeserializer;
 import com.nordnet.opale.deserializer.TypeTVADeserializer;
@@ -15,9 +16,10 @@ import com.nordnet.opale.enums.TypeTVA;
 public class Frais {
 
 	/**
-	 * reference frais.
+	 * id frais.
 	 */
-	private String reference;
+	@JsonProperty("id_frais")
+	private String idFrais;
 
 	/**
 	 * label du frais.
@@ -49,19 +51,19 @@ public class Frais {
 
 	/**
 	 * 
-	 * @return {@link #reference}.
+	 * @return {@link #idFrais}.
 	 */
-	public String getReference() {
-		return reference;
+	public String getIdFrais() {
+		return idFrais;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}.
+	 * @param idFrais
+	 *            {@link #idFrais}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setIdFrais(String idFrais) {
+		this.idFrais = idFrais;
 	}
 
 	/**

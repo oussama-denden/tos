@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import org.hibernate.validator.NotNull;
 
 import com.nordnet.opale.business.FraisInfo;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypeTVA;
 
@@ -78,20 +77,15 @@ public class Frais {
 	/**
 	 * creation d'un frais a partir de la trame du catalogue.
 	 * 
-	 * @param refFrais
-	 *            reference du frais.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param frais
+	 *            {@link com.nordnet.opale.business.catalogue.Frais}.
 	 */
-	public Frais(String refFrais, TrameCatalogue trameCatalogue) {
-		com.nordnet.opale.business.catalogue.Frais frais = trameCatalogue.getFraisMap().get(refFrais);
-		this.reference = frais.getReference();
+	public Frais(com.nordnet.opale.business.catalogue.Frais frais) {
+		this.reference = frais.getIdFrais();
 		this.label = frais.getLabel();
 		this.typeFrais = frais.getTypeFrais();
 		this.montant = frais.getMontant();
 		this.typeTVA = frais.getTypeTVA();
-		// this.politique
-		// this.politiqueIndex
 	}
 
 	/**

@@ -27,6 +27,8 @@ import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TransformationInfo;
+import com.nordnet.opale.business.catalogue.Choice;
+import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.Tarif;
@@ -852,32 +854,35 @@ public class DraftServiceImpl implements DraftService {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		double reduction = 0d;
-		Map<String, Tarif> tarifMap = trameCatalogue.getTarifsMap();
-		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
 		detailCout.setNumero(draftLigne.getReference());
 		detailCout.setLabel(draftLigne.getReferenceOffre());
 		double plan = 0d;
 		Integer frequence = null;
 		Tarif tarif = null;
+		DetailCatalogue detailCatalogue = null;
+		Choice choice = null;
+		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
 		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-			tarif = tarifMap.get(draftLigneDetail.getReferenceTarif());
-			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
+			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
+			choice = detailCatalogue.getChoiceMap().get(draftLigneDetail.getReferenceChoix());
+			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
+			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 			coutTotal += detailCoutTarif.getCoutTotal();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
 					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReferenceChoix(),
 							detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan() != null ? detailCoutTarif
-									.getPlan().getPlan() : Constants.ZERO, tarif, fraisMap, false);
+									.getPlan().getPlan() : Constants.ZERO, tarif, false);
 		}
 
-		tarif = tarifMap.get(draftLigne.getReferenceTarif());
-		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
+		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 		coutTotal += detailCoutTarif.getCoutTotal();
 		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 		reduction +=
 				caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
-						plan, tarif, fraisMap, true);
+						plan, tarif, true);
 
 		detailCout.setPlan(new Plan(frequence, plan));
 		detailCout.setCoutTotal(coutTotal);
@@ -891,11 +896,9 @@ public class DraftServiceImpl implements DraftService {
 	 * 
 	 * @param tarif
 	 *            {@link Tarif}.
-	 * @param fraisMap
-	 *            liste des {@link Frais} du catalogue.
 	 * @return {@link DetailCout}.
 	 */
-	private DetailCout calculerDetailCoutTarif(Tarif tarif, Map<String, Frais> fraisMap) {
+	private DetailCout calculerDetailCoutTarif(Tarif tarif) {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		if (tarif.isRecurrent()) {
@@ -903,8 +906,7 @@ public class DraftServiceImpl implements DraftService {
 		} else {
 			coutTotal += tarif.getPrix();
 		}
-		for (String refFrais : tarif.getFrais()) {
-			Frais frais = fraisMap.get(refFrais);
+		for (Frais frais : tarif.getFrais()) {
 			if (frais.getTypeFrais() == TypeFrais.CREATION)
 				coutTotal += frais.getMontant();
 		}
@@ -925,8 +927,6 @@ public class DraftServiceImpl implements DraftService {
 	 *            cout de detail ligne
 	 * @param tarif
 	 *            {@link Tarif}
-	 * @param fraisMap
-	 *            map du frais
 	 * @param isLigne
 	 *            true si on va calculer la reduction sir la ligne
 	 * @param plan
@@ -934,7 +934,7 @@ public class DraftServiceImpl implements DraftService {
 	 * @return somme di reduction.
 	 */
 	private Double caculerReductionDetaille(String refDraft, String refLinge, String refDetailLigne, Double coutDetail,
-			Double plan, Tarif tarif, Map<String, Frais> fraisMap, boolean isLigne) {
+			Double plan, Tarif tarif, boolean isLigne) {
 		double coutReduction = 0d;
 		Reduction reductionProduit = null;
 		if (isLigne) {
@@ -954,17 +954,16 @@ public class DraftServiceImpl implements DraftService {
 		}
 
 		// calculer reduction su frais de detaille ligne draft.
-		for (String refFrais : tarif.getFrais()) {
+		for (Frais frais : tarif.getFrais()) {
 			Reduction reductionFrais = null;
-			Frais frais = fraisMap.get(refFrais);
 			if (isLigne) {
 				reductionFrais =
-						reductionService.findReductionlLigneDraftFrais(refDraft, refLinge, tarif.getReference(),
-								refFrais);
+						reductionService.findReductionlLigneDraftFrais(refDraft, refLinge, tarif.getIdTarif(),
+								frais.getIdFrais());
 			} else {
 				reductionFrais =
 						reductionService.findReductionDetailLigneDraftFrais(refDraft, refLinge, refDetailLigne,
-								tarif.getReference(), refFrais);
+								tarif.getIdTarif(), frais.getIdFrais());
 			}
 			if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
 				if (reductionFrais.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {

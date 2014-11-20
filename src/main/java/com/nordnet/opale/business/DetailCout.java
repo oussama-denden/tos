@@ -1,9 +1,5 @@
 package com.nordnet.opale.business;
 
-import java.util.Map;
-
-import com.nordnet.opale.business.catalogue.Frais;
-import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.enums.TypeFrais;
@@ -162,31 +158,31 @@ public class DetailCout {
 		this.reduction = reduction;
 	}
 
-	/**
-	 * calcule du {@link DetailCout} pour un {@link Tarif}.
-	 * 
-	 * @param tarif
-	 *            {@link Tarif}.
-	 * @param fraisMap
-	 *            liste des {@link Frais} du catalogue.
-	 * @return {@link DetailCout}.
-	 */
-	private DetailCout calculerDetailCoutTarif(Tarif tarif, Map<String, Frais> fraisMap) {
-		DetailCout detailCout = new DetailCout();
-		double coutTotal = 0d;
-		if (tarif.isRecurrent()) {
-			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix()));
-		} else {
-			coutTotal += tarif.getPrix();
-		}
-		for (String refFrais : tarif.getFrais()) {
-			Frais frais = fraisMap.get(refFrais);
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutTotal += frais.getMontant();
-		}
-		detailCout.setCoutTotal(coutTotal);
-		return detailCout;
-	}
+	// /**
+	// * calcule du {@link DetailCout} pour un {@link Tarif}.
+	// *
+	// * @param tarif
+	// * {@link Tarif}.
+	// * @param fraisMap
+	// * liste des {@link Frais} du catalogue.
+	// * @return {@link DetailCout}.
+	// */
+	// private DetailCout calculerDetailCoutTarif(Tarif tarif, Map<String, Frais> fraisMap) {
+	// DetailCout detailCout = new DetailCout();
+	// double coutTotal = 0d;
+	// if (tarif.isRecurrent()) {
+	// detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix()));
+	// } else {
+	// coutTotal += tarif.getPrix();
+	// }
+	// for (String refFrais : tarif.getFrais()) {
+	// Frais frais = fraisMap.get(refFrais);
+	// if (frais.getTypeFrais() == TypeFrais.CREATION)
+	// coutTotal += frais.getMontant();
+	// }
+	// detailCout.setCoutTotal(coutTotal);
+	// return detailCout;
+	// }
 
 	/**
 	 * calcule du {@link DetailCout} pour un {@link com.nordnet.opale.domain.commande.Tarif}.

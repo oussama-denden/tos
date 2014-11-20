@@ -25,6 +25,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
+import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
@@ -143,25 +144,26 @@ public class CommandeLigne {
 	 * 
 	 * @param draftLigne
 	 *            {@link DraftLigne}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param offreCatalogue
+	 *            {@link OffreCatalogue}.
 	 */
-	public CommandeLigne(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
-		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
+	public CommandeLigne(DraftLigne draftLigne, OffreCatalogue offreCatalogue) {
 		this.numEC = draftLigne.getNumEC();
 		this.referenceOffre = draftLigne.getReferenceOffre();
 		this.referenceContrat = draftLigne.getReferenceContrat();
 		this.gamme = offreCatalogue.getGamme();
 		this.famille = offreCatalogue.getFamille();
+		this.secteur = offreCatalogue.getSecteur();
 		this.label = offreCatalogue.getLabel();
-		this.typeProduit = offreCatalogue.getNature();
+		this.typeProduit = offreCatalogue.getType();
 		this.modeFacturation = offreCatalogue.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
-		this.tarif = new Tarif(draftLigne.getReferenceTarif(), trameCatalogue);
-
+		this.tarif = new Tarif(offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif()));
+		DetailCatalogue detailCatalogue = null;
 		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, referenceOffre, trameCatalogue);
+			detailCatalogue = offreCatalogue.getDetailsMap().get(detail.getReferenceSelection());
+			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, detailCatalogue);
 			addCommandeLigneDetail(commandeLigneDetail);
 		}
 		creerArborescence(draftLigne.getDraftLigneDetails(), this.commandeLigneDetails);

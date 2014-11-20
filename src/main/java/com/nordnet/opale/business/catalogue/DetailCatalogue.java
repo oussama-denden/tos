@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.TypeProduitDeserializer;
 import com.nordnet.opale.enums.TypeProduit;
 
 /**
@@ -28,19 +30,30 @@ public class DetailCatalogue {
 	private String label;
 
 	/**
-	 * type detail.
+	 * required.
 	 */
-	private String type;
+	private boolean required;
+
+	/**
+	 * type de selection.
+	 */
+	private String selectionType;
 
 	/**
 	 * Type de produit (SERVICE,Bien).
 	 */
-	private TypeProduit nature;
+	@JsonDeserialize(using = TypeProduitDeserializer.class)
+	private TypeProduit type;
 
 	/**
 	 * liste des {@link Choice} associe au detail du catalogue.
 	 */
 	private List<Choice> choices = new ArrayList<Choice>();
+
+	/**
+	 * la reference de l'element parent.
+	 */
+	private String dependDe;
 
 	/**
 	 * constructeur par defaut.
@@ -111,36 +124,53 @@ public class DetailCatalogue {
 
 	/**
 	 * 
-	 * @return {@link #type}.
+	 * @return {@link #required}.
 	 */
-	public String getType() {
+	public boolean isRequired() {
+		return required;
+	}
+
+	/**
+	 * 
+	 * @param required
+	 *            {@link #required}.
+	 */
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	/**
+	 * 
+	 * @return {@link #selectionType}.
+	 */
+	public String getSelectionType() {
+		return selectionType;
+	}
+
+	/**
+	 * 
+	 * @param selectionType
+	 *            {@link #selectionType}.
+	 */
+	public void setSelectionType(String selectionType) {
+		this.selectionType = selectionType;
+	}
+
+	/**
+	 * 
+	 * @return {@link TypeProduit}.
+	 */
+	public TypeProduit getType() {
 		return type;
 	}
 
 	/**
 	 * 
 	 * @param type
-	 *            {@link #type}.
+	 *            {@link TypeProduit}.
 	 */
-	public void setType(String type) {
+	public void setType(TypeProduit type) {
 		this.type = type;
-	}
-
-	/**
-	 * 
-	 * @return {@link #nature}
-	 */
-	public TypeProduit getNature() {
-		return nature;
-	}
-
-	/**
-	 * 
-	 * @param nature
-	 *            {@link #nature}
-	 */
-	public void setNature(TypeProduit nature) {
-		this.nature = nature;
 	}
 
 	/**
@@ -158,6 +188,23 @@ public class DetailCatalogue {
 	 */
 	public void setChoices(List<Choice> choices) {
 		this.choices = choices;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dependDe}.
+	 */
+	public String getDependDe() {
+		return dependDe;
+	}
+
+	/**
+	 * 
+	 * @param dependDe
+	 *            {@link #dependDe}.
+	 */
+	public void setDependDe(String dependDe) {
+		this.dependDe = dependDe;
 	}
 
 	/**

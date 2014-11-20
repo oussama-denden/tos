@@ -91,21 +91,18 @@ public class Tarif {
 	/**
 	 * creation d'un tarif a partir de la {@link TrameCatalogue}.
 	 * 
-	 * @param refTarif
-	 *            reference tarif.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param tarif
+	 *            {@link com.nordnet.opale.business.catalogue.Tarif}.
 	 */
-	public Tarif(String refTarif, TrameCatalogue trameCatalogue) {
-		com.nordnet.opale.business.catalogue.Tarif tarif = trameCatalogue.getTarifsMap().get(refTarif);
-		this.reference = tarif.getReference();
+	public Tarif(com.nordnet.opale.business.catalogue.Tarif tarif) {
+		this.reference = tarif.getIdTarif();
 		this.prix = tarif.getPrix();
 		this.engagement = tarif.getEngagement();
 		this.duree = tarif.getDuree();
-		this.typeTVA = tarif.getTypeTVA();
+		this.typeTVA = tarif.getTva();
 		this.frequence = tarif.getFrequence();
-		for (String refFrais : tarif.getFrais()) {
-			Frais frais = new Frais(refFrais, trameCatalogue);
+		for (com.nordnet.opale.business.catalogue.Frais fraisCatalogue : tarif.getFrais()) {
+			Frais frais = new Frais(fraisCatalogue);
 			addFrais(frais);
 		}
 	}
