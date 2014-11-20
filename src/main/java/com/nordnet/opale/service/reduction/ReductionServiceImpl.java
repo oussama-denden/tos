@@ -66,7 +66,7 @@ public class ReductionServiceImpl implements ReductionService {
 
 		Reduction reductionDraft = reductionRepository.findReductionDraft(refDraft);
 		ReductionValidator.checkReductionDraftExist(refDraft, reductionDraft);
-		ReductionValidator.chekReductionValide(reductionInfo, Constants.DRAFT);
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.DRAFT, null);
 
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
@@ -88,8 +88,7 @@ public class ReductionServiceImpl implements ReductionService {
 		Reduction reductionLigne = reductionRepository.findReductionLigneSanFrais(refDraft, refLigne);
 		ReductionValidator.checkReductionDraftLigneExist(refDraft, refLigne, reductionLigne);
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
-		ReductionValidator.chekReductionValide(reductionInfo, Constants.LIGNE);
-		ReductionValidator.chekReductionValide(reductionInfo, draftLigne);
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.LIGNE, draftLigne);
 
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
@@ -113,7 +112,7 @@ public class ReductionServiceImpl implements ReductionService {
 						draftLigneDetail.getReferenceChoix(), refFrais, draftLigneDetail.getReferenceTarif());
 		ReductionValidator.checkReductionDraftLigneDetailFraisExist(refDraft, refLigne,
 				draftLigneDetail.getReferenceChoix(), refFrais, reductionLigneDetailFrais);
-		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT, null);
 
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
@@ -140,8 +139,7 @@ public class ReductionServiceImpl implements ReductionService {
 						draftLigneDetail.getReferenceChoix());
 		ReductionValidator.checkReductionDraftLigneDetailExist(refDraft, refLigne,
 				draftLigneDetail.getReferenceChoix(), reductionLigneDetail);
-		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT);
-		ReductionValidator.chekReductionValide(reductionInfo, draftLigneDetail);
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT, draftLigneDetail);
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
 		reduction.setReferenceLigne(refLigne);
@@ -165,7 +163,7 @@ public class ReductionServiceImpl implements ReductionService {
 						draftLigne.getReferenceTarif());
 		ReductionValidator.checkReductionDraftLigneFraisExist(refDraft, draftLigne.getReference(), refFrais,
 				reductionLigneFrais);
-		ReductionValidator.chekReductionValide(reductionInfo, Constants.FRAIS);
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.FRAIS, null);
 
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
@@ -267,8 +265,7 @@ public class ReductionServiceImpl implements ReductionService {
 		Reduction reductionLigne = reductionRepository.findReductionECParent(refDraft, refLigne, refTarif);
 		ReductionValidator.checkReductionDraftLigneExist(refDraft, refLigne, reductionLigne);
 		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
-		ReductionValidator.chekReductionValide(reductionInfo, Constants.ECPARENT);
-		ReductionValidator.chekReductionValide(reductionInfo, draftLigne);
+		ReductionValidator.chekReductionValide(reductionInfo, Constants.ECPARENT, draftLigne);
 
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
