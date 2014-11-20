@@ -15,6 +15,11 @@ import com.nordnet.opale.enums.TypeValeur;
 public class ReductionContrat {
 
 	/**
+	 * reference reduction.
+	 */
+	private String referenceReduction;
+
+	/**
 	 * titre de la reduction.
 	 */
 	private String titre;
@@ -73,13 +78,31 @@ public class ReductionContrat {
 		this.nbUtilisationMax = reduction.getNbUtilisationMax();
 		this.valeur = reduction.getValeur();
 		this.typeValeur = reduction.getTypeValeur();
+		this.referenceReduction = reduction.getReferenceReduction();
 	}
 
 	@Override
 	public String toString() {
-		return "ReductionContrat [titre=" + titre + ", dateDebut=" + dateDebut + ", dateFin="
-				+ dateFin + ", nbUtilisationMax=" + nbUtilisationMax + ", valeur=" + valeur + ", typeValeur="
-				+ typeValeur + ", typeFrais=" + typeFrais + ", typeReduction=" + typeReduction + "]";
+		return "ReductionContrat [titre=" + titre + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin
+				+ ", nbUtilisationMax=" + nbUtilisationMax + ", valeur=" + valeur + ", typeValeur=" + typeValeur
+				+ ", typeFrais=" + typeFrais + ", typeReduction=" + typeReduction + "]";
+	}
+
+	/**
+	 * 
+	 * @return {@link #referenceReduction}
+	 */
+	public String getReferenceReduction() {
+		return referenceReduction;
+	}
+
+	/**
+	 * 
+	 * @param referenceReduction
+	 *            {@link #referenceReduction}
+	 */
+	public void setReferenceReduction(String referenceReduction) {
+		this.referenceReduction = referenceReduction;
 	}
 
 	/**

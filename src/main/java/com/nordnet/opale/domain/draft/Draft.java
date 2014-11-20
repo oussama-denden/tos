@@ -7,8 +7,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,7 +29,6 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
-import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
@@ -120,12 +117,6 @@ public class Draft {
 	private String codePartenaire;
 
 	/**
-	 * Le geste effectue.
-	 */
-	@Enumerated(EnumType.STRING)
-	private Geste geste;
-
-	/**
 	 * constructeur par defaut.
 	 */
 	public Draft() {
@@ -197,8 +188,7 @@ public class Draft {
 	public String toString() {
 		return "Draft [id=" + id + ", reference=" + reference + ", referenceExterne=" + referenceExterne
 				+ ", dateAnnulation=" + dateAnnulation + ", dateTransformationCommande=" + dateTransformationCommande
-				+ ", commandeSource=" + commandeSource + ", codePartenaire=" + codePartenaire + ", geste=" + geste
-				+ "]";
+				+ ", commandeSource=" + commandeSource + ", codePartenaire=" + codePartenaire + ", geste=" + "]";
 	}
 
 	/**
@@ -409,22 +399,6 @@ public class Draft {
 	 */
 	public void setCodePartenaire(String codePartenaire) {
 		this.codePartenaire = codePartenaire;
-	}
-
-	/**
-	 * @return {@link #geste}
-	 */
-	public Geste getGeste() {
-		return geste;
-	}
-
-	/**
-	 * 
-	 * @param geste
-	 *            {@link #geste}
-	 */
-	public void setGeste(Geste geste) {
-		this.geste = geste;
 	}
 
 	/**

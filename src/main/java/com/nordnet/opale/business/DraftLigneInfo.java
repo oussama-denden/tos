@@ -1,5 +1,9 @@
 package com.nordnet.opale.business;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.GesteDeserializer;
+import com.nordnet.opale.enums.Geste;
+
 /**
  * classe business contient les info d'une ligne draft.
  * 
@@ -12,6 +16,12 @@ public class DraftLigneInfo {
 	 * {@link Auteur}.
 	 */
 	private Auteur auteur;
+
+	/**
+	 * Le geste effectue.
+	 */
+	@JsonDeserialize(using = GesteDeserializer.class)
+	private Geste geste;
 
 	/**
 	 * {@link Offre}.
@@ -39,6 +49,23 @@ public class DraftLigneInfo {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * 
+	 * @return {@link #geste}
+	 */
+	public Geste getGeste() {
+		return geste;
+	}
+
+	/**
+	 * 
+	 * @param geste
+	 *            {@link #geste}
+	 */
+	public void setGeste(Geste geste) {
+		this.geste = geste;
 	}
 
 	/**

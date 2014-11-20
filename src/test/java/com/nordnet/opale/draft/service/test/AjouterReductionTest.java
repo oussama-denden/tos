@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
@@ -12,7 +13,6 @@ import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
-import com.nordnet.opale.draft.test.generator.ReductionInfoGenrator;
 import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
@@ -29,6 +29,11 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 public class AjouterReductionTest extends GlobalTestCase {
 
 	/**
+	 * Declaration du log.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(AjouterLignesTest.class);
+
+	/**
 	 * {@link DraftService}.
 	 */
 	@SpringBean("reductionService")
@@ -37,8 +42,8 @@ public class AjouterReductionTest extends GlobalTestCase {
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("reductionInfoGenrator")
-	private ReductionInfoGenrator reductionInfoGenrator;
+	@SpringBean("draftInfoGenerator")
+	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * ajout reduction valide a un draft.
@@ -50,10 +55,16 @@ public class AjouterReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
 	public void testAjoutReductionValide() throws OpaleException {
 
-		ReductionInfo reductionInfo = reductionInfoGenrator.getReductionInfo();
-		reductionService.ajouterReduction("REF-DRAFT-1", reductionInfo);
-		Reduction reduction = reductionService.findReductionDraft("REF-DRAFT-1");
-		assertNotNull(reduction);
+		try {
+			ReductionInfo reductionInfo =
+					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");
+			reductionService.ajouterReduction("REF-DRAFT-1", reductionInfo);
+			Reduction reduction = reductionService.findReductionDraft("REF-DRAFT-1");
+			assertNotNull(reduction);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
+		}
 
 	}
 
@@ -65,15 +76,19 @@ public class AjouterReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
 	public void testAjoutReductionInValide() {
 
-		ReductionInfo reductionInfo = reductionInfoGenrator.getReductionInfo();
-		reductionInfo.setTypeValeur(TypeValeur.MOIS);
-
 		try {
+			ReductionInfo reductionInfo =
+					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");
+			reductionInfo.setTypeValeur(TypeValeur.MOIS);
+
 			reductionService.ajouterReduction("REF-DRAFT-2", reductionInfo);
 			fail("unexpected state");
 		} catch (OpaleException exception) {
 			assertEquals(exception.getErrorCode(), "5.1.1");
 
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			fail(e.getMessage());
 		}
 
 	}
