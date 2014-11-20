@@ -45,6 +45,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
+import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypePaiement;
@@ -725,13 +726,28 @@ public class CommandeServiceImpl implements CommandeService {
 
 		// Liste de produit renouvelement.
 		List<com.nordnet.opale.business.commande.ProduitRenouvellement> produitRenouvellements = new ArrayList<>();
+
+		com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement =
+				new com.nordnet.opale.business.commande.ProduitRenouvellement();
+
+		produitRenouvellement.setLabel(ligne.getLabel());
+		produitRenouvellement.setNumeroCommande(commande.getReference());
+		produitRenouvellement.setPrix(getPrixRenouvellement(ligne, commande.getReference()));
+		produitRenouvellement.setNumEC(ligne.getNumEC());
+
+		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
+		produitRenouvellement.setRemboursable(true);
+		produitRenouvellement.setTypeProduit(ligne.getTypeProduit());
+
+		produitRenouvellements.add(produitRenouvellement);
+
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
-			com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement =
-					new com.nordnet.opale.business.commande.ProduitRenouvellement();
+			produitRenouvellement = new com.nordnet.opale.business.commande.ProduitRenouvellement();
 
 			produitRenouvellement.setLabel(ligneDetail.getLabel());
 			produitRenouvellement.setNumeroCommande(commande.getReference());
-			produitRenouvellement.setPrix(getPrixRenouvellement(ligne, ligneDetail, commande.getReference()));
+			produitRenouvellement.setPrix(getPrixRenouvellement(ligneDetail, ligne.getModeFacturation(),
+					commande.getReference()));
 			produitRenouvellement.setNumEC(ligneDetail.getNumEC());
 			if (ligneDetail.getCommandeLigneDetailParent() != null) {
 				produitRenouvellement.setNumECParent(ligneDetail.getCommandeLigneDetailParent().getNumEC());
@@ -750,22 +766,65 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
-	 * Creer prix renouvellement.
+	 * Creer prix renouvellement detail ligne.
 	 * 
 	 * @param ligne
 	 *            {@link CommandeLigne}
+	 * @param referenceCommande
+	 *            reference commande
+	 * @return {@link PrixRenouvellemnt}
+	 */
+	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigne ligne, String referenceCommande) {
+		// creer le prix
+		PrixRenouvellemnt prix = new PrixRenouvellemnt();
+		prix.setModeFacturation(ligne.getModeFacturation());
+		prix.setMontant(ligne.getTarif().getPrix());
+		prix.setPeriodicite(ligne.getTarif().getFrequence());
+		prix.setTypeTVA(ligne.getTarif().getTypeTVA());
+
+		// affecter la duree.
+
+		prix.setDuree(ligne.getTarif().getDuree());
+		// prix.setModePaiement(ligne.getModePaiement());
+
+		// affecter la reference mode de paiement.
+		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
+		Paiement paiementRecurrent = null;
+		if (paiementRecurrents.size() > Constants.ZERO) {
+			paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		}
+		if (paiementRecurrent != null) {
+			prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
+		}
+
+		// creer le frais
+		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
+		for (Frais fraisCommande : ligne.getTarif().getFrais()) {
+			frais.add(mappingToFraisRenouvellement(fraisCommande));
+		}
+
+		prix.setFrais(frais);
+
+		return prix;
+	}
+
+	/**
+	 * Creer prix renouvellement detail ligne.
+	 * 
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}
 	 * @param ligneDetail
 	 *            {@link CommandeLigneDetail}
 	 * @param referenceCommande
 	 *            reference commande
 	 * @return {@link PrixRenouvellemnt}
 	 */
-	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigne ligne, CommandeLigneDetail ligneDetail,
+	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigneDetail ligneDetail, ModeFacturation modeFacturation,
 			String referenceCommande) {
 
 		// creer le prix
 		PrixRenouvellemnt prix = new PrixRenouvellemnt();
-		prix.setModeFacturation(ligne.getModeFacturation());
+		prix.setModeFacturation(modeFacturation);
 		prix.setMontant(ligneDetail.getTarif().getPrix());
 		prix.setPeriodicite(ligneDetail.getTarif().getFrequence());
 		prix.setTypeTVA(ligneDetail.getTarif().getTypeTVA());
