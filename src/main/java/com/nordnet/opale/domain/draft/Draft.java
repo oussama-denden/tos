@@ -178,6 +178,7 @@ public class Draft {
 						auteur);
 		this.clientALivrer = clientALivrer;
 
+		// TODO verifier comment recuperer l'addresse du client suscripteur.
 		Client clientSouscripteur = new Client(contrat.getIdClient(), "", auteur);
 		this.clientSouscripteur = clientSouscripteur;
 
