@@ -145,6 +145,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandeInfo getCommande(String refCommande) throws OpaleException {
 
 		LOGGER.info("Debut methode getCommande");
@@ -159,6 +160,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Commande getCommandeByReferenceDraft(String referenceDraft) {
 
 		LOGGER.info("Debut methode getCommandeByReferenceDraft");
@@ -243,6 +245,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<CommandeInfo> find(CriteresCommande criteresCommande) {
 
 		LOGGER.info("Debut methode find");
@@ -284,6 +287,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Commande getCommandeByReference(String referenceCommande) throws OpaleException {
 
 		LOGGER.info("Debut methode getCommandeByReference");
@@ -294,7 +298,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
@@ -342,6 +346,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) throws OpaleException {
 		getCommandeByReference(referenceCommande);
 
@@ -352,6 +357,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException {
 
 		getCommandeByReference(refCommande);
@@ -366,6 +372,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException {
 
 		LOGGER.info("Debut methode supprimerPaiement");
@@ -411,6 +418,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerSignature(String refCommande, String refSignature, Auteur auteur) throws OpaleException {
 
 		LOGGER.info("Debut methode supprimerSignature");
@@ -425,6 +433,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object creerIntentionDeSignature(String refCommande, AjoutSignatureInfo ajoutSignatureInfo)
 			throws OpaleException, JSONException {
 
@@ -442,6 +451,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * @throws JSONException
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object signerCommande(String refCommande, String refrenceSignature, SignatureInfo signatureInfo)
 			throws OpaleException, JSONException {
 
@@ -455,6 +465,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<SignatureInfo> getSignature(String refCommande, Boolean afficheAnnule) throws OpaleException {
 		LOGGER.info("Debut methode  getSignature");
 
@@ -468,6 +479,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		return validerCommande(commande);
@@ -478,6 +490,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandeValidationInfo validerCommande(Commande commande) throws OpaleException {
 
 		CommandeValidationInfo validationInfo = new CommandeValidationInfo();
@@ -527,6 +540,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -542,6 +556,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
 		List<String> referencesContrats = new ArrayList<>();
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
@@ -628,6 +643,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
@@ -669,6 +685,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Commande> getCommandeNonAnnuleEtNonTransformes() {
 		return commandeRepository.recupererCommandeNonTransformeeEtNonAnnulee();
 	}
@@ -677,6 +694,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public String getRecentDate(String refCommande) throws OpaleException {
 		return commandeRepository.getRecentDate(refCommande);
 	}
@@ -686,6 +704,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -819,6 +838,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Cout calculerCout(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		Cout cout = new Cout(commande);
