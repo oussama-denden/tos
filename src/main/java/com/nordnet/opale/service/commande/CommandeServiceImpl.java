@@ -719,6 +719,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 		}
 
+		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		commandeRepository.save(commande);
+
 	}
 
 	/**
