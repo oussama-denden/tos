@@ -65,7 +65,7 @@ public class ReductionValidator {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");
 			}
 		}
-		if (reductionInfo.getNbUtilisationMax() == null || reductionInfo.getDateDebut() == null) {
+		if (reductionInfo.getNbUtilisationMax() == null && reductionInfo.getDateDebut() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3",
 					"Reduction.NbUtilisationMax ou Reduction.DateDebut "), "5.1.3");
 		}

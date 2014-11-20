@@ -1,0 +1,11 @@
+{
+  "valeur": "10",
+  "typeValeur": "POURCENTAGE",
+  "nbUtilisationMax":2,
+  "label": "string",
+  "referenceReduction" :"ref6reduc",
+  "auteur": {
+    "qui": "string"
+    
+  }
+}
