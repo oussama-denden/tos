@@ -149,7 +149,7 @@ public class DraftController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{reference:.+}/lignes", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{reference:.+}/ligne", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public String ajouterLignes(@PathVariable String reference, @RequestBody List<DraftLigneInfo> draftLignesInfo)
 			throws OpaleException, JSONException {
@@ -375,7 +375,7 @@ public class DraftController {
 	}
 
 	/**
-	 * associer une reduction a un draft.
+	 * associer une reduction a l'element parent dans le draft.
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
@@ -391,7 +391,7 @@ public class DraftController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/{refTarif:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/tarif/{refTarif:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object associerReductionECParent(@PathVariable String refDraft, @PathVariable String refLigne,
 			@PathVariable String refTarif, @RequestBody ReductionInfo reductionInfo)
