@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.annotations.Index;
 
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
@@ -64,11 +65,13 @@ public class CommandeLigneDetail {
 	/**
 	 * reference choix.
 	 */
+	@Index(columnNames = "referenceChoix", name = "index_commandeLigneDetail_referenceChoix")
 	private String referenceChoix;
 
 	/**
 	 * label du produit.
 	 */
+	@Index(columnNames = "label", name = "index_commandeLigneDetail_label")
 	private String label;
 
 	/**

@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.google.common.base.Optional;
@@ -47,6 +48,7 @@ public class Tarif {
 	 * reference du tarif.
 	 */
 	@NotNull
+	@Index(columnNames = "reference", name = "index_tarif")
 	private String reference;
 
 	/**

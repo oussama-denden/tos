@@ -20,6 +20,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -73,11 +74,13 @@ public class CommandeLigne {
 	/**
 	 * reference du contrat.
 	 */
+	@Index(columnNames = "referenceContrat", name = "index_commandeLigne_referenceOffre")
 	private String referenceContrat;
 
 	/**
 	 * label de l'offre dans le catalogue.
 	 */
+	@Index(columnNames = "label", name = "index_commandeLigne_label")
 	private String label;
 
 	/**

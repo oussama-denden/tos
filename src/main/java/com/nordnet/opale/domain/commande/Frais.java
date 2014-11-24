@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.nordnet.opale.business.FraisInfo;
@@ -33,6 +34,7 @@ public class Frais {
 	 * reference du tarif.
 	 */
 	@NotNull
+	@Index(columnNames = "reference", name = "index_frais")
 	private String reference;
 
 	/**

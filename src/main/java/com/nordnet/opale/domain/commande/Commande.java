@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.google.common.base.Optional;
@@ -52,6 +53,7 @@ public class Commande {
 	 * reference de la commande.
 	 */
 	@NotNull
+	@Index(columnNames = "reference", name = "index_commande")
 	private String reference;
 
 	/**
