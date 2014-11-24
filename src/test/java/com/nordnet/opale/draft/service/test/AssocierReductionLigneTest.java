@@ -1,6 +1,7 @@
 package com.nordnet.opale.draft.service.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
@@ -52,10 +53,8 @@ public class AssocierReductionLigneTest extends GlobalTestCase {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
-			Object result = draftService.associerReductionLigne("REF-DRAFT", "REF-LIGNE", reductionInfo);
-			// assertTrue(result instanceof JSONObject);
-			// JSONObject resultJson = (JSONObject) result;
-			// Assert.assertNotNull(resultJson.get("referenceReduction"));
+			String result = (String) draftService.associerReductionLigne("REF-DRAFT", "REF-LIGNE", reductionInfo);
+			assertTrue(result.contains("referenceReduction"));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
