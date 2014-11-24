@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.enums.TypeProduit;
 
 /**
@@ -17,11 +16,6 @@ import com.nordnet.opale.enums.TypeProduit;
 public class TrameCatalogue {
 
 	/**
-	 * L auteur qui va lancer l operation.
-	 */
-	private Auteur auteur;
-
-	/**
 	 * liste des {@link OffreCatalogue} dans le catalogue.
 	 */
 	private List<OffreCatalogue> offres = new ArrayList<OffreCatalogue>();
@@ -30,23 +24,6 @@ public class TrameCatalogue {
 	 * constructeur par defaut.
 	 */
 	public TrameCatalogue() {
-	}
-
-	/**
-	 * 
-	 * @return {@link Auteur}
-	 */
-	public Auteur getAuteur() {
-		return auteur;
-	}
-
-	/**
-	 * 
-	 * @param auteur
-	 *            {@link Auteur}
-	 */
-	public void setAuteur(Auteur auteur) {
-		this.auteur = auteur;
 	}
 
 	/**

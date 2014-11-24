@@ -1,115 +1,118 @@
 {
-    "auteur": {
-      "canal": "welcome",
-      "qui": "anis",
-      "ip": {
-        "ip": "10.10.0.19"
-      }
-    },
-    "offres": [
-    {
-      "reference": "jet_surf10",
-      "gamme": "jet",
-      "famille": "sat",
-      "modeFacturation": "PREMIER_MOIS",
-      "tarifs": [
-       	{
-	      "id_tarif": "mensuel_jet10_base",
-	      "engagement": "0",
-	      "prix": "34.9",
-	      "tva": "S",
-	      "frais": [
-	        {
-	      		"id_frais": "std_cloture",
-	      		"typeFrais": "RESILIATION",
-	      		"montant": "50",
-	      		"label": "Frais de cloture de dossier",
-	      		"typeTVA": "S" 
-	    	}
-	      ],
-	      "frequence": "1",
-	      "duree": "1"
-    	},
-    	{
-	      "id_tarif": "annuel_jet10_base",
-	      "engagement": "12",
-	      "tva": "S",
-	      "prix": "34.9",
-	      "frais": [
-	        {
-	      		"id_frais": "engagement_kitsat",
-	      		"typeFrais": "CREATION",
-	      		"montant": "50",
-	      		"label": "Frais de dossier",
-	      		"typeTVA": "S" 
-	    	}
-	      ],
-	      "frequence": "1",
-	      "duree": "12"
-    	}
-      ],
-      "details": [
-        {
-          "referenceSelection": "kitsat",
-          "label": "Trafic",
-          "type": "BIEN",
-          "choices": [
-            {
-              "reference": "kitsat",
-              "label": "Trafic 10 Gigas (Inclus)",
-              "tarifs": [
-                {
-			      "id_tarif": "annuel_jet10_base",
-			      "engagement": "12",
-			      "tva": "S",
-			      "prix": "34.9",
-			      "frais": [
-			        {
-			      		"id_frais": "engagement_kitsat",
-			      		"typeFrais": "CREATION",
-			      		"montant": "50",
-			      		"label": "Frais de dossier",
-			      		"typeTVA": "S" 
-			    	}
-			      ],
-			      "frequence": "1",
-			      "duree": "12"
-    			}
-              ]
-            }
-          ]
-        },
-         {
-          "referenceSelection": "jet",
-          "label": "Trafic",
-          "type": "BIEN",
-          "choices": [
-            {
-              "reference": "jet",
-              "label": "Trafic 10 Gigas (Inclus)",
-              "tarifs": [
-                {
-			      "id_tarif": "annuel_jet10_base",
-			      "engagement": "12",
-			      "tva": "S",
-			      "prix": "34.9",
-			      "frais": [
-			        {
-			      		"id_frais": "engagement_kitsat",
-			      		"typeFrais": "CREATION",
-			      		"montant": "50",
-			      		"label": "Frais de dossier",
-			      		"typeTVA": "S" 
-			    	}
-			      ],
-			      "frequence": "1",
-			      "duree": "12"
-    			}
-              ]
-            }
-          ]
-        }
-      ]
+  "auteur": {
+    "qui": "GRC.WEL-JOHNDOE",
+    "canal": "welcome",
+    "ip": {
+      "ts": "1411654933",
+      "ip": "127.0.0.1"
     }
-  ]
+  },
+  "trameCatalogue": {
+    "offres": [
+      {
+        "reference": "jet_surf10",
+        "gamme": "jet",
+        "famille": "sat",
+        "modeFacturation": "PREMIER_MOIS",
+        "tarifs": [
+          {
+            "id_tarif": "mensuel_jet10_base",
+            "engagement": "0",
+            "prix": "34.9",
+            "tva": "S",
+            "frais": [
+              {
+                "id_frais": "std_cloture",
+                "typeFrais": "RESILIATION",
+                "montant": "50",
+                "label": "Frais de cloture de dossier",
+                "typeTVA": "S"
+              }
+            ],
+            "frequence": "1",
+            "duree": "1"
+          },
+          {
+            "id_tarif": "annuel_jet10_base",
+            "engagement": "12",
+            "tva": "S",
+            "prix": "34.9",
+            "frais": [
+              {
+                "id_frais": "engagement_kitsat",
+                "typeFrais": "CREATION",
+                "montant": "50",
+                "label": "Frais de dossier",
+                "typeTVA": "S"
+              }
+            ],
+            "frequence": "1",
+            "duree": "12"
+          }
+        ],
+        "details": [
+          {
+            "referenceSelection": "kitsat",
+            "label": "Trafic",
+            "type": "BIEN",
+            "choices": [
+              {
+                "reference": "kitsat",
+                "label": "Trafic 10 Gigas (Inclus)",
+                "tarifs": [
+                  {
+                    "id_tarif": "annuel_jet10_base",
+                    "engagement": "12",
+                    "tva": "S",
+                    "prix": "34.9",
+                    "frais": [
+                      {
+                        "id_frais": "engagement_kitsat",
+                        "typeFrais": "CREATION",
+                        "montant": "50",
+                        "label": "Frais de dossier",
+                        "typeTVA": "S"
+                      }
+                    ],
+                    "frequence": "1",
+                    "duree": "12"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "referenceSelection": "jet",
+            "label": "Trafic",
+            "type": "BIEN",
+            "choices": [
+              {
+                "reference": "jet",
+                "label": "Trafic 10 Gigas (Inclus)",
+                "tarifs": [
+                  {
+                    "id_tarif": "annuel_jet10_base",
+                    "engagement": "12",
+                    "tva": "S",
+                    "prix": "34.9",
+                    "frais": [
+                      {
+                        "id_frais": "engagement_kitsat",
+                        "typeFrais": "CREATION",
+                        "montant": "50",
+                        "label": "Frais de dossier",
+                        "typeTVA": "S"
+                      }
+                    ],
+                    "frequence": "1",
+                    "duree": "12"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
+}

@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.Auteur;
@@ -166,7 +167,7 @@ public class Draft {
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public Draft(Contrat contrat, TrameCatalogue trameCatalogue) {
+	public Draft(Contrat contrat, TrameCatalogueInfo trameCatalogue) {
 		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
 		this.auteur = auteur;
 		Client clientAFacturer =

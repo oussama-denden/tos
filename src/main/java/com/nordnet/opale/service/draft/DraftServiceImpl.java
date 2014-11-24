@@ -26,6 +26,7 @@ import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.Choice;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
@@ -428,14 +429,15 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isAuteurValide(trameCatalogue.getAuteur());
 		DraftValidator.codePartenaireNotNull(draft, Constants.VALIDER_DRAFT);
 		tracageService.ajouterTrace(trameCatalogue.getAuteur().getQui(), referenceDraft,
 				"la validation du draft de reference " + referenceDraft);
 
-		return catalogueValidator.validerDraft(draft, trameCatalogue);
+		return catalogueValidator.validerDraft(draft, trameCatalogue.getTrameCatalogue());
 	}
 
 	/**
@@ -446,7 +448,7 @@ public class DraftServiceImpl implements DraftService {
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
 			throws OpaleException, CloneNotSupportedException {
 
-		DraftValidator.validerAuteur(transformationInfo.getTrameCatalogue().getAuteur());
+		DraftValidator.validerAuteur(transformationInfo.getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
@@ -459,7 +461,7 @@ public class DraftServiceImpl implements DraftService {
 				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 
 		if (validationInfo.isValide()) {
-			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
+			Commande commande = new Commande(draft, transformationInfo);
 			commande.setReference(keygenService.getNextKey(Commande.class));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
@@ -469,7 +471,7 @@ public class DraftServiceImpl implements DraftService {
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
 
-			tracageService.ajouterTrace(transformationInfo.getTrameCatalogue().getAuteur().getQui(), referenceDraft,
+			tracageService.ajouterTrace(transformationInfo.getAuteur().getQui(), referenceDraft,
 					"la transformation du draft de reference " + referenceDraft + " en commande de reference "
 							+ commande.getReference());
 			return commande;
@@ -620,11 +622,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+	public Object calculerCout(String refDraft, TrameCatalogueInfo trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(refDraft);
-		DraftValidationInfo validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue);
+		DraftValidationInfo validationInfo =
+				catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 		if (validationInfo.isValide()) {
-			Cout cout = calculerCoutLigne(draft, trameCatalogue);
+			Cout cout = calculerCoutLigne(draft, trameCatalogue.getTrameCatalogue());
 			return cout;
 		} else {
 			return validationInfo;
@@ -779,13 +782,14 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
+	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogueInfo trameCatalogue)
 			throws OpaleException {
 		LOGGER.info("Debut methode transformerContratEnDraft");
 		Contrat contrat = restClient.getContratByReference(referenceContrat);
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 		String referenceOffre = contrat.getParent().getReferenceProduit();
-		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(contrat.getParent().getReferenceProduit());
+		OffreCatalogue offreCatalogue =
+				trameCatalogue.getTrameCatalogue().getOffreMap().get(contrat.getParent().getReferenceProduit());
 		DraftValidationInfo validationInfo = new DraftValidationInfo();
 		if (offreCatalogue == null) {
 			validationInfo.addReason("offre.reference", "36.3.1.2",
@@ -794,7 +798,7 @@ public class DraftServiceImpl implements DraftService {
 			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 		} else {
 			Draft draft = new Draft(contrat, trameCatalogue);
-			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue);
+			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 			if (validationInfo.isValide()) {
 				/*
 				 * attribution des reference au draft/draftLigne.

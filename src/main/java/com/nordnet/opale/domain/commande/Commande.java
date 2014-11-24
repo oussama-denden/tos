@@ -21,6 +21,7 @@ import org.hibernate.validator.NotNull;
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandeLigneInfo;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
@@ -126,7 +127,7 @@ public class Commande {
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
+	public Commande(Draft draft, TransformationInfo trameCatalogue) {
 
 		this.clientAFacturer = draft.getClientAFacturer();
 		this.clientAFacturer.setAuteur(draft.getAuteur());
@@ -140,7 +141,7 @@ public class Commande {
 		this.referenceDraft = draft.getReference();
 		OffreCatalogue offreCatalogue = null;
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
+			offreCatalogue = trameCatalogue.getTrameCatalogue().getOffreMap().get(draftLigne.getReferenceOffre());
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, offreCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
 			addLigne(commandeLigne);

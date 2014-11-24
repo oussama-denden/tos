@@ -13,6 +13,10 @@ import com.nordnet.opale.domain.draft.Draft;
 public class TransformationInfo {
 
 	/**
+	 * L auteur qui va lancer l operation.
+	 */
+	private Auteur auteur;
+	/**
 	 * {@link TrameCatalogue}.
 	 */
 	private TrameCatalogue trameCatalogue;
@@ -26,6 +30,23 @@ public class TransformationInfo {
 	 * constrcteur par defaut.
 	 */
 	public TransformationInfo() {
+	}
+
+	/**
+	 * 
+	 * @return {@link Auteur}
+	 */
+	public Auteur getAuteur() {
+		return auteur;
+	}
+
+	/**
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 */
+	public void setAuteur(Auteur auteur) {
+		this.auteur = auteur;
 	}
 
 	/**

@@ -28,6 +28,7 @@ import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
@@ -231,8 +232,8 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/valider", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public DraftValidationInfo validerDraft(@PathVariable String refDraft, @RequestBody TrameCatalogue trameCatalogue)
-			throws OpaleException {
+	public DraftValidationInfo validerDraft(@PathVariable String refDraft,
+			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException {
 		LOGGER.info(":::ws-rec:::validerDraft");
 		return draftService.validerDraft(refDraft, trameCatalogue);
 	}
@@ -304,7 +305,7 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/costCalculation", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogue trameCatalogue)
+	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogueInfo trameCatalogue)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::calculerCout");
 		return draftService.calculerCout(refDraft, trameCatalogue);
@@ -516,8 +517,8 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public String transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
-			throws OpaleException, JSONException {
+	public String transformerContratEnDraft(@PathVariable String refContrat,
+			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
 		Draft draft = draftService.transformerContratEnDraft(refContrat, trameCatalogue);
 
