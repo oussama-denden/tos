@@ -86,7 +86,6 @@ CREATE TABLE `commandeligne` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` datetime DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
-  `famille` varchar(255) DEFAULT NULL,
   `gamme` varchar(255) DEFAULT NULL,
   `label` varchar(255) DEFAULT NULL,
   `modeFacturation` varchar(255) DEFAULT NULL,
@@ -210,8 +209,6 @@ CREATE TABLE `frais` (
   `politiqueIndex` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `typeFrais` varchar(255) DEFAULT NULL,
-  `typeTVA` varchar(255) DEFAULT NULL,
-
   `tarifId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK5D2A8FF8D480C8F` (`tarifId`)

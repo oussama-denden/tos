@@ -101,7 +101,6 @@
     referenceContrat CDATA #IMPLIED
     secteur CDATA #IMPLIED
     commandeId CDATA #IMPLIED
-    famille CDATA #IMPLIED
     tarifId CDATA #IMPLIED
 >
 
@@ -137,7 +136,6 @@
     politique CDATA #IMPLIED
     politiqueIndex CDATA #IMPLIED
     reference CDATA #IMPLIED
-    typeTVA CDATA #IMPLIED
     typeFrais CDATA #IMPLIED
     tarifId CDATA #IMPLIED
 >

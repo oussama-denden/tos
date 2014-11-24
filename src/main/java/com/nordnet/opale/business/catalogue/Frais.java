@@ -3,9 +3,7 @@ package com.nordnet.opale.business.catalogue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.deserializer.TypeFraisDeserializer;
-import com.nordnet.opale.deserializer.TypeTVADeserializer;
 import com.nordnet.opale.enums.TypeFrais;
-import com.nordnet.opale.enums.TypeTVA;
 
 /**
  * represente les frais associe a une offre.
@@ -30,12 +28,6 @@ public class Frais {
 	 * montant du frais.
 	 */
 	private Double montant;
-
-	/**
-	 * {@link TypeTVA}.
-	 */
-	@JsonDeserialize(using = TypeTVADeserializer.class)
-	private TypeTVA typeTVA;
 
 	/**
 	 * {@link TypeFrais}.
@@ -98,23 +90,6 @@ public class Frais {
 	 */
 	public void setMontant(Double montant) {
 		this.montant = montant;
-	}
-
-	/**
-	 * 
-	 * @return {@link TypeTVA}.
-	 */
-	public TypeTVA getTypeTVA() {
-		return typeTVA;
-	}
-
-	/**
-	 * 
-	 * @param typeTVA
-	 *            {@link TypeTVA}.
-	 */
-	public void setTypeTVA(TypeTVA typeTVA) {
-		this.typeTVA = typeTVA;
 	}
 
 	/**

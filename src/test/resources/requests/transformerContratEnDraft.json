@@ -10,7 +10,7 @@
     {
       "reference": "jet_surf10",
       "gamme": "jet",
-      "famille": "sat",
+      "secteur": "sat",
       "modeFacturation": "PREMIER_MOIS",
       "tarifs": [
        	{
@@ -23,9 +23,8 @@
 	      		"id_frais": "std_cloture",
 	      		"typeFrais": "RESILIATION",
 	      		"montant": "50",
-	      		"label": "Frais de cloture de dossier",
-	      		"typeTVA": "S" 
-	    	}
+	      		"label": "Frais de cloture de dossier"
+	      	}
 	      ],
 	      "frequence": "1",
 	      "duree": "1"
@@ -40,8 +39,7 @@
 	      		"id_frais": "engagement_kitsat",
 	      		"typeFrais": "CREATION",
 	      		"montant": "50",
-	      		"label": "Frais de dossier",
-	      		"typeTVA": "S" 
+	      		"label": "Frais de dossier"
 	    	}
 	      ],
 	      "frequence": "1",
@@ -68,8 +66,7 @@
 			      		"id_frais": "engagement_kitsat",
 			      		"typeFrais": "CREATION",
 			      		"montant": "50",
-			      		"label": "Frais de dossier",
-			      		"typeTVA": "S" 
+			      		"label": "Frais de dossier"
 			    	}
 			      ],
 			      "frequence": "1",
@@ -98,8 +95,7 @@
 			      		"id_frais": "engagement_kitsat",
 			      		"typeFrais": "CREATION",
 			      		"montant": "50",
-			      		"label": "Frais de dossier",
-			      		"typeTVA": "S" 
+			      		"label": "Frais de dossier"
 			    	}
 			      ],
 			      "frequence": "1",
