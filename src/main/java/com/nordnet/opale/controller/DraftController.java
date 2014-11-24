@@ -427,8 +427,7 @@ public class DraftController {
 			@PathVariable String refProduit, @PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionFrais");
-		return draftService
-				.associerReductionFraisLigneDetaille(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+		return draftService.associerReductionFraisLigneDetail(refDraft, refLigne, refProduit, refFrais, reductionInfo);
 	}
 
 	/**

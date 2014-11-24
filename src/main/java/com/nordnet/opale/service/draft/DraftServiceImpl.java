@@ -714,7 +714,7 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
+	public Object associerReductionFraisLigneDetail(String refDraft, String refLigne, String refProduit,
 			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFrais ");
@@ -747,8 +747,7 @@ public class DraftServiceImpl implements DraftService {
 
 		LOGGER.info("Debut methode associerReductionFraisLigne ");
 
-		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.isExistDraft(draft, refDraft);
+		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
