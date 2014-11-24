@@ -18,14 +18,13 @@ import com.nordnet.opale.service.draft.DraftServiceImpl;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * Classe de teste de la methode
- * {@link DraftServiceImpl#associerReductionDetailLigne(String, String, String, com.nordnet.opale.business.ReductionInfo)}
- * .
+ * Classe de test de la methode
+ * {@link DraftServiceImpl#associerReductionECParent(String, String, String, com.nordnet.opale.business.ReductionInfo)}.
  * 
  * @author akram-moncer
  * 
  */
-public class AssocierReductionDetailLigneTest extends GlobalTestCase {
+public class AssocierReductionECParentTest extends GlobalTestCase {
 
 	/**
 	 * Declaration du log.
@@ -45,16 +44,16 @@ public class AssocierReductionDetailLigneTest extends GlobalTestCase {
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
-	 * tester la cas d'association d'une reduction au detail ligne.
+	 * tester le cas d'association d'une reduction a l'element parent.
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionDetailLigneValide() {
+	public void associerReductionECParentValide() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
 			String result =
-					(String) draftService.associerReductionDetailLigne("REF-DRAFT", "REF-LIGNE", "REF-PRODUIT",
+					(String) draftService.associerReductionECParent("REF-DRAFT", "REF-LIGNE", "REF-TARIF",
 							reductionInfo);
 			assertTrue(result.contains("referenceReduction"));
 		} catch (Exception e) {
@@ -64,15 +63,15 @@ public class AssocierReductionDetailLigneTest extends GlobalTestCase {
 	}
 
 	/**
-	 * tester le cas d'associaion d'une reduction au draft ligne pour un draft qui n'existe pas.
+	 * tester le cas d'association d'une reduction a l'element parent pour un draft qui n'existe pas.
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionDetailLigneAvecDraftNonExiste() {
+	public void associerReductionECParentAvecDraftNonExiste() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
-			draftService.associerReductionDetailLigne("00000000", "REF-LIGNE", "REF-PRODUIT", reductionInfo);
+			draftService.associerReductionECParent("00000000", "REF-LIGNE", "annuel_jet10_base", reductionInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("1.1.1", e.getErrorCode());
@@ -83,18 +82,18 @@ public class AssocierReductionDetailLigneTest extends GlobalTestCase {
 	}
 
 	/**
-	 * tester le cas d'associaion d'une reduction au draft ligne pour un detail qui n'existe pas.
+	 * tester le cas d'association d'une reduction a l'element parent pour une ligne qui n'existe pas.
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionDetailLigneAvecProduitNonExiste() {
+	public void associerReductionECParentAvecElementNonExiste() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
-			draftService.associerReductionDetailLigne("REF-DRAFT", "REF-LIGNE", "PRODUIT", reductionInfo);
+			draftService.associerReductionECParent("REF-DRAFT", "00000000", "REF-TARIF", reductionInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
-			assertEquals("1.1.27", e.getErrorCode());
+			assertEquals("1.1.2", e.getErrorCode());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

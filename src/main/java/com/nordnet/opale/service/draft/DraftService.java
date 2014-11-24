@@ -301,7 +301,7 @@ public interface DraftService {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
+	public Object associerReductionFraisLigneDetail(String refDraft, String refLigne, String refProduit,
 			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException;
 
 	/**
