@@ -32,11 +32,6 @@ public class OffreCatalogue {
 	private String gamme;
 
 	/**
-	 * le famille de l'offre.
-	 */
-	private String famille;
-
-	/**
 	 * secteur.
 	 */
 	private String secteur;
@@ -138,23 +133,6 @@ public class OffreCatalogue {
 	 */
 	public void setGamme(String gamme) {
 		this.gamme = gamme;
-	}
-
-	/**
-	 * 
-	 * @return {@link #famille}.
-	 */
-	public String getFamille() {
-		return famille;
-	}
-
-	/**
-	 * 
-	 * @param famille
-	 *            {@link #famille}.
-	 */
-	public void setFamille(String famille) {
-		this.famille = famille;
 	}
 
 	/**

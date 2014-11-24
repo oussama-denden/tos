@@ -641,8 +641,7 @@ public class DraftServiceImpl implements DraftService {
 	@Transactional(rollbackFor = Exception.class)
 	public void associerAuteur(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		LOGGER.info("De ut methode associerAuteur");
-		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.isExistDraft(draft, refDraft);
+		Draft draft = getDraftByReference(refDraft);
 		DraftValidator.validerAuteur(auteur);
 		draft.setAuteur(auteur.toDomain());
 		draftRepository.save(draft);
@@ -673,8 +672,7 @@ public class DraftServiceImpl implements DraftService {
 			throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionLigne ");
 
-		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.isExistDraft(draft, refDraft);
+		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);

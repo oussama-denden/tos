@@ -129,11 +129,6 @@ public class CommandeLigne {
 	private Tarif tarif;
 
 	/**
-	 * la famille de l'offre.
-	 */
-	private String famille;
-
-	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {
@@ -152,7 +147,6 @@ public class CommandeLigne {
 		this.referenceOffre = draftLigne.getReferenceOffre();
 		this.referenceContrat = draftLigne.getReferenceContrat();
 		this.gamme = offreCatalogue.getGamme();
-		this.famille = offreCatalogue.getFamille();
 		this.secteur = offreCatalogue.getSecteur();
 		this.label = offreCatalogue.getLabel();
 		this.typeProduit = offreCatalogue.getType();
@@ -420,25 +414,6 @@ public class CommandeLigne {
 	 */
 	public void addCommandeLigneDetail(CommandeLigneDetail commandeLigneDetail) {
 		this.commandeLigneDetails.add(commandeLigneDetail);
-	}
-
-	/**
-	 * get the famille.
-	 * 
-	 * @return {@link #famille}
-	 */
-	public String getFamille() {
-		return famille;
-	}
-
-	/**
-	 * set the famille.
-	 * 
-	 * @param famille
-	 *            the new {@link #famille}
-	 */
-	public void setFamille(String famille) {
-		this.famille = famille;
 	}
 
 	/**

@@ -108,7 +108,6 @@
 		<xsd:attribute name="referenceContrat" use="optional" />
 		<xsd:attribute name="secteur" use="optional" />
 		<xsd:attribute name="commandeId" use="optional" />
-		<xsd:attribute name="famille" use="optional" />
 		<xsd:attribute name="tarifId" use="optional" />
 	</xsd:complexType>
 	
@@ -144,7 +143,6 @@
 		<xsd:attribute name="politique" use="optional" />
 		<xsd:attribute name="politiqueIndex" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
-		<xsd:attribute name="typeTVA" use="optional" />
 		<xsd:attribute name="typeFrais" use="optional" />
 		<xsd:attribute name="tarifId" use="optional" />
 	</xsd:complexType>
