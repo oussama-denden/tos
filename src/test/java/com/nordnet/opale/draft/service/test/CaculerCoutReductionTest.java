@@ -12,7 +12,7 @@ import org.unitils.spring.annotation.SpringBean;
 
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.DraftValidationInfo;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -56,8 +56,9 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft-reduction.xml" })
 	public void calculerCoutReductionValide() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/calculerCoutDraft.json");
+			TrameCatalogueInfo trameCatalogue =
+					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+							"./requests/calculerCoutDraft.json");
 			Object object = draftService.calculerCout("Dra-00000001", trameCatalogue);
 			assertTrue(object instanceof Cout);
 			Cout cout = (Cout) object;
@@ -83,8 +84,9 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftNonExiste() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/calculerCoutDraft.json");
+			TrameCatalogueInfo trameCatalogue =
+					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+							"./requests/calculerCoutDraft.json");
 			draftService.calculerCout("Dra-00000000", trameCatalogue);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
@@ -102,8 +104,9 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftNonValide() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class, "./requests/calculerCoutDraft.json");
+			TrameCatalogueInfo trameCatalogue =
+					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+							"./requests/calculerCoutDraft.json");
 			Object object = draftService.calculerCout("Dra-00000002", trameCatalogue);
 			assertTrue(object instanceof DraftValidationInfo);
 			DraftValidationInfo validationInfo = (DraftValidationInfo) object;

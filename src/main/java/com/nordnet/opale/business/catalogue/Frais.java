@@ -1,10 +1,9 @@
 package com.nordnet.opale.business.catalogue;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.deserializer.TypeFraisDeserializer;
-import com.nordnet.opale.deserializer.TypeTVADeserializer;
 import com.nordnet.opale.enums.TypeFrais;
-import com.nordnet.opale.enums.TypeTVA;
 
 /**
  * represente les frais associe a une offre.
@@ -15,9 +14,10 @@ import com.nordnet.opale.enums.TypeTVA;
 public class Frais {
 
 	/**
-	 * reference frais.
+	 * id frais.
 	 */
-	private String reference;
+	@JsonProperty("id_frais")
+	private String idFrais;
 
 	/**
 	 * label du frais.
@@ -28,12 +28,6 @@ public class Frais {
 	 * montant du frais.
 	 */
 	private Double montant;
-
-	/**
-	 * {@link TypeTVA}.
-	 */
-	@JsonDeserialize(using = TypeTVADeserializer.class)
-	private TypeTVA typeTVA;
 
 	/**
 	 * {@link TypeFrais}.
@@ -49,19 +43,19 @@ public class Frais {
 
 	/**
 	 * 
-	 * @return {@link #reference}.
+	 * @return {@link #idFrais}.
 	 */
-	public String getReference() {
-		return reference;
+	public String getIdFrais() {
+		return idFrais;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}.
+	 * @param idFrais
+	 *            {@link #idFrais}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setIdFrais(String idFrais) {
+		this.idFrais = idFrais;
 	}
 
 	/**
@@ -96,23 +90,6 @@ public class Frais {
 	 */
 	public void setMontant(Double montant) {
 		this.montant = montant;
-	}
-
-	/**
-	 * 
-	 * @return {@link TypeTVA}.
-	 */
-	public TypeTVA getTypeTVA() {
-		return typeTVA;
-	}
-
-	/**
-	 * 
-	 * @param typeTVA
-	 *            {@link TypeTVA}.
-	 */
-	public void setTypeTVA(TypeTVA typeTVA) {
-		this.typeTVA = typeTVA;
 	}
 
 	/**

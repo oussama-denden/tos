@@ -1,7 +1,11 @@
 package com.nordnet.opale.business.catalogue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Optional;
 import com.nordnet.opale.deserializer.TypeTVADeserializer;
@@ -18,7 +22,8 @@ public class Tarif {
 	/**
 	 * reference tarif.
 	 */
-	private String reference;
+	@JsonProperty("id_tarif")
+	private String idTarif;
 
 	/**
 	 * le prix dans le tarif.
@@ -44,12 +49,12 @@ public class Tarif {
 	 * {@link TypeTVA}.
 	 */
 	@JsonDeserialize(using = TypeTVADeserializer.class)
-	private TypeTVA typeTVA;
+	private TypeTVA tva;
 
 	/**
 	 * la liste des reference des {@link Frais} associe au tarif.
 	 */
-	private List<String> frais;
+	private List<Frais> frais = new ArrayList<Frais>();
 
 	/**
 	 * constructeur par defaut.
@@ -59,25 +64,25 @@ public class Tarif {
 
 	@Override
 	public String toString() {
-		return "Tarif [reference=" + reference + ", prix=" + prix + ", duree=" + duree + ", frequence=" + frequence
+		return "Tarif [idTarif=" + idTarif + ", prix=" + prix + ", duree=" + duree + ", frequence=" + frequence
 				+ ", engagement=" + engagement + ", frais=" + frais + "]";
 	}
 
 	/**
 	 * 
-	 * @return {@link #reference}.
+	 * @return {@link #idTarif}.
 	 */
-	public String getReference() {
-		return reference;
+	public String getIdTarif() {
+		return idTarif;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}.
+	 * @param idTarif
+	 *            {@link #idTarif}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setIdTarif(String idTarif) {
+		this.idTarif = idTarif;
 	}
 
 	/**
@@ -152,24 +157,24 @@ public class Tarif {
 	 * 
 	 * @return {@link TypeTVA}.
 	 */
-	public TypeTVA getTypeTVA() {
-		return typeTVA;
+	public TypeTVA getTva() {
+		return tva;
 	}
 
 	/**
 	 * 
-	 * @param typeTVA
+	 * @param tva
 	 *            {@link TypeTVA}.
 	 */
-	public void setTypeTVA(TypeTVA typeTVA) {
-		this.typeTVA = typeTVA;
+	public void setTva(TypeTVA tva) {
+		this.tva = tva;
 	}
 
 	/**
 	 * 
 	 * @return {@link #frais}.
 	 */
-	public List<String> getFrais() {
+	public List<Frais> getFrais() {
 		return frais;
 	}
 
@@ -178,7 +183,7 @@ public class Tarif {
 	 * @param frais
 	 *            {@link #frais}.
 	 */
-	public void setFrais(List<String> frais) {
+	public void setFrais(List<Frais> frais) {
 		this.frais = frais;
 	}
 
@@ -195,6 +200,19 @@ public class Tarif {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * transforme la {@link List} de frais en un objet {@link Map}.
+	 * 
+	 * @return {@link Map<string, Frais>}.
+	 */
+	public Map<String, Frais> getFraisMap() {
+		Map<String, Frais> map = new HashMap<String, Frais>();
+		for (Frais frais : this.frais) {
+			map.put(frais.getIdFrais(), frais);
+		}
+		return map;
 	}
 
 }

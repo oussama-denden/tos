@@ -17,12 +17,12 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.annotations.Index;
 
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.Choice;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.ModeFacturation;
@@ -65,11 +65,13 @@ public class CommandeLigneDetail {
 	/**
 	 * reference choix.
 	 */
+	@Index(columnNames = "referenceChoix", name = "index_commandeLigneDetail_referenceChoix")
 	private String referenceChoix;
 
 	/**
 	 * label du produit.
 	 */
+	@Index(columnNames = "label", name = "index_commandeLigneDetail_label")
 	private String label;
 
 	/**
@@ -108,23 +110,19 @@ public class CommandeLigneDetail {
 	 * 
 	 * @param detail
 	 *            {@link DraftLigneDetail}.
-	 * @param referenceOffre
-	 *            reference de l'offre.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param detailCatalogue
+	 *            {@link DetailCatalogue}.
 	 */
-	public CommandeLigneDetail(DraftLigneDetail detail, String referenceOffre, TrameCatalogue trameCatalogue) {
-		DetailCatalogue detailCatalogue =
-				trameCatalogue.getOffreMap().get(referenceOffre).getDetailsMap().get(detail.getReferenceSelection());
+	public CommandeLigneDetail(DraftLigneDetail detail, DetailCatalogue detailCatalogue) {
 		this.numEC = detail.getNumEC();
 		this.referenceSelection = detail.getReferenceSelection();
-		this.typeProduit = detailCatalogue.getNature();
+		this.typeProduit = detailCatalogue.getType();
 		this.configurationJson = detail.getConfigurationJson();
 		Choice choice = detailCatalogue.getChoiceMap().get(detail.getReferenceChoix());
 		this.referenceChoix = detail.getReferenceChoix();
 		this.label = choice.getLabel();
 		if (!Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
-			this.tarif = new Tarif(detail.getReferenceTarif(), trameCatalogue);
+			this.tarif = new Tarif(choice.getTarifsMap().get(detail.getReferenceTarif()));
 		}
 	}
 

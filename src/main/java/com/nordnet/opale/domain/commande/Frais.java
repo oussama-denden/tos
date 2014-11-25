@@ -7,12 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.nordnet.opale.business.FraisInfo;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.enums.TypeFrais;
-import com.nordnet.opale.enums.TypeTVA;
 
 /**
  * Classe represente les frais dans une {@link Commande}.
@@ -35,6 +34,7 @@ public class Frais {
 	 * reference du tarif.
 	 */
 	@NotNull
+	@Index(columnNames = "reference", name = "index_frais")
 	private String reference;
 
 	/**
@@ -52,12 +52,6 @@ public class Frais {
 	 * montant du frais.
 	 */
 	private Double montant;
-
-	/**
-	 * {@link TypeTVA}.
-	 */
-	@Enumerated(EnumType.STRING)
-	private TypeTVA typeTVA;
 
 	/**
 	 * politique.
@@ -78,20 +72,14 @@ public class Frais {
 	/**
 	 * creation d'un frais a partir de la trame du catalogue.
 	 * 
-	 * @param refFrais
-	 *            reference du frais.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param frais
+	 *            {@link com.nordnet.opale.business.catalogue.Frais}.
 	 */
-	public Frais(String refFrais, TrameCatalogue trameCatalogue) {
-		com.nordnet.opale.business.catalogue.Frais frais = trameCatalogue.getFraisMap().get(refFrais);
-		this.reference = frais.getReference();
+	public Frais(com.nordnet.opale.business.catalogue.Frais frais) {
+		this.reference = frais.getIdFrais();
 		this.label = frais.getLabel();
 		this.typeFrais = frais.getTypeFrais();
 		this.montant = frais.getMontant();
-		this.typeTVA = frais.getTypeTVA();
-		// this.politique
-		// this.politiqueIndex
 	}
 
 	/**
@@ -177,23 +165,6 @@ public class Frais {
 	 */
 	public void setMontant(Double montant) {
 		this.montant = montant;
-	}
-
-	/**
-	 * 
-	 * @return {@link TypeTVA}.
-	 */
-	public TypeTVA getTypeTVA() {
-		return typeTVA;
-	}
-
-	/**
-	 * 
-	 * @param typeTVA
-	 *            {@link TypeTVA}.
-	 */
-	public void setTypeTVA(TypeTVA typeTVA) {
-		this.typeTVA = typeTVA;
 	}
 
 	/**

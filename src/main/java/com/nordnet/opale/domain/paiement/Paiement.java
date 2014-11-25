@@ -12,6 +12,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -46,11 +47,13 @@ public class Paiement {
 	 * reference du tarif.
 	 */
 	@NotNull
+	@Index(columnNames = "reference", name = "index_paiement_reference")
 	private String reference;
 
 	/**
 	 * reference commande.
 	 */
+	@Index(columnNames = "referenceCommande", name = "index_paiement_referenceCommande")
 	private String referenceCommande;
 
 	/**

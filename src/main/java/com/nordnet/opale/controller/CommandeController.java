@@ -336,7 +336,7 @@ public class CommandeController {
 	@ResponseBody
 	public List<CommandeInfo> chercherCommande(@RequestBody CriteresCommande criteresCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::chercherCommande");
-		return commandeService.find(criteresCommande);
+		return commandeService.chercherCommande(criteresCommande);
 
 	}
 
@@ -371,7 +371,7 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             the opale exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}/supprimer", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
 			@RequestBody Auteur auteur) throws OpaleException {
@@ -451,7 +451,7 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refCommande:.+}/signature/{refSignature:.+}/supprimer", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerSignature(@PathVariable String refCommande, @PathVariable String refSignature,
 			@RequestBody Auteur auteur) throws OpaleException {

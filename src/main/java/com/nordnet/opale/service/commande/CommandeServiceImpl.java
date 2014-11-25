@@ -45,6 +45,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
+import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypePaiement;
@@ -145,6 +146,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandeInfo getCommande(String refCommande) throws OpaleException {
 
 		LOGGER.info("Debut methode getCommande");
@@ -159,6 +161,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Commande getCommandeByReferenceDraft(String referenceDraft) {
 
 		LOGGER.info("Debut methode getCommandeByReferenceDraft");
@@ -243,7 +246,8 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<CommandeInfo> find(CriteresCommande criteresCommande) {
+	@Transactional(readOnly = true)
+	public List<CommandeInfo> chercherCommande(CriteresCommande criteresCommande) {
 
 		LOGGER.info("Debut methode find");
 
@@ -284,6 +288,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Commande getCommandeByReference(String referenceCommande) throws OpaleException {
 
 		LOGGER.info("Debut methode getCommandeByReference");
@@ -294,7 +299,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Paiement> getListePaiementComptant(String referenceCommande, boolean isAnnule) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isExiste(referenceCommande, commande);
@@ -342,6 +347,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Paiement> getPaiementRecurrent(String referenceCommande, boolean isAnnule) throws OpaleException {
 		getCommandeByReference(referenceCommande);
 
@@ -352,6 +358,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandePaiementInfo getListeDePaiement(String refCommande, boolean isAnnule) throws OpaleException {
 
 		getCommandeByReference(refCommande);
@@ -366,6 +373,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerPaiement(String refCommande, String refPaiement, Auteur auteur) throws OpaleException {
 
 		LOGGER.info("Debut methode supprimerPaiement");
@@ -411,12 +419,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerSignature(String refCommande, String refSignature, Auteur auteur) throws OpaleException {
 
 		LOGGER.info("Debut methode supprimerSignature");
 
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		getCommandeByReference(refCommande);
 		signatureService.supprimer(refCommande, refSignature, auteur);
 
 	}
@@ -425,6 +433,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object creerIntentionDeSignature(String refCommande, AjoutSignatureInfo ajoutSignatureInfo)
 			throws OpaleException, JSONException {
 
@@ -442,6 +451,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * @throws JSONException
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object signerCommande(String refCommande, String refrenceSignature, SignatureInfo signatureInfo)
 			throws OpaleException, JSONException {
 
@@ -455,11 +465,11 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<SignatureInfo> getSignature(String refCommande, Boolean afficheAnnule) throws OpaleException {
 		LOGGER.info("Debut methode  getSignature");
 
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		getCommandeByReference(refCommande);
 
 		return signatureService.getSignatures(refCommande, afficheAnnule);
 	}
@@ -468,6 +478,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandeValidationInfo validerCommande(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		return validerCommande(commande);
@@ -478,6 +489,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public CommandeValidationInfo validerCommande(Commande commande) throws OpaleException {
 
 		CommandeValidationInfo validationInfo = new CommandeValidationInfo();
@@ -527,6 +539,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -542,6 +555,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
 		List<String> referencesContrats = new ArrayList<>();
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
@@ -628,6 +642,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
@@ -669,6 +684,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Commande> getCommandeNonAnnuleEtNonTransformes() {
 		return commandeRepository.recupererCommandeNonTransformeeEtNonAnnulee();
 	}
@@ -677,6 +693,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public String getRecentDate(String refCommande) throws OpaleException {
 		return commandeRepository.getRecentDate(refCommande);
 	}
@@ -686,6 +703,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * 
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
@@ -698,6 +716,9 @@ public class CommandeServiceImpl implements CommandeService {
 			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
 
 		}
+
+		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		commandeRepository.save(commande);
 
 	}
 
@@ -725,13 +746,28 @@ public class CommandeServiceImpl implements CommandeService {
 
 		// Liste de produit renouvelement.
 		List<com.nordnet.opale.business.commande.ProduitRenouvellement> produitRenouvellements = new ArrayList<>();
+
+		com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement =
+				new com.nordnet.opale.business.commande.ProduitRenouvellement();
+
+		produitRenouvellement.setLabel(ligne.getLabel());
+		produitRenouvellement.setNumeroCommande(commande.getReference());
+		produitRenouvellement.setPrix(getPrixRenouvellement(ligne, commande.getReference()));
+		produitRenouvellement.setNumEC(ligne.getNumEC());
+
+		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
+		produitRenouvellement.setRemboursable(true);
+		produitRenouvellement.setTypeProduit(ligne.getTypeProduit());
+
+		produitRenouvellements.add(produitRenouvellement);
+
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
-			com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement =
-					new com.nordnet.opale.business.commande.ProduitRenouvellement();
+			produitRenouvellement = new com.nordnet.opale.business.commande.ProduitRenouvellement();
 
 			produitRenouvellement.setLabel(ligneDetail.getLabel());
 			produitRenouvellement.setNumeroCommande(commande.getReference());
-			produitRenouvellement.setPrix(getPrixRenouvellement(ligne, ligneDetail, commande.getReference()));
+			produitRenouvellement.setPrix(getPrixRenouvellement(ligneDetail, ligne.getModeFacturation(),
+					commande.getReference()));
 			produitRenouvellement.setNumEC(ligneDetail.getNumEC());
 			if (ligneDetail.getCommandeLigneDetailParent() != null) {
 				produitRenouvellement.setNumECParent(ligneDetail.getCommandeLigneDetailParent().getNumEC());
@@ -750,22 +786,65 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
-	 * Creer prix renouvellement.
+	 * Creer prix renouvellement detail ligne.
 	 * 
 	 * @param ligne
 	 *            {@link CommandeLigne}
+	 * @param referenceCommande
+	 *            reference commande
+	 * @return {@link PrixRenouvellemnt}
+	 */
+	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigne ligne, String referenceCommande) {
+		// creer le prix
+		PrixRenouvellemnt prix = new PrixRenouvellemnt();
+		prix.setModeFacturation(ligne.getModeFacturation());
+		prix.setMontant(ligne.getTarif().getPrix());
+		prix.setPeriodicite(ligne.getTarif().getFrequence());
+		prix.setTypeTVA(ligne.getTarif().getTypeTVA());
+
+		// affecter la duree.
+
+		prix.setDuree(ligne.getTarif().getDuree());
+		// prix.setModePaiement(ligne.getModePaiement());
+
+		// affecter la reference mode de paiement.
+		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
+		Paiement paiementRecurrent = null;
+		if (paiementRecurrents.size() > Constants.ZERO) {
+			paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		}
+		if (paiementRecurrent != null) {
+			prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
+		}
+
+		// creer le frais
+		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
+		for (Frais fraisCommande : ligne.getTarif().getFrais()) {
+			frais.add(mappingToFraisRenouvellement(fraisCommande));
+		}
+
+		prix.setFrais(frais);
+
+		return prix;
+	}
+
+	/**
+	 * Creer prix renouvellement detail ligne.
+	 * 
+	 * @param modeFacturation
+	 *            {@link ModeFacturation}
 	 * @param ligneDetail
 	 *            {@link CommandeLigneDetail}
 	 * @param referenceCommande
 	 *            reference commande
 	 * @return {@link PrixRenouvellemnt}
 	 */
-	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigne ligne, CommandeLigneDetail ligneDetail,
+	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigneDetail ligneDetail, ModeFacturation modeFacturation,
 			String referenceCommande) {
 
 		// creer le prix
 		PrixRenouvellemnt prix = new PrixRenouvellemnt();
-		prix.setModeFacturation(ligne.getModeFacturation());
+		prix.setModeFacturation(modeFacturation);
 		prix.setMontant(ligneDetail.getTarif().getPrix());
 		prix.setPeriodicite(ligneDetail.getTarif().getFrequence());
 		prix.setTypeTVA(ligneDetail.getTarif().getTypeTVA());
@@ -819,6 +898,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Cout calculerCout(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		Cout cout = new Cout(commande);

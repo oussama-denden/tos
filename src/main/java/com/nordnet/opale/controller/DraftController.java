@@ -28,6 +28,7 @@ import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
@@ -87,18 +88,18 @@ public class DraftController {
 	/**
 	 * chercher draft par reference.
 	 * 
-	 * @param reference
+	 * @param referenceDraft
 	 *            reference du draft.
 	 * @param auteur
 	 *            l auteur
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	@RequestMapping(value = "/{referenceDraft:.+}/supprimer", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void supprimerDraft(@PathVariable String reference, @RequestBody Auteur auteur) throws OpaleException {
+	public void supprimerDraft(@PathVariable String referenceDraft, @RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::annulerDraft");
-		draftService.annulerDraft(reference, auteur);
+		draftService.annulerDraft(referenceDraft, auteur);
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class DraftController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{reference:.+}/lignes", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{reference:.+}/ligne", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public String ajouterLignes(@PathVariable String reference, @RequestBody List<DraftLigneInfo> draftLignesInfo)
 			throws OpaleException, JSONException {
@@ -193,7 +194,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/supprimer", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerLigneDraft(@PathVariable String refDraft, @PathVariable String refLigne,
 			@RequestBody DeleteInfo deleteInfo) throws OpaleException {
@@ -231,8 +232,8 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/valider", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public DraftValidationInfo validerDraft(@PathVariable String refDraft, @RequestBody TrameCatalogue trameCatalogue)
-			throws OpaleException {
+	public DraftValidationInfo validerDraft(@PathVariable String refDraft,
+			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException {
 		LOGGER.info(":::ws-rec:::validerDraft");
 		return draftService.validerDraft(refDraft, trameCatalogue);
 	}
@@ -304,7 +305,7 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/costCalculation", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogue trameCatalogue)
+	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogueInfo trameCatalogue)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::calculerCout");
 		return draftService.calculerCout(refDraft, trameCatalogue);
@@ -375,7 +376,7 @@ public class DraftController {
 	}
 
 	/**
-	 * associer une reduction a un draft.
+	 * associer une reduction a l'element parent dans le draft.
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
@@ -391,7 +392,7 @@ public class DraftController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/{refTarif:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/tarif/{refTarif:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object associerReductionECParent(@PathVariable String refDraft, @PathVariable String refLigne,
 			@PathVariable String refTarif, @RequestBody ReductionInfo reductionInfo)
@@ -426,8 +427,7 @@ public class DraftController {
 			@PathVariable String refProduit, @PathVariable String refFrais, @RequestBody ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionFrais");
-		return draftService
-				.associerReductionFraisLigneDetaille(refDraft, refLigne, refProduit, refFrais, reductionInfo);
+		return draftService.associerReductionFraisLigneDetail(refDraft, refLigne, refProduit, refFrais, reductionInfo);
 	}
 
 	/**
@@ -493,7 +493,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/reduction/{refReduction:.+}", method = RequestMethod.DELETE, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/reduction/{refReduction:.+}/supprimer", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
 	public void supprimerReduction(@PathVariable String refDraft, @PathVariable String refReduction)
 			throws OpaleException {
@@ -516,8 +516,8 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public String transformerContratEnDraft(@PathVariable String refContrat, @RequestBody TrameCatalogue trameCatalogue)
-			throws OpaleException, JSONException {
+	public String transformerContratEnDraft(@PathVariable String refContrat,
+			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
 		Draft draft = draftService.transformerContratEnDraft(refContrat, trameCatalogue);
 

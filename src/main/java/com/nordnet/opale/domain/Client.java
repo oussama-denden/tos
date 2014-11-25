@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
@@ -32,11 +34,13 @@ public class Client {
 	/**
 	 * L'identifianrt du client.
 	 */
+	@Index(columnNames = "clientId", name = "index_client_clientId")
 	private String clientId;
 
 	/**
 	 * L adresse.
 	 */
+	@Index(columnNames = "adresseId", name = "index_client_adresseId")
 	private String adresseId;
 
 	/**

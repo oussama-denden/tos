@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -73,8 +73,8 @@ public class TransformerContratEnDraftTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-contrat-en-draft.xml" })
 	public void testerTransformerContratEnDraftNonValide() {
 		try {
-			TrameCatalogue trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogue.class,
+			TrameCatalogueInfo trameCatalogue =
+					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
 							"./requests/transformerContratEnDraft.json");
 			draftService.transformerContratEnDraft("00000002", trameCatalogue);
 		} catch (OpaleException e) {

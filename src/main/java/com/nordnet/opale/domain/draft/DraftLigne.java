@@ -25,6 +25,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
@@ -137,7 +138,7 @@ public class DraftLigne {
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public DraftLigne(Contrat contrat, TrameCatalogue trameCatalogue) {
+	public DraftLigne(Contrat contrat, TrameCatalogueInfo trameCatalogue) {
 		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
 		this.auteur = auteur;
 		ElementContractuel elementContractuelParent = contrat.getParent();
@@ -145,7 +146,7 @@ public class DraftLigne {
 		this.referenceOffre = elementContractuelParent.getReferenceProduit();
 		this.referenceTarif = elementContractuelParent.getReferenceTarif();
 		this.numEC = elementContractuelParent.getNumEC();
-		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(this.referenceOffre);
+		OffreCatalogue offreCatalogue = trameCatalogue.getTrameCatalogue().getOffreMap().get(this.referenceOffre);
 		for (ElementContractuel elementContractuel : contrat.getSousContrats()) {
 			if (!elementContractuel.isParent()) {
 				addDraftLigneDetail(new DraftLigneDetail(elementContractuel, offreCatalogue));

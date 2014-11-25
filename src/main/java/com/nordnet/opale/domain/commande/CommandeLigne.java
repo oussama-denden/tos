@@ -20,11 +20,13 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
+import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
@@ -72,11 +74,13 @@ public class CommandeLigne {
 	/**
 	 * reference du contrat.
 	 */
+	@Index(columnNames = "referenceContrat", name = "index_commandeLigne_referenceOffre")
 	private String referenceContrat;
 
 	/**
 	 * label de l'offre dans le catalogue.
 	 */
+	@Index(columnNames = "label", name = "index_commandeLigne_label")
 	private String label;
 
 	/**
@@ -128,11 +132,6 @@ public class CommandeLigne {
 	private Tarif tarif;
 
 	/**
-	 * la famille de l'offre.
-	 */
-	private String famille;
-
-	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {
@@ -143,25 +142,25 @@ public class CommandeLigne {
 	 * 
 	 * @param draftLigne
 	 *            {@link DraftLigne}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param offreCatalogue
+	 *            {@link OffreCatalogue}.
 	 */
-	public CommandeLigne(DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
-		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
+	public CommandeLigne(DraftLigne draftLigne, OffreCatalogue offreCatalogue) {
 		this.numEC = draftLigne.getNumEC();
 		this.referenceOffre = draftLigne.getReferenceOffre();
 		this.referenceContrat = draftLigne.getReferenceContrat();
 		this.gamme = offreCatalogue.getGamme();
-		this.famille = offreCatalogue.getFamille();
+		this.secteur = offreCatalogue.getSecteur();
 		this.label = offreCatalogue.getLabel();
-		this.typeProduit = offreCatalogue.getNature();
+		this.typeProduit = offreCatalogue.getType();
 		this.modeFacturation = offreCatalogue.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
-		this.tarif = new Tarif(draftLigne.getReferenceTarif(), trameCatalogue);
-
+		this.tarif = new Tarif(offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif()));
+		DetailCatalogue detailCatalogue = null;
 		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, referenceOffre, trameCatalogue);
+			detailCatalogue = offreCatalogue.getDetailsMap().get(detail.getReferenceSelection());
+			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, detailCatalogue);
 			addCommandeLigneDetail(commandeLigneDetail);
 		}
 		creerArborescence(draftLigne.getDraftLigneDetails(), this.commandeLigneDetails);
@@ -418,25 +417,6 @@ public class CommandeLigne {
 	 */
 	public void addCommandeLigneDetail(CommandeLigneDetail commandeLigneDetail) {
 		this.commandeLigneDetails.add(commandeLigneDetail);
-	}
-
-	/**
-	 * get the famille.
-	 * 
-	 * @return {@link #famille}
-	 */
-	public String getFamille() {
-		return famille;
-	}
-
-	/**
-	 * set the famille.
-	 * 
-	 * @param famille
-	 *            the new {@link #famille}
-	 */
-	public void setFamille(String famille) {
-		this.famille = famille;
 	}
 
 	/**

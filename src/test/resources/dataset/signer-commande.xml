@@ -16,6 +16,8 @@
 
 <commande id="10"  reference="REF-COMMANDE-6" timestamp="[now]" />
 
+<commande id="11"  reference="REF-COMMANDE-7" timestamp="[now]" />
+
 <signature id="1"  reference="REF-SIGNATURE-1" mode="OPEN_TRUST" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-2" />
 <signature id="2"  reference="REF-SIGNATURE-2" mode="OPEN_TRUST" idSignature="opentrust_dfr2225tr3555" timestampSignature="[now]" footprint="e2680542f77606f42f1cb06d6" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]"  referenceCommande="REF-COMMANDE-4"/>
 

@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.Auteur;
@@ -166,7 +167,7 @@ public class Draft {
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public Draft(Contrat contrat, TrameCatalogue trameCatalogue) {
+	public Draft(Contrat contrat, TrameCatalogueInfo trameCatalogue) {
 		Auteur auteur = new Auteur(trameCatalogue.getAuteur());
 		this.auteur = auteur;
 		Client clientAFacturer =
@@ -178,6 +179,7 @@ public class Draft {
 						auteur);
 		this.clientALivrer = clientALivrer;
 
+		// TODO verifier comment recuperer l'addresse du client suscripteur.
 		Client clientSouscripteur = new Client(contrat.getIdClient(), "", auteur);
 		this.clientSouscripteur = clientSouscripteur;
 
@@ -448,7 +450,7 @@ public class Draft {
 		JSONObject detailJsonObject = null;
 		String referenceContrat = null;
 
-		draftJsonObject.put("refrence", reference);
+		draftJsonObject.put("reference", reference);
 		for (DraftLigne draftLigne : draftLignes) {
 			draftLigneJsonObject = new JSONObject();
 			offreJsonObject = new JSONObject();

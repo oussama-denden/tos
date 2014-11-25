@@ -26,7 +26,10 @@ import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
+import com.nordnet.opale.business.catalogue.Choice;
+import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.Tarif;
@@ -128,6 +131,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Draft getDraftByReference(String reference) throws OpaleException {
 		Draft draft = draftRepository.findByReference(reference);
 		DraftValidator.isExistDraft(draft, reference);
@@ -143,6 +147,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerDraft(String reference) throws OpaleException {
 
 		LOGGER.info("Enter methode supprimerDraft");
@@ -157,6 +162,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Draft> findDraftAnnule() {
 		return draftRepository.findDraftAnnule();
 	}
@@ -165,6 +171,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException {
 
 		LOGGER.info("Enter methode creerDraft");
@@ -217,7 +224,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public List<String> ajouterLignes(String refDraft, List<DraftLigneInfo> draftLignesInfo) throws OpaleException {
 
 		Draft draft = getDraftByReference(refDraft);
@@ -248,6 +255,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void modifierLigne(String refDraft, String refLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Draft draft = getDraftByReference(refDraft);
@@ -292,6 +300,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void annulerDraft(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		LOGGER.info("Entrer methode annulerDraft");
 
@@ -312,6 +321,7 @@ public class DraftServiceImpl implements DraftService {
 	 * 
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void ajouterReferenceExterne(String referenceDraft, ReferenceExterneInfo referenceExterneInfo)
 			throws OpaleException {
 		LOGGER.info("Debut methode ajouterReferenceExterne");
@@ -331,6 +341,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
 			throws OpaleException {
 
@@ -357,6 +368,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void associerClient(String refDraft, ClientInfo clientInfo) throws OpaleException {
 		LOGGER.info("Enter methode associerClient");
 
@@ -416,14 +428,16 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+	@Transactional(rollbackFor = Exception.class)
+	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isAuteurValide(trameCatalogue.getAuteur());
 		DraftValidator.codePartenaireNotNull(draft, Constants.VALIDER_DRAFT);
 		tracageService.ajouterTrace(trameCatalogue.getAuteur().getQui(), referenceDraft,
 				"la validation du draft de reference " + referenceDraft);
 
-		return catalogueValidator.validerDraft(draft, trameCatalogue);
+		return catalogueValidator.validerDraft(draft, trameCatalogue.getTrameCatalogue());
 	}
 
 	/**
@@ -434,7 +448,7 @@ public class DraftServiceImpl implements DraftService {
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
 			throws OpaleException, CloneNotSupportedException {
 
-		DraftValidator.validerAuteur(transformationInfo.getTrameCatalogue().getAuteur());
+		DraftValidator.validerAuteur(transformationInfo.getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
@@ -447,7 +461,7 @@ public class DraftServiceImpl implements DraftService {
 				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 
 		if (validationInfo.isValide()) {
-			Commande commande = new Commande(draft, transformationInfo.getTrameCatalogue());
+			Commande commande = new Commande(draft, transformationInfo);
 			commande.setReference(keygenService.getNextKey(Commande.class));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
@@ -457,7 +471,7 @@ public class DraftServiceImpl implements DraftService {
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
 
-			tracageService.ajouterTrace(transformationInfo.getTrameCatalogue().getAuteur().getQui(), referenceDraft,
+			tracageService.ajouterTrace(transformationInfo.getAuteur().getQui(), referenceDraft,
 					"la transformation du draft de reference " + referenceDraft + " en commande de reference "
 							+ commande.getReference());
 			return commande;
@@ -476,7 +490,6 @@ public class DraftServiceImpl implements DraftService {
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}
 	 */
-	@Transactional
 	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
 		// coper reduction draft
 		List<Reduction> reductionDraft = new ArrayList<Reduction>();
@@ -591,6 +604,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void associerCodePartenaire(String refDraft, CodePartenaireInfo codePartenaireInfo) throws OpaleException {
 		LOGGER.info("Debut methode service associerCodePartenaire");
 		Draft draft = draftRepository.findByReference(refDraft);
@@ -607,11 +621,13 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException {
+	@Transactional(readOnly = true)
+	public Object calculerCout(String refDraft, TrameCatalogueInfo trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(refDraft);
-		DraftValidationInfo validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue);
+		DraftValidationInfo validationInfo =
+				catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 		if (validationInfo.isValide()) {
-			Cout cout = calculerCoutLigne(draft, trameCatalogue);
+			Cout cout = calculerCoutLigne(draft, trameCatalogue.getTrameCatalogue());
 			return cout;
 		} else {
 			return validationInfo;
@@ -622,10 +638,10 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void associerAuteur(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		LOGGER.info("De ut methode associerAuteur");
-		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.isExistDraft(draft, refDraft);
+		Draft draft = getDraftByReference(refDraft);
 		DraftValidator.validerAuteur(auteur);
 		draft.setAuteur(auteur.toDomain());
 		draftRepository.save(draft);
@@ -637,6 +653,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc }.
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReduction(String refDraft, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReduction ");
 
@@ -650,12 +667,12 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionLigne ");
 
-		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.isExistDraft(draft, refDraft);
+		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
@@ -671,6 +688,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionDetailLigne ");
@@ -695,7 +713,8 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
+	@Transactional(rollbackFor = Exception.class)
+	public Object associerReductionFraisLigneDetail(String refDraft, String refLigne, String refProduit,
 			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFrais ");
@@ -722,13 +741,13 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionFraisLigne(String refDraft, String refLigne, String refFrais,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFraisLigne ");
 
-		Draft draft = draftRepository.findByReference(refDraft);
-		DraftValidator.isExistDraft(draft, refDraft);
+		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
@@ -745,6 +764,7 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void supprimerReduction(String refDraft, String refReduction) throws OpaleException {
 		LOGGER.info("Debut methode supprimerReduction");
 
@@ -758,13 +778,15 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
+	@Transactional(rollbackFor = Exception.class)
+	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogueInfo trameCatalogue)
 			throws OpaleException {
 		LOGGER.info("Debut methode transformerContratEnDraft");
 		Contrat contrat = restClient.getContratByReference(referenceContrat);
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 		String referenceOffre = contrat.getParent().getReferenceProduit();
-		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(contrat.getParent().getReferenceProduit());
+		OffreCatalogue offreCatalogue =
+				trameCatalogue.getTrameCatalogue().getOffreMap().get(contrat.getParent().getReferenceProduit());
 		DraftValidationInfo validationInfo = new DraftValidationInfo();
 		if (offreCatalogue == null) {
 			validationInfo.addReason("offre.reference", "36.3.1.2",
@@ -773,7 +795,7 @@ public class DraftServiceImpl implements DraftService {
 			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 		} else {
 			Draft draft = new Draft(contrat, trameCatalogue);
-			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue);
+			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 			if (validationInfo.isValide()) {
 				/*
 				 * attribution des reference au draft/draftLigne.
@@ -833,32 +855,35 @@ public class DraftServiceImpl implements DraftService {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		double reduction = 0d;
-		Map<String, Tarif> tarifMap = trameCatalogue.getTarifsMap();
-		Map<String, Frais> fraisMap = trameCatalogue.getFraisMap();
 		detailCout.setNumero(draftLigne.getReference());
 		detailCout.setLabel(draftLigne.getReferenceOffre());
 		double plan = 0d;
 		Integer frequence = null;
 		Tarif tarif = null;
+		DetailCatalogue detailCatalogue = null;
+		Choice choice = null;
+		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
 		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-			tarif = tarifMap.get(draftLigneDetail.getReferenceTarif());
-			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
+			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
+			choice = detailCatalogue.getChoiceMap().get(draftLigneDetail.getReferenceChoix());
+			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
+			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 			coutTotal += detailCoutTarif.getCoutTotal();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
 					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReferenceChoix(),
 							detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan() != null ? detailCoutTarif
-									.getPlan().getPlan() : Constants.ZERO, tarif, fraisMap, false);
+									.getPlan().getPlan() : Constants.ZERO, tarif, false);
 		}
 
-		tarif = tarifMap.get(draftLigne.getReferenceTarif());
-		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif, fraisMap);
+		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 		coutTotal += detailCoutTarif.getCoutTotal();
 		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 		reduction +=
 				caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
-						plan, tarif, fraisMap, true);
+						plan, tarif, true);
 
 		detailCout.setPlan(new Plan(frequence, plan));
 		detailCout.setCoutTotal(coutTotal);
@@ -872,11 +897,9 @@ public class DraftServiceImpl implements DraftService {
 	 * 
 	 * @param tarif
 	 *            {@link Tarif}.
-	 * @param fraisMap
-	 *            liste des {@link Frais} du catalogue.
 	 * @return {@link DetailCout}.
 	 */
-	private DetailCout calculerDetailCoutTarif(Tarif tarif, Map<String, Frais> fraisMap) {
+	private DetailCout calculerDetailCoutTarif(Tarif tarif) {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		if (tarif.isRecurrent()) {
@@ -884,8 +907,7 @@ public class DraftServiceImpl implements DraftService {
 		} else {
 			coutTotal += tarif.getPrix();
 		}
-		for (String refFrais : tarif.getFrais()) {
-			Frais frais = fraisMap.get(refFrais);
+		for (Frais frais : tarif.getFrais()) {
 			if (frais.getTypeFrais() == TypeFrais.CREATION)
 				coutTotal += frais.getMontant();
 		}
@@ -906,8 +928,6 @@ public class DraftServiceImpl implements DraftService {
 	 *            cout de detail ligne
 	 * @param tarif
 	 *            {@link Tarif}
-	 * @param fraisMap
-	 *            map du frais
 	 * @param isLigne
 	 *            true si on va calculer la reduction sir la ligne
 	 * @param plan
@@ -915,7 +935,7 @@ public class DraftServiceImpl implements DraftService {
 	 * @return somme di reduction.
 	 */
 	private Double caculerReductionDetaille(String refDraft, String refLinge, String refDetailLigne, Double coutDetail,
-			Double plan, Tarif tarif, Map<String, Frais> fraisMap, boolean isLigne) {
+			Double plan, Tarif tarif, boolean isLigne) {
 		double coutReduction = 0d;
 		Reduction reductionProduit = null;
 		if (isLigne) {
@@ -935,17 +955,16 @@ public class DraftServiceImpl implements DraftService {
 		}
 
 		// calculer reduction su frais de detaille ligne draft.
-		for (String refFrais : tarif.getFrais()) {
+		for (Frais frais : tarif.getFrais()) {
 			Reduction reductionFrais = null;
-			Frais frais = fraisMap.get(refFrais);
 			if (isLigne) {
 				reductionFrais =
-						reductionService.findReductionlLigneDraftFrais(refDraft, refLinge, tarif.getReference(),
-								refFrais);
+						reductionService.findReductionlLigneDraftFrais(refDraft, refLinge, tarif.getIdTarif(),
+								frais.getIdFrais());
 			} else {
 				reductionFrais =
 						reductionService.findReductionDetailLigneDraftFrais(refDraft, refLinge, refDetailLigne,
-								tarif.getReference(), refFrais);
+								tarif.getIdTarif(), frais.getIdFrais());
 			}
 			if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
 				if (reductionFrais.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
@@ -986,6 +1005,7 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionECParent(String refDraft, String refLigne, String refTarif,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionECParent ");

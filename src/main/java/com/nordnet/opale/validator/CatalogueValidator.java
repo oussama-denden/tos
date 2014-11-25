@@ -121,7 +121,7 @@ public class CatalogueValidator {
 				validationInfo.addReason("lignes[" + i + "].offre.reference", "36.3.1.2", PropertiesUtil.getInstance()
 						.getErrorMessage("1.1.6", draftLigne.getReferenceOffre()), values);
 			} else {
-				Tarif tarifLigne = trameCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+				Tarif tarifLigne = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
 				if (tarifLigne == null) {
 					values = new ArrayList<String>();
 					values.add(draftLigne.getReferenceTarif());
@@ -129,17 +129,6 @@ public class CatalogueValidator {
 							.getInstance().getErrorMessage("1.1.28", draftLigne.getReferenceTarif()), values);
 				}
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					if (!Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
-						Tarif tarifDetail = trameCatalogue.getTarifsMap().get(detail.getReferenceTarif());
-						if (tarifDetail == null) {
-							values = new ArrayList<String>();
-							values.add(detail.getReferenceTarif());
-							validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].referenceTarif",
-									"36.3.1.5",
-									PropertiesUtil.getInstance().getErrorMessage("1.1.28", detail.getReferenceTarif()),
-									values);
-						}
-					}
 					DetailCatalogue detailCatalogue =
 							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());
 					if (detailCatalogue == null) {
@@ -149,6 +138,7 @@ public class CatalogueValidator {
 								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
 								values);
 					} else {
+
 						Choice choice = detailCatalogue.getChoice(detail.getReferenceChoix());
 						if (choice == null) {
 							values = new ArrayList<String>();
@@ -157,6 +147,17 @@ public class CatalogueValidator {
 									"36.3.1.6",
 									PropertiesUtil.getInstance().getErrorMessage("1.1.29", detail.getReferenceChoix()),
 									values);
+						} else {
+							if (!Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
+								Tarif tarifDetail = choice.getTarifsMap().get(detail.getReferenceTarif());
+								if (tarifDetail == null) {
+									values = new ArrayList<String>();
+									values.add(detail.getReferenceTarif());
+									validationInfo.addReason("lignes[" + i + "].offre.details[" + j
+											+ "].referenceTarif", "36.3.1.5", PropertiesUtil.getInstance()
+											.getErrorMessage("1.1.28", detail.getReferenceTarif()), values);
+								}
+							}
 						}
 					}
 					j++;

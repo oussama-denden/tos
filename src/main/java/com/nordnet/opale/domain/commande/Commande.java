@@ -16,11 +16,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandeLigneInfo;
+import com.nordnet.opale.business.TransformationInfo;
+import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
@@ -50,6 +53,7 @@ public class Commande {
 	 * reference de la commande.
 	 */
 	@NotNull
+	@Index(columnNames = "reference", name = "index_commande")
 	private String reference;
 
 	/**
@@ -125,7 +129,7 @@ public class Commande {
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}.
 	 */
-	public Commande(Draft draft, TrameCatalogue trameCatalogue) {
+	public Commande(Draft draft, TransformationInfo trameCatalogue) {
 
 		this.clientAFacturer = draft.getClientAFacturer();
 		this.clientAFacturer.setAuteur(draft.getAuteur());
@@ -137,8 +141,10 @@ public class Commande {
 		this.auteur = new Auteur(trameCatalogue.getAuteur());
 		this.codePartenaire = draft.getCodePartenaire();
 		this.referenceDraft = draft.getReference();
+		OffreCatalogue offreCatalogue = null;
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, trameCatalogue);
+			offreCatalogue = trameCatalogue.getTrameCatalogue().getOffreMap().get(draftLigne.getReferenceOffre());
+			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, offreCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
 			addLigne(commandeLigne);
 		}

@@ -1,70 +1,79 @@
 {
-  "frais": [
-    {
-      "reference": "std_cloture",
-      "typeFrais": "RESILIATION",
-      "montant": "50",
-      "label": "Frais de cloture de dossier",
-      "typeTVA": "S" 
-    },
-    {
-      "reference": "engagement_kitsat",
-      "typeFrais": "CREATION",
-      "montant": "50",
-      "label": "Frais de dossier",
-      "typeTVA": "S" 
+  "auteur": {
+    "qui": "GRC.WEL-JOHNDOE",
+    "canal": "welcome",
+    "ip": {
+      "ts": "1411654933",
+      "ip": "127.0.0.1"
     }
-  ],
-  "tarifs": [
-    {
-      "reference": "mensuel_jet10_base",
-      "engagement": "0",
-      "prix": "34.9",
-      "typeTVA": "S",
-      "frais": [
-        "std_cloture"
-      ],
-      "frequence": "1",
-      "duree": "1"
-    },
-    {
-      "reference": "annuel_jet10_base",
-      "engagement": "12",
-      "typeTVA": "S",
-      "prix": "34.9",
-      "frais": [
-        "engagement_kitsat"
-      ],
-      "frequence": "1",
-      "duree": "12"
-    }
-  ],
-  "offres": [
+  },
+  "trameCatalogue": {
+    "offres": [
     {
       "reference": "jet_surf10",
-      "label": "offre jet_surf10",
       "gamme": "jet",
-      "famille": "sat",
+      "secteur": "sat",
       "modeFacturation": "PREMIER_MOIS",
-      "nature": "SERVICE",
       "tarifs": [
-        "annuel_jet10_base","mensuel_jet10_base"
-      ],
-      "tranches": [
-        "A"
+       	{
+	      "id_tarif": "mensuel_jet10_base",
+	      "engagement": "0",
+	      "prix": "34.9",
+	      "tva": "S",
+	      "frais": [
+	        {
+	      		"id_frais": "std_cloture",
+	      		"typeFrais": "RESILIATION",
+	      		"montant": "50",
+	      		"label": "Frais de cloture de dossier"
+	      	}
+	      ],
+	      "frequence": "1",
+	      "duree": "1"
+    	},
+    	{
+	      "id_tarif": "annuel_jet10_base",
+	      "engagement": "12",
+	      "tva": "S",
+	      "prix": "34.9",
+	      "frais": [
+	        {
+	      		"id_frais": "engagement_kitsat",
+	      		"typeFrais": "CREATION",
+	      		"montant": "50",
+	      		"label": "Frais de dossier"
+	    	}
+	      ],
+	      "frequence": "1",
+	      "duree": "12"
+    	}
       ],
       "details": [
         {
           "referenceSelection": "kitsat",
           "label": "Trafic",
-          "type": "ONLY_ONE",
-          "nature": "BIEN",
+          "type": "BIEN",
           "choices": [
             {
-              "reference": "trafic20g",
+              "reference": "kitsat",
               "label": "Trafic 10 Gigas (Inclus)",
               "tarifs": [
-                "annuel_jet10_base"
+                {
+			      "id_tarif": "annuel_jet10_base",
+			      "engagement": "12",
+			      "tva": "S",
+			      "prix": "34.9",
+			      "frais": [
+			        {
+			      		"id_frais": "engagement_kitsat",
+			      		"typeFrais": "CREATION",
+			      		"montant": "50",
+			      		"label": "Frais de dossier"
+			    	}
+			      ],
+			      "frequence": "1",
+			      "duree": "12"
+    			}
               ]
             }
           ]
@@ -72,27 +81,34 @@
          {
           "referenceSelection": "jet",
           "label": "Trafic",
-          "type": "ONLY_ONE",
-          "nature": "BIEN",
+          "type": "BIEN",
           "choices": [
             {
-              "reference": "trafic10g",
+              "reference": "jet",
               "label": "Trafic 10 Gigas (Inclus)",
               "tarifs": [
-                "annuel_jet10_base"
+                {
+			      "id_tarif": "annuel_jet10_base",
+			      "engagement": "12",
+			      "tva": "S",
+			      "prix": "34.9",
+			      "frais": [
+			        {
+			      		"id_frais": "engagement_kitsat",
+			      		"typeFrais": "CREATION",
+			      		"montant": "50",
+			      		"label": "Frais de dossier"
+			    	}
+			      ],
+			      "frequence": "1",
+			      "duree": "12"
+    			}
               ]
             }
           ]
         }
       ]
     }
-  ],
-    "auteur": {
-      "qui": "string",
-      "ip": {
-        "ip": "string",
-        "ts": "123456789"
-      },
-      "canal": "string"
-    }
-},
+  ]
+  }
+  }

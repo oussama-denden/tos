@@ -1,6 +1,5 @@
 package com.nordnet.opale.repository.commande;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -125,12 +124,12 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 			String referenceTarif, String referenceFrais);
 
 	/**
-	 * recuperer la date de d'accee sur une commande.
+	 * recuperer la date de derniere operation sur la commande.
 	 * 
 	 * @param refCommande
 	 *            reference du commande.
 	 * 
-	 * @return {@link Date}
+	 * @return la date de derniere operation.
 	 */
 	@Query(nativeQuery = true, value = MAX_DATE_ACTIVATION)
 	public String getRecentDate(@Param("referenceCommande") String refCommande);

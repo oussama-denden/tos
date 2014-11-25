@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.enums.TypeProduit;
 
 /**
@@ -17,22 +16,6 @@ import com.nordnet.opale.enums.TypeProduit;
 public class TrameCatalogue {
 
 	/**
-	 * L auteur qui va lancer l operation.
-	 */
-	private Auteur auteur;
-
-	/**
-	 * 
-	 * list des {@link Frais}.
-	 */
-	private List<Frais> frais = new ArrayList<Frais>();
-
-	/**
-	 * liste des {@link Tarif} dans le catalogue.
-	 */
-	private List<Tarif> tarifs = new ArrayList<Tarif>();
-
-	/**
 	 * liste des {@link OffreCatalogue} dans le catalogue.
 	 */
 	private List<OffreCatalogue> offres = new ArrayList<OffreCatalogue>();
@@ -41,57 +24,6 @@ public class TrameCatalogue {
 	 * constructeur par defaut.
 	 */
 	public TrameCatalogue() {
-	}
-
-	/**
-	 * 
-	 * @return {@link Auteur}
-	 */
-	public Auteur getAuteur() {
-		return auteur;
-	}
-
-	/**
-	 * 
-	 * @param auteur
-	 *            {@link Auteur}
-	 */
-	public void setAuteur(Auteur auteur) {
-		this.auteur = auteur;
-	}
-
-	/**
-	 * 
-	 * @return {@link #frais}.
-	 */
-	public List<Frais> getFrais() {
-		return frais;
-	}
-
-	/**
-	 * 
-	 * @param frais
-	 *            {@link #frais}.
-	 */
-	public void setFrais(List<Frais> frais) {
-		this.frais = frais;
-	}
-
-	/**
-	 * 
-	 * @return {@link #tarifs}.
-	 */
-	public List<Tarif> getTarifs() {
-		return tarifs;
-	}
-
-	/**
-	 * 
-	 * @param tarifs
-	 *            {@link #tarifs}.
-	 */
-	public void setTarifs(List<Tarif> tarifs) {
-		this.tarifs = tarifs;
 	}
 
 	/**
@@ -165,37 +97,11 @@ public class TrameCatalogue {
 			DetailCatalogue detailCatalogue = new DetailCatalogue();
 			detailCatalogue.setReferenceSelection(referenceSelection);
 			int indexDetail = offreCatalogue.getDetails().indexOf(detailCatalogue);
-			if (offreCatalogue.getDetails().get(indexDetail).getNature().equals(TypeProduit.BIEN)) {
+			if (offreCatalogue.getDetails().get(indexDetail).getType().equals(TypeProduit.BIEN)) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * transforme la {@link List} de tarif en un objet {@link Map}.
-	 * 
-	 * @return {@link Map<string, Tarif>}.
-	 */
-	public Map<String, Tarif> getTarifsMap() {
-		Map<String, Tarif> map = new HashMap<String, Tarif>();
-		for (Tarif tarif : tarifs) {
-			map.put(tarif.getReference(), tarif);
-		}
-		return map;
-	}
-
-	/**
-	 * transforme la {@link List} de frais en un objet {@link Map}.
-	 * 
-	 * @return {@link Map<string, Frais>}.
-	 */
-	public Map<String, Frais> getFraisMap() {
-		Map<String, Frais> map = new HashMap<String, Frais>();
-		for (Frais frais : this.frais) {
-			map.put(frais.getReference(), frais);
-		}
-		return map;
 	}
 
 	/**

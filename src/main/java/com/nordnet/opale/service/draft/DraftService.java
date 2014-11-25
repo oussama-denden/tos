@@ -14,6 +14,7 @@ import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
+import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
@@ -170,7 +171,8 @@ public interface DraftService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogue trameCatalogue) throws OpaleException;
+	public DraftValidationInfo validerDraft(String referenceDraft, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException;
 
 	/**
 	 * transformer un {@link Draft} en {@link Commande}.
@@ -231,7 +233,7 @@ public interface DraftService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Object calculerCout(String refDraft, TrameCatalogue trameCatalogue) throws OpaleException;
+	public Object calculerCout(String refDraft, TrameCatalogueInfo trameCatalogue) throws OpaleException;
 
 	/**
 	 * Transformer un contrat en draft.
@@ -244,7 +246,7 @@ public interface DraftService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogue trameCatalogue)
+	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogueInfo trameCatalogue)
 			throws OpaleException;
 
 	/**
@@ -299,7 +301,7 @@ public interface DraftService {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public Object associerReductionFraisLigneDetaille(String refDraft, String refLigne, String refProduit,
+	public Object associerReductionFraisLigneDetail(String refDraft, String refLigne, String refProduit,
 			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException;
 
 	/**

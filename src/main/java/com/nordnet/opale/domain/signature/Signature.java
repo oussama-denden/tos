@@ -13,6 +13,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.deserializer.ModeSignatureDeserialiser;
@@ -48,11 +50,13 @@ public class Signature {
 	/**
 	 * reference de signature.
 	 */
+	@Index(columnNames = "reference", name = "index_signature_reference")
 	private String reference;
 
 	/**
 	 * refrence du commande.
 	 */
+	@Index(columnNames = "referenceCommande", name = "index_signature_referenceCommande")
 	private String referenceCommande;
 
 	/**
