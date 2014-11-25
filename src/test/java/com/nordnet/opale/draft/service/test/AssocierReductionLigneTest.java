@@ -49,7 +49,7 @@ public class AssocierReductionLigneTest extends GlobalTestCase {
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionLigneValide() {
+	public void testerAssocierReductionLigneValide() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
@@ -66,7 +66,7 @@ public class AssocierReductionLigneTest extends GlobalTestCase {
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionLigneAvecDraftNonExiste() {
+	public void testerAssocierReductionLigneAvecDraftNonExiste() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
@@ -85,7 +85,7 @@ public class AssocierReductionLigneTest extends GlobalTestCase {
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionLigneAvecLigneNonExiste() {
+	public void testerAssocierReductionLigneAvecLigneNonExiste() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");

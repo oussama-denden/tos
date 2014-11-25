@@ -30,7 +30,7 @@ public class AssocierReductionFraisLigneTest extends GlobalTestCase {
 	/**
 	 * Declaration du log.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(AssocierReductionLigneTest.class);
+	private static final Logger LOGGER = Logger.getLogger(AssocierReductionFraisLigneTest.class);
 
 	/**
 	 * {@link DraftService}.
@@ -49,7 +49,7 @@ public class AssocierReductionFraisLigneTest extends GlobalTestCase {
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionFraisLigneValide() {
+	public void testerAssocierReductionFraisLigneValide() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
@@ -68,7 +68,7 @@ public class AssocierReductionFraisLigneTest extends GlobalTestCase {
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionFraisLigneAvecDraftNonExiste() {
+	public void testerAssocierReductionFraisLigneAvecDraftNonExiste() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");
@@ -87,7 +87,7 @@ public class AssocierReductionFraisLigneTest extends GlobalTestCase {
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
-	public void associerReductionFraisLigneAvecLigneNonExiste() {
+	public void testerAssocierReductionFraisLigneAvecLigneNonExiste() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/associerReduction.json");

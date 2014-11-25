@@ -111,7 +111,7 @@ public interface CommandeService {
 	 *            the criteres commande
 	 * @return list de {@link Commande}
 	 */
-	public List<CommandeInfo> find(CriteresCommande criteresCommande);
+	public List<CommandeInfo> chercherCommande(CriteresCommande criteresCommande);
 
 	/**
 	 * recherche une commande a partir du reference.

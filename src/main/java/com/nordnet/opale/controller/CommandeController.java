@@ -336,7 +336,7 @@ public class CommandeController {
 	@ResponseBody
 	public List<CommandeInfo> chercherCommande(@RequestBody CriteresCommande criteresCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::chercherCommande");
-		return commandeService.find(criteresCommande);
+		return commandeService.chercherCommande(criteresCommande);
 
 	}
 

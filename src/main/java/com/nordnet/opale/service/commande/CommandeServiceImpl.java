@@ -247,7 +247,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<CommandeInfo> find(CriteresCommande criteresCommande) {
+	public List<CommandeInfo> chercherCommande(CriteresCommande criteresCommande) {
 
 		LOGGER.info("Debut methode find");
 
@@ -424,8 +424,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		LOGGER.info("Debut methode supprimerSignature");
 
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		getCommandeByReference(refCommande);
 		signatureService.supprimer(refCommande, refSignature, auteur);
 
 	}
@@ -470,8 +469,7 @@ public class CommandeServiceImpl implements CommandeService {
 	public List<SignatureInfo> getSignature(String refCommande, Boolean afficheAnnule) throws OpaleException {
 		LOGGER.info("Debut methode  getSignature");
 
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		getCommandeByReference(refCommande);
 
 		return signatureService.getSignatures(refCommande, afficheAnnule);
 	}
