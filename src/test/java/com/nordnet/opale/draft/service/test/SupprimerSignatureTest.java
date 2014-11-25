@@ -16,14 +16,15 @@ import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
+import com.nordnet.opale.service.commande.CommandeServiceImpl;
 import com.nordnet.opale.service.signature.SignatureService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * Classe de test de la methode.
- * {@link SignatureService#supprimer(String, String, com.nordnet.opale.business.Auteur)
+ * Classe de test de la methode. {@link CommandeServiceImpl#supprimerSignature(String, String, Auteur)}.
+ * 
  * @author mahjoub-MARZOUGUI
- *
+ * 
  */
 public class SupprimerSignatureTest extends GlobalTestCase {
 

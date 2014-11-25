@@ -469,8 +469,7 @@ public class CommandeServiceImpl implements CommandeService {
 	public List<SignatureInfo> getSignature(String refCommande, Boolean afficheAnnule) throws OpaleException {
 		LOGGER.info("Debut methode  getSignature");
 
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+		getCommandeByReference(refCommande);
 
 		return signatureService.getSignatures(refCommande, afficheAnnule);
 	}
