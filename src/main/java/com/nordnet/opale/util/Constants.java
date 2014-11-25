@@ -48,6 +48,11 @@ public final class Constants {
 	public static final Object PROD_ENV = "prod";
 
 	/**
+	 * entier de valeur 0.
+	 */
+	public static final Integer ZERO = 0;
+
+	/**
 	 * entier de valeur 1.
 	 */
 	public static final Integer UN = 1;
@@ -58,9 +63,14 @@ public final class Constants {
 	public static final Integer DEUX = 2;
 
 	/**
-	 * entier de valeur 0.
+	 * entier de valeur 3.
 	 */
-	public static final Integer ZERO = 0;
+	public static final Integer TROIS = 3;
+
+	/**
+	 * entier de valeur 4.
+	 */
+	public static final Integer QUATRE = 4;
 
 	/**
 	 * L'utilisateur interne de topaze.
