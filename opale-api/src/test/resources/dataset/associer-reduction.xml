@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+
+<dataset>
+<draft id="1000" reference="REF-DRAFT" />
+
+<draftLigne id="1000" reference="REF-LIGNE" referenceTarif="mensuel_jet10_base"	referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="1000" />
+
+<draftLigneDetail id="1000" referenceSelection="kitsat"	referenceChoix="REF-PRODUIT" referenceTarif="REF-TARIF" draftLigneId="1000" />
+<reduction/>
+</dataset>

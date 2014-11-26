@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+
+<dataset>
+	<client id="1" clientId="client-1245" adresseId="Adr_Facturation_1" />
+	<client id="2" clientId="client-1245" adresseId="Adr_Souscripteur_1" />
+	<client id="3" clientId="client-1245" adresseId="Adr_Livraison_1" />
+	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
+		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		clientSouscripteurId="2" />
+	<draft id="2" reference="REF-DRAFT-3" codePartenaire="000111"
+		timestamp="[now]" />
+	<draft id="3" reference="REF-DRAFT-4" codePartenaire="000111"
+		timestamp="[now]" />
+	<draft id="4" reference="REF-DRAFT-5" codePartenaire="000111"
+		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		clientSouscripteurId="2" />
+	<draft id="5" reference="REF-DRAFT-6" codePartenaire="000111"
+		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		clientSouscripteurId="2" />
+	<draft id="6" reference="REF-DRAFT-7" codePartenaire="000111"
+		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		clientSouscripteurId="2" />
+
+	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="1" />
+	<draftLigne id="1001" reference="00000002" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf100" qui="GRC.WEL-JOHNDOE"
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="2" />
+	<draftLigne id="1002" reference="00000003" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="3" />
+	<draftLigne id="1003" reference="00000001" referenceTarif="mensuel_jet10_base10"
+		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="4" />
+	<draftLigne id="1004" reference="00000001" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="5" />
+	<draftLigne id="1005" reference="00000001" referenceTarif="mensuel_jet10_base"
+		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="6" />
+
+	<draftLigneDetail id="1000" referenceSelection="kitsat"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1000" />
+	<draftLigneDetail id="1001" referenceSelection="jet"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1000" dependDe="1000" />
+	<draftLigneDetail id="1002" referenceSelection="kitsat"
+		referenceChoix="trafic10g" referenceTarif="achat_kit_mensuel"
+		configurationJson="" draftLigneId="1001" />
+	<draftLigneDetail id="1003" referenceSelection="jet"
+		referenceChoix="trafic10g" referenceTarif="achat_kit_mensuel"
+		configurationJson="" draftLigneId="1001" dependDe="1000" />
+	<draftLigneDetail id="1004" referenceSelection="kitsat10"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1002" />
+	<draftLigneDetail id="1005" referenceSelection="kitsat"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1003" />
+	<draftLigneDetail id="1006" referenceSelection="jet"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1003" dependDe="1005" />
+	<draftLigneDetail id="1007" referenceSelection="kitsat"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1004" />
+	<draftLigneDetail id="1008" referenceSelection="jet"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base10"
+		configurationJson="" draftLigneId="1004" dependDe="1007" />
+	<draftLigneDetail id="1009" referenceSelection="kitsat"
+		referenceChoix="trafic100g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1005" />
+	<draftLigneDetail id="1010" referenceSelection="jet"
+		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"
+		configurationJson="" draftLigneId="1005" dependDe="1009" />
+
+</dataset>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+
+<dataset>
+<client/>
+<client id="1000" canal="welcome" ip="GRC.WEL-JOHNDOE" timestamp="[now]" adresseId="id-facturation" clientId="123"  />
+
+<commande/>
+<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000005" referenceDraft="00000001" clientAFacturerId="1000" />
+</dataset>

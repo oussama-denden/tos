@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<dataset>
+
+<client id="1000" clientId="1000" adresseId="1000"/>
+<client id="1001" clientId="1001" adresseId="1001"/>
+
+<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" qui="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000004" referenceDraft="00000004" clientAFacturerId="1000" clientALivrerId="1001"/>
+
+<commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" timestamp="[now]" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1006" />
+
+<commandeLigneDetail id="1000" referenceChoix="trafic10g" label="Trafic 10 Gigas" typeProduit="SERVICE" dependDe="1001" commandeLigneId="1000" tarifId="1000" />
+<commandeLigneDetail id="1001" referenceChoix="kitsat" label="Trafic 10 Gigas" typeProduit="BIEN" commandeLigneId="1000" />
+
+
+<tarif id="1000" duree="5" engagement="12" frequence="4" prix="34.9" reference="mensuel_jet10_base" typeTVA="S" />
+<tarif id="1002" duree="5" engagement="12" frequence="4" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1004" duree="12" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1005" duree="12" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+<tarif id="1006" duree="12" engagement="12" frequence="12" prix="34.9" reference="annuel_jet10_base" typeTVA="S" />
+
+<frais id="1000" reference="std_Cloture" montant="50" typeFrais="RESILIATION" tarifId="1000" />
+<frais id="1002" montant="50" typeFrais="RESILIATION" tarifId="1002" />
+<frais id="1003" montant="50" typeFrais="CREATION" tarifId="1003" />
+<frais id="1004" montant="50" typeFrais="RESILIATION" tarifId="1004" />
+<frais id="1005" montant="50" typeFrais="CREATION" tarifId="1005" />
+<frais id="1006" reference="engagement_kitsat" montant="50" typeFrais="RESILIATION" tarifId="1006" />
+<frais id="1007" montant="50" typeFrais="RESILIATION" tarifId="1007" />
+
+<paiement id="1000" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" typePaiement="COMPTANT" />
+<paiement id="1001" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" typePaiement="RECURRENT" />
+
+<reduction id="1005" label="reduction sur draft" nbUtilisationMax="5" reference="00000001" referenceDraft="00000004" typeValeur="POURCENTAGE" valeur="50" />	
+<reduction id="1000" label="reduction sur ligne" nbUtilisationMax="5" reference="00000002" referenceDraft="00000004" referenceLigne="jet_surf10" typeValeur="POURCENTAGE" valeur="50" />
+<reduction id="1001" label="reduction sur produit" nbUtilisationMax="5" reference="00000003" referenceDraft="00000004" referenceLigne="jet_surf10" referenceLigneDetail="trafic10g" typeValeur="POURCENTAGE" valeur="50" />
+<reduction id="1002" label="reduction sur produit parent" nbUtilisationMax="5" reference="00000004" referenceDraft="00000004" referenceLigne="jet_surf10" referenceTarif="annuel_jet10_base" typeValeur="POURCENTAGE" valeur="50" />
+<reduction id="1003" label="reduction sur frais ligne" nbUtilisationMax="5" reference="00000005" referenceDraft="00000004" referenceLigne="jet_surf10" referenceFrais="engagement_kitsat" referenceTarif="annuel_jet10_base" typeValeur="POURCENTAGE" valeur="50" />
+<reduction id="1004" label="reduction sur frais detail" nbUtilisationMax="5" reference="00000006" referenceDraft="00000004" referenceLigne="jet_surf10" referenceFrais="std_Cloture" referenceLigneDetail="trafic10g" referenceTarif="mensuel_jet10_base" typeValeur="POURCENTAGE" valeur="50" />
+</dataset>

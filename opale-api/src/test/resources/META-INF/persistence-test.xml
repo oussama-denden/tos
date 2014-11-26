@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	
+	<persistence-unit name="opale" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>com.nordnet.opale.domain.Keygen</class>
+		<class>com.nordnet.opale.domain.draft.Draft</class>
+		<class>com.nordnet.opale.domain.draft.DraftLigne</class>
+		<class>com.nordnet.opale.domain.draft.DraftLigneDetail</class>
+		<class>com.nordnet.opale.domain.commande.Commande</class>
+		<class>com.nordnet.opale.domain.commande.CommandeLigne</class>
+		<class>com.nordnet.opale.domain.commande.CommandeLigneDetail</class>
+		<class>com.nordnet.opale.domain.commande.Frais</class>
+		<class>com.nordnet.opale.domain.commande.Tarif</class>
+		<class>com.nordnet.opale.domain.paiement.Paiement</class>
+		<class>com.nordnet.opale.domain.Auteur</class>
+		<class>com.nordnet.opale.domain.Tracage</class>
+		<class>com.nordnet.opale.domain.Client</class>
+		<class>com.nordnet.opale.domain.signature.Signature</class>
+		<class>com.nordnet.opale.domain.reduction.Reduction</class>
+		
+		<properties>
+<!--			<property name="hibernate.hbm2ddl.auto" value="update" />-->
+			<!-- <property name="hibernate.hbm2ddl.auto" value="create" /> -->
+			
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.generate_statistics" value="true" />
+			<property name="hibernate.validator.apply_to_ddl" value="false" /> 
+			<property name="hibernate.validator.autoregister_listeners" value="false" />
+		</properties>
+	</persistence-unit>
+</persistence>	
