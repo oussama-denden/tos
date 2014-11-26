@@ -12,6 +12,7 @@
 	<name>opale-finder</name>
 
 	<dependencies>
+	
 	<!-- Java Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -19,6 +20,7 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
+	
 	<!-- Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -52,71 +54,12 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- MySQL JDBC Driver -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.6</version>
+			<groupId>log4j</groupId>
+			<artifactId>apache-log4j-extras</artifactId>
+			<version>1.2.17</version>
 		</dependency>
-		
-
-		<!-- Commons -->
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-pool</groupId>
-			<artifactId>commons-pool</artifactId>
-			<version>1.6</version>
-		</dependency>
-
-		<!-- Third Party dependencies -->
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
-		</dependency>
-		
-		<!-- swagger -->
-		<dependency>
-			<groupId>com.mangofactory</groupId>
-			<artifactId>swagger-springmvc</artifactId>
-			<version>${version.swagger.springmvc}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-webmvc</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-web</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
-
-	<dependency>
-		<groupId>log4j</groupId>
-		<artifactId>apache-log4j-extras</artifactId>
-		<version>1.2.17</version>
-	</dependency>
-		
+	
 	</dependencies>
 	<build>
 		<finalName>opale-finder</finalName>
