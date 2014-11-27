@@ -7,12 +7,18 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
+/**
+ * un response handler customise.
+ * 
+ * @author akram-moncer.
+ * 
+ */
 public class RestClientResponseErrorHandler implements ResponseErrorHandler {
 
 	/**
 	 * Declaration du log.
 	 */
-	private static final Log LOGGER = LogFactory.getLog(RestClient.class);
+	private static final Log LOGGER = LogFactory.getLog(RestClientResponseErrorHandler.class);
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
