@@ -1,0 +1,186 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.nordnet.opale</groupId>
+		<artifactId>opale</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>com.nordnet.opale-api</groupId>
+	<artifactId>opale-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>opale-api</name>
+
+	<url>http://git.dvpt.nordnet.fr/dsi-si/opale</url>
+
+	<issueManagement>
+		<system>gitlab</system>
+		<url>http://git.dvpt.nordnet.fr/dsi-si/opale/issues</url>
+	</issueManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>internal</id>
+			<url>http://archiva.dvpt.nordnet.fr:8080/archiva/repository/internal/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://archiva.dvpt.nordnet.fr:8080/archiva/repository/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:git@git.dvpt.nordnet.fr:dsi-si/opale.git</connection>
+		<url>git@git.dvpt.nordnet.fr/dsi-si/opale.git</url>
+		<developerConnection>scm:git:git@git.dvpt.nordnet.fr:dsi-si/opale.git</developerConnection>
+		<tag>0.0.1</tag>
+	</scm>
+
+	<dependencies>
+
+		<!-- Java Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>1.5.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${version.spring}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- QuartzJobBean in spring-context-support.jar -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+
+		<!-- Quartz framework -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.6</version>
+		</dependency>
+		
+		<!-- client saphir -->
+		<dependency>
+			<groupId>com.nordnet.saphir</groupId>
+			<artifactId>saphir.ws.client</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>opale-api</finalName>
+		<!-- Setting main resources folder -->
+		<resources>
+			<!-- filtering persistence.xml -->
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+
+			<resource>
+				<directory>src/main/config/dev/</directory>
+				<targetPath>${project.build.outputDirectory}/META-INF/spring/</targetPath>
+
+			</resource>
+			<resource>
+				<directory>src/main/config/prod/</directory>
+				<targetPath>${project.build.outputDirectory}/META-INF/spring/</targetPath>
+
+			</resource>
+			<resource>
+				<directory>src/main/config/qualif/</directory>
+				<targetPath>${project.build.outputDirectory}/META-INF/spring/</targetPath>
+
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<!-- <webResources> <resource> <filtering>true</filtering> <directory>${basedir}/WebContent</directory> 
+						<includes> <include>**/web.xml</include> </includes> </resource> </webResources> -->
+					<warSourceDirectory>${basedir}/WebContent</warSourceDirectory>
+					<!-- <webXml>${basedir}/WebContent/WEB-INF/web.xml</webXml> -->
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12</version>
+				<configuration>
+					<printSummary>false</printSummary>
+					<skipTests>false</skipTests>
+					<testFailureIgnore>false</testFailureIgnore>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>1.0</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>

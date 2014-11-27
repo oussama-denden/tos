@@ -1,0 +1,31 @@
+{
+ "geste" : "VENTE",
+  "offre": {
+    "referenceTarif": "mensuel_jet10_base",
+    "referenceOffre": "jet_surf10",
+    "details": [
+      {
+        "referenceSelection": "kitsat",
+        "referenceTarif": "mensuel_jet10_base",
+        "configurationJson": "",
+        "referenceChoix" :"kitsat",
+        "dependDe": ""
+      },
+      {
+        "referenceSelection": "jet",
+        "referenceTarif": "mensuel_jet10_base",
+        "configurationJson": "",
+        "referenceChoix" :"jet",
+        "dependDe": "kitsat"
+      }
+    ]
+  },
+  "auteur": {
+    "qui": "string2",
+    "ip": {
+      "ip": "string2",
+      "ts": "123456789123"
+    },
+    "canal": "string2"
+  }
+}

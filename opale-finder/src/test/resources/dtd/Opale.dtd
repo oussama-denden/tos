@@ -1,0 +1,193 @@
+<!ELEMENT dataset (keygen*,client*,draft*, draftLigne*, draftLigneDetail*, commande*, commandeLigne*, commandeLigneDetail*, tarif*, frais*,signature*,paiement*,reduction*)>
+
+<!ELEMENT draft EMPTY>
+<!ATTLIST draft
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    clientAFacturerId CDATA #IMPLIED
+    clientALivrerId CDATA #IMPLIED
+    clientSouscripteurId CDATA #IMPLIED
+    codePartenaire CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    referenceExterne CDATA #IMPLIED
+    dateAnnulation  CDATA #IMPLIED
+>
+<!ELEMENT draftLigne EMPTY>
+<!ATTLIST draftLigne
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    draftId CDATA #IMPLIED
+    referenceOffre CDATA #IMPLIED
+     geste CDATA #IMPLIED
+>
+<!ELEMENT draftLigneDetail EMPTY>
+<!ATTLIST draftLigneDetail
+     id CDATA #IMPLIED
+    referenceSelection CDATA #IMPLIED
+    referenceChoix CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    configurationJson CDATA #IMPLIED
+    dependDe CDATA #IMPLIED
+    draftLigneId CDATA #IMPLIED
+>
+
+<!ELEMENT tracage EMPTY>
+<!ATTLIST tracage
+     id CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    action CDATA #IMPLIED
+    user CDATA #IMPLIED
+    date CDATA #IMPLIED
+>
+
+<!ELEMENT keygen EMPTY>
+<!ATTLIST keygen
+     id CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    entite CDATA #IMPLIED
+    prefix CDATA #IMPLIED
+>
+
+<!ELEMENT client EMPTY>
+<!ATTLIST client
+     id CDATA #IMPLIED
+    adresseId CDATA #IMPLIED
+    clientId CDATA #IMPLIED
+    canal CDATA #IMPLIED
+  ip  CDATA #IMPLIED
+  qui  CDATA #IMPLIED
+  timestamp  CDATA #IMPLIED
+>
+
+<!ELEMENT commande EMPTY>
+<!ATTLIST commande
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    clientAFacturerId CDATA #IMPLIED
+    clientALivrerId CDATA #IMPLIED
+    clientSouscripteurId CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
+    dateTransformationContrat CDATA #IMPLIED
+    dateAnnulation CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    codePartenaire CDATA #IMPLIED
+>
+
+<!ELEMENT commandeLigne EMPTY>
+<!ATTLIST commandeLigne
+    id CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    gamme CDATA #IMPLIED
+    label CDATA #IMPLIED
+    modeFacturation CDATA #IMPLIED
+    referenceOffre CDATA #IMPLIED
+    referenceContrat CDATA #IMPLIED
+    secteur CDATA #IMPLIED
+    commandeId CDATA #IMPLIED
+    tarifId CDATA #IMPLIED
+>
+
+<!ELEMENT commandeLigneDetail EMPTY>
+<!ATTLIST commandeLigneDetail
+    id CDATA #IMPLIED
+    configurationJson CDATA #IMPLIED
+    referenceSelection CDATA #IMPLIED
+    referenceChoix CDATA #IMPLIED
+    label CDATA #IMPLIED
+    typeProduit CDATA #IMPLIED
+    dependDe CDATA #IMPLIED
+    commandeLigneId CDATA #IMPLIED
+    tarifId CDATA #IMPLIED
+>
+
+<!ELEMENT tarif EMPTY>
+<!ATTLIST tarif
+     id CDATA #IMPLIED
+    duree CDATA #IMPLIED
+    engagement CDATA #IMPLIED
+    frequence CDATA #IMPLIED
+    prix CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    typeTVA CDATA #IMPLIED
+>
+
+<!ELEMENT frais EMPTY>
+<!ATTLIST frais
+     id CDATA #IMPLIED
+    label CDATA #IMPLIED
+    montant CDATA #IMPLIED
+    politique CDATA #IMPLIED
+    politiqueIndex CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    typeFrais CDATA #IMPLIED
+    tarifId CDATA #IMPLIED
+>
+
+<!ELEMENT signature EMPTY>
+<!ATTLIST signature
+    id CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    mode CDATA #IMPLIED
+    timestampSignature CDATA #IMPLIED
+    footprint CDATA #IMPLIED
+    idSignature  CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    referenceCommande CDATA #IMPLIED
+    dateAnnulation  CDATA #IMPLIED
+    timestampIntention CDATA #IMPLIED
+>
+
+<!ELEMENT paiement EMPTY>
+<!ATTLIST paiement
+    id CDATA #IMPLIED
+    infoPaiement CDATA #IMPLIED
+    modePaiement CDATA #IMPLIED
+    montant CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceCommande CDATA #IMPLIED
+    qui CDATA #IMPLIED
+    ip CDATA #IMPLIED
+    canal CDATA #IMPLIED
+    timestamp CDATA #IMPLIED
+    timestampIntention CDATA #IMPLIED
+    timestampPaiement CDATA #IMPLIED
+    typePaiement CDATA #IMPLIED
+>
+
+<!ELEMENT reduction EMPTY>
+<!ATTLIST reduction
+    id CDATA #IMPLIED
+    dateDebut CDATA #IMPLIED
+    dateFin CDATA #IMPLIED
+    label CDATA #IMPLIED
+    nbUtilisationMax CDATA #IMPLIED
+    reference CDATA #IMPLIED
+    referenceDraft CDATA #IMPLIED
+    referenceFrais CDATA #IMPLIED
+    referenceLigne CDATA #IMPLIED
+    referenceLigneDetail CDATA #IMPLIED
+    referenceTarif CDATA #IMPLIED
+    typeValeur CDATA #IMPLIED
+    valeur CDATA #IMPLIED
+    referenceReduction CDATA #IMPLIED
+>

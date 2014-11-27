@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/jee
+	http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+	    http://www.springframework.org/schema/jdbc 
+    http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
+
+
+	<context:component-scan base-package="com.nordnet.opale.finder" />
+
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/OpaleDS"
+		expected-type="javax.sql.DataSource" />
+
+	<bean id="opaleExceptionsProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:opale-exceptions.properties" />
+	</bean>
+	
+	<!-- create job-meta tables automatically -->
+  <jdbc:initialize-database data-source="dataSource">
+	<jdbc:script location="classpath:/META-INF/init-sql.sql"  encoding="UTF-8" />
+  </jdbc:initialize-database>
+
+	<!-- Bean d'acces au Contexte -->
+	<bean id="applicationContextHolder"
+		class="com.nordnet.opale.finder.util.spring.ApplicationContextHolder" />
+
+	<bean id="sqlQueryProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:sqlQuery.properties" />
+	</bean>
+
+</beans>
