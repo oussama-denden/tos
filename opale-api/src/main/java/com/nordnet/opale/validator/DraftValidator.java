@@ -325,7 +325,7 @@ public class DraftValidator {
 	}
 
 	/**
-	 * <<<<<<< HEAD Verifer que la ligne detail existe.
+	 * Verifer que la ligne detail existe.
 	 * 
 	 * @param refProduit
 	 *            reference du produit.
@@ -362,4 +362,5 @@ public class DraftValidator {
 		}
 
 	}
+
 }

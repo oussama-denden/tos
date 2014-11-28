@@ -62,11 +62,44 @@ public class CatalogueValidator {
 		}
 
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			Tarif lastTarif = null;
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
+
+			for (Tarif tarif : offreCatalogue.getTarifs()) {
+				if (draftLigne.getReferenceTarif().equals(tarif.getIdTarif())) {
+					if (lastTarif != null && tarif.getFrequence() != lastTarif.getFrequence()) {
+						validationInfo.addReason(
+								"commande",
+								"1.1.31",
+								PropertiesUtil.getInstance().getErrorMessage("1.1.31", tarif.getIdTarif(),
+										tarif.getFrequence(), lastTarif.getIdTarif(), lastTarif.getFrequence()), null);
+					}
+				}
+				lastTarif = tarif;
+			}
+
 			if (offreCatalogue != null) {
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
 					DetailCatalogue detailCatalogue =
 							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());
+
+					for (Choice choice : detailCatalogue.getChoices()) {
+						for (Tarif tarif : choice.getTarifs()) {
+							if (detail.getReferenceTarif().equals(tarif.getIdTarif())) {
+								if (lastTarif != null && tarif.getFrequence() != lastTarif.getFrequence()) {
+									validationInfo.addReason(
+											"commande",
+											"1.1.31",
+											PropertiesUtil.getInstance().getErrorMessage("1.1.31", tarif.getIdTarif(),
+													tarif.getFrequence(), lastTarif.getIdTarif(),
+													lastTarif.getFrequence()), null);
+								}
+							}
+							lastTarif = tarif;
+						}
+
+					}
+
 					if (detailCatalogue != null) {
 						if (!isPossedeBiens) {
 							isPossedeBiens =
