@@ -457,27 +457,29 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
 		draft.setClientSouscripteur(transformationInfo.getClientInfo().getSouscripteur().toDomain());
 
-		DraftValidationInfo validationInfo =
-				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
+		// DraftValidationInfo validationInfo =
+		// catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 
-		if (validationInfo.isValide()) {
-			Commande commande = new Commande(draft, transformationInfo);
-			commande.setReference(keygenService.getNextKey(Commande.class));
-			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
-			commandeService.save(commande);
+		// if (validationInfo.isValide()) {
+		Commande commande = new Commande(draft, transformationInfo);
+		commande.setReference(keygenService.getNextKey(Commande.class));
+		commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
+		commandeService.save(commande);
 
-			associerReductionCommande(draft, commande);
+		associerReductionCommande(draft, commande);
 
-			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
-			draftRepository.save(draft);
+		draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
+		draftRepository.save(draft);
 
-			tracageService.ajouterTrace(transformationInfo.getAuteur().getQui(), referenceDraft,
-					"la transformation du draft de reference " + referenceDraft + " en commande de reference "
-							+ commande.getReference());
-			return commande;
-		} else {
-			return validationInfo;
-		}
+		tracageService.ajouterTrace(
+				transformationInfo.getAuteur().getQui(),
+				referenceDraft,
+				"la transformation du draft de reference " + referenceDraft + " en commande de reference "
+						+ commande.getReference());
+		return commande;
+		// } else {
+		// return validationInfo;
+		// }
 	}
 
 	/**
