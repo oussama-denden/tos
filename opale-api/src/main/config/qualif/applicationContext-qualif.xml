@@ -21,6 +21,15 @@
 		<property name="location" value="classpath:rest-url.properties" />
 	</bean>
 	
+	<!-- declaration du restTemplate avec un custom 'errorHandler' -->
+	<bean class="org.springframework.web.client.RestTemplate">
+    	<property name="errorHandler">
+        	<bean class="com.nordnet.opale.rest.RestClientResponseErrorHandler" />
+    	</property>
+	</bean>
+	
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+	
 	<bean id="opaleExceptionsProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:opale-exceptions.properties" />

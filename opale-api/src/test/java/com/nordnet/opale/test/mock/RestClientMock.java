@@ -3,7 +3,6 @@ package com.nordnet.opale.test.mock;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nordnet.opale.business.ContratReductionInfo;
@@ -34,7 +33,7 @@ public class RestClientMock extends RestClient {
 	private DraftInfoGenerator draftInfoGenerator;
 
 	@Override
-	public String preparerContrat(ContratPreparationInfo contratPreparationInfo) throws OpaleException, JSONException {
+	public String preparerContrat(ContratPreparationInfo contratPreparationInfo) throws OpaleException {
 		return "reference-contrat";
 	}
 
