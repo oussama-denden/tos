@@ -867,23 +867,29 @@ public class DraftServiceImpl implements DraftService {
 			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
 			choice = detailCatalogue.getChoiceMap().get(draftLigneDetail.getReferenceChoix());
 			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
+			if (tarif != null) {
+				DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+				coutTotal += detailCoutTarif.getCoutTotal();
+				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+				frequence = tarif.getFrequence();
+				reduction +=
+						caculerReductionDetaille(refDraft, draftLigne.getReference(),
+								draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(),
+								detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan()
+										: Constants.ZERO, tarif, false);
+			}
+		}
+
+		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+		if (tarif != null) {
 			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 			coutTotal += detailCoutTarif.getCoutTotal();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
-					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReferenceChoix(),
-							detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan() != null ? detailCoutTarif
-									.getPlan().getPlan() : Constants.ZERO, tarif, false);
+					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
+							plan, tarif, true);
 		}
-
-		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
-		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
-		coutTotal += detailCoutTarif.getCoutTotal();
-		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-		reduction +=
-				caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
-						plan, tarif, true);
 
 		detailCout.setPlan(new Plan(frequence, plan));
 		detailCout.setCoutTotal(coutTotal);
