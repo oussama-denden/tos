@@ -80,8 +80,7 @@ public class CatalogueValidator {
 				}
 
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					DetailCatalogue detailCatalogue =
-							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());
+					DetailCatalogue detailCatalogue = offreCatalogue.getDetail(detail.getReferenceSelection());
 					if (detailCatalogue != null) {
 						for (Choice choice : detailCatalogue.getChoices()) {
 							for (Tarif tarif : choice.getTarifs()) {
@@ -161,8 +160,7 @@ public class CatalogueValidator {
 							.getInstance().getErrorMessage("1.1.28", draftLigne.getReferenceTarif()), values);
 				}
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
-					DetailCatalogue detailCatalogue =
-							trameCatalogue.findDetailCatalogue(offreCatalogue, detail.getReferenceSelection());
+					DetailCatalogue detailCatalogue = offreCatalogue.getDetail(detail.getReferenceSelection());
 					if (detailCatalogue == null) {
 						values = new ArrayList<String>();
 						values.add(detail.getReferenceSelection());

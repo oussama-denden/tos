@@ -179,8 +179,8 @@ public class OffreCatalogue {
 
 	/**
 	 * 
-	 * @param nature
-	 *            {@link #nature}.
+	 * @param type
+	 *            {@link #type}.
 	 */
 	public void setType(TypeProduit type) {
 		this.type = type;
@@ -249,6 +249,17 @@ public class OffreCatalogue {
 		}
 
 		return detailsMap;
+	}
+
+	/**
+	 * recuperer la {@link DetailCatalogue} associe a l'offre a travers la reference selection.
+	 * 
+	 * @param referenceSelection
+	 *            reference de la selection.
+	 * @return {@link DetailCatalogue}.
+	 */
+	public DetailCatalogue getDetail(String referenceSelection) {
+		return getDetailsMap().get(referenceSelection);
 	}
 
 	/**
