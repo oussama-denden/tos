@@ -57,16 +57,21 @@ public class DetailCout {
 		com.nordnet.opale.domain.commande.Tarif tarif = null;
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
 			tarif = commandeLigneDetail.getTarif();
+			if (tarif != null) {
+				DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+				coutTotal += detailCoutTarif.getCoutTotal();
+				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+				frequence = tarif.getFrequence();
+			}
+		}
+
+		tarif = commandeLigne.getTarif();
+		if (tarif != null) {
 			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 			coutTotal += detailCoutTarif.getCoutTotal();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 		}
-
-		tarif = commandeLigne.getTarif();
-		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
-		coutTotal += detailCoutTarif.getCoutTotal();
-		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 
 		if (plan > Constants.ZERO) {
 			this.plan = new Plan(frequence, plan);

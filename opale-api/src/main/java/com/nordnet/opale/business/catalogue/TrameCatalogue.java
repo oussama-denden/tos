@@ -51,35 +51,7 @@ public class TrameCatalogue {
 	 * @return {@link OffreCatalogue}.
 	 */
 	public OffreCatalogue isOffreExist(String referenceOffre) {
-		OffreCatalogue offreCatalogue = new OffreCatalogue();
-		offreCatalogue.setReference(referenceOffre);
-		if (offres.contains(offreCatalogue)) {
-			for (OffreCatalogue offre : offres) {
-				if (offre.getReference().equals(referenceOffre))
-					return offre;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * rechercher du detail catalogue a partir de la referenceSelection.
-	 * 
-	 * @param offreCatalogue
-	 *            {@link OffreCatalogue}.
-	 * @param referenceSelection
-	 *            reference selection.
-	 * @return true si la selection existe dans l'offre.
-	 */
-	public DetailCatalogue findDetailCatalogue(OffreCatalogue offreCatalogue, String referenceSelection) {
-
-		if (offreCatalogue != null) {
-			for (DetailCatalogue detailCatalogue : offreCatalogue.getDetails()) {
-				if (detailCatalogue.getReferenceSelection().equals(referenceSelection))
-					return detailCatalogue;
-			}
-		}
-		return null;
+		return getOffreMap().get(referenceOffre);
 	}
 
 	/**
