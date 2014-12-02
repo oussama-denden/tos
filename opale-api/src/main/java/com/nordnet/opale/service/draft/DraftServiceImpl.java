@@ -211,8 +211,6 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		// DraftReturn draftReturn = new DraftReturn();
-		// draftReturn.setReference(draft.getReference());
 		tracageService.ajouterTrace(draft.getAuteur() != null ? draft.getAuteur().getQui() : null,
 				draft.getReference(), "Draft " + draft.getReference() + " crée");
 		LOGGER.info("Fin methode creerDraft");
