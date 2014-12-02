@@ -66,7 +66,8 @@ public class CatalogueValidator {
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
 			if (offreCatalogue != null) {
 				for (Tarif tarif : offreCatalogue.getTarifs()) {
-					if (draftLigne.getReferenceTarif().equals(tarif.getIdTarif())) {
+					if (draftLigne.getReferenceTarif() != null
+							&& draftLigne.getReferenceTarif().equals(tarif.getIdTarif())) {
 						if (lastTarif != null && tarif.getFrequence() != lastTarif.getFrequence()) {
 							validationInfo.addReason(
 									"commande",
@@ -84,7 +85,8 @@ public class CatalogueValidator {
 					if (detailCatalogue != null) {
 						for (Choice choice : detailCatalogue.getChoices()) {
 							for (Tarif tarif : choice.getTarifs()) {
-								if (detail.getReferenceTarif().equals(tarif.getIdTarif())) {
+								if (detail.getReferenceTarif() != null
+										&& detail.getReferenceTarif().equals(tarif.getIdTarif())) {
 									if (lastTarif != null && tarif.getFrequence() != lastTarif.getFrequence()) {
 										validationInfo.addReason(
 												"commande",
