@@ -20,12 +20,12 @@ import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.google.common.base.Optional;
+import com.nordnet.common.valueObject.constants.VatType;
 import com.nordnet.opale.business.FraisInfo;
 import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.business.commande.Prix;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.TypeTVA;
 
 /**
  * Classe represente les Tarif associe a une commande/commandeDetail.
@@ -75,7 +75,7 @@ public class Tarif {
 	 * {@link TypeTVA}.
 	 */
 	@Enumerated(EnumType.STRING)
-	private TypeTVA typeTVA;
+	private VatType typeTVA;
 
 	/**
 	 * liste des {@link Frais} associe au tarif.
@@ -219,18 +219,18 @@ public class Tarif {
 
 	/**
 	 * 
-	 * @return {@link #typeTVA}.
+	 * @return {@link #VatType}.
 	 */
-	public TypeTVA getTypeTVA() {
+	public VatType getTypeTVA() {
 		return typeTVA;
 	}
 
 	/**
 	 * 
 	 * @param typeTVA
-	 *            {@link #typeTVA}.
+	 *            {@link #VatType}.
 	 */
-	public void setTypeTVA(TypeTVA typeTVA) {
+	public void setTypeTVA(VatType typeTVA) {
 		this.typeTVA = typeTVA;
 	}
 

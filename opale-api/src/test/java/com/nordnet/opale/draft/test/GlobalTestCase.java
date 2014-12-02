@@ -15,7 +15,6 @@ import com.nordnet.opale.util.spring.ApplicationContextHolder;
  * @author anisselmane.
  * 
  */
-
 @SpringApplicationContext(value = { "applicationContextTest.xml" })
 public abstract class GlobalTestCase extends UnitilsJUnit4 {
 
@@ -56,6 +55,7 @@ public abstract class GlobalTestCase extends UnitilsJUnit4 {
 	public void init() {
 		System.setProperty(com.nordnet.opale.util.Constants.ENV_PROPERTY, "dev");
 		System.setProperty("ws.saphir.useMock", "true");
+		System.setProperty("ws.nordNetVat.useMock", "true");
 	}
 
 }
