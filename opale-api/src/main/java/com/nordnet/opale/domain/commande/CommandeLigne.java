@@ -35,6 +35,7 @@ import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Constants;
@@ -470,14 +471,16 @@ public class CommandeLigne {
 	 *            reference du commande.
 	 * @param qui
 	 *            {@link Auteur#getQui()}.
+	 * @param paiement
+	 *            {@link Paiement}
 	 * @return {@link ContratPreparationInfo}.
 	 */
-	public ContratPreparationInfo toContratPreparationInfo(String referenceCommande, String qui) {
+	public ContratPreparationInfo toContratPreparationInfo(String referenceCommande, String qui, List<Paiement> paiement) {
 		ContratPreparationInfo contrat = new ContratPreparationInfo();
 
 		contrat.setUser(qui);
 		List<Produit> produits = new ArrayList<>();
-		produits.add(toProduitParent(referenceCommande));
+		produits.add(toProduitParent(referenceCommande, paiement));
 		numEC = Constants.UN;
 		for (CommandeLigneDetail ligneDetail : commandeLigneDetails) {
 			Integer numECParent = null;
@@ -488,7 +491,7 @@ public class CommandeLigne {
 				numECParent = Constants.UN;
 			}
 
-			produits.add(ligneDetail.toProduit(referenceCommande, numEC, numECParent, modeFacturation));
+			produits.add(ligneDetail.toProduit(referenceCommande, numEC, numECParent, modeFacturation, paiement));
 			ligneDetail.setNumEC(numEC);
 		}
 		contrat.setProduits(produits);
@@ -526,9 +529,11 @@ public class CommandeLigne {
 	 * 
 	 * @param referenceCommande
 	 *            reference de la {@link Commande}.
+	 * @param paiement
+	 *            {@link Paiement}
 	 * @return {@link Produit}.
 	 */
-	private Produit toProduitParent(String referenceCommande) {
+	private Produit toProduitParent(String referenceCommande, List<Paiement> paiement) {
 		Produit produitParent = new Produit();
 		produitParent.setLabel(label);
 		produitParent.setNumEC(Constants.UN);
@@ -537,7 +542,7 @@ public class CommandeLigne {
 		produitParent.setReference(referenceOffre);
 		produitParent.setReferenceTarif(tarif.getReference());
 		if (tarif != null) {
-			produitParent.setPrix(tarif.toPrix(modeFacturation));
+			produitParent.setPrix(tarif.toPrix(modeFacturation, paiement));
 		}
 		return produitParent;
 	}

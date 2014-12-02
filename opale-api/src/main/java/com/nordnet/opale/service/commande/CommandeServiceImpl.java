@@ -558,9 +558,15 @@ public class CommandeServiceImpl implements CommandeService {
 	@Transactional(rollbackFor = Exception.class)
 	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
 		List<String> referencesContrats = new ArrayList<>();
+		List<Paiement> paiement = null;
+		if ((commande.needPaiementRecurrent() && !(calculerCoutComptant(commande.getReference()) > 0d))
+				|| (!commande.needPaiementRecurrent() && (calculerCoutComptant(commande.getReference()) > 0d))) {
+			paiement = paiementService.getPaiementByReferenceCommande(commande.getReference());
+		}
+
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			ContratPreparationInfo preparationInfo =
-					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui());
+					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
 			/*
 			 * ajout du mode de paiement au produits prepare.
