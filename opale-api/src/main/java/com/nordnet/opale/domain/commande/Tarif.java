@@ -297,6 +297,7 @@ public class Tarif {
 	public Prix toPrix(ModeFacturation modeFacturation, List<Paiement> paiement) {
 		Prix prix = new Prix();
 		if (paiement != null) {
+			// deterniner la duree selon le type de paiement(si recurrent : duree=null sinon duree= frequence)
 			if (paiement.get(0).getTypePaiement().equals(TypePaiement.RECURRENT)) {
 				prix.setDuree(null);
 			} else {

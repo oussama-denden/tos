@@ -10,7 +10,6 @@ import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
-import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
@@ -67,11 +66,11 @@ public interface DraftService {
 	 * 
 	 * @param draftInfo
 	 *            draft info {@link DraftInfo}
-	 * @return {@link DraftReturn}
+	 * @return {@link Draft}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException;
+	public Draft creerDraft(DraftInfo draftInfo) throws OpaleException;
 
 	/**
 	 * Ajouter une ou plusieurs lignes au draft.

@@ -1,5 +1,6 @@
 package com.nordnet.opale.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,6 @@ import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
-import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
@@ -110,12 +110,25 @@ public class DraftController {
 	 * @return {@link Contrat}.
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
+	 * @throws JSONException
+	 *             {@link JSONException}
 	 */
 	@RequestMapping(value = "/draft", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public DraftReturn creerDraft(@RequestBody DraftInfo draftInfo) throws OpaleException {
+	public String creerDraft(@RequestBody DraftInfo draftInfo) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::creerDraft");
-		return draftService.creerDraft(draftInfo);
+		Draft draft = draftService.creerDraft(draftInfo);
+		JSONObject rsc = new JSONObject();
+		rsc.put("reference", draft.getReference());
+		List<JSONObject> lignes = new ArrayList<>();
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			JSONObject ligne = new JSONObject();
+			ligne.put("referenceLigne", draftLigne.getReference());
+			ligne.put("referenceOffre", draftLigne.getReferenceOffre());
+			lignes.add(ligne);
+		}
+		rsc.put("lignes", lignes);
+		return rsc.toString();
 
 	}
 
