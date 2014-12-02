@@ -21,7 +21,6 @@ import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
-import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.business.ReductionInfo;
@@ -172,7 +171,7 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException {
+	public Draft creerDraft(DraftInfo draftInfo) throws OpaleException {
 
 		LOGGER.info("Enter methode creerDraft");
 		DraftValidator.validerAuteur(draftInfo.getAuteur());
@@ -212,12 +211,10 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		DraftReturn draftReturn = new DraftReturn();
-		draftReturn.setReference(draft.getReference());
 		tracageService.ajouterTrace(draft.getAuteur() != null ? draft.getAuteur().getQui() : null,
 				draft.getReference(), "Draft " + draft.getReference() + " crée");
 		LOGGER.info("Fin methode creerDraft");
-		return draftReturn;
+		return draft;
 	}
 
 	/**
@@ -868,23 +865,29 @@ public class DraftServiceImpl implements DraftService {
 			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
 			choice = detailCatalogue.getChoiceMap().get(draftLigneDetail.getReferenceChoix());
 			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
+			if (tarif != null) {
+				DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+				coutTotal += detailCoutTarif.getCoutTotal();
+				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+				frequence = tarif.getFrequence();
+				reduction +=
+						caculerReductionDetaille(refDraft, draftLigne.getReference(),
+								draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(),
+								detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan()
+										: Constants.ZERO, tarif, false);
+			}
+		}
+
+		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+		if (tarif != null) {
 			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
 			coutTotal += detailCoutTarif.getCoutTotal();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
-					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigneDetail.getReferenceChoix(),
-							detailCoutTarif.getCoutTotal(), detailCoutTarif.getPlan() != null ? detailCoutTarif
-									.getPlan().getPlan() : Constants.ZERO, tarif, false);
+					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
+							plan, tarif, true);
 		}
-
-		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
-		DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
-		coutTotal += detailCoutTarif.getCoutTotal();
-		plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-		reduction +=
-				caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
-						plan, tarif, true);
 
 		detailCout.setPlan(new Plan(frequence, plan));
 		detailCout.setCoutTotal(coutTotal);

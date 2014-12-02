@@ -25,6 +25,7 @@ import com.nordnet.opale.business.catalogue.Choice;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Utils;
@@ -340,9 +341,12 @@ public class CommandeLigneDetail {
 	 *            numero d'offre parent.
 	 * @param modeFacturation
 	 *            {@link ModeFacturation}.
+	 * @param paiement
+	 *            {@link Paiement}
 	 * @return {@link Produit}.
 	 */
-	public Produit toProduit(String referenceCommande, int numEC, Integer numECParent, ModeFacturation modeFacturation) {
+	public Produit toProduit(String referenceCommande, int numEC, Integer numECParent, ModeFacturation modeFacturation,
+			List<Paiement> paiement) {
 		Produit produit = new Produit();
 		produit.setLabel(label);
 		produit.setNumEC(numEC);
@@ -352,7 +356,7 @@ public class CommandeLigneDetail {
 		Optional<Tarif> tarifOptional = Optional.fromNullable(tarif);
 		if (tarifOptional.isPresent()) {
 			produit.setReferenceTarif(tarif.getReference());
-			produit.setPrix(tarif.toPrix(modeFacturation));
+			produit.setPrix(tarif.toPrix(modeFacturation, paiement));
 		}
 		produit.setNumECParent(numECParent);
 		return produit;
