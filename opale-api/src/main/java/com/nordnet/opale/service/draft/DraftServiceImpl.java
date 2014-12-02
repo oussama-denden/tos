@@ -21,7 +21,6 @@ import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
-import com.nordnet.opale.business.DraftReturn;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.business.ReductionInfo;
@@ -173,7 +172,7 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public DraftReturn creerDraft(DraftInfo draftInfo) throws OpaleException {
+	public Draft creerDraft(DraftInfo draftInfo) throws OpaleException {
 
 		LOGGER.info("Enter methode creerDraft");
 		DraftValidator.validerAuteur(draftInfo.getAuteur());
@@ -213,12 +212,10 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		DraftReturn draftReturn = new DraftReturn();
-		draftReturn.setReference(draft.getReference());
 		tracageService.ajouterTrace(draft.getAuteur() != null ? draft.getAuteur().getQui() : null,
 				draft.getReference(), "Draft " + draft.getReference() + " crée");
 		LOGGER.info("Fin methode creerDraft");
-		return draftReturn;
+		return draft;
 	}
 
 	/**
@@ -453,6 +450,7 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
+		DraftValidator.validerindicatifTVA(transformationInfo.getClientInfo());
 
 		draft.setClientAFacturer(transformationInfo.getClientInfo().getFacturation().toDomain());
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());

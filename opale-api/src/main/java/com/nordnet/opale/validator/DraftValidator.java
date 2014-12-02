@@ -1,9 +1,11 @@
 package com.nordnet.opale.validator;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Client;
+import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Offre;
@@ -359,6 +361,31 @@ public class DraftValidator {
 			String refProduit) throws OpaleException {
 		if (draftLigneDetail == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.27", refProduit, refLigne, refDraft), "1.1.27");
+		}
+
+	}
+
+	/**
+	 * Vérifier les indicatifs TVA.
+	 * 
+	 * @param clientInfo
+	 *            {@link ClientInfo}
+	 */
+	public static void validerindicatifTVA(ClientInfo clientInfo) throws OpaleException {
+		List<String> indicatifTVA = Arrays.asList("00", "01", "10", "11");
+		if (clientInfo != null && clientInfo.getFacturation() != null && clientInfo.getFacturation().getTva() != null
+				&& !indicatifTVA.contains(clientInfo.getFacturation().getTva())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
+		}
+
+		if (clientInfo != null && clientInfo.getLivraison() != null && clientInfo.getLivraison().getTva() != null
+				&& !indicatifTVA.contains(clientInfo.getLivraison().getTva())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
+		}
+
+		if (clientInfo != null && clientInfo.getSouscripteur() != null && clientInfo.getSouscripteur().getTva() != null
+				&& !indicatifTVA.contains(clientInfo.getSouscripteur().getTva())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
 		}
 
 	}

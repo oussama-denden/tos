@@ -31,7 +31,8 @@ public class ReductionValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void chekReductionValide(ReductionInfo reductionInfo, String type) throws OpaleException {
+	public static void chekReductionValide(ReductionInfo reductionInfo, String type, Object objetEnReduction)
+			throws OpaleException {
 
 		if (reductionInfo.getValeur() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.Valeur"), "5.1.3");
@@ -43,25 +44,12 @@ public class ReductionValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1", type), "5.1.1");
 		}
 
-	}
-
-	/**
-	 * Verifier qu'une reduction une ligne du draft.
-	 * 
-	 * @param reductionInfo
-	 *            {@link ReductionInfo}
-	 * @param objetEnReduction
-	 *            {@link Object}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public static void chekReductionValide(ReductionInfo reductionInfo, Object objetEnReduction) throws OpaleException {
-		if (objetEnReduction instanceof DraftLigne) {
+		if (objetEnReduction != null && objetEnReduction instanceof DraftLigne) {
 			if (((DraftLigne) objetEnReduction).getReferenceTarif() == null) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");
 			}
 		} else {
-			if (((DraftLigneDetail) objetEnReduction).getReferenceTarif() == null) {
+			if (objetEnReduction != null && ((DraftLigneDetail) objetEnReduction).getReferenceTarif() == null) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");
 			}
 		}
