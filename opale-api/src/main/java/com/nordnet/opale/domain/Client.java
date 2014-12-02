@@ -49,6 +49,11 @@ public class Client {
 	@Embedded
 	private Auteur auteur;
 
+	/**
+	 * type TVA.
+	 */
+	private String TVA;
+
 	@Override
 	public String toString() {
 		return "Client [id=" + id + ", clientId=" + clientId + ", adresseId=" + adresseId + "]";
@@ -159,6 +164,23 @@ public class Client {
 	 */
 	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
+	}
+
+	/**
+	 * 
+	 * @return type tva {@link #TVA}
+	 */
+	public String getTVA() {
+		return TVA;
+	}
+
+	/**
+	 * 
+	 * @param tVA
+	 *            {@link Client#TVA}
+	 */
+	public void setTVA(String tVA) {
+		TVA = tVA;
 	}
 
 	/**

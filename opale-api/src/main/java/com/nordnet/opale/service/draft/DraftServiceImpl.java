@@ -452,6 +452,7 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
+		DraftValidator.validerindicatifTVA(transformationInfo.getClientInfo());
 
 		draft.setClientAFacturer(transformationInfo.getClientInfo().getFacturation().toDomain());
 		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());

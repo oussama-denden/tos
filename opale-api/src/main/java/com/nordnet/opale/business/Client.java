@@ -1,5 +1,7 @@
 package com.nordnet.opale.business;
 
+import com.nordnet.opale.util.Constants;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link Client}.
  * 
@@ -17,6 +19,11 @@ public class Client {
 	 * L adresse.
 	 */
 	private String adresseId;
+
+	/**
+	 * type TVA.
+	 */
+	private String tva;
 
 	@Override
 	public String toString() {
@@ -66,6 +73,23 @@ public class Client {
 	}
 
 	/**
+	 * 
+	 * @return type tva {@link #TVA}
+	 */
+	public String getTva() {
+		return tva;
+	}
+
+	/**
+	 * 
+	 * @param tVA
+	 *            {@link Client#TVA}
+	 */
+	public void setTva(String tVA) {
+		tva = tVA;
+	}
+
+	/**
 	 * convertir un {@link ClientInfo} en {@link com.nordnet.opale.domain.Client}.
 	 * 
 	 * @return {@link com.nordnet.opale.domain.Client}.
@@ -75,6 +99,7 @@ public class Client {
 
 		client.setAdresseId(adresseId);
 		client.setClientId(clientId);
+		client.setTVA(this.tva != null ? this.tva : Constants.DEFAULT_TYPE_TVA_CLIENT);
 		return client;
 	}
 

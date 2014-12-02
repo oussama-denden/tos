@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:dflt="opale_test">
+	<xsd:import namespace="opale_test" schemaLocation="opale_test.xsd" />
+	<xsd:element name="dataset">
+		<xsd:complexType>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="draftlignedetail" type="dflt:draftlignedetail__type" />
+				<xsd:element name="paiement" type="dflt:paiement__type" />
+				<xsd:element name="signature" type="dflt:signature__type" />
+				<xsd:element name="dbmaintain_scripts" type="dflt:dbmaintain_scripts__type" />
+				<xsd:element name="commande" type="dflt:commande__type" />
+				<xsd:element name="draftligne" type="dflt:draftligne__type" />
+				<xsd:element name="frais" type="dflt:frais__type" />
+				<xsd:element name="keygen" type="dflt:keygen__type" />
+				<xsd:element name="tarif" type="dflt:tarif__type" />
+				<xsd:element name="commandelignedetail" type="dflt:commandelignedetail__type" />
+				<xsd:element name="commandeligne" type="dflt:commandeligne__type" />
+				<xsd:element name="draft" type="dflt:draft__type" />
+				<xsd:element name="client" type="dflt:client__type" />
+				<xsd:element name="reduction" type="dflt:reduction__type" />
+				<xsd:element name="tracage" type="dflt:tracage__type" />
+				<xsd:any namespace="opale_test" />
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
