@@ -8,8 +8,8 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Optional;
-import com.nordnet.opale.deserializer.TypeTVADeserializer;
-import com.nordnet.opale.enums.TypeTVA;
+import com.nordnet.common.valueObject.constants.VatType;
+import com.nordnet.opale.deserializer.VATTypeDeserializer;
 
 /**
  * classe contenant les info du tarif.
@@ -46,10 +46,10 @@ public class Tarif {
 	private Integer engagement;
 
 	/**
-	 * {@link TypeTVA}.
+	 * {@link VatType}.
 	 */
-	@JsonDeserialize(using = TypeTVADeserializer.class)
-	private TypeTVA tva;
+	@JsonDeserialize(using = VATTypeDeserializer.class)
+	private VatType tva;
 
 	/**
 	 * la liste des reference des {@link Frais} associe au tarif.
@@ -155,18 +155,18 @@ public class Tarif {
 
 	/**
 	 * 
-	 * @return {@link TypeTVA}.
+	 * @return {@link VatType}.
 	 */
-	public TypeTVA getTva() {
+	public VatType getTva() {
 		return tva;
 	}
 
 	/**
 	 * 
 	 * @param tva
-	 *            {@link TypeTVA}.
+	 *            {@link VatType}.
 	 */
-	public void setTva(TypeTVA tva) {
+	public void setTva(VatType tva) {
 		this.tva = tva;
 	}
 

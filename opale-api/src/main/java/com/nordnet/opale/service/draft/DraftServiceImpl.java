@@ -57,6 +57,7 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
+import com.nordnet.opale.vat.client.VatClient;
 
 /**
  * L'implementation de service {@link DraftService}.
@@ -623,10 +624,12 @@ public class DraftServiceImpl implements DraftService {
 	@Transactional(readOnly = true)
 	public Object calculerCout(String refDraft, TrameCatalogueInfo trameCatalogue) throws OpaleException {
 		Draft draft = getDraftByReference(refDraft);
+
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 			Cout cout = calculerCoutLigne(draft, trameCatalogue.getTrameCatalogue());
+
 			return cout;
 		} else {
 			return validationInfo;
@@ -817,21 +820,26 @@ public class DraftServiceImpl implements DraftService {
 	 * @param draft
 	 *            {@link Draft}
 	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}
+	 *            {@link TrameCatalogue}.
 	 * @return {@link Cout}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	private Cout calculerCoutLigne(Draft draft, TrameCatalogue trameCatalogue) {
+	private Cout calculerCoutLigne(Draft draft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Cout cout = new Cout();
-		Double coutTotal = 0d;
+		double coutTotal = 0d;
+		double coutTotalTTC = 0d;
 		double reduction = 0d;
 		List<DetailCout> details = new ArrayList<DetailCout>();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			DetailCout detailCout = calculerCoutLigneDetail(draft.getReference(), draftLigne, trameCatalogue);
+			DetailCout detailCout = calculerCoutDetailLigne(draft.getReference(), draftLigne, trameCatalogue);
 			coutTotal += detailCout.getCoutTotal();
+			coutTotalTTC += detailCout.getCoutTotalTTC();
 			reduction += detailCout.getReduction();
 			details.add(detailCout);
 		}
 		cout.setCoutTotal(coutTotal);
+		cout.setCoutTotalTTC(coutTotalTTC);
 		cout.setDetails(details);
 		reduction += calculerReductionDraft(draft.getReference(), coutTotal);
 		cout.setReduction(reduction);
@@ -840,7 +848,7 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * calucler le cout du ligne detail.
+	 * calucler le cout du detail ligne.
 	 * 
 	 * @param refDraft
 	 *            reference du draft.
@@ -849,14 +857,19 @@ public class DraftServiceImpl implements DraftService {
 	 * @param trameCatalogue
 	 *            {@link TrameCatalogue}
 	 * @return {@link DetailCout}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	private DetailCout calculerCoutLigneDetail(String refDraft, DraftLigne draftLigne, TrameCatalogue trameCatalogue) {
+	private DetailCout calculerCoutDetailLigne(String refDraft, DraftLigne draftLigne, TrameCatalogue trameCatalogue)
+			throws OpaleException {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
+		double coutTotalTTC = 0d;
 		double reduction = 0d;
 		detailCout.setNumero(draftLigne.getReference());
 		detailCout.setLabel(draftLigne.getReferenceOffre());
 		double plan = 0d;
+		double planTTC = 0d;
 		Integer frequence = null;
 		Tarif tarif = null;
 		DetailCatalogue detailCatalogue = null;
@@ -864,12 +877,14 @@ public class DraftServiceImpl implements DraftService {
 		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
 		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
 			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
-			choice = detailCatalogue.getChoiceMap().get(draftLigneDetail.getReferenceChoix());
+			choice = detailCatalogue.getChoice(draftLigneDetail.getReferenceChoix());
 			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
 			if (tarif != null) {
-				DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+				DetailCout detailCoutTarif = calculerCoutTarif(tarif, "00");
 				coutTotal += detailCoutTarif.getCoutTotal();
+				coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
 				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+				planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
 				frequence = tarif.getFrequence();
 				reduction +=
 						calculerReductionLignetETDetail(refDraft, draftLigne.getReference(),
@@ -881,17 +896,20 @@ public class DraftServiceImpl implements DraftService {
 
 		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
 		if (tarif != null) {
-			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+			DetailCout detailCoutTarif = calculerCoutTarif(tarif, "00");
 			coutTotal += detailCoutTarif.getCoutTotal();
+			coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+			planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
 					calculerReductionLignetETDetail(refDraft, draftLigne.getReference(), draftLigne.getReference(),
 							coutTotal, plan, tarif, true);
 		}
 
-		detailCout.setPlan(new Plan(frequence, plan));
+		detailCout.setPlan(new Plan(frequence, plan, planTTC));
 		detailCout.setCoutTotal(coutTotal);
+		detailCout.setCoutTotalTTC(coutTotalTTC);
 		detailCout.setReduction(reduction);
 		return detailCout;
 
@@ -902,13 +920,19 @@ public class DraftServiceImpl implements DraftService {
 	 * 
 	 * @param tarif
 	 *            {@link Tarif}.
+	 * @param segmentTVA
+	 *            segment tva du client.
 	 * @return {@link DetailCout}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	private DetailCout calculerDetailCoutTarif(Tarif tarif) {
+	private DetailCout calculerCoutTarif(Tarif tarif, String segmentTVA) throws OpaleException {
+
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		if (tarif.isRecurrent()) {
-			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix()));
+			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(),
+					tarif.getTva(), segmentTVA)));
 		} else {
 			coutTotal += tarif.getPrix();
 		}
@@ -917,6 +941,8 @@ public class DraftServiceImpl implements DraftService {
 				coutTotal += frais.getMontant();
 		}
 		detailCout.setCoutTotal(coutTotal);
+		detailCout.setCoutTotalTTC(VatClient.appliquerTVA(coutTotal, tarif.getTva(), segmentTVA));
+
 		return detailCout;
 	}
 

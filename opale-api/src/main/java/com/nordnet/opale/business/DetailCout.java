@@ -3,7 +3,9 @@ package com.nordnet.opale.business;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.enums.TypeFrais;
+import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.vat.client.VatClient;
 
 /**
  * contient les cout en detail pour un profuit.
@@ -27,6 +29,12 @@ public class DetailCout {
 	 * cout total de l'offre.
 	 */
 	private double coutTotal;
+
+	/**
+	 * cout total du commande/draft.
+	 */
+	private double coutTotalTTC;
+
 	/**
 	 * cout totale du reduction.
 	 */
@@ -48,33 +56,42 @@ public class DetailCout {
 	 * 
 	 * @param commandeLigne
 	 *            {@link CommandeLigne}.
+	 * @param segmentTVA
+	 *            segment TVA du client.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public DetailCout(CommandeLigne commandeLigne) {
+	public DetailCout(CommandeLigne commandeLigne, String segmentTVA) throws OpaleException {
 		numero = String.valueOf(commandeLigne.getNumero());
 		label = commandeLigne.getReferenceOffre();
 		double plan = 0d;
+		double planTTC = 0d;
 		Integer frequence = null;
 		com.nordnet.opale.domain.commande.Tarif tarif = null;
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
 			tarif = commandeLigneDetail.getTarif();
 			if (tarif != null) {
-				DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+				DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
 				coutTotal += detailCoutTarif.getCoutTotal();
+				coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
 				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+				planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
 				frequence = tarif.getFrequence();
 			}
 		}
 
 		tarif = commandeLigne.getTarif();
 		if (tarif != null) {
-			DetailCout detailCoutTarif = calculerDetailCoutTarif(tarif);
+			DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
 			coutTotal += detailCoutTarif.getCoutTotal();
+			coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
+			planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
 			frequence = tarif.getFrequence();
 		}
 
 		if (plan > Constants.ZERO) {
-			this.plan = new Plan(frequence, plan);
+			this.plan = new Plan(frequence, plan, planTTC);
 		}
 	}
 
@@ -131,6 +148,23 @@ public class DetailCout {
 
 	/**
 	 * 
+	 * @return {@link #coutTotalTTC}.
+	 */
+	public double getCoutTotalTTC() {
+		return coutTotalTTC;
+	}
+
+	/**
+	 * 
+	 * @param coutTotalTTC
+	 *            {@link #coutTotalTTC}.
+	 */
+	public void setCoutTotalTTC(double coutTotalTTC) {
+		this.coutTotalTTC = coutTotalTTC;
+	}
+
+	/**
+	 * 
 	 * @return {@link Plan}.
 	 */
 	public Plan getPlan() {
@@ -163,44 +197,24 @@ public class DetailCout {
 		this.reduction = reduction;
 	}
 
-	// /**
-	// * calcule du {@link DetailCout} pour un {@link Tarif}.
-	// *
-	// * @param tarif
-	// * {@link Tarif}.
-	// * @param fraisMap
-	// * liste des {@link Frais} du catalogue.
-	// * @return {@link DetailCout}.
-	// */
-	// private DetailCout calculerDetailCoutTarif(Tarif tarif, Map<String, Frais> fraisMap) {
-	// DetailCout detailCout = new DetailCout();
-	// double coutTotal = 0d;
-	// if (tarif.isRecurrent()) {
-	// detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix()));
-	// } else {
-	// coutTotal += tarif.getPrix();
-	// }
-	// for (String refFrais : tarif.getFrais()) {
-	// Frais frais = fraisMap.get(refFrais);
-	// if (frais.getTypeFrais() == TypeFrais.CREATION)
-	// coutTotal += frais.getMontant();
-	// }
-	// detailCout.setCoutTotal(coutTotal);
-	// return detailCout;
-	// }
-
 	/**
 	 * calcule du {@link DetailCout} pour un {@link com.nordnet.opale.domain.commande.Tarif}.
 	 * 
 	 * @param tarif
 	 *            {@link com.nordnet.opale.domain.commande.Tarif}.
+	 * @param segmentTVA
+	 *            segment TVA du client.
 	 * @return {@link DetailCout}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	private DetailCout calculerDetailCoutTarif(com.nordnet.opale.domain.commande.Tarif tarif) {
+	private DetailCout calculerCoutTarif(com.nordnet.opale.domain.commande.Tarif tarif, String segmentTVA)
+			throws OpaleException {
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		if (tarif.isRecurrent()) {
-			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix()));
+			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(),
+					tarif.getTypeTVA(), segmentTVA)));
 		} else {
 			coutTotal += tarif.getPrix();
 		}
@@ -209,6 +223,7 @@ public class DetailCout {
 				coutTotal += frais.getMontant();
 		}
 		detailCout.setCoutTotal(coutTotal);
+		detailCout.setCoutTotalTTC(VatClient.appliquerTVA(coutTotal, tarif.getTypeTVA(), segmentTVA));
 		return detailCout;
 	}
 

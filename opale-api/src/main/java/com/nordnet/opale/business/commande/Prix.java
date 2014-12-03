@@ -8,9 +8,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
+import com.nordnet.common.valueObject.constants.VatType;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.TypeTVA;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Prix}.
@@ -42,9 +42,9 @@ public class Prix {
 	private Integer periodicite;
 
 	/**
-	 * {@link TypeTVA}.
+	 * {@link VatType}.
 	 */
-	private TypeTVA typeTVA;
+	private VatType typeTVA;
 
 	/**
 	 * montant de prix.
@@ -210,7 +210,7 @@ public class Prix {
 	/**
 	 * @return {@link #typeTVA}.
 	 */
-	public TypeTVA getTypeTVA() {
+	public VatType getTypeTVA() {
 		return typeTVA;
 	}
 
@@ -218,7 +218,7 @@ public class Prix {
 	 * @param typeTVA
 	 *            {@link #typeTVA}.
 	 */
-	public void setTypeTVA(TypeTVA typeTVA) {
+	public void setTypeTVA(VatType typeTVA) {
 		this.typeTVA = typeTVA;
 	}
 
