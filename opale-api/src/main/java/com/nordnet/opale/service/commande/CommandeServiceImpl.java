@@ -282,10 +282,6 @@ public class CommandeServiceImpl implements CommandeService {
 				commandeInfos.add(commande.toCommandInfo());
 			}
 		}
-		System.out.println(commandes.size());
-		for (Commande commande : commandes) {
-			System.out.println(commande.getReference());
-		}
 
 		return commandeInfos;
 	}

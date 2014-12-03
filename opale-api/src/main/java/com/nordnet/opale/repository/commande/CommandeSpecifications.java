@@ -92,6 +92,7 @@ public class CommandeSpecifications {
 				if (signe != null) {
 					query.distinct(true);
 					Root<Signature> signature = query.from(Signature.class);
+					// selectionne les signatures de la commande.
 					Predicate signatureDeCommande =
 							cb.equal(signature.get("referenceCommande"), commandeRoot.get("reference"));
 
@@ -107,7 +108,7 @@ public class CommandeSpecifications {
 					Predicate signatureNonSigner =
 							cb.and(cb.isNull(signature.get("idSignature")),
 									cb.isNull(signature.get("timestampSignature")));
-
+					// sous requette dans le cas où la commande n a pas de signature
 					final Subquery<Long> subQuery = query.subquery(Long.class);
 					final Root<Signature> ps = subQuery.from(Signature.class);
 					Expression<Long> signatureId = ps.get("id");
@@ -138,6 +139,7 @@ public class CommandeSpecifications {
 				if (paye != null) {
 					query.distinct(true);
 					Root<Paiement> paiement = query.from(Paiement.class);
+					// selectionne les paiements de la commande.
 					Predicate paiementDeCommande =
 							cb.equal(paiement.get("referenceCommande"), commandeRoot.get("reference"));
 
@@ -146,7 +148,7 @@ public class CommandeSpecifications {
 								cb.and(cb.isNotNull(paiement.get("timestampPaiement")), paiementDeCommande);
 						return commandePaye;
 					}
-
+					// sous requette dans le cas où la commande n a pas de paiement
 					final Subquery<Long> subQuery = query.subquery(Long.class);
 					final Root<Paiement> ps = subQuery.from(Paiement.class);
 					Expression<Long> paiementId = ps.get("id");
