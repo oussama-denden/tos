@@ -377,6 +377,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.clientIdNotNull(clientInfo.getFacturation());
 		DraftValidator.clientIdNotNull(clientInfo.getLivraison());
 		DraftValidator.clientIdNotNull(clientInfo.getSouscripteur());
+		DraftValidator.validerindicatifTVA(clientInfo);
 
 		// associer le client facturation.
 		String idClientFacturation = null;
@@ -871,7 +872,7 @@ public class DraftServiceImpl implements DraftService {
 				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 				frequence = tarif.getFrequence();
 				reduction +=
-						caculerReductionDetaille(refDraft, draftLigne.getReference(),
+						calculerReductionLignetETDetail(refDraft, draftLigne.getReference(),
 								draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(),
 								detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan()
 										: Constants.ZERO, tarif, false);
@@ -885,8 +886,8 @@ public class DraftServiceImpl implements DraftService {
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
-					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
-							plan, tarif, true);
+					calculerReductionLignetETDetail(refDraft, draftLigne.getReference(), draftLigne.getReference(),
+							coutTotal, plan, tarif, true);
 		}
 
 		detailCout.setPlan(new Plan(frequence, plan));
@@ -938,8 +939,8 @@ public class DraftServiceImpl implements DraftService {
 	 *            cout recurrent.
 	 * @return somme di reduction.
 	 */
-	private Double caculerReductionDetaille(String refDraft, String refLinge, String refDetailLigne, Double coutDetail,
-			Double plan, Tarif tarif, boolean isLigne) {
+	private Double calculerReductionLignetETDetail(String refDraft, String refLinge, String refDetailLigne,
+			Double coutDetail, Double plan, Tarif tarif, boolean isLigne) {
 		double coutReduction = 0d;
 		Reduction reductionProduit = null;
 		if (isLigne) {
