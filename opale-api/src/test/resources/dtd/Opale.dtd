@@ -66,6 +66,7 @@
   ip  CDATA #IMPLIED
   qui  CDATA #IMPLIED
   timestamp  CDATA #IMPLIED
+  tva CDATA #IMPLIED
 >
 
 <!ELEMENT commande EMPTY>

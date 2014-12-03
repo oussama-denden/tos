@@ -99,7 +99,7 @@ public class Client {
 
 		client.setAdresseId(adresseId);
 		client.setClientId(clientId);
-		client.setTVA(this.tva != null ? this.tva : Constants.DEFAULT_TYPE_TVA_CLIENT);
+		client.setTva(this.tva != null ? this.tva : Constants.DEFAULT_TYPE_TVA_CLIENT);
 		return client;
 	}
 
@@ -116,6 +116,7 @@ public class Client {
 		client.setAdresseId(adresseId);
 		client.setClientId(clientId);
 		client.setAuteur(auteur != null ? auteur.toDomain() : null);
+		client.setTva(this.tva != null ? this.tva : Constants.DEFAULT_TYPE_TVA_CLIENT);
 		return client;
 	}
 }

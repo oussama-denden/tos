@@ -12,6 +12,7 @@ import org.hibernate.annotations.Index;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 
 /**
@@ -180,11 +181,11 @@ public class Client {
 
 	/**
 	 * 
-	 * @param tva
+	 * @param tVA
 	 *            {@link Client#tva}
 	 */
-	public void setTVA(String tva) {
-		this.tva = tva;
+	public void setTva(String tVA) {
+		tva = tVA;
 	}
 
 	/**
@@ -199,7 +200,7 @@ public class Client {
 	public void setFromBusiness(com.nordnet.opale.business.Client client, com.nordnet.opale.business.Auteur auteur) {
 		adresseId = client.getAdresseId();
 		clientId = client.getClientId();
-		tva = client.getTva();
+		tva = client.getTva() != null ? client.getTva() : Constants.DEFAULT_TYPE_TVA_CLIENT;
 		this.auteur = auteur.toDomain();
 	}
 

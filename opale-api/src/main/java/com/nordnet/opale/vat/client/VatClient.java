@@ -9,6 +9,7 @@ import com.nordnet.common.vat.ws.client.entite.Vat;
 import com.nordnet.common.vat.ws.client.fake.NordNetVatFake;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 
 /**
  * classe responsable de la creation du client {@link NordNetVat}.
@@ -19,7 +20,7 @@ import com.nordnet.opale.util.PropertiesUtil;
 public class VatClient {
 
 	/**
-	 * 
+	 * {@link NordNetVat}.
 	 */
 	private static NordNetVat instance;
 
@@ -52,16 +53,24 @@ public class VatClient {
 	}
 
 	/**
+	 * appliquer le TVA pour calculer le nouveau montant TTC.
 	 * 
 	 * @param montant
-	 * @param vatType
+	 *            le montant HT.
+	 * @param typeTVA
+	 *            {@link VatType}.
 	 * @param segmentTVA
-	 * @return
+	 *            segment tva du client.
+	 * @return le montant TTC.
 	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	public static double appliquerTVA(double montant, VatType typeTVA, String segmentTVA) throws OpaleException {
-		VatSegment vatSegment = new VatSegment(segmentTVA);
 		try {
+			if (Utils.isStringNullOrEmpty(segmentTVA)) {
+				segmentTVA = "00";
+			}
+			VatSegment vatSegment = new VatSegment(segmentTVA);
 			Vat vat = getClientInstance().findByTypeAndSegment(typeTVA, vatSegment);
 			Price price = new Price(montant, CurrencyCode.EUR);
 			double vatAmount = vat.getRate().applyVat(price).getPrice().getAmount().doubleValue();

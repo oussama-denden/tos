@@ -2,7 +2,7 @@
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 
 <dataset>
-<client id="1000" adresseId="address-facturation" clientId="client-id" ip="1.1.1.1" timestamp="[now]" qui="TEST" />
+<client id="1000" adresseId="address-facturation" clientId="client-id" ip="1.1.1.1" timestamp="[now]" qui="TEST" tva="00" />
 
 <commande id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="Cmd-00000001" referenceDraft="00000001" clientAFacturerId="1000" />
 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Client;
-import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Offre;
@@ -355,7 +354,7 @@ public class DraftValidator {
 	 * @param refProduit
 	 *            reference produit
 	 * @throws OpaleException
-	 *             {@link OpaleExceptionee}
+	 *             {@link OpaleException}
 	 */
 	public static void isExistDetailLigneDraft(DraftLigneDetail draftLigneDetail, String refDraft, String refLigne,
 			String refProduit) throws OpaleException {
@@ -368,26 +367,16 @@ public class DraftValidator {
 	/**
 	 * Vérifier les indicatifs TVA.
 	 * 
-	 * @param clientInfo
-	 *            {@link ClientInfo}
+	 * @param client
+	 *            {@link Client}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
-	public static void validerindicatifTVA(ClientInfo clientInfo) throws OpaleException {
+	public static void validerIndicatifTVA(Client client) throws OpaleException {
 		List<String> indicatifTVA = Arrays.asList("00", "01", "10", "11");
-		if (clientInfo != null && clientInfo.getFacturation() != null && clientInfo.getFacturation().getTva() != null
-				&& !indicatifTVA.contains(clientInfo.getFacturation().getTva())) {
+		if (client != null && client.getTva() != null && !indicatifTVA.contains(client.getTva())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
 		}
-
-		if (clientInfo != null && clientInfo.getLivraison() != null && clientInfo.getLivraison().getTva() != null
-				&& !indicatifTVA.contains(clientInfo.getLivraison().getTva())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
-		}
-
-		if (clientInfo != null && clientInfo.getSouscripteur() != null && clientInfo.getSouscripteur().getTva() != null
-				&& !indicatifTVA.contains(clientInfo.getSouscripteur().getTva())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
-		}
-
 	}
 
 }

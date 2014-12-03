@@ -68,7 +68,7 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="adresseId" use="optional" />
 		<xsd:attribute name="clientId" use="optional" />
-		
+		<xsd:attribute name="tva" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="timestamp" use="optional" />
