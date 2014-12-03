@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.exception.OpaleException;
 
 /**
  * contient les couts d'une commande.
@@ -18,6 +19,11 @@ public class Cout {
 	 * cout total du commande/draft.
 	 */
 	private double coutTotal;
+
+	/**
+	 * cout total du commande/draft.
+	 */
+	private double coutTotalTTC;
 
 	/**
 	 * cout totale du reduction.
@@ -40,11 +46,14 @@ public class Cout {
 	 * 
 	 * @param commande
 	 *            {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
-	public Cout(Commande commande) {
+	public Cout(Commande commande) throws OpaleException {
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			DetailCout detailCout = new DetailCout(commandeLigne);
+			DetailCout detailCout = new DetailCout(commandeLigne, "00");
 			coutTotal += detailCout.getCoutTotal();
+			coutTotalTTC += detailCout.getCoutTotalTTC();
 			addDetail(detailCout);
 		}
 	}
@@ -64,6 +73,23 @@ public class Cout {
 	 */
 	public void setCoutTotal(Double coutTotal) {
 		this.coutTotal = coutTotal;
+	}
+
+	/**
+	 * 
+	 * @return {@link #coutTotalTTC}.
+	 */
+	public double getCoutTotalTTC() {
+		return coutTotalTTC;
+	}
+
+	/**
+	 * 
+	 * @param coutTotalTTC
+	 *            {@link #coutTotalTTC}.
+	 */
+	public void setCoutTotalTTC(double coutTotalTTC) {
+		this.coutTotalTTC = coutTotalTTC;
 	}
 
 	/**

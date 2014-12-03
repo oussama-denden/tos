@@ -1,5 +1,7 @@
 package com.nordnet.opale.rest;
 
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
@@ -8,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nordnet.opale.business.ContratReductionInfo;
 import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.business.commande.ContratPreparationInfo;
@@ -22,7 +22,6 @@ import com.nordnet.opale.business.commande.ContratValidationInfo;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
-import com.nordnet.opale.util.Utils;
 
 /**
  * Opale Rest client.
@@ -45,6 +44,18 @@ public class RestClient {
 	private RestPropertiesUtil restPropertiesUtil;
 
 	/**
+	 * {@link RestTemplate}.
+	 */
+	@Autowired
+	private RestTemplate restTemplate;
+
+	/**
+	 * {@link ObjectMapper}.
+	 */
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public RestClient() {
@@ -62,25 +73,23 @@ public class RestClient {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public String preparerContrat(ContratPreparationInfo contratPreparationInfo) throws OpaleException, JSONException {
+	public String preparerContrat(ContratPreparationInfo contratPreparationInfo) throws OpaleException {
 		LOGGER.info(":::ws-call:::preparerContrat");
-		RestTemplate rt = new RestTemplate();
-		String url = restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.PREPARER_CONTRAT);
-
 		try {
-			ResponseEntity<String> response = rt.postForEntity(url, contratPreparationInfo, String.class);
-			JSONObject contrat = new JSONObject(response.getBody());
-			return contrat.getString("referenceContrat");
-		} catch (HttpMessageNotReadableException exception) {
-			LOGGER.error("failed to send REST request", exception);
-			if (exception.getCause() instanceof UnrecognizedPropertyException) {
-				throw new OpaleException(exception.getMessage(), exception.getMessage());
+			String url =
+					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.PREPARER_CONTRAT);
+			HttpEntity<ContratPreparationInfo> requestEntity =
+					new HttpEntity<ContratPreparationInfo>(contratPreparationInfo);
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+			String responseBody = response.getBody();
+			if (RestUtil.isError(response.getStatusCode())) {
+				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
 			} else {
-				ResponseEntity<InfoErreur> infoErreurEntity = rt.getForEntity(url, InfoErreur.class);
-				InfoErreur infoErreur = infoErreurEntity.getBody();
-				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+				JSONObject jsonResponse = new JSONObject(responseBody);
+				return jsonResponse.getString("referenceContrat");
 			}
-		} catch (RestClientException e) {
+		} catch (IOException | JSONException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
@@ -97,24 +106,18 @@ public class RestClient {
 	 */
 	public void validerContrat(String refContrat, ContratValidationInfo validationInfo) throws OpaleException {
 		LOGGER.info(":::ws-call:::validerContrat");
-		RestTemplate rt = new RestTemplate();
-		String url =
-				restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.VALIDER_CONTRAT,
-						refContrat);
-
 		try {
-			@SuppressWarnings("unused")
-			ResponseEntity<Void> response = rt.postForEntity(url, validationInfo, Void.class);
-		} catch (HttpMessageNotReadableException exception) {
-			LOGGER.error("failed to send REST request", exception);
-			if (exception.getCause() instanceof UnrecognizedPropertyException) {
-				throw new OpaleException(exception.getMessage(), exception.getMessage());
-			} else {
-				ResponseEntity<InfoErreur> infoErreurEntity = rt.getForEntity(url, InfoErreur.class);
-				InfoErreur infoErreur = infoErreurEntity.getBody();
-				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+			String url =
+					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.VALIDER_CONTRAT,
+							refContrat);
+			HttpEntity<ContratValidationInfo> requestEntity = new HttpEntity<ContratValidationInfo>(validationInfo);
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+			if (RestUtil.isError(response.getStatusCode())) {
+				String responseBody = response.getBody();
+				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
 			}
-		} catch (RestClientException e) {
+		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 
@@ -132,14 +135,18 @@ public class RestClient {
 	public Contrat getContratByReference(String referenceContrat) throws OpaleException {
 		LOGGER.info(":::ws-call:::getContratByReference");
 		try {
-			RestTemplate rt = new RestTemplate();
-
 			String url =
 					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
 							RestConstants.GET_CONTRAT_BY_REFERENCE, referenceContrat);
-			ResponseEntity<Contrat> responseEntity = rt.getForEntity(url, Contrat.class);
-			return responseEntity.getBody();
-		} catch (Exception e) {
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+			String responseBody = response.getBody();
+			if (RestUtil.isError(response.getStatusCode())) {
+				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+			} else {
+				return objectMapper.readValue(responseBody, Contrat.class);
+			}
+		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
@@ -156,30 +163,21 @@ public class RestClient {
 	 */
 	public void renouvelerContrat(String referenceContrat, ContratRenouvellementInfo renouvellementInfo)
 			throws OpaleException {
-
 		try {
 			LOGGER.info(":::ws-call:::renouvelerContrat");
-			RestTemplate rt = new RestTemplate();
 			String url =
 					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE, RestConstants.RENOUVELER_CONTRAT,
 							referenceContrat);
 
-			HttpEntity<ContratRenouvellementInfo> entity =
+			HttpEntity<ContratRenouvellementInfo> requestEntity =
 					new HttpEntity<ContratRenouvellementInfo>(renouvellementInfo);
-			ResponseEntity<String> response = rt.exchange(url, HttpMethod.POST, entity, String.class);
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 			String responseBody = response.getBody();
-
-			if (!Utils.isStringNullOrEmpty(responseBody)) {
-				InfoErreur infoErreur = new InfoErreur();
-				JSONObject object = new JSONObject(responseBody);
-				infoErreur.setErrorCode(object.getString("errorCode"));
-				infoErreur.setErrorMessage(object.getString("errorMessage"));
-				if (!Utils.isStringNullOrEmpty(infoErreur.getErrorCode())) {
-					throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
-				}
+			if (RestUtil.isError(response.getStatusCode())) {
+				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
 			}
-
-		} catch (JSONException e) {
+		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
@@ -197,26 +195,18 @@ public class RestClient {
 	public void ajouterReductionSurContrat(String referenceContrat, ContratReductionInfo contratReductionInfo)
 			throws OpaleException {
 		try {
-
 			LOGGER.info(":::ws-call:::ajouterReductionSurContrat");
-			RestTemplate rt = new RestTemplate();
 			String url =
 					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
 							RestConstants.AJOUTER_REDUCTION_CONTRAT, referenceContrat);
-			HttpEntity<ContratReductionInfo> entity = new HttpEntity<ContratReductionInfo>(contratReductionInfo);
-			ResponseEntity<String> response = rt.exchange(url, HttpMethod.POST, entity, String.class);
+			HttpEntity<ContratReductionInfo> requestEntity = new HttpEntity<ContratReductionInfo>(contratReductionInfo);
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 			String responseBody = response.getBody();
-			if (!Utils.isStringNullOrEmpty(responseBody)) {
-				InfoErreur infoErreur = new InfoErreur();
-				JSONObject object = new JSONObject(responseBody);
-				infoErreur.setErrorCode(object.getString("errorCode"));
-				infoErreur.setErrorMessage(object.getString("errorMessage"));
-				if (!Utils.isStringNullOrEmpty(infoErreur.getErrorCode())) {
-					throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
-				}
+			if (RestUtil.isError(response.getStatusCode())) {
+				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
 			}
-
-		} catch (JSONException e) {
+		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}
@@ -236,27 +226,18 @@ public class RestClient {
 	public void ajouterReductionSurElementContractuel(String referenceContrat, Integer numEC,
 			ContratReductionInfo contratReductionInfo) throws OpaleException {
 		try {
-
 			LOGGER.info(":::ws-call:::ajouterReductionSurElementContractuel");
-			RestTemplate rt = new RestTemplate();
 			String url =
 					restPropertiesUtil.getRestURL(RestConstants.BRIQUE_CONTRAT_CORE,
 							RestConstants.AJOUTER_REDUCTION_ELEMENT_CONTRACTUEL, referenceContrat, numEC);
-			HttpEntity<ContratReductionInfo> entity = new HttpEntity<ContratReductionInfo>(contratReductionInfo);
-			ResponseEntity<String> response = rt.exchange(url, HttpMethod.POST, entity, String.class);
+			HttpEntity<ContratReductionInfo> requestEntity = new HttpEntity<ContratReductionInfo>(contratReductionInfo);
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 			String responseBody = response.getBody();
-
-			if (!Utils.isStringNullOrEmpty(responseBody)) {
-				InfoErreur infoErreur = new InfoErreur();
-				JSONObject object = new JSONObject(responseBody);
-				infoErreur.setErrorCode(object.getString("errorCode"));
-				infoErreur.setErrorMessage(object.getString("errorMessage"));
-				if (!Utils.isStringNullOrEmpty(infoErreur.getErrorCode())) {
-					throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
-				}
+			if (RestUtil.isError(response.getStatusCode())) {
+				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
 			}
-
-		} catch (JSONException e) {
+		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		}
 	}

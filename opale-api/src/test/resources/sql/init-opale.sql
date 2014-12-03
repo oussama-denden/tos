@@ -20,6 +20,7 @@ CREATE TABLE `client` (
   `qui` varchar(255) DEFAULT NULL,
   `timestamp` datetime DEFAULT NULL,
   `clientId` varchar(255) DEFAULT NULL,
+  `tva` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 

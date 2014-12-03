@@ -142,4 +142,9 @@ public final class Constants {
 	 */
 	public static final String ECPARENT = "ECParent";
 
+	/**
+	 * type de tva par defaut .
+	 */
+	public static String DEFAULT_TYPE_TVA_CLIENT = "00";
+
 }

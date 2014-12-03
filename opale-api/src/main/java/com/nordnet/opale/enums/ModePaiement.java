@@ -35,7 +35,7 @@ public enum ModePaiement {
 	CHEQUE,
 
 	/**
-	 * .
+	 * Mondat administrative.
 	 */
 	FACTURE,
 

@@ -6,7 +6,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.nordnet.opale.enums.TypeTVA;
+import com.nordnet.common.valueObject.constants.VatType;
+import com.nordnet.opale.business.commande.Produit;
 
 /**
  * Definir notre propre logique de deserialisation que sera utiliser par jackson lors de auto-population de
@@ -16,12 +17,23 @@ import com.nordnet.opale.enums.TypeTVA;
  * @author Denden-OUSSAMA
  * 
  */
-public class TypeTVADeserializer extends JsonDeserializer<TypeTVA> {
+public class VATTypeDeserializer extends JsonDeserializer<VatType> {
 
 	@Override
-	public TypeTVA deserialize(JsonParser parser, DeserializationContext context)
+	public VatType deserialize(JsonParser parser, DeserializationContext context)
 			throws IOException, JsonProcessingException {
-		return TypeTVA.fromString(parser.getText().toUpperCase());
+		switch (parser.getText().toUpperCase()) {
+		case "S":
+			return VatType.S;
+		case "R":
+			return VatType.R;
+		case "SR":
+			return VatType.SR;
+		case "P":
+			return VatType.P;
+
+		}
+		return null;
 	}
 
 }
