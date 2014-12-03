@@ -131,12 +131,15 @@ public class Commande {
 	 */
 	public Commande(Draft draft, TransformationInfo trameCatalogue) {
 
-		this.clientAFacturer = draft.getClientAFacturer();
-		this.clientAFacturer.setAuteur(draft.getAuteur());
-		this.clientALivrer = draft.getClientALivrer();
-		this.clientALivrer.setAuteur(draft.getAuteur());
-		this.clientSouscripteur = draft.getClientSouscripteur();
-		this.clientSouscripteur.setAuteur(draft.getAuteur());
+		this.clientAFacturer =
+				new Client(draft.getClientAFacturer().getClientId(), draft.getClientAFacturer().getAdresseId(), draft
+						.getClientAFacturer().getTva(), draft.getAuteur());
+		this.clientALivrer =
+				new Client(draft.getClientALivrer().getClientId(), draft.getClientSouscripteur().getAdresseId(), draft
+						.getClientALivrer().getTva(), draft.getAuteur());
+		this.clientSouscripteur =
+				new Client(draft.getClientSouscripteur().getClientId(), draft.getClientSouscripteur().getAdresseId(),
+						draft.getClientSouscripteur().getTva(), draft.getAuteur());
 
 		this.auteur = new Auteur(trameCatalogue.getAuteur());
 		this.codePartenaire = draft.getCodePartenaire();

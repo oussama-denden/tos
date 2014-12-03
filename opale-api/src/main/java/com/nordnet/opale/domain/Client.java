@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Index;
@@ -52,7 +53,7 @@ public class Client {
 	/**
 	 * type TVA.
 	 */
-	private String TVA;
+	private String tva;
 
 	@Override
 	public String toString() {
@@ -87,13 +88,16 @@ public class Client {
 	 *            client id.
 	 * @param adresseId
 	 *            the adresse id
+	 * @param tva
+	 *            tva du client.
 	 * @param auteur
 	 *            l auteur
 	 */
-	public Client(String clientId, String adresseId, Auteur auteur) {
+	public Client(String clientId, String adresseId, String tva, Auteur auteur) {
 		super();
 		this.clientId = clientId;
 		this.adresseId = adresseId;
+		this.tva = tva;
 		this.auteur = auteur;
 	}
 
@@ -170,17 +174,17 @@ public class Client {
 	 * 
 	 * @return type tva {@link #TVA}
 	 */
-	public String getTVA() {
-		return TVA;
+	public String getTva() {
+		return tva;
 	}
 
 	/**
 	 * 
-	 * @param tVA
-	 *            {@link Client#TVA}
+	 * @param tva
+	 *            {@link Client#tva}
 	 */
-	public void setTVA(String tVA) {
-		TVA = tVA;
+	public void setTVA(String tva) {
+		this.tva = tva;
 	}
 
 	/**
@@ -195,6 +199,7 @@ public class Client {
 	public void setFromBusiness(com.nordnet.opale.business.Client client, com.nordnet.opale.business.Auteur auteur) {
 		adresseId = client.getAdresseId();
 		clientId = client.getClientId();
+		tva = client.getTva();
 		this.auteur = auteur.toDomain();
 	}
 
@@ -205,6 +210,7 @@ public class Client {
 	 *             {@link OpaleException}
 	 */
 	@PrePersist
+	@PreUpdate
 	public void prePersist() throws OpaleException {
 		if (auteur != null && auteur.getTimestamp() == null) {
 			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());

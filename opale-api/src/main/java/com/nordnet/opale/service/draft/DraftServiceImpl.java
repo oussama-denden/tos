@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nordnet.opale.business.Client;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.Cout;
@@ -450,11 +451,27 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
-		DraftValidator.validerindicatifTVA(transformationInfo.getClientInfo());
 
-		draft.setClientAFacturer(transformationInfo.getClientInfo().getFacturation().toDomain());
-		draft.setClientALivrer(transformationInfo.getClientInfo().getLivraison().toDomain());
-		draft.setClientSouscripteur(transformationInfo.getClientInfo().getSouscripteur().toDomain());
+		if (transformationInfo.getClientInfo() != null) {
+			Client clientAFacturer = transformationInfo.getClientInfo().getFacturation();
+			Client clientALivrer = transformationInfo.getClientInfo().getLivraison();
+			Client clientSouscripteur = transformationInfo.getClientInfo().getSouscripteur();
+			DraftValidator.validerindicatifTVA(transformationInfo.getClientInfo());
+			DraftValidator.clientIdNotNull(clientAFacturer);
+			DraftValidator.clientIdNotNull(clientALivrer);
+			DraftValidator.clientIdNotNull(clientSouscripteur);
+			if (clientAFacturer != null) {
+				draft.getClientAFacturer().setFromBusiness(clientAFacturer, transformationInfo.getAuteur());
+			}
+
+			if (clientALivrer != null) {
+				draft.getClientALivrer().setFromBusiness(clientALivrer, transformationInfo.getAuteur());
+			}
+
+			if (clientSouscripteur != null) {
+				draft.getClientSouscripteur().setFromBusiness(clientSouscripteur, transformationInfo.getAuteur());
+			}
+		}
 
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
@@ -627,7 +644,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 		if (validationInfo.isValide()) {
-			Cout cout = calculerCoutLigne(draft, trameCatalogue.getTrameCatalogue());
+			Cout cout = calculerCoutDraft(draft, trameCatalogue.getTrameCatalogue());
 
 			return cout;
 		} else {
@@ -824,14 +841,14 @@ public class DraftServiceImpl implements DraftService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	private Cout calculerCoutLigne(Draft draft, TrameCatalogue trameCatalogue) throws OpaleException {
+	private Cout calculerCoutDraft(Draft draft, TrameCatalogue trameCatalogue) throws OpaleException {
 		Cout cout = new Cout();
 		double coutTotal = 0d;
 		double coutTotalTTC = 0d;
 		double reduction = 0d;
 		List<DetailCout> details = new ArrayList<DetailCout>();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			DetailCout detailCout = calculerCoutDetailLigne(draft.getReference(), draftLigne, trameCatalogue);
+			DetailCout detailCout = calculerCoutLigne(draft, draftLigne, trameCatalogue);
 			coutTotal += detailCout.getCoutTotal();
 			coutTotalTTC += detailCout.getCoutTotalTTC();
 			reduction += detailCout.getReduction();
@@ -849,8 +866,8 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * calucler le cout du detail ligne.
 	 * 
-	 * @param refDraft
-	 *            reference du draft.
+	 * @param draft
+	 *            {@link Draft}.
 	 * @param draftLigne
 	 *            {@link DraftLigne}
 	 * @param trameCatalogue
@@ -859,8 +876,9 @@ public class DraftServiceImpl implements DraftService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	private DetailCout calculerCoutDetailLigne(String refDraft, DraftLigne draftLigne, TrameCatalogue trameCatalogue)
+	private DetailCout calculerCoutLigne(Draft draft, DraftLigne draftLigne, TrameCatalogue trameCatalogue)
 			throws OpaleException {
+		String segmentTVA = draft.getClientAFacturer().getTva();
 		DetailCout detailCout = new DetailCout();
 		double coutTotal = 0d;
 		double coutTotalTTC = 0d;
@@ -879,14 +897,14 @@ public class DraftServiceImpl implements DraftService {
 			choice = detailCatalogue.getChoice(draftLigneDetail.getReferenceChoix());
 			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
 			if (tarif != null) {
-				DetailCout detailCoutTarif = calculerCoutTarif(tarif, "00");
+				DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
 				coutTotal += detailCoutTarif.getCoutTotal();
 				coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
 				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 				planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
 				frequence = tarif.getFrequence();
 				reduction +=
-						caculerReductionDetaille(refDraft, draftLigne.getReference(),
+						caculerReductionDetaille(draft.getReference(), draftLigne.getReference(),
 								draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(),
 								detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan()
 										: Constants.ZERO, tarif, false);
@@ -895,15 +913,15 @@ public class DraftServiceImpl implements DraftService {
 
 		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
 		if (tarif != null) {
-			DetailCout detailCoutTarif = calculerCoutTarif(tarif, "00");
+			DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
 			coutTotal += detailCoutTarif.getCoutTotal();
 			coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
 			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
 			planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
 			frequence = tarif.getFrequence();
 			reduction +=
-					caculerReductionDetaille(refDraft, draftLigne.getReference(), draftLigne.getReference(), coutTotal,
-							plan, tarif, true);
+					caculerReductionDetaille(draft.getReference(), draftLigne.getReference(),
+							draftLigne.getReference(), coutTotal, plan, tarif, true);
 		}
 
 		detailCout.setPlan(new Plan(frequence, plan, planTTC));

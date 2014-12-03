@@ -147,12 +147,13 @@ public class Draft {
 		if (clientSouscripteur != null) {
 			this.clientSouscripteur =
 					new Client(clientSouscripteur.getClientId(), clientSouscripteur.getAdresseId(),
-							clientSouscripteur.getAuteur());
+							clientSouscripteur.getTva(), clientSouscripteur.getAuteur());
 		}
 		Client clientALivrer = commande.getClientALivrer();
 		if (clientALivrer != null) {
 			this.clientALivrer =
-					new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId(), clientALivrer.getAuteur());
+					new Client(clientALivrer.getClientId(), clientALivrer.getAdresseId(), clientALivrer.getTva(),
+							clientALivrer.getAuteur());
 		}
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			addLigne(new DraftLigne(commandeLigne));
@@ -172,15 +173,15 @@ public class Draft {
 		this.auteur = auteur;
 		Client clientAFacturer =
 				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation(),
-						auteur);
+						null, auteur);
 		this.clientAFacturer = clientAFacturer;
 		Client clientALivrer =
 				new Client(contrat.getIdClient(), contrat.getSousContrats().get(Constants.ZERO).getIdAdrLivraison(),
-						auteur);
+						null, auteur);
 		this.clientALivrer = clientALivrer;
 
 		// TODO verifier comment recuperer l'addresse du client suscripteur.
-		Client clientSouscripteur = new Client(contrat.getIdClient(), "", auteur);
+		Client clientSouscripteur = new Client(contrat.getIdClient(), "", null, auteur);
 		this.clientSouscripteur = clientSouscripteur;
 
 		addLigne(new DraftLigne(contrat, trameCatalogue));

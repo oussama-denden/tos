@@ -2,8 +2,9 @@
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 
 <dataset>
+<client id="1000" adresseId="address-facturation" clientId="client-id" ip="1.1.1.1" timestamp="[now]" qui="TEST" />
 
-<commande id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="Cmd-00000001" referenceDraft="00000001" />
+<commande id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="Cmd-00000001" referenceDraft="00000001" clientAFacturerId="1000" />
 
 <commandeLigne id="1000" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1002" />
 
