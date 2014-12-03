@@ -9,7 +9,6 @@
 	
 	<groupId>com.nordnet.opale-api</groupId>
 	<artifactId>opale-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>opale-api</name>
 
