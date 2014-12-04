@@ -261,8 +261,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		commandes =
 				commandeRepository.findAll(where(CommandeSpecifications.clientIdEqual(clientId))
-
-				.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
+						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
 						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
