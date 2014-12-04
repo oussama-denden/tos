@@ -9,14 +9,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Optional;
+import com.nordnet.common.valueObject.constants.VatType;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.deserializer.TypeProduitDeserializer;
-import com.nordnet.opale.deserializer.TypeTVADeserializer;
+import com.nordnet.opale.deserializer.VATTypeDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypeProduit;
-import com.nordnet.opale.enums.TypeTVA;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link ElementContractuel}.
@@ -83,9 +83,11 @@ public class ElementContractuel {
 	 */
 	private Double montant;
 
-	/** The type tva. {@link TypeTVA}. */
-	@JsonDeserialize(using = TypeTVADeserializer.class)
-	private TypeTVA typeTVA;
+	/**
+	 * {@link VatType}.
+	 */
+	@JsonDeserialize(using = VATTypeDeserializer.class)
+	private VatType typeTVA;
 
 	/**
 	 * La période de facturation.
@@ -329,9 +331,9 @@ public class ElementContractuel {
 	/**
 	 * Gets the type tva.
 	 * 
-	 * @return {@link #typeTVA}.
+	 * @return {@link #VatType}.
 	 */
-	public TypeTVA getTypeTVA() {
+	public VatType getTypeTVA() {
 		return typeTVA;
 	}
 
@@ -339,9 +341,9 @@ public class ElementContractuel {
 	 * Sets the type tva.
 	 * 
 	 * @param typeTVA
-	 *            the new type tva {@link #typeTVA}.
+	 *            the new type tva {@link #VatType}.
 	 */
-	public void setTypeTVA(TypeTVA typeTVA) {
+	public void setTypeTVA(VatType typeTVA) {
 		this.typeTVA = typeTVA;
 	}
 

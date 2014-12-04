@@ -9,7 +9,6 @@
 	
 	<groupId>com.nordnet.opale-api</groupId>
 	<artifactId>opale-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>opale-api</name>
 
@@ -116,6 +115,12 @@
 			<artifactId>saphir.ws.client</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
+    	
+    	<dependency>
+      		<groupId>com.nordnet.common</groupId>
+     		<artifactId>vat.ws.client</artifactId>
+      		<version>0.0.1-SNAPSHOT</version>
+    	</dependency>
 	</dependencies>
 	<build>
 		<finalName>opale-api</finalName>
@@ -176,11 +181,7 @@
 					<testFailureIgnore>false</testFailureIgnore>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>1.0</version>
-			</plugin>
+			
 		</plugins>
 	</build>
 </project>

@@ -226,13 +226,13 @@ public interface DraftService {
 	 * 
 	 * @param refDraft
 	 *            reference {@link Draft}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param calculInfo
+	 *            {@link TransformationInfo}.
 	 * @return soit le cout du draft soit les info de non validation.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Object calculerCout(String refDraft, TrameCatalogueInfo trameCatalogue) throws OpaleException;
+	public Object calculerCout(String refDraft, TransformationInfo calculInfo) throws OpaleException;
 
 	/**
 	 * Transformer un contrat en draft.

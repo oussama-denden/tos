@@ -19,6 +19,11 @@ public class Plan {
 	private double plan;
 
 	/**
+	 * plan TTC.
+	 */
+	private double planTTC;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Plan() {
@@ -31,10 +36,13 @@ public class Plan {
 	 *            frequence du tarif.
 	 * @param plan
 	 *            montant du tarif.
+	 * @param planTTC
+	 *            plan TTC.
 	 */
-	public Plan(Integer frequence, double plan) {
+	public Plan(Integer frequence, double plan, double planTTC) {
 		this.frequence = frequence;
 		this.plan = plan;
+		this.planTTC = planTTC;
 	}
 
 	/**
@@ -69,6 +77,23 @@ public class Plan {
 	 */
 	public void setPlan(double plan) {
 		this.plan = plan;
+	}
+
+	/**
+	 * 
+	 * @return {@link #planTTC}.
+	 */
+	public double getPlanTTC() {
+		return planTTC;
+	}
+
+	/**
+	 * 
+	 * @param planTTC
+	 *            {@link #planTTC}.
+	 */
+	public void setPlanTTC(double planTTC) {
+		this.planTTC = planTTC;
 	}
 
 }

@@ -12,7 +12,7 @@ import org.unitils.spring.annotation.SpringBean;
 
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.DraftValidationInfo;
-import com.nordnet.opale.business.TrameCatalogueInfo;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
@@ -55,10 +55,10 @@ public class CalculerCoutDraft extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftValide() {
 		try {
-			TrameCatalogueInfo trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+			TransformationInfo calculInfo =
+					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
 							"./requests/calculerCoutDraft.json");
-			Object object = draftService.calculerCout("Dra-00000001", trameCatalogue);
+			Object object = draftService.calculerCout("Dra-00000001", calculInfo);
 			assertTrue(object instanceof Cout);
 			Cout cout = (Cout) object;
 			assertEquals(new Double(119.8), cout.getCoutTotal());
@@ -79,10 +79,10 @@ public class CalculerCoutDraft extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftNonExiste() {
 		try {
-			TrameCatalogueInfo trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+			TransformationInfo calculInfo =
+					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
 							"./requests/calculerCoutDraft.json");
-			draftService.calculerCout("Dra-00000000", trameCatalogue);
+			draftService.calculerCout("Dra-00000000", calculInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("1.1.1", e.getErrorCode());
@@ -99,10 +99,10 @@ public class CalculerCoutDraft extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftNonValide() {
 		try {
-			TrameCatalogueInfo trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+			TransformationInfo calculInfo =
+					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
 							"./requests/calculerCoutDraft.json");
-			Object object = draftService.calculerCout("Dra-00000002", trameCatalogue);
+			Object object = draftService.calculerCout("Dra-00000002", calculInfo);
 			assertTrue(object instanceof DraftValidationInfo);
 			DraftValidationInfo validationInfo = (DraftValidationInfo) object;
 			assertFalse(validationInfo.isValide());

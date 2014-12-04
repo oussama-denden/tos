@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,8 +71,6 @@ public class RestClient {
 	 * @return reference du contrat preparer.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
-	 * @throws JSONException
-	 *             {@link JSONException}.
 	 */
 	public String preparerContrat(ContratPreparationInfo contratPreparationInfo) throws OpaleException {
 		LOGGER.info(":::ws-call:::preparerContrat");
@@ -89,8 +88,10 @@ public class RestClient {
 				JSONObject jsonResponse = new JSONObject(responseBody);
 				return jsonResponse.getString("referenceContrat");
 			}
-		} catch (IOException | JSONException e) {
+		} catch (JSONException | IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
+		} catch (ResourceAccessException e) {
+			throw new OpaleException("la connection vers topaze est refuse", e);
 		}
 	}
 
@@ -119,6 +120,8 @@ public class RestClient {
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
+		} catch (ResourceAccessException e) {
+			throw new OpaleException("la connection vers topaze est refuse", e);
 		}
 
 	}
@@ -148,6 +151,8 @@ public class RestClient {
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
+		} catch (ResourceAccessException e) {
+			throw new OpaleException("la connection vers topaze est refuse", e);
 		}
 	}
 
@@ -179,6 +184,8 @@ public class RestClient {
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
+		} catch (ResourceAccessException e) {
+			throw new OpaleException("la connection vers topaze est refuse", e);
 		}
 	}
 
@@ -208,6 +215,8 @@ public class RestClient {
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
+		} catch (ResourceAccessException e) {
+			throw new OpaleException("la connection vers topaze est refuse", e);
 		}
 	}
 
@@ -239,6 +248,8 @@ public class RestClient {
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
+		} catch (ResourceAccessException e) {
+			throw new OpaleException("la connection vers topaze est refuse", e);
 		}
 	}
 
