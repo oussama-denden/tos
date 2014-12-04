@@ -1,7 +1,9 @@
 package com.nordnet.opale.validator;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Client;
@@ -17,6 +19,7 @@ import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 
@@ -358,13 +361,47 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void validerClient(ClientInfo clientInfo) throws OpaleException {
+
 		if (clientInfo != null) {
 			clientIdNotNull(clientInfo.getFacturation());
 			clientIdNotNull(clientInfo.getLivraison());
 			clientIdNotNull(clientInfo.getSouscripteur());
+
 			validerIndicatifTVA(clientInfo.getFacturation());
 			validerIndicatifTVA(clientInfo.getLivraison());
 			validerIndicatifTVA(clientInfo.getSouscripteur());
+		}
+
+	}
+
+	/**
+	 * valider que les client facturation/livraison/souscripteur ont le meme id.
+	 * 
+	 * @param draft
+	 *            {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerIdClientUnique(Draft draft) throws OpaleException {
+		Set<String> idClientSet = new HashSet<String>();
+		String errorMessage = "";
+		if (draft.getClientAFacturer() != null) {
+			idClientSet.add(draft.getClientAFacturer().getClientId());
+			errorMessage += "facturation = " + draft.getClientAFacturer().getClientId() + " ";
+		}
+
+		if (draft.getClientALivrer() != null) {
+			idClientSet.add(draft.getClientALivrer().getClientId());
+			errorMessage += "livraison = " + draft.getClientALivrer().getClientId() + " ";
+		}
+
+		if (draft.getClientSouscripteur() != null) {
+			idClientSet.add(draft.getClientSouscripteur().getClientId());
+			errorMessage += "souscripteur = " + draft.getClientSouscripteur().getClientId();
+		}
+
+		if (idClientSet.size() > Constants.UN) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.32", errorMessage), "1.1.32");
 		}
 	}
 

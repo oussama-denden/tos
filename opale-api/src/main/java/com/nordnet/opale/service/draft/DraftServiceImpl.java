@@ -381,6 +381,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClientALivrer(clientInfo.getLivraison(), clientInfo.getAuteur());
 		draft.setClientSouscripteur(clientInfo.getSouscripteur(), clientInfo.getAuteur());
 
+		DraftValidator.validerIdClientUnique(draft);
+
 		String idClientFacturation = null;
 		if (clientInfo.getFacturation() != null) {
 			idClientFacturation = clientInfo.getFacturation().getClientId();
@@ -437,11 +439,14 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
 		ClientInfo clientInfo = transformationInfo.getClientInfo();
-		DraftValidator.validerClient(clientInfo);
+		if (clientInfo != null) {
+			DraftValidator.validerClient(clientInfo);
 
-		draft.setClientAFacturer(clientInfo.getFacturation(), transformationInfo.getAuteur());
-		draft.setClientALivrer(clientInfo.getLivraison(), transformationInfo.getAuteur());
-		draft.setClientSouscripteur(clientInfo.getSouscripteur(), transformationInfo.getAuteur());
+			draft.setClientAFacturer(clientInfo.getFacturation(), transformationInfo.getAuteur());
+			draft.setClientALivrer(clientInfo.getLivraison(), transformationInfo.getAuteur());
+			draft.setClientSouscripteur(clientInfo.getSouscripteur(), transformationInfo.getAuteur());
+			DraftValidator.validerIdClientUnique(draft);
+		}
 
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
