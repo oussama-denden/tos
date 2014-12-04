@@ -12,6 +12,7 @@ import com.nordnet.opale.deserializer.ModePaiementDeserializer;
  * <li><b>Cheque</b></li>
  * <li><b>sous forme de prelevement par mois</b></li>
  * <li><b>3 fois sans frais</b></li>
+ * <li><b>facture fin de mois</b></li>
  * </ul>
  * 
  * @author akram-moncer
@@ -42,7 +43,12 @@ public enum ModePaiement {
 	/**
 	 * Mode de payement en 3 fois sans frais.
 	 */
-	TROIS_FOIS_SANS_FRAIS;
+	TROIS_FOIS_SANS_FRAIS,
+
+	/**
+	 * mode de paiement sur facture en fin de mois.
+	 */
+	FACTURE_FIN_DE_MOIS;
 
 	/**
 	 * Cette methode sera utiliser par le {@link ModePaiementDeserializer} pour faire la deserialisation.
@@ -63,6 +69,8 @@ public enum ModePaiement {
 			return FACTURE;
 		case "TROIS_FOIS_SANS_FRAIS":
 			return TROIS_FOIS_SANS_FRAIS;
+		case "FACTURE_FIN_DE_MOIS":
+			return FACTURE_FIN_DE_MOIS;
 		}
 		return null;
 	}
