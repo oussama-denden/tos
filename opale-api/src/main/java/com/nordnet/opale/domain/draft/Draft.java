@@ -135,11 +135,10 @@ public class Draft {
 		this.auteur = commande.getAuteur();
 		Client clientAFacturer = commande.getClientAFacturer();
 		if (clientAFacturer != null) {
-			// this.clientAFacturer = new Client(clientAFacturer.getClientId(),
-			// clientALivrer.getAdresseId());
 			this.clientAFacturer = new Client();
 			this.clientAFacturer.setAdresseId(clientAFacturer.getAdresseId());
 			this.clientAFacturer.setClientId(clientAFacturer.getClientId());
+			this.clientAFacturer.setTva(clientAFacturer.getTva());
 			this.clientAFacturer.setAuteur(clientAFacturer.getAuteur());
 
 		}

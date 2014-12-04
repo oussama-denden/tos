@@ -51,10 +51,13 @@ public class CalculerCoutCommande extends GlobalTestCase {
 	public void calculeCoutCommandeValide() {
 		try {
 			Cout cout = commandeService.calculerCout("Cmd-00000001");
-			assertEquals(new Double(119.8), cout.getCoutTotal());
+			assertEquals(new Double(119.8), new Double(cout.getCoutTotal()));
+			assertEquals(new Double(143.76), new Double(cout.getCoutTotalTTC()));
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(cout.getDetails().size()));
-			assertEquals(new Double(119.8), cout.getDetails().get(0).getCoutTotal());
+			assertEquals(new Double(119.8), new Double(cout.getDetails().get(0).getCoutTotal()));
+			assertEquals(new Double(143.76), new Double(cout.getDetails().get(0).getCoutTotalTTC()));
 			assertEquals(new Double(34.9), new Double(cout.getDetails().get(0).getPlan().getPlan()));
+			assertEquals(new Double(41.88), new Double(cout.getDetails().get(0).getPlan().getPlanTTC()));
 			assertEquals(Constants.UN, cout.getDetails().get(0).getPlan().getFrequence());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

@@ -62,11 +62,11 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 			Object object = draftService.calculerCout("Dra-00000001", calculInfo);
 			assertTrue(object instanceof Cout);
 			Cout cout = (Cout) object;
-			assertEquals(new Double(119.8), cout.getCoutTotal());
-			assertEquals(new Double(39.43), cout.getReduction());
+			assertEquals(new Double(119.8), new Double(cout.getCoutTotal()));
+			assertEquals(new Double(39.43), new Double(cout.getReduction()));
 
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(cout.getDetails().size()));
-			assertEquals(new Double(119.8), cout.getDetails().get(0).getCoutTotal());
+			assertEquals(new Double(119.8), new Double(cout.getDetails().get(0).getCoutTotal()));
 			assertEquals(new Double(27.45), cout.getDetails().get(0).getReduction());
 
 			assertEquals(new Double(34.9), new Double(cout.getDetails().get(0).getPlan().getPlan()));

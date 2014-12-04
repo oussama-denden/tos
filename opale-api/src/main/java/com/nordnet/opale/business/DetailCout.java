@@ -133,7 +133,7 @@ public class DetailCout {
 	 * 
 	 * @return {@link #coutTotal}.
 	 */
-	public Double getCoutTotal() {
+	public double getCoutTotal() {
 		return coutTotal;
 	}
 
@@ -142,7 +142,7 @@ public class DetailCout {
 	 * @param coutTotal
 	 *            {@link #coutTotal}.
 	 */
-	public void setCoutTotal(Double coutTotal) {
+	public void setCoutTotal(double coutTotal) {
 		this.coutTotal = coutTotal;
 	}
 

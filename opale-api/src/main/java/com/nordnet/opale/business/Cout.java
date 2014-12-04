@@ -63,7 +63,7 @@ public class Cout {
 	 * 
 	 * @return {@link #coutTotal}.
 	 */
-	public Double getCoutTotal() {
+	public double getCoutTotal() {
 		return coutTotal;
 	}
 
