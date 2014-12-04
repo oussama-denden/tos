@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.Client;
+import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Offre;
@@ -159,22 +160,6 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.2", referenceLigne), "1.1.2");
 		}
 
-	}
-
-	/**
-	 * Tester si le clientId n'est pas null ou empty.
-	 * 
-	 * @param client
-	 *            {@link Client}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public static void clientIdNotNull(Client client) throws OpaleException {
-		if (client != null) {
-			if (Utils.isStringNullOrEmpty(client.getClientId())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.5"), "1.1.5");
-			}
-		}
 	}
 
 	/**
@@ -362,6 +347,41 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.27", refProduit, refLigne, refDraft), "1.1.27");
 		}
 
+	}
+
+	/**
+	 * valider un {@link ClientInfo}.
+	 * 
+	 * @param clientInfo
+	 *            {@link ClientInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerClient(ClientInfo clientInfo) throws OpaleException {
+		if (clientInfo != null) {
+			clientIdNotNull(clientInfo.getFacturation());
+			clientIdNotNull(clientInfo.getLivraison());
+			clientIdNotNull(clientInfo.getSouscripteur());
+			validerIndicatifTVA(clientInfo.getFacturation());
+			validerIndicatifTVA(clientInfo.getLivraison());
+			validerIndicatifTVA(clientInfo.getSouscripteur());
+		}
+	}
+
+	/**
+	 * Tester si le clientId n'est pas null ou empty.
+	 * 
+	 * @param client
+	 *            {@link Client}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void clientIdNotNull(Client client) throws OpaleException {
+		if (client != null) {
+			if (Utils.isStringNullOrEmpty(client.getClientId())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.5"), "1.1.5");
+			}
+		}
 	}
 
 	/**

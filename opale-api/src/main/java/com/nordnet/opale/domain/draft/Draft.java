@@ -352,6 +352,28 @@ public class Draft {
 	}
 
 	/**
+	 * associer un {@link Client} au draft a partir des informations d'un {@link com.nordnet.opale.business.Client}.
+	 * 
+	 * @param client
+	 *            {@link com.nordnet.opale.business.Client}.
+	 * @param auteur
+	 *            {@link com.nordnet.opale.business.Auteur}.
+	 */
+	public void setClientSouscripteur(com.nordnet.opale.business.Client client, com.nordnet.opale.business.Auteur auteur) {
+		if (client != null) {
+			if (this.clientSouscripteur != null) {
+				this.clientSouscripteur.setAdresseId(client.getAdresseId());
+				this.clientSouscripteur.setClientId(client.getClientId());
+				this.clientSouscripteur.setTva(client.getTva());
+				this.clientSouscripteur.setAuteur(auteur.toDomain());
+			} else {
+				this.clientSouscripteur =
+						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur.toDomain());
+			}
+		}
+	}
+
+	/**
 	 * 
 	 * @return {@link Client}.
 	 */
@@ -369,6 +391,28 @@ public class Draft {
 	}
 
 	/**
+	 * associer un {@link Client} au draft a partir des informations d'un {@link com.nordnet.opale.business.Client}.
+	 * 
+	 * @param client
+	 *            {@link com.nordnet.opale.business.Client}.
+	 * @param auteur
+	 *            {@link com.nordnet.opale.business.Auteur}.
+	 */
+	public void setClientALivrer(com.nordnet.opale.business.Client client, com.nordnet.opale.business.Auteur auteur) {
+		if (client != null) {
+			if (this.clientALivrer != null) {
+				this.clientALivrer.setAdresseId(client.getAdresseId());
+				this.clientALivrer.setClientId(client.getClientId());
+				this.clientALivrer.setTva(client.getTva());
+				this.clientALivrer.setAuteur(auteur.toDomain());
+			} else {
+				this.clientALivrer =
+						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur.toDomain());
+			}
+		}
+	}
+
+	/**
 	 * 
 	 * @return {@link Client}.
 	 */
@@ -383,6 +427,28 @@ public class Draft {
 	 */
 	public void setClientAFacturer(Client clientAFacturer) {
 		this.clientAFacturer = clientAFacturer;
+	}
+
+	/**
+	 * associer un {@link Client} au draft a partir des informations d'un {@link com.nordnet.opale.business.Client}.
+	 * 
+	 * @param client
+	 *            {@link com.nordnet.opale.business.Client}.
+	 * @param auteur
+	 *            {@link com.nordnet.opale.business.Auteur}.
+	 */
+	public void setClientAFacturer(com.nordnet.opale.business.Client client, com.nordnet.opale.business.Auteur auteur) {
+		if (client != null) {
+			if (this.clientAFacturer != null) {
+				this.clientAFacturer.setAdresseId(client.getAdresseId());
+				this.clientAFacturer.setClientId(client.getClientId());
+				this.clientAFacturer.setTva(client.getTva());
+				this.clientAFacturer.setAuteur(auteur.toDomain());
+			} else {
+				this.clientAFacturer =
+						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur.toDomain());
+			}
+		}
 	}
 
 	/**

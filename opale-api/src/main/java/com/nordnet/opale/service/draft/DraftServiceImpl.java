@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nordnet.opale.business.Client;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.Cout;
@@ -376,42 +375,25 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerAuteur(clientInfo.getAuteur());
 
 		// verifier si le clientId n'est pas null ou empty.
-		DraftValidator.clientIdNotNull(clientInfo.getFacturation());
-		DraftValidator.clientIdNotNull(clientInfo.getLivraison());
-		DraftValidator.clientIdNotNull(clientInfo.getSouscripteur());
-		DraftValidator.validerIndicatifTVA(clientInfo.getFacturation());
-		DraftValidator.validerIndicatifTVA(clientInfo.getLivraison());
-		DraftValidator.validerIndicatifTVA(clientInfo.getSouscripteur());
+		DraftValidator.validerClient(clientInfo);
 
-		// associer le client facturation.
+		draft.setClientAFacturer(clientInfo.getFacturation(), clientInfo.getAuteur());
+		draft.setClientALivrer(clientInfo.getLivraison(), clientInfo.getAuteur());
+		draft.setClientSouscripteur(clientInfo.getSouscripteur(), clientInfo.getAuteur());
+
 		String idClientFacturation = null;
 		if (clientInfo.getFacturation() != null) {
 			idClientFacturation = clientInfo.getFacturation().getClientId();
-			if (draft.getClientAFacturer() != null) {
-				draft.getClientAFacturer().setFromBusiness(clientInfo.getFacturation(), clientInfo.getAuteur());
-			} else {
-				draft.setClientAFacturer(clientInfo.getFacturation().toDomain(clientInfo.getAuteur()));
-			}
 		}
-		// associer le client livraison.
+
 		String idClientLivraison = null;
 		if (clientInfo.getLivraison() != null) {
 			idClientLivraison = clientInfo.getLivraison().getClientId();
-			if (draft.getClientALivrer() != null) {
-				draft.getClientALivrer().setFromBusiness(clientInfo.getLivraison(), clientInfo.getAuteur());
-			} else {
-				draft.setClientALivrer(clientInfo.getLivraison().toDomain(clientInfo.getAuteur()));
-			}
 		}
-		// associer le client souscripteur.
+
 		String idClientSouscripteur = null;
 		if (clientInfo.getSouscripteur() != null) {
 			idClientSouscripteur = clientInfo.getSouscripteur().getClientId();
-			if (draft.getClientSouscripteur() != null) {
-				draft.getClientSouscripteur().setFromBusiness(clientInfo.getSouscripteur(), clientInfo.getAuteur());
-			} else {
-				draft.setClientSouscripteur(clientInfo.getSouscripteur().toDomain(clientInfo.getAuteur()));
-			}
 		}
 
 		draftRepository.save(draft);
@@ -454,40 +436,12 @@ public class DraftServiceImpl implements DraftService {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
+		ClientInfo clientInfo = transformationInfo.getClientInfo();
+		DraftValidator.validerClient(clientInfo);
 
-		if (transformationInfo.getClientInfo() != null) {
-			Client clientAFacturer = transformationInfo.getClientInfo().getFacturation();
-			Client clientALivrer = transformationInfo.getClientInfo().getLivraison();
-			Client clientSouscripteur = transformationInfo.getClientInfo().getSouscripteur();
-			DraftValidator.clientIdNotNull(clientAFacturer);
-			DraftValidator.clientIdNotNull(clientALivrer);
-			DraftValidator.clientIdNotNull(clientSouscripteur);
-			DraftValidator.validerIndicatifTVA(clientAFacturer);
-			DraftValidator.validerIndicatifTVA(clientALivrer);
-			DraftValidator.validerIndicatifTVA(clientSouscripteur);
-			if (clientAFacturer != null && draft.getClientAFacturer() != null) {
-				draft.getClientAFacturer().setFromBusiness(clientAFacturer, transformationInfo.getAuteur());
-			} else if (clientAFacturer != null) {
-				draft.setClientAFacturer(new com.nordnet.opale.domain.Client(clientAFacturer.getClientId(),
-						clientAFacturer.getAdresseId(), clientAFacturer.getTva(), transformationInfo.getAuteur()
-								.toDomain()));
-			}
-
-			if (clientALivrer != null && draft.getClientALivrer() != null) {
-				draft.getClientALivrer().setFromBusiness(clientALivrer, transformationInfo.getAuteur());
-			} else if (clientALivrer != null) {
-				draft.setClientALivrer(new com.nordnet.opale.domain.Client(clientALivrer.getClientId(), clientALivrer
-						.getAdresseId(), clientALivrer.getTva(), transformationInfo.getAuteur().toDomain()));
-			}
-
-			if (clientSouscripteur != null && draft.getClientSouscripteur() != null) {
-				draft.getClientSouscripteur().setFromBusiness(clientSouscripteur, transformationInfo.getAuteur());
-			} else if (clientAFacturer != null) {
-				draft.setClientSouscripteur(new com.nordnet.opale.domain.Client(clientSouscripteur.getClientId(),
-						clientSouscripteur.getAdresseId(), clientSouscripteur.getTva(), transformationInfo.getAuteur()
-								.toDomain()));
-			}
-		}
+		draft.setClientAFacturer(clientInfo.getFacturation(), transformationInfo.getAuteur());
+		draft.setClientALivrer(clientInfo.getLivraison(), transformationInfo.getAuteur());
+		draft.setClientSouscripteur(clientInfo.getSouscripteur(), transformationInfo.getAuteur());
 
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
