@@ -1,5 +1,7 @@
 package com.nordnet.opale.vat.client;
 
+import org.apache.log4j.Logger;
+
 import com.nordnet.common.valueObject.constants.CurrencyCode;
 import com.nordnet.common.valueObject.constants.VatType;
 import com.nordnet.common.valueObject.money.Price;
@@ -17,6 +19,11 @@ import com.nordnet.opale.util.PropertiesUtil;
  * 
  */
 public class VatClient {
+
+	/**
+	 * Declaration du log.
+	 */
+	private final static Logger LOGGER = Logger.getLogger(VatClient.class);
 
 	/**
 	 * 
@@ -67,6 +74,7 @@ public class VatClient {
 			double vatAmount = vat.getRate().applyVat(price).getPrice().getAmount().doubleValue();
 			return vatAmount;
 		} catch (Exception e) {
+			LOGGER.error("Erreur :", e);
 			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("0.2"), "0.2");
 		}
 	}
