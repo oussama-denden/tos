@@ -33,7 +33,6 @@ import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
@@ -49,6 +48,7 @@ import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
 import com.nordnet.opale.rest.RestClient;
+import com.nordnet.opale.rest.RestPropertiesUtil;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.reduction.ReductionService;
@@ -58,6 +58,8 @@ import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
 import com.nordnet.opale.vat.client.VatClient;
+import com.nordnet.topaze.ws.client.TopazeClient;
+import com.nordnet.topaze.ws.entity.Contrat;
 
 /**
  * L'implementation de service {@link DraftService}.
@@ -126,6 +128,18 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private DraftLigneDetailRepository draftLigneDetailRepository;
+
+	/**
+	 * Client rest de topaze.
+	 */
+	@Autowired
+	TopazeClient topazeClient;
+
+	/**
+	 * {@link PropertiesUtil}.
+	 */
+	@Autowired
+	private RestPropertiesUtil restPropertiesUtil;
 
 	/**
 	 * {@inheritDoc}

@@ -23,12 +23,12 @@ import com.google.common.base.Optional;
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.catalogue.Choice;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
-import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Utils;
+import com.nordnet.topaze.ws.entity.Produit;
+import com.nordnet.topaze.ws.enums.TypeProduit;
 
 /**
  * Contient les informations lie a une offre dans la commande.
@@ -117,7 +117,7 @@ public class CommandeLigneDetail {
 	public CommandeLigneDetail(DraftLigneDetail detail, DetailCatalogue detailCatalogue) {
 		this.numEC = detail.getNumEC();
 		this.referenceSelection = detail.getReferenceSelection();
-		this.typeProduit = detailCatalogue.getType();
+		this.typeProduit = TypeProduit.fromString(detailCatalogue.getType().name());
 		this.configurationJson = detail.getConfigurationJson();
 		Choice choice = detailCatalogue.getChoiceMap().get(detail.getReferenceChoix());
 		this.referenceChoix = detail.getReferenceChoix();

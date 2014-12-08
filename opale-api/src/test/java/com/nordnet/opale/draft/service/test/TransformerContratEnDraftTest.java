@@ -9,7 +9,6 @@ import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
 import com.nordnet.opale.business.TrameCatalogueInfo;
-import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
@@ -17,6 +16,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.draft.DraftServiceImpl;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
+import com.nordnet.topaze.ws.entity.Contrat;
 
 /**
  * classe de test de la methode

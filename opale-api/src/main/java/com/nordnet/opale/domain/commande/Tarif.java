@@ -24,10 +24,11 @@ import com.nordnet.common.valueObject.constants.VatType;
 import com.nordnet.opale.business.FraisInfo;
 import com.nordnet.opale.business.TarifInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.business.commande.Prix;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypePaiement;
+import com.nordnet.topaze.ws.entity.Prix;
+import com.nordnet.topaze.ws.enums.TypeTVA;
 
 /**
  * Classe represente les Tarif associe a une commande/commandeDetail.
@@ -309,13 +310,13 @@ public class Tarif {
 		prix.setEngagement(engagement);
 		prix.setMontant(this.prix);
 		prix.setPeriodicite(frequence);
-		prix.setTypeTVA(typeTVA);
-		Set<com.nordnet.opale.business.commande.Frais> fraisSet = new HashSet<>();
+		prix.setTypeTVA(TypeTVA.fromString(typeTVA.name()));
+		Set<com.nordnet.topaze.ws.entity.Frais> fraisSet = new HashSet<>();
 		for (Frais frais : this.frais) {
 			fraisSet.add(frais.toFraisContrat());
 		}
 		prix.setFrais(fraisSet);
-		prix.setModeFacturation(modeFacturation);
+		prix.setModeFacturation(com.nordnet.topaze.ws.enums.ModeFacturation.fromString(modeFacturation.name()));
 		return prix;
 	}
 

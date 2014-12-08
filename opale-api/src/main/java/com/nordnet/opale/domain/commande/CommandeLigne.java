@@ -29,16 +29,16 @@ import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.business.commande.Contrat;
-import com.nordnet.opale.business.commande.ContratPreparationInfo;
-import com.nordnet.opale.business.commande.Produit;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.topaze.ws.entity.Contrat;
+import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
+import com.nordnet.topaze.ws.entity.Produit;
+import com.nordnet.topaze.ws.enums.TypeProduit;
 
 /**
  * Classe represente une ligne (offre) dans la {@link Commande}.
@@ -153,7 +153,7 @@ public class CommandeLigne {
 		this.gamme = offreCatalogue.getGamme();
 		this.secteur = offreCatalogue.getSecteur();
 		this.label = offreCatalogue.getLabel();
-		this.typeProduit = offreCatalogue.getType();
+		this.typeProduit = TypeProduit.fromString(offreCatalogue.getType().name());
 		this.modeFacturation = offreCatalogue.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
@@ -538,7 +538,7 @@ public class CommandeLigne {
 		produitParent.setLabel(label);
 		produitParent.setNumEC(Constants.UN);
 		produitParent.setNumeroCommande(referenceCommande);
-		produitParent.setTypeProduit(typeProduit);
+		produitParent.setTypeProduit(com.nordnet.topaze.ws.enums.TypeProduit.fromString(typeProduit.name()));
 		produitParent.setReference(referenceOffre);
 		produitParent.setReferenceTarif(tarif.getReference());
 		if (tarif != null) {

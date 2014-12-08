@@ -5,14 +5,14 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.nordnet.opale.business.ContratReductionInfo;
-import com.nordnet.opale.business.commande.Contrat;
-import com.nordnet.opale.business.commande.ContratPreparationInfo;
-import com.nordnet.opale.business.commande.ContratRenouvellementInfo;
-import com.nordnet.opale.business.commande.ContratValidationInfo;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.rest.RestClient;
+import com.nordnet.topaze.ws.entity.Contrat;
+import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
+import com.nordnet.topaze.ws.entity.ContratReductionInfo;
+import com.nordnet.topaze.ws.entity.ContratRenouvellementInfo;
+import com.nordnet.topaze.ws.entity.ContratValidationInfo;
 
 /**
  * The Class restClientMock.
@@ -38,7 +38,7 @@ public class RestClientMock extends RestClient {
 	}
 
 	@Override
-	public void validerContrat(String refContrat, ContratValidationInfo validationInfo) throws OpaleException {
+	public void validerContrat(String refContrat, ContratValidationInfo contratValidationInfo) throws OpaleException {
 
 	}
 

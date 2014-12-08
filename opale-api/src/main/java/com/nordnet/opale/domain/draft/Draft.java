@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.business.commande.Contrat;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.commande.Commande;
@@ -33,6 +32,7 @@ import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.topaze.ws.entity.Contrat;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Draft}.

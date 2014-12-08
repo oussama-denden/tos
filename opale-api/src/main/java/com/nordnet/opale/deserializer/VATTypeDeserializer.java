@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.nordnet.common.valueObject.constants.VatType;
-import com.nordnet.opale.business.commande.Produit;
+import com.nordnet.topaze.ws.entity.Produit;
 
 /**
  * Definir notre propre logique de deserialisation que sera utiliser par jackson lors de auto-population de

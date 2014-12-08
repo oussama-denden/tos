@@ -220,13 +220,13 @@ public class Frais {
 	 * 
 	 * @return frais contrat {@link com.nordnet.opale.business.commande.Frais}.
 	 */
-	public com.nordnet.opale.business.commande.Frais toFraisContrat() {
-		com.nordnet.opale.business.commande.Frais frais = new com.nordnet.opale.business.commande.Frais();
+	public com.nordnet.topaze.ws.entity.Frais toFraisContrat() {
+		com.nordnet.topaze.ws.entity.Frais frais = new com.nordnet.topaze.ws.entity.Frais();
 		frais.setMontant(montant);
 		// frais.setNombreMois(nombreMois);
 		// frais.setOrdre(ordre);
 		frais.setTitre(label);
-		frais.setTypeFrais(typeFrais);
+		frais.setTypeFrais(com.nordnet.topaze.ws.enums.TypeFrais.fromSting(typeFrais.name()));
 		return frais;
 	}
 

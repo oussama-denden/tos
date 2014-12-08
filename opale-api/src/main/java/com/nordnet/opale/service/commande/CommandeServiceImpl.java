@@ -2,6 +2,7 @@ package com.nordnet.opale.service.commande;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,29 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
-import com.nordnet.opale.business.ContratReductionInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
-import com.nordnet.opale.business.ReductionContrat;
 import com.nordnet.opale.business.SignatureInfo;
-import com.nordnet.opale.business.TypeReduction;
-import com.nordnet.opale.business.commande.Contrat;
-import com.nordnet.opale.business.commande.ContratPreparationInfo;
-import com.nordnet.opale.business.commande.ContratRenouvellementInfo;
-import com.nordnet.opale.business.commande.ContratValidationInfo;
-import com.nordnet.opale.business.commande.FraisRenouvellement;
-import com.nordnet.opale.business.commande.PolitiqueRenouvellement;
-import com.nordnet.opale.business.commande.PolitiqueValidation;
-import com.nordnet.opale.business.commande.Prix;
-import com.nordnet.opale.business.commande.PrixRenouvellemnt;
-import com.nordnet.opale.business.commande.Produit;
-import com.nordnet.opale.business.commande.ProduitRenouvellement;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
@@ -47,7 +36,6 @@ import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
@@ -63,6 +51,25 @@ import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CommandeValidator;
+import com.nordnet.topaze.exception.TopazeException;
+import com.nordnet.topaze.ws.client.TopazeClient;
+import com.nordnet.topaze.ws.entity.Contrat;
+import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
+import com.nordnet.topaze.ws.entity.ContratReductionInfo;
+import com.nordnet.topaze.ws.entity.ContratRenouvellementInfo;
+import com.nordnet.topaze.ws.entity.ContratValidationInfo;
+import com.nordnet.topaze.ws.entity.FraisRenouvellement;
+import com.nordnet.topaze.ws.entity.PolitiqueRenouvellement;
+import com.nordnet.topaze.ws.entity.PolitiqueValidation;
+import com.nordnet.topaze.ws.entity.Prix;
+import com.nordnet.topaze.ws.entity.PrixRenouvellemnt;
+import com.nordnet.topaze.ws.entity.Produit;
+import com.nordnet.topaze.ws.entity.ProduitRenouvellement;
+import com.nordnet.topaze.ws.entity.ReductionContrat;
+import com.nordnet.topaze.ws.enums.TypeFrais;
+import com.nordnet.topaze.ws.enums.TypeReduction;
+import com.nordnet.topaze.ws.enums.TypeTVA;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * implementation de l'interface {@link CommandeService}.
@@ -132,6 +139,12 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private ReductionService reductionService;
+
+	/**
+	 * Client rest de topaze.
+	 */
+	@Autowired
+	TopazeClient topazeClient;
 
 	/**
 	 * 
@@ -536,10 +549,13 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @throws TopazeException
+	 * @throws IOException
+	 * 
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException {
+	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
@@ -552,10 +568,15 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @throws TopazeException
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonParseException
+	 * 
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
+	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException {
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = null;
 		if ((commande.needPaiementRecurrent() && !(calculerCoutComptant(commande.getReference()) > 0d))
@@ -564,15 +585,14 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			ContratPreparationInfo preparationInfo =
+			ContratPreparationInfo contratPreparationInfo =
 					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
 			/*
 			 * ajout du mode de paiement au produits prepare.
 			 */
-			ajouterModePaiementProduit(preparationInfo.getProduits());
-
-			String refContrat = restClient.preparerContrat(preparationInfo);
+			ajouterModePaiementProduit(contratPreparationInfo.getProduits());
+			String refContrat = restClient.preparerContrat(contratPreparationInfo);
 			ligne.setReferenceContrat(refContrat);
 
 			/*
@@ -580,9 +600,9 @@ public class CommandeServiceImpl implements CommandeService {
 			 */
 			transformerReductionCommandeEnReductionContrat(commande, ligne);
 
-			ContratValidationInfo validationInfo = creeContratValidationInfo(commande, ligne, refContrat);
+			ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne, refContrat);
 
-			restClient.validerContrat(refContrat, validationInfo);
+			restClient.validerContrat(refContrat, contratValidationInfo);
 
 			referencesContrats.add(refContrat);
 
@@ -614,9 +634,8 @@ public class CommandeServiceImpl implements CommandeService {
 		validationInfo.setPolitiqueValidation(politiqueValidation);
 		validationInfo.setUser(ligne.getAuteur().getQui());
 
-		List<com.nordnet.opale.business.commande.PaiementInfo> paiementInfos = new ArrayList<>();
-		com.nordnet.opale.business.commande.PaiementInfo paiementInfoParent =
-				new com.nordnet.opale.business.commande.PaiementInfo();
+		List<com.nordnet.topaze.ws.entity.PaiementInfo> paiementInfos = new ArrayList<>();
+		com.nordnet.topaze.ws.entity.PaiementInfo paiementInfoParent = new com.nordnet.topaze.ws.entity.PaiementInfo();
 		paiementInfoParent.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
 		paiementInfoParent.setNumEC(ligne.getNumEC());
 		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(commande.getReference(), false);
@@ -632,8 +651,7 @@ public class CommandeServiceImpl implements CommandeService {
 		paiementInfoParent.setReferenceProduit(ligne.getReferenceOffre());
 		paiementInfos.add(paiementInfoParent);
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
-			com.nordnet.opale.business.commande.PaiementInfo paiementInfo =
-					new com.nordnet.opale.business.commande.PaiementInfo();
+			com.nordnet.topaze.ws.entity.PaiementInfo paiementInfo = new com.nordnet.topaze.ws.entity.PaiementInfo();
 
 			paiementInfo.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
 			paiementInfo.setNumEC(ligneDetail.getNumEC());
@@ -706,6 +724,8 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @throws TopazeException
+	 * 
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -717,7 +737,6 @@ public class CommandeServiceImpl implements CommandeService {
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 
 			ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
-
 			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
 
 		}
@@ -750,10 +769,10 @@ public class CommandeServiceImpl implements CommandeService {
 		renouvellementInfo.setUser(ligne.getAuteur().getQui());
 
 		// Liste de produit renouvelement.
-		List<com.nordnet.opale.business.commande.ProduitRenouvellement> produitRenouvellements = new ArrayList<>();
+		List<com.nordnet.topaze.ws.entity.ProduitRenouvellement> produitRenouvellements = new ArrayList<>();
 
-		com.nordnet.opale.business.commande.ProduitRenouvellement produitRenouvellement =
-				new com.nordnet.opale.business.commande.ProduitRenouvellement();
+		com.nordnet.topaze.ws.entity.ProduitRenouvellement produitRenouvellement =
+				new com.nordnet.topaze.ws.entity.ProduitRenouvellement();
 
 		produitRenouvellement.setLabel(ligne.getLabel());
 		produitRenouvellement.setNumeroCommande(commande.getReference());
@@ -767,7 +786,7 @@ public class CommandeServiceImpl implements CommandeService {
 		produitRenouvellements.add(produitRenouvellement);
 
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
-			produitRenouvellement = new com.nordnet.opale.business.commande.ProduitRenouvellement();
+			produitRenouvellement = new com.nordnet.topaze.ws.entity.ProduitRenouvellement();
 
 			produitRenouvellement.setLabel(ligneDetail.getLabel());
 			produitRenouvellement.setNumeroCommande(commande.getReference());
@@ -802,10 +821,11 @@ public class CommandeServiceImpl implements CommandeService {
 	private PrixRenouvellemnt getPrixRenouvellement(CommandeLigne ligne, String referenceCommande) {
 		// creer le prix
 		PrixRenouvellemnt prix = new PrixRenouvellemnt();
-		prix.setModeFacturation(ligne.getModeFacturation());
+		prix.setModeFacturation(com.nordnet.topaze.ws.enums.ModeFacturation.fromString(ligne.getModeFacturation()
+				.name()));
 		prix.setMontant(ligne.getTarif().getPrix());
 		prix.setPeriodicite(ligne.getTarif().getFrequence());
-		prix.setTypeTVA(ligne.getTarif().getTypeTVA());
+		prix.setTypeTVA(TypeTVA.fromString(ligne.getTarif().getTypeTVA().name()));
 
 		// affecter la duree.
 
@@ -849,10 +869,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		// creer le prix
 		PrixRenouvellemnt prix = new PrixRenouvellemnt();
-		prix.setModeFacturation(modeFacturation);
+		prix.setModeFacturation(com.nordnet.topaze.ws.enums.ModeFacturation.fromString(modeFacturation.name()));
 		prix.setMontant(ligneDetail.getTarif().getPrix());
 		prix.setPeriodicite(ligneDetail.getTarif().getFrequence());
-		prix.setTypeTVA(ligneDetail.getTarif().getTypeTVA());
+		prix.setTypeTVA(TypeTVA.fromString(ligneDetail.getTarif().getTypeTVA().name()));
 
 		// affecter la duree.
 
@@ -893,7 +913,8 @@ public class CommandeServiceImpl implements CommandeService {
 		// fraisRenouvellement.setNombreMois(fraisCommande.getNombreMois());
 		// fraisRenouvellement.setOrdre(fraisCommande.getOrdre());
 
-		fraisRenouvellement.setTypeFrais(fraisCommande.getTypeFrais());
+		fraisRenouvellement.setTypeFrais(com.nordnet.topaze.ws.enums.TypeFrais.fromSting(fraisCommande.getTypeFrais()
+				.name()));
 
 		return fraisRenouvellement;
 
@@ -919,6 +940,8 @@ public class CommandeServiceImpl implements CommandeService {
 	 *            {@link CommandeLigne}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
+	 * @throws TopazeException
+	 *             {@link TopazeException}.
 	 */
 	private void transformerReductionCommandeEnReductionContrat(Commande commande, CommandeLigne commandeLigne)
 			throws OpaleException {
@@ -926,14 +949,16 @@ public class CommandeServiceImpl implements CommandeService {
 		List<Reduction> reductionsLigne =
 				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReferenceOffre());
 		for (Reduction reductionLigne : reductionsLigne) {
-			reductionContrat = new ReductionContrat(reductionLigne);
+			reductionContrat = fromReduction(reductionLigne);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			if (reductionLigne.getReferenceFrais() == null) {
 				if (reductionLigne.getReferenceTarif() == null) {
+
 					restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
 				} else {
+
 					restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 							commandeLigne.getNumEC(), contratReductionInfo);
 				}
@@ -944,8 +969,10 @@ public class CommandeServiceImpl implements CommandeService {
 								reductionLigne.getReferenceTarif(), reductionLigne.getReferenceFrais());
 				contratReductionInfo.getReduction().setTypeReduction(TypeReduction.FRAIS);
 				contratReductionInfo.getReduction().setTypeFrais(TypeFrais.fromSting(typeFrais));
+
 				restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 						commandeLigne.getNumEC(), contratReductionInfo);
+
 			}
 
 		}
@@ -955,7 +982,7 @@ public class CommandeServiceImpl implements CommandeService {
 					reductionService.findReductionDetailLigneDraft(commande.getReference(),
 							commandeLigne.getReferenceOffre(), commandeLigneDetail.getReferenceChoix());
 			for (Reduction reductionligneDetail : reductionsligneDetail) {
-				reductionContrat = new ReductionContrat(reductionligneDetail);
+				reductionContrat = fromReduction(reductionligneDetail);
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 				if (reductionligneDetail.getReferenceFrais() != null) {
 					String typeFrais =
@@ -968,10 +995,30 @@ public class CommandeServiceImpl implements CommandeService {
 				}
 				ContratReductionInfo contratReductionInfo =
 						new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
+
 				restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 						commandeLigneDetail.getNumEC(), contratReductionInfo);
 			}
 		}
+	}
+
+	/**
+	 * Creer deduction contrat d une reduction ligne.
+	 * 
+	 * @param reduction
+	 *            {@link Reduction}
+	 * @return {@link ReductionContrat}
+	 */
+	private ReductionContrat fromReduction(Reduction reduction) {
+		ReductionContrat reductionContrat = new ReductionContrat();
+		reductionContrat.setTitre(reduction.getLabel());
+		reductionContrat.setDateDebut(reduction.getDateDebut());
+		reductionContrat.setDateFin(reduction.getDateFin());
+		reductionContrat.setNbUtilisationMax(reduction.getNbUtilisationMax());
+		reductionContrat.setValeur(reduction.getValeur());
+		reductionContrat.setTypeValeur(TypeValeur.fromString(reduction.getTypeValeur().name()));
+		reductionContrat.setReferenceReduction(reduction.getReferenceReduction());
+		return reductionContrat;
 	}
 
 	/**
@@ -998,9 +1045,11 @@ public class CommandeServiceImpl implements CommandeService {
 			prix = produit.getPrix();
 			if (prix != null) {
 				if (prix.isRecurrent()) {
-					prix.setModePaiement(modePaiementRecurrent);
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementRecurrent
+							.name()));
 				} else {
-					prix.setModePaiement(modePaiementComptant);
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementComptant
+							.name()));
 				}
 			}
 		}
@@ -1012,7 +1061,8 @@ public class CommandeServiceImpl implements CommandeService {
 	 * @param produitsRenouvellement
 	 *            liste des {@link ProduitRenouvellement} a preparer.
 	 */
-	private void ajouterModePaiementRenouvellement(List<ProduitRenouvellement> produitsRenouvellement) {
+	private void ajouterModePaiementRenouvellement(
+			List<com.nordnet.topaze.ws.entity.ProduitRenouvellement> produitsRenouvellement) {
 		List<Paiement> paiementsComptant =
 				paiementService.getListePaiementComptant(
 						produitsRenouvellement.get(Constants.ZERO).getNumeroCommande(), false);
@@ -1028,13 +1078,15 @@ public class CommandeServiceImpl implements CommandeService {
 			modePaiementRecurrent = paiementsRecurrent.get(Constants.ZERO).getModePaiement();
 		}
 		PrixRenouvellemnt prix = null;
-		for (ProduitRenouvellement produitRenouvellement : produitsRenouvellement) {
+		for (com.nordnet.topaze.ws.entity.ProduitRenouvellement produitRenouvellement : produitsRenouvellement) {
 			prix = produitRenouvellement.getPrix();
 			if (prix != null) {
 				if (prix.isRecurrent()) {
-					prix.setModePaiement(modePaiementRecurrent);
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementRecurrent
+							.name()));
 				} else {
-					prix.setModePaiement(modePaiementComptant);
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementComptant
+							.name()));
 				}
 			}
 		}

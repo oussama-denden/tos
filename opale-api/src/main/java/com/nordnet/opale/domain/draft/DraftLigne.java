@@ -28,8 +28,6 @@ import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
-import com.nordnet.opale.business.commande.Contrat;
-import com.nordnet.opale.business.commande.ElementContractuel;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
@@ -38,6 +36,8 @@ import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.DraftValidator;
+import com.nordnet.topaze.ws.entity.Contrat;
+import com.nordnet.topaze.ws.entity.ElementContractuel;
 
 /**
  * entite qui represente une ligne d'un {@link Draft}.

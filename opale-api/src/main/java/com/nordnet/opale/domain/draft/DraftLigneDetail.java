@@ -15,10 +15,10 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
-import com.nordnet.opale.business.commande.ElementContractuel;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.util.Utils;
+import com.nordnet.topaze.ws.entity.ElementContractuel;
 
 /**
  * contient les detail d'une {@link DraftLigne} dans un {@link Draft}.
