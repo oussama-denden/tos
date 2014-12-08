@@ -310,18 +310,18 @@ public class DraftController {
 	 * 
 	 * @param refDraft
 	 *            reference {@link Draft}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param calculInfo
+	 *            {@link TransformationInfo}.
 	 * @return soit le cout du draft soit les info de non validation.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/costCalculation", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TrameCatalogueInfo trameCatalogue)
+	public Object calculerCout(@PathVariable("refDraft") String refDraft, @RequestBody TransformationInfo calculInfo)
 			throws OpaleException {
 		LOGGER.info(":::ws-rec:::calculerCout");
-		return draftService.calculerCout(refDraft, trameCatalogue);
+		return draftService.calculerCout(refDraft, calculInfo);
 	}
 
 	/**

@@ -50,8 +50,9 @@ public class Cout {
 	 *             {@link OpaleException}.
 	 */
 	public Cout(Commande commande) throws OpaleException {
+		String segmentTVA = commande.getClientAFacturer().getTva();
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			DetailCout detailCout = new DetailCout(commandeLigne, "00");
+			DetailCout detailCout = new DetailCout(commandeLigne, segmentTVA);
 			coutTotal += detailCout.getCoutTotal();
 			coutTotalTTC += detailCout.getCoutTotalTTC();
 			addDetail(detailCout);
@@ -62,7 +63,7 @@ public class Cout {
 	 * 
 	 * @return {@link #coutTotal}.
 	 */
-	public Double getCoutTotal() {
+	public double getCoutTotal() {
 		return coutTotal;
 	}
 

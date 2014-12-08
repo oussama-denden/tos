@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Index;
@@ -88,13 +89,16 @@ public class Client {
 	 *            client id.
 	 * @param adresseId
 	 *            the adresse id
+	 * @param tva
+	 *            tva du client.
 	 * @param auteur
 	 *            l auteur
 	 */
-	public Client(String clientId, String adresseId, Auteur auteur) {
+	public Client(String clientId, String adresseId, String tva, Auteur auteur) {
 		super();
 		this.clientId = clientId;
 		this.adresseId = adresseId;
+		this.tva = tva;
 		this.auteur = auteur;
 	}
 
@@ -178,7 +182,7 @@ public class Client {
 	/**
 	 * 
 	 * @param tVA
-	 *            {@link Client#TVA}
+	 *            {@link Client#tva}
 	 */
 	public void setTva(String tVA) {
 		tva = tVA;
@@ -207,6 +211,7 @@ public class Client {
 	 *             {@link OpaleException}
 	 */
 	@PrePersist
+	@PreUpdate
 	public void prePersist() throws OpaleException {
 		if (auteur != null && auteur.getTimestamp() == null) {
 			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());

@@ -12,7 +12,7 @@ import org.unitils.spring.annotation.SpringBean;
 
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.DraftValidationInfo;
-import com.nordnet.opale.business.TrameCatalogueInfo;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -56,18 +56,18 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft-reduction.xml" })
 	public void calculerCoutReductionValide() {
 		try {
-			TrameCatalogueInfo trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+			TransformationInfo calculInfo =
+					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
 							"./requests/calculerCoutDraft.json");
-			Object object = draftService.calculerCout("Dra-00000001", trameCatalogue);
+			Object object = draftService.calculerCout("Dra-00000001", calculInfo);
 			assertTrue(object instanceof Cout);
 			Cout cout = (Cout) object;
-			assertEquals(new Double(119.8), cout.getCoutTotal());
-			assertEquals(new Double(39.43), cout.getReduction());
+			assertEquals(new Double(119.8), new Double(cout.getCoutTotal()));
+			assertEquals(new Double(36.056799999999996), new Double(cout.getReduction()));
 
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(cout.getDetails().size()));
-			assertEquals(new Double(119.8), cout.getDetails().get(0).getCoutTotal());
-			assertEquals(new Double(27.45), cout.getDetails().get(0).getReduction());
+			assertEquals(new Double(119.8), new Double(cout.getDetails().get(0).getCoutTotal()));
+			assertEquals(new Double(26.752), cout.getDetails().get(0).getReduction());
 
 			assertEquals(new Double(34.9), new Double(cout.getDetails().get(0).getPlan().getPlan()));
 			assertEquals(Constants.UN, cout.getDetails().get(0).getPlan().getFrequence());
@@ -84,10 +84,10 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftNonExiste() {
 		try {
-			TrameCatalogueInfo trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+			TransformationInfo calculInfo =
+					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
 							"./requests/calculerCoutDraft.json");
-			draftService.calculerCout("Dra-00000000", trameCatalogue);
+			draftService.calculerCout("Dra-00000000", calculInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
 			assertEquals("1.1.1", e.getErrorCode());
@@ -104,10 +104,10 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftNonValide() {
 		try {
-			TrameCatalogueInfo trameCatalogue =
-					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class,
+			TransformationInfo calculInfo =
+					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
 							"./requests/calculerCoutDraft.json");
-			Object object = draftService.calculerCout("Dra-00000002", trameCatalogue);
+			Object object = draftService.calculerCout("Dra-00000002", calculInfo);
 			assertTrue(object instanceof DraftValidationInfo);
 			DraftValidationInfo validationInfo = (DraftValidationInfo) object;
 			assertFalse(validationInfo.isValide());

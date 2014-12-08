@@ -110,8 +110,8 @@
 		
 		<!-- local -->
 		<dependency>
-			<groupId>com.nordnet.topaze</groupId>
-			<artifactId>shared-lib</artifactId>
+			<groupId>com.nordnet.ot-sharedlib</groupId>
+			<artifactId>ot-sharedlib</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<type>pom</type>
 			<scope>provided</scope>
