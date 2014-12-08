@@ -48,7 +48,6 @@ import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
 import com.nordnet.opale.rest.RestClient;
-import com.nordnet.opale.rest.RestPropertiesUtil;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.reduction.ReductionService;
@@ -134,12 +133,6 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	TopazeClient topazeClient;
-
-	/**
-	 * {@link PropertiesUtil}.
-	 */
-	@Autowired
-	private RestPropertiesUtil restPropertiesUtil;
 
 	/**
 	 * {@inheritDoc}
