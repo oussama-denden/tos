@@ -77,7 +77,7 @@ public class RestClient {
 				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
 			}
 		} catch (TopazeException e1) {
-			throw new OpaleException(e1.getErrorCode(), e1.getMessage());
+			throw new OpaleException(e1.getMessage(), e1.getErrorCode());
 		} catch (IOException e) {
 			LOGGER.error("failed to send REST request", e);
 			throw new OpaleException(e.getMessage(), e.getMessage());
@@ -114,7 +114,7 @@ public class RestClient {
 				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
 			}
 		} catch (TopazeException e1) {
-			throw new OpaleException(e1.getErrorCode(), e1.getMessage());
+			throw new OpaleException(e1.getMessage(), e1.getErrorCode());
 		} catch (IOException e) {
 			LOGGER.error("failed to send REST request", e);
 			throw new OpaleException(e.getMessage(), e.getMessage());
@@ -139,7 +139,7 @@ public class RestClient {
 			try {
 				response = topazeClient.getContratByReference(referenceContrat);
 			} catch (TopazeException e) {
-				throw new OpaleException(e.getErrorCode(), e.getMessage());
+				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
@@ -173,7 +173,7 @@ public class RestClient {
 			try {
 				response = topazeClient.renouvelerContrat(referenceContrat, renouvellementInfo);
 			} catch (TopazeException e) {
-				throw new OpaleException(e.getErrorCode(), e.getMessage());
+				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
@@ -206,7 +206,7 @@ public class RestClient {
 			try {
 				response = topazeClient.ajouterReductionSurContrat(referenceContrat, contratReductionInfo);
 			} catch (TopazeException e) {
-				throw new OpaleException(e.getErrorCode(), e.getMessage());
+				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
@@ -242,7 +242,7 @@ public class RestClient {
 						topazeClient.ajouterReductionSurElementContractuel(referenceContrat, numEC,
 								contratReductionInfo);
 			} catch (TopazeException e) {
-				throw new OpaleException(e.getErrorCode(), e.getMessage());
+				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
