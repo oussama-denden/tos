@@ -63,11 +63,11 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 			assertTrue(object instanceof Cout);
 			Cout cout = (Cout) object;
 			assertEquals(new Double(119.8), new Double(cout.getCoutTotal()));
-			assertEquals(new Double(39.43), new Double(cout.getReduction()));
+			assertEquals(new Double(36.056799999999996), new Double(cout.getReduction()));
 
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(cout.getDetails().size()));
 			assertEquals(new Double(119.8), new Double(cout.getDetails().get(0).getCoutTotal()));
-			assertEquals(new Double(27.45), cout.getDetails().get(0).getReduction());
+			assertEquals(new Double(26.752), cout.getDetails().get(0).getReduction());
 
 			assertEquals(new Double(34.9), new Double(cout.getDetails().get(0).getPlan().getPlan()));
 			assertEquals(Constants.UN, cout.getDetails().get(0).getPlan().getFrequence());

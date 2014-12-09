@@ -388,6 +388,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.setClientALivrer(clientInfo.getLivraison(), clientInfo.getAuteur());
 		draft.setClientSouscripteur(clientInfo.getSouscripteur(), clientInfo.getAuteur());
 
+		DraftValidator.validerIdClientUnique(draft);
+
 		String idClientFacturation = null;
 		if (clientInfo.getFacturation() != null) {
 			idClientFacturation = clientInfo.getFacturation().getClientId();
@@ -444,11 +446,14 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isTransformationPossible(draft, referenceDraft);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
 		ClientInfo clientInfo = transformationInfo.getClientInfo();
-		DraftValidator.validerClient(clientInfo);
+		if (clientInfo != null) {
+			DraftValidator.validerClient(clientInfo);
 
-		draft.setClientAFacturer(clientInfo.getFacturation(), transformationInfo.getAuteur());
-		draft.setClientALivrer(clientInfo.getLivraison(), transformationInfo.getAuteur());
-		draft.setClientSouscripteur(clientInfo.getSouscripteur(), transformationInfo.getAuteur());
+			draft.setClientAFacturer(clientInfo.getFacturation(), transformationInfo.getAuteur());
+			draft.setClientALivrer(clientInfo.getLivraison(), transformationInfo.getAuteur());
+			draft.setClientSouscripteur(clientInfo.getSouscripteur(), transformationInfo.getAuteur());
+			DraftValidator.validerIdClientUnique(draft);
+		}
 
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
@@ -834,7 +839,7 @@ public class DraftServiceImpl implements DraftService {
 		cout.setCoutTotal(coutTotal);
 		cout.setCoutTotalTTC(coutTotalTTC);
 		cout.setDetails(details);
-		reduction += calculerReductionDraft(draft.getReference(), coutTotal);
+		reduction += calculerReductionDraft(draft.getReference(), coutTotal, reduction);
 		cout.setReduction(reduction);
 		return cout;
 
@@ -889,7 +894,7 @@ public class DraftServiceImpl implements DraftService {
 				frequence = tarif.getFrequence();
 				reduction +=
 						calculerReductionLignetETDetail(draft.getReference(), draftLigne.getReference(),
-								draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(),
+								draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(), reduction,
 								detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan()
 										: Constants.ZERO, tarif, false);
 			}
@@ -905,7 +910,7 @@ public class DraftServiceImpl implements DraftService {
 			frequence = tarif.getFrequence();
 			reduction +=
 					calculerReductionLignetETDetail(draft.getReference(), draftLigne.getReference(),
-							draftLigne.getReference(), coutTotal, plan, tarif, true);
+							draftLigne.getReference(), coutTotal, reduction, plan, tarif, true);
 		}
 
 		detailCout.setPlan(new Plan(frequence, plan, planTTC));
@@ -967,7 +972,7 @@ public class DraftServiceImpl implements DraftService {
 	 * @return somme di reduction.
 	 */
 	private Double calculerReductionLignetETDetail(String refDraft, String refLinge, String refDetailLigne,
-			Double coutDetail, Double plan, Tarif tarif, boolean isLigne) {
+			Double coutDetail, double reduction, Double plan, Tarif tarif, boolean isLigne) {
 		double coutReduction = 0d;
 		Reduction reductionProduit = null;
 		if (isLigne) {
@@ -980,7 +985,11 @@ public class DraftServiceImpl implements DraftService {
 		// calculer la reduction
 		if (reductionProduit != null) {
 			if (reductionProduit.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-				coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
+				if (isLigne) {
+					coutReduction += ((plan + coutDetail - reduction) * reductionProduit.getValeur()) / 100;
+				} else {
+					coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
+				}
 			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
 				coutReduction += reductionProduit.getValeur();
 			}
@@ -1021,7 +1030,7 @@ public class DraftServiceImpl implements DraftService {
 	 * 
 	 * @return cout du reduction.
 	 */
-	private double calculerReductionDraft(String refDraft, double coutTotale) {
+	private double calculerReductionDraft(String refDraft, double coutTotale, double reduction) {
 
 		Reduction reductionDraft = reductionService.findReductionDraft(refDraft);
 		double coutReduction = 0d;
@@ -1029,7 +1038,7 @@ public class DraftServiceImpl implements DraftService {
 			return coutReduction;
 		}
 		if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-			coutReduction += (coutTotale * reductionDraft.getValeur()) / 100;
+			coutReduction += ((coutTotale - reduction) * reductionDraft.getValeur()) / 100;
 		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.MONTANT)) {
 			coutReduction += reductionDraft.getValeur();
 		}

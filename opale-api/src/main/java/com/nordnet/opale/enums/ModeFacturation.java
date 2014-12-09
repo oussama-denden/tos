@@ -2,7 +2,6 @@ package com.nordnet.opale.enums;
 
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 
-
 /**
  * 
  * Enumeration que definit le differents modes de facturation.
