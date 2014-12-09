@@ -1082,11 +1082,11 @@ public class CommandeServiceImpl implements CommandeService {
 			prix = produitRenouvellement.getPrix();
 			if (prix != null) {
 				if (prix.isRecurrent()) {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementRecurrent
-							.name()));
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
+							.fromString(modePaiementRecurrent != null ? modePaiementRecurrent.name() : ""));
 				} else {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementComptant
-							.name()));
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
+							.fromString(modePaiementComptant != null ? modePaiementComptant.name() : ""));
 				}
 			}
 		}

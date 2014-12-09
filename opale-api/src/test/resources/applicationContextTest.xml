@@ -90,5 +90,7 @@
     
     <!-- Mock contrat rest -->
 	<bean id="restClient" class="com.nordnet.opale.test.mock.RestClientMock" />
+	<context:component-scan base-package="com.nordnet.topaze.ws" />
+    <bean id="topazeClient" class="com.nordnet.topaze.ws.client.TopazeClient" />
     
 </beans>

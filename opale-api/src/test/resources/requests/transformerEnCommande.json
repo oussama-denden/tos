@@ -14,6 +14,7 @@
       "gamme": "jet",
       "secteur": "sat",
       "modeFacturation": "PREMIER_MOIS",
+      "type": "bien",
       "tarifs": [
        	{
 	      "id_tarif": "mensuel_jet10_base",

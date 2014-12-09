@@ -153,7 +153,8 @@ public class CommandeLigne {
 		this.gamme = offreCatalogue.getGamme();
 		this.secteur = offreCatalogue.getSecteur();
 		this.label = offreCatalogue.getLabel();
-		this.typeProduit = TypeProduit.fromString(offreCatalogue.getType().name());
+		this.typeProduit =
+				TypeProduit.fromString(offreCatalogue.getType() != null ? offreCatalogue.getType().name() : "");
 		this.modeFacturation = offreCatalogue.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
@@ -538,7 +539,8 @@ public class CommandeLigne {
 		produitParent.setLabel(label);
 		produitParent.setNumEC(Constants.UN);
 		produitParent.setNumeroCommande(referenceCommande);
-		produitParent.setTypeProduit(com.nordnet.topaze.ws.enums.TypeProduit.fromString(typeProduit.name()));
+		produitParent.setTypeProduit(com.nordnet.topaze.ws.enums.TypeProduit.fromString(typeProduit != null
+				? typeProduit.name() : ""));
 		produitParent.setReference(referenceOffre);
 		produitParent.setReferenceTarif(tarif.getReference());
 		if (tarif != null) {
