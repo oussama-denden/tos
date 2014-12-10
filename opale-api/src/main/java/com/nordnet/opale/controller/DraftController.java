@@ -26,6 +26,7 @@ import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftValidationInfo;
+import com.nordnet.opale.business.GesteInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
@@ -537,6 +538,26 @@ public class DraftController {
 		Draft draft = draftService.transformerContratEnDraft(refContrat, trameCatalogue);
 
 		return draft.toJSON().toString();
+	}
+
+	/**
+	 * Associe geste a une ligne draft.
+	 * 
+	 * @param refDraft
+	 *            the ref draft
+	 * @param refLigne
+	 *            reference ligne draft
+	 * @param gesteInfo
+	 *            geste informations.
+	 * @throws OpaleException
+	 *             the opale exception
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/associerGeste", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void associerGeste(@PathVariable String refDraft, @PathVariable String refLigne,
+			@RequestBody GesteInfo gesteInfo) throws OpaleException {
+		LOGGER.info(":::ws-rec:::associerClient");
+		draftService.associerGeste(refDraft, refLigne, gesteInfo.getGeste());
 	}
 
 	/**

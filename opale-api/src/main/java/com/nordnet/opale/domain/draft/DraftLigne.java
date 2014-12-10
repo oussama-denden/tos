@@ -191,7 +191,7 @@ public class DraftLigne {
 		Tarif tarif = commandeLigne.getTarif();
 		this.referenceTarif = tarif != null ? tarif.getReference() : null;
 		this.auteur = commandeLigne.getAuteur();
-
+		this.setGeste(commandeLigne.getGeste());
 		this.dateCreation = commandeLigne.getDateCreation();
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
 			addDraftLigneDetail(new DraftLigneDetail(commandeLigneDetail));
