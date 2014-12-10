@@ -5,14 +5,14 @@ import org.apache.log4j.Logger;
 import com.nordnet.common.valueObject.identifier.Identifier;
 import com.nordnet.common.valueObject.money.PaymentReference;
 import com.nordnet.common.valueObject.money.Price;
-import com.nordnet.saphir.ws.client.SaphirClient;
+import com.nordnet.saphir.ws.client.SaphirTechnical;
 
 /**
  * 
  * @author akram-moncer
  * 
  */
-public class SaphirMock extends SaphirClient {
+public class SaphirMock extends SaphirTechnical {
 
 	/**
 	 * Declaration du log.
