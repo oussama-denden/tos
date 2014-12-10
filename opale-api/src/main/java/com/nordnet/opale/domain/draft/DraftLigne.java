@@ -482,5 +482,9 @@ public class DraftLigne {
 		if (auteur != null && auteur.getTimestamp() == null) {
 			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
 		}
+
+		if (dateCreation == null) {
+			dateCreation = PropertiesUtil.getInstance().getDateDuJour();
+		}
 	}
 }
