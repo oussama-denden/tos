@@ -76,8 +76,9 @@ public class CatalogueValidator {
 											tarif.getFrequence(), lastTarif.getIdTarif(), lastTarif.getFrequence()),
 									null);
 						}
+						lastTarif = tarif;
 					}
-					lastTarif = tarif;
+
 				}
 
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
@@ -95,8 +96,9 @@ public class CatalogueValidator {
 														tarif.getIdTarif(), tarif.getFrequence(),
 														lastTarif.getIdTarif(), lastTarif.getFrequence()), null);
 									}
+									lastTarif = tarif;
 								}
-								lastTarif = tarif;
+
 							}
 
 						}
