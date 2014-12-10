@@ -153,8 +153,7 @@ public class CommandeLigne {
 		this.gamme = offreCatalogue.getGamme();
 		this.secteur = offreCatalogue.getSecteur();
 		this.label = offreCatalogue.getLabel();
-		this.typeProduit =
-				TypeProduit.fromString(offreCatalogue.getType() != null ? offreCatalogue.getType().name() : "");
+		this.typeProduit = TypeProduit.fromString(offreCatalogue.getType().name());
 		this.modeFacturation = offreCatalogue.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();

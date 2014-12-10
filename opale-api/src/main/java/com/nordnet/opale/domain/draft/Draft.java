@@ -364,10 +364,11 @@ public class Draft {
 				this.clientSouscripteur.setAdresseId(client.getAdresseId());
 				this.clientSouscripteur.setClientId(client.getClientId());
 				this.clientSouscripteur.setTva(client.getTva());
-				this.clientSouscripteur.setAuteur(auteur.toDomain());
+				this.clientSouscripteur.setAuteur(auteur != null ? auteur.toDomain() : null);
 			} else {
 				this.clientSouscripteur =
-						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur.toDomain());
+						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur != null
+								? auteur.toDomain() : null);
 			}
 		}
 	}
@@ -403,10 +404,11 @@ public class Draft {
 				this.clientALivrer.setAdresseId(client.getAdresseId());
 				this.clientALivrer.setClientId(client.getClientId());
 				this.clientALivrer.setTva(client.getTva());
-				this.clientALivrer.setAuteur(auteur.toDomain());
+				this.clientALivrer.setAuteur(auteur != null ? auteur.toDomain() : null);
 			} else {
 				this.clientALivrer =
-						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur.toDomain());
+						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur != null
+								? auteur.toDomain() : null);
 			}
 		}
 	}
@@ -442,10 +444,11 @@ public class Draft {
 				this.clientAFacturer.setAdresseId(client.getAdresseId());
 				this.clientAFacturer.setClientId(client.getClientId());
 				this.clientAFacturer.setTva(client.getTva());
-				this.clientAFacturer.setAuteur(auteur.toDomain());
+				this.clientAFacturer.setAuteur(auteur != null ? auteur.toDomain() : null);
 			} else {
 				this.clientAFacturer =
-						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur.toDomain());
+						new Client(client.getClientId(), client.getAdresseId(), client.getTva(), auteur != null
+								? auteur.toDomain() : null);
 			}
 		}
 	}

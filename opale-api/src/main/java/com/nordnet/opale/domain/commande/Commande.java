@@ -24,7 +24,6 @@ import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandeLigneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
@@ -126,10 +125,10 @@ public class Commande {
 	 * 
 	 * @param draft
 	 *            {@link Draft}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param transformationInfo
+	 *            {@link TransformationInfo}.
 	 */
-	public Commande(Draft draft, TransformationInfo trameCatalogue) {
+	public Commande(Draft draft, TransformationInfo transformationInfo) {
 
 		this.clientAFacturer =
 				new Client(draft.getClientAFacturer().getClientId(), draft.getClientAFacturer().getAdresseId(), draft
@@ -141,12 +140,17 @@ public class Commande {
 				new Client(draft.getClientSouscripteur().getClientId(), draft.getClientSouscripteur().getAdresseId(),
 						draft.getClientSouscripteur().getTva(), draft.getAuteur());
 
-		this.auteur = new Auteur(trameCatalogue.getAuteur());
+		if (transformationInfo.getAuteur() != null) {
+			this.auteur = new Auteur(transformationInfo.getAuteur());
+		} else {
+			this.auteur = draft.getAuteur();
+		}
+
 		this.codePartenaire = draft.getCodePartenaire();
 		this.referenceDraft = draft.getReference();
 		OffreCatalogue offreCatalogue = null;
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			offreCatalogue = trameCatalogue.getTrameCatalogue().getOffreMap().get(draftLigne.getReferenceOffre());
+			offreCatalogue = transformationInfo.getTrameCatalogue().getOffreMap().get(draftLigne.getReferenceOffre());
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, offreCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
 			addLigne(commandeLigne);

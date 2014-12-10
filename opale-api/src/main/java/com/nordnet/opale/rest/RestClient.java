@@ -74,7 +74,7 @@ public class RestClient {
 			responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (TopazeException e1) {
 			throw new OpaleException(e1.getMessage(), e1.getErrorCode());
@@ -111,7 +111,7 @@ public class RestClient {
 			responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (TopazeException e1) {
 			throw new OpaleException(e1.getMessage(), e1.getErrorCode());
@@ -144,7 +144,7 @@ public class RestClient {
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			} else {
 				return objectMapper.readValue(responseBody, Contrat.class);
 			}
@@ -178,7 +178,7 @@ public class RestClient {
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
@@ -211,7 +211,7 @@ public class RestClient {
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
@@ -247,7 +247,7 @@ public class RestClient {
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);

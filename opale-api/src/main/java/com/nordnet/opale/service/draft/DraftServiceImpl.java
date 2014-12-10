@@ -443,7 +443,7 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftValidator.validerAuteur(transformationInfo.getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
-		DraftValidator.isTransformationPossible(draft, referenceDraft);
+		DraftValidator.isTransformationPossible(draft, referenceDraft, transformationInfo);
 		DraftValidator.codePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
 		ClientInfo clientInfo = transformationInfo.getClientInfo();
 		if (clientInfo != null) {
@@ -469,7 +469,7 @@ public class DraftServiceImpl implements DraftService {
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
 
-			tracageService.ajouterTrace(transformationInfo.getAuteur().getQui(), referenceDraft,
+			tracageService.ajouterTrace(commande.getAuteur().getQui(), referenceDraft,
 					"la transformation du draft de reference " + referenceDraft + " en commande de reference "
 							+ commande.getReference());
 			return commande;
@@ -609,6 +609,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, refDraft);
 		Commande commande = commandeService.getCommandeByReferenceDraft(refDraft);
 		DraftValidator.isDraftTransformer(draft, commande);
+		DraftValidator.validerCodePartenaire(codePartenaireInfo.getCodePartenaire());
 		draft.setCodePartenaire(codePartenaireInfo.getCodePartenaire());
 		draftRepository.save(draft);
 		LOGGER.info("Fin methode service associerCodePartenaire");

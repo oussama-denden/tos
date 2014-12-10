@@ -11,6 +11,7 @@ import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Offre;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -61,16 +62,17 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void isOffreValide(Offre offre) throws OpaleException {
+
+		if (offre == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.34"), "1.1.34");
+		}
+
 		if (Utils.isStringNullOrEmpty(offre.getReferenceOffre())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Offre.reference"), "0.1.4");
 		}
 
 		if (Utils.isStringNullOrEmpty(offre.getReferenceTarif())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Offre.referenceTarif"), "0.1.4");
-		}
-
-		if (Utils.isListNullOrEmpty(offre.getDetails())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.3"), "1.1.3");
 		}
 
 		List<Detail> details = offre.getDetails();
@@ -204,6 +206,20 @@ public class DraftValidator {
 	}
 
 	/**
+	 * valider si l'auteur est null ou pas.
+	 * 
+	 * @param auteur
+	 *            {@link Auteur}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void isNull(Auteur auteur) throws OpaleException {
+		if (auteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
+		}
+	}
+
+	/**
 	 * tester si le code n est pas null.
 	 * 
 	 * @param draft
@@ -230,10 +246,13 @@ public class DraftValidator {
 	 *            {@link Draft}.
 	 * @param referenceDraft
 	 *            reference draft.
+	 * @param transformationInfo
+	 *            {@link TransformationInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isTransformationPossible(Draft draft, String referenceDraft) throws OpaleException {
+	public static void isTransformationPossible(Draft draft, String referenceDraft,
+			TransformationInfo transformationInfo) throws OpaleException {
 		isExistDraft(draft, referenceDraft);
 		if (draft.isAnnule()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.9"), "1.1.9");
@@ -241,6 +260,14 @@ public class DraftValidator {
 
 		if (draft.isTransforme()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.10"), "1.1.10");
+		}
+
+		if (draft.getDraftLignes().size() == Constants.ZERO) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.33"), "1.1.33");
+		}
+
+		if (draft.getAuteur() == null && transformationInfo.getAuteur() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
 		}
 	}
 
@@ -362,6 +389,14 @@ public class DraftValidator {
 	 */
 	public static void validerClient(ClientInfo clientInfo) throws OpaleException {
 
+		Client clientFacturation = clientInfo.getFacturation();
+		Client clientLivraison = clientInfo.getLivraison();
+		Client clientSouscripteur = clientInfo.getSouscripteur();
+
+		if (clientFacturation == null && clientLivraison == null && clientSouscripteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.35"), "1.1.35");
+		}
+
 		if (clientInfo != null) {
 			clientIdNotNull(clientInfo.getFacturation());
 			clientIdNotNull(clientInfo.getLivraison());
@@ -433,6 +468,20 @@ public class DraftValidator {
 		List<String> indicatifTVA = Arrays.asList("00", "01", "10", "11");
 		if (client != null && client.getTva() != null && !indicatifTVA.contains(client.getTva())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
+		}
+	}
+
+	/**
+	 * valider le code partenaire.
+	 * 
+	 * @param codePartenaire
+	 *            code partenaire.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerCodePartenaire(String codePartenaire) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(codePartenaire)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Code Partenaire"), "0.1.4");
 		}
 	}
 

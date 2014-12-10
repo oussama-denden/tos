@@ -38,7 +38,6 @@ import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.draft.DraftService;
-import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.wordnik.swagger.annotations.Api;
 
@@ -527,8 +526,8 @@ public class DraftController {
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
-	 * @throws TopazeException
-	 *             {@link TopazeException}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
@@ -549,7 +548,7 @@ public class DraftController {
 	 *            exception
 	 * @return {@link InfoErreur}
 	 */
-	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ OpaleException.class })
 	@ResponseBody
 	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
