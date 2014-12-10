@@ -41,6 +41,7 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
+import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
@@ -485,6 +486,24 @@ public class DraftServiceImpl implements DraftService {
 		} else {
 			return validationInfo;
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void associerGeste(String refDraft, String refLigne, Geste geste) throws OpaleException {
+		LOGGER.info("Enter methode associerGeste");
+		Draft draft = getDraftByReference(refDraft);
+
+		DraftValidator.isExistDraft(draft, refDraft);
+
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
+
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+
+		draftLigne.setGeste(geste);
+		draftLigneRepository.save(draftLigne);
+
 	}
 
 	/**

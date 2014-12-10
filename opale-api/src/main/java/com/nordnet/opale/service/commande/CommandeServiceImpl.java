@@ -34,6 +34,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
+import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypePaiement;
@@ -560,6 +561,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
+		CommandeValidator.checkGeste(Geste.VENTE, commande);
 		CommandeValidator.isAuteurValide(auteur);
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 		return transformeEnContrat(commande, auteur);
@@ -585,27 +587,28 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			ContratPreparationInfo contratPreparationInfo =
-					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
+			if (ligne.getGeste().equals(Geste.VENTE)) {
+				ContratPreparationInfo contratPreparationInfo =
+						ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
-			/*
-			 * ajout du mode de paiement au produits prepare.
-			 */
-			ajouterModePaiementProduit(contratPreparationInfo.getProduits());
-			String refContrat = restClient.preparerContrat(contratPreparationInfo);
-			ligne.setReferenceContrat(refContrat);
+				/*
+				 * ajout du mode de paiement au produits prepare.
+				 */
+				ajouterModePaiementProduit(contratPreparationInfo.getProduits());
+				String refContrat = restClient.preparerContrat(contratPreparationInfo);
+				ligne.setReferenceContrat(refContrat);
 
-			/*
-			 * association des reductions au nouveau contrat cre.
-			 */
-			transformerReductionCommandeEnReductionContrat(commande, ligne);
+				/*
+				 * association des reductions au nouveau contrat cre.
+				 */
+				transformerReductionCommandeEnReductionContrat(commande, ligne);
 
-			ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne, refContrat);
+				ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne, refContrat);
 
-			restClient.validerContrat(refContrat, contratValidationInfo);
+				restClient.validerContrat(refContrat, contratValidationInfo);
 
-			referencesContrats.add(refContrat);
-
+				referencesContrats.add(refContrat);
+			}
 		}
 
 		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
@@ -734,10 +737,12 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
+		CommandeValidator.checkGeste(Geste.RENOUVELLEMENT, commande);
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-
-			ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
-			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
+			if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+				ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
+				restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
+			}
 
 		}
 
@@ -1045,11 +1050,11 @@ public class CommandeServiceImpl implements CommandeService {
 			prix = produit.getPrix();
 			if (prix != null) {
 				if (prix.isRecurrent()) {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementRecurrent
-							.name()));
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
+							.fromString(modePaiementRecurrent != null ? modePaiementRecurrent.name() : ""));
 				} else {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementComptant
-							.name()));
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
+							.fromString(modePaiementComptant != null ? modePaiementComptant.name() : ""));
 				}
 			}
 		}
