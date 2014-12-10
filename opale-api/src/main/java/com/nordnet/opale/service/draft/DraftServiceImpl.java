@@ -186,27 +186,22 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = new Draft();
 
-		// verifier si le clientId n'est pas null ou empty.
-		DraftValidator.clientIdNotNull(draftInfo.getFacturation());
-		DraftValidator.clientIdNotNull(draftInfo.getLivraison());
-		DraftValidator.clientIdNotNull(draftInfo.getSouscripteur());
+		if (draftInfo.isContientInfoClient()) {
+			ClientInfo clientInfo = new ClientInfo();
+			clientInfo.setAuteur(draftInfo.getAuteur());
+			clientInfo.setFacturation(draftInfo.getFacturation());
+			clientInfo.setLivraison(draftInfo.getLivraison());
+			clientInfo.setSouscripteur(draftInfo.getSouscripteur());
+			associerClient(draft, clientInfo);
+		}
 
 		if (draftInfo.getAuteur() != null) {
-			DraftValidator.validerAuteur(draftInfo.getAuteur());
 			Auteur auteur = new Auteur(draftInfo.getAuteur());
 			draft.setAuteur(auteur);
 		}
-		if (draftInfo.getFacturation() != null) {
-			draft.setClientAFacturer(draftInfo.getFacturation().toDomain(draftInfo.getAuteur()));
-		}
-		if (draftInfo.getLivraison() != null) {
-			draft.setClientALivrer(draftInfo.getLivraison().toDomain(draftInfo.getAuteur()));
-		}
-		if (draftInfo.getSouscripteur() != null) {
-			draft.setClientSouscripteur(draftInfo.getSouscripteur().toDomain(draftInfo.getAuteur()));
-		}
 
 		if (draftInfo.getLignes() != null) {
+			DraftValidator.isOffresValide(draftInfo.getLignes());
 			for (DraftLigneInfo draftLigneInfo : draftInfo.getLignes()) {
 				DraftLigne draftLigne = new DraftLigne(draftLigneInfo, draftInfo.getAuteur());
 				draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
@@ -296,8 +291,8 @@ public class DraftServiceImpl implements DraftService {
 		draft.addLigne(nouveauDraftLigne);
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(draftLigne.getAuteur().getQui(), refDraft, "la ligne " + refLigne + " du draft "
-				+ refDraft + " modifiée");
+		tracageService.ajouterTrace(draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur().getQui() : null,
+				refDraft, "ajout de ligne aux draft " + refDraft);
 
 	}
 
@@ -309,12 +304,12 @@ public class DraftServiceImpl implements DraftService {
 	public void annulerDraft(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
 		LOGGER.info("Entrer methode annulerDraft");
 
+		DraftValidator.isAuteurValide(auteur);
 		Draft draft = getDraftByReference(refDraft);
 
 		DraftValidator.isAnnuler(draft);
 		draft.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());
 
-		DraftValidator.isAuteurValide(auteur);
 		draftRepository.save(draft);
 
 		tracageService.ajouterTrace(auteur.getQui(), refDraft, "le draft " + refDraft + " annulé");
@@ -379,16 +374,7 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = getDraftByReference(refDraft);
 
-		DraftValidator.validerAuteur(clientInfo.getAuteur());
-
-		// verifier si le clientId n'est pas null ou empty.
-		DraftValidator.validerClient(clientInfo);
-
-		draft.setClientAFacturer(clientInfo.getFacturation(), clientInfo.getAuteur());
-		draft.setClientALivrer(clientInfo.getLivraison(), clientInfo.getAuteur());
-		draft.setClientSouscripteur(clientInfo.getSouscripteur(), clientInfo.getAuteur());
-
-		DraftValidator.validerIdClientUnique(draft);
+		associerClient(draft, clientInfo);
 
 		String idClientFacturation = null;
 		if (clientInfo.getFacturation() != null) {
@@ -409,11 +395,34 @@ public class DraftServiceImpl implements DraftService {
 
 		tracageService.ajouterTrace(clientInfo.getAuteur() != null ? clientInfo.getAuteur().getQui() : null, refDraft,
 				"associer le client souscripteur " + idClientSouscripteur + " client facturation "
-						+ idClientFacturation + " client livraison "
-
-						+ idClientLivraison + " au draft" + refDraft);
+						+ idClientFacturation + " client livraison " + idClientLivraison + " au draft" + refDraft);
 
 		LOGGER.info("fin methode associerClient");
+
+	}
+
+	/**
+	 * associer client a un {@link Draft}.
+	 * 
+	 * @param draft
+	 *            {@link Draft}.
+	 * @param clientInfo
+	 *            {@link ClientInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	private void associerClient(Draft draft, ClientInfo clientInfo) throws OpaleException {
+
+		DraftValidator.validerAuteur(clientInfo.getAuteur());
+
+		// verifier si le clientId n'est pas null ou empty.
+		DraftValidator.validerClient(clientInfo);
+
+		draft.setClientAFacturer(clientInfo.getFacturation(), clientInfo.getAuteur());
+		draft.setClientALivrer(clientInfo.getLivraison(), clientInfo.getAuteur());
+		draft.setClientSouscripteur(clientInfo.getSouscripteur(), clientInfo.getAuteur());
+
+		DraftValidator.validerIdClientUnique(draft);
 
 	}
 
@@ -609,7 +618,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, refDraft);
 		Commande commande = commandeService.getCommandeByReferenceDraft(refDraft);
 		DraftValidator.isDraftTransformer(draft, commande);
-		DraftValidator.validerCodePartenaire(codePartenaireInfo.getCodePartenaire());
+		DraftValidator.isCodePartenaireValide(codePartenaireInfo.getCodePartenaire());
 		draft.setCodePartenaire(codePartenaireInfo.getCodePartenaire());
 		draftRepository.save(draft);
 		LOGGER.info("Fin methode service associerCodePartenaire");
@@ -863,7 +872,7 @@ public class DraftServiceImpl implements DraftService {
 			throws OpaleException {
 		String segmentTVA = null;
 		if (calculInfo.getClientInfo() != null && calculInfo.getClientInfo().getFacturation() != null) {
-			DraftValidator.validerIndicatifTVA(calculInfo.getClientInfo().getFacturation());
+			DraftValidator.isIndicatifTVAValide(calculInfo.getClientInfo().getFacturation());
 			segmentTVA = calculInfo.getClientInfo().getFacturation().getTva();
 		} else if (draft.getClientAFacturer() != null) {
 			segmentTVA = draft.getClientAFacturer().getTva();
