@@ -130,21 +130,21 @@ public class Commande {
 	 */
 	public Commande(Draft draft, TransformationInfo transformationInfo) {
 
-		this.clientAFacturer =
-				new Client(draft.getClientAFacturer().getClientId(), draft.getClientAFacturer().getAdresseId(), draft
-						.getClientAFacturer().getTva(), draft.getAuteur());
-		this.clientALivrer =
-				new Client(draft.getClientALivrer().getClientId(), draft.getClientSouscripteur().getAdresseId(), draft
-						.getClientALivrer().getTva(), draft.getAuteur());
-		this.clientSouscripteur =
-				new Client(draft.getClientSouscripteur().getClientId(), draft.getClientSouscripteur().getAdresseId(),
-						draft.getClientSouscripteur().getTva(), draft.getAuteur());
-
 		if (transformationInfo.getAuteur() != null) {
 			this.auteur = new Auteur(transformationInfo.getAuteur());
 		} else {
 			this.auteur = draft.getAuteur();
 		}
+
+		this.clientAFacturer =
+				new Client(draft.getClientAFacturer().getClientId(), draft.getClientAFacturer().getAdresseId(), draft
+						.getClientAFacturer().getTva(), this.auteur);
+		this.clientALivrer =
+				new Client(draft.getClientALivrer().getClientId(), draft.getClientSouscripteur().getAdresseId(), draft
+						.getClientALivrer().getTva(), this.auteur);
+		this.clientSouscripteur =
+				new Client(draft.getClientSouscripteur().getClientId(), draft.getClientSouscripteur().getAdresseId(),
+						draft.getClientSouscripteur().getTva(), this.auteur);
 
 		this.codePartenaire = draft.getCodePartenaire();
 		this.referenceDraft = draft.getReference();

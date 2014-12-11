@@ -333,7 +333,7 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isExsteGeste(Geste geste) throws OpaleException {
+	public static void isExistGeste(Geste geste) throws OpaleException {
 		if (geste == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "geste"), "0.1.4");
 		}
@@ -402,9 +402,9 @@ public class DraftValidator {
 			clientIdNotNull(clientInfo.getLivraison());
 			clientIdNotNull(clientInfo.getSouscripteur());
 
-			validerIndicatifTVA(clientInfo.getFacturation());
-			validerIndicatifTVA(clientInfo.getLivraison());
-			validerIndicatifTVA(clientInfo.getSouscripteur());
+			isIndicatifTVAValide(clientInfo.getFacturation());
+			isIndicatifTVAValide(clientInfo.getLivraison());
+			isIndicatifTVAValide(clientInfo.getSouscripteur());
 		}
 
 	}
@@ -464,7 +464,7 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void validerIndicatifTVA(Client client) throws OpaleException {
+	public static void isIndicatifTVAValide(Client client) throws OpaleException {
 		List<String> indicatifTVA = Arrays.asList("00", "01", "10", "11");
 		if (client != null && client.getTva() != null && !indicatifTVA.contains(client.getTva())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
@@ -479,7 +479,7 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void validerCodePartenaire(String codePartenaire) throws OpaleException {
+	public static void isCodePartenaireValide(String codePartenaire) throws OpaleException {
 		if (Utils.isStringNullOrEmpty(codePartenaire)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Code Partenaire"), "0.1.4");
 		}

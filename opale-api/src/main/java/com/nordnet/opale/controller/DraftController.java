@@ -335,7 +335,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/AssocierAuteur", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/associerAuteur", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public void associerAuteur(@PathVariable String refDraft, @RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::associerAuteur");

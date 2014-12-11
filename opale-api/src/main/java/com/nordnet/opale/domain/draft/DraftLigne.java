@@ -123,7 +123,7 @@ public class DraftLigne {
 	public DraftLigne(DraftLigneInfo draftLigneInfo) throws OpaleException {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
-		DraftValidator.isExsteGeste(draftLigneInfo.getGeste());
+		DraftValidator.isExistGeste(draftLigneInfo.getGeste());
 		this.geste = draftLigneInfo.getGeste();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
@@ -169,9 +169,9 @@ public class DraftLigne {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
 
-		DraftValidator.isExsteGeste(draftLigneInfo.getGeste());
+		DraftValidator.isExistGeste(draftLigneInfo.getGeste());
 		this.geste = draftLigneInfo.getGeste();
-		this.auteur = auteur.toDomain();
+		this.auteur = auteur != null ? auteur.toDomain() : null;
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
 		}
@@ -481,6 +481,10 @@ public class DraftLigne {
 	public void prePersist() throws OpaleException {
 		if (auteur != null && auteur.getTimestamp() == null) {
 			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
+
+		if (dateCreation == null) {
+			dateCreation = PropertiesUtil.getInstance().getDateDuJour();
 		}
 	}
 }

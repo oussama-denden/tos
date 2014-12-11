@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Client}.
@@ -212,9 +213,13 @@ public class Client {
 	 */
 	@PrePersist
 	@PreUpdate
-	public void prePersist() throws OpaleException {
+	public void preDBOperation() throws OpaleException {
 		if (auteur != null && auteur.getTimestamp() == null) {
 			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		}
+
+		if (Utils.isStringNullOrEmpty(tva)) {
+			tva = Constants.DEFAULT_TYPE_TVA_CLIENT;
 		}
 	}
 
