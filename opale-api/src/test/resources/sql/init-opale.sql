@@ -96,6 +96,7 @@ CREATE TABLE `commandeligne` (
   `secteur` varchar(255) DEFAULT NULL,
   `tarifId` int(11) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
+   `geste` varchar(255) DEFAULT NULL,
 
   PRIMARY KEY (`id`),
   KEY `FK2872A7878D480C8F` (`tarifId`),
