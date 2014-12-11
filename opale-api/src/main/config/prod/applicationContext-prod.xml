@@ -9,6 +9,7 @@
 	<context:property-placeholder location="classpath:META-INF/spring/*.properties" />
 
 	<context:component-scan base-package="com.nordnet.opale" />
+	<context:component-scan base-package="com.nordnet.topaze.ws" />
 
 	<!-- Load Hibernate related configuration -->
 	<import resource="hibernate-context.xml" />
@@ -29,6 +30,7 @@
 	</bean>
 	
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+	<bean id="topazeClient" class="com.nordnet.topaze.ws.client.TopazeClient" />
 	
 	<bean id="opaleExceptionsProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
