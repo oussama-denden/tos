@@ -4,8 +4,9 @@
 
 <client id="1000" clientId="1000" adresseId="1000"/>
 <client id="1001" clientId="1001" adresseId="1001"/>
+<client id="1002" clientId="1002" adresseId="1002"/>
 
-<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" qui="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000004" referenceDraft="00000004" clientAFacturerId="1000" clientALivrerId="1001"/>
+<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" qui="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000004" referenceDraft="00000004" clientAFacturerId="1000" clientALivrerId="1001" clientSouscripteurId="1002"/>
 
 <commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" timestamp="[now]" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1006" geste="VENTE"/>
 
