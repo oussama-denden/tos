@@ -7,7 +7,7 @@
 
 <commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" qui="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000004" referenceDraft="00000004" clientAFacturerId="1000" clientALivrerId="1001"/>
 
-<commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" timestamp="[now]" referenceContrat="ref_contrat" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1006" />
+<commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" timestamp="[now]" referenceContrat="ref_contrat" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1006" geste="RENOUVELLEMENT"/>
 
 <commandeLigneDetail id="1000" referenceChoix="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" commandeLigneId="1000" tarifId="1000" />
 
