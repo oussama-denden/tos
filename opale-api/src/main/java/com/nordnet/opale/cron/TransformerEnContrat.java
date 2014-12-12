@@ -3,6 +3,7 @@ package com.nordnet.opale.cron;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -46,7 +47,11 @@ public class TransformerEnContrat extends QuartzJobBean {
 					LOGGER.info("TransformerEnContrat: contrat valide " + commande.getReference());
 					Auteur auteur = new Auteur();
 					auteur.setQui(Constants.INTERNAL_USER);
-					commandeService.transformeEnContrat(commande, auteur);
+					try {
+						commandeService.transformeEnContrat(commande, auteur);
+					} catch (JSONException e) {
+						LOGGER.error("erreur lors de la transformation des commandes en contrats", e);
+					}
 				}
 			}
 
