@@ -4,7 +4,6 @@ import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
-import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 
@@ -38,10 +37,6 @@ public class ReductionValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.Valeur"), "5.1.3");
 		} else if (reductionInfo.getTypeValeur() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.TypeValeur"), "5.1.3");
-		}
-
-		if (reductionInfo.getTypeValeur().equals(TypeValeur.MOIS)) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1", type), "5.1.1");
 		}
 
 		if (objetEnReduction != null && objetEnReduction instanceof DraftLigne) {
