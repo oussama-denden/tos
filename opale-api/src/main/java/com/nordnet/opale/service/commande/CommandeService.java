@@ -1,14 +1,11 @@
 package com.nordnet.opale.service.commande;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.activation.CommandInfo;
 
 import org.json.JSONException;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
@@ -305,11 +302,8 @@ public interface CommandeService {
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonParseException
 	 */
-	List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException;
+	List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException;
 
 	/**
 	 * recuperer la list des commandes non transformes et non annules.

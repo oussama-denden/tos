@@ -2,7 +2,6 @@ package com.nordnet.opale.service.commande;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
@@ -34,6 +31,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
+import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypePaiement;
@@ -549,34 +547,25 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws TopazeException
-	 * @throws IOException
-	 * 
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException {
+	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.testerCommandeNonTransforme(commande);
-		CommandeValidator.isAuteurValide(auteur);
-		CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
+
 		return transformeEnContrat(commande, auteur);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws TopazeException
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonParseException
-	 * 
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException {
+	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
+
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = null;
 		if ((commande.needPaiementRecurrent() && !(calculerCoutComptant(commande.getReference()) > 0d))
@@ -585,27 +574,35 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			ContratPreparationInfo contratPreparationInfo =
-					ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
+			if (ligne.getGeste().equals(Geste.VENTE)) {
+				CommandeValidator.testerCommandeNonTransforme(commande);
+				// CommandeValidator.checkGeste(Geste.VENTE, commande);
+				CommandeValidator.isAuteurValide(auteur);
+				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 
-			/*
-			 * ajout du mode de paiement au produits prepare.
-			 */
-			ajouterModePaiementProduit(contratPreparationInfo.getProduits());
-			String refContrat = restClient.preparerContrat(contratPreparationInfo);
-			ligne.setReferenceContrat(refContrat);
+				ContratPreparationInfo contratPreparationInfo =
+						ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
-			/*
-			 * association des reductions au nouveau contrat cre.
-			 */
-			transformerReductionCommandeEnReductionContrat(commande, ligne);
+				/*
+				 * ajout du mode de paiement au produits prepare.
+				 */
+				ajouterModePaiementProduit(contratPreparationInfo.getProduits());
+				String refContrat = restClient.preparerContrat(contratPreparationInfo);
+				ligne.setReferenceContrat(refContrat);
 
-			ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne, refContrat);
+				/*
+				 * association des reductions au nouveau contrat cre.
+				 */
+				transformerReductionCommandeEnReductionContrat(commande, ligne);
 
-			restClient.validerContrat(refContrat, contratValidationInfo);
+				ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne, refContrat);
 
-			referencesContrats.add(refContrat);
+				restClient.validerContrat(refContrat, contratValidationInfo);
 
+				referencesContrats.add(refContrat);
+			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+				transformeEnOrdereRenouvellement(commande.getReference());
+			}
 		}
 
 		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
@@ -627,7 +624,7 @@ public class CommandeServiceImpl implements CommandeService {
 	private ContratValidationInfo creeContratValidationInfo(Commande commande, CommandeLigne ligne, String refContrat) {
 		ContratValidationInfo validationInfo = new ContratValidationInfo();
 		validationInfo.setIdAdrFacturation(commande.getClientAFacturer().getAdresseId());
-		validationInfo.setIdClient(commande.getClientAFacturer().getClientId());
+		validationInfo.setIdClient(commande.getClientSouscripteur().getClientId());
 		PolitiqueValidation politiqueValidation = new PolitiqueValidation();
 		politiqueValidation.setCheckIsPackagerCreationPossible(true);
 		politiqueValidation.setFraisCreation(true);
@@ -724,8 +721,6 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws TopazeException
-	 * 
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -734,15 +729,17 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
+		// CommandeValidator.checkGeste(Geste.RENOUVELLEMENT, commande);
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-
-			ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
-			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
+			if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+				ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
+				restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
+			}
 
 		}
 
-		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
-		commandeRepository.save(commande);
+		// commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		// commandeRepository.save(commande);
 
 	}
 
@@ -1045,11 +1042,11 @@ public class CommandeServiceImpl implements CommandeService {
 			prix = produit.getPrix();
 			if (prix != null) {
 				if (prix.isRecurrent()) {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementRecurrent
-							.name()));
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
+							.fromString(modePaiementRecurrent != null ? modePaiementRecurrent.name() : ""));
 				} else {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement.fromString(modePaiementComptant
-							.name()));
+					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
+							.fromString(modePaiementComptant != null ? modePaiementComptant.name() : ""));
 				}
 			}
 		}

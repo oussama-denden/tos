@@ -19,6 +19,7 @@ import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -188,6 +189,20 @@ public interface DraftService {
 	 */
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
 			throws OpaleException, CloneNotSupportedException;
+
+	/**
+	 * Associer un geste a une ligne draft.
+	 * 
+	 * @param refDraft
+	 *            reference draft
+	 * @param refLigne
+	 *            reference ligne draft
+	 * @param geste
+	 *            {@link Geste}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void associerGeste(String refDraft, String refLigne, Geste geste) throws OpaleException;
 
 	/**
 	 * sauver un {@link Draft} dans la base de donnee.

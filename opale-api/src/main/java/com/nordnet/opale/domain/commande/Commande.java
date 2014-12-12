@@ -24,7 +24,6 @@ import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CommandeLigneInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
@@ -126,27 +125,32 @@ public class Commande {
 	 * 
 	 * @param draft
 	 *            {@link Draft}.
-	 * @param trameCatalogue
-	 *            {@link TrameCatalogue}.
+	 * @param transformationInfo
+	 *            {@link TransformationInfo}.
 	 */
-	public Commande(Draft draft, TransformationInfo trameCatalogue) {
+	public Commande(Draft draft, TransformationInfo transformationInfo) {
+
+		if (transformationInfo.getAuteur() != null) {
+			this.auteur = new Auteur(transformationInfo.getAuteur());
+		} else {
+			this.auteur = draft.getAuteur();
+		}
 
 		this.clientAFacturer =
 				new Client(draft.getClientAFacturer().getClientId(), draft.getClientAFacturer().getAdresseId(), draft
-						.getClientAFacturer().getTva(), draft.getAuteur());
+						.getClientAFacturer().getTva(), this.auteur);
 		this.clientALivrer =
 				new Client(draft.getClientALivrer().getClientId(), draft.getClientSouscripteur().getAdresseId(), draft
-						.getClientALivrer().getTva(), draft.getAuteur());
+						.getClientALivrer().getTva(), this.auteur);
 		this.clientSouscripteur =
 				new Client(draft.getClientSouscripteur().getClientId(), draft.getClientSouscripteur().getAdresseId(),
-						draft.getClientSouscripteur().getTva(), draft.getAuteur());
+						draft.getClientSouscripteur().getTva(), this.auteur);
 
-		this.auteur = new Auteur(trameCatalogue.getAuteur());
 		this.codePartenaire = draft.getCodePartenaire();
 		this.referenceDraft = draft.getReference();
 		OffreCatalogue offreCatalogue = null;
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			offreCatalogue = trameCatalogue.getTrameCatalogue().getOffreMap().get(draftLigne.getReferenceOffre());
+			offreCatalogue = transformationInfo.getTrameCatalogue().getOffreMap().get(draftLigne.getReferenceOffre());
 			CommandeLigne commandeLigne = new CommandeLigne(draftLigne, offreCatalogue);
 			commandeLigne.setNumero(this.commandeLignes.size());
 			addLigne(commandeLigne);

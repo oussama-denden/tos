@@ -11,6 +11,7 @@ import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.Offre;
+import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -61,16 +62,17 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void isOffreValide(Offre offre) throws OpaleException {
+
+		if (offre == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.34"), "1.1.34");
+		}
+
 		if (Utils.isStringNullOrEmpty(offre.getReferenceOffre())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Offre.reference"), "0.1.4");
 		}
 
 		if (Utils.isStringNullOrEmpty(offre.getReferenceTarif())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Offre.referenceTarif"), "0.1.4");
-		}
-
-		if (Utils.isListNullOrEmpty(offre.getDetails())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.3"), "1.1.3");
 		}
 
 		List<Detail> details = offre.getDetails();
@@ -203,6 +205,20 @@ public class DraftValidator {
 
 	}
 
+	// /**
+	// * valider si l'auteur est null ou pas.
+	// *
+	// * @param auteur
+	// * {@link Auteur}
+	// * @throws OpaleException
+	// * {@link OpaleException}
+	// */
+	// public static void isNull(Auteur auteur) throws OpaleException {
+	// if (auteur == null) {
+	// throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
+	// }
+	// }
+
 	/**
 	 * tester si le code n est pas null.
 	 * 
@@ -213,11 +229,26 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void codePartenaireNotNull(Draft draft, String action) throws OpaleException {
+	public static void isCodePartenaireNotNull(Draft draft, String action) throws OpaleException {
 		if (Utils.isStringNullOrEmpty(draft.getCodePartenaire()) && action.equals("VALIDER_DRAFT")) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.21"), "1.1.21");
 		} else if (Utils.isStringNullOrEmpty(draft.getCodePartenaire()) && action.equals("TRANSFORMER_EN_COMMANDE")) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.23"), "1.1.23");
+		}
+
+	}
+
+	/**
+	 * tester si la reference externe n est pas null.
+	 * 
+	 * @param referenceExterne
+	 *            reference externe.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void isReferenceExterneNotNull(String referenceExterne) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(referenceExterne)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Reference externe"), "0.1.4");
 		}
 
 	}
@@ -230,10 +261,13 @@ public class DraftValidator {
 	 *            {@link Draft}.
 	 * @param referenceDraft
 	 *            reference draft.
+	 * @param transformationInfo
+	 *            {@link TransformationInfo}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isTransformationPossible(Draft draft, String referenceDraft) throws OpaleException {
+	public static void isTransformationPossible(Draft draft, String referenceDraft,
+			TransformationInfo transformationInfo) throws OpaleException {
 		isExistDraft(draft, referenceDraft);
 		if (draft.isAnnule()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.9"), "1.1.9");
@@ -241,6 +275,14 @@ public class DraftValidator {
 
 		if (draft.isTransforme()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.10"), "1.1.10");
+		}
+
+		if (draft.getDraftLignes().size() == Constants.ZERO) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.33"), "1.1.33");
+		}
+
+		if (draft.getAuteur() == null && transformationInfo.getAuteur() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
 		}
 	}
 
@@ -269,11 +311,9 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void checkReferenceExterne(Draft draft, String referenceDraft) throws OpaleException {
+	public static void isDraftContientReferenceExterne(Draft draft, String referenceDraft) throws OpaleException {
 
-		if (draft == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.1", referenceDraft), "1.1.1");
-		}
+		isExistDraft(draft, referenceDraft);
 		if (!Utils.isStringNullOrEmpty(draft.getReferenceExterne())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.20", referenceDraft,
 					draft.getReferenceExterne()), "1.1.20");
@@ -306,7 +346,7 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isExsteGeste(Geste geste) throws OpaleException {
+	public static void isExistGeste(Geste geste) throws OpaleException {
 		if (geste == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "geste"), "0.1.4");
 		}
@@ -362,14 +402,22 @@ public class DraftValidator {
 	 */
 	public static void validerClient(ClientInfo clientInfo) throws OpaleException {
 
+		Client clientFacturation = clientInfo.getFacturation();
+		Client clientLivraison = clientInfo.getLivraison();
+		Client clientSouscripteur = clientInfo.getSouscripteur();
+
+		if (clientFacturation == null && clientLivraison == null && clientSouscripteur == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.35"), "1.1.35");
+		}
+
 		if (clientInfo != null) {
 			clientIdNotNull(clientInfo.getFacturation());
 			clientIdNotNull(clientInfo.getLivraison());
 			clientIdNotNull(clientInfo.getSouscripteur());
 
-			validerIndicatifTVA(clientInfo.getFacturation());
-			validerIndicatifTVA(clientInfo.getLivraison());
-			validerIndicatifTVA(clientInfo.getSouscripteur());
+			isIndicatifTVAValide(clientInfo.getFacturation());
+			isIndicatifTVAValide(clientInfo.getLivraison());
+			isIndicatifTVAValide(clientInfo.getSouscripteur());
 		}
 
 	}
@@ -429,10 +477,48 @@ public class DraftValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void validerIndicatifTVA(Client client) throws OpaleException {
+	public static void isIndicatifTVAValide(Client client) throws OpaleException {
 		List<String> indicatifTVA = Arrays.asList("00", "01", "10", "11");
 		if (client != null && client.getTva() != null && !indicatifTVA.contains(client.getTva())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.12"), "2.1.12");
+		}
+	}
+
+	/**
+	 * valider le code partenaire.
+	 * 
+	 * @param codePartenaire
+	 *            code partenaire.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void isCodePartenaireValide(String codePartenaire) throws OpaleException {
+		if (Utils.isStringNullOrEmpty(codePartenaire)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Code Partenaire"), "0.1.4");
+		}
+	}
+
+	/**
+	 * varifier si {@link DraftLigne}/ {@link DraftLigneDetail} contient la referenceTarif.
+	 * 
+	 * @param element
+	 *            une instance de type {@link DraftLigne} / {@link DraftLigneDetail}.
+	 * @param refTarif
+	 *            reference tarif.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void isContientRefTarif(Object element, String refTarif) throws OpaleException {
+		if (element instanceof DraftLigne) {
+			DraftLigne draftLigne = (DraftLigne) element;
+			if (!draftLigne.getReferenceTarif().equals(refTarif)) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.36", "La ligne draft", refTarif), "1.1.36");
+			}
+		} else {
+			DraftLigneDetail draftLigneDetail = (DraftLigneDetail) element;
+			if (!draftLigneDetail.getReferenceTarif().equals(refTarif)) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.36", "Le draft", refTarif), "1.1.36");
+			}
 		}
 	}
 

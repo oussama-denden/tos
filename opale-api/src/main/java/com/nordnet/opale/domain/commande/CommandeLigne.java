@@ -33,6 +33,7 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.topaze.ws.entity.Contrat;
@@ -133,6 +134,12 @@ public class CommandeLigne {
 	private Tarif tarif;
 
 	/**
+	 * Le geste effectue.
+	 */
+	@Enumerated(EnumType.STRING)
+	private Geste geste;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {
@@ -153,12 +160,12 @@ public class CommandeLigne {
 		this.gamme = offreCatalogue.getGamme();
 		this.secteur = offreCatalogue.getSecteur();
 		this.label = offreCatalogue.getLabel();
-		this.typeProduit =
-				TypeProduit.fromString(offreCatalogue.getType() != null ? offreCatalogue.getType().name() : "");
+		this.typeProduit = TypeProduit.fromString(offreCatalogue.getType().name());
 		this.modeFacturation = offreCatalogue.getModeFacturation();
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
 		this.tarif = new Tarif(offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif()));
+		this.geste = draftLigne.getGeste();
 		DetailCatalogue detailCatalogue = null;
 		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
 			detailCatalogue = offreCatalogue.getDetailsMap().get(detail.getReferenceSelection());
@@ -409,6 +416,22 @@ public class CommandeLigne {
 	 */
 	public void setTarif(Tarif tarif) {
 		this.tarif = tarif;
+	}
+
+	/**
+	 * @return {@link #geste}
+	 */
+	public Geste getGeste() {
+		return geste;
+	}
+
+	/**
+	 * 
+	 * @param geste
+	 *            {@link #geste}
+	 */
+	public void setGeste(Geste geste) {
+		this.geste = geste;
 	}
 
 	/**

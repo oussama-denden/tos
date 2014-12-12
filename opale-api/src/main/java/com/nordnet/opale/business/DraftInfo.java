@@ -2,6 +2,8 @@ package com.nordnet.opale.business;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Contient les info de l auteur.
  * 
@@ -16,7 +18,7 @@ public class DraftInfo {
 	private Auteur auteur;
 
 	/**
-	 * 
+	 * liste {@link DraftLigneInfo}.
 	 */
 	private List<DraftLigneInfo> lignes;
 
@@ -149,6 +151,23 @@ public class DraftInfo {
 	 */
 	public void setCodePartenaire(String codePartenaire) {
 		this.codePartenaire = codePartenaire;
+	}
+
+	/**
+	 * verifier si le draftInfo contient des info sur le client.
+	 * 
+	 * @return true si il y a des info sur le client.
+	 */
+	@JsonIgnore
+	public boolean isContientInfoClient() {
+		if (facturation != null)
+			return true;
+		if (livraison != null)
+			return true;
+		if (souscripteur != null)
+			return true;
+
+		return false;
 	}
 
 }

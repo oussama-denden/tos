@@ -26,6 +26,7 @@ import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftValidationInfo;
+import com.nordnet.opale.business.GesteInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
@@ -38,7 +39,6 @@ import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.draft.DraftService;
-import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.wordnik.swagger.annotations.Api;
 
@@ -335,7 +335,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@RequestMapping(value = "/{refDraft:.+}/AssocierAuteur", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/{refDraft:.+}/associerAuteur", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public void associerAuteur(@PathVariable String refDraft, @RequestBody Auteur auteur) throws OpaleException {
 		LOGGER.info(":::ws-rec:::associerAuteur");
@@ -527,8 +527,8 @@ public class DraftController {
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
-	 * @throws TopazeException
-	 *             {@link TopazeException}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
@@ -541,6 +541,26 @@ public class DraftController {
 	}
 
 	/**
+	 * Associe geste a une ligne draft.
+	 * 
+	 * @param refDraft
+	 *            the ref draft
+	 * @param refLigne
+	 *            reference ligne draft
+	 * @param gesteInfo
+	 *            geste informations.
+	 * @throws OpaleException
+	 *             the opale exception
+	 */
+	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/associerGeste", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void associerGeste(@PathVariable String refDraft, @PathVariable String refLigne,
+			@RequestBody GesteInfo gesteInfo) throws OpaleException {
+		LOGGER.info(":::ws-rec:::associerClient");
+		draftService.associerGeste(refDraft, refLigne, gesteInfo.getGeste());
+	}
+
+	/**
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
 	 * @param req
@@ -549,7 +569,7 @@ public class DraftController {
 	 *            exception
 	 * @return {@link InfoErreur}
 	 */
-	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ OpaleException.class })
 	@ResponseBody
 	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {

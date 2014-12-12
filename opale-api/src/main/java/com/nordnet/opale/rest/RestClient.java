@@ -74,9 +74,10 @@ public class RestClient {
 			responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (TopazeException e1) {
+			LOGGER.error("failed to send REST request", e1);
 			throw new OpaleException(e1.getMessage(), e1.getErrorCode());
 		} catch (IOException e) {
 			LOGGER.error("failed to send REST request", e);
@@ -111,9 +112,10 @@ public class RestClient {
 			responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (TopazeException e1) {
+			LOGGER.error("failed to send REST request", e1);
 			throw new OpaleException(e1.getMessage(), e1.getErrorCode());
 		} catch (IOException e) {
 			LOGGER.error("failed to send REST request", e);
@@ -130,7 +132,6 @@ public class RestClient {
 	 * @return {@link Contrat}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
-	 * @throws TopazeException
 	 */
 	public Contrat getContratByReference(String referenceContrat) throws OpaleException {
 		LOGGER.info(":::ws-call:::getContratByReference");
@@ -139,12 +140,13 @@ public class RestClient {
 			try {
 				response = topazeClient.getContratByReference(referenceContrat);
 			} catch (TopazeException e) {
+				LOGGER.error("failed to send REST request", e);
 				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			} else {
 				return objectMapper.readValue(responseBody, Contrat.class);
 			}
@@ -173,12 +175,13 @@ public class RestClient {
 			try {
 				response = topazeClient.renouvelerContrat(referenceContrat, renouvellementInfo);
 			} catch (TopazeException e) {
+				LOGGER.error("failed to send REST request", e);
 				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
@@ -206,12 +209,13 @@ public class RestClient {
 			try {
 				response = topazeClient.ajouterReductionSurContrat(referenceContrat, contratReductionInfo);
 			} catch (TopazeException e) {
+				LOGGER.error("failed to send REST request", e);
 				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
@@ -242,12 +246,13 @@ public class RestClient {
 						topazeClient.ajouterReductionSurElementContractuel(referenceContrat, numEC,
 								contratReductionInfo);
 			} catch (TopazeException e) {
+				LOGGER.error("failed to send REST request", e);
 				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			String responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorCode(), infoErreur.getErrorMessage());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
