@@ -133,6 +133,7 @@ public class Draft {
 	public Draft(Commande commande) {
 		this.commandeSource = commande.getReference();
 		this.auteur = commande.getAuteur();
+		this.codePartenaire = commande.getCodePartenaire();
 		Client clientAFacturer = commande.getClientAFacturer();
 		if (clientAFacturer != null) {
 			this.clientAFacturer = new Client();

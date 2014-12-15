@@ -42,7 +42,7 @@ public class SupprimerCommandes extends QuartzJobBean {
 		List<Commande> commandes = commandeService.getCommandeNonAnnuleEtNonTransformes();
 		for (Commande commande : commandes) {
 			try {
-				if (checkCommandeActive(commande.getReference())) {
+				if (checkCommandeActive(commande)) {
 					LOGGER.info("annulation automatique du commande :" + commande.getReference());
 					commande.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());
 					commandeService.save(commande);
@@ -66,12 +66,17 @@ public class SupprimerCommandes extends QuartzJobBean {
 	 *             {@link ParseException}
 	 * 
 	 */
-	private Boolean checkCommandeActive(String refCommande) throws OpaleException, ParseException {
+	private Boolean checkCommandeActive(Commande commande) throws OpaleException, ParseException {
 		LocalDate dateJour = LocalDate.fromDateFields(PropertiesUtil.getInstance().getDateDuJour());
-		Date dateAction = Utils.parseDate(commandeService.getRecentDate(refCommande));
+		Date dateAction = Utils.parseDate(commandeService.getRecentDate(commande.getReference()));
 		LocalDate dateDerniereAction = LocalDate.fromDateFields(dateAction);
+		LocalDate dateCreationCommande =
+				commande.getDateCreation() != null ? LocalDate.fromDateFields(commande.getDateCreation()) : null;
 		Integer delaiInactive = PropertiesUtil.getInstance().getDureeInactive();
-		if (dateDerniereAction.plusDays(delaiInactive).isBefore(dateJour)) {
+		if ((dateCreationCommande != null && dateCreationCommande.plusDays(delaiInactive).isBefore(dateJour) && dateCreationCommande
+				.isAfter(dateDerniereAction))
+				|| (dateCreationCommande.isBefore(dateDerniereAction) && dateDerniereAction.plusDays(delaiInactive)
+						.isBefore(dateJour))) {
 			return true;
 		}
 

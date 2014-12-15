@@ -397,4 +397,13 @@ public interface DraftService {
 	 */
 	public List<Draft> findAllDraft();
 
+	/**
+	 * Retourne un message d alert si la commande a une reduction sur commande et sue ligne.
+	 * 
+	 * @param commande
+	 *            {@link Commande}
+	 * @return alert
+	 */
+	public String alertMultipleReduction(Commande commande);
+
 }

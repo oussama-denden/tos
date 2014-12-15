@@ -141,6 +141,7 @@ public class PaiementServiceImpl implements PaiementService {
 		Date datePaiement = paiementInfo.getTimestampPaiement();
 		paiement.setTimestampPaiement(datePaiement != null ? datePaiement : PropertiesUtil.getInstance()
 				.getDateDuJour());
+		paiement.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 		paiementRepository.save(paiement);
 		return paiement;
 
