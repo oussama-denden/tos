@@ -1,6 +1,5 @@
 package com.nordnet.opale.draft.service.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -14,7 +13,6 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
-import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
@@ -79,29 +77,4 @@ public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 
 	}
 
-	/**
-	 * ajout reduction invalide a une ligne du draft.
-	 * 
-	 */
-	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
-	public void testajouterReductionFraisLigneInValide() {
-
-		try {
-			ReductionInfo reductionInfo =
-					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");
-			reductionInfo.setTypeValeur(TypeValeur.MOIS);
-			DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef("REF-DRAFT-1", "REF-LIGNE-1");
-
-			reductionService.ajouterReductionFraisLigne("REF-DRAFT-1", draftLigne, "REF-FRAIS-1", reductionInfo);
-			fail("unexpected state");
-		} catch (OpaleException exception) {
-			assertEquals(exception.getErrorCode(), "5.1.1");
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			fail(e.getMessage());
-		}
-
-	}
 }
