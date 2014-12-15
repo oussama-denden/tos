@@ -16,6 +16,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * Classe de test de la methode

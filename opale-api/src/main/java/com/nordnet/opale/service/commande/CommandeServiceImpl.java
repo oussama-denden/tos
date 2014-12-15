@@ -948,6 +948,8 @@ public class CommandeServiceImpl implements CommandeService {
 		for (Reduction reductionLigne : reductionsLigne) {
 			reductionContrat = fromReduction(reductionLigne);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+			reductionContrat.setIsAffichableSurFacture(true);
+			reductionContrat.setTypeValeur(reductionLigne.getTypeValeur());
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			if (reductionLigne.getReferenceFrais() == null) {
@@ -981,6 +983,8 @@ public class CommandeServiceImpl implements CommandeService {
 			for (Reduction reductionligneDetail : reductionsligneDetail) {
 				reductionContrat = fromReduction(reductionligneDetail);
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+				reductionContrat.setIsAffichableSurFacture(true);
+				reductionContrat.setTypeValeur(reductionligneDetail.getTypeValeur());
 				if (reductionligneDetail.getReferenceFrais() != null) {
 					String typeFrais =
 							commandeRepository.findTypeFrais(reductionligneDetail.getReferenceDraft(),

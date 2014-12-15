@@ -13,7 +13,7 @@ import org.hibernate.validator.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.enums.ModePaiement;
-import com.nordnet.opale.enums.TypeValeur;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * Cette classe represente l'entite {@link Reduction}.

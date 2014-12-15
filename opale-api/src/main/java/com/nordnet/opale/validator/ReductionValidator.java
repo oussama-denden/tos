@@ -6,6 +6,7 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * cette classe responsable de valider les informations liés a une {@link Reduction}.
