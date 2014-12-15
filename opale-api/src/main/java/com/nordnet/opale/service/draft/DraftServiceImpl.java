@@ -43,7 +43,6 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.TypeFrais;
-import com.nordnet.opale.enums.TypeValeur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
@@ -60,6 +59,7 @@ import com.nordnet.opale.validator.DraftValidator;
 import com.nordnet.opale.vat.client.VatClient;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * L'implementation de service {@link DraftService}.
@@ -492,6 +492,7 @@ public class DraftServiceImpl implements DraftService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void associerGeste(String refDraft, String refLigne, Geste geste) throws OpaleException {
 		LOGGER.info("Enter methode associerGeste");
 
@@ -1023,7 +1024,7 @@ public class DraftServiceImpl implements DraftService {
 				} else {
 					coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
 				}
-			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
+			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.EURO)) {
 				coutReduction += reductionProduit.getValeur();
 			}
 		}
@@ -1043,7 +1044,7 @@ public class DraftServiceImpl implements DraftService {
 			if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
 				if (reductionFrais.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
 					coutReduction += (frais.getMontant() * reductionFrais.getValeur()) / 100;
-				} else if (reductionFrais.getTypeValeur().equals(TypeValeur.MONTANT)) {
+				} else if (reductionFrais.getTypeValeur().equals(TypeValeur.EURO)) {
 					coutReduction += reductionFrais.getValeur();
 
 				}
@@ -1074,7 +1075,7 @@ public class DraftServiceImpl implements DraftService {
 		}
 		if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
 			coutReduction += ((coutTotale - reduction) * reductionDraft.getValeur()) / 100;
-		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.MONTANT)) {
+		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.EURO)) {
 			coutReduction += reductionDraft.getValeur();
 		}
 		return coutReduction;

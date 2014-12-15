@@ -3,7 +3,7 @@ package com.nordnet.opale.business;
 import java.util.Date;
 
 import com.nordnet.opale.domain.reduction.Reduction;
-import com.nordnet.opale.enums.TypeValeur;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * Cette classe regroupe les informations liees au {@link ReductionInfo}.
