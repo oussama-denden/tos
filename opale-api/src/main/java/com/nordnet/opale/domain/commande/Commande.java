@@ -140,7 +140,7 @@ public class Commande {
 				new Client(draft.getClientAFacturer().getClientId(), draft.getClientAFacturer().getAdresseId(), draft
 						.getClientAFacturer().getTva(), this.auteur);
 		this.clientALivrer =
-				new Client(draft.getClientALivrer().getClientId(), draft.getClientSouscripteur().getAdresseId(), draft
+				new Client(draft.getClientALivrer().getClientId(), draft.getClientALivrer().getAdresseId(), draft
 						.getClientALivrer().getTva(), this.auteur);
 		this.clientSouscripteur =
 				new Client(draft.getClientSouscripteur().getClientId(), draft.getClientSouscripteur().getAdresseId(),
