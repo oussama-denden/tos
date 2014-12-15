@@ -544,7 +544,7 @@ public class CommandeController {
 	 *            exception
 	 * @return {@link InfoErreur}
 	 */
-	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ OpaleException.class })
 	@ResponseBody
 	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
