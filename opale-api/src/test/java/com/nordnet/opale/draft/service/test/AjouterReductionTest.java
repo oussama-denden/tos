@@ -1,6 +1,5 @@
 package com.nordnet.opale.draft.service.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -61,31 +60,6 @@ public class AjouterReductionTest extends GlobalTestCase {
 			reductionService.ajouterReduction("REF-DRAFT-1", reductionInfo);
 			Reduction reduction = reductionService.findReductionDraft("REF-DRAFT-1");
 			assertNotNull(reduction);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			fail(e.getMessage());
-		}
-
-	}
-
-	/**
-	 * ajout reduction valide a un draft.
-	 * 
-	 */
-	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
-	public void testAjoutReductionInValide() {
-
-		try {
-			ReductionInfo reductionInfo =
-					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");
-			reductionInfo.setTypeValeur(TypeValeur.MOIS);
-
-			reductionService.ajouterReduction("REF-DRAFT-2", reductionInfo);
-			fail("unexpected state");
-		} catch (OpaleException exception) {
-			assertEquals(exception.getErrorCode(), "5.1.1");
-
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

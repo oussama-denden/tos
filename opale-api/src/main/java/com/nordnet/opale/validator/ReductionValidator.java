@@ -40,10 +40,6 @@ public class ReductionValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.TypeValeur"), "5.1.3");
 		}
 
-		if (reductionInfo.getTypeValeur().equals(TypeValeur.MOIS)) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.1", type), "5.1.1");
-		}
-
 		if (objetEnReduction != null && objetEnReduction instanceof DraftLigne) {
 			if (((DraftLigne) objetEnReduction).getReferenceTarif() == null) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");

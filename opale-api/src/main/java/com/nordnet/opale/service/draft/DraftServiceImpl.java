@@ -459,7 +459,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isCodePartenaireNotNull(draft, Constants.TRANSFORMER_EN_COMMANDE);
 		ClientInfo clientInfo = transformationInfo.getClientInfo();
 		if (clientInfo != null) {
-			DraftValidator.validerClient(clientInfo);
+			DraftValidator.validerClientCommande(clientInfo);
 
 			draft.setClientAFacturer(clientInfo.getFacturation(), transformationInfo.getAuteur());
 			draft.setClientALivrer(clientInfo.getLivraison(), transformationInfo.getAuteur());
@@ -522,7 +522,7 @@ public class DraftServiceImpl implements DraftService {
 	 *             {@link CloneNotSupportedException}
 	 */
 	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
-		// coper reduction draft
+		// copier reduction draft
 		List<Reduction> reductionDraft = new ArrayList<Reduction>();
 		Reduction reduction = reductionService.findReductionDraft(draft.getReference());
 		if (reduction != null)
@@ -530,9 +530,9 @@ public class DraftServiceImpl implements DraftService {
 
 		ajouterReductionCommande(reductionDraft, commande.getReference(), null, null);
 
-		// coper reduction ligne draft
+		// copier reduction ligne draft
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			// coper reduction ligne draft
+			// copier reduction ligne draft
 			List<Reduction> reductionLigneDraft =
 					reductionService.findReductionLigneDraft(draft.getReference(), draftLigne.getReference());
 
@@ -547,9 +547,9 @@ public class DraftServiceImpl implements DraftService {
 			ajouterReductionCommande(reductionLigneDraft, commande.getReference(),
 					commandeLigneEnReduction.getReferenceOffre(), null);
 
-			// coper reduction detail ligne draft
+			// copier reduction detail ligne draft
 			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-				// coper reduction ligne draft
+				// copier reduction ligne draft
 				List<Reduction> reductionDetailLigneDraft =
 						reductionService.findReductionDetailLigneDraft(draft.getReference(), draftLigne.getReference(),
 								draftLigneDetail.getReferenceChoix());
@@ -1111,4 +1111,21 @@ public class DraftServiceImpl implements DraftService {
 		return draftRepository.findAll();
 	}
 
+	@Override
+	public String alertMultipleReduction(Commande commande) {
+		Reduction reductionCommande = reductionService.findReductionDraft(commande.getReferenceDraft());
+		List<Reduction> reductionsLigne = new ArrayList<>();
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			Reduction reductionLigne =
+					reductionService.findReductionLigneDraftSansFrais(commande.getReference(),
+							commandeLigne.getReferenceOffre());
+			reductionsLigne.add(reductionLigne);
+		}
+
+		if (reductionCommande != null && reductionsLigne.size() > 0) {
+			return DraftValidator.alertReductionMultiple();
+		}
+
+		return null;
+	}
 }
