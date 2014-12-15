@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 
-	<!--
-		=====================================================================
-		Log4j Configuration
-		=====================================================================
-	-->
+<!-- ===================================================================== 
+	Log4j Configuration ===================================================================== -->
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
 	debug="false">
@@ -13,83 +10,65 @@
 	<!-- ============================== -->
 	<!-- Append messages to the console -->
 	<!-- ============================== -->
-	
+
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%5p %d{ISO8601} %c.%M - %m%n" />
 		</layout>
 	</appender>
-	
+
 	<!-- ============================== -->
 	<!-- Append messages to the File -->
 	<!-- ============================== -->
-	
-        <appender name="ROLL" class="org.apache.log4j.rolling.RollingFileAppender">
-                <!-- The active file to log to -->
-                <param name="file" value="/tmp/opale/opale.log" />
-                <param name="append" value="true" />
-                <param name="encoding" value="UTF-8" />
 
-                <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
-                        <!-- The file to roll to, this is a fairly intelligent parameter, if the file
-                        ends in .gz, it gzips it, based on the date stamp it rolls at that time, 
-                        default is yyyy-MM-dd, (rolls at midnight)
-                        See: http://logging.apache.org/log4j/companions/extras/apidocs/org/apache/log4j/rolling/TimeBasedRollingPolicy.html -->
-                        <param name="FileNamePattern" value="/applogs/opale.%d.log.gz" />
-                </rollingPolicy>
+	<appender name="ROLL" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- The active file to log to -->
+		<param name="file" value="/var/log/tomcat/default/opale/opale.log" />
+		<param name="append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-ww" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- The log message pattern -->
+			<param name="ConversionPattern" value="%5p %d{ISO8601} %c.%M - %m%n" />
+		</layout>
+	</appender>
 
-                <layout class="org.apache.log4j.PatternLayout">
-                        <!-- The log message pattern -->
-                        <param name="ConversionPattern" value="%5p %d{ISO8601} %c.%M - %m%n" />
-                </layout>
-        </appender>
-        
-        <appender name="FIND-APPENDER" class="org.apache.log4j.rolling.RollingFileAppender">
-                <!-- The active file to log to -->
-                <param name="file" value="/tmp/opale/opale.finder.log" />
-                <param name="append" value="true" />
-                <param name="encoding" value="UTF-8" />
+	<appender name="FIND-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- The active file to log to -->
+		<param name="file" value="/var/log/tomcat/default/opale/opale.finder.log" />
+		<param name="append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-ww" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- The log message pattern -->
+			<param name="ConversionPattern" value="%5p %d{ISO8601} %c.%M - %m%n" />
+		</layout>
+	</appender>
 
-                <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
-                        <!-- The file to roll to, this is a fairly intelligent parameter, if the file
-                        ends in .gz, it gzips it, based on the date stamp it rolls at that time, 
-                        default is yyyy-MM-dd, (rolls at midnight)
-                        See: http://logging.apache.org/log4j/companions/extras/apidocs/org/apache/log4j/rolling/TimeBasedRollingPolicy.html -->
-                        <param name="FileNamePattern" value="/applogs/opale.finder.%d.log.gz" />
-                </rollingPolicy>
 
-                <layout class="org.apache.log4j.PatternLayout">
-                        <!-- The log message pattern -->
-                        <param name="ConversionPattern" value="%5p %d{ISO8601} %c.%M - %m%n" />
-                </layout>
-        </appender>
-        
-      	
 	<logger name="log4j.logger.org.springframework.ws">
 		<level value="DEBUG" />
 	</logger>
-	
+
 	<logger name="log4j.logger.org.springframework.xml">
 		<level value="DEBUG" />
 	</logger>
-	
-	
+
+
 	<category name="com.nordnet.opale.finder" additivity="true">
-		<appender-ref ref="FIND-APPENDER"/>
+		<appender-ref ref="FIND-APPENDER" />
 	</category>
-	
+
 
 	<!-- Limit the org.apache category to ERROR as its INFO is verbose -->
-<!-- 	<category name="org">
-		<priority value="ERROR" />
-		</category> -->
-	
+	<!-- <category name="org"> <priority value="ERROR" /> </category> -->
+
 	<!-- ======================= -->
 	<!-- Setup the Root category -->
 	<!-- ======================= -->
 	<root>
 		<priority value="INFO" />
-		<appender-ref ref="CONSOLE" /> 
+		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="ROLL" />
 	</root>
 
