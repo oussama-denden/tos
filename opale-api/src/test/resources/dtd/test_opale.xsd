@@ -164,6 +164,7 @@
 		<xsd:attribute name="timestampIntention" use="optional" />
 		<xsd:attribute name="timestampPaiement" use="optional" />
 		<xsd:attribute name="typePaiement" use="optional" />
+		<xsd:attribute name="dateCreation" use="optional" />
 	</xsd:complexType>
 	
 	
@@ -184,6 +185,7 @@
 		<xsd:attribute name="referenceCommande" use="optional" />
 		<xsd:attribute name="dateAnnulation" use="optional" />
 		<xsd:attribute name="timestampIntention" use="optional" />
+		<xsd:attribute name="dateCreation" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="reduction" type="reduction_type"/>

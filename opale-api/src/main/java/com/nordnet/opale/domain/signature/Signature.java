@@ -92,6 +92,11 @@ public class Signature {
 	private Date dateAnnulation;
 
 	/**
+	 * date creation.
+	 */
+	private Date dateCreation;
+
+	/**
 	 * contrcteur par defaut.
 	 */
 	public Signature() {
@@ -234,7 +239,6 @@ public class Signature {
 	}
 
 	/**
-	 * <<<<<<< HEAD get date de l'intention.
 	 * 
 	 * @return {@link #timestampIntention}
 	 */
@@ -286,6 +290,23 @@ public class Signature {
 	 */
 	public void setDateAnnulation(Date dateAnnulation) {
 		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateCreation}
+	 */
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+	/**
+	 * 
+	 * @param dateCreation
+	 *            {@link #dateCreation}
+	 */
+	public void setDateCreation(Date dateCreation) {
+		this.dateCreation = dateCreation;
 	}
 
 	/**

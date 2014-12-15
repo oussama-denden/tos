@@ -70,6 +70,7 @@ CREATE TABLE `signature` (
   `referenceCommande` varchar(255) DEFAULT NULL,
    `dateAnnulation` datetime DEFAULT NULL,
     `timestampIntention` datetime DEFAULT NULL,
+     `dateCreation` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -285,6 +286,7 @@ CREATE TABLE `paiement` (
   `timestampIntention` datetime DEFAULT NULL,
   `timestampPaiement` datetime DEFAULT NULL,
   `typePaiement` varchar(255) DEFAULT NULL,
+  `dateCreation` datetime DEFAULT NULL,
 
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
