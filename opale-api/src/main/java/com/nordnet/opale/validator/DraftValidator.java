@@ -196,11 +196,8 @@ public class DraftValidator {
 	 */
 	public static void validerAuteur(Auteur auteur) throws OpaleException {
 
-		if (auteur != null) {
-
-			if (Utils.isStringNullOrEmpty(auteur.getQui())) {
-				throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
-			}
+		if (auteur == null || Utils.isStringNullOrEmpty(auteur.getQui())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur.qui"), "0.1.4");
 		}
 
 	}
