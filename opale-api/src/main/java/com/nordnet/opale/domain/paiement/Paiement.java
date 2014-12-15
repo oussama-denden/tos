@@ -105,6 +105,11 @@ public class Paiement {
 	private Date dateAnnulation;
 
 	/**
+	 * date creation.
+	 */
+	private Date dateCreation;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Paiement() {
@@ -331,6 +336,24 @@ public class Paiement {
 	 */
 	public void setDateAnnulation(Date dateAnnulation) {
 		this.dateAnnulation = dateAnnulation;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateCreation}
+	 */
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+	/**
+	 * 
+	 * @param dateCreation
+	 *            {@link #dateCreation}
+	 */
+	public void setDateCreation(Date dateCreation) {
+		this.dateCreation = dateCreation;
+
 	}
 
 	/**

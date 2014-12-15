@@ -412,7 +412,7 @@ public class CommandeController {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	@RequestMapping(value = "/{refCommande:.+}/transformeEnContrat", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/{refCommande:.+}/transformerEnContrat", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public String transformeEnContrat(@PathVariable String refCommande, @RequestBody Auteur auteur)
 			throws OpaleException, JSONException {

@@ -192,6 +192,7 @@ public class SignatureServiceImpl implements SignatureService {
 		if (signatureInfo.getAuteur() != null) {
 			signature.setAuteur(new Auteur(signatureInfo.getAuteur()));
 		}
+		signature.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 		signatureRepository.save(signature);
 
 		return signature.getReference();
@@ -235,6 +236,7 @@ public class SignatureServiceImpl implements SignatureService {
 		signature.setAuteur(auteur);
 		signature.setReference(keygenService.getNextKey(Signature.class));
 		signature.setReferenceCommande(refCommande);
+		signature.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 		signatureRepository.save(signature);
 		return signature.getReference();
 	}

@@ -158,6 +158,7 @@
     referenceCommande CDATA #IMPLIED
     dateAnnulation  CDATA #IMPLIED
     timestampIntention CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
 >
 
 <!ELEMENT paiement EMPTY>
@@ -175,6 +176,7 @@
     timestampIntention CDATA #IMPLIED
     timestampPaiement CDATA #IMPLIED
     typePaiement CDATA #IMPLIED
+    dateCreation CDATA #IMPLIED
 >
 
 <!ELEMENT reduction EMPTY>

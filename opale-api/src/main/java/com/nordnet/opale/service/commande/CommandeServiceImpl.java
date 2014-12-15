@@ -2,7 +2,6 @@ package com.nordnet.opale.service.commande;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
@@ -550,35 +547,25 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws TopazeException
-	 * @throws IOException
-	 * 
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException {
+	public List<String> transformeEnContrat(String refCommande, Auteur auteur) throws OpaleException, JSONException {
 		CommandeValidator.checkReferenceCommande(refCommande);
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.testerCommandeNonTransforme(commande);
-		CommandeValidator.checkGeste(Geste.VENTE, commande);
-		CommandeValidator.isAuteurValide(auteur);
-		CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
+
 		return transformeEnContrat(commande, auteur);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws TopazeException
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonParseException
-	 * 
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException {
+	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
+
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = null;
 		if ((commande.needPaiementRecurrent() && !(calculerCoutComptant(commande.getReference()) > 0d))
@@ -588,6 +575,11 @@ public class CommandeServiceImpl implements CommandeService {
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
+				CommandeValidator.testerCommandeNonTransforme(commande);
+				// CommandeValidator.checkGeste(Geste.VENTE, commande);
+				CommandeValidator.isAuteurValide(auteur);
+				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
+
 				ContratPreparationInfo contratPreparationInfo =
 						ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
@@ -608,6 +600,8 @@ public class CommandeServiceImpl implements CommandeService {
 				restClient.validerContrat(refContrat, contratValidationInfo);
 
 				referencesContrats.add(refContrat);
+			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+				transformeEnOrdereRenouvellement(commande.getReference());
 			}
 		}
 
@@ -727,8 +721,6 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws TopazeException
-	 * 
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -737,7 +729,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
-		CommandeValidator.checkGeste(Geste.RENOUVELLEMENT, commande);
+		// CommandeValidator.checkGeste(Geste.RENOUVELLEMENT, commande);
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
 				ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
@@ -746,8 +738,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		}
 
-		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
-		commandeRepository.save(commande);
+		// commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		// commandeRepository.save(commande);
 
 	}
 
@@ -956,6 +948,8 @@ public class CommandeServiceImpl implements CommandeService {
 		for (Reduction reductionLigne : reductionsLigne) {
 			reductionContrat = fromReduction(reductionLigne);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+			reductionContrat.setIsAffichableSurFacture(true);
+			reductionContrat.setTypeValeur(reductionLigne.getTypeValeur());
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			if (reductionLigne.getReferenceFrais() == null) {
@@ -989,6 +983,8 @@ public class CommandeServiceImpl implements CommandeService {
 			for (Reduction reductionligneDetail : reductionsligneDetail) {
 				reductionContrat = fromReduction(reductionligneDetail);
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+				reductionContrat.setIsAffichableSurFacture(true);
+				reductionContrat.setTypeValeur(reductionligneDetail.getTypeValeur());
 				if (reductionligneDetail.getReferenceFrais() != null) {
 					String typeFrais =
 							commandeRepository.findTypeFrais(reductionligneDetail.getReferenceDraft(),
