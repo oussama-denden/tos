@@ -91,13 +91,12 @@ public class CommandeSpecifications {
 
 				if (signe != null) {
 					query.distinct(true);
-					Root<Signature> signature = query.from(Signature.class);
-					// selectionne les signatures de la commande.
-					Predicate signatureDeCommande =
-							cb.equal(signature.get("referenceCommande"), commandeRoot.get("reference"));
 
 					if (signe) {
-
+						Root<Signature> signature = query.from(Signature.class);
+						// selectionne les signatures de la commande.
+						Predicate signatureDeCommande =
+								cb.equal(signature.get("referenceCommande"), commandeRoot.get("reference"));
 						Predicate signatureSigner =
 								cb.and(cb.isNotNull(signature.get("idSignature")),
 										cb.isNotNull(signature.get("timestampSignature")));
@@ -105,17 +104,15 @@ public class CommandeSpecifications {
 						return cb.and(signatureDeCommande, signatureSigner);
 					}
 
-					Predicate signatureNonSigner =
-							cb.and(cb.isNull(signature.get("idSignature")),
-									cb.isNull(signature.get("timestampSignature")));
 					// sous requette dans le cas où la commande n a pas de signature
 					final Subquery<Long> subQuery = query.subquery(Long.class);
 					final Root<Signature> ps = subQuery.from(Signature.class);
 					Expression<Long> signatureId = ps.get("id");
 					Expression<Long> countId = cb.count(signatureId);
-					subQuery.select(countId)
-							.where(cb.equal(ps.get("referenceCommande"), commandeRoot.get("reference")));
-					return cb.or(cb.equal(subQuery, 0), cb.and(signatureDeCommande, signatureNonSigner));
+					subQuery.select(countId).where(
+							cb.and(cb.equal(ps.get("referenceCommande"), commandeRoot.get("reference")),
+									cb.isNotNull(ps.get("idSignature")), cb.isNotNull(ps.get("timestampSignature"))));
+					return cb.or(cb.equal(subQuery, 0));
 				}
 				return null;
 			}
@@ -135,29 +132,30 @@ public class CommandeSpecifications {
 
 			@Override
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
 				if (paye != null) {
 					query.distinct(true);
-					Root<Paiement> paiement = query.from(Paiement.class);
-					// selectionne les paiements de la commande.
-					Predicate paiementDeCommande =
-							cb.equal(paiement.get("referenceCommande"), commandeRoot.get("reference"));
 
 					if (paye) {
+						Root<Paiement> paiement = query.from(Paiement.class);
+						// selectionne les paiements de la commande.
+						Predicate paiementDeCommande =
+								cb.equal(paiement.get("referenceCommande"), commandeRoot.get("reference"));
+
 						Predicate commandePaye =
 								cb.and(cb.isNotNull(paiement.get("timestampPaiement")), paiementDeCommande);
 						return commandePaye;
 					}
 					// sous requette dans le cas où la commande n a pas de paiement
+
 					final Subquery<Long> subQuery = query.subquery(Long.class);
 					final Root<Paiement> ps = subQuery.from(Paiement.class);
 					Expression<Long> paiementId = ps.get("id");
 					Expression<Long> countId = cb.count(paiementId);
-					subQuery.select(countId)
-							.where(cb.equal(ps.get("referenceCommande"), commandeRoot.get("reference")));
-					Predicate commandeNonPaye =
-							cb.or(cb.equal(subQuery, 0),
-									cb.and(paiementDeCommande, cb.isNull(paiement.get("timestampPaiement"))));
+					subQuery.select(countId).where(
+							cb.and(cb.equal(ps.get("referenceCommande"), commandeRoot.get("reference")),
+									cb.isNotNull(ps.get("timestampPaiement"))));
+
+					Predicate commandeNonPaye = cb.or(cb.equal(subQuery, 0L));
 					return commandeNonPaye;
 				}
 				return null;
