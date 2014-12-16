@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 <dataset>
-
+<keygen/>
 <commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000001" referenceDraft="00000001" />
 <commande id="1001" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000003" referenceDraft="00000003" />
 <commande id="1002" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000004" referenceDraft="00000004" />
