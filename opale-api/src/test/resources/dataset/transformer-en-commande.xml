@@ -14,15 +14,15 @@
 	<draftLigne />
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="1" />
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="1" geste="VENTE"/>
 
 	<draftLigne id="1001" reference="00000002" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf100" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="2" />
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="2" geste="VENTE"/>
 
 	<draftLigne id="1002" reference="00000003" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="3" />
+		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="3" geste="VENTE"/>
 
 	<draftLigneDetail />
 	<draftLigneDetail id="1000" referenceSelection="kitsat"
