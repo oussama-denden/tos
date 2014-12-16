@@ -4,7 +4,6 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
-import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
@@ -161,22 +160,20 @@ public class CommandeValidator {
 	/**
 	 * Verifier si le geste existe dans la commande.
 	 * 
-	 * @param geste
-	 *            {@link Geste}
 	 * @param commande
 	 *            {@link Commande}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void checkGeste(Geste geste, Commande commande) throws OpaleException {
+	public static void checkGesteNotNull(Commande commande) throws OpaleException {
 		boolean haveGeste = false;
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			if (commandeLigne.getGeste() != null && commandeLigne.getGeste().equals(geste)) {
+			if (commandeLigne.getGeste() == null) {
 				haveGeste = true;
 			}
 		}
-		if (!haveGeste) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.13", geste.name()), "2.1.13");
+		if (haveGeste) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "geste"), "0.1.4");
 		}
 
 	}

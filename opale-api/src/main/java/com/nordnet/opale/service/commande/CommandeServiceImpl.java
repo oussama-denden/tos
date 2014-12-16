@@ -576,7 +576,6 @@ public class CommandeServiceImpl implements CommandeService {
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
 				CommandeValidator.testerCommandeNonTransforme(commande);
-				// CommandeValidator.checkGeste(Geste.VENTE, commande);
 				CommandeValidator.isAuteurValide(auteur);
 				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 
@@ -591,7 +590,7 @@ public class CommandeServiceImpl implements CommandeService {
 				ligne.setReferenceContrat(refContrat);
 
 				/*
-				 * association des reductions au nouveau contrat cre.
+				 * association des reductions au nouveau contrat creer.
 				 */
 				transformerReductionCommandeEnReductionContrat(commande, ligne);
 
@@ -729,7 +728,6 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 		CommandeValidator.testerCommandeNonTransforme(commande);
-		// CommandeValidator.checkGeste(Geste.RENOUVELLEMENT, commande);
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
 				ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
@@ -737,9 +735,6 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 
 		}
-
-		// commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
-		// commandeRepository.save(commande);
 
 	}
 

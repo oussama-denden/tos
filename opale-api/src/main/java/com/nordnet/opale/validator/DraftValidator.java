@@ -281,6 +281,8 @@ public class DraftValidator {
 		if (draft.getAuteur() == null && transformationInfo.getAuteur() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
 		}
+
+		checkGesteNotNull(draft);
 	}
 
 	/**
@@ -346,6 +348,22 @@ public class DraftValidator {
 	public static void isExistGeste(Geste geste) throws OpaleException {
 		if (geste == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "geste"), "0.1.4");
+		}
+
+	}
+
+	/**
+	 * Verifier si le geste existe dans la commande.
+	 * 
+	 * @param draft
+	 *            {@link Draft}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkGesteNotNull(Draft draft) throws OpaleException {
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+
+			isExistGeste(draftLigne.getGeste());
 		}
 
 	}
