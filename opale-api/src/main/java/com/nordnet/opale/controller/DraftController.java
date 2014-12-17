@@ -541,8 +541,17 @@ public class DraftController {
 			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
 		Draft draft = draftService.transformerContratEnDraft(refContrat, trameCatalogue);
-
-		return draft.toJSON().toString();
+		JSONObject rsc = new JSONObject();
+		rsc.put("reference", draft.getReference());
+		List<JSONObject> lignes = new ArrayList<>();
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			JSONObject ligne = new JSONObject();
+			ligne.put("referenceLigne", draftLigne.getReference());
+			ligne.put("referenceOffre", draftLigne.getReferenceOffre());
+			lignes.add(ligne);
+		}
+		rsc.put("lignes", lignes);
+		return rsc.toString();
 	}
 
 	/**
