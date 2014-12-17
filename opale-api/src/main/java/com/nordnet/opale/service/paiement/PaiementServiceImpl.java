@@ -177,6 +177,27 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public List<Paiement> getPaiementEnCours(String referenceCommande, TypePaiement typePaiement) {
+
+		return paiementRepository
+				.findByReferenceCommandeAndTypePaiementAndTimestampPaiementIsNotNullAndDateAnnulationIsNull(
+						referenceCommande, typePaiement);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Paiement> getPaiementEnCours(String referenceCommande) {
+
+		return paiementRepository
+				.findByReferenceCommandeAndTimestampPaiementIsNotNullAndDateAnnulationIsNull(referenceCommande);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void supprimer(String refCommande, String refPaiement) throws OpaleException {
 		LOGGER.info("Entrer methode supprimer");
 

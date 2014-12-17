@@ -567,11 +567,10 @@ public class CommandeServiceImpl implements CommandeService {
 	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
 
 		List<String> referencesContrats = new ArrayList<>();
-		List<Paiement> paiement = null;
-		if ((commande.needPaiementRecurrent() && !(calculerCoutComptant(commande.getReference()) > 0d))
-				|| (!commande.needPaiementRecurrent() && (calculerCoutComptant(commande.getReference()) > 0d))) {
-			paiement = paiementService.getPaiementRecurrent(commande.getReference(), false);
-		}
+		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference(), TypePaiement.RECURRENT);
+		List<Paiement> paiementDouble = paiementService.getPaiementEnCours(commande.getReference());
+
+		CommandeValidator.checkPaiementDouble(paiementDouble);
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {

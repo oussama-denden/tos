@@ -38,8 +38,7 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	public Paiement findByReference(String reference);
 
 	/**
-	 * chercher un paiement avec sa reference et la reference de la commande
-	 * associe.
+	 * chercher un paiement avec sa reference et la reference de la commande associe.
 	 * 
 	 * @param reference
 	 *            reference.
@@ -70,8 +69,7 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	public Double getMontantComptantPayePourCommande(@Param("referenceCommande") String referenceCommande);
 
 	/**
-	 * retourner la liste des paiements non annule d'une commande selon le type
-	 * paiement.
+	 * retourner la liste des paiements non annule d'une commande selon le type paiement.
 	 * 
 	 * @param referenceCommande
 	 *            reference commande.
@@ -92,5 +90,28 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	 * @return Liste de {@link Paiement}
 	 */
 	public List<Paiement> findByReferenceCommandeAndTypePaiement(String referenceCommande, TypePaiement typePaiement);
+
+	/**
+	 * retourner la liste des paiements en cours d une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @return Liste de {@link Paiement}
+	 */
+	public List<Paiement> findByReferenceCommandeAndTimestampPaiementIsNotNullAndDateAnnulationIsNull(
+			String referenceCommande);
+
+	/**
+	 * retourner la liste des paiements en cours d une commande selon le type de paiement.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * 
+	 * @param typePaiement
+	 *            {@link TypePaiement}
+	 * @return Liste de {@link Paiement}
+	 */
+	public List<Paiement> findByReferenceCommandeAndTypePaiementAndTimestampPaiementIsNotNullAndDateAnnulationIsNull(
+			String referenceCommande, TypePaiement typePaiement);
 
 }

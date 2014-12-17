@@ -132,4 +132,25 @@ public interface PaiementService {
 	 */
 	public void supprimer(String refCommande, String refPaiement) throws OpaleException;
 
+	/**
+	 * retourner la liste des paiements en cours d une commande selon le type de paiement.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * 
+	 * @param typePaiement
+	 *            {@link TypePaiement}
+	 * @return Liste de {@link Paiement}
+	 */
+	List<Paiement> getPaiementEnCours(String referenceCommande, TypePaiement typePaiement);
+
+	/**
+	 * retourner la liste des paiements en cours d une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @return Liste de {@link Paiement}
+	 */
+	List<Paiement> getPaiementEnCours(String referenceCommande);
+
 }
