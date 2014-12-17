@@ -192,7 +192,7 @@ public class CommandeValidator {
 	 */
 	public static void checkPaiementDouble(List<Paiement> paiementDouble) throws OpaleException {
 
-		if (paiementDouble != null) {
+		if (!Utils.isListNullOrEmpty(paiementDouble)) {
 			TypePaiement typePaiementInit = paiementDouble.get(0).getTypePaiement();
 			for (Paiement paiement : paiementDouble) {
 				if (paiement.getTypePaiement() != typePaiementInit) {
