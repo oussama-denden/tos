@@ -27,6 +27,7 @@ import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypePaiement;
+import com.nordnet.opale.util.Utils;
 import com.nordnet.topaze.ws.entity.Prix;
 import com.nordnet.topaze.ws.enums.TypeTVA;
 
@@ -296,17 +297,21 @@ public class Tarif {
 	 * @return {@link Prix}.
 	 */
 	public Prix toPrix(ModeFacturation modeFacturation, List<Paiement> paiement) {
+
 		Prix prix = new Prix();
-		if (paiement != null && paiement.size() != 0) {
-			// deterniner la duree selon le type de paiement(si recurrent : duree=null sinon duree= frequence)
-			if (paiement.get(0).getTypePaiement().equals(TypePaiement.RECURRENT)) {
-				prix.setDuree(null);
-			} else {
-				prix.setDuree(frequence);
+		boolean hasRecurrent = false;
+		for (Paiement paiement2 : paiement) {
+			if (paiement2.getTypePaiement() == TypePaiement.RECURRENT) {
+				hasRecurrent = true;
 			}
-		} else {
-			prix.setDuree(duree);
 		}
+		// deterniner la duree selon le type de paiement(si recurrent : duree=null sinon duree= frequence)
+		if (Utils.isListNullOrEmpty(paiement) || hasRecurrent) {
+			prix.setDuree(null);
+		} else {
+			prix.setDuree(frequence);
+		}
+
 		prix.setEngagement(engagement);
 		prix.setMontant(this.prix);
 		prix.setPeriodicite(frequence);

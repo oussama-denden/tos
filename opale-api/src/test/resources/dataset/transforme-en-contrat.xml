@@ -28,8 +28,7 @@
 <frais id="1006" reference="engagement_kitsat" montant="50" typeFrais="RESILIATION" tarifId="1006" />
 <frais id="1007" montant="50" typeFrais="RESILIATION" tarifId="1007" />
 
-<paiement id="1000" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" typePaiement="COMPTANT" />
-<paiement id="1001" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" typePaiement="RECURRENT" />
+<paiement id="1001" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" typePaiement="RECURRENT" timestampPaiement="[now]" />
 
 <reduction id="1005" label="reduction sur draft" nbUtilisationMax="5" reference="00000001" referenceDraft="00000004" typeValeur="POURCENTAGE" valeur="50" />	
 <reduction id="1000" label="reduction sur ligne" nbUtilisationMax="5" reference="00000002" referenceDraft="00000004" referenceLigne="jet_surf10" typeValeur="POURCENTAGE" valeur="50" />

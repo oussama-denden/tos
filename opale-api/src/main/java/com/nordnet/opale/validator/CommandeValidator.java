@@ -1,9 +1,13 @@
 package com.nordnet.opale.validator;
 
+import java.util.List;
+
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
@@ -174,6 +178,27 @@ public class CommandeValidator {
 		}
 		if (haveGeste) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "geste"), "0.1.4");
+		}
+
+	}
+
+	/**
+	 * Verifier si la commande est associee a pluseurs paiements.
+	 * 
+	 * @param paiementDouble
+	 *            liste de {@link Paiement}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkPaiementDouble(List<Paiement> paiementDouble) throws OpaleException {
+
+		if (!Utils.isListNullOrEmpty(paiementDouble)) {
+			TypePaiement typePaiementInit = paiementDouble.get(0).getTypePaiement();
+			for (Paiement paiement : paiementDouble) {
+				if (paiement.getTypePaiement() != typePaiementInit) {
+					throw new OpaleException(propertiesUtil.getErrorMessage("2.1.14"), "2.1.14");
+				}
+			}
 		}
 
 	}
