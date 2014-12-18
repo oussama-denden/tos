@@ -47,6 +47,7 @@ import com.nordnet.opale.service.signature.SignatureService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.validator.CommandeValidator;
 import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
@@ -819,18 +820,31 @@ public class CommandeServiceImpl implements CommandeService {
 
 		// affecter la duree.
 
-		prix.setDuree(ligne.getTarif().getDuree());
-		// prix.setModePaiement(ligne.getModePaiement());
+		// affecter la reference mode de paiement.
+		List<Paiement> paiement = paiementService.getPaiementEnCours(referenceCommande);
+		boolean hasRecurrent = false;
+		for (Paiement paiement2 : paiement) {
+			if (paiement2.getTypePaiement() == TypePaiement.RECURRENT) {
+				hasRecurrent = true;
+				prix.setReferenceModePaiement(paiement2.getIdPaiement());
+			}
+		}
+		// deterniner la duree selon le type de paiement(si recurrent : duree=null sinon duree= frequence)
+		if (Utils.isListNullOrEmpty(paiement) || hasRecurrent) {
+			prix.setDuree(null);
+		} else {
+			prix.setDuree(ligne.getTarif().getFrequence());
+		}
 
 		// affecter la reference mode de paiement.
-		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
-		Paiement paiementRecurrent = null;
-		if (paiementRecurrents.size() > Constants.ZERO) {
-			paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
-		}
-		if (paiementRecurrent != null) {
-			prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
-		}
+		// List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
+		// Paiement paiementRecurrent = null;
+		// if (paiementRecurrents.size() > Constants.ZERO) {
+		// paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		// }
+		// if (paiementRecurrent != null) {
+		// prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
+		// }
 
 		// creer le frais
 		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
@@ -864,20 +878,33 @@ public class CommandeServiceImpl implements CommandeService {
 		prix.setPeriodicite(ligneDetail.getTarif().getFrequence());
 		prix.setTypeTVA(TypeTVA.fromString(ligneDetail.getTarif().getTypeTVA().name()));
 
-		// affecter la duree.
-
-		prix.setDuree(ligneDetail.getTarif().getDuree());
 		// prix.setModePaiement(ligne.getModePaiement());
 
 		// affecter la reference mode de paiement.
-		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
-		Paiement paiementRecurrent = null;
-		if (paiementRecurrents.size() > Constants.ZERO) {
-			paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		List<Paiement> paiement = paiementService.getPaiementEnCours(referenceCommande);
+		boolean hasRecurrent = false;
+		for (Paiement paiement2 : paiement) {
+			if (paiement2.getTypePaiement() == TypePaiement.RECURRENT) {
+				hasRecurrent = true;
+				prix.setReferenceModePaiement(paiement2.getIdPaiement());
+			}
 		}
-		if (paiementRecurrent != null) {
-			prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
+		// deterniner la duree selon le type de paiement(si recurrent : duree=null sinon duree= frequence)
+		if (Utils.isListNullOrEmpty(paiement) || hasRecurrent) {
+			prix.setDuree(null);
+		} else {
+			prix.setDuree(ligneDetail.getTarif().getFrequence());
 		}
+
+		// List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
+		// Paiement paiementRecurrent = null;
+		// if (paiementRecurrents.size() > Constants.ZERO) {
+		// paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		// }
+		//
+		// if (paiementRecurrent != null) {
+		// prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
+		// }
 
 		// creer le frais
 		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
