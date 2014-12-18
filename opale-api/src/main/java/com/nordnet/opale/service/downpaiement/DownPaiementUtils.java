@@ -9,9 +9,9 @@ import com.nordnet.common.valueObject.constants.TransactionType;
 import com.nordnet.common.valueObject.identifier.Identifier;
 import com.nordnet.common.valueObject.money.Price;
 import com.nordnet.common.valueObject.money.Transaction;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.saphir.ws.client.constants.TMovementAppendixItemType;
 import com.nordnet.saphir.ws.client.entity.TMovementAppendixItem;
+import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
  * Une classe qui regroupe des methodes utiles a la facturation.

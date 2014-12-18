@@ -6,11 +6,11 @@ import java.util.List;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
+import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
  * valider les info de paiement.

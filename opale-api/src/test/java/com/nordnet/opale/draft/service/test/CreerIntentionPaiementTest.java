@@ -14,11 +14,11 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
+import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
  * Classe de test de la methode

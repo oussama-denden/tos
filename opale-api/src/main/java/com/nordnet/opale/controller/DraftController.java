@@ -547,7 +547,6 @@ public class DraftController {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			JSONObject ligne = new JSONObject();
 			ligne.put("referenceLigne", draftLigne.getReference());
-			ligne.put("referenceOffre", draftLigne.getReferenceOffre());
 			lignes.add(ligne);
 		}
 		rsc.put("lignes", lignes);

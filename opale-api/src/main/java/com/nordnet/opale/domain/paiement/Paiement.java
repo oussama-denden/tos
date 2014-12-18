@@ -20,10 +20,10 @@ import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
  * Represente un paiement d'une {@link Commande}.

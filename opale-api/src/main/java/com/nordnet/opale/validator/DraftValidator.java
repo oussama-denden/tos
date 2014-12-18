@@ -18,11 +18,11 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
-import com.nordnet.opale.enums.ModePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
+import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
  * Valider un draft.
