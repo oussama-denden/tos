@@ -325,29 +325,6 @@ public interface CommandeService {
 	public String getRecentDate(String refCommande) throws OpaleException;
 
 	/**
-	 * retourner si la commande a encore besoin d'un paiement recurrent ou non. si il ya un paiement recurrent annule,
-	 * il na compte pas.
-	 * 
-	 * @param referenceCommande
-	 *            reference {@link Commande}.
-	 * @return true si la commande a besoin d'un paiement recurrent.
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException;
-
-	/**
-	 * retourner si la commande a besoin d'un paiement comptant ou non.
-	 * 
-	 * @param referenceCommande
-	 *            reference {@link Commande}.
-	 * @return true si la commande a besoin d'un paiement comptant.
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException;
-
-	/**
 	 * Transformer une commande en ordre de renouvellement afin d'acter le renouvellement pour un contrat donné.
 	 * 
 	 * @param refCommande

@@ -677,27 +677,6 @@ public class CommandeServiceImpl implements CommandeService {
 		return draft;
 	}
 
-	@Override
-	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException {
-		Commande commande = getCommandeByReference(referenceCommande);
-		if (commande.needPaiementRecurrent()) {
-			List<Paiement> paiementRecurrents = getPaiementRecurrent(referenceCommande, false);
-			if (paiementRecurrents.size() == Constants.ZERO) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException {
-		getCommandeByReference(referenceCommande);
-		if (calculerCoutComptant(referenceCommande) > 0d && !isPayeTotalement(referenceCommande)) {
-			return true;
-		}
-		return false;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -818,8 +797,6 @@ public class CommandeServiceImpl implements CommandeService {
 		prix.setPeriodicite(ligne.getTarif().getFrequence());
 		prix.setTypeTVA(TypeTVA.fromString(ligne.getTarif().getTypeTVA().name()));
 
-		// affecter la duree.
-
 		// affecter la reference mode de paiement.
 		List<Paiement> paiement = paiementService.getPaiementEnCours(referenceCommande);
 		boolean hasRecurrent = false;
@@ -835,16 +812,6 @@ public class CommandeServiceImpl implements CommandeService {
 		} else {
 			prix.setDuree(ligne.getTarif().getFrequence());
 		}
-
-		// affecter la reference mode de paiement.
-		// List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
-		// Paiement paiementRecurrent = null;
-		// if (paiementRecurrents.size() > Constants.ZERO) {
-		// paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
-		// }
-		// if (paiementRecurrent != null) {
-		// prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
-		// }
 
 		// creer le frais
 		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
@@ -895,16 +862,6 @@ public class CommandeServiceImpl implements CommandeService {
 		} else {
 			prix.setDuree(ligneDetail.getTarif().getFrequence());
 		}
-
-		// List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
-		// Paiement paiementRecurrent = null;
-		// if (paiementRecurrents.size() > Constants.ZERO) {
-		// paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
-		// }
-		//
-		// if (paiementRecurrent != null) {
-		// prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
-		// }
 
 		// creer le frais
 		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
