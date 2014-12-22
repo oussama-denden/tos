@@ -54,6 +54,19 @@ public interface CommandeService {
 	public CommandeInfo getCommande(String refCommande) throws OpaleException;
 
 	/**
+	 * recuperer une commande detaille (avec paiement et signature).
+	 * 
+	 * @param refCommande
+	 *            {@link String}
+	 * 
+	 * @return {@link CommandInfo}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandeInfo getCommandeDetailee(String refCommande) throws OpaleException;
+
+	/**
 	 * recherche une commande a partir du reference {@link Draft}.
 	 * 
 	 * @param referenceDraft
@@ -350,4 +363,5 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public Cout calculerCout(String referenceCommande) throws OpaleException;
+
 }

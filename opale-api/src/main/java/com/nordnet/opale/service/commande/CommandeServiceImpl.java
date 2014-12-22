@@ -177,6 +177,30 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
+	public CommandeInfo getCommandeDetailee(String refCommande) throws OpaleException {
+		CommandeInfo commandeInfo = getCommande(refCommande);
+		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
+		List<PaiementInfo> paiementInfos = new ArrayList<PaiementInfo>();
+		for (Paiement paiement : paiements) {
+			if (paiement.getTypePaiement() == TypePaiement.COMPTANT) {
+				paiementInfos.add(paiement.fromPaiementToPaiementInfoComptant());
+			} else {
+				paiementInfos.add(paiement.fromPaiementToPaiementInfoRecurrent());
+			}
+		}
+		commandeInfo.setPaiements(paiementInfos);
+
+		Signature signature = signatureService.getSignatureByReferenceCommande(refCommande);
+		commandeInfo.setSignature(signature.toSignatureInfo());
+
+		return commandeInfo;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional(readOnly = true)
 	public Commande getCommandeByReferenceDraft(String referenceDraft) {
 
 		LOGGER.info("Debut methode getCommandeByReferenceDraft");

@@ -3,6 +3,7 @@ package com.nordnet.opale.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.CommandInfo;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -86,6 +87,25 @@ public class CommandeController {
 	public CommandeInfo getCommande(@PathVariable String refCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::getCommande");
 		return commandeService.getCommande(refCommande);
+
+	}
+
+	/**
+	 * recuperer une commande detaille (avec paiement et signature).
+	 * 
+	 * @param refCommande
+	 *            {@link String}
+	 * 
+	 * @return {@link CommandInfo}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/details/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public CommandeInfo getCommandeDetailee(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::getCommandeDetailee");
+		return commandeService.getCommandeDetailee(refCommande);
 
 	}
 
