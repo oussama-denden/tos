@@ -283,10 +283,6 @@ public class DraftController {
 				jsonResponse.put("avertissement", alert);
 			}
 			jsonResponse.put("reference", commande.getReference());
-			jsonResponse.put("besoinPaiementRecurrent",
-					commandeService.isBesoinPaiementRecurrent(commande.getReference()));
-			jsonResponse.put("besoinPaiementComptant",
-					commandeService.isBesoinPaiementComptant(commande.getReference()));
 			return jsonResponse.toString();
 		}
 		return object;

@@ -3,7 +3,7 @@ package com.nordnet.opale.validator;
 import java.util.List;
 
 import com.nordnet.opale.business.Auteur;
-import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
@@ -69,12 +69,12 @@ public class CommandeValidator {
 	 * @param montantPaye
 	 *            montant deja paye pour la commande.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
 	public static void isPaiementPossible(String referenceCommande, Commande commande, Double coutCommandeComptant,
-			Double montantPaye, PaiementInfo paiementInfo) throws OpaleException {
+			Double montantPaye, PaiementInfoRecurrent paiementInfo) throws OpaleException {
 		isExiste(referenceCommande, commande);
 		if (paiementInfo.getMontant() != null && coutCommandeComptant < (montantPaye + paiementInfo.getMontant())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.3"), "2.1.3");
