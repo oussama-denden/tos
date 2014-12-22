@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
-import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
@@ -23,7 +23,7 @@ import com.nordnet.opale.test.utils.Constants;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * Classe de test de la methode {@link CommandeService#paiementDirect(String, com.nordnet.opale.business.PaiementInfo)}.
+ * Classe de test de la methode {@link CommandeService#paiementDirect(String, com.nordnet.opale.business.PaiementInfoRecurrent)}.
  * 
  * @author akram-moncer
  * 
@@ -60,8 +60,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
 	public void testerPaiementDirectValide() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
+			PaiementInfoRecurrent paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
 			List<Paiement> paiements = paiementService.getPaiementByReferenceCommande("00000005");
 			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(paiements.size()));
 			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
@@ -81,8 +81,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
 	public void testerPaiementDirectAvecCommandeNonExiste() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
+			PaiementInfoRecurrent paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
 			commandeService.paiementDirect("00000000", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
@@ -100,8 +100,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansModePaiement() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
+			PaiementInfoRecurrent paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
 			paiementInfo.setModePaiement(null);
 			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
@@ -120,8 +120,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansMontant() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
+			PaiementInfoRecurrent paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
 			paiementInfo.setMontant(null);
 			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
@@ -140,8 +140,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansInfoPaiement() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class, "./requests/paiementDirect.json");
+			PaiementInfoRecurrent paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
 			paiementInfo.setInfoPaiement(null);
 			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");

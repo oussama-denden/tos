@@ -1,5 +1,6 @@
 package com.nordnet.opale.service.commande;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.activation.CommandInfo;
@@ -14,6 +15,8 @@ import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -70,7 +73,7 @@ public interface CommandeService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException;
+	public Paiement creerIntentionPaiement(String refCommande, PaiementInfoComptant paiementInfo) throws OpaleException;
 
 	/**
 	 * payer une intention de paiement.
@@ -80,12 +83,12 @@ public interface CommandeService {
 	 * @param referencePaiement
 	 *            reference {@link Paiement}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
-			throws OpaleException;
+	public void payerIntentionPaiement(String referenceCommande, String referencePaiement,
+			PaiementInfoComptant paiementInfo) throws OpaleException;
 
 	/**
 	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en

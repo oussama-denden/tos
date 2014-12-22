@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
-import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
@@ -22,7 +22,7 @@ import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
- * {@link CommandeService#payerIntentionPaiement(String, String, com.nordnet.opale.business.PaiementInfo)}.
+ * {@link CommandeService#payerIntentionPaiement(String, String, com.nordnet.opale.business.PaiementInfoRecurrent)}.
  * 
  * @author akram-moncer
  * 
@@ -61,8 +61,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 		try {
 			Paiement paiement = paiementService.getPaiementByReference("00000001");
 			Assert.assertNull(paiement.getMontant());
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/payerIntentionPaiement.json");
 			commandeService.payerIntentionPaiement("00000001", "00000001", paiementInfo);
 			Assert.assertEquals(Double.valueOf(Constants.CINQ), paiement.getMontant());
@@ -81,8 +81,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementAvecCommandeNonExiste() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/payerIntentionPaiement.json");
 			commandeService.payerIntentionPaiement("00000000", "00000001", paiementInfo);
 			fail("Unexpected error");
@@ -101,8 +101,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementNonExiste() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/payerIntentionPaiement.json");
 			commandeService.payerIntentionPaiement("00000001", "00000000", paiementInfo);
 			fail("Unexpected error");
@@ -121,8 +121,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementDejaPaye() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/payerIntentionPaiement.json");
 			commandeService.payerIntentionPaiement("00000002", "00000002", paiementInfo);
 			fail("Unexpected error");
@@ -141,8 +141,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansModePaiement() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/payerIntentionPaiement.json");
 			paiementInfo.setModePaiement(null);
 			commandeService.payerIntentionPaiement("00000001", "00000001", paiementInfo);
@@ -162,8 +162,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansMontant() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/payerIntentionPaiement.json");
 			paiementInfo.setMontant(null);
 			commandeService.payerIntentionPaiement("00000001", "00000001", paiementInfo);
@@ -183,8 +183,8 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansInfoPaiement() {
 		try {
-			PaiementInfo paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfo.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/payerIntentionPaiement.json");
 			paiementInfo.setInfoPaiement(null);
 			commandeService.payerIntentionPaiement("00000001", "00000001", paiementInfo);

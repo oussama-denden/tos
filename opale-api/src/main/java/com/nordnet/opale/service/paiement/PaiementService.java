@@ -3,6 +3,8 @@ package com.nordnet.opale.service.paiement;
 import java.util.List;
 
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
@@ -58,12 +60,13 @@ public interface PaiementService {
 	 * @param referenceCommande
 	 *            reference commande.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @return {@link Paiement}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException;
+	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfoComptant paiementInfo)
+			throws OpaleException;
 
 	/**
 	 * tester si le paiement est possible avant de faire l'appel de la methode 'effectuerPaiement'.
@@ -73,7 +76,7 @@ public interface PaiementService {
 	 * @param referenceCommade
 	 *            reference commande.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
@@ -88,7 +91,7 @@ public interface PaiementService {
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @param typePaiement
 	 *            {@link TypePaiement}.
 	 * @return {@link Paiement} ou null si le paiement existe deja.

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.exception.OpaleException;
@@ -51,11 +53,11 @@ public class PaiementValidator {
 	 * @param referenceCommande
 	 *            reference commande.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}
+	 *            {@link PaiementInfoRecurrent}
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void validerAjoutIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo)
+	public static void validerAjoutIntentionPaiement(String referenceCommande, PaiementInfoComptant paiementInfo)
 			throws OpaleException {
 
 		if (referenceCommande == null) {
@@ -64,6 +66,10 @@ public class PaiementValidator {
 
 		if (paiementInfo.getModePaiement() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.1", "Paiement.modePaiement"), "0.1.1");
+		}
+
+		if (Utils.isStringNullOrEmpty(paiementInfo.getReferenceModePaiement())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.1", "Paiement.referenceModePaiement"), "0.1.1");
 		}
 
 	}
@@ -78,7 +84,7 @@ public class PaiementValidator {
 	 * @param paiement
 	 *            {@link Paiement}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
@@ -98,6 +104,11 @@ public class PaiementValidator {
 
 		if (paiementInfo.getMontant() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.montant"), "0.1.4");
+		}
+
+		if (paiementInfo instanceof PaiementInfoComptant
+				&& ((PaiementInfoComptant) paiementInfo).getReferenceModePaiement() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.referenceModePaiement"), "0.1.4");
 		}
 
 		if (Utils.isStringNullOrEmpty(paiementInfo.getInfoPaiement())
@@ -144,8 +155,8 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.modePaiement"), "0.1.4");
 		}
 
-		if (Utils.isStringNullOrEmpty(paiementInfo.getIdPaiement())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.idpaiement"), "0.1.4");
+		if (Utils.isStringNullOrEmpty(((PaiementInfoRecurrent) paiementInfo).getRum())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.rum"), "0.1.4");
 		}
 
 	}

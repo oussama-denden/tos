@@ -18,6 +18,8 @@ import org.hibernate.validator.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.enums.TypePaiement;
@@ -116,16 +118,21 @@ public class Paiement {
 	}
 
 	/**
-	 * creer un paiement a partir d'un {@link PaiementInfo}.
+	 * creer un paiement a partir d'un {@link PaiementInfoRecurrent}.
 	 * 
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 */
 	public Paiement(PaiementInfo paiementInfo) {
 		this.modePaiement = paiementInfo.getModePaiement();
 		this.montant = paiementInfo.getMontant();
 		this.infoPaiement = paiementInfo.getInfoPaiement();
-		this.idPaiement = paiementInfo.getIdPaiement();
+		if (paiementInfo instanceof PaiementInfoComptant) {
+			this.idPaiement = ((PaiementInfoComptant) paiementInfo).getReferenceModePaiement();
+		} else {
+			this.idPaiement = ((PaiementInfoRecurrent) paiementInfo).getRum();
+		}
+
 	}
 
 	@Override
@@ -391,10 +398,10 @@ public class Paiement {
 	/**
 	 * mapping paiement to business.
 	 * 
-	 * @return {@link PaiementInfo}
+	 * @return {@link PaiementInfoRecurrent}
 	 */
-	public PaiementInfo fromPaiementToPaiementInfo() {
-		PaiementInfo paiementInfo = new PaiementInfo();
+	public PaiementInfoRecurrent fromPaiementToPaiementInfoRecurrent() {
+		PaiementInfoRecurrent paiementInfo = new PaiementInfoRecurrent();
 		paiementInfo.setAuteur(auteur.toAuteurBusiness());
 		paiementInfo.setInfoPaiement(infoPaiement);
 		paiementInfo.setModePaiement(modePaiement);
@@ -402,7 +409,27 @@ public class Paiement {
 		paiementInfo.setTimestampIntention(timestampIntention);
 		paiementInfo.setTimestampPaiement(timestampPaiement);
 		paiementInfo.setReference(reference);
-		paiementInfo.setIdPaiement(idPaiement);
+		paiementInfo.setRum(idPaiement);
+
+		return paiementInfo;
+
+	}
+
+	/**
+	 * mapping paiement to business.
+	 * 
+	 * @return {@link PaiementInfoRecurrent}
+	 */
+	public PaiementInfoComptant fromPaiementToPaiementInfoComptant() {
+		PaiementInfoComptant paiementInfo = new PaiementInfoComptant();
+		paiementInfo.setAuteur(auteur.toAuteurBusiness());
+		paiementInfo.setInfoPaiement(infoPaiement);
+		paiementInfo.setModePaiement(modePaiement);
+		paiementInfo.setMontant(montant);
+		paiementInfo.setTimestampIntention(timestampIntention);
+		paiementInfo.setTimestampPaiement(timestampPaiement);
+		paiementInfo.setReference(reference);
+		paiementInfo.setReferenceModePaiement(idPaiement);
 
 		return paiementInfo;
 

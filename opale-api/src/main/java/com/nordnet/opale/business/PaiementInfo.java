@@ -44,11 +44,6 @@ public class PaiementInfo {
 	private String infoPaiement;
 
 	/**
-	 * id paiement.
-	 */
-	private String idPaiement;
-
-	/**
 	 * date d'intention de paiement.
 	 */
 	private Date timestampIntention;
@@ -175,23 +170,6 @@ public class PaiementInfo {
 	 */
 	public void setInfoPaiement(String infoPaiement) {
 		this.infoPaiement = infoPaiement;
-	}
-
-	/**
-	 * 
-	 * @return {@link #idPaiement}
-	 */
-	public String getIdPaiement() {
-		return idPaiement;
-	}
-
-	/**
-	 * 
-	 * @param idPaiement
-	 *            {@link #idPaiement}
-	 */
-	public void setIdPaiement(String idPaiement) {
-		this.idPaiement = idPaiement;
 	}
 
 	/**
