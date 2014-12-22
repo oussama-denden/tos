@@ -208,10 +208,10 @@ public class Frais {
 	 */
 	public FraisInfo tofraisInfo() {
 		FraisInfo fraisInfo = new FraisInfo();
-		fraisInfo.setReference(reference);
+		fraisInfo.setIdFrais(reference);
 		fraisInfo.setLabel(label);
 		fraisInfo.setMontant(montant);
-		fraisInfo.setType(typeFrais);
+		fraisInfo.setTypeFrais(typeFrais);
 		return fraisInfo;
 	}
 

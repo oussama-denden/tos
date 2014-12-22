@@ -66,6 +66,7 @@ import com.nordnet.topaze.ws.entity.ProduitRenouvellement;
 import com.nordnet.topaze.ws.entity.ReductionContrat;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 import com.nordnet.topaze.ws.enums.TypeFrais;
+import com.nordnet.topaze.ws.enums.TypeProduit;
 import com.nordnet.topaze.ws.enums.TypeReduction;
 import com.nordnet.topaze.ws.enums.TypeTVA;
 import com.nordnet.topaze.ws.enums.TypeValeur;
@@ -772,7 +773,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
 		produitRenouvellement.setRemboursable(true);
-		produitRenouvellement.setTypeProduit(ligne.getTypeProduit());
+		produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligne.getTypeProduit().toString()));
 
 		produitRenouvellements.add(produitRenouvellement);
 
@@ -789,7 +790,7 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceChoix());
 			produitRenouvellement.setRemboursable(true);
-			produitRenouvellement.setTypeProduit(ligneDetail.getTypeProduit());
+			produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligneDetail.getTypeProduit().toString()));
 
 			produitRenouvellements.add(produitRenouvellement);
 

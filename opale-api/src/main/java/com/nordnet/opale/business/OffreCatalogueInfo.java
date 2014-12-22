@@ -5,7 +5,9 @@ import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
+import com.nordnet.opale.deserializer.TypeProduitDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
+import com.nordnet.opale.enums.TypeProduit;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link OffreCatalogue}.
@@ -45,6 +47,12 @@ public class OffreCatalogueInfo {
 	 */
 	@JsonDeserialize(using = ModeFacturationDeserializer.class)
 	private ModeFacturation modeFacturation;
+
+	/**
+	 * {@link TypeProduit}.
+	 */
+	@JsonDeserialize(using = TypeProduitDeserializer.class)
+	private TypeProduit typeProduit;
 
 	/**
 	 * la liste de detaille.
@@ -170,6 +178,23 @@ public class OffreCatalogueInfo {
 	 */
 	public void setModeFacturation(ModeFacturation modeFacturation) {
 		this.modeFacturation = modeFacturation;
+	}
+
+	/**
+	 * 
+	 * @return {@link #typeProduit}.
+	 */
+	public TypeProduit getTypeProduit() {
+		return typeProduit;
+	}
+
+	/**
+	 * 
+	 * @param typeProduit
+	 *            {@link #typeProduit}.
+	 */
+	public void setTypeProduit(TypeProduit typeProduit) {
+		this.typeProduit = typeProduit;
 	}
 
 	/**

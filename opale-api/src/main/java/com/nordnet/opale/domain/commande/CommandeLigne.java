@@ -35,11 +35,11 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
+import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
 import com.nordnet.topaze.ws.entity.Produit;
-import com.nordnet.topaze.ws.enums.TypeProduit;
 
 /**
  * Classe represente une ligne (offre) dans la {@link Commande}.
@@ -455,6 +455,7 @@ public class CommandeLigne {
 		offreCatalogueInfo.setLabel(label);
 		offreCatalogueInfo.setGamme(gamme);
 		offreCatalogueInfo.setFammille(secteur);
+		offreCatalogueInfo.setTypeProduit(typeProduit);
 		offreCatalogueInfo.setModeFacturation(modeFacturation);
 
 		offreCatalogueInfo.setTarif(tarif.toTarifInfo());

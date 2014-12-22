@@ -103,6 +103,7 @@
 		<xsd:attribute name="gamme" use="optional" />
 		<xsd:attribute name="label" use="optional" />
 		<xsd:attribute name="modeFacturation" use="optional" />
+		<xsd:attribute name="typeProduit" use="optional" />
 		<xsd:attribute name="numero" use="optional" />
 		<xsd:attribute name="referenceOffre" use="optional" />
 		<xsd:attribute name="referenceContrat" use="optional" />

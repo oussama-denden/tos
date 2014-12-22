@@ -2,6 +2,8 @@ package com.nordnet.opale.business;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link TarifInfo}.
  * 
@@ -11,9 +13,10 @@ import java.util.List;
 public class TarifInfo {
 
 	/**
-	 * reference tarif.
+	 * id tarif.
 	 */
-	private String reference;
+	@JsonProperty("id_tarif")
+	private String idTarif;
 
 	/**
 	 * le prix dans le tarif.
@@ -48,19 +51,19 @@ public class TarifInfo {
 
 	/**
 	 * 
-	 * @return {@link #reference}.
+	 * @return {@link #idTarif}.
 	 */
-	public String getReference() {
-		return reference;
+	public String getIdTarif() {
+		return idTarif;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}.
+	 * @param idTarif
+	 *            {@link #idTarif}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setIdTarif(String idTarif) {
+		this.idTarif = idTarif;
 	}
 
 	/**

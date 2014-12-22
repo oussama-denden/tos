@@ -99,6 +99,7 @@
     gamme CDATA #IMPLIED
     label CDATA #IMPLIED
     modeFacturation CDATA #IMPLIED
+    typeProduit CDATA #IMPLIED
     referenceOffre CDATA #IMPLIED
     referenceContrat CDATA #IMPLIED
     secteur CDATA #IMPLIED

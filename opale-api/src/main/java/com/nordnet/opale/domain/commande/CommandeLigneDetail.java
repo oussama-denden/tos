@@ -26,9 +26,9 @@ import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.ModeFacturation;
+import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.topaze.ws.entity.Produit;
-import com.nordnet.topaze.ws.enums.TypeProduit;
 
 /**
  * Contient les informations lie a une offre dans la commande.
@@ -313,7 +313,7 @@ public class CommandeLigneDetail {
 		if (tarifOptional.isPresent()) {
 			detailCommandeLigneInfo.setTarif(tarif.toTarifInfo());
 		}
-
+		detailCommandeLigneInfo.setTypeProduit(typeProduit);
 		return detailCommandeLigneInfo;
 
 	}
@@ -351,7 +351,7 @@ public class CommandeLigneDetail {
 		produit.setLabel(label);
 		produit.setNumEC(numEC);
 		produit.setNumeroCommande(referenceCommande);
-		produit.setTypeProduit(typeProduit);
+		produit.setTypeProduit(com.nordnet.topaze.ws.enums.TypeProduit.fromString(typeProduit.toString()));
 		produit.setReference(referenceChoix);
 		Optional<Tarif> tarifOptional = Optional.fromNullable(tarif);
 		if (tarifOptional.isPresent()) {
