@@ -115,7 +115,7 @@ public class PaginationHelper<E> {
 
 					commande = new Commande();
 					commande.setReference(resultSet.getString("refcommande"));
-
+					commande.setAnnule(resultSet.getBoolean("annule"));
 					// Accocier les client a la commande.
 					associerClient(resultSet, commande);
 
