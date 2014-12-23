@@ -33,8 +33,6 @@ public class PaiementInfoRecurrent extends PaiementInfo {
 	 *            {@link #modePaiement}
 	 * @param montant
 	 *            {@link #montant}
-	 * @param infoPaiement
-	 *            {@link #infoPaiement}
 	 * @param timestampIntention
 	 *            {@link #timestampIntention}
 	 * @param timestampPaiement
@@ -42,9 +40,9 @@ public class PaiementInfoRecurrent extends PaiementInfo {
 	 * @param rum
 	 *            {@link #rum}
 	 */
-	public PaiementInfoRecurrent(ModePaiement modePaiement, Double montant, String infoPaiement,
-			Date timestampIntention, Date timestampPaiement, String rum) {
-		super(modePaiement, montant, infoPaiement, timestampIntention, timestampPaiement);
+	public PaiementInfoRecurrent(ModePaiement modePaiement, Double montant, Date timestampIntention,
+			Date timestampPaiement, String rum) {
+		super(modePaiement, montant, timestampIntention, timestampPaiement);
 		this.rum = rum;
 	}
 

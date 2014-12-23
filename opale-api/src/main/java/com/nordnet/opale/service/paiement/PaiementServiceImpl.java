@@ -132,7 +132,6 @@ public class PaiementServiceImpl implements PaiementService {
 		if (referencePaiement != null) {
 			paiement.setModePaiement(paiementInfo.getModePaiement());
 			paiement.setMontant(paiementInfo.getMontant());
-			paiement.setInfoPaiement(paiementInfo.getInfoPaiement());
 			paiement.setAuteur(new Auteur(paiementInfo.getAuteur()));
 			if (paiementInfo instanceof PaiementInfoComptant) {
 				paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement());
