@@ -16,12 +16,12 @@ public class CommandePaiementInfo {
 	/**
 	 * liste de paiements comptants.
 	 */
-	private List<PaiementInfo> comptant;
+	private List<PaiementInfoComptant> comptant;
 
 	/**
 	 * liste de paiements recurrents.
 	 */
-	private List<PaiementInfo> recurrent;
+	private List<PaiementInfoRecurrent> recurrent;
 
 	/**
 	 * constructeur par defaut .
@@ -33,9 +33,9 @@ public class CommandePaiementInfo {
 	/**
 	 * get the comptant.
 	 * 
-	 * @return {@link List<PaiementInfo>}
+	 * @return {@link List<PaiementInfoComptant>}
 	 */
-	public List<PaiementInfo> getComptant() {
+	public List<PaiementInfoComptant> getComptant() {
 		return comptant;
 	}
 
@@ -43,9 +43,9 @@ public class CommandePaiementInfo {
 	 * set the comptant.
 	 * 
 	 * @param comptant
-	 *            the new {@link List<PaiementInfo> }
+	 *            {@link List<PaiementInfoComptant> }
 	 */
-	public void setComptant(List<PaiementInfo> comptant) {
+	public void setComptant(List<PaiementInfoComptant> comptant) {
 		this.comptant = comptant;
 	}
 
@@ -54,7 +54,7 @@ public class CommandePaiementInfo {
 	 * 
 	 * @return {@link List<PaiementInfo> }
 	 */
-	public List<PaiementInfo> getRecurrent() {
+	public List<PaiementInfoRecurrent> getRecurrent() {
 		return recurrent;
 	}
 
@@ -64,7 +64,7 @@ public class CommandePaiementInfo {
 	 * @param recurrent
 	 *            the new {@link List<PaiementInfo> }
 	 */
-	public void setRecurrent(List<PaiementInfo> recurrent) {
+	public void setRecurrent(List<PaiementInfoRecurrent> recurrent) {
 		this.recurrent = recurrent;
 	}
 

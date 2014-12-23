@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
@@ -76,7 +78,8 @@ public class PaiementServiceImpl implements PaiementService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfo paiementInfo) throws OpaleException {
+	public Paiement ajouterIntentionPaiement(String referenceCommande, PaiementInfoComptant paiementInfo)
+			throws OpaleException {
 		PaiementValidator.validerAjoutIntentionPaiement(referenceCommande, paiementInfo);
 		Paiement paiement = getIntentionPaiement(referenceCommande);
 		if (paiement != null) {
@@ -131,6 +134,12 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setMontant(paiementInfo.getMontant());
 			paiement.setInfoPaiement(paiementInfo.getInfoPaiement());
 			paiement.setAuteur(new Auteur(paiementInfo.getAuteur()));
+			if (paiementInfo instanceof PaiementInfoComptant) {
+				paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement());
+			} else {
+				paiement.setIdPaiement(((PaiementInfoRecurrent) paiementInfo).getRum());
+			}
+
 		} else {
 			paiement = new Paiement(paiementInfo);
 			Auteur auteur = new Auteur(paiementInfo.getAuteur());
@@ -138,6 +147,12 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setReference(keygenService.getNextKey(Paiement.class));
 			paiement.setReferenceCommande(referenceCommande);
 			paiement.setTypePaiement(typePaiement);
+			if (paiementInfo instanceof PaiementInfoComptant) {
+				paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement());
+			} else {
+				paiement.setIdPaiement(((PaiementInfoRecurrent) paiementInfo).getRum());
+			}
+
 		}
 		Date datePaiement = paiementInfo.getTimestampPaiement();
 		paiement.setTimestampPaiement(datePaiement != null ? datePaiement : PropertiesUtil.getInstance()

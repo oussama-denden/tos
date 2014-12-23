@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
-import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
@@ -89,12 +91,31 @@ public class CommandeController {
 	}
 
 	/**
+	 * recuperer une commande detaille (avec paiement et signature).
+	 * 
+	 * @param refCommande
+	 *            {@link String}
+	 * 
+	 * @return {@link CommandeInfoDetaille}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/details/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public CommandeInfoDetaille getCommandeDetailee(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::getCommandeDetailee");
+		return commandeService.getCommandeDetailee(refCommande);
+
+	}
+
+	/**
 	 * ajouter une intention de paiement a la commande.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @return reference paiement.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
@@ -103,8 +124,8 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public String creerIntentionPaiement(@PathVariable String refCommande, @RequestBody PaiementInfo paiementInfo)
-			throws OpaleException, JSONException {
+	public String creerIntentionPaiement(@PathVariable String refCommande,
+			@RequestBody PaiementInfoComptant paiementInfo) throws OpaleException, JSONException {
 		Paiement paiement = commandeService.creerIntentionPaiement(refCommande, paiementInfo);
 		JSONObject response = new JSONObject();
 		response.put("reference", paiement.getReference());
@@ -119,14 +140,14 @@ public class CommandeController {
 	 * @param refPaiement
 	 *            reference {@link Paiement}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/{refPaiement:.+}/payer", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public void payerIntentionPaiement(@PathVariable String refCommande, @PathVariable String refPaiement,
-			@RequestBody PaiementInfo paiementInfo) throws OpaleException {
+			@RequestBody PaiementInfoComptant paiementInfo) throws OpaleException {
 		commandeService.payerIntentionPaiement(refCommande, refPaiement, paiementInfo);
 	}
 
@@ -139,7 +160,7 @@ public class CommandeController {
 	 * @param refCommande
 	 *            reference {@link Commande}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @return reference paiement.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
@@ -148,7 +169,7 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public String paiementDirect(@PathVariable String refCommande, @RequestBody PaiementInfo paiementInfo)
+	public String paiementDirect(@PathVariable String refCommande, @RequestBody PaiementInfoComptant paiementInfo)
 			throws OpaleException, JSONException {
 		Paiement paiement = commandeService.paiementDirect(refCommande, paiementInfo, TypePaiement.COMPTANT);
 		JSONObject response = new JSONObject();
@@ -213,7 +234,7 @@ public class CommandeController {
 	 * @param refCommande
 	 *            reference {@link Commande}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @return reference paiement.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
@@ -222,7 +243,7 @@ public class CommandeController {
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public String paiementRecurrent(@PathVariable String refCommande, @RequestBody PaiementInfo paiementInfo)
+	public String paiementRecurrent(@PathVariable String refCommande, @RequestBody PaiementInfoRecurrent paiementInfo)
 			throws OpaleException, JSONException {
 		Paiement paiement = commandeService.paiementDirect(refCommande, paiementInfo, TypePaiement.RECURRENT);
 		JSONObject response = new JSONObject();
@@ -458,48 +479,6 @@ public class CommandeController {
 		LOGGER.info(":::ws-rec:::supprimerSignature");
 		commandeService.supprimerSignature(refCommande, refSignature, auteur);
 
-	}
-
-	/**
-	 * retourner si la commande a besoin d'un paiement recurrent ou non.
-	 * 
-	 * @param refCommande
-	 *            reference {@link Commande}.
-	 * @return {@link JSONObject}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 * @throws JSONException
-	 *             {@link JSONException}
-	 */
-	@RequestMapping(value = "/{refCommande:.+}/besoinPaiementRecurrent", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public String isBesoinPaiementRecurrent(@PathVariable("refCommande") String refCommande)
-			throws OpaleException, JSONException {
-		boolean isBesoinPaiementRecurrent = commandeService.isBesoinPaiementRecurrent(refCommande);
-		JSONObject responce = new JSONObject();
-		responce.put("besoinPaiementRecurrent", isBesoinPaiementRecurrent);
-		return responce.toString();
-	}
-
-	/**
-	 * retourner si la commande a besoin d'un paiement comptant ou non.
-	 * 
-	 * @param refCommande
-	 *            reference {@link Commande}.
-	 * @return true si la commande a besoin d'un paiement comptant.
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 * @throws JSONException
-	 *             {@link JSONException}
-	 */
-	@RequestMapping(value = "/{refCommande:.+}/besoinPaiementComptant", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public String isBesoinPaiementComptant(@PathVariable("refCommande") String refCommande)
-			throws OpaleException, JSONException {
-		boolean isBesoinPaiementComptant = commandeService.isBesoinPaiementComptant(refCommande);
-		JSONObject responce = new JSONObject();
-		responce.put("besoinPaiementComptant", isBesoinPaiementComptant);
-		return responce.toString();
 	}
 
 	/**

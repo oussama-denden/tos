@@ -1,5 +1,6 @@
 package com.nordnet.opale.service.commande;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.activation.CommandInfo;
@@ -9,11 +10,14 @@ import org.json.JSONException;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -51,6 +55,19 @@ public interface CommandeService {
 	public CommandeInfo getCommande(String refCommande) throws OpaleException;
 
 	/**
+	 * recuperer une commande detaille (avec paiement et signature).
+	 * 
+	 * @param refCommande
+	 *            {@link String}
+	 * 
+	 * @return {@link CommandeInfoDetaille}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandeInfoDetaille getCommandeDetailee(String refCommande) throws OpaleException;
+
+	/**
 	 * recherche une commande a partir du reference {@link Draft}.
 	 * 
 	 * @param referenceDraft
@@ -70,7 +87,7 @@ public interface CommandeService {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException;
+	public Paiement creerIntentionPaiement(String refCommande, PaiementInfoComptant paiementInfo) throws OpaleException;
 
 	/**
 	 * payer une intention de paiement.
@@ -80,12 +97,12 @@ public interface CommandeService {
 	 * @param referencePaiement
 	 *            reference {@link Paiement}.
 	 * @param paiementInfo
-	 *            {@link PaiementInfo}.
+	 *            {@link PaiementInfoRecurrent}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
-			throws OpaleException;
+	public void payerIntentionPaiement(String referenceCommande, String referencePaiement,
+			PaiementInfoComptant paiementInfo) throws OpaleException;
 
 	/**
 	 * creer directement un nouveau paiement a associe a la commande, sans la creation d'un intention de paiement en
@@ -325,29 +342,6 @@ public interface CommandeService {
 	public String getRecentDate(String refCommande) throws OpaleException;
 
 	/**
-	 * retourner si la commande a encore besoin d'un paiement recurrent ou non. si il ya un paiement recurrent annule,
-	 * il na compte pas.
-	 * 
-	 * @param referenceCommande
-	 *            reference {@link Commande}.
-	 * @return true si la commande a besoin d'un paiement recurrent.
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException;
-
-	/**
-	 * retourner si la commande a besoin d'un paiement comptant ou non.
-	 * 
-	 * @param referenceCommande
-	 *            reference {@link Commande}.
-	 * @return true si la commande a besoin d'un paiement comptant.
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException;
-
-	/**
 	 * Transformer une commande en ordre de renouvellement afin d'acter le renouvellement pour un contrat donné.
 	 * 
 	 * @param refCommande
@@ -370,4 +364,5 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public Cout calculerCout(String referenceCommande) throws OpaleException;
+
 }

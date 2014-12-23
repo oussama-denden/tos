@@ -16,11 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.PaiementInfo;
+import com.nordnet.opale.business.PaiementInfoComptant;
+import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
@@ -66,6 +69,7 @@ import com.nordnet.topaze.ws.entity.ProduitRenouvellement;
 import com.nordnet.topaze.ws.entity.ReductionContrat;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 import com.nordnet.topaze.ws.enums.TypeFrais;
+import com.nordnet.topaze.ws.enums.TypeProduit;
 import com.nordnet.topaze.ws.enums.TypeReduction;
 import com.nordnet.topaze.ws.enums.TypeTVA;
 import com.nordnet.topaze.ws.enums.TypeValeur;
@@ -174,6 +178,32 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
+	public CommandeInfoDetaille getCommandeDetailee(String refCommande) throws OpaleException {
+		CommandeInfo commandeInfo = getCommande(refCommande);
+		CommandeInfoDetaille commandeInfoDetail = new CommandeInfoDetaille(commandeInfo);
+		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
+		List<PaiementInfo> paiementInfos = new ArrayList<PaiementInfo>();
+		for (Paiement paiement : paiements) {
+			if (paiement.getTypePaiement() == TypePaiement.COMPTANT) {
+				paiementInfos.add(paiement.fromPaiementToPaiementInfoComptant());
+			} else {
+				paiementInfos.add(paiement.fromPaiementToPaiementInfoRecurrent());
+			}
+		}
+		commandeInfoDetail.setPaiements(paiementInfos);
+
+		Signature signature = signatureService.getSignatureByReferenceCommande(refCommande);
+		if (signature != null) {
+			commandeInfoDetail.setSignature(signature.toSignatureInfo());
+		}
+		return commandeInfoDetail;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional(readOnly = true)
 	public Commande getCommandeByReferenceDraft(String referenceDraft) {
 
 		LOGGER.info("Debut methode getCommandeByReferenceDraft");
@@ -186,7 +216,7 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Paiement creerIntentionPaiement(String refCommande, PaiementInfo paiementInfo) throws OpaleException {
+	public Paiement creerIntentionPaiement(String refCommande, PaiementInfoComptant paiementInfo) throws OpaleException {
 
 		LOGGER.info("Debut methode creerIntentionPaiement");
 
@@ -205,8 +235,8 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void payerIntentionPaiement(String referenceCommande, String referencePaiement, PaiementInfo paiementInfo)
-			throws OpaleException {
+	public void payerIntentionPaiement(String referenceCommande, String referencePaiement,
+			PaiementInfoComptant paiementInfo) throws OpaleException {
 
 		LOGGER.info("Debut methode payerIntentionPaiement");
 
@@ -409,15 +439,15 @@ public class CommandeServiceImpl implements CommandeService {
 	private CommandePaiementInfo getCommandePaiementInfoFromPaiement(List<Paiement> paiementComptants,
 			List<Paiement> paiementRecurrents) {
 		CommandePaiementInfo commandePaiementInfo = new CommandePaiementInfo();
-		List<PaiementInfo> paiementInfosComptant = new ArrayList<PaiementInfo>();
+		List<PaiementInfoComptant> paiementInfosComptant = new ArrayList<PaiementInfoComptant>();
 		for (Paiement paiement : paiementComptants) {
-			paiementInfosComptant.add(paiement.fromPaiementToPaiementInfo());
+			paiementInfosComptant.add(paiement.fromPaiementToPaiementInfoComptant());
 		}
 		commandePaiementInfo.setComptant(paiementInfosComptant);
 
-		List<PaiementInfo> paiementInfosRecurrent = new ArrayList<PaiementInfo>();
+		List<PaiementInfoRecurrent> paiementInfosRecurrent = new ArrayList<PaiementInfoRecurrent>();
 		for (Paiement paiementReccurent : paiementRecurrents) {
-			paiementInfosRecurrent.add(paiementReccurent.fromPaiementToPaiementInfo());
+			paiementInfosRecurrent.add(paiementReccurent.fromPaiementToPaiementInfoRecurrent());
 		}
 
 		commandePaiementInfo.setRecurrent(paiementInfosRecurrent);
@@ -633,14 +663,14 @@ public class CommandeServiceImpl implements CommandeService {
 		com.nordnet.topaze.ws.entity.PaiementInfo paiementInfoParent = new com.nordnet.topaze.ws.entity.PaiementInfo();
 		paiementInfoParent.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
 		paiementInfoParent.setNumEC(ligne.getNumEC());
-		List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(commande.getReference(), false);
-		Paiement paiementRecurrent = null;
+		List<Paiement> paiements = paiementService.getPaiementEnCours(commande.getReference());
+		Paiement paiement = null;
 		String referenceModePaiement = null;
-		if (paiementRecurrents.size() > Constants.ZERO) {
-			paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
+		if (paiements.size() > Constants.ZERO) {
+			paiement = paiements.get(Constants.ZERO);
 		}
-		if (paiementRecurrent != null) {
-			referenceModePaiement = paiementRecurrent.getIdPaiement();
+		if (paiement != null) {
+			referenceModePaiement = paiement.getIdPaiement();
 		}
 		paiementInfoParent.setReferenceModePaiement(referenceModePaiement);
 		paiementInfoParent.setReferenceProduit(ligne.getReferenceOffre());
@@ -675,27 +705,6 @@ public class CommandeServiceImpl implements CommandeService {
 		draftService.save(draft);
 
 		return draft;
-	}
-
-	@Override
-	public boolean isBesoinPaiementRecurrent(String referenceCommande) throws OpaleException {
-		Commande commande = getCommandeByReference(referenceCommande);
-		if (commande.needPaiementRecurrent()) {
-			List<Paiement> paiementRecurrents = getPaiementRecurrent(referenceCommande, false);
-			if (paiementRecurrents.size() == Constants.ZERO) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isBesoinPaiementComptant(String referenceCommande) throws OpaleException {
-		getCommandeByReference(referenceCommande);
-		if (calculerCoutComptant(referenceCommande) > 0d && !isPayeTotalement(referenceCommande)) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -772,7 +781,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
 		produitRenouvellement.setRemboursable(true);
-		produitRenouvellement.setTypeProduit(ligne.getTypeProduit());
+		produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligne.getTypeProduit().toString()));
 
 		produitRenouvellements.add(produitRenouvellement);
 
@@ -789,7 +798,7 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceChoix());
 			produitRenouvellement.setRemboursable(true);
-			produitRenouvellement.setTypeProduit(ligneDetail.getTypeProduit());
+			produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligneDetail.getTypeProduit().toString()));
 
 			produitRenouvellements.add(produitRenouvellement);
 
@@ -818,8 +827,6 @@ public class CommandeServiceImpl implements CommandeService {
 		prix.setPeriodicite(ligne.getTarif().getFrequence());
 		prix.setTypeTVA(TypeTVA.fromString(ligne.getTarif().getTypeTVA().name()));
 
-		// affecter la duree.
-
 		// affecter la reference mode de paiement.
 		List<Paiement> paiement = paiementService.getPaiementEnCours(referenceCommande);
 		boolean hasRecurrent = false;
@@ -835,16 +842,6 @@ public class CommandeServiceImpl implements CommandeService {
 		} else {
 			prix.setDuree(ligne.getTarif().getFrequence());
 		}
-
-		// affecter la reference mode de paiement.
-		// List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
-		// Paiement paiementRecurrent = null;
-		// if (paiementRecurrents.size() > Constants.ZERO) {
-		// paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
-		// }
-		// if (paiementRecurrent != null) {
-		// prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
-		// }
 
 		// creer le frais
 		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
@@ -895,16 +892,6 @@ public class CommandeServiceImpl implements CommandeService {
 		} else {
 			prix.setDuree(ligneDetail.getTarif().getFrequence());
 		}
-
-		// List<Paiement> paiementRecurrents = paiementService.getPaiementRecurrent(referenceCommande, false);
-		// Paiement paiementRecurrent = null;
-		// if (paiementRecurrents.size() > Constants.ZERO) {
-		// paiementRecurrent = paiementRecurrents.get(Constants.ZERO);
-		// }
-		//
-		// if (paiementRecurrent != null) {
-		// prix.setReferenceModePaiement(paiementRecurrent.getIdPaiement());
-		// }
 
 		// creer le frais
 		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();

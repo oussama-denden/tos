@@ -1,10 +1,13 @@
 {
   "modePaiement": "CB",
-   "auteur": {
+  "montant": "70",
+  "infoPaiement": "123",
+  "timestampPaiement": "2014-05-05",
+  "referenceModePaiement": "R0000001",
+  "auteur": {
     "qui": "GRC.WEL-JOHNDOE",
     "canal": "welcome",
     "ip": {
-      "ts": "1411654933",
       "ip": "127.0.0.1"
     }
   }
