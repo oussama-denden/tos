@@ -3,7 +3,6 @@ package com.nordnet.opale.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.activation.CommandInfo;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
@@ -96,14 +96,14 @@ public class CommandeController {
 	 * @param refCommande
 	 *            {@link String}
 	 * 
-	 * @return {@link CommandInfo}
+	 * @return {@link CommandeInfoDetaille}
 	 * 
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/details/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public CommandeInfo getCommandeDetailee(@PathVariable String refCommande) throws OpaleException {
+	public CommandeInfoDetaille getCommandeDetailee(@PathVariable String refCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::getCommandeDetailee");
 		return commandeService.getCommandeDetailee(refCommande);
 

@@ -2,9 +2,6 @@ package com.nordnet.opale.business;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 /**
  * Cette classe regroupe les informations qui definissent un {@link CommandeInfo}.
  * 
@@ -27,18 +24,6 @@ public class CommandeInfo {
 	 * la liste de ligne de la commande.
 	 */
 	private List<CommandeLigneInfo> lignes;
-
-	/**
-	 * {@link PaiementInfo}.
-	 */
-	@JsonInclude(Include.NON_NULL)
-	private List<PaiementInfo> paiements;
-
-	/**
-	 * {@link SignatureInfo}.
-	 */
-	@JsonInclude(Include.NON_NULL)
-	private SignatureInfo signature;
 
 	/**
 	 * un flag pour indiquer si la commande est annule ou pas.
@@ -109,40 +94,6 @@ public class CommandeInfo {
 	 */
 	public void setLignes(List<CommandeLigneInfo> lignes) {
 		this.lignes = lignes;
-	}
-
-	/**
-	 * 
-	 * @return {@link #paiements}.
-	 */
-	public List<PaiementInfo> getPaiements() {
-		return paiements;
-	}
-
-	/**
-	 * 
-	 * @param paiements
-	 *            {@link #paiements}.
-	 */
-	public void setPaiements(List<PaiementInfo> paiements) {
-		this.paiements = paiements;
-	}
-
-	/**
-	 * 
-	 * @return {@link #signature}.
-	 */
-	public SignatureInfo getSignature() {
-		return signature;
-	}
-
-	/**
-	 * 
-	 * @param signature
-	 *            {@link #signature}.
-	 */
-	public void setSignature(SignatureInfo signature) {
-		this.signature = signature;
 	}
 
 	/**

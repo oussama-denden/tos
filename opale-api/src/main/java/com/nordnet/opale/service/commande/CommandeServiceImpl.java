@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
@@ -177,8 +178,9 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public CommandeInfo getCommandeDetailee(String refCommande) throws OpaleException {
+	public CommandeInfoDetaille getCommandeDetailee(String refCommande) throws OpaleException {
 		CommandeInfo commandeInfo = getCommande(refCommande);
+		CommandeInfoDetaille commandeInfoDetail = new CommandeInfoDetaille(commandeInfo);
 		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
 		List<PaiementInfo> paiementInfos = new ArrayList<PaiementInfo>();
 		for (Paiement paiement : paiements) {
@@ -188,12 +190,13 @@ public class CommandeServiceImpl implements CommandeService {
 				paiementInfos.add(paiement.fromPaiementToPaiementInfoRecurrent());
 			}
 		}
-		commandeInfo.setPaiements(paiementInfos);
+		commandeInfoDetail.setPaiements(paiementInfos);
 
 		Signature signature = signatureService.getSignatureByReferenceCommande(refCommande);
-		commandeInfo.setSignature(signature.toSignatureInfo());
-
-		return commandeInfo;
+		if (signature != null) {
+			commandeInfoDetail.setSignature(signature.toSignatureInfo());
+		}
+		return commandeInfoDetail;
 	}
 
 	/**
