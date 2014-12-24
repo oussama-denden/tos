@@ -28,7 +28,6 @@ public class TracageServiceImpl implements TracageService {
 	 */
 	@Override
 	public void ajouterTrace(String user, String referenceDraft, String action) {
-
 		Tracage tracage = new Tracage();
 		tracage.setUser(user);
 		tracage.setReferenceDraft(referenceDraft);
