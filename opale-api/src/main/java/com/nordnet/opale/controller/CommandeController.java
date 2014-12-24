@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
@@ -86,6 +87,25 @@ public class CommandeController {
 	public CommandeInfo getCommande(@PathVariable String refCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::getCommande");
 		return commandeService.getCommande(refCommande);
+
+	}
+
+	/**
+	 * recuperer une commande detaille (avec paiement et signature).
+	 * 
+	 * @param refCommande
+	 *            {@link String}
+	 * 
+	 * @return {@link CommandeInfoDetaille}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/details/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public CommandeInfoDetaille getCommandeDetailee(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::getCommandeDetailee");
+		return commandeService.getCommandeDetailee(refCommande);
 
 	}
 

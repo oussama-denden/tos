@@ -26,6 +26,11 @@ public class CommandeInfo {
 	private List<CommandeLigneInfo> lignes;
 
 	/**
+	 * un flag pour indiquer si la commande est annule ou pas.
+	 */
+	private boolean isAnnule;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeInfo() {
@@ -89,6 +94,23 @@ public class CommandeInfo {
 	 */
 	public void setLignes(List<CommandeLigneInfo> lignes) {
 		this.lignes = lignes;
+	}
+
+	/**
+	 * 
+	 * @return {@link #isAnnule}
+	 */
+	public boolean isAnnule() {
+		return isAnnule;
+	}
+
+	/**
+	 * 
+	 * @param isAnnule
+	 *            {@link #isAnnule}.
+	 */
+	public void setAnnule(boolean isAnnule) {
+		this.isAnnule = isAnnule;
 	}
 
 }

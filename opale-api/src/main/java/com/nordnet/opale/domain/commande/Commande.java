@@ -399,6 +399,7 @@ public class Commande {
 
 		}
 		commandeInfo.setLignes(lignes);
+		commandeInfo.setAnnule(isAnnule());
 		return commandeInfo;
 
 	}

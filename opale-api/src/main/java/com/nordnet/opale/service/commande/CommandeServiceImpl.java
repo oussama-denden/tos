@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
@@ -68,6 +69,7 @@ import com.nordnet.topaze.ws.entity.ProduitRenouvellement;
 import com.nordnet.topaze.ws.entity.ReductionContrat;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 import com.nordnet.topaze.ws.enums.TypeFrais;
+import com.nordnet.topaze.ws.enums.TypeProduit;
 import com.nordnet.topaze.ws.enums.TypeReduction;
 import com.nordnet.topaze.ws.enums.TypeTVA;
 import com.nordnet.topaze.ws.enums.TypeValeur;
@@ -169,6 +171,32 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(refCommande);
 		return commande.toCommandInfo();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public CommandeInfoDetaille getCommandeDetailee(String refCommande) throws OpaleException {
+		CommandeInfo commandeInfo = getCommande(refCommande);
+		CommandeInfoDetaille commandeInfoDetail = new CommandeInfoDetaille(commandeInfo);
+		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
+		List<PaiementInfo> paiementInfos = new ArrayList<PaiementInfo>();
+		for (Paiement paiement : paiements) {
+			if (paiement.getTypePaiement() == TypePaiement.COMPTANT) {
+				paiementInfos.add(paiement.fromPaiementToPaiementInfoComptant());
+			} else {
+				paiementInfos.add(paiement.fromPaiementToPaiementInfoRecurrent());
+			}
+		}
+		commandeInfoDetail.setPaiements(paiementInfos);
+
+		Signature signature = signatureService.getSignatureByReferenceCommande(refCommande);
+		if (signature != null) {
+			commandeInfoDetail.setSignature(signature.toSignatureInfo());
+		}
+		return commandeInfoDetail;
 	}
 
 	/**
@@ -758,7 +786,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
 		produitRenouvellement.setRemboursable(true);
-		produitRenouvellement.setTypeProduit(ligne.getTypeProduit());
+		produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligne.getTypeProduit().toString()));
 
 		produitRenouvellements.add(produitRenouvellement);
 
@@ -775,7 +803,7 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceChoix());
 			produitRenouvellement.setRemboursable(true);
-			produitRenouvellement.setTypeProduit(ligneDetail.getTypeProduit());
+			produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligneDetail.getTypeProduit().toString()));
 
 			produitRenouvellements.add(produitRenouvellement);
 

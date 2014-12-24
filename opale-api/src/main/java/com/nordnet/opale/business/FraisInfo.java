@@ -1,5 +1,6 @@
 package com.nordnet.opale.business;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nordnet.opale.enums.TypeFrais;
 
 /**
@@ -11,9 +12,10 @@ import com.nordnet.opale.enums.TypeFrais;
 public class FraisInfo {
 
 	/**
-	 * le reference.
+	 * id frais.
 	 */
-	private String reference;
+	@JsonProperty("id_frais")
+	private String idFrais;
 
 	/**
 	 * le label.
@@ -28,7 +30,7 @@ public class FraisInfo {
 	/**
 	 * le type de frais.
 	 */
-	private TypeFrais type;
+	private TypeFrais typeFrais;
 
 	/**
 	 * constructeur par defaut.
@@ -40,22 +42,20 @@ public class FraisInfo {
 	/* Getters and Setters */
 
 	/**
-	 * get the reference.
 	 * 
-	 * @return {@link #reference}
+	 * @return {@link #idFrais}.
 	 */
-	public String getReference() {
-		return reference;
+	public String getIdFrais() {
+		return idFrais;
 	}
 
 	/**
-	 * set the reference.
 	 * 
-	 * @param reference
-	 *            the new {@link #reference}
+	 * @param idFrais
+	 *            {@link #idFrais}.
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setIdFrais(String idFrais) {
+		this.idFrais = idFrais;
 	}
 
 	/**
@@ -97,22 +97,20 @@ public class FraisInfo {
 	}
 
 	/**
-	 * get the type.
 	 * 
-	 * @return {@link TypeFrais}
+	 * @return {@link #typeFrais}.
 	 */
-	public TypeFrais getType() {
-		return type;
+	public TypeFrais getTypeFrais() {
+		return typeFrais;
 	}
 
 	/**
-	 * set the type.
 	 * 
-	 * @param type
-	 *            the new {@link TypeFrais}
+	 * @param typeFrais
+	 *            {@link #typeFrais}.
 	 */
-	public void setType(TypeFrais type) {
-		this.type = type;
+	public void setTypeFrais(TypeFrais typeFrais) {
+		this.typeFrais = typeFrais;
 	}
 
 }

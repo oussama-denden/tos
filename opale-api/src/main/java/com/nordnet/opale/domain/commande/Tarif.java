@@ -272,7 +272,7 @@ public class Tarif {
 	 */
 	public TarifInfo toTarifInfo() {
 		TarifInfo tarifInfo = new TarifInfo();
-		tarifInfo.setReference(reference);
+		tarifInfo.setIdTarif(reference);
 		tarifInfo.setPrix(prix);
 		tarifInfo.setFrequence(frequence);
 		tarifInfo.setDuree(duree);

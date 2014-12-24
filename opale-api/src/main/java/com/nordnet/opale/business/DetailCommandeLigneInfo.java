@@ -1,5 +1,9 @@
 package com.nordnet.opale.business;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.TypeProduitDeserializer;
+import com.nordnet.opale.enums.TypeProduit;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link DetailCommandeLigneInfo}.
  * 
@@ -22,6 +26,12 @@ public class DetailCommandeLigneInfo {
 	 * {@link TarifInfo}.
 	 */
 	private TarifInfo tarif;
+
+	/**
+	 * {@link TypeProduit}.
+	 */
+	@JsonDeserialize(using = TypeProduitDeserializer.class)
+	private TypeProduit typeProduit;
 
 	/**
 	 * constructeur par defaut.
@@ -83,6 +93,23 @@ public class DetailCommandeLigneInfo {
 	 */
 	public void setTarif(TarifInfo tarif) {
 		this.tarif = tarif;
+	}
+
+	/**
+	 * 
+	 * @return {@link #typeProduit}.
+	 */
+	public TypeProduit getTypeProduit() {
+		return typeProduit;
+	}
+
+	/**
+	 * 
+	 * @param typeProduit
+	 *            {@link TypeProduit}.
+	 */
+	public void setTypeProduit(TypeProduit typeProduit) {
+		this.typeProduit = typeProduit;
 	}
 
 }

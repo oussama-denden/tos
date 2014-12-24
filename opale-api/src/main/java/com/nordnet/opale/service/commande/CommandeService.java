@@ -10,6 +10,7 @@ import org.json.JSONException;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
+import com.nordnet.opale.business.CommandeInfoDetaille;
 import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
@@ -52,6 +53,19 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public CommandeInfo getCommande(String refCommande) throws OpaleException;
+
+	/**
+	 * recuperer une commande detaille (avec paiement et signature).
+	 * 
+	 * @param refCommande
+	 *            {@link String}
+	 * 
+	 * @return {@link CommandeInfoDetaille}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public CommandeInfoDetaille getCommandeDetailee(String refCommande) throws OpaleException;
 
 	/**
 	 * recherche une commande a partir du reference {@link Draft}.
@@ -350,4 +364,5 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public Cout calculerCout(String referenceCommande) throws OpaleException;
+
 }
