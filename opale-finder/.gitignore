@@ -3,5 +3,6 @@
 .project
 .settings
 .classpath
+/src/test/resources/opale_test.xsd
 
 
