@@ -653,6 +653,7 @@ public class CommandeServiceImpl implements CommandeService {
 		ContratValidationInfo validationInfo = new ContratValidationInfo();
 		validationInfo.setIdAdrFacturation(commande.getClientAFacturer().getAdresseId());
 		validationInfo.setIdClient(commande.getClientSouscripteur().getClientId());
+		validationInfo.setSegmentTVA(commande.getClientAFacturer().getTva());
 		PolitiqueValidation politiqueValidation = new PolitiqueValidation();
 		politiqueValidation.setCheckIsPackagerCreationPossible(true);
 		politiqueValidation.setFraisCreation(true);
