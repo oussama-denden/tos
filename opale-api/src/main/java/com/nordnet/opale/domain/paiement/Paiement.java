@@ -16,6 +16,7 @@ import org.hibernate.annotations.Index;
 import org.hibernate.validator.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Optional;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
@@ -24,6 +25,7 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.serializer.DateSerializer;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 
@@ -99,11 +101,13 @@ public class Paiement {
 	/**
 	 * date annulation.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date dateAnnulation;
 
 	/**
 	 * date creation.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date dateCreation;
 
 	/**
