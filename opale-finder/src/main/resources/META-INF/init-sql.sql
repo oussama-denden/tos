@@ -4,6 +4,7 @@ IF EXISTS `listcommande`;
 CREATE VIEW `listcommande` AS
 SELECT
 	commande.reference AS refcommande,
+	CASE WHEN commande.dateAnnulation is NULL THEN FALSE ELSE TRUE END AS annule,
 	client.clientId AS idClientSous,
 	client.adresseId AS adresseIdClientSous,
 	clientFact.clientId AS idClientFac,

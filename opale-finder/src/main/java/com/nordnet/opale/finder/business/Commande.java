@@ -62,6 +62,11 @@ public class Commande {
 	private Client clientAlivrer;
 
 	/**
+	 * Si la commande est annule ou non.
+	 */
+	private boolean annule;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Commande() {
@@ -239,6 +244,23 @@ public class Commande {
 	 */
 	public void setClientAlivrer(Client clientAlivrer) {
 		this.clientAlivrer = clientAlivrer;
+	}
+
+	/**
+	 * 
+	 * @return {@link #annule}
+	 */
+	public boolean isAnnule() {
+		return annule;
+	}
+
+	/**
+	 * 
+	 * @param annule
+	 *            {@link #annule}
+	 */
+	public void setAnnule(boolean annule) {
+		this.annule = annule;
 	}
 
 	/**

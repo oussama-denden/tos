@@ -33,8 +33,6 @@ public class PaiementInfoComptant extends PaiementInfo {
 	 *            {@link #modePaiement}
 	 * @param montant
 	 *            {@link #montant}
-	 * @param infoPaiement
-	 *            {@link #infoPaiement}
 	 * @param timestampIntention
 	 *            {@link #timestampIntention}
 	 * @param timestampPaiement
@@ -42,9 +40,9 @@ public class PaiementInfoComptant extends PaiementInfo {
 	 * @param referenceModePaiement
 	 *            {@link #referenceModePaiement}
 	 */
-	public PaiementInfoComptant(ModePaiement modePaiement, Double montant, String infoPaiement,
-			Date timestampIntention, Date timestampPaiement, String referenceModePaiement) {
-		super(modePaiement, montant, infoPaiement, timestampIntention, timestampPaiement);
+	public PaiementInfoComptant(ModePaiement modePaiement, Double montant, Date timestampIntention,
+			Date timestampPaiement, String referenceModePaiement) {
+		super(modePaiement, montant, timestampIntention, timestampPaiement);
 		this.referenceModePaiement = referenceModePaiement;
 
 	}

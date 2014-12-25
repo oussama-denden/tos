@@ -23,7 +23,8 @@ import com.nordnet.opale.test.utils.Constants;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * Classe de test de la methode {@link CommandeService#paiementDirect(String, com.nordnet.opale.business.PaiementInfoRecurrent)}.
+ * Classe de test de la methode
+ * {@link CommandeService#paiementDirect(String, com.nordnet.opale.business.PaiementInfoRecurrent)}.
  * 
  * @author akram-moncer
  * 
@@ -61,7 +62,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	public void testerPaiementDirectValide() {
 		try {
 			PaiementInfoRecurrent paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class,
+							"./requests/paiementDirect.json");
 			List<Paiement> paiements = paiementService.getPaiementByReferenceCommande("00000005");
 			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(paiements.size()));
 			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
@@ -82,7 +84,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	public void testerPaiementDirectAvecCommandeNonExiste() {
 		try {
 			PaiementInfoRecurrent paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class,
+							"./requests/paiementDirect.json");
 			commandeService.paiementDirect("00000000", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
@@ -101,7 +104,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansModePaiement() {
 		try {
 			PaiementInfoRecurrent paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class,
+							"./requests/paiementDirect.json");
 			paiementInfo.setModePaiement(null);
 			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
@@ -121,7 +125,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansMontant() {
 		try {
 			PaiementInfoRecurrent paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class,
+							"./requests/paiementDirect.json");
 			paiementInfo.setMontant(null);
 			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
 			fail("Unexpected error");
@@ -133,23 +138,4 @@ public class PaiementDirectTest extends GlobalTestCase {
 		}
 	}
 
-	/**
-	 * tester le cas de paiement direct sans indiquer les info de paiement.
-	 */
-	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
-	public void testerPayerIntentionPaiementAvecPaiementInfoSansInfoPaiement() {
-		try {
-			PaiementInfoRecurrent paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class, "./requests/paiementDirect.json");
-			paiementInfo.setInfoPaiement(null);
-			commandeService.paiementDirect("00000005", paiementInfo, TypePaiement.COMPTANT);
-			fail("Unexpected error");
-		} catch (OpaleException e) {
-			assertEquals("0.1.4", e.getErrorCode());
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			fail(e.getMessage());
-		}
-	}
 }

@@ -600,7 +600,7 @@ public class CommandeServiceImpl implements CommandeService {
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
 
-		CommandeValidator.checkPaiementDouble(paiement);
+		// CommandeValidator.checkPaiementDouble(paiement);
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
@@ -661,21 +661,26 @@ public class CommandeServiceImpl implements CommandeService {
 		validationInfo.setUser(ligne.getAuteur().getQui());
 
 		List<com.nordnet.topaze.ws.entity.PaiementInfo> paiementInfos = new ArrayList<>();
+
 		com.nordnet.topaze.ws.entity.PaiementInfo paiementInfoParent = new com.nordnet.topaze.ws.entity.PaiementInfo();
 		paiementInfoParent.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
 		paiementInfoParent.setNumEC(ligne.getNumEC());
 		List<Paiement> paiements = paiementService.getPaiementEnCours(commande.getReference());
-		Paiement paiement = null;
+		Paiement paiement = getPaiementRecurrent(paiements);
 		String referenceModePaiement = null;
-		if (paiements.size() > Constants.ZERO) {
-			paiement = paiements.get(Constants.ZERO);
-		}
+
 		if (paiement != null) {
 			referenceModePaiement = paiement.getIdPaiement();
+		} else {
+			if (getPaiementComptant(paiements).size() > 0) {
+				referenceModePaiement = getPaiementComptant(paiements).get(0).getIdPaiement();
+			}
 		}
+
 		paiementInfoParent.setReferenceModePaiement(referenceModePaiement);
 		paiementInfoParent.setReferenceProduit(ligne.getReferenceOffre());
 		paiementInfos.add(paiementInfoParent);
+
 		for (CommandeLigneDetail ligneDetail : ligne.getCommandeLigneDetails()) {
 			com.nordnet.topaze.ws.entity.PaiementInfo paiementInfo = new com.nordnet.topaze.ws.entity.PaiementInfo();
 
@@ -1054,11 +1059,9 @@ public class CommandeServiceImpl implements CommandeService {
 			prix = produit.getPrix();
 			if (prix != null) {
 				if (prix.isRecurrent()) {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
-							.fromString(modePaiementRecurrent != null ? modePaiementRecurrent.name() : ""));
+					prix.setModePaiement(modePaiementRecurrent);
 				} else {
-					prix.setModePaiement(com.nordnet.topaze.ws.enums.ModePaiement
-							.fromString(modePaiementComptant != null ? modePaiementComptant.name() : ""));
+					prix.setModePaiement(modePaiementComptant);
 				}
 			}
 		}
@@ -1099,5 +1102,26 @@ public class CommandeServiceImpl implements CommandeService {
 				}
 			}
 		}
+	}
+
+	private Paiement getPaiementRecurrent(List<Paiement> paiements) {
+		for (Paiement paiement : paiements) {
+			if (paiement.getTypePaiement() == TypePaiement.RECURRENT) {
+				return paiement;
+			}
+
+		}
+		return null;
+	}
+
+	private List<Paiement> getPaiementComptant(List<Paiement> paiements) {
+		List<Paiement> paiementComptant = new ArrayList<>();
+		for (Paiement paiement : paiements) {
+			if (paiement.getTypePaiement() == TypePaiement.COMPTANT) {
+				paiementComptant.add(paiement);
+			}
+
+		}
+		return paiementComptant;
 	}
 }

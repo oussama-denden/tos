@@ -129,7 +129,7 @@ public class CommandeDaoImpl implements CommandeDao {
 					|| !resultSet.getString("refcommande").equals(lastReferenceCommande)) {
 				commande = new Commande();
 				commande.setReference(resultSet.getString("refcommande"));
-
+				commande.setAnnule(resultSet.getBoolean("annule"));
 				// Accocier les client a la commande.
 				associerClient(resultSet, commande);
 
