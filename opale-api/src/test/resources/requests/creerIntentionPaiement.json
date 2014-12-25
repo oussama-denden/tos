@@ -1,7 +1,6 @@
 {
   "modePaiement": "CB",
   "montant": "70",
-  "infoPaiement": "123",
   "timestampPaiement": "2014-05-05",
   "referenceModePaiement": "R0000001",
   "auteur": {

@@ -12,7 +12,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
-import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
  * valider les info de paiement.
@@ -109,11 +108,6 @@ public class PaiementValidator {
 		if (paiementInfo instanceof PaiementInfoComptant
 				&& ((PaiementInfoComptant) paiementInfo).getReferenceModePaiement() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.referenceModePaiement"), "0.1.4");
-		}
-
-		if (Utils.isStringNullOrEmpty(paiementInfo.getInfoPaiement())
-				&& (paiementInfo.getModePaiement() == ModePaiement.CB || paiementInfo.getModePaiement() == ModePaiement.FACTURE)) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.infoPaiement"), "0.1.4");
 		}
 
 	}

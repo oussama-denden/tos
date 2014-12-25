@@ -2,6 +2,7 @@ package com.nordnet.opale.business;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -25,6 +26,7 @@ public class PaiementInfo {
 	/**
 	 * reference de paiement.
 	 */
+	@JsonIgnore
 	private String reference;
 
 	/**
@@ -37,11 +39,6 @@ public class PaiementInfo {
 	 * montant de paiement.
 	 */
 	private Double montant;
-
-	/**
-	 * info paiement.
-	 */
-	private String infoPaiement;
 
 	/**
 	 * date d'intention de paiement.
@@ -66,19 +63,15 @@ public class PaiementInfo {
 	 *            {@link #modePaiement}
 	 * @param montant
 	 *            {@link #montant}
-	 * @param infoPaiement
-	 *            {@link #infoPaiement}
 	 * @param timestampIntention
 	 *            {@link #timestampIntention}
 	 * @param timestampPaiement
 	 *            {@link #timestampPaiement}
 	 */
-	public PaiementInfo(ModePaiement modePaiement, Double montant, String infoPaiement, Date timestampIntention,
-			Date timestampPaiement) {
+	public PaiementInfo(ModePaiement modePaiement, Double montant, Date timestampIntention, Date timestampPaiement) {
 		super();
 		this.modePaiement = modePaiement;
 		this.montant = montant;
-		this.infoPaiement = infoPaiement;
 		this.timestampIntention = timestampIntention;
 		this.timestampPaiement = timestampPaiement;
 	}
@@ -153,23 +146,6 @@ public class PaiementInfo {
 	 */
 	public void setMontant(Double montant) {
 		this.montant = montant;
-	}
-
-	/**
-	 * 
-	 * @return {@link #infoPaiement}.
-	 */
-	public String getInfoPaiement() {
-		return infoPaiement;
-	}
-
-	/**
-	 * 
-	 * @param infoPaiement
-	 *            {@link #infoPaiement}.
-	 */
-	public void setInfoPaiement(String infoPaiement) {
-		this.infoPaiement = infoPaiement;
 	}
 
 	/**

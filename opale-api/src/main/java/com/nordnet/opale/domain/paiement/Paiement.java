@@ -70,11 +70,6 @@ public class Paiement {
 	private Double montant;
 
 	/**
-	 * info paiement.
-	 */
-	private String infoPaiement;
-
-	/**
 	 * id paiement.
 	 */
 	private String idPaiement;
@@ -126,7 +121,6 @@ public class Paiement {
 	public Paiement(PaiementInfo paiementInfo) {
 		this.modePaiement = paiementInfo.getModePaiement();
 		this.montant = paiementInfo.getMontant();
-		this.infoPaiement = paiementInfo.getInfoPaiement();
 		if (paiementInfo instanceof PaiementInfoComptant) {
 			this.idPaiement = ((PaiementInfoComptant) paiementInfo).getReferenceModePaiement();
 		} else {
@@ -138,8 +132,7 @@ public class Paiement {
 	@Override
 	public String toString() {
 		return "Paiement [id=" + id + ", reference=" + reference + ", referenceCommande=" + referenceCommande
-				+ ", modePaiement=" + modePaiement + ", montant=" + montant + ", infoPaiement=" + infoPaiement
-				+ ", typePaiement=" + typePaiement + "]";
+				+ ", modePaiement=" + modePaiement + ", montant=" + montant + ", typePaiement=" + typePaiement + "]";
 	}
 
 	/**
@@ -225,23 +218,6 @@ public class Paiement {
 	 */
 	public void setMontant(Double montant) {
 		this.montant = montant;
-	}
-
-	/**
-	 * 
-	 * @return {@link #infoPaiement}.
-	 */
-	public String getInfoPaiement() {
-		return infoPaiement;
-	}
-
-	/**
-	 * 
-	 * @param infoPaiement
-	 *            {@link #infoPaiement}.
-	 */
-	public void setInfoPaiement(String infoPaiement) {
-		this.infoPaiement = infoPaiement;
 	}
 
 	/**
@@ -403,7 +379,6 @@ public class Paiement {
 	public PaiementInfoRecurrent fromPaiementToPaiementInfoRecurrent() {
 		PaiementInfoRecurrent paiementInfo = new PaiementInfoRecurrent();
 		paiementInfo.setAuteur(auteur.toAuteurBusiness());
-		paiementInfo.setInfoPaiement(infoPaiement);
 		paiementInfo.setModePaiement(modePaiement);
 		paiementInfo.setMontant(montant);
 		paiementInfo.setTimestampIntention(timestampIntention);
@@ -423,7 +398,6 @@ public class Paiement {
 	public PaiementInfoComptant fromPaiementToPaiementInfoComptant() {
 		PaiementInfoComptant paiementInfo = new PaiementInfoComptant();
 		paiementInfo.setAuteur(auteur.toAuteurBusiness());
-		paiementInfo.setInfoPaiement(infoPaiement);
 		paiementInfo.setModePaiement(modePaiement);
 		paiementInfo.setMontant(montant);
 		paiementInfo.setTimestampIntention(timestampIntention);
