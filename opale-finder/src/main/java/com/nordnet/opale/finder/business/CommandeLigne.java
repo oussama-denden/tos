@@ -3,12 +3,16 @@ package com.nordnet.opale.finder.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link CommandeLigne}.
  * 
  * @author anisselmane.
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class CommandeLigne {
 
 	/**
@@ -29,7 +33,7 @@ public class CommandeLigne {
 	/**
 	 * Lite des detail.
 	 */
-	List<DetailCommandeLigne> detailCommandeLignes = new ArrayList<DetailCommandeLigne>();
+	List<DetailCommandeLigne> detailCommandeLignes;
 
 	/**
 	 * constructeur par defaut.
@@ -115,6 +119,9 @@ public class CommandeLigne {
 	 *            {@link DetailCommandeLigne}
 	 */
 	public void addDetail(DetailCommandeLigne detailCommandeLigne) {
+		if (this.detailCommandeLignes == null) {
+			this.detailCommandeLignes = new ArrayList<DetailCommandeLigne>();
+		}
 		this.detailCommandeLignes.add(detailCommandeLigne);
 	}
 }

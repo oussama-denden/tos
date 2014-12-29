@@ -307,22 +307,9 @@ public class CommandeServiceImpl implements CommandeService {
 						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
 		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
-		for (Commande commande : commandes) {
-			if (commande.getClientSouscripteur().getClientId().equals(clientId)) {
-				commandeInfos.add(commande.toCommandInfo());
-			}
-		}
 
 		for (Commande commande : commandes) {
-			if (commande.getClientALivrer().getClientId().equals(clientId)) {
-				commandeInfos.add(commande.toCommandInfo());
-			}
-		}
-
-		for (Commande commande : commandes) {
-			if (commande.getClientAFacturer().getClientId().equals(clientId)) {
-				commandeInfos.add(commande.toCommandInfo());
-			}
+			commandeInfos.add(commande.toCommandInfo());
 		}
 
 		return commandeInfos;

@@ -1,11 +1,15 @@
 package com.nordnet.opale.finder.business;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link Frais}.
  * 
  * @author anisselmane.
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class Frais {
 
 	/**

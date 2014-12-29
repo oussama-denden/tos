@@ -160,8 +160,9 @@ public class CommandeDaoImpl implements CommandeDao {
 
 			// associer une ligne a une commande.
 
-			if (Utils.isStringNullOrEmpty(lastReferenceLigneCommande)
-					|| !resultSet.getString("refligne").equals(lastReferenceLigneCommande)) {
+			if ((Utils.isStringNullOrEmpty(lastReferenceLigneCommande) || !resultSet.getString("refligne").equals(
+					lastReferenceLigneCommande))
+					&& (!Utils.isStringNullOrEmpty(resultSet.getString("refligne")))) {
 				refFraisLigne.clear();
 				commandeLigne = new CommandeLigne();
 				commandeLigne.setReference(resultSet.getString("refligne"));
@@ -201,8 +202,9 @@ public class CommandeDaoImpl implements CommandeDao {
 
 			// associer un detail a une ligne.
 
-			if (Utils.isStringNullOrEmpty(lastReferenceDetailLigneCommande)
-					|| !resultSet.getString("refDetailLigne").equals(lastReferenceDetailLigneCommande)) {
+			if ((Utils.isStringNullOrEmpty(lastReferenceDetailLigneCommande) || !resultSet.getString("refDetailLigne")
+					.equals(lastReferenceDetailLigneCommande))
+					&& !Utils.isStringNullOrEmpty(resultSet.getString("refDetailLigne"))) {
 				refFraisDetailLigne.clear();
 				detailCommandeLigne = new DetailCommandeLigne();
 				detailCommandeLigne.setLabel(resultSet.getString("labelCommandelignedetail"));

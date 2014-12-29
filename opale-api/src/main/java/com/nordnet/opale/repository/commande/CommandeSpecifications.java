@@ -39,6 +39,10 @@ public class CommandeSpecifications {
 			@Override
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				if (!Utils.isStringNullOrEmpty(clientId)) {
+					query.distinct(true);
+					query.orderBy(cb.asc(commandeRoot.get("clientSouscripteur").get("clientId")),
+							cb.asc(commandeRoot.get("clientALivrer").get("clientId")),
+							cb.asc(commandeRoot.get("clientAFacturer").get("clientId")));
 					return cb.or(cb.equal(commandeRoot.<String> get("clientSouscripteur").get("clientId"), clientId),
 							cb.equal(commandeRoot.<String> get("clientALivrer").get("clientId"), clientId),
 							cb.equal(commandeRoot.<String> get("clientAFacturer").get("clientId"), clientId));
@@ -63,12 +67,17 @@ public class CommandeSpecifications {
 
 			@Override
 			public Predicate toPredicate(Root<Commande> commandeRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
+				query.distinct(true);
 				if (!Utils.isStringNullOrEmpty(dateStart) && !Utils.isStringNullOrEmpty(dateEnd)) {
+
 					LocalDate datefrom = new LocalDate(dateStart);
 					LocalDate dateto = new LocalDate(dateEnd).plusDays(Constants.UN);
 
 					return cb.between(commandeRoot.<Date> get("dateCreation"), datefrom.toDate(), dateto.toDate());
+				} else if (!Utils.isStringNullOrEmpty(dateStart)) {
+					LocalDate datefrom = new LocalDate(dateStart);
+
+					return cb.greaterThanOrEqualTo(commandeRoot.<Date> get("dateCreation"), datefrom.toDate());
 				}
 				return null;
 			}

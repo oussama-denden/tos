@@ -3,12 +3,16 @@ package com.nordnet.opale.finder.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link Commande}.
  * 
  * @author anisselmane.
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class Commande {
 
 	/**
@@ -19,7 +23,7 @@ public class Commande {
 	/**
 	 * la liste de ligne de la commande.
 	 */
-	private List<CommandeLigne> lignes = new ArrayList<CommandeLigne>();
+	private List<CommandeLigne> lignes;
 
 	/**
 	 * Si la commmande est paye en comptant.
@@ -29,12 +33,12 @@ public class Commande {
 	/**
 	 * Le moyen de paiement comptant.
 	 */
-	private List<String> moyenPaiement = new ArrayList<String>();
+	private List<String> moyenPaiement;
 
 	/**
 	 * Le montant du paiement comptant.
 	 */
-	private List<Double> montant = new ArrayList<Double>();
+	private List<Double> montant;
 
 	/**
 	 * Si la commande est signe.
@@ -270,6 +274,8 @@ public class Commande {
 	 *            {@link CommandeLigne}
 	 */
 	public void addLigne(CommandeLigne commandeLigne) {
+		if (lignes == null)
+			lignes = new ArrayList<CommandeLigne>();
 		this.lignes.add(commandeLigne);
 
 	}
@@ -283,7 +289,11 @@ public class Commande {
 	 *            {@link #montant}
 	 */
 	public void addPaiementComptant(String modePaiement, Double montant) {
+		if (this.moyenPaiement == null)
+			this.moyenPaiement = new ArrayList<String>();
 		this.moyenPaiement.add(modePaiement);
+		if (this.montant == null)
+			this.montant = new ArrayList<Double>();
 		this.montant.add(montant);
 	}
 

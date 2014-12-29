@@ -3,12 +3,16 @@ package com.nordnet.opale.finder.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link Tarif}.
  * 
  * @author anisselmane.
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class Tarif {
 
 	/**
@@ -44,7 +48,7 @@ public class Tarif {
 	/**
 	 * la liste des reference des {@link Frais} associe au tarif.
 	 */
-	private List<Frais> frais = new ArrayList<Frais>();
+	private List<Frais> frais;
 
 	/**
 	 * constructeur par defaut.
@@ -179,6 +183,8 @@ public class Tarif {
 	 *            {@link Frais}
 	 */
 	public void addFrais(Frais frais) {
+		if (this.frais == null)
+			this.frais = new ArrayList<Frais>();
 		this.frais.add(frais);
 	}
 
