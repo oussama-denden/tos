@@ -174,6 +174,8 @@ public class DraftValidator {
 	 *            ligne draft.
 	 * @param referenceLigne
 	 *            reference ligne draft.
+	 * @param referenceDraft
+	 *            reference draft.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */

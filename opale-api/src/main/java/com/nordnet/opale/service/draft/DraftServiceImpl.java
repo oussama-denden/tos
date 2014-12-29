@@ -260,8 +260,8 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = getDraftByReference(refDraft);
 
-		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
-		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 
