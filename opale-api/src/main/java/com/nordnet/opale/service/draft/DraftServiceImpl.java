@@ -690,7 +690,7 @@ public class DraftServiceImpl implements DraftService {
 	@Transactional(rollbackFor = Exception.class)
 	public Object associerReduction(String refDraft, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReduction ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 		String referenceReduction = reductionService.ajouterReduction(refDraft, reductionInfo);
@@ -705,7 +705,7 @@ public class DraftServiceImpl implements DraftService {
 	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionLigne ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
@@ -726,7 +726,7 @@ public class DraftServiceImpl implements DraftService {
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionDetailLigne ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
@@ -752,7 +752,7 @@ public class DraftServiceImpl implements DraftService {
 			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFrais ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
@@ -780,7 +780,7 @@ public class DraftServiceImpl implements DraftService {
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFraisLigne ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
