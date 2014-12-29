@@ -33,9 +33,9 @@ public class OffreCatalogueInfo {
 	private String gamme;
 
 	/**
-	 * la famille.
+	 * secteur.
 	 */
-	private String fammille;
+	private String secteur;
 
 	/**
 	 * {@link TarifInfo}.
@@ -127,29 +127,27 @@ public class OffreCatalogueInfo {
 
 	/**
 	 * 
-	 * 
-	 * @return {@link #fammille}
-	 */
-	public String getFammille() {
-		return fammille;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param fammille
-	 *            the new {@link #fammille}
-	 */
-	public void setFammille(String fammille) {
-		this.fammille = fammille;
-	}
-
-	/**
-	 * 
 	 * @return {@link #tarif}.
 	 */
 	public TarifInfo getTarif() {
 		return tarif;
+	}
+
+	/**
+	 * 
+	 * @return {@link #secteur}.
+	 */
+	public String getSecteur() {
+		return secteur;
+	}
+
+	/**
+	 * 
+	 * @param secteur
+	 *            {@link #secteur}.
+	 */
+	public void setSecteur(String secteur) {
+		this.secteur = secteur;
 	}
 
 	/**
