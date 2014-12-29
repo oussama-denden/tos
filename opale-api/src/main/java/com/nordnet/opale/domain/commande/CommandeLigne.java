@@ -454,7 +454,7 @@ public class CommandeLigne {
 		offreCatalogueInfo.setReference(referenceOffre);
 		offreCatalogueInfo.setLabel(label);
 		offreCatalogueInfo.setGamme(gamme);
-		offreCatalogueInfo.setFammille(secteur);
+		offreCatalogueInfo.setSecteur(secteur);
 		offreCatalogueInfo.setTypeProduit(typeProduit);
 		offreCatalogueInfo.setModeFacturation(modeFacturation);
 

@@ -190,7 +190,9 @@ public class CommandeServiceImpl implements CommandeService {
 				paiementInfos.add(paiement.fromPaiementToPaiementInfoRecurrent());
 			}
 		}
-		commandeInfoDetail.setPaiements(paiementInfos);
+		if (paiementInfos.size() > Constants.ZERO) {
+			commandeInfoDetail.setPaiements(paiementInfos);
+		}
 
 		Signature signature = signatureService.getSignatureByReferenceCommande(refCommande);
 		if (signature != null) {

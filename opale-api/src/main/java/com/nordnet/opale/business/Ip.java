@@ -2,6 +2,9 @@ package com.nordnet.opale.business;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.nordnet.opale.serializer.DateSerializer;
+
 /**
  * Cette classe regroupe les informations qui definissent un {@link Ip}.
  * 
@@ -18,6 +21,7 @@ public class Ip {
 	/**
 	 * date de l ip.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date ts;
 
 	/**

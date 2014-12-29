@@ -23,6 +23,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
@@ -34,6 +35,7 @@ import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.serializer.DateSerializer;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.DraftValidator;
 import com.nordnet.topaze.ws.entity.Contrat;
@@ -85,6 +87,7 @@ public class DraftLigne {
 	/**
 	 * date de creation de la ligne.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date dateCreation;
 
 	/**
