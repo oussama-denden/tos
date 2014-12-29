@@ -2,6 +2,8 @@ package com.nordnet.opale.business;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nordnet.opale.deserializer.TypeValeurDeserialiser;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.topaze.ws.enums.TypeValeur;
 
@@ -36,6 +38,7 @@ public class ReductionInfo {
 	/**
 	 * le type de valeur.
 	 */
+	@JsonDeserialize(using = TypeValeurDeserialiser.class)
 	private TypeValeur typeValeur;
 
 	/**
