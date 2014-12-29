@@ -216,8 +216,7 @@ public class PaiementServiceImpl implements PaiementService {
 	public void supprimer(String refCommande, String refPaiement) throws OpaleException {
 		LOGGER.info("Entrer methode supprimer");
 
-		Paiement paiement = paiementRepository.findByReference(refPaiement);
-
+		Paiement paiement = paiementRepository.findByReferenceAndReferenceCommande(refPaiement, refCommande);
 		PaiementValidator.isExiste(refPaiement, refCommande, paiement);
 
 		if (paiement.isIntention()) {
