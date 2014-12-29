@@ -344,24 +344,24 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
+	public void supprimerLigneDraft(String referenceDraft, String referenceLigne, DeleteInfo deleteInfo)
 			throws OpaleException {
 
 		LOGGER.info("Enter methode supprimerLigneDraft");
-		getDraftByReference(reference);
+		Draft draft = getDraftByReference(referenceDraft);
 
 		DraftValidator.validerAuteur(deleteInfo.getAuteur());
 
-		DraftLigne draftLigne = draftLigneRepository.findByReference(referenceLigne);
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(referenceDraft, referenceLigne);
 
 		// verifier si la ligne draft existe.
-		DraftValidator.isExistLigneDraft(draftLigne, referenceLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, referenceLigne, referenceDraft);
 
 		draftLigneRepository.delete(draftLigne);
 		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(deleteInfo.getAuteur() != null ? deleteInfo.getAuteur().getQui()
-				: Constants.INTERNAL_USER, reference, "la ligne " + referenceLigne + " du draft " + reference
+				: Constants.INTERNAL_USER, referenceDraft, "la ligne " + referenceLigne + " du draft " + referenceDraft
 				+ " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
