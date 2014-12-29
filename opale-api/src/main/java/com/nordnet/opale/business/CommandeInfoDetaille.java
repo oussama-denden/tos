@@ -2,6 +2,8 @@ package com.nordnet.opale.business;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.nordnet.opale.domain.commande.Commande;
 
 /**
@@ -15,11 +17,13 @@ public class CommandeInfoDetaille extends CommandeInfo {
 	/**
 	 * {@link PaiementInfo}.
 	 */
+	@JsonInclude(Include.NON_NULL)
 	private List<PaiementInfo> paiements;
 
 	/**
 	 * {@link SignatureInfo}.
 	 */
+	@JsonInclude(Include.NON_NULL)
 	private SignatureInfo signature;
 
 	/**

@@ -4,7 +4,9 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.enums.ModeSignature;
+import com.nordnet.opale.serializer.DateSerializer;
 
 /**
  * Classi qui groupe les informations de signature.
@@ -38,6 +40,7 @@ public class SignatureInfo {
 	/**
 	 * date de signature.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date timestamp;
 
 	/**

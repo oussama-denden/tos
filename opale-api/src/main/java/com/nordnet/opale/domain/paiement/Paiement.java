@@ -85,11 +85,13 @@ public class Paiement {
 	/**
 	 * date d'intention de paiement.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date timestampIntention;
 
 	/**
 	 * date de paiement.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date timestampPaiement;
 
 	/**

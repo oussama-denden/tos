@@ -3,8 +3,10 @@ package com.nordnet.opale.business;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.deserializer.ModePaiementDeserializer;
 import com.nordnet.opale.domain.paiement.Paiement;
+import com.nordnet.opale.serializer.DateSerializer;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
@@ -33,6 +35,7 @@ public class PaiementRecurrentInfo {
 	/**
 	 * date de paiement.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date timestamp;
 
 	/**

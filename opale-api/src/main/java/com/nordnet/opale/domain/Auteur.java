@@ -4,7 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.business.Ip;
+import com.nordnet.opale.serializer.DateSerializer;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Auteur}.
@@ -33,6 +35,7 @@ public class Auteur {
 	/**
 	 * date de l ip.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date timestamp;
 
 	/**
@@ -137,6 +140,7 @@ public class Auteur {
 		auteur.setCanal(canal);
 		Ip ipBusiness = new Ip();
 		ipBusiness.setIp(ip);
+		ipBusiness.setTs(timestamp);
 		auteur.setIp(ipBusiness);
 		auteur.setQui(qui);
 		return auteur;

@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.deserializer.ModePaiementDeserializer;
+import com.nordnet.opale.serializer.DateSerializer;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
@@ -43,11 +45,13 @@ public class PaiementInfo {
 	/**
 	 * date d'intention de paiement.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date timestampIntention;
 
 	/**
 	 * date de paiement.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date timestampPaiement;
 
 	/**
