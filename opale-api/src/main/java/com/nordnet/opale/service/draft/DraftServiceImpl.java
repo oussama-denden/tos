@@ -15,25 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
-import com.nordnet.opale.business.Cout;
-import com.nordnet.opale.business.CoutRecurrent;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.Detail;
-import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftValidationInfo;
-import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.catalogue.Choice;
-import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.Tarif;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.calcule.CalculeCout;
+import com.nordnet.opale.calcule.CoutDecorator;
+import com.nordnet.opale.calcule.CoutDraft;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
@@ -57,7 +53,6 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
-import com.nordnet.opale.vat.client.VatClient;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.enums.TypeValeur;
@@ -135,6 +130,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	TopazeClient topazeClient;
+
+	/**
+	 * calculateur du cout.
+	 */
+	@Autowired
+	private CoutDecorator coutDecorator;
 
 	/**
 	 * {@inheritDoc}
@@ -661,9 +662,11 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerReferencesDraft(draft, calculInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
-			Cout cout = calculerCoutDraft(draft, calculInfo);
 
-			return cout;
+			CalculeCout coutDraft = new CoutDraft(draft, calculInfo);
+			coutDecorator.setCalculeCout(coutDraft);
+			return coutDecorator.getCout();
+
 		} else {
 			return validationInfo;
 		}
@@ -845,162 +848,6 @@ public class DraftServiceImpl implements DraftService {
 				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 			}
 		}
-	}
-
-	/**
-	 * calculer le cout des lignes.
-	 * 
-	 * @param draft
-	 *            {@link Draft}
-	 * @param calculInfo
-	 *            {@link TransformationInfo}.
-	 * @return {@link Cout}
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private Cout calculerCoutDraft(Draft draft, TransformationInfo calculInfo) throws OpaleException {
-		Cout cout = new Cout();
-		double coutComptantHT = 0d;
-		double coutComptantTTC = 0d;
-		double reductionHT = 0d;
-		double reductionTTC = 0d;
-		List<DetailCout> details = new ArrayList<DetailCout>();
-		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			DetailCout detailCout = calculerCoutLigne(draft, draftLigne, calculInfo);
-			coutComptantHT += detailCout.getCoutComptantHT();
-			coutComptantTTC += detailCout.getCoutComptantTTC();
-			reductionHT += detailCout.getReductionHT();
-			reductionTTC += detailCout.getReductionTTC();
-			details.add(detailCout);
-		}
-		cout.setCoutComptantHT(coutComptantHT);
-		cout.setCoutComptantTTC(coutComptantTTC);
-		cout.setDetails(details);
-		reductionHT += calculerReductionDraft(draft.getReference(), coutComptantHT, reductionHT);
-		cout.setReductionHT(reductionHT);
-		return cout;
-
-	}
-
-	/**
-	 * calucler le cout du detail ligne.
-	 * 
-	 * @param draft
-	 *            {@link Draft}.
-	 * @param draftLigne
-	 *            {@link DraftLigne}
-	 * @param calculInfo
-	 *            {@link TransformationInfo}
-	 * @return {@link DetailCout}
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private DetailCout calculerCoutLigne(Draft draft, DraftLigne draftLigne, TransformationInfo calculInfo)
-			throws OpaleException {
-		String segmentTVA = null;
-		if (calculInfo.getClientInfo() != null && calculInfo.getClientInfo().getFacturation() != null) {
-			DraftValidator.isIndicatifTVAValide(calculInfo.getClientInfo().getFacturation());
-			segmentTVA = calculInfo.getClientInfo().getFacturation().getTva();
-		} else if (draft.getClientAFacturer() != null) {
-			segmentTVA = draft.getClientAFacturer().getTva();
-		}
-		DetailCout detailCout = new DetailCout();
-		double coutComptantHT = 0d;
-		double coutComptantTTC = 0d;
-		double reductionHT = 0d;
-		double reductionTTC = 0d;
-		detailCout.setNumero(draftLigne.getReference());
-		detailCout.setLabel(draftLigne.getReferenceOffre());
-		double tarifHT = 0d;
-		double tarifTTC = 0d;
-		Integer frequence = null;
-		Tarif tarif = null;
-		DetailCatalogue detailCatalogue = null;
-		Choice choice = null;
-		TrameCatalogue trameCatalogue = calculInfo.getTrameCatalogue();
-		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
-		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
-			choice = detailCatalogue.getChoice(draftLigneDetail.getReferenceChoix());
-			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
-			if (tarif != null) {
-				DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
-				coutComptantHT += detailCoutTarif.getCoutComptantHT();
-				coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
-				tarifHT +=
-						detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-								.getNormal().getTarifHT() : 0d;
-				tarifTTC +=
-						detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-								.getNormal().getTarifTTC() : 0d;
-				frequence = tarif.getFrequence();
-				// reductionHT +=
-				// calculerReductionLignetETDetail(draft.getReference(), draftLigne.getReference(),
-				// draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(), reduction,
-				// detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan()
-				// : Constants.ZERO, tarif, false);
-			}
-		}
-
-		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
-		if (tarif != null) {
-			DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
-			coutComptantHT += detailCoutTarif.getCoutComptantHT();
-			coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
-			tarifHT +=
-					detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-							.getNormal().getTarifHT() : 0d;
-			tarifTTC +=
-					detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-							.getNormal().getTarifTTC() : 0d;
-			frequence = tarif.getFrequence();
-			// reduction +=
-			// calculerReductionLignetETDetail(draft.getReference(), draftLigne.getReference(),
-			// draftLigne.getReference(), coutTotal, reduction, plan, tarif, true);
-		}
-		Plan normal = new Plan(tarifHT, tarifTTC);
-		Plan reduit = new Plan(reductionTTC, reductionHT);
-		detailCout.setCoutRecurrent(new CoutRecurrent(frequence, normal, reduit));
-		detailCout.setCoutComptantHT(coutComptantHT);
-		detailCout.setCoutComptantTTC(coutComptantTTC);
-		detailCout.setReductionHT(reductionHT);
-		return detailCout;
-
-	}
-
-	/**
-	 * calcule du {@link DetailCout} pour un {@link Tarif}.
-	 * 
-	 * @param tarif
-	 *            {@link Tarif}.
-	 * @param segmentTVA
-	 *            segment tva du client.
-	 * @return {@link DetailCout}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private DetailCout calculerCoutTarif(Tarif tarif, String segmentTVA) throws OpaleException {
-
-		DetailCout detailCout = new DetailCout();
-		double coutComptant = 0d;
-		if (tarif.isRecurrent()) {
-			Plan normal =
-					new Plan(tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(), tarif.getTva(), segmentTVA));
-			detailCout.setCoutRecurrent(new CoutRecurrent(tarif.getFrequence(), normal, null));
-			// detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix(),
-			// VatClient.appliquerTVA(tarif.getPrix(),
-			// tarif.getTva(), segmentTVA)));
-		} else {
-			coutComptant += tarif.getPrix();
-		}
-		for (Frais frais : tarif.getFrais()) {
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutComptant += frais.getMontant();
-		}
-		detailCout.setCoutComptantHT(coutComptant);
-		detailCout.setCoutComptantTTC(VatClient.appliquerTVA(coutComptant, tarif.getTva(), segmentTVA));
-
-		return detailCout;
 	}
 
 	/**

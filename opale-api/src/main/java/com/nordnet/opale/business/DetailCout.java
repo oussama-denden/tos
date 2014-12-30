@@ -13,7 +13,7 @@ import com.nordnet.opale.vat.client.VatClient;
  * @author akram-moncer
  * 
  */
-public class DetailCout {
+public class DetailCout extends Cout {
 
 	/**
 	 * numero detail coincide avec le numero de ligne dans la commande.
@@ -178,6 +178,7 @@ public class DetailCout {
 	 * 
 	 * @return {@link #coutComptantHT}
 	 */
+	@Override
 	public double getCoutComptantHT() {
 		return coutComptantHT;
 	}
@@ -187,6 +188,7 @@ public class DetailCout {
 	 * @param coutComptantHT
 	 *            {@link #coutComptantHT}
 	 */
+	@Override
 	public void setCoutComptantHT(double coutComptantHT) {
 		this.coutComptantHT = coutComptantHT;
 	}
@@ -195,6 +197,7 @@ public class DetailCout {
 	 * 
 	 * @return {@link #coutComptantTTC}
 	 */
+	@Override
 	public double getCoutComptantTTC() {
 		return coutComptantTTC;
 	}
@@ -204,6 +207,7 @@ public class DetailCout {
 	 * @param coutComptantTTC
 	 *            {@link #coutComptantTTC}
 	 */
+	@Override
 	public void setCoutComptantTTC(double coutComptantTTC) {
 		this.coutComptantTTC = coutComptantTTC;
 	}
@@ -212,6 +216,7 @@ public class DetailCout {
 	 * 
 	 * @return {@link #reductionHT}
 	 */
+	@Override
 	public double getReductionHT() {
 		return reductionHT;
 	}
@@ -221,6 +226,7 @@ public class DetailCout {
 	 * @param reductionHT
 	 *            {@link #reductionHT}
 	 */
+	@Override
 	public void setReductionHT(double reductionHT) {
 		this.reductionHT = reductionHT;
 	}
@@ -229,6 +235,7 @@ public class DetailCout {
 	 * 
 	 * @return {@link #reductionTTC}
 	 */
+	@Override
 	public double getReductionTTC() {
 		return reductionTTC;
 	}
@@ -238,6 +245,7 @@ public class DetailCout {
 	 * @param reductionTTC
 	 *            {@link #reductionTTC}
 	 */
+	@Override
 	public void setReductionTTC(double reductionTTC) {
 		this.reductionTTC = reductionTTC;
 	}
