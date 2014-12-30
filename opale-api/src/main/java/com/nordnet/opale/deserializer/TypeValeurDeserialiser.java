@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.nordnet.opale.enums.TypeValeur;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * Desrialisation du type de valeur.
@@ -19,7 +19,7 @@ public class TypeValeurDeserialiser extends JsonDeserializer<TypeValeur> {
 	@Override
 	public TypeValeur deserialize(JsonParser parser, DeserializationContext context)
 			throws IOException, JsonProcessingException {
-		return TypeValeur.fromSting(parser.getText().toUpperCase());
+		return TypeValeur.fromString(parser.getText().toUpperCase());
 	}
 
 }

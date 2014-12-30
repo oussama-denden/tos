@@ -168,6 +168,26 @@ public class DraftValidator {
 	}
 
 	/**
+	 * tester si la ligne draft existe.
+	 * 
+	 * @param draftLigne
+	 *            ligne draft.
+	 * @param referenceLigne
+	 *            reference ligne draft.
+	 * @param referenceDraft
+	 *            reference draft.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void isExistLigneDraft(DraftLigne draftLigne, String referenceLigne, String referenceDraft)
+			throws OpaleException {
+		if (draftLigne == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.39", referenceLigne, referenceDraft), "1.1.39");
+		}
+
+	}
+
+	/**
 	 * Valider l {@link Auteur}.
 	 * 
 	 * @param auteur

@@ -262,8 +262,8 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = getDraftByReference(refDraft);
 
-		DraftLigne draftLigne = draftLigneRepository.findByReference(refLigne);
-		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 
@@ -346,24 +346,24 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void supprimerLigneDraft(String reference, String referenceLigne, DeleteInfo deleteInfo)
+	public void supprimerLigneDraft(String referenceDraft, String referenceLigne, DeleteInfo deleteInfo)
 			throws OpaleException {
 
 		LOGGER.info("Enter methode supprimerLigneDraft");
-		getDraftByReference(reference);
+		Draft draft = getDraftByReference(referenceDraft);
 
 		DraftValidator.validerAuteur(deleteInfo.getAuteur());
 
-		DraftLigne draftLigne = draftLigneRepository.findByReference(referenceLigne);
+		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(referenceDraft, referenceLigne);
 
 		// verifier si la ligne draft existe.
-		DraftValidator.isExistLigneDraft(draftLigne, referenceLigne);
+		DraftValidator.isExistLigneDraft(draftLigne, referenceLigne, referenceDraft);
 
 		draftLigneRepository.delete(draftLigne);
 		draftLigneRepository.flush();
 
 		tracageService.ajouterTrace(deleteInfo.getAuteur() != null ? deleteInfo.getAuteur().getQui()
-				: Constants.INTERNAL_USER, reference, "la ligne " + referenceLigne + " du draft " + reference
+				: Constants.INTERNAL_USER, referenceDraft, "la ligne " + referenceLigne + " du draft " + referenceDraft
 				+ " supprimée");
 
 		LOGGER.info("fin methode supprimerLigneDraft");
@@ -694,7 +694,7 @@ public class DraftServiceImpl implements DraftService {
 	@Transactional(rollbackFor = Exception.class)
 	public Object associerReduction(String refDraft, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReduction ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 		String referenceReduction = reductionService.ajouterReduction(refDraft, reductionInfo);
@@ -709,7 +709,7 @@ public class DraftServiceImpl implements DraftService {
 	public Object associerReductionLigne(String refDraft, String refLigne, ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionLigne ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
@@ -730,7 +730,7 @@ public class DraftServiceImpl implements DraftService {
 	public Object associerReductionDetailLigne(String refDraft, String refLigne, String refProduit,
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 		LOGGER.info("Debut methode associerReductionDetailLigne ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
@@ -756,7 +756,7 @@ public class DraftServiceImpl implements DraftService {
 			String refFrais, ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFrais ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		Draft draft = draftRepository.findByReference(refDraft);
 		DraftValidator.isExistDraft(draft, refDraft);
 
@@ -784,7 +784,7 @@ public class DraftServiceImpl implements DraftService {
 			ReductionInfo reductionInfo) throws OpaleException, JSONException {
 
 		LOGGER.info("Debut methode associerReductionFraisLigne ");
-
+		DraftValidator.validerAuteur(reductionInfo.getAuteur());
 		getDraftByReference(refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);

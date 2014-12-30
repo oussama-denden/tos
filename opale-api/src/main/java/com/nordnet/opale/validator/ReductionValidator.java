@@ -6,7 +6,6 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
-import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * cette classe responsable de valider les informations liés a une {@link Reduction}.
@@ -37,7 +36,7 @@ public class ReductionValidator {
 		if (reductionInfo.getValeur() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.Valeur"), "5.1.3");
 		} else if (reductionInfo.getTypeValeur() == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.TypeValeur"), "5.1.3");
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.10", "Reduction.TypeValeur"), "5.1.10");
 		}
 
 		if (objetEnReduction != null && objetEnReduction instanceof DraftLigne) {

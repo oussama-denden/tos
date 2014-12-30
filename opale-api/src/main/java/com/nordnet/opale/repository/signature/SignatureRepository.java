@@ -28,6 +28,17 @@ public interface SignatureRepository extends JpaRepository<Signature, Integer> {
 	public Signature findByReference(String reference);
 
 	/**
+	 * recuperer une signature par reference et reference commande.
+	 * 
+	 * @param referenceSignature
+	 *            reference de signature {@link String }
+	 * @param referenceCommande
+	 *            reference commande {@link String }
+	 * @return {@link Signature}
+	 */
+	public Signature findByReferenceAndReferenceCommande(String referenceSignature, String referenceCommande);
+
+	/**
 	 * recuperer une sig ature par la reference du commande.
 	 * 
 	 * @param referenceCommande

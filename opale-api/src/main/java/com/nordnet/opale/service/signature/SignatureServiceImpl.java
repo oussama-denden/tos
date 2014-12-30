@@ -114,7 +114,7 @@ public class SignatureServiceImpl implements SignatureService {
 		SignatureValidator.validerAuteur(signatureInfo.getAuteur());
 		String referenceSignature = null;
 		if (refSignature != null) {
-			Signature signature = signatureRepository.findByReference(refSignature);
+			Signature signature = signatureRepository.findByReferenceAndReferenceCommande(refSignature, refCommande);
 			SignatureValidator.checkSignatureExiste(signature, refSignature, refCommande);
 			SignatureValidator.checkSignatureComplete(refCommande, signature, false);
 			SignatureValidator.validerSignature(signatureInfo);
