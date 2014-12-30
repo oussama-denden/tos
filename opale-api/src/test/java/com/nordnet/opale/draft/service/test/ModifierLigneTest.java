@@ -118,7 +118,7 @@ public class ModifierLigneTest extends GlobalTestCase {
 			draftService.modifierLigne("REF-DRAFT-1", "00000002", draftLigneInfo);
 			fail("Unexpected error");
 		} catch (OpaleException e) {
-			assertEquals("1.1.2", e.getErrorCode());
+			assertEquals("1.1.39", e.getErrorCode());
 		}
 	}
 
