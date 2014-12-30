@@ -9,8 +9,9 @@ import com.nordnet.common.valueObject.constants.TransactionType;
 import com.nordnet.common.valueObject.identifier.Identifier;
 import com.nordnet.common.valueObject.money.Price;
 import com.nordnet.common.valueObject.money.Transaction;
-import com.nordnet.saphir.ws.client.constants.TMovementAppendixItemType;
-import com.nordnet.saphir.ws.client.entity.TMovementAppendixItem;
+import com.nordnet.saphir.ws.entities.MovementAppendixItem;
+import com.nordnet.saphir.ws.entities.MovementAppendixItem.Builder;
+import com.nordnet.saphir.ws.entities.constants.AppendixItemType;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
@@ -52,17 +53,19 @@ public final class DownPaiementUtils {
 	 *            reference du contrat
 	 * @return liste des appendixItem
 	 */
-	public static final Collection<TMovementAppendixItem> creerAppendixItem(String label, double montant,
+	public static final Collection<MovementAppendixItem> creerAppendixItem(String label, double montant,
 			String productReferenceId) {
-		Collection<TMovementAppendixItem> appendixItems = new ArrayList<TMovementAppendixItem>();
+		Collection<MovementAppendixItem> appendixItems = new ArrayList<MovementAppendixItem>();
 		Price price = new Price(montant, CurrencyCode.EUR);
 		Identifier productReferenceIDenIdentifier = Identifier.build(productReferenceId);
 
-		TMovementAppendixItem movementAppendixItem =
-				new TMovementAppendixItem(null, TMovementAppendixItemType.OTHER, price, label,
-						productReferenceIDenIdentifier);
+		Builder movementAppendixItem = MovementAppendixItem.builder();
+		movementAppendixItem.productReferenceId(productReferenceIDenIdentifier);
+		movementAppendixItem.label(label);
+		movementAppendixItem.price(price);
+		movementAppendixItem.type(AppendixItemType.OTHER);
 
-		appendixItems.add(movementAppendixItem);
+		appendixItems.add(movementAppendixItem.build());
 		return appendixItems;
 	}
 
