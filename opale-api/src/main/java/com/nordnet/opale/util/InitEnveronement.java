@@ -31,7 +31,6 @@ public class InitEnveronement implements ServletContextListener {
 	public void contextInitialized(final ServletContextEvent event) {
 
 		final String props = new File(System.getProperty("catalina.base")) + "/webapps/env.properties";
-
 		final Properties propsFromFile = new Properties();
 		try {
 			final FileInputStream in = new FileInputStream(props);

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
@@ -37,35 +39,15 @@ public class FindCommandeTest extends GlobalTestCase {
 
 		try {
 			Date d1 = new Date();
-			List<Commande> commandes = commandeService.findByIdClient("1");
+			List<Commande> commandes = commandeService.findByIdClient("000003");
 			Date d2 = new Date();
 			System.out.println("Find All Contrat in " + (d2.getTime() - d1.getTime()) + "ms");
-			assertEquals(3214, commandes.size());
+			assertEquals(6, commandes.size());
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Assert.fail("Unexpected Error");
 		}
 
 	}
 
-	/**
-	 * Test execute.
-	 */
-	@Test
-	@DataSet(factory = TopazeMultiSchemaXmlDataSetFactory.class, value = "/dataset/findCommandeTest.xml")
-	public void testFindValide() {
-
-		try {
-			Date d1 = new Date();
-			List<Commande> commandes = commandeService.findByIdClient(2, 50, "1");
-			Date d2 = new Date();
-			System.out.println("Find All Contrat in " + (d2.getTime() - d1.getTime()) + "ms");
-			assertEquals(50, commandes.size());
-			assertEquals(commandes.get(0).getReference(), "Cmd-00000051");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
 }

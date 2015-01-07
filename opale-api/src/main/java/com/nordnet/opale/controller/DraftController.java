@@ -42,6 +42,7 @@ import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 
 /**
  * Gerer l'ensemble des requetes qui ont en rapport avec le {@link Draft}.
@@ -49,7 +50,7 @@ import com.wordnik.swagger.annotations.Api;
  * @author anisselmane.
  * 
  */
-@Api(value = "draft", description = "draft")
+@Api(value = "Draft", description = "liste des services pour la gestion des drafts")
 @Controller
 @RequestMapping("/draft")
 public class DraftController {
@@ -80,6 +81,7 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
+	@ApiOperation(value = "addEvent", notes = "Add a new event")
 	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Draft getDraftByReference(@PathVariable String reference) throws OpaleException {

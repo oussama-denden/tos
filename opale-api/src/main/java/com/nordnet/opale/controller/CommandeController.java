@@ -49,7 +49,7 @@ import com.wordnik.swagger.annotations.Api;
  * @author mahjoub-MARZOUGUI
  * 
  */
-@Api(value = "commande", description = "commande")
+@Api(value = "Commande", description = "liste des services pour la gestion des commandes")
 @Controller
 @RequestMapping("/commande")
 public class CommandeController {

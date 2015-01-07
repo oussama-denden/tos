@@ -1,5 +1,6 @@
 package com.nordnet.opale.business;
 
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Auteur}.
@@ -9,10 +10,10 @@ package com.nordnet.opale.business;
  */
 public class Auteur {
 
-
 	/**
 	 * nom de l auteur.
 	 */
+	@ApiModelProperty(required = true)
 	private String qui;
 
 	/**
@@ -31,7 +32,6 @@ public class Auteur {
 	public Auteur() {
 
 	}
-
 
 	/**
 	 * 
