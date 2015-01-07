@@ -28,7 +28,7 @@ import com.wordnik.swagger.annotations.Api;
  */
 @Api(value = "finder", description = "Opale finder")
 @Controller
-@RequestMapping("/Commandes")
+@RequestMapping("/Commande")
 public class FinderController {
 
 	/**
@@ -52,29 +52,6 @@ public class FinderController {
 	public List<Commande> findByIdClient(@PathVariable String idClient) throws OpaleException {
 
 		return commandeService.findByIdClient(idClient);
-
-	}
-
-	/**
-	 * recuperer tous les {@link Commande} par page.
-	 * 
-	 * @param numPage
-	 *            numero de page
-	 * 
-	 * @param nombreLigne
-	 *            nombre de ligne
-	 * @param idClient
-	 *            l id du client
-	 * @return Liste de {@link Commande}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	@RequestMapping(value = "/client/{idClient:.+}/page/{numPage:.+}/{nombreLigne:.+}", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public List<Commande> find(@PathVariable int numPage, @PathVariable int nombreLigne, @PathVariable String idClient)
-			throws OpaleException {
-
-		return commandeService.findByIdClient(numPage, nombreLigne, idClient);
 
 	}
 
