@@ -77,4 +77,9 @@ public final class Constants {
 	 */
 	public static final String FIND_COMMANDE = "FIND_COMMANDE";
 
+	/**
+	 * le code erreur par defaut si une exception interne est leve.
+	 */
+	public static String CODE_ERREUR_PAR_DEFAUT = "0.2";
+
 }

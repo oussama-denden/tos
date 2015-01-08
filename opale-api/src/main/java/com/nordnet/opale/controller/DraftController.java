@@ -39,6 +39,8 @@ import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.draft.DraftService;
+import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.wordnik.swagger.annotations.Api;
@@ -583,7 +585,26 @@ public class DraftController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ OpaleException.class })
 	@ResponseBody
-	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
+	InfoErreur handleOpaleException(HttpServletRequest req, Exception ex) {
 		return new InfoErreur(req.getRequestURI(), ((OpaleException) ex).getErrorCode(), ex.getLocalizedMessage());
+	}
+
+	/**
+	 * 
+	 * Gerer le cas ou on a une {@link Exception}.
+	 * 
+	 * @param req
+	 *            requete HttpServletRequest.
+	 * @param ex
+	 *            exception
+	 * @return {@link InfoErreur}
+	 */
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler({ Exception.class })
+	@ResponseBody
+	InfoErreur handleException(HttpServletRequest req, Exception ex) {
+		LOGGER.error(PropertiesUtil.getInstance().getErrorMessage(Constants.CODE_ERREUR_PAR_DEFAUT), ex);
+		return new InfoErreur(req.getRequestURI(), Constants.CODE_ERREUR_PAR_DEFAUT, PropertiesUtil.getInstance()
+				.getErrorMessage(Constants.CODE_ERREUR_PAR_DEFAUT));
 	}
 }
