@@ -80,11 +80,11 @@ public class DetailCout extends Cout {
 				coutComptantHT += detailCoutTarif.getCoutComptantHT();
 				coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
 				tarifHT +=
-						detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-								.getNormal().getTarifHT() : 0d;
+						detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+								.getTarifHT() : 0d;
 				tarifTTC +=
-						detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-								.getNormal().getTarifTTC() : 0d;
+						detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+								.getTarifTTC() : 0d;
 				frequence = tarif.getFrequence();
 			}
 		}
@@ -95,11 +95,11 @@ public class DetailCout extends Cout {
 			coutComptantHT += detailCoutTarif.getCoutComptantHT();
 			coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
 			tarifHT +=
-					detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-							.getNormal().getTarifHT() : 0d;
+					detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+							.getTarifHT() : 0d;
 			tarifTTC +=
-					detailCoutTarif.getCoutRecurrent().getNormal() != null ? detailCoutTarif.getCoutRecurrent()
-							.getNormal().getTarifTTC() : 0d;
+					detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+							.getTarifTTC() : 0d;
 			frequence = tarif.getFrequence();
 		}
 

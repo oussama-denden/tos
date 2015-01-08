@@ -43,7 +43,7 @@ public class CoutDraft extends CalculeCout {
 	}
 
 	/**
-	 * constructeur avec param.
+	 * constructeur avec parametres.
 	 * 
 	 * @param draft
 	 *            {@link Draft}
@@ -92,7 +92,9 @@ public class CoutDraft extends CalculeCout {
 				coutRecurentReduitHT += coutLigneDraft.getCoutRecurentReduitTTC();
 			}
 
+			// recuperation du reduction du draft.
 			Reduction reductionDraft = reductionRepository.findReductionDraft(draft.getReference());
+
 			reductionTTC +=
 					ReductionUtil.calculeReductionComptant(coutComptantTTC - reductionComptantTTC, reductionDraft);
 			reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);

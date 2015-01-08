@@ -62,7 +62,7 @@ public class CoutLigneDraft extends CalculeCout {
 	}
 
 	/**
-	 * constructeur avec param.
+	 * constructeur avec parametres.
 	 * 
 	 * @param draft
 	 *            {@link #draft}
@@ -154,6 +154,7 @@ public class CoutLigneDraft extends CalculeCout {
 
 				CoutTarif coutTarif =
 						new CoutTarif(tarif, segmentTVA, null, draftLigne, draft, true, false, reductionRepository);
+
 				DetailCout detailCoutTarif = (DetailCout) coutTarif.getCout();
 				coutComptantHT += detailCoutTarif.getCoutComptantHT();
 				coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
@@ -165,9 +166,16 @@ public class CoutLigneDraft extends CalculeCout {
 								.getTarifTTC() : 0d;
 				frequence = tarif.getFrequence();
 
+				reductionRecurrentHT += coutTarif.getReductionRecurrentHT();
+				reductionRecurrentTTC += coutTarif.getReductionRecurrentTTC();
+
+				reductionComptantHT += coutTarif.getReductionComptantHT();
+				reductionComptantTTC += coutTarif.getReductionComptantTTC();
+
 				Reduction reductionECParent =
 						reductionRepository.findReductionECParent(draft.getReference(), draftLigne.getReference(),
 								tarif.getIdTarif());
+				// calculer la reduction sur le tarif de ligne.
 				calculerReductionECParent(reductionECParent, detailCoutTarif, tva);
 
 			}
@@ -176,9 +184,13 @@ public class CoutLigneDraft extends CalculeCout {
 			Reduction reductionLigne =
 					reductionRepository.findReductionLigneSanFrais(draft.getReference(), draftLigne.getReference());
 
+			// recuperer les reductions recurrentes liees au draft
 			Reduction reductionDraft = reductionRepository.findReductionDraft(draft.getReference());
 
+			// calculer la reduction de ligne.
 			calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, tva, false);
+
+			// calculer la reduction recurrente du draft sur la ligne.
 			calculerReductionLigne(reductionDraft, coutComptantTTC, tarifTTC, tva, true);
 
 			Plan normal = new Plan(tarifHT, tarifTTC);

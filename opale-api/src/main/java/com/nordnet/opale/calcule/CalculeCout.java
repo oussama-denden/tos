@@ -4,6 +4,7 @@ import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
+ * classe abstract qui est le parent du tous les classe qui calcule le cout.
  * 
  * @author mahjoub-MARZOUGUI
  * 

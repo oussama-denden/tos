@@ -117,16 +117,22 @@ public class CoutLigneDetailDraft extends CalculeCout {
 						new CoutTarif(tarif, segmentTVA, draftLigneDetail, draftLigne, draft, false, true,
 								reductionRepository);
 				detailCoutTarif = (DetailCout) coutTarif.getCout();
+
+				// recuperer la reduction liee au detaille ligne draft.
 				Reduction reduction =
 						reductionRepository.findReductionLigneDetailleSansFrais(draft.getReference(),
 								draftLigne.getReference(), draftLigneDetail.getReferenceChoix());
+
 				double tarifHT = detailCoutTarif.getCoutRecurrent().getNormal().getTarifHT();
 				double tarifTTC = detailCoutTarif.getCoutRecurrent().getNormal().getTarifTTC();
 
+				// calculer la reduction du detaille ligne.
 				calculerReductionLigneDetail(reduction, detailCoutTarif.getCoutComptantTTC(), tarifTTC, tva,
 						detailCoutTarif);
 				detailCoutTarif.setReductionHT(reductionHT);
 				detailCoutTarif.setReductionTTC(reductionTTC);
+
+				// plan reduit
 				reduit =
 						new Plan((tarifHT - reductionRecurrentHT) > 0 ? tarifHT - reductionRecurrentHT : 0,
 								(tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0);
