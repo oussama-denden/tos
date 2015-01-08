@@ -1,6 +1,7 @@
 package com.nordnet.opale.finder.business;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -69,6 +70,8 @@ public class Commande {
 	 * Si la commande est annule ou non.
 	 */
 	private boolean annule;
+
+	private Date dateCreation;
 
 	/**
 	 * constructeur par defaut.
@@ -265,6 +268,23 @@ public class Commande {
 	 */
 	public void setAnnule(boolean annule) {
 		this.annule = annule;
+	}
+
+	/**
+	 * 
+	 * @return {@link #dateCreation}
+	 */
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+	/**
+	 * 
+	 * @param dateCreation
+	 *            {@link #dateCreation}
+	 */
+	public void setDateCreation(Date dateCreation) {
+		this.dateCreation = dateCreation;
 	}
 
 	/**

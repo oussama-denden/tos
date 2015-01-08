@@ -52,7 +52,12 @@
 
 	<!-- <context:annotation-config /> -->
 	<!-- scan du projet -->
-	<context:component-scan base-package="com.nordnet.opale" />
+	<context:component-scan base-package="com.nordnet.opale.domain" />
+	<context:component-scan base-package="com.nordnet.opale.repository" />
+	<context:component-scan base-package="com.nordnet.opale.service" />
+	<context:component-scan base-package="com.nordnet.opale.rest" />
+	<context:component-scan base-package="com.nordnet.opale.validator" />
+	<context:component-scan base-package="com.nordnet.opale.draft.test.generator" />
 	
 	<bean id="restURLProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">

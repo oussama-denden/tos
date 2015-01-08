@@ -1,15 +1,9 @@
 package com.nordnet.opale.finder.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
-import org.springframework.context.MessageSource;
 
-import com.nordnet.opale.finder.exception.OpaleException;
 import com.nordnet.opale.finder.util.spring.ApplicationContextHolder;
 
 /**
@@ -33,12 +27,7 @@ public class PropertiesUtil {
 	/**
 	 * Rest URL properties file.
 	 */
-	private Properties topazeExceptionsProperties = ApplicationContextHolder.getBean("topazeExceptionsProperties");
-
-	/**
-	 * Dynamic properties file.
-	 */
-	private MessageSource dynamicProperties = ApplicationContextHolder.getBean("dynamicProperties");
+	private Properties opaleExceptionsProperties = ApplicationContextHolder.getBean("opaleExceptionsProperties");
 
 	/**
 	 * private constructor.
@@ -66,7 +55,7 @@ public class PropertiesUtil {
 	 * @return message d'erreur.
 	 */
 	public String getErrorMessage(String errorMessageKey, Object... parameters) {
-		return String.format(topazeExceptionsProperties.getProperty(errorMessageKey), parameters);
+		return String.format(opaleExceptionsProperties.getProperty(errorMessageKey), parameters);
 	}
 
 	/**
@@ -77,34 +66,6 @@ public class PropertiesUtil {
 	 * @return code d'erreur.
 	 */
 	public String getErrorCode(String errorCodeKey) {
-		return topazeExceptionsProperties.getProperty(errorCodeKey);
-	}
-
-	/**
-	 * @return LocalDateTime de jour definit dans la fichier env.properties.
-	 * @throws TopazeException
-	 *             {@link TopazeException}.
-	 */
-	public LocalDateTime getDateDuJour() throws OpaleException {
-		String dateDuJourString =
-				dynamicProperties.getMessage(Constants.DATE_DU_JOUR_PROPERTY, null,
-						Constants.DEFAULT_DATE_FORMAT.format(new Date()), null);
-		if (Utils.isStringNullOrEmpty(dateDuJourString) || dateDuJourString.equals(Constants.NOW)
-				|| System.getProperty(Constants.ENV_PROPERTY).equals(Constants.PROD_ENV)) {
-			return new LocalDateTime();
-		} else {
-			try {
-				SimpleDateFormat formatter = Constants.DEFAULT_DATE_FORMAT;
-				Date dateDuJour = formatter.parse(dateDuJourString);
-				LocalDateTime date = new LocalDateTime(dateDuJour);
-				LocalTime time = new LocalTime();
-				return date.withTime(time.hourOfDay().get(), time.minuteOfHour().get(), time.secondOfMinute().get(),
-						time.millisOfSecond().get());
-			} catch (Exception e) {
-				LOGGER.error("Error occurs during parse date", e);
-				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("0.1"), "0.1");
-			}
-
-		}
+		return opaleExceptionsProperties.getProperty(errorCodeKey);
 	}
 }

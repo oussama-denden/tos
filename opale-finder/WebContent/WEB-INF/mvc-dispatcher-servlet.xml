@@ -12,11 +12,12 @@
         base-package="com.nordnet.opale.finder.controller" />
 	<context:component-scan
         base-package="com.nordnet.opale.finder.service" />
+    <context:component-scan
+        base-package="com.nordnet.opale.finder.swagger" />
 
 	<mvc:default-servlet-handler />
 	
 	<!-- creates a controller at /api-docs from this uri, which serves swagger's raw documentation in JSON format. -->
-    <bean class="com.mangofactory.swagger.configuration.DocumentationConfig" id="documentationConfig"/>
+    <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
 
-	<context:property-placeholder location="classpath:/swagger.properties" />
 </beans>

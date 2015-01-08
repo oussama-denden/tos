@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ import com.nordnet.opale.finder.business.Commande;
 import com.nordnet.opale.finder.exception.InfoErreur;
 import com.nordnet.opale.finder.exception.OpaleException;
 import com.nordnet.opale.finder.service.CommandeService;
+import com.nordnet.opale.finder.util.Constants;
+import com.nordnet.opale.finder.util.PropertiesUtil;
 import com.wordnik.swagger.annotations.Api;
 
 /**
@@ -28,8 +31,13 @@ import com.wordnik.swagger.annotations.Api;
  */
 @Api(value = "finder", description = "Opale finder")
 @Controller
-@RequestMapping("/Commandes")
+@RequestMapping("/Commande")
 public class FinderController {
+
+	/**
+	 * Declaration du log.
+	 */
+	private final static Logger LOGGER = Logger.getLogger(FinderController.class);
 
 	/**
 	 * Commande service.
@@ -56,29 +64,6 @@ public class FinderController {
 	}
 
 	/**
-	 * recuperer tous les {@link Commande} par page.
-	 * 
-	 * @param numPage
-	 *            numero de page
-	 * 
-	 * @param nombreLigne
-	 *            nombre de ligne
-	 * @param idClient
-	 *            l id du client
-	 * @return Liste de {@link Commande}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	@RequestMapping(value = "/client/{idClient:.+}/page/{numPage:.+}/{nombreLigne:.+}", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public List<Commande> find(@PathVariable int numPage, @PathVariable int nombreLigne, @PathVariable String idClient)
-			throws OpaleException {
-
-		return commandeService.findByIdClient(numPage, nombreLigne, idClient);
-
-	}
-
-	/**
 	 * 
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 
@@ -91,7 +76,26 @@ public class FinderController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ OpaleException.class })
 	@ResponseBody
-	InfoErreur handleTopazeException(HttpServletRequest req, Exception ex) {
+	InfoErreur handleOpaleException(HttpServletRequest req, Exception ex) {
 		return new InfoErreur(req.getRequestURI(), ((OpaleException) ex).getErrorCode(), ex.getLocalizedMessage());
+	}
+
+	/**
+	 * 
+	 * Gerer le cas ou on a une {@link Exception}.
+	 * 
+	 * @param req
+	 *            requete HttpServletRequest.
+	 * @param ex
+	 *            exception
+	 * @return {@link InfoErreur}
+	 */
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler({ Exception.class })
+	@ResponseBody
+	InfoErreur handleException(HttpServletRequest req, Exception ex) {
+		LOGGER.error(PropertiesUtil.getInstance().getErrorMessage(Constants.CODE_ERREUR_PAR_DEFAUT), ex);
+		return new InfoErreur(req.getRequestURI(), Constants.CODE_ERREUR_PAR_DEFAUT, PropertiesUtil.getInstance()
+				.getErrorMessage(Constants.CODE_ERREUR_PAR_DEFAUT));
 	}
 }

@@ -14,7 +14,8 @@
     http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
 
 
-	<context:component-scan base-package="com.nordnet.opale.finder" />
+	<context:component-scan base-package="com.nordnet.opale.finder.service" />
+	<context:component-scan base-package="com.nordnet.opale.finder.dao" />
 
 	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/OpaleDS"
 		expected-type="javax.sql.DataSource" />
