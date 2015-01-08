@@ -130,6 +130,7 @@ public class CommandeDaoImpl implements CommandeDao {
 				commande = new Commande();
 				commande.setReference(resultSet.getString("refcommande"));
 				commande.setAnnule(resultSet.getBoolean("annule"));
+				commande.setDateCreation(resultSet.getDate("dateCreation"));
 				// Accocier les client a la commande.
 				associerClient(resultSet, commande);
 
