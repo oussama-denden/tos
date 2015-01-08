@@ -21,6 +21,11 @@ public class CommandeLigne {
 	private String reference;
 
 	/**
+	 * Le geste de la ligne (VENTE/RENOUVELEMENT/MIGRATION...).
+	 */
+	private String geste;
+
+	/**
 	 * Label ligne commande.
 	 */
 	private String label;
@@ -33,7 +38,7 @@ public class CommandeLigne {
 	/**
 	 * Lite des detail.
 	 */
-	List<DetailCommandeLigne> detailCommandeLignes;
+	private List<DetailCommandeLigne> detailCommandeLignes;
 
 	/**
 	 * constructeur par defaut.
@@ -110,6 +115,23 @@ public class CommandeLigne {
 	 */
 	public void setDetailCommandeLignes(List<DetailCommandeLigne> detailCommandeLignes) {
 		this.detailCommandeLignes = detailCommandeLignes;
+	}
+
+	/**
+	 * 
+	 * @return {@link #geste}
+	 */
+	public String getGeste() {
+		return geste;
+	}
+
+	/**
+	 * 
+	 * @param geste
+	 *            {@link #geste}
+	 */
+	public void setGeste(String geste) {
+		this.geste = geste;
 	}
 
 	/**

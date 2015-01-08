@@ -46,21 +46,4 @@ public class CommandeServiceImpl implements CommandeService {
 		return commandes;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Commande> findByIdClient(int numPage, int nombreligne, String idClient) throws OpaleException {
-		LOGGER.info("Entrer methode findByIdClient");
-		Date d1 = new Date();
-
-		List<Commande> commandes = commandeDao.findByIdClient(numPage, nombreligne, idClient);
-
-		Date d2 = new Date();
-		LOGGER.info("Find " + nombreligne + "  Orders in " + (d2.getTime() - d1.getTime()) + "ms");
-		LOGGER.info("Fin methode findByIdClient");
-		return commandes;
-
-	}
-
 }

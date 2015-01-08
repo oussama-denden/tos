@@ -22,6 +22,11 @@ public class Commande {
 	private String reference;
 
 	/**
+	 * Le code partenaire.
+	 */
+	private String codePartenaire;
+
+	/**
 	 * la liste de ligne de la commande.
 	 */
 	private List<CommandeLigne> lignes;
@@ -34,12 +39,17 @@ public class Commande {
 	/**
 	 * Le moyen de paiement comptant.
 	 */
-	private List<String> moyenPaiement;
+	private String moyenPaiementComptant;
 
 	/**
-	 * Le montant du paiement comptant.
+	 * Le moyen de paiement recurrent.
 	 */
-	private List<Double> montant;
+	private String moyenPaiementRecurrent;
+
+	// /**
+	// * Le montant du paiement comptant.
+	// */
+	// private List<Double> montant;
 
 	/**
 	 * Si la commande est signe.
@@ -71,6 +81,9 @@ public class Commande {
 	 */
 	private boolean annule;
 
+	/**
+	 * Date creation commande.
+	 */
 	private Date dateCreation;
 
 	/**
@@ -134,39 +147,22 @@ public class Commande {
 		this.paye = paye;
 	}
 
-	/**
-	 * 
-	 * @return {@link #paiementRecurrent}
-	 */
-	public List<String> getMoyenPaiement() {
-		return moyenPaiement;
-	}
-
-	/**
-	 * 
-	 * @param moyenPaiement
-	 *            {@link #paiementRecurrent}
-	 */
-	public void setMoyenPaiement(List<String> moyenPaiement) {
-		this.moyenPaiement = moyenPaiement;
-	}
-
-	/**
-	 * 
-	 * @return {@link #montant}
-	 */
-	public List<Double> getMontant() {
-		return montant;
-	}
-
-	/**
-	 * 
-	 * @param montant
-	 *            {@link #montant}
-	 */
-	public void setMontant(List<Double> montant) {
-		this.montant = montant;
-	}
+	// /**
+	// *
+	// * @return {@link #montant}
+	// */
+	// public List<Double> getMontant() {
+	// return montant;
+	// }
+	//
+	// /**
+	// *
+	// * @param montant
+	// * {@link #montant}
+	// */
+	// public void setMontant(List<Double> montant) {
+	// this.montant = montant;
+	// }
 
 	/**
 	 * 
@@ -288,6 +284,57 @@ public class Commande {
 	}
 
 	/**
+	 * 
+	 * @return {@link #codePartenaire}
+	 */
+	public String getCodePartenaire() {
+		return codePartenaire;
+	}
+
+	/**
+	 * 
+	 * @param codePartenaire
+	 *            {@link #codePartenaire}
+	 */
+	public void setCodePartenaire(String codePartenaire) {
+		this.codePartenaire = codePartenaire;
+	}
+
+	/**
+	 * 
+	 * @return {@link #moyenPaiementComptant}
+	 */
+	public String getMoyenPaiementComptant() {
+		return moyenPaiementComptant;
+	}
+
+	/**
+	 * 
+	 * @param moyenPaiementComptant
+	 *            {@link #moyenPaiementComptant}
+	 */
+	public void setMoyenPaiementComptant(String moyenPaiementComptant) {
+		this.moyenPaiementComptant = moyenPaiementComptant;
+	}
+
+	/**
+	 * 
+	 * @return {@link #moyenPaiementRecurrent}
+	 */
+	public String getMoyenPaiementRecurrent() {
+		return moyenPaiementRecurrent;
+	}
+
+	/**
+	 * 
+	 * @param moyenPaiementRecurrent
+	 *            {@link #moyenPaiementRecurrent}
+	 */
+	public void setMoyenPaiementRecurrent(String moyenPaiementRecurrent) {
+		this.moyenPaiementRecurrent = moyenPaiementRecurrent;
+	}
+
+	/**
 	 * Assoucer une ligne a une commade.
 	 * 
 	 * @param commandeLigne
@@ -301,20 +348,37 @@ public class Commande {
 	}
 
 	/**
-	 * Ajouter paiement comptant.
+	 * Ajouter moyen paiement comptant.
 	 * 
-	 * @param modePaiement
-	 *            {@link #moyenPaiement}
-	 * @param montant
-	 *            {@link #montant}
+	 * @param moyenPaiementComptant
+	 *            {@link #moyenPaiementComptant}
 	 */
-	public void addPaiementComptant(String modePaiement, Double montant) {
-		if (this.moyenPaiement == null)
-			this.moyenPaiement = new ArrayList<String>();
-		this.moyenPaiement.add(modePaiement);
-		if (this.montant == null)
-			this.montant = new ArrayList<Double>();
-		this.montant.add(montant);
+	public void addMoyenPaiementComptant(String moyenPaiementComptant) {
+		if (this.moyenPaiementComptant != null) {
+			this.moyenPaiementComptant += "/" + moyenPaiementComptant;
+
+		} else {
+			this.moyenPaiementComptant = moyenPaiementComptant;
+
+		}
+
+	}
+
+	/**
+	 * Ajouter moyen paiement recurrent.
+	 * 
+	 * @param moyenPaiementRecurrent
+	 *            {@link #moyenPaiementRecurrent}
+	 */
+	public void addMoyenPaiementRecurrent(String moyenPaiementRecurrent) {
+		if (this.moyenPaiementRecurrent != null) {
+			this.moyenPaiementRecurrent += "/" + moyenPaiementRecurrent;
+
+		} else {
+			this.moyenPaiementRecurrent = moyenPaiementRecurrent;
+
+		}
+
 	}
 
 }

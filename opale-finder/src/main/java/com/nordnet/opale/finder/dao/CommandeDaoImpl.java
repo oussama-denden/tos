@@ -25,7 +25,6 @@ import com.nordnet.opale.finder.business.Frais;
 import com.nordnet.opale.finder.business.Tarif;
 import com.nordnet.opale.finder.exception.OpaleException;
 import com.nordnet.opale.finder.util.Constants;
-import com.nordnet.opale.finder.util.PaginationHelper;
 import com.nordnet.opale.finder.util.Utils;
 
 /**
@@ -79,27 +78,6 @@ public class CommandeDaoImpl implements CommandeDao {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public List<Commande> findByIdClient(final int pageNo, final int pageSize, String idClient) throws OpaleException {
-		PaginationHelper<Commande> paginationHelper = new PaginationHelper<Commande>();
-		List<Commande> commandes = null;
-
-		String listeContrat = String.format(sqlQueryProperties.getProperty(Constants.FIND_COMMANDE), idClient);
-		String nombreLigne = String.format(sqlQueryProperties.getProperty(Constants.NBR_LIGNE_COMMANDE), idClient);
-		try {
-			Connection conn = dataSource.getConnection();
-			Statement stmt =
-					(Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			commandes = paginationHelper.fetchPage(stmt, nombreLigne, listeContrat, pageNo, pageSize).getPageItems();
-			return commandes;
-		} catch (SQLException e) {
-			LOGGER.error("Finder :Erreur lors de la recuperation des commandes", e);
-			throw new OpaleException("Finder :Erreur lors de la recuperation des commandes", e.getLocalizedMessage());
-		}
-	}
-
-	/**
 	 * Creer la liste des contrats a partir du resultat de requette.
 	 * 
 	 * @param resultSet
@@ -116,6 +94,7 @@ public class CommandeDaoImpl implements CommandeDao {
 		String lastReferenceCommande = null;
 		String lastReferenceLigneCommande = null;
 		String lastReferenceDetailLigneCommande = null;
+		String lastReferencePaiementRecurrent = null;
 		Set<String> refFraisLigne = new HashSet<String>();
 		Set<String> refFraisDetailLigne = new HashSet<String>();
 		Tarif tarifLigne = null;
@@ -131,6 +110,7 @@ public class CommandeDaoImpl implements CommandeDao {
 				commande.setReference(resultSet.getString("refcommande"));
 				commande.setAnnule(resultSet.getBoolean("annule"));
 				commande.setDateCreation(resultSet.getDate("dateCreation"));
+				commande.setCodePartenaire(resultSet.getString("codePartenaire"));
 				// Accocier les client a la commande.
 				associerClient(resultSet, commande);
 
@@ -148,7 +128,7 @@ public class CommandeDaoImpl implements CommandeDao {
 					&& resultSet.getString("typePaiement").equals("COMPTANT")) {
 				if (!refPaiement.contains(resultSet.getString("refPaiement"))) {
 					commande.setPaye(true);
-					commande.addPaiementComptant(resultSet.getString("modePaiement"), resultSet.getDouble("montant"));
+					commande.addMoyenPaiementComptant(resultSet.getString("modePaiement"));
 					refPaiement.add(resultSet.getString("refPaiement"));
 				}
 			}
@@ -156,7 +136,12 @@ public class CommandeDaoImpl implements CommandeDao {
 			// tester si la commande a un paiement recurrent.
 			if (!Utils.isStringNullOrEmpty(resultSet.getString("refPaiement"))
 					&& resultSet.getString("typePaiement").equals("RECURRENT")) {
-				commande.setPaiementRecurrent(true);
+				if (lastReferencePaiementRecurrent == null
+						|| !lastReferencePaiementRecurrent.equals(resultSet.getString("refPaiement"))) {
+					commande.addMoyenPaiementRecurrent(resultSet.getString("modePaiement"));
+					commande.setPaiementRecurrent(true);
+					lastReferencePaiementRecurrent = resultSet.getString("refPaiement");
+				}
 			}
 
 			// associer une ligne a une commande.
@@ -168,7 +153,7 @@ public class CommandeDaoImpl implements CommandeDao {
 				commandeLigne = new CommandeLigne();
 				commandeLigne.setReference(resultSet.getString("refligne"));
 				commandeLigne.setLabel(resultSet.getString("labelCommandeligne"));
-
+				commandeLigne.setGeste(resultSet.getString("geste"));
 				// ajouter le tarif si ca existe.
 				if (!Utils.isStringNullOrEmpty(resultSet.getString("referenceTarifLigne"))) {
 					tarifLigne = new Tarif();
@@ -320,5 +305,10 @@ public class CommandeDaoImpl implements CommandeDao {
 		fraisDetailLigne.setType(resultSet.getString("typeFraisFraisDetailLigne"));
 		return fraisDetailLigne;
 
+	}
+
+	private Commande calculerCout(Commande commande) {
+
+		return commande;
 	}
 }
