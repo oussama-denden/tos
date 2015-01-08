@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.base.Optional;
 import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.deserializer.TypeProduitDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
@@ -172,11 +173,17 @@ public class OffreCatalogue {
 	}
 
 	/**
+	 * le type prduit sera par defaut service au niveau de l'offre.
 	 * 
 	 * @return {@link #nature}.
 	 */
 	public TypeProduit getType() {
-		return type;
+		Optional<TypeProduit> typeProduitOp = Optional.fromNullable(type);
+		if (typeProduitOp.isPresent()) {
+			return type;
+		} else {
+			return TypeProduit.SERVICE;
+		}
 	}
 
 	/**
