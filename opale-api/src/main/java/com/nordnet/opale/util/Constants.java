@@ -145,6 +145,11 @@ public final class Constants {
 	/**
 	 * type de tva par defaut .
 	 */
-	public static String DEFAULT_TYPE_TVA_CLIENT = "00";
+	public static final String DEFAULT_TYPE_TVA_CLIENT = "00";
+
+	/**
+	 * le code erreur par defaut si une exception interne est leve.
+	 */
+	public static final String CODE_ERREUR_PAR_DEFAUT = "0.3";
 
 }
