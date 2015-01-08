@@ -44,6 +44,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
+import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
@@ -124,6 +125,12 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private DraftLigneDetailRepository draftLigneDetailRepository;
+
+	/**
+	 * {@link ReductionRepository}.
+	 */
+	@Autowired
+	private ReductionRepository reductionRepository;
 
 	/**
 	 * Client rest de topaze.
@@ -663,7 +670,7 @@ public class DraftServiceImpl implements DraftService {
 				catalogueValidator.validerReferencesDraft(draft, calculInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 
-			CalculeCout coutDraft = new CoutDraft(draft, calculInfo);
+			CalculeCout coutDraft = new CoutDraft(draft, calculInfo, reductionRepository);
 			coutDecorator.setCalculeCout(coutDraft);
 			return coutDecorator.getCout();
 

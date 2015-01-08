@@ -113,6 +113,7 @@ public class ReductionServiceImpl implements ReductionService {
 		ReductionValidator.checkReductionDraftLigneDetailFraisExist(refDraft, refLigne,
 				draftLigneDetail.getReferenceChoix(), refFrais, reductionLigneDetailFrais);
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.PRODUIT, null);
+		ReductionValidator.validerReductionFrais(reductionInfo);
 
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
@@ -164,6 +165,7 @@ public class ReductionServiceImpl implements ReductionService {
 		ReductionValidator.checkReductionDraftLigneFraisExist(refDraft, draftLigne.getReference(), refFrais,
 				reductionLigneFrais);
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.FRAIS, null);
+		ReductionValidator.validerReductionFrais(reductionInfo);
 
 		Reduction reduction = reductionInfo.toDomain();
 		reduction.setReference(keygenService.getNextKey(Reduction.class));
