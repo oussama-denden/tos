@@ -13,7 +13,6 @@ import com.nordnet.opale.deserializer.ModeFacturationDeserializer;
 import com.nordnet.opale.deserializer.TypeProduitDeserializer;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypeProduit;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * Classe reprensente une offre dans le catalogue.
@@ -26,7 +25,6 @@ public class OffreCatalogue {
 	/**
 	 * reference offre.
 	 */
-	@ApiModelProperty(required = true)
 	private String reference;
 
 	/**
