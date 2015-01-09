@@ -26,6 +26,11 @@ public class DetailCout extends Cout {
 	private String label;
 
 	/**
+	 * tva de l'offre
+	 */
+	private double tva;
+
+	/**
 	 * cout total de l'offre.
 	 */
 	private double coutComptantHT;
@@ -172,6 +177,23 @@ public class DetailCout extends Cout {
 	 */
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	/**
+	 * 
+	 * @return {@link #tva}
+	 */
+	public double getTva() {
+		return tva;
+	}
+
+	/**
+	 * 
+	 * @param tva
+	 *            {@link #tva}
+	 */
+	public void setTva(double tva) {
+		this.tva = tva;
 	}
 
 	/**

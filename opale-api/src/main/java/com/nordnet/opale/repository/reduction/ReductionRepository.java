@@ -34,8 +34,8 @@ public interface ReductionRepository extends JpaRepository<Reduction, Integer> {
 	 *            reference draft
 	 * @return {@link List}
 	 */
-	@Query(name = "findReductionDraft", value = "SELECT r FROM Reduction r WHERE r.referenceLigne=null AND r.referenceLigneDetail=null AND referenceDraft LIKE :referenceDraft ")
-	public Reduction findReductionDraft(@Param("referenceDraft") String referenceDraft);
+	@Query(name = "referenceElement", value = "SELECT r FROM Reduction r WHERE r.referenceLigne=null AND r.referenceLigneDetail=null AND referenceDraft LIKE :referenceElement ")
+	public Reduction findReduction(@Param("referenceElement") String referenceDraft);
 
 	/**
 	 * Rechercher les reductions d'une ligne.

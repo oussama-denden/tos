@@ -6,15 +6,13 @@ import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CoutRecurrent;
 import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.Plan;
-import com.nordnet.opale.business.catalogue.Frais;
-import com.nordnet.opale.business.catalogue.Tarif;
-import com.nordnet.opale.domain.draft.Draft;
-import com.nordnet.opale.domain.draft.DraftLigne;
-import com.nordnet.opale.domain.draft.DraftLigneDetail;
+import com.nordnet.opale.domain.commande.Frais;
+import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
+import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.vat.client.VatClient;
 
 /**
@@ -37,17 +35,17 @@ public class CoutTarif extends CalculeCout {
 	/**
 	 * detaille du ligne draft.
 	 */
-	private DraftLigneDetail draftLigneDetail;
+	private String referenceDraftLigneDetail;
 
 	/**
 	 * ligne du draft.
 	 */
-	private DraftLigne draftLigne;
+	private String referenceDraftLigne;
 
 	/**
 	 * draft
 	 */
-	private Draft draft;
+	private String referenceDraft;
 
 	/**
 	 * indique si on va calculer le tarif d'une ligne.
@@ -64,22 +62,22 @@ public class CoutTarif extends CalculeCout {
 	 * {@link ReductionRepository}.
 	 */
 	@Autowired
-	private ReductionRepository reductionRepository;
+	private ReductionService reductionService;
 
 	/**
 	 * constructeur par defaut.
 	 */
 
-	public CoutTarif(Tarif tarif, String segmentTVA, DraftLigneDetail draftLigneDetail, DraftLigne draftLigne,
-			Draft draft, boolean isLigne, boolean isDetail, ReductionRepository reductionRepository) {
+	public CoutTarif(Tarif tarif, String segmentTVA, String referenceDraftLigneDetail, String referenceDraftLigne,
+			String referenceDraft, boolean isLigne, boolean isDetail, ReductionService reductionService) {
 		this.tarif = tarif;
 		this.segmentTVA = segmentTVA;
-		this.draftLigneDetail = draftLigneDetail;
-		this.draftLigne = draftLigne;
-		this.draft = draft;
+		this.referenceDraftLigneDetail = referenceDraftLigneDetail;
+		this.referenceDraftLigne = referenceDraftLigne;
+		this.referenceDraft = referenceDraft;
 		this.isLigne = isLigne;
 		this.isDetail = isDetail;
-		this.reductionRepository = reductionRepository;
+		this.reductionService = reductionService;
 	}
 
 	public CoutTarif() {
@@ -94,19 +92,20 @@ public class CoutTarif extends CalculeCout {
 	@Override
 	public Cout getCout() throws OpaleException {
 
-		if (draft == null || tarif == null || reductionRepository == null || (isLigne && draftLigne == null)
-				|| (isDetail && draftLigneDetail == null)) {
+		if (referenceDraft == null || tarif == null || reductionService == null
+				|| (isLigne && referenceDraftLigne == null) || (isDetail && referenceDraftLigneDetail == null)) {
 			return null;
 		} else {
 
 			DetailCout detailCout = new DetailCout();
 			double coutComptantHT = 0d;
 			double coutComptantTTC = 0d;
-			double tva = VatClient.getValeurTVA(tarif.getTva(), segmentTVA);
+			double tva = VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA);
 
 			if (tarif.isRecurrent()) {
 				Plan normal =
-						new Plan(tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(), tarif.getTva(), segmentTVA));
+						new Plan(tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(), tarif.getTypeTVA(),
+								segmentTVA));
 				detailCout.setCoutRecurrent(new CoutRecurrent(tarif.getFrequence(), normal, null));
 				// detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix(),
 				// VatClient.appliquerTVA(tarif.getPrix(),
@@ -131,7 +130,7 @@ public class CoutTarif extends CalculeCout {
 				}
 			}
 
-			coutComptantTTC = VatClient.appliquerTVA(coutComptantHT, tarif.getTva(), segmentTVA);
+			coutComptantTTC = VatClient.appliquerTVA(coutComptantHT, tarif.getTypeTVA(), segmentTVA);
 			coutComptantReduitTTC = coutComptantTTC - reductionTTC;
 			coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
 			detailCout.setCoutComptantHT(coutComptantHT);
@@ -156,18 +155,17 @@ public class CoutTarif extends CalculeCout {
 		Reduction reduction = null;
 		if (isLigne) {
 			reduction =
-					reductionRepository.findReductionLigneFrais(draft.getReference(), draftLigne.getReference(),
-							frais.getIdFrais(), tarif.getIdTarif());
+					reductionService.findReductionlLigneDraftFrais(referenceDraft, referenceDraftLigne,
+							tarif.getReference(), frais.getReference());
 		} else if (isDetail) {
 			reduction =
-					reductionRepository.findReductionLigneDetailleFrais(draft.getReference(),
-							draftLigne.getReference(), draftLigneDetail.getReferenceChoix(), frais.getIdFrais(),
-							tarif.getIdTarif());
+					reductionService.findReductionDetailLigneDraftFrais(referenceDraft, referenceDraftLigneDetail,
+							referenceDraftLigne, frais.getReference(), tarif.getReference());
 
 		}
 		reductionTTC =
 				ReductionUtil.calculeReductionComptant(
-						VatClient.appliquerTVA(frais.getMontant(), tarif.getTva(), segmentTVA), reduction);
+						VatClient.appliquerTVA(frais.getMontant(), tarif.getTypeTVA(), segmentTVA), reduction);
 		reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);
 
 		reductionComptantHT = reductionHT;

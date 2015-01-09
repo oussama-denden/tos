@@ -11,6 +11,7 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
+import com.nordnet.opale.service.reduction.ReductionService;
 
 /**
  * calcule cout du draft.
@@ -33,7 +34,7 @@ public class CoutDraft extends CalculeCout {
 	/**
 	 * {@link ReductionRepository}.
 	 */
-	private ReductionRepository reductionRepository;
+	private ReductionService reductionService;
 
 	/**
 	 * constructeur par defaut.
@@ -50,10 +51,10 @@ public class CoutDraft extends CalculeCout {
 	 * @param transformationInfo
 	 *            {@link TransformationInfo}
 	 */
-	public CoutDraft(Draft draft, TransformationInfo transformationInfo, ReductionRepository reductionRepository) {
+	public CoutDraft(Draft draft, TransformationInfo transformationInfo, ReductionService reductionService) {
 		this.draft = draft;
 		this.transformationInfo = transformationInfo;
-		this.reductionRepository = reductionRepository;
+		this.reductionService = reductionService;
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class CoutDraft extends CalculeCout {
 	@Override
 	public Cout getCout() throws OpaleException {
 
-		if (draft == null || transformationInfo == null || reductionRepository == null) {
+		if (draft == null || transformationInfo == null || reductionService == null) {
 			return null;
 		} else {
 			Cout cout = new Cout();
@@ -76,7 +77,7 @@ public class CoutDraft extends CalculeCout {
 			for (DraftLigne draftLigne : draft.getDraftLignes()) {
 
 				CoutLigneDraft coutLigneDraft =
-						new CoutLigneDraft(draft, transformationInfo, draftLigne, reductionRepository);
+						new CoutLigneDraft(draft, transformationInfo, draftLigne, reductionService);
 				DetailCout detailCoutLigne = (DetailCout) coutLigneDraft.getCout();
 				coutComptantHT += detailCoutLigne.getCoutComptantHT();
 				coutComptantTTC += detailCoutLigne.getCoutComptantTTC();
@@ -93,7 +94,7 @@ public class CoutDraft extends CalculeCout {
 			}
 
 			// recuperation du reduction du draft.
-			Reduction reductionDraft = reductionRepository.findReductionDraft(draft.getReference());
+			Reduction reductionDraft = reductionService.findReduction(draft.getReference());
 
 			reductionTTC +=
 					ReductionUtil.calculeReductionComptant(coutComptantTTC - reductionComptantTTC, reductionDraft);

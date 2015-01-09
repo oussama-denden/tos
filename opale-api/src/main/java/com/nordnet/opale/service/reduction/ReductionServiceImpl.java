@@ -64,7 +64,7 @@ public class ReductionServiceImpl implements ReductionService {
 
 		LOGGER.info("Debut methode ajouterReduction ");
 
-		Reduction reductionDraft = reductionRepository.findReductionDraft(refDraft);
+		Reduction reductionDraft = reductionRepository.findReduction(refDraft);
 		ReductionValidator.checkReductionDraftExist(refDraft, reductionDraft);
 		ReductionValidator.chekReductionValide(reductionInfo, Constants.DRAFT, null);
 
@@ -191,8 +191,8 @@ public class ReductionServiceImpl implements ReductionService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Reduction findReductionDraft(String referenceDraft) {
-		return reductionRepository.findReductionDraft(referenceDraft);
+	public Reduction findReduction(String referenceDraft) {
+		return reductionRepository.findReduction(referenceDraft);
 	}
 
 	/**
@@ -276,6 +276,14 @@ public class ReductionServiceImpl implements ReductionService {
 		reduction.setReferenceTarif(refTarif);
 		reductionRepository.save(reduction);
 		return reduction.getReference();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Reduction findReductionECParent(String referenceDraft, String referenceLigne, String referenceTarif) {
+		return reductionRepository.findReductionECParent(referenceDraft, referenceLigne, referenceTarif);
 	}
 
 }

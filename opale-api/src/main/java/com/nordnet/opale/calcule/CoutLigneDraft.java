@@ -18,6 +18,7 @@ import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
+import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.validator.DraftValidator;
 import com.nordnet.opale.vat.client.VatClient;
 
@@ -47,7 +48,7 @@ public class CoutLigneDraft extends CalculeCout {
 	 * {@link ReductionRepository}.
 	 */
 	@Autowired
-	private ReductionRepository reductionRepository;
+	private ReductionService reductionService;
 
 	/**
 	 * valeur du tva .
@@ -74,11 +75,11 @@ public class CoutLigneDraft extends CalculeCout {
 	 *            {@link #transformationInfo}
 	 */
 	public CoutLigneDraft(Draft draft, TransformationInfo transformationInfo, DraftLigne draftLigne,
-			ReductionRepository reductionRepository) {
+			ReductionService reductionService) {
 		this.draft = draft;
 		this.transformationInfo = transformationInfo;
 		this.draftLigne = draftLigne;
-		this.reductionRepository = reductionRepository;
+		this.reductionService = reductionService;
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class CoutLigneDraft extends CalculeCout {
 	@Override
 	public Cout getCout() throws OpaleException {
 
-		if (draft == null || transformationInfo == null || reductionRepository == null || draftLigne == null) {
+		if (draft == null || transformationInfo == null || reductionService == null || draftLigne == null) {
 			return null;
 		} else {
 			String segmentTVA = null;
@@ -102,6 +103,7 @@ public class CoutLigneDraft extends CalculeCout {
 			Choice choice = null;
 			Tarif tarif = null;
 			DetailCatalogue detailCatalogue = null;
+			String label = draftLigne.getReferenceOffre();
 
 			if (transformationInfo.getClientInfo() != null
 					&& transformationInfo.getClientInfo().getFacturation() != null) {
@@ -124,7 +126,7 @@ public class CoutLigneDraft extends CalculeCout {
 
 					CoutLigneDetailDraft coutLigneDetailDraft =
 							new CoutLigneDetailDraft(draftLigneDetail, transformationInfo, draftLigne, draft,
-									reductionRepository);
+									reductionService);
 
 					DetailCout detailCoutTarif = (DetailCout) coutLigneDetailDraft.getCout();
 					coutComptantHT += detailCoutTarif.getCoutComptantHT();
@@ -153,7 +155,8 @@ public class CoutLigneDraft extends CalculeCout {
 				tva = VatClient.getValeurTVA(tarif.getTva(), segmentTVA);
 
 				CoutTarif coutTarif =
-						new CoutTarif(tarif, segmentTVA, null, draftLigne, draft, true, false, reductionRepository);
+						new CoutTarif(tarif.toTarifDomain(), segmentTVA, null, draftLigne.getReference(),
+								draft.getReference(), true, false, reductionService);
 
 				DetailCout detailCoutTarif = (DetailCout) coutTarif.getCout();
 				coutComptantHT += detailCoutTarif.getCoutComptantHT();
@@ -173,7 +176,7 @@ public class CoutLigneDraft extends CalculeCout {
 				reductionComptantTTC += coutTarif.getReductionComptantTTC();
 
 				Reduction reductionECParent =
-						reductionRepository.findReductionECParent(draft.getReference(), draftLigne.getReference(),
+						reductionService.findReductionECParent(draft.getReference(), draftLigne.getReference(),
 								tarif.getIdTarif());
 				// calculer la reduction sur le tarif de ligne.
 				calculerReductionECParent(reductionECParent, detailCoutTarif, tva);
@@ -182,10 +185,10 @@ public class CoutLigneDraft extends CalculeCout {
 
 			// trouver les reduction liees aux lignes.
 			Reduction reductionLigne =
-					reductionRepository.findReductionLigneSanFrais(draft.getReference(), draftLigne.getReference());
+					reductionService.findReductionLigneDraftSansFrais(draft.getReference(), draftLigne.getReference());
 
 			// recuperer les reductions recurrentes liees au draft
-			Reduction reductionDraft = reductionRepository.findReductionDraft(draft.getReference());
+			Reduction reductionDraft = reductionService.findReduction(draft.getReference());
 
 			// calculer la reduction de ligne.
 			calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, tva, false);
@@ -202,6 +205,8 @@ public class CoutLigneDraft extends CalculeCout {
 			detailCout.setCoutComptantTTC(coutComptantTTC);
 			detailCout.setReductionHT(reductionHT);
 			detailCout.setReductionTTC(reductionTTC);
+			detailCout.setTva(tva);
+			detailCout.setLabel(label);
 
 			coutRecurentReduitTTC = (tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0;
 			coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitTTC, tva);

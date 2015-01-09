@@ -117,7 +117,7 @@ public interface ReductionService {
 	 *            reference draft
 	 * @return {@link List}
 	 */
-	public Reduction findReductionDraft(String referenceDraft);
+	public Reduction findReduction(String referenceDraft);
 
 	/**
 	 * Rechercher les reductions d'une ligne.
@@ -227,5 +227,19 @@ public interface ReductionService {
 	 */
 	public String ajouterReductionECParent(String refDraft, String refLigne, String refTarif,
 			ReductionInfo reductionInfo) throws OpaleException;
+
+	/**
+	 * Rechercher les reductions du tarif ligne.
+	 * 
+	 * @param referenceDraft
+	 *            reference draft
+	 * @param referenceLigne
+	 *            reference ligne *
+	 * @param referenceTarif
+	 *            reference tarif
+	 * 
+	 * @return reduction tarif du ligne.
+	 */
+	public Reduction findReductionECParent(String referenceDraft, String referenceLigne, String referenceTarif);
 
 }

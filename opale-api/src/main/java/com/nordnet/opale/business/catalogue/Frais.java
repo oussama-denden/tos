@@ -109,4 +109,18 @@ public class Frais {
 		this.typeFrais = typeFrais;
 	}
 
+	/**
+	 * changer le frais du catalogue au frais domaine.
+	 * 
+	 * @return {@link com.nordnet.opale.domain.commande.Frais}
+	 */
+	public com.nordnet.opale.domain.commande.Frais tofraisDomain() {
+		com.nordnet.opale.domain.commande.Frais frais = new com.nordnet.opale.domain.commande.Frais();
+		frais.setLabel(label);
+		frais.setReference(idFrais);
+		frais.setMontant(montant);
+		frais.setTypeFrais(typeFrais);
+		return frais;
+	}
+
 }

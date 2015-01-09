@@ -533,7 +533,7 @@ public class DraftServiceImpl implements DraftService {
 	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
 		// copier reduction draft
 		List<Reduction> reductionDraft = new ArrayList<Reduction>();
-		Reduction reduction = reductionService.findReductionDraft(draft.getReference());
+		Reduction reduction = reductionService.findReduction(draft.getReference());
 		if (reduction != null)
 			reductionDraft.add(reduction);
 
@@ -670,7 +670,7 @@ public class DraftServiceImpl implements DraftService {
 				catalogueValidator.validerReferencesDraft(draft, calculInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
 
-			CalculeCout coutDraft = new CoutDraft(draft, calculInfo, reductionRepository);
+			CalculeCout coutDraft = new CoutDraft(draft, calculInfo, reductionService);
 			coutDecorator.setCalculeCout(coutDraft);
 			return coutDecorator.getCout();
 
@@ -926,31 +926,8 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * calculer le cout du reduction pour un draft.
-	 * 
-	 * @param refDraft
-	 *            reference du draft
-	 * @param coutTotale
-	 *            cout totale du draft
-	 * @param reduction
-	 *            montant reduction.
-	 * 
-	 * @return cout du reduction.
+	 * {@inheritDoc}
 	 */
-	private double calculerReductionDraft(String refDraft, double coutComptant, double reductionHT) {
-
-		Reduction reductionDraft = reductionService.findReductionDraft(refDraft);
-		double coutReductionHT = 0d;
-		if (reductionDraft == null) {
-			return coutReductionHT;
-		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-			coutReductionHT += ((coutComptant - reductionHT) * reductionDraft.getValeur()) / 100;
-		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.EURO)) {
-			coutReductionHT += reductionDraft.getValeur();
-		}
-		return coutReductionHT;
-	}
-
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionECParent(String refDraft, String refLigne, String refTarif,
@@ -976,14 +953,20 @@ public class DraftServiceImpl implements DraftService {
 		return reductionResponse.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Draft> findAllDraft() {
 		return draftRepository.findAll();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String alertMultipleReduction(Commande commande) {
-		Reduction reductionCommande = reductionService.findReductionDraft(commande.getReferenceDraft());
+		Reduction reductionCommande = reductionService.findReduction(commande.getReferenceDraft());
 		List<Reduction> reductionsLigne = new ArrayList<>();
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			Reduction reductionLigne =
