@@ -62,11 +62,11 @@ public class CommandeDaoImpl implements CommandeDao {
 		List<Commande> commandes = null;
 
 		String sql = String.format(sqlQueryProperties.getProperty(Constants.FIND_COMMANDE), idClient);
-
+		Connection connection = null;
+		Statement stmt = null;
 		try {
-			Connection conn = dataSource.getConnection();
-			Statement stmt =
-					(Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			connection = dataSource.getConnection();
+			stmt = (Statement) connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet res = stmt.executeQuery(sql);
 			commandes = getCommandeFromResultSet(res);
 
@@ -74,6 +74,13 @@ public class CommandeDaoImpl implements CommandeDao {
 		} catch (SQLException e) {
 			LOGGER.error("Finder :Erreur lors de la recuperation des commandes", e);
 			throw new OpaleException("Finder :Erreur lors de la recuperation des commandes", e.getMessage());
+		} finally {
+			try {
+				stmt.close();
+				connection.close();
+			} catch (SQLException e) {
+				LOGGER.error("Finder :Erreur lors de fermeture du session", e);
+			}
 		}
 
 	}
