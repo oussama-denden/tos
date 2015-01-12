@@ -289,7 +289,7 @@ public class CoutLigneDraft extends CalculeCout {
 			reduction = ReductionUtil.calculeReductionRecurrent(coutRecurrent - reductionRecurrentTTC, reductionLigne);
 
 			reductionTTC += reduction;
-			reductionHT += ReductionUtil.caculerReductionHT(reductionTTC, tva);
+			reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);
 
 			reductionRecurrentTTC += reduction;
 			reductionRecurrentHT = ReductionUtil.caculerReductionHT(reductionRecurrentTTC, tva);
