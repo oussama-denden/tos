@@ -3,6 +3,7 @@ CHANGELOG from 2015-01-07
 
 This changelog references the relevant changes (bug fixes and minor features) done
 from 2015-01-07.
+
  * opale-api
   * add required annotation to swagger documentation
   * add 400 bad request exception handling in opale-finder contoler
