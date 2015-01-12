@@ -172,4 +172,32 @@ public class CoutTarif extends CalculeCout {
 		reductionComptantTTC = reductionTTC;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @throws OpaleException
+	 */
+	@Override
+	public double getCoutRecurrentHT() throws OpaleException {
+		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
+			return 0;
+		} else
+			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @throws OpaleException
+	 */
+	@Override
+	public double getCoutRecurrentTTC() throws OpaleException {
+		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
+			return 0;
+		} else
+			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
+	}
+
 }

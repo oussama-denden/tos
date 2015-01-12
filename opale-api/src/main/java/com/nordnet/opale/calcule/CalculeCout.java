@@ -12,11 +12,6 @@ import com.nordnet.opale.exception.OpaleException;
 public abstract class CalculeCout {
 
 	/**
-	 * cout.
-	 */
-	Cout cout;
-
-	/**
 	 * cout comptantHT.
 	 */
 	double coutComptantHT;
@@ -87,6 +82,14 @@ public abstract class CalculeCout {
 	double coutRecurentReduitHT;
 
 	/**
+	 * 
+	 * @return {@link #cout}
+	 * 
+	 * @throws OpaleException
+	 */
+	public abstract Cout getCout() throws OpaleException;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CalculeCout() {
@@ -96,24 +99,6 @@ public abstract class CalculeCout {
 	/*
 	 * getter and setters
 	 */
-
-	/**
-	 * 
-	 * @return {@link #cout}
-	 * @throws OpaleException
-	 */
-	public Cout getCout() throws OpaleException {
-		return cout;
-	}
-
-	/**
-	 * 
-	 * @param cout
-	 *            {@link #cout}
-	 */
-	public void setCout(Cout cout) {
-		this.cout = cout;
-	}
 
 	/**
 	 * 
