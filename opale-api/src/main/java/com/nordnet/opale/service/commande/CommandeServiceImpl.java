@@ -52,7 +52,6 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.validator.CommandeValidator;
-import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
@@ -939,12 +938,21 @@ public class CommandeServiceImpl implements CommandeService {
 	 *            {@link CommandeLigne}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
-	 * @throws TopazeException
-	 *             {@link TopazeException}.
 	 */
 	private void transformerReductionCommandeEnReductionContrat(Commande commande, CommandeLigne commandeLigne)
 			throws OpaleException {
 		ReductionContrat reductionContrat = null;
+
+		Reduction reductionDraft = reductionService.findReductionDraft(commande.getReference());
+		if (reductionDraft != null) {
+			reductionContrat = fromReduction(reductionDraft);
+			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+			reductionContrat.setIsAffichableSurFacture(true);
+			ContratReductionInfo contratReductionInfo =
+					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
+			restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
+		}
+
 		List<Reduction> reductionsLigne =
 				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReferenceOffre());
 		for (Reduction reductionLigne : reductionsLigne) {
