@@ -51,14 +51,16 @@ public class CalculerCoutCommande extends GlobalTestCase {
 	public void calculeCoutCommandeValide() {
 		try {
 			Cout cout = commandeService.calculerCout("Cmd-00000001");
-			assertEquals(new Double(119.8), new Double(cout.getCoutTotal()));
-			assertEquals(new Double(143.76), new Double(cout.getCoutTotalTTC()));
+			assertEquals(new Double(119.8), new Double(cout.getCoutComptantHT()));
+			assertEquals(new Double(143.76), new Double(cout.getCoutComptantTTC()));
 			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(cout.getDetails().size()));
-			assertEquals(new Double(119.8), new Double(cout.getDetails().get(0).getCoutTotal()));
-			assertEquals(new Double(143.76), new Double(cout.getDetails().get(0).getCoutTotalTTC()));
-			assertEquals(new Double(34.9), new Double(cout.getDetails().get(0).getPlan().getPlan()));
-			assertEquals(new Double(41.88), new Double(cout.getDetails().get(0).getPlan().getPlanTTC()));
-			assertEquals(Constants.UN, cout.getDetails().get(0).getPlan().getFrequence());
+			assertEquals(new Double(119.8), new Double(cout.getDetails().get(0).getCoutComptantHT()));
+			assertEquals(new Double(143.76), new Double(cout.getDetails().get(0).getCoutComptantTTC()));
+			assertEquals(new Double(34.9), new Double(cout.getDetails().get(0).getCoutRecurrent().getNormal()
+					.getTarifHT()));
+			assertEquals(new Double(41.88), new Double(cout.getDetails().get(0).getCoutRecurrent().getNormal()
+					.getTarifTTC()));
+			assertEquals(Constants.UN, cout.getDetails().get(0).getCoutRecurrent().getFrequence());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

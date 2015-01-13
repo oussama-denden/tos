@@ -14,6 +14,7 @@
 	<context:component-scan base-package="com.nordnet.opale.rest" />
 	<context:component-scan base-package="com.nordnet.opale.validator" />
 	<context:component-scan base-package="com.nordnet.topaze.ws" />
+	<context:component-scan base-package="com.nordnet.opale.calcule" />
 
 	<!-- Load Hibernate related configuration -->
 	<import resource="hibernate-context.xml" />

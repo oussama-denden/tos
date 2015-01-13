@@ -36,10 +36,10 @@ public class SupprimerReductionTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
 	public void testSupprimerReduction() throws OpaleException {
-		Reduction reductionAvant = reductionService.findReductionDraft("REF-DRAFT-3");
+		Reduction reductionAvant = reductionService.findReduction("REF-DRAFT-3");
 		assertNotNull(reductionAvant);
 		reductionService.supprimer(reductionAvant.getReference());
-		Reduction reductionApres = reductionService.findReductionDraft("REF-DRAFT-3");
+		Reduction reductionApres = reductionService.findReduction("REF-DRAFT-3");
 		assertNull(reductionApres);
 	}
 

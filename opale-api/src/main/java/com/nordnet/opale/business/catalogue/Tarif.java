@@ -215,4 +215,22 @@ public class Tarif {
 		return map;
 	}
 
+	public com.nordnet.opale.domain.commande.Tarif toTarifDomain() {
+
+		com.nordnet.opale.domain.commande.Tarif tarif = new com.nordnet.opale.domain.commande.Tarif();
+		List<com.nordnet.opale.domain.commande.Frais> fraisList =
+				new ArrayList<com.nordnet.opale.domain.commande.Frais>();
+		for (Frais fraisCatalogue : frais) {
+			fraisList.add(fraisCatalogue.tofraisDomain());
+		}
+		tarif.setDuree(duree);
+		tarif.setEngagement(engagement);
+		tarif.setFrais(fraisList);
+		tarif.setFrequence(frequence);
+		tarif.setPrix(prix);
+		tarif.setTypeTVA(tva);
+		tarif.setReference(idTarif);
+		return tarif;
+	}
+
 }

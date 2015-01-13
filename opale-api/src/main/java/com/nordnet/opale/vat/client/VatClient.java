@@ -88,4 +88,29 @@ public class VatClient {
 		}
 	}
 
+	/**
+	 * récupérer la valeur de TVA.
+	 * 
+	 * @param typeTVA
+	 *            {@link VatType}.
+	 * @param segmentTVA
+	 *            segment tva du client.
+	 * @return le montant TTC.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static double getValeurTVA(VatType typeTVA, String segmentTVA) throws OpaleException {
+		try {
+			if (Utils.isStringNullOrEmpty(segmentTVA)) {
+				segmentTVA = "00";
+			}
+			VatSegment vatSegment = new VatSegment(segmentTVA);
+			Vat vat = getClientInstance().findByTypeAndSegment(typeTVA, vatSegment);
+			return vat.getRate().getVatRate().getAmount().doubleValue();
+		} catch (Exception e) {
+			LOGGER.error("Erreur :", e);
+			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("0.2"), "0.2");
+		}
+	}
+
 }

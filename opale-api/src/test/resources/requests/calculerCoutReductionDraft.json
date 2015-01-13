@@ -1,0 +1,38 @@
+{
+  "auteur": {
+    "qui": "Emna",
+    "canal": "welcome",
+    "ip": {
+      "ts": "1411654933",
+      "ip": "127.0.0.1"
+    }
+  },
+"trameCatalogue": {
+    "offres": [
+      {
+        "reference": "avfwpro-confort-s",
+        "label": "Securitoo Integral",
+        "gamme": "Antivirus",
+        "secteur": "Securite",
+        "modeFacturation": "DATE_ANNIVERSAIRE",
+        "type": "SERVICE",
+        "tarifs": [
+          {
+            "id_tarif": "avfw.essentiel.3mois",
+            "prix": "13",
+            "frequence": "3",
+          "frais": [
+                    {
+                      "id_frais": "engagement_kitsat",
+                      "typeFrais": "CREATION",
+                      "montant": "50",
+                      "label": "Frais de dossier"
+                    }
+                  ],
+            "tva": "R"
+          }
+        ]
+      }
+    ]
+  }  
+}

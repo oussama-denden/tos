@@ -58,6 +58,7 @@
 	<context:component-scan base-package="com.nordnet.opale.rest" />
 	<context:component-scan base-package="com.nordnet.opale.validator" />
 	<context:component-scan base-package="com.nordnet.opale.draft.test.generator" />
+	<context:component-scan base-package="com.nordnet.opale.calcule" />
 	
 	<bean id="restURLProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">

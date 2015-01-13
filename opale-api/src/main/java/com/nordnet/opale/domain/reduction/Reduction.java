@@ -376,4 +376,22 @@ public class Reduction implements Cloneable {
 		return reduction;
 	}
 
+	/**
+	 * vérifier si une reduction est sur le cout récurrent.
+	 * 
+	 * @return true si la reduction est comptante.
+	 */
+	public boolean isreductionRecurrente() {
+		return (typeValeur.equals(TypeValeur.MOIS) || typeValeur.equals(TypeValeur.POURCENTAGE));
+	}
+
+	/**
+	 * vérifer si une reduction est sur le cout comptant.
+	 * 
+	 * @return true si la reduction est comptante.
+	 */
+	public boolean isreductionComptant() {
+		return (typeValeur.equals(TypeValeur.EURO) || typeValeur.equals(TypeValeur.POURCENTAGE));
+	}
+
 }
