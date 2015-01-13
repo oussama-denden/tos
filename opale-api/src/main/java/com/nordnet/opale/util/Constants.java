@@ -152,4 +152,9 @@ public final class Constants {
 	 */
 	public static final String CODE_ERREUR_PAR_DEFAUT = "0.3";
 
+	/**
+	 * le code erreur pour une requette syntaxiquement incorrect.
+	 */
+	public static final String CODE_ERREUR_SYNTAXE = "0.4";
+
 }

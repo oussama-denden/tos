@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -549,6 +550,24 @@ public class CommandeController {
 		LOGGER.error(PropertiesUtil.getInstance().getErrorMessage(Constants.CODE_ERREUR_PAR_DEFAUT), ex);
 		return new InfoErreur(req.getRequestURI(), Constants.CODE_ERREUR_PAR_DEFAUT, PropertiesUtil.getInstance()
 				.getErrorMessage(Constants.CODE_ERREUR_PAR_DEFAUT));
+	}
+
+	/**
+	 * 
+	 * Gerer le cas ou on a une {@link HttpMessageNotReadableException}.
+	 * 
+	 * @param req
+	 *            requete HttpServletRequest.
+	 * @param ex
+	 *            exception
+	 * @return {@link InfoErreur}
+	 */
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({ HttpMessageNotReadableException.class })
+	@ResponseBody
+	InfoErreur handleMessageNotReadableException(HttpServletRequest req, HttpMessageNotReadableException ex) {
+		return new InfoErreur(req.getRequestURI(), Constants.CODE_ERREUR_SYNTAXE, PropertiesUtil.getInstance()
+				.getErrorMessage(Constants.CODE_ERREUR_SYNTAXE));
 	}
 
 }

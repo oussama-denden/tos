@@ -3,6 +3,8 @@ package com.nordnet.opale.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 /**
  * classe business contien les information necassaire pour la creation d'une ligne draft.
  * 
@@ -14,6 +16,7 @@ public class Offre {
 	/**
 	 * reference de l'offre.
 	 */
+	@ApiModelProperty(required = true)
 	private String referenceOffre;
 
 	/**
