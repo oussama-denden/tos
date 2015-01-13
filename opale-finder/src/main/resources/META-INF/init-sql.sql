@@ -7,6 +7,7 @@ SELECT
 	CASE WHEN commande.dateAnnulation is NULL THEN FALSE ELSE TRUE END AS annule,
     draft.dateTransformationCommande AS dateCreation,
     commande.codePartenaire as codePartenaire,
+  clientFact.tva as tva,
 	client.clientId AS idClientSous,
 	client.adresseId AS adresseIdClientSous,
 	clientFact.clientId AS idClientFac,
@@ -45,7 +46,7 @@ SELECT
 	fraisDetailLigne.typeFrais AS typeFraisFraisDetailLigne
 FROM
 	commande
-INNER JOIN draft ON draft.reference=commande.referenceDraft
+LEFT OUTER JOIN draft ON draft.reference=commande.referenceDraft
 INNER  JOIN client ON commande.clientSouscripteurId = client.id
 LEFT  JOIN client AS clientFact ON commande.clientAFacturerId = clientFact.id
 LEFT  JOIN client AS clientLiv ON commande.clientALivrerId = clientLiv.id

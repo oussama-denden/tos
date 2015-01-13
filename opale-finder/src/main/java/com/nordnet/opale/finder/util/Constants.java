@@ -87,4 +87,34 @@ public final class Constants {
 	 */
 	public static final String CODE_ERREUR_SYNTAXE = "0.3";
 
+	/**
+	 * Requette recuperer reduction EC parent.
+	 */
+	public static final String FIND_REDUCTIONECPARENT = "FIND_REDUCTIONECPARENT";
+
+	/**
+	 * Requette recuperer reduction detail ligne.
+	 */
+	public static final String FIND_REDUCTION_LIGNE_DETAIL_FRAIS = "FIND_REDUCTION_LIGNE_DETAIL_FRAIS";
+
+	/**
+	 * Requette recuperer reduction ligne.
+	 */
+	public static final String FIND_REDUCTION_LIGNE_FRAIS = "FIND_REDUCTION_LIGNE_FRAIS";
+
+	/**
+	 * Requette recuperer reduction detail ligne sans frais.
+	 */
+	public static final String FIND_REDUCTION_LIGNEDETAIL_SANS_FRAIS = "FIND_REDUCTION_LIGNEDETAIL_SANS_FRAIS";
+
+	/**
+	 * Requette recuperer reduction ligne sans frais.
+	 */
+	public static final String FIND_REDUCTION_LIGNE_SANS_FRAIS = "FIND_REDUCTION_LIGNE_SANS_FRAIS";
+
+	/**
+	 * Requette recuperer reduction.
+	 */
+	public static final String FIND_REDUCTION = "FIND_REDUCTION";
+
 }

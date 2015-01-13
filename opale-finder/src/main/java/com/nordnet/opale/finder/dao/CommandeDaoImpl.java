@@ -23,6 +23,7 @@ import com.nordnet.opale.finder.business.CommandeLigne;
 import com.nordnet.opale.finder.business.DetailCommandeLigne;
 import com.nordnet.opale.finder.business.Frais;
 import com.nordnet.opale.finder.business.Tarif;
+import com.nordnet.opale.finder.cout.CoutCommande;
 import com.nordnet.opale.finder.exception.OpaleException;
 import com.nordnet.opale.finder.util.Constants;
 import com.nordnet.opale.finder.util.Utils;
@@ -53,6 +54,12 @@ public class CommandeDaoImpl implements CommandeDao {
 	private Properties sqlQueryProperties;
 
 	/**
+	 * Rduction dao.
+	 */
+	@Autowired
+	private ReductionDao reductionDao;
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 */
@@ -61,11 +68,11 @@ public class CommandeDaoImpl implements CommandeDao {
 		List<Commande> commandes = null;
 
 		String sql = String.format(sqlQueryProperties.getProperty(Constants.FIND_COMMANDE), idClient);
-
+		Connection connection = null;
+		Statement stmt = null;
 		try {
-			Connection conn = dataSource.getConnection();
-			Statement stmt =
-					(Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			connection = dataSource.getConnection();
+			stmt = (Statement) connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet res = stmt.executeQuery(sql);
 			commandes = getCommandeFromResultSet(res);
 
@@ -73,20 +80,33 @@ public class CommandeDaoImpl implements CommandeDao {
 		} catch (SQLException e) {
 			LOGGER.error("Finder :Erreur lors de la recuperation des commandes", e);
 			throw new OpaleException("Finder :Erreur lors de la recuperation des commandes", e.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("Finder :Erreur lors de la recuperation des commandes", e);
+			throw new OpaleException("Finder :Erreur lors de la recuperation des commandes", e.getMessage());
+
+		} finally {
+			try {
+				stmt.close();
+				connection.close();
+			} catch (SQLException e) {
+				LOGGER.error("Finder :Erreur lors de fermeture du session", e);
+			}
 		}
 
 	}
 
 	/**
-	 * Creer la liste des contrats a partir du resultat de requette.
+	 * Creer la liste des commandes a partir du resultat de requette.
 	 * 
 	 * @param resultSet
 	 *            {@link ResultSet}
 	 * @return liste de {@link Contrat}
 	 * @throws SQLException
 	 *             {@link SQLException}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
-	private List<Commande> getCommandeFromResultSet(ResultSet resultSet) throws SQLException {
+	private List<Commande> getCommandeFromResultSet(ResultSet resultSet) throws SQLException, OpaleException {
 
 		Commande commande = null;
 		CommandeLigne commandeLigne = null;
@@ -106,6 +126,7 @@ public class CommandeDaoImpl implements CommandeDao {
 
 			if (Utils.isStringNullOrEmpty(lastReferenceCommande)
 					|| !resultSet.getString("refcommande").equals(lastReferenceCommande)) {
+
 				commande = new Commande();
 				commande.setReference(resultSet.getString("refcommande"));
 				commande.setAnnule(resultSet.getBoolean("annule"));
@@ -169,6 +190,13 @@ public class CommandeDaoImpl implements CommandeDao {
 						tarifLigne.addFrais(associerFraitLigne(resultSet));
 					}
 					refFraisLigne.add(resultSet.getString("referenceFraisLigne"));
+
+					if (tarifLigne.isRecurrent()) {
+
+					} else {
+
+					}
+
 				}
 
 				commande.addLigne(commandeLigne);
@@ -228,7 +256,7 @@ public class CommandeDaoImpl implements CommandeDao {
 			lastReferenceDetailLigneCommande = resultSet.getString("refDetailLigne");
 		}
 
-		return commandes;
+		return calculerCout(commandes);
 
 	}
 
@@ -248,6 +276,7 @@ public class CommandeDaoImpl implements CommandeDao {
 			Client clientAFacturer = new Client();
 			clientAFacturer.setAdresseId(resultSet.getString("adresseIdClientFac"));
 			clientAFacturer.setClientId(resultSet.getString("idClientFac"));
+			clientAFacturer.setTva(resultSet.getString("tva"));
 			commande.setClientAFacturer(clientAFacturer);
 		}
 		// associer le client a livrer.
@@ -307,8 +336,23 @@ public class CommandeDaoImpl implements CommandeDao {
 
 	}
 
-	private Commande calculerCout(Commande commande) {
+	/**
+	 * Calculer couts commandes.
+	 * 
+	 * @param commandes
+	 *            liste de {@link Commande}
+	 * @return liste de {@link Commande}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	private List<Commande> calculerCout(List<Commande> commandes) throws OpaleException {
 
-		return commande;
+		for (Commande commande : commandes) {
+			CoutCommande coutCommande = new CoutCommande(commande, reductionDao);
+
+			commande = coutCommande.getCommande();
+		}
+
+		return commandes;
 	}
 }

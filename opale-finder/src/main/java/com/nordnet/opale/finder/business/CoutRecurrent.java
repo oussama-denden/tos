@@ -5,21 +5,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.common.base.Optional;
 
 /**
- * Cette classe regroupe les informations qui definissent un {@link Tarif}.
+ * Cette classe regroupe les informations qui definissent un {@link CoutRecurrent}.
  * 
  * @author anisselmane.
  * 
  */
 @JsonInclude(Include.NON_NULL)
-public class Tarif {
-
-	/**
-	 * reference tarif.
-	 */
-	private String reference;
+public class CoutRecurrent {
 
 	/**
 	 * le prix dans le tarif.
@@ -37,14 +31,9 @@ public class Tarif {
 	private Integer engagement;
 
 	/**
-	 * duree de tarif.
+	 * Le tva.
 	 */
-	private Integer duree;
-
-	/**
-	 * Type TVA.
-	 */
-	private String typeTVA;
+	private double tva;
 
 	/**
 	 * la liste des reference des {@link Frais} associe au tarif.
@@ -54,24 +43,7 @@ public class Tarif {
 	/**
 	 * constructeur par defaut.
 	 */
-	public Tarif() {
-	}
-
-	/**
-	 * 
-	 * @return {@link #reference}.
-	 */
-	public String getReference() {
-		return reference;
-	}
-
-	/**
-	 * 
-	 * @param reference
-	 *            {@link #reference}.
-	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public CoutRecurrent() {
 	}
 
 	/**
@@ -145,36 +117,19 @@ public class Tarif {
 
 	/**
 	 * 
-	 * @return {@link #duree}
+	 * @return {@link #TVA}
 	 */
-	public Integer getDuree() {
-		return duree;
+	public double getTVA() {
+		return tva;
 	}
 
 	/**
 	 * 
-	 * @param duree
-	 *            {@link #duree}
+	 * @param tva
+	 *            {@link #TVA}
 	 */
-	public void setDuree(Integer duree) {
-		this.duree = duree;
-	}
-
-	/**
-	 * 
-	 * @return {@link #typeTVA}
-	 */
-	public String getTypeTVA() {
-		return typeTVA;
-	}
-
-	/**
-	 * 
-	 * @param typeTVA
-	 *            {@link #typeTVA}
-	 */
-	public void setTypeTVA(String typeTVA) {
-		this.typeTVA = typeTVA;
+	public void setTVA(double tva) {
+		this.tva = tva;
 	}
 
 	/**
@@ -187,19 +142,6 @@ public class Tarif {
 		if (this.frais == null)
 			this.frais = new ArrayList<Frais>();
 		this.frais.add(frais);
-	}
-
-	/**
-	 * verifie si le tarif est recurrent ou non.
-	 * 
-	 * @return true si le tarif est recurrent.
-	 */
-	public boolean isRecurrent() {
-		Optional<Integer> frequenceOp = Optional.fromNullable(frequence);
-		if (frequenceOp.isPresent()) {
-			return true;
-		}
-		return false;
 	}
 
 }

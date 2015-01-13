@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -30,11 +31,10 @@ public class Commande {
 	 * la liste de ligne de la commande.
 	 */
 	private List<CommandeLigne> lignes;
-
 	/**
-	 * Si la commmande est paye en comptant.
+	 * Le cout comptant du une commande.
 	 */
-	private boolean paye;
+	private Double coutComptant;
 
 	/**
 	 * Le moyen de paiement comptant.
@@ -45,6 +45,11 @@ public class Commande {
 	 * Le moyen de paiement recurrent.
 	 */
 	private String moyenPaiementRecurrent;
+
+	/**
+	 * Si la commmande est paye en comptant.
+	 */
+	private boolean paye;
 
 	// /**
 	// * Le montant du paiement comptant.
@@ -59,6 +64,7 @@ public class Commande {
 	/**
 	 * Si la commande a un paiement recurrent.
 	 */
+	@JsonIgnore
 	private boolean paiementRecurrent;
 
 	/**
@@ -332,6 +338,23 @@ public class Commande {
 	 */
 	public void setMoyenPaiementRecurrent(String moyenPaiementRecurrent) {
 		this.moyenPaiementRecurrent = moyenPaiementRecurrent;
+	}
+
+	/**
+	 * 
+	 * @return {@link #coutComptant}
+	 */
+	public Double getCoutComptant() {
+		return coutComptant;
+	}
+
+	/**
+	 * 
+	 * @param coutComptant
+	 *            {@link #coutComptant}
+	 */
+	public void setCoutComptant(Double coutComptant) {
+		this.coutComptant = coutComptant;
 	}
 
 	/**

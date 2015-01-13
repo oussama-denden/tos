@@ -2,8 +2,6 @@ package com.nordnet.opale.finder.util;
 
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import com.nordnet.opale.finder.util.spring.ApplicationContextHolder;
 
 /**
@@ -13,11 +11,6 @@ import com.nordnet.opale.finder.util.spring.ApplicationContextHolder;
  * 
  */
 public class PropertiesUtil {
-
-	/**
-	 * default logger.
-	 */
-	private static final Logger LOGGER = Logger.getLogger(PropertiesUtil.class.getName());
 
 	/**
 	 * Instance unique de la classe.
