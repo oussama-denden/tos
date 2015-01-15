@@ -54,6 +54,7 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
+import com.nordnet.opale.validator.ReductionValidator;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.enums.TypeValeur;
@@ -529,8 +530,10 @@ public class DraftServiceImpl implements DraftService {
 	 *            {@link Commande}
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}
+	 * @throws OpaleException
 	 */
-	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
+	private void associerReductionCommande(Draft draft, Commande commande)
+			throws CloneNotSupportedException, OpaleException {
 		// copier reduction draft
 		List<Reduction> reductionDraft = new ArrayList<Reduction>();
 		Reduction reduction = reductionService.findReduction(draft.getReference());
@@ -553,6 +556,11 @@ public class DraftServiceImpl implements DraftService {
 				}
 			}
 
+			if (commandeLigneEnReduction != null && commandeLigneEnReduction.getTarif() != null) {
+				ReductionValidator.validerReductionTarif(reductionLigneDraft, commandeLigneEnReduction.getTarif(),
+						commandeLigneEnReduction);
+			}
+
 			ajouterReductionCommande(reductionLigneDraft, commande.getReference(),
 					commandeLigneEnReduction.getReferenceOffre(), null);
 
@@ -572,6 +580,12 @@ public class DraftServiceImpl implements DraftService {
 							break;
 						}
 					}
+
+					if (commandeLigneDetailEnReduction != null && commandeLigneDetailEnReduction.getTarif() != null) {
+						ReductionValidator.validerReductionTarif(reductionDetailLigneDraft,
+								commandeLigneDetailEnReduction.getTarif(), commandeLigneDetailEnReduction);
+					}
+
 					ajouterReductionCommande(reductionDetailLigneDraft, commande.getReference(),
 							commandeLigneEnReduction.getReferenceOffre(),
 							commandeLigneDetailEnReduction.getReferenceChoix());
