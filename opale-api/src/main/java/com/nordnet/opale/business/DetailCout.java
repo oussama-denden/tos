@@ -213,7 +213,8 @@ public class DetailCout extends Cout {
 	 *            the number of decimal places.
 	 * @return rounded value.
 	 */
-	public static double arroundiNombre(double value) {
+	@Override
+	public double arroundiNombre(double value) {
 
 		BigDecimal bd = new BigDecimal(String.valueOf(value));
 		bd = bd.setScale(Constants.DEUX, RoundingMode.HALF_UP);
