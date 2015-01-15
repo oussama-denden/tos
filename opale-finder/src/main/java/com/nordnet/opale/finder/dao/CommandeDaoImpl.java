@@ -127,6 +127,10 @@ public class CommandeDaoImpl implements CommandeDao {
 			if (Utils.isStringNullOrEmpty(lastReferenceCommande)
 					|| !resultSet.getString("refcommande").equals(lastReferenceCommande)) {
 
+				// calculer les couts de la commande.
+				if (!Utils.isStringNullOrEmpty(lastReferenceCommande)) {
+					calculerCout(commande);
+				}
 				commande = new Commande();
 				commande.setReference(resultSet.getString("refcommande"));
 				commande.setAnnule(resultSet.getBoolean("annule"));
@@ -167,7 +171,7 @@ public class CommandeDaoImpl implements CommandeDao {
 
 			// associer une ligne a une commande.
 
-			if ((Utils.isStringNullOrEmpty(lastReferenceLigneCommande) || !resultSet.getString("refligne").equals(
+			if ((Utils.isStringNullOrEmpty(lastReferenceLigneCommande) || !resultSet.getString("idLigne").equals(
 					lastReferenceLigneCommande))
 					&& (!Utils.isStringNullOrEmpty(resultSet.getString("refligne")))) {
 				refFraisLigne.clear();
@@ -241,10 +245,10 @@ public class CommandeDaoImpl implements CommandeDao {
 					refFraisDetailLigne.add(resultSet.getString("referenceFraisDetailLigne"));
 				}
 				commandeLigne.addDetail(detailCommandeLigne);
-				lastReferenceLigneCommande = resultSet.getString("refligne");
+				lastReferenceLigneCommande = resultSet.getString("idLigne");
 
 			} else if (!Utils.isStringNullOrEmpty(lastReferenceDetailLigneCommande) && tarifDetailLigne != null
-					&& resultSet.getString("referenceFraisDetailLigne") != null
+					&& resultSet.getString("idDetailLigne") != null
 					&& !refFraisDetailLigne.contains(resultSet.getString("referenceFraisDetailLigne"))) {
 				// ajouter le frais.
 				if (!Utils.isStringNullOrEmpty(resultSet.getString("referenceFraisDetailLigne"))) {
@@ -253,10 +257,10 @@ public class CommandeDaoImpl implements CommandeDao {
 				refFraisDetailLigne.add(resultSet.getString("referenceFraisDetailLigne"));
 			}
 
-			lastReferenceDetailLigneCommande = resultSet.getString("refDetailLigne");
+			lastReferenceDetailLigneCommande = resultSet.getString("idDetailLigne");
 		}
 
-		return calculerCout(commandes);
+		return commandes;
 
 	}
 
@@ -345,14 +349,12 @@ public class CommandeDaoImpl implements CommandeDao {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	private List<Commande> calculerCout(List<Commande> commandes) throws OpaleException {
+	private Commande calculerCout(Commande commande) throws OpaleException {
 
-		for (Commande commande : commandes) {
-			CoutCommande coutCommande = new CoutCommande(commande, reductionDao);
+		CoutCommande coutCommande = new CoutCommande(commande, reductionDao);
 
-			commande = coutCommande.getCommande();
-		}
+		commande = coutCommande.getCommande();
 
-		return commandes;
+		return commande;
 	}
 }
