@@ -343,9 +343,9 @@ public class CommandeDaoImpl implements CommandeDao {
 	/**
 	 * Calculer couts commandes.
 	 * 
-	 * @param commandes
-	 *            liste de {@link Commande}
-	 * @return liste de {@link Commande}
+	 * @param commande
+	 *            {@link Commande}
+	 * @return {@link Commande}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
