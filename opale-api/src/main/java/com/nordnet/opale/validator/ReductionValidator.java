@@ -1,11 +1,18 @@
 package com.nordnet.opale.validator;
 
+import java.util.List;
+
 import com.nordnet.opale.business.ReductionInfo;
+import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * cette classe responsable de valider les informations liés a une {@link Reduction}.
@@ -39,6 +46,8 @@ public class ReductionValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.10", "Reduction.TypeValeur"), "5.1.10");
 		}
 
+		validerReduction(reductionInfo);
+
 		if (objetEnReduction != null && objetEnReduction instanceof DraftLigne) {
 			if (((DraftLigne) objetEnReduction).getReferenceTarif() == null) {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");
@@ -48,11 +57,57 @@ public class ReductionValidator {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");
 			}
 		}
-		if (reductionInfo.getNbUtilisationMax() == null && reductionInfo.getDateDebut() == null) {
+		if (!reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getNbUtilisationMax() == null
+				&& reductionInfo.getDateDebut() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3",
 					"Reduction.NbUtilisationMax ou Reduction.DateDebut "), "5.1.3");
 		}
 
+	}
+
+	/**
+	 * valider les combinaison des champs pour une reduction.
+	 * 
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerReduction(ReductionInfo reductionInfo) throws OpaleException {
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getDateDebut() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.11"), "5.1.11");
+		}
+
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getDateFin() != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.12"), "5.1.12");
+		}
+
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getNbUtilisationMax() != null
+				&& reductionInfo.getNbUtilisationMax() != Constants.UN) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.13"), "5.1.13");
+		}
+		if (reductionInfo.getDateFin() != null && reductionInfo.getDateDebut() == null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.14"), "5.1.14");
+		}
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getNbUtilisationMax() == null) {
+			reductionInfo.setNbUtilisationMax(Constants.UN);
+		}
+	}
+
+	/**
+	 * valider les reductions asociees au frais de ligne et ses detailles.
+	 * 
+	 * @param reductionInfo
+	 *            {@link ReductionInfo}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerReductionFrais(ReductionInfo reductionInfo) throws OpaleException {
+
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.MOIS)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.15"), "5.1.15");
+
+		}
 	}
 
 	/**
@@ -181,6 +236,33 @@ public class ReductionValidator {
 		if (reduction != null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.9", refFrais, refLigneDetail, refLigne,
 					refDraft), "5.1.9");
+		}
+	}
+
+	/**
+	 * Verifier que les tarifs comptants ne peuvent pas avoir des reductions de type mois.
+	 * 
+	 * @param reduction
+	 *            {@link Reduction}
+	 * @param tarif
+	 *            {@link Tarif}
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerReductionTarif(List<Reduction> reductions, Tarif tarif, Object element)
+			throws OpaleException {
+
+		for (Reduction reduction : reductions) {
+			if ((reduction.isReductionECparent() || reduction.isReductionDetail())
+					&& reduction.getTypeValeur().equals(TypeValeur.MOIS) && !tarif.isRecurrent()) {
+				if (element instanceof CommandeLigne) {
+					throw new OpaleException(propertiesUtil.getErrorMessage("5.1.16", reduction.getReference(),
+							((CommandeLigne) element).getReferenceOffre()), "5.1.16");
+				} else if (element instanceof CommandeLigneDetail) {
+					throw new OpaleException(propertiesUtil.getErrorMessage("5.1.16", reduction.getReference(),
+							((CommandeLigneDetail) element).getReferenceChoix()), "5.1.16");
+				}
+			}
 		}
 	}
 }

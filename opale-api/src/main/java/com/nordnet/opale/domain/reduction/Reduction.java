@@ -376,4 +376,44 @@ public class Reduction implements Cloneable {
 		return reduction;
 	}
 
+	/**
+	 * Verifer si la reduction est associee au tarif de la ligne.
+	 * 
+	 * @return true si la reduction est de type EC parent.
+	 */
+	public boolean isReductionECparent() {
+
+		return (referenceDraft != null && referenceLigne != null && referenceTarif != null
+				&& referenceLigneDetail == null && referenceFrais == null);
+	}
+
+	/**
+	 * Verifer si la reduction est associee au detaile de la ligne.
+	 * 
+	 * @return true si la reduction est de type recution detaille.
+	 */
+	public boolean isReductionDetail() {
+
+		return (referenceDraft != null && referenceLigne != null && referenceTarif == null
+				&& referenceLigneDetail != null && referenceFrais == null);
+	}
+
+	/**
+	 * vérifier si une reduction est sur le cout récurrent.
+	 * 
+	 * @return true si la reduction est comptante.
+	 */
+	public boolean isreductionRecurrente() {
+		return (typeValeur.equals(TypeValeur.MOIS) || typeValeur.equals(TypeValeur.POURCENTAGE));
+	}
+
+	/**
+	 * vérifer si une reduction est sur le cout comptant.
+	 * 
+	 * @return true si la reduction est comptante.
+	 */
+	public boolean isreductionComptant() {
+		return (typeValeur.equals(TypeValeur.EURO) || typeValeur.equals(TypeValeur.POURCENTAGE));
+	}
+
 }

@@ -18,17 +18,22 @@ public class Cout {
 	/**
 	 * cout total du commande/draft.
 	 */
-	private double coutTotal;
+	private double coutComptantHT;
 
 	/**
 	 * cout total du commande/draft.
 	 */
-	private double coutTotalTTC;
+	private double coutComptantTTC;
 
 	/**
 	 * cout totale du reduction.
 	 */
-	private double reduction;
+	private double reductionHT;
+
+	/**
+	 * cout totale du reduction.
+	 */
+	private double reductionTTC;
 
 	/**
 	 * liste des {@link DetailCout}.
@@ -53,44 +58,10 @@ public class Cout {
 		String segmentTVA = commande.getClientAFacturer().getTva();
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			DetailCout detailCout = new DetailCout(commandeLigne, segmentTVA);
-			coutTotal += detailCout.getCoutTotal();
-			coutTotalTTC += detailCout.getCoutTotalTTC();
+			coutComptantHT += detailCout.getCoutComptantHT();
+			coutComptantTTC += detailCout.getCoutComptantTTC();
 			addDetail(detailCout);
 		}
-	}
-
-	/**
-	 * 
-	 * @return {@link #coutTotal}.
-	 */
-	public double getCoutTotal() {
-		return coutTotal;
-	}
-
-	/**
-	 * 
-	 * @param coutTotal
-	 *            {@link #coutTotal}.
-	 */
-	public void setCoutTotal(Double coutTotal) {
-		this.coutTotal = coutTotal;
-	}
-
-	/**
-	 * 
-	 * @return {@link #coutTotalTTC}.
-	 */
-	public double getCoutTotalTTC() {
-		return coutTotalTTC;
-	}
-
-	/**
-	 * 
-	 * @param coutTotalTTC
-	 *            {@link #coutTotalTTC}.
-	 */
-	public void setCoutTotalTTC(double coutTotalTTC) {
-		this.coutTotalTTC = coutTotalTTC;
 	}
 
 	/**
@@ -122,19 +93,70 @@ public class Cout {
 
 	/**
 	 * 
-	 * @return {@link #reduction}
+	 * @return {@link #coutComptantHT}
 	 */
-	public Double getReduction() {
-		return reduction;
+	public double getCoutComptantHT() {
+		return coutComptantHT;
 	}
 
 	/**
 	 * 
-	 * @param reduction
-	 *            the new {@link #reduction}
+	 * @param coutComptant
+	 *            {@link #coutComptantHT}
 	 */
-	public void setReduction(Double reduction) {
-		this.reduction = reduction;
+	public void setCoutComptantHT(double coutComptantHT) {
+		this.coutComptantHT = coutComptantHT;
+	}
+
+	/**
+	 * 
+	 * @return {@link #coutComptantTTC}
+	 */
+	public double getCoutComptantTTC() {
+		return coutComptantTTC;
+	}
+
+	/**
+	 * 
+	 * @param coutComptantTTC
+	 *            {@link #coutComptantTTC}
+	 */
+	public void setCoutComptantTTC(double coutComptantTTC) {
+		this.coutComptantTTC = coutComptantTTC;
+	}
+
+	/**
+	 * 
+	 * @return {@link Cout#reductionHT}
+	 */
+	public double getReductionHT() {
+		return reductionHT;
+	}
+
+	/**
+	 * 
+	 * @param reductionHT
+	 *            {@link #reductionHT}
+	 */
+	public void setReductionHT(double reductionHT) {
+		this.reductionHT = reductionHT;
+	}
+
+	/**
+	 * 
+	 * @return {@link #reductionTTC}
+	 */
+	public double getReductionTTC() {
+		return reductionTTC;
+	}
+
+	/**
+	 * 
+	 * @param reductionTTC
+	 *            {@link #reductionTTC}
+	 */
+	public void setReductionTTC(double reductionTTC) {
+		this.reductionTTC = reductionTTC;
 	}
 
 }

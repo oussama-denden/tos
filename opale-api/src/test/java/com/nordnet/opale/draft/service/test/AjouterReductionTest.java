@@ -16,7 +16,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
-import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * Classe de test de la methode
@@ -58,7 +57,7 @@ public class AjouterReductionTest extends GlobalTestCase {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");
 			reductionService.ajouterReduction("REF-DRAFT-1", reductionInfo);
-			Reduction reduction = reductionService.findReductionDraft("REF-DRAFT-1");
+			Reduction reduction = reductionService.findReduction("REF-DRAFT-1");
 			assertNotNull(reduction);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

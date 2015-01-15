@@ -15,24 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
-import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.business.Detail;
-import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftValidationInfo;
-import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.catalogue.Choice;
-import com.nordnet.opale.business.catalogue.DetailCatalogue;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.Tarif;
-import com.nordnet.opale.business.catalogue.TrameCatalogue;
+import com.nordnet.opale.calcule.CalculeCout;
+import com.nordnet.opale.calcule.CoutDecorator;
+import com.nordnet.opale.calcule.CoutDraft;
 import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
@@ -47,6 +44,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.repository.draft.DraftRepository;
+import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
@@ -56,7 +54,7 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
-import com.nordnet.opale.vat.client.VatClient;
+import com.nordnet.opale.validator.ReductionValidator;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.enums.TypeValeur;
@@ -130,10 +128,22 @@ public class DraftServiceImpl implements DraftService {
 	private DraftLigneDetailRepository draftLigneDetailRepository;
 
 	/**
+	 * {@link ReductionRepository}.
+	 */
+	@Autowired
+	private ReductionRepository reductionRepository;
+
+	/**
 	 * Client rest de topaze.
 	 */
 	@Autowired
 	TopazeClient topazeClient;
+
+	/**
+	 * calculateur du cout.
+	 */
+	@Autowired
+	private CoutDecorator coutDecorator;
 
 	/**
 	 * {@inheritDoc}
@@ -520,11 +530,13 @@ public class DraftServiceImpl implements DraftService {
 	 *            {@link Commande}
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}
+	 * @throws OpaleException
 	 */
-	private void associerReductionCommande(Draft draft, Commande commande) throws CloneNotSupportedException {
+	private void associerReductionCommande(Draft draft, Commande commande)
+			throws CloneNotSupportedException, OpaleException {
 		// copier reduction draft
 		List<Reduction> reductionDraft = new ArrayList<Reduction>();
-		Reduction reduction = reductionService.findReductionDraft(draft.getReference());
+		Reduction reduction = reductionService.findReduction(draft.getReference());
 		if (reduction != null)
 			reductionDraft.add(reduction);
 
@@ -542,6 +554,11 @@ public class DraftServiceImpl implements DraftService {
 					commandeLigneEnReduction = commandeLigne;
 					break;
 				}
+			}
+
+			if (commandeLigneEnReduction != null && commandeLigneEnReduction.getTarif() != null) {
+				ReductionValidator.validerReductionTarif(reductionLigneDraft, commandeLigneEnReduction.getTarif(),
+						commandeLigneEnReduction);
 			}
 
 			ajouterReductionCommande(reductionLigneDraft, commande.getReference(),
@@ -563,6 +580,12 @@ public class DraftServiceImpl implements DraftService {
 							break;
 						}
 					}
+
+					if (commandeLigneDetailEnReduction != null && commandeLigneDetailEnReduction.getTarif() != null) {
+						ReductionValidator.validerReductionTarif(reductionDetailLigneDraft,
+								commandeLigneDetailEnReduction.getTarif(), commandeLigneDetailEnReduction);
+					}
+
 					ajouterReductionCommande(reductionDetailLigneDraft, commande.getReference(),
 							commandeLigneEnReduction.getReferenceOffre(),
 							commandeLigneDetailEnReduction.getReferenceChoix());
@@ -660,9 +683,11 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerReferencesDraft(draft, calculInfo.getTrameCatalogue());
 		if (validationInfo.isValide()) {
-			Cout cout = calculerCoutDraft(draft, calculInfo);
 
-			return cout;
+			CalculeCout coutDraft = new CoutDraft(draft, calculInfo, reductionService);
+			coutDecorator.setCalculeCout(coutDraft);
+			return coutDecorator.getCout();
+
 		} else {
 			return validationInfo;
 		}
@@ -674,7 +699,7 @@ public class DraftServiceImpl implements DraftService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void associerAuteur(String refDraft, com.nordnet.opale.business.Auteur auteur) throws OpaleException {
-		LOGGER.info("De ut methode associerAuteur");
+		LOGGER.info("Debut methode associerAuteur");
 		Draft draft = getDraftByReference(refDraft);
 		DraftValidator.validerAuteur(auteur);
 		draft.setAuteur(auteur.toDomain());
@@ -847,146 +872,6 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * calculer le cout des lignes.
-	 * 
-	 * @param draft
-	 *            {@link Draft}
-	 * @param calculInfo
-	 *            {@link TransformationInfo}.
-	 * @return {@link Cout}
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private Cout calculerCoutDraft(Draft draft, TransformationInfo calculInfo) throws OpaleException {
-		Cout cout = new Cout();
-		double coutTotal = 0d;
-		double coutTotalTTC = 0d;
-		double reduction = 0d;
-		List<DetailCout> details = new ArrayList<DetailCout>();
-		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			DetailCout detailCout = calculerCoutLigne(draft, draftLigne, calculInfo);
-			coutTotal += detailCout.getCoutTotal();
-			coutTotalTTC += detailCout.getCoutTotalTTC();
-			reduction += detailCout.getReduction();
-			details.add(detailCout);
-		}
-		cout.setCoutTotal(coutTotal);
-		cout.setCoutTotalTTC(coutTotalTTC);
-		cout.setDetails(details);
-		reduction += calculerReductionDraft(draft.getReference(), coutTotal, reduction);
-		cout.setReduction(reduction);
-		return cout;
-
-	}
-
-	/**
-	 * calucler le cout du detail ligne.
-	 * 
-	 * @param draft
-	 *            {@link Draft}.
-	 * @param draftLigne
-	 *            {@link DraftLigne}
-	 * @param calculInfo
-	 *            {@link TransformationInfo}
-	 * @return {@link DetailCout}
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private DetailCout calculerCoutLigne(Draft draft, DraftLigne draftLigne, TransformationInfo calculInfo)
-			throws OpaleException {
-		String segmentTVA = null;
-		if (calculInfo.getClientInfo() != null && calculInfo.getClientInfo().getFacturation() != null) {
-			DraftValidator.isIndicatifTVAValide(calculInfo.getClientInfo().getFacturation());
-			segmentTVA = calculInfo.getClientInfo().getFacturation().getTva();
-		} else if (draft.getClientAFacturer() != null) {
-			segmentTVA = draft.getClientAFacturer().getTva();
-		}
-		DetailCout detailCout = new DetailCout();
-		double coutTotal = 0d;
-		double coutTotalTTC = 0d;
-		double reduction = 0d;
-		detailCout.setNumero(draftLigne.getReference());
-		detailCout.setLabel(draftLigne.getReferenceOffre());
-		double plan = 0d;
-		double planTTC = 0d;
-		Integer frequence = null;
-		Tarif tarif = null;
-		DetailCatalogue detailCatalogue = null;
-		Choice choice = null;
-		TrameCatalogue trameCatalogue = calculInfo.getTrameCatalogue();
-		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
-		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
-			choice = detailCatalogue.getChoice(draftLigneDetail.getReferenceChoix());
-			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
-			if (tarif != null) {
-				DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
-				coutTotal += detailCoutTarif.getCoutTotal();
-				coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
-				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-				planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
-				frequence = tarif.getFrequence();
-				reduction +=
-						calculerReductionLignetETDetail(draft.getReference(), draftLigne.getReference(),
-								draftLigneDetail.getReferenceChoix(), detailCoutTarif.getCoutTotal(), reduction,
-								detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan()
-										: Constants.ZERO, tarif, false);
-			}
-		}
-
-		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
-		if (tarif != null) {
-			DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
-			coutTotal += detailCoutTarif.getCoutTotal();
-			coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
-			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-			planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
-			frequence = tarif.getFrequence();
-			reduction +=
-					calculerReductionLignetETDetail(draft.getReference(), draftLigne.getReference(),
-							draftLigne.getReference(), coutTotal, reduction, plan, tarif, true);
-		}
-
-		detailCout.setPlan(new Plan(frequence, plan, planTTC));
-		detailCout.setCoutTotal(coutTotal);
-		detailCout.setCoutTotalTTC(coutTotalTTC);
-		detailCout.setReduction(reduction);
-		return detailCout;
-
-	}
-
-	/**
-	 * calcule du {@link DetailCout} pour un {@link Tarif}.
-	 * 
-	 * @param tarif
-	 *            {@link Tarif}.
-	 * @param segmentTVA
-	 *            segment tva du client.
-	 * @return {@link DetailCout}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private DetailCout calculerCoutTarif(Tarif tarif, String segmentTVA) throws OpaleException {
-
-		DetailCout detailCout = new DetailCout();
-		double coutTotal = 0d;
-		if (tarif.isRecurrent()) {
-			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(),
-					tarif.getTva(), segmentTVA)));
-		} else {
-			coutTotal += tarif.getPrix();
-		}
-		for (Frais frais : tarif.getFrais()) {
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutTotal += frais.getMontant();
-		}
-		detailCout.setCoutTotal(coutTotal);
-		detailCout.setCoutTotalTTC(VatClient.appliquerTVA(coutTotal, tarif.getTva(), segmentTVA));
-
-		return detailCout;
-	}
-
-	/**
 	 * Calculer le cout du reduction.
 	 * 
 	 * @param refDraft
@@ -1055,32 +940,8 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * calculer le cout du reduction pour un draft.
-	 * 
-	 * @param refDraft
-	 *            reference du draft
-	 * @param coutTotale
-	 *            cout totale du draft
-	 * @param reduction
-	 *            montant reduction.
-	 * 
-	 * @return cout du reduction.
+	 * {@inheritDoc}
 	 */
-	private double calculerReductionDraft(String refDraft, double coutTotale, double reduction) {
-
-		Reduction reductionDraft = reductionService.findReductionDraft(refDraft);
-		double coutReduction = 0d;
-		if (reductionDraft == null) {
-			return coutReduction;
-		}
-		if (reductionDraft.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-			coutReduction += ((coutTotale - reduction) * reductionDraft.getValeur()) / 100;
-		} else if (reductionDraft.getTypeValeur().equals(TypeValeur.EURO)) {
-			coutReduction += reductionDraft.getValeur();
-		}
-		return coutReduction;
-	}
-
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Object associerReductionECParent(String refDraft, String refLigne, String refTarif,
@@ -1106,14 +967,20 @@ public class DraftServiceImpl implements DraftService {
 		return reductionResponse.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Draft> findAllDraft() {
 		return draftRepository.findAll();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String alertMultipleReduction(Commande commande) {
-		Reduction reductionCommande = reductionService.findReductionDraft(commande.getReferenceDraft());
+		Reduction reductionCommande = reductionService.findReduction(commande.getReferenceDraft());
 		List<Reduction> reductionsLigne = new ArrayList<>();
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			Reduction reductionLigne =

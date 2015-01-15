@@ -414,7 +414,7 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/ligne/{refLigne:.+}/tarif/{refTarif:.+}/associerReduction", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public Object associerReductionECParent(@PathVariable String refDraft, @PathVariable String refLigne,
+	public Object associerReductionTarifOffre(@PathVariable String refDraft, @PathVariable String refLigne,
 			@PathVariable String refTarif, @RequestBody ReductionInfo reductionInfo)
 			throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::associerReductionECParent");

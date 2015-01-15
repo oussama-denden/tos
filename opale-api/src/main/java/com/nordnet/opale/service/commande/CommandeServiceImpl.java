@@ -25,6 +25,8 @@ import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.SignatureInfo;
+import com.nordnet.opale.calcule.CoutCommande;
+import com.nordnet.opale.calcule.CoutDecorator;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
@@ -40,6 +42,7 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
+import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.downpaiement.DownPaiementService;
 import com.nordnet.opale.service.draft.DraftService;
@@ -146,7 +149,18 @@ public class CommandeServiceImpl implements CommandeService {
 	 * Client rest de topaze.
 	 */
 	@Autowired
-	TopazeClient topazeClient;
+	private TopazeClient topazeClient;
+
+	/**
+	 * {@link CoutDecorator}
+	 */
+	@Autowired
+	private CoutDecorator coutDecorator;
+
+	/**
+	 * {@link ReductionRepository}
+	 */
+	private ReductionRepository reductionRepository;
 
 	/**
 	 * 
@@ -925,8 +939,9 @@ public class CommandeServiceImpl implements CommandeService {
 	@Transactional(readOnly = true)
 	public Cout calculerCout(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
-		Cout cout = new Cout(commande);
-		return cout;
+		CoutCommande coutCommande = new CoutCommande(commande, reductionService);
+		coutDecorator.setCalculeCout(coutCommande);
+		return coutDecorator.getCout();
 	}
 
 	/**

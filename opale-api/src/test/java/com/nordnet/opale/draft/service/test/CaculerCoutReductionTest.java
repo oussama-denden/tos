@@ -58,19 +58,34 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 		try {
 			TransformationInfo calculInfo =
 					draftInfoGenerator.getObjectFromJsonFile(TransformationInfo.class,
-							"./requests/calculerCoutDraft.json");
+							"./requests/calculerCoutReductionDraft.json");
 			Object object = draftService.calculerCout("Dra-00000001", calculInfo);
 			assertTrue(object instanceof Cout);
 			Cout cout = (Cout) object;
-			assertEquals(new Double(119.8), new Double(cout.getCoutTotal()));
-			assertEquals(new Double(36.056799999999996), new Double(cout.getReduction()));
+			assertEquals(new Double(50), new Double(cout.getCoutComptantHT()));
+			assertEquals(new Double(55), new Double(cout.getCoutComptantTTC()));
 
-			assertEquals(Double.valueOf(Constants.UN), Double.valueOf(cout.getDetails().size()));
-			assertEquals(new Double(119.8), new Double(cout.getDetails().get(0).getCoutTotal()));
-			assertEquals(new Double(26.752), cout.getDetails().get(0).getReduction());
+			assertEquals(new Double(22.7898), new Double(cout.getReductionTTC()));
+			assertEquals(new Double(20.718), new Double(cout.getReductionHT()));
 
-			assertEquals(new Double(34.9), new Double(cout.getDetails().get(0).getPlan().getPlan()));
-			assertEquals(Constants.UN, cout.getDetails().get(0).getPlan().getFrequence());
+			assertEquals(new Double(55), new Double(cout.getDetails().get(0).getCoutComptantTTC()));
+			assertEquals(new Double(50), new Double(cout.getDetails().get(0).getCoutComptantHT()));
+
+			assertEquals(new Double(18.7803), new Double(cout.getDetails().get(0).getReductionTTC()));
+			assertEquals(new Double(17.073), new Double(cout.getDetails().get(0).getReductionHT()));
+
+			assertEquals(new Double(14.3), new Double(cout.getDetails().get(0).getCoutRecurrent().getNormal()
+					.getTarifTTC()));
+			assertEquals(new Double(13), new Double(cout.getDetails().get(0).getCoutRecurrent().getNormal()
+					.getTarifHT()));
+
+			assertEquals(new Double(14.3), new Double(cout.getDetails().get(0).getCoutRecurrent().getNormal()
+					.getTarifTTC()));
+			assertEquals(new Double(13), new Double(cout.getDetails().get(0).getCoutRecurrent().getNormal()
+					.getTarifHT()));
+
+			assertEquals(Constants.TROIS, cout.getDetails().get(0).getCoutRecurrent().getFrequence());
+
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

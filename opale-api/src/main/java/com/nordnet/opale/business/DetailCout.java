@@ -13,7 +13,7 @@ import com.nordnet.opale.vat.client.VatClient;
  * @author akram-moncer
  * 
  */
-public class DetailCout {
+public class DetailCout extends Cout {
 
 	/**
 	 * numero detail coincide avec le numero de ligne dans la commande.
@@ -26,24 +26,34 @@ public class DetailCout {
 	private String label;
 
 	/**
+	 * tva de l'offre
+	 */
+	private double tva;
+
+	/**
 	 * cout total de l'offre.
 	 */
-	private double coutTotal;
+	private double coutComptantHT;
 
 	/**
 	 * cout total du commande/draft.
 	 */
-	private double coutTotalTTC;
+	private double coutComptantTTC;
 
 	/**
 	 * cout totale du reduction.
 	 */
-	private double reduction;
+	private double reductionHT;
+
+	/**
+	 * cout totale du reduction.
+	 */
+	private double reductionTTC;
 
 	/**
 	 * {@link Plan}.
 	 */
-	private Plan plan;
+	private CoutRecurrent coutRecurrent;
 
 	/**
 	 * constructeur par defaut.
@@ -64,18 +74,22 @@ public class DetailCout {
 	public DetailCout(CommandeLigne commandeLigne, String segmentTVA) throws OpaleException {
 		numero = String.valueOf(commandeLigne.getNumero());
 		label = commandeLigne.getReferenceOffre();
-		double plan = 0d;
-		double planTTC = 0d;
+		double tarifHT = 0d;
+		double tarifTTC = 0d;
 		Integer frequence = null;
 		com.nordnet.opale.domain.commande.Tarif tarif = null;
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigne.getCommandeLigneDetails()) {
 			tarif = commandeLigneDetail.getTarif();
 			if (tarif != null) {
 				DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
-				coutTotal += detailCoutTarif.getCoutTotal();
-				coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
-				plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-				planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
+				coutComptantHT += detailCoutTarif.getCoutComptantHT();
+				coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
+				tarifHT +=
+						detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+								.getTarifHT() : 0d;
+				tarifTTC +=
+						detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+								.getTarifTTC() : 0d;
 				frequence = tarif.getFrequence();
 			}
 		}
@@ -83,16 +97,52 @@ public class DetailCout {
 		tarif = commandeLigne.getTarif();
 		if (tarif != null) {
 			DetailCout detailCoutTarif = calculerCoutTarif(tarif, segmentTVA);
-			coutTotal += detailCoutTarif.getCoutTotal();
-			coutTotalTTC += detailCoutTarif.getCoutTotalTTC();
-			plan += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlan() : 0d;
-			planTTC += detailCoutTarif.getPlan() != null ? detailCoutTarif.getPlan().getPlanTTC() : 0d;
+			coutComptantHT += detailCoutTarif.getCoutComptantHT();
+			coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
+			tarifHT +=
+					detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+							.getTarifHT() : 0d;
+			tarifTTC +=
+					detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+							.getTarifTTC() : 0d;
 			frequence = tarif.getFrequence();
 		}
 
-		if (plan > Constants.ZERO) {
-			this.plan = new Plan(frequence, plan, planTTC);
+		if (tarifHT > Constants.ZERO) {
+			Plan normal = new Plan(tarifHT, tarifTTC);
+			this.coutRecurrent = new CoutRecurrent(frequence, normal, null);
 		}
+	}
+
+	/**
+	 * calcule du {@link DetailCout} pour un {@link com.nordnet.opale.domain.commande.Tarif}.
+	 * 
+	 * @param tarif
+	 *            {@link com.nordnet.opale.domain.commande.Tarif}.
+	 * @param segmentTVA
+	 *            segment TVA du client.
+	 * @return {@link DetailCout}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	private DetailCout calculerCoutTarif(com.nordnet.opale.domain.commande.Tarif tarif, String segmentTVA)
+			throws OpaleException {
+		DetailCout detailCout = new DetailCout();
+		double coutComptant = 0d;
+		if (tarif.isRecurrent()) {
+			Plan normal =
+					new Plan(tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(), tarif.getTypeTVA(), segmentTVA));
+			detailCout.setCoutRecurrent(new CoutRecurrent(tarif.getFrequence(), normal, null));
+		} else {
+			coutComptant += tarif.getPrix();
+		}
+		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
+			if (frais.getTypeFrais() == TypeFrais.CREATION)
+				coutComptant += frais.getMontant();
+		}
+		detailCout.setCoutComptantHT(coutComptant);
+		detailCout.setCoutComptantTTC(VatClient.appliquerTVA(coutComptant, tarif.getTypeTVA(), segmentTVA));
+		return detailCout;
 	}
 
 	/**
@@ -131,100 +181,112 @@ public class DetailCout {
 
 	/**
 	 * 
-	 * @return {@link #coutTotal}.
+	 * @return {@link #tva}
 	 */
-	public double getCoutTotal() {
-		return coutTotal;
+	public double getTva() {
+		return tva;
 	}
 
 	/**
 	 * 
-	 * @param coutTotal
-	 *            {@link #coutTotal}.
+	 * @param tva
+	 *            {@link #tva}
 	 */
-	public void setCoutTotal(double coutTotal) {
-		this.coutTotal = coutTotal;
+	public void setTva(double tva) {
+		this.tva = tva;
 	}
 
 	/**
 	 * 
-	 * @return {@link #coutTotalTTC}.
+	 * @return {@link #coutComptantHT}
 	 */
-	public double getCoutTotalTTC() {
-		return coutTotalTTC;
+	@Override
+	public double getCoutComptantHT() {
+		return coutComptantHT;
 	}
 
 	/**
 	 * 
-	 * @param coutTotalTTC
-	 *            {@link #coutTotalTTC}.
+	 * @param coutComptantHT
+	 *            {@link #coutComptantHT}
 	 */
-	public void setCoutTotalTTC(double coutTotalTTC) {
-		this.coutTotalTTC = coutTotalTTC;
+	@Override
+	public void setCoutComptantHT(double coutComptantHT) {
+		this.coutComptantHT = coutComptantHT;
 	}
 
 	/**
 	 * 
-	 * @return {@link Plan}.
+	 * @return {@link #coutComptantTTC}
 	 */
-	public Plan getPlan() {
-		return plan;
+	@Override
+	public double getCoutComptantTTC() {
+		return coutComptantTTC;
 	}
 
 	/**
 	 * 
-	 * @param plan
-	 *            {@link Plan}.
+	 * @param coutComptantTTC
+	 *            {@link #coutComptantTTC}
 	 */
-	public void setPlan(Plan plan) {
-		this.plan = plan;
+	@Override
+	public void setCoutComptantTTC(double coutComptantTTC) {
+		this.coutComptantTTC = coutComptantTTC;
 	}
 
 	/**
 	 * 
-	 * @return {@link #reduction}
+	 * @return {@link #reductionHT}
 	 */
-	public Double getReduction() {
-		return reduction;
+	@Override
+	public double getReductionHT() {
+		return reductionHT;
 	}
 
 	/**
 	 * 
-	 * @param reduction
-	 *            the new {@link #reduction}
+	 * @param reductionHT
+	 *            {@link #reductionHT}
 	 */
-	public void setReduction(Double reduction) {
-		this.reduction = reduction;
+	@Override
+	public void setReductionHT(double reductionHT) {
+		this.reductionHT = reductionHT;
 	}
 
 	/**
-	 * calcule du {@link DetailCout} pour un {@link com.nordnet.opale.domain.commande.Tarif}.
 	 * 
-	 * @param tarif
-	 *            {@link com.nordnet.opale.domain.commande.Tarif}.
-	 * @param segmentTVA
-	 *            segment TVA du client.
-	 * @return {@link DetailCout}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
+	 * @return {@link #reductionTTC}
 	 */
-	private DetailCout calculerCoutTarif(com.nordnet.opale.domain.commande.Tarif tarif, String segmentTVA)
-			throws OpaleException {
-		DetailCout detailCout = new DetailCout();
-		double coutTotal = 0d;
-		if (tarif.isRecurrent()) {
-			detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(),
-					tarif.getTypeTVA(), segmentTVA)));
-		} else {
-			coutTotal += tarif.getPrix();
-		}
-		for (com.nordnet.opale.domain.commande.Frais frais : tarif.getFrais()) {
-			if (frais.getTypeFrais() == TypeFrais.CREATION)
-				coutTotal += frais.getMontant();
-		}
-		detailCout.setCoutTotal(coutTotal);
-		detailCout.setCoutTotalTTC(VatClient.appliquerTVA(coutTotal, tarif.getTypeTVA(), segmentTVA));
-		return detailCout;
+	@Override
+	public double getReductionTTC() {
+		return reductionTTC;
+	}
+
+	/**
+	 * 
+	 * @param reductionTTC
+	 *            {@link #reductionTTC}
+	 */
+	@Override
+	public void setReductionTTC(double reductionTTC) {
+		this.reductionTTC = reductionTTC;
+	}
+
+	/**
+	 * 
+	 * @return {@link #coutRecurrent}
+	 */
+	public CoutRecurrent getCoutRecurrent() {
+		return coutRecurrent;
+	}
+
+	/**
+	 * 
+	 * @param coutRecurrent
+	 *            {@link #coutRecurrent}
+	 */
+	public void setCoutRecurrent(CoutRecurrent coutRecurrent) {
+		this.coutRecurrent = coutRecurrent;
 	}
 
 }

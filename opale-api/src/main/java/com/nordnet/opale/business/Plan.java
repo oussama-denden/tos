@@ -1,99 +1,74 @@
 package com.nordnet.opale.business;
 
 /**
- * contient des info sur le plan de paiement d'une offre.
+ * contient des info sur le plan normale et reduit de paiement d'une offre.
  * 
- * @author akram-moncer
+ * @author mahjoub-MARZOUGUI
  * 
  */
 public class Plan {
 
 	/**
-	 * frequence/periodicite de paiement.
+	 * tarif hors tax.
 	 */
-	private Integer frequence;
+	private double tarifHT;
 
 	/**
-	 * plan.
+	 * tarif avec taxt.
 	 */
-	private double plan;
-
-	/**
-	 * plan TTC.
-	 */
-	private double planTTC;
+	private double tarifTTC;
 
 	/**
 	 * constructeur par defaut.
 	 */
 	public Plan() {
-	}
 
-	/**
-	 * creation du plan.
-	 * 
-	 * @param frequence
-	 *            frequence du tarif.
-	 * @param plan
-	 *            montant du tarif.
-	 * @param planTTC
-	 *            plan TTC.
-	 */
-	public Plan(Integer frequence, double plan, double planTTC) {
-		this.frequence = frequence;
-		this.plan = plan;
-		this.planTTC = planTTC;
 	}
 
 	/**
 	 * 
-	 * @return {@link #frequence}.
+	 * @param tarifHT
+	 *            {@link #tarifHT}
+	 * @param tarifTTC
+	 *            {@link #tarifTTC}
 	 */
-	public Integer getFrequence() {
-		return frequence;
+	public Plan(double tarifHT, double tarifTTC) {
+		this.tarifHT = tarifHT;
+		this.tarifTTC = tarifTTC;
 	}
 
 	/**
 	 * 
-	 * @param frequence
-	 *            {@link #frequence}.
+	 * @return {@link #tarifHT}
 	 */
-	public void setFrequence(Integer frequence) {
-		this.frequence = frequence;
+	public double getTarifHT() {
+		return tarifHT;
 	}
 
 	/**
 	 * 
-	 * @return {@link #plan}.
+	 * @param tarifHT
+	 *            {@link #tarifHT}
 	 */
-	public double getPlan() {
-		return plan;
+	public void setTarifHT(double tarifHT) {
+		this.tarifHT = tarifHT;
 	}
 
 	/**
 	 * 
-	 * @param plan
-	 *            {@link #plan}.
+	 * @return {@link #tarifTTC}
 	 */
-	public void setPlan(double plan) {
-		this.plan = plan;
+	public double getTarifTTC() {
+		return tarifTTC;
 	}
 
 	/**
 	 * 
-	 * @return {@link #planTTC}.
+	 * @param tarifTTC
+	 *            {@link #tarifTTC}
 	 */
-	public double getPlanTTC() {
-		return planTTC;
-	}
-
-	/**
-	 * 
-	 * @param planTTC
-	 *            {@link #planTTC}.
-	 */
-	public void setPlanTTC(double planTTC) {
-		this.planTTC = planTTC;
+	public void setTarifTTC(double tarifTTC) {
+		this.tarifTTC = tarifTTC;
 	}
 
 }
