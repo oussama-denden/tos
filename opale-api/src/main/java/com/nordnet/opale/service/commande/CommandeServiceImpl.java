@@ -958,7 +958,7 @@ public class CommandeServiceImpl implements CommandeService {
 			throws OpaleException {
 		ReductionContrat reductionContrat = null;
 
-		Reduction reductionDraft = reductionService.findReductionDraft(commande.getReference());
+		Reduction reductionDraft = reductionService.findReduction(commande.getReference());
 		if (reductionDraft != null) {
 			reductionContrat = fromReduction(reductionDraft);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
