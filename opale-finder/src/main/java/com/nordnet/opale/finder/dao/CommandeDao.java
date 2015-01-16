@@ -24,19 +24,4 @@ public interface CommandeDao {
 	 */
 	public List<Commande> findByIdClient(String idClient) throws OpaleException;
 
-	/**
-	 * recuperer commandes par page.
-	 * 
-	 * @param pageNo
-	 *            numero de page
-	 * @param pageSize
-	 *            nombre de ligne
-	 * @param idClient
-	 *            l id du client
-	 * @return liste de {@link Commande}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
-	 */
-	public List<Commande> findByIdClient(final int pageNo, final int pageSize, String idClient) throws OpaleException;
-
 }

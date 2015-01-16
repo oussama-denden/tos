@@ -3,6 +3,7 @@ package com.nordnet.opale.finder.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -21,6 +22,11 @@ public class CommandeLigne {
 	private String reference;
 
 	/**
+	 * Le geste de la ligne (VENTE/RENOUVELEMENT/MIGRATION...).
+	 */
+	private String geste;
+
+	/**
 	 * Label ligne commande.
 	 */
 	private String label;
@@ -28,12 +34,24 @@ public class CommandeLigne {
 	/**
 	 * Tarif ligne commande.
 	 */
+	@JsonIgnore
 	private Tarif tarif;
+
+	/**
+	 * Le cout comptant d une ligne commande.
+	 */
+	private Double coutComptant;
+
+	/**
+	 * Le cout recurrent d une ligne commande.
+	 */
+	private CoutRecurrent coutRecurrent;
 
 	/**
 	 * Lite des detail.
 	 */
-	List<DetailCommandeLigne> detailCommandeLignes;
+	@JsonIgnore
+	private List<DetailCommandeLigne> detailCommandeLignes;
 
 	/**
 	 * constructeur par defaut.
@@ -110,6 +128,57 @@ public class CommandeLigne {
 	 */
 	public void setDetailCommandeLignes(List<DetailCommandeLigne> detailCommandeLignes) {
 		this.detailCommandeLignes = detailCommandeLignes;
+	}
+
+	/**
+	 * 
+	 * @return {@link #geste}
+	 */
+	public String getGeste() {
+		return geste;
+	}
+
+	/**
+	 * 
+	 * @param geste
+	 *            {@link #geste}
+	 */
+	public void setGeste(String geste) {
+		this.geste = geste;
+	}
+
+	/**
+	 * 
+	 * @return {@link #coutComptant}
+	 */
+	public Double getCoutComptant() {
+		return coutComptant;
+	}
+
+	/**
+	 * 
+	 * @param coutComptant
+	 *            {@link #coutComptant}
+	 */
+	public void setCoutComptant(Double coutComptant) {
+		this.coutComptant = coutComptant;
+	}
+
+	/**
+	 * 
+	 * @return {@link #coutRecurrent}
+	 */
+	public CoutRecurrent getCoutRecurrent() {
+		return coutRecurrent;
+	}
+
+	/**
+	 * 
+	 * @param coutRecurrent
+	 *            {@link #coutRecurrent}
+	 */
+	public void setCoutRecurrent(CoutRecurrent coutRecurrent) {
+		this.coutRecurrent = coutRecurrent;
 	}
 
 	/**
