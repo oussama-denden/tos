@@ -11,6 +11,8 @@ from 2015-01-12.
   * add addional control to reduction with type 'EURO' and NB utilisation is not 1.
   * force the value of 1 to the reduction with type 'EURO' and NB utilisation is null.
   * US 143 : Add payment mode 'VIREMENT'.
+  * US 148 : make optional the 'codePartenaire'.
+  
  * opale-finder
   * US 138: Add the field codePartemaire  for the command.
   * US 140: Add the field geste for the command line.
