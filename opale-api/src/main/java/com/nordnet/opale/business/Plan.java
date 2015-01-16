@@ -1,9 +1,6 @@
 package com.nordnet.opale.business;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.Utils;
 
 /**
  * contient des info sur le plan normale et reduit de paiement d'une offre.
@@ -56,7 +53,7 @@ public class Plan {
 	 *            {@link #tarifHT}
 	 */
 	public void setTarifHT(double tarifHT) {
-		this.tarifHT = arroundiNombre(tarifHT);
+		this.tarifHT = Utils.arroundiNombre(tarifHT);
 	}
 
 	/**
@@ -73,23 +70,7 @@ public class Plan {
 	 *            {@link #tarifTTC}
 	 */
 	public void setTarifTTC(double tarifTTC) {
-		this.tarifTTC = arroundiNombre(tarifTTC);
-	}
-
-	/**
-	 * Rounds up a double value.
-	 * 
-	 * @param value
-	 *            double value.
-	 * @param places
-	 *            the number of decimal places.
-	 * @return rounded value.
-	 */
-	public double arroundiNombre(double value) {
-
-		BigDecimal bd = new BigDecimal(String.valueOf(value));
-		bd = bd.setScale(Constants.DEUX, RoundingMode.HALF_UP);
-		return bd.doubleValue();
+		this.tarifTTC = Utils.arroundiNombre(tarifTTC);
 	}
 
 }

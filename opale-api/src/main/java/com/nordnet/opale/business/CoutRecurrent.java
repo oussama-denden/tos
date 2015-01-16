@@ -96,4 +96,29 @@ public class CoutRecurrent {
 		this.reduit = reduit;
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public int hashCode() {
+		return frequence.hashCode();
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CoutRecurrent other = (CoutRecurrent) obj;
+		if (!frequence.equals(other.frequence))
+			return false;
+		return true;
+	}
+
 }

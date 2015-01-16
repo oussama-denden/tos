@@ -12,7 +12,10 @@ from 2015-01-12.
   * force the value of 1 to the reduction with type 'EURO' and NB utilisation is null.
   * US 143 : Add payment mode 'VIREMENT'.
   * US 148 : make optional the 'codePartenaire'.
-  
+  * force the value of 1 to the reduction with type 'EURO' and NB utilisation is null.  
+  * US 145 round the numbers in cost calculation process to 2 decimal places.
+  * US 146  show the recurring cost for each line in the trame cost for either commande and draft.
+
  * opale-finder
   * US 138: Add the field codePartemaire  for the command.
   * US 140: Add the field geste for the command line.
