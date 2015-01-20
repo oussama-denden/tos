@@ -1,5 +1,6 @@
 package com.nordnet.opale.finder.business;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -21,6 +22,12 @@ public class Client {
 	 * L adresse.
 	 */
 	private String adresseId;
+
+	/**
+	 * type TVA.
+	 */
+	@JsonIgnore
+	private String tva;
 
 	@Override
 	public String toString() {
@@ -67,6 +74,23 @@ public class Client {
 	 */
 	public void setAdresseId(String adresseId) {
 		this.adresseId = adresseId;
+	}
+
+	/**
+	 * 
+	 * @return type tva {@link #TVA}
+	 */
+	public String getTva() {
+		return tva;
+	}
+
+	/**
+	 * 
+	 * @param tVA
+	 *            {@link Client#TVA}
+	 */
+	public void setTva(String tVA) {
+		tva = tVA;
 	}
 
 }

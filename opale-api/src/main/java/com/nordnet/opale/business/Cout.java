@@ -3,9 +3,7 @@ package com.nordnet.opale.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nordnet.opale.domain.commande.Commande;
-import com.nordnet.opale.domain.commande.CommandeLigne;
-import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.Utils;
 
 /**
  * contient les couts d'une commande.
@@ -36,6 +34,11 @@ public class Cout {
 	private double reductionTTC;
 
 	/**
+	 * liste des {@link CoutRecurrent}
+	 */
+	private List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<CoutRecurrent>();
+
+	/**
 	 * liste des {@link DetailCout}.
 	 */
 	List<DetailCout> details = new ArrayList<DetailCout>();
@@ -44,24 +47,6 @@ public class Cout {
 	 * constructeur par defaut.
 	 */
 	public Cout() {
-	}
-
-	/**
-	 * creation du cout d'une {@link Commande}.
-	 * 
-	 * @param commande
-	 *            {@link Commande}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	public Cout(Commande commande) throws OpaleException {
-		String segmentTVA = commande.getClientAFacturer().getTva();
-		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			DetailCout detailCout = new DetailCout(commandeLigne, segmentTVA);
-			coutComptantHT += detailCout.getCoutComptantHT();
-			coutComptantTTC += detailCout.getCoutComptantTTC();
-			addDetail(detailCout);
-		}
 	}
 
 	/**
@@ -105,7 +90,7 @@ public class Cout {
 	 *            {@link #coutComptantHT}
 	 */
 	public void setCoutComptantHT(double coutComptantHT) {
-		this.coutComptantHT = coutComptantHT;
+		this.coutComptantHT = Utils.arroundiNombre(coutComptantHT);
 	}
 
 	/**
@@ -122,7 +107,7 @@ public class Cout {
 	 *            {@link #coutComptantTTC}
 	 */
 	public void setCoutComptantTTC(double coutComptantTTC) {
-		this.coutComptantTTC = coutComptantTTC;
+		this.coutComptantTTC = Utils.arroundiNombre(coutComptantTTC);
 	}
 
 	/**
@@ -139,7 +124,7 @@ public class Cout {
 	 *            {@link #reductionHT}
 	 */
 	public void setReductionHT(double reductionHT) {
-		this.reductionHT = reductionHT;
+		this.reductionHT = Utils.arroundiNombre(reductionHT);
 	}
 
 	/**
@@ -156,7 +141,24 @@ public class Cout {
 	 *            {@link #reductionTTC}
 	 */
 	public void setReductionTTC(double reductionTTC) {
-		this.reductionTTC = reductionTTC;
+		this.reductionTTC = Utils.arroundiNombre(reductionTTC);
+	}
+
+	/**
+	 * 
+	 * @return {@link #coutRecurrentGlobale}
+	 */
+	public List<CoutRecurrent> getCoutRecurrentGlobale() {
+		return coutRecurrentGlobale;
+	}
+
+	/**
+	 * 
+	 * @param coutRecurrentGlobale
+	 *            {@link #coutRecurrentGlobale}
+	 */
+	public void setCoutRecurrentGlobale(List<CoutRecurrent> coutRecurrentGlobale) {
+		this.coutRecurrentGlobale = coutRecurrentGlobale;
 	}
 
 }

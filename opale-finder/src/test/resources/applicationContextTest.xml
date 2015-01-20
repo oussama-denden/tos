@@ -40,6 +40,7 @@
 	</bean>
 		<!-- create job-meta tables automatically -->
   <jdbc:initialize-database data-source="dataSource">
+	<jdbc:script location="classpath:/sql/init-opale.sql"  encoding="UTF-8" />
 	<jdbc:script location="classpath:/META-INF/init-sql.sql"  encoding="UTF-8" />
   </jdbc:initialize-database>
   

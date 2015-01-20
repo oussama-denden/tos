@@ -1,12 +1,14 @@
 package com.nordnet.opale.business;
 
+import com.nordnet.opale.util.Utils;
+
 /**
  * contient des info sur le plan normale et reduit de paiement d'une offre.
  * 
  * @author mahjoub-MARZOUGUI
  * 
  */
-public class Plan {
+public class Plan implements Cloneable {
 
 	/**
 	 * tarif hors tax.
@@ -33,8 +35,8 @@ public class Plan {
 	 *            {@link #tarifTTC}
 	 */
 	public Plan(double tarifHT, double tarifTTC) {
-		this.tarifHT = tarifHT;
-		this.tarifTTC = tarifTTC;
+		setTarifHT(tarifHT);
+		setTarifTTC(tarifTTC);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class Plan {
 	 *            {@link #tarifHT}
 	 */
 	public void setTarifHT(double tarifHT) {
-		this.tarifHT = tarifHT;
+		this.tarifHT = Utils.arroundiNombre(tarifHT);
 	}
 
 	/**
@@ -68,7 +70,20 @@ public class Plan {
 	 *            {@link #tarifTTC}
 	 */
 	public void setTarifTTC(double tarifTTC) {
-		this.tarifTTC = tarifTTC;
+		this.tarifTTC = Utils.arroundiNombre(tarifTTC);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Plan clone() {
+		Plan plan = new Plan();
+
+		plan.setTarifHT(tarifHT);
+		plan.setTarifTTC(tarifTTC);
+
+		return plan;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nordnet.opale.business.Cout;
+import com.nordnet.opale.business.CoutRecurrent;
 import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.domain.draft.Draft;
@@ -73,6 +74,7 @@ public class CoutDraft extends CalculeCout {
 			double coutComptantTTC = 0d;
 			double tva = 0;
 			List<DetailCout> details = new ArrayList<DetailCout>();
+			List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<CoutRecurrent>();
 
 			for (DraftLigne draftLigne : draft.getDraftLignes()) {
 
@@ -82,6 +84,7 @@ public class CoutDraft extends CalculeCout {
 				coutComptantHT += detailCoutLigne.getCoutComptantHT();
 				coutComptantTTC += detailCoutLigne.getCoutComptantTTC();
 				details.add(detailCoutLigne);
+				ReductionUtil.ajouterCoutRecurrent(coutRecurrentGlobale, detailCoutLigne.getCoutRecurrent());
 				tva = coutLigneDraft.getTva();
 
 				reductionHT += detailCoutLigne.getReductionHT();
@@ -108,6 +111,7 @@ public class CoutDraft extends CalculeCout {
 			cout.setCoutComptantHT(coutComptantHT);
 			cout.setCoutComptantTTC(coutComptantTTC);
 			cout.setDetails(details);
+			cout.setCoutRecurrentGlobale(coutRecurrentGlobale);
 			cout.setReductionHT(reductionHT);
 			cout.setReductionTTC(reductionTTC);
 			return cout;

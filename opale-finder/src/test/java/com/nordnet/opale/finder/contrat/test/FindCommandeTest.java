@@ -38,6 +38,7 @@ public class FindCommandeTest extends GlobalTestCase {
 	public void testFindAllValide() {
 
 		try {
+			System.setProperty("ws.nordNetVat.useMock","true");
 			Date d1 = new Date();
 			List<Commande> commandes = commandeService.findByIdClient("000003");
 			Date d2 = new Date();

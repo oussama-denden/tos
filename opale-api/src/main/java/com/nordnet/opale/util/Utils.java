@@ -1,5 +1,7 @@
 package com.nordnet.opale.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -118,6 +120,22 @@ public final class Utils {
 			dateFormatte = PropertiesUtil.getInstance().getDateDuJour();
 		}
 		return dateFormatte;
+	}
+
+	/**
+	 * Rounds up a double value.
+	 * 
+	 * @param value
+	 *            double value.
+	 * @param places
+	 *            the number of decimal places.
+	 * @return rounded value.
+	 */
+	public static double arroundiNombre(double value) {
+
+		BigDecimal bd = new BigDecimal(String.valueOf(value));
+		bd = bd.setScale(Constants.DEUX, RoundingMode.HALF_UP);
+		return bd.doubleValue();
 	}
 
 }

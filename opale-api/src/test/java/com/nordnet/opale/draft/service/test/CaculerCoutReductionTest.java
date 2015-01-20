@@ -65,14 +65,14 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 			assertEquals(new Double(50), new Double(cout.getCoutComptantHT()));
 			assertEquals(new Double(55), new Double(cout.getCoutComptantTTC()));
 
-			assertEquals(new Double(22.7898), new Double(cout.getReductionTTC()));
-			assertEquals(new Double(20.718), new Double(cout.getReductionHT()));
+			assertEquals(new Double(22.79), new Double(cout.getReductionTTC()));
+			assertEquals(new Double(20.72), new Double(cout.getReductionHT()));
 
 			assertEquals(new Double(55), new Double(cout.getDetails().get(0).getCoutComptantTTC()));
 			assertEquals(new Double(50), new Double(cout.getDetails().get(0).getCoutComptantHT()));
 
-			assertEquals(new Double(18.7803), new Double(cout.getDetails().get(0).getReductionTTC()));
-			assertEquals(new Double(17.073), new Double(cout.getDetails().get(0).getReductionHT()));
+			assertEquals(new Double(18.78), new Double(cout.getDetails().get(0).getReductionTTC()));
+			assertEquals(new Double(17.07), new Double(cout.getDetails().get(0).getReductionHT()));
 
 			assertEquals(new Double(14.3), new Double(cout.getDetails().get(0).getCoutRecurrent().getNormal()
 					.getTarifTTC()));

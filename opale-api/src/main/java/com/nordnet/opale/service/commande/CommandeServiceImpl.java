@@ -939,7 +939,7 @@ public class CommandeServiceImpl implements CommandeService {
 	@Transactional(readOnly = true)
 	public Cout calculerCout(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
-		CoutCommande coutCommande = new CoutCommande(commande, reductionService);
+		CoutCommande coutCommande = new CoutCommande(commande, reductionService, paiementService);
 		coutDecorator.setCalculeCout(coutCommande);
 		return coutDecorator.getCout();
 	}
