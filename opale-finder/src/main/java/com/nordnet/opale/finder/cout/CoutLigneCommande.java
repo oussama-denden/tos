@@ -95,8 +95,6 @@ public class CoutLigneCommande extends CalculeCout {
 					coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
 					tarifTTC += detailCoutTarif.getCoutRecurrent().getPrix();
 
-					// reductionTTC += detailCoutTarif.getReductionTTC();
-
 				}
 			}
 		}
@@ -147,8 +145,6 @@ public class CoutLigneCommande extends CalculeCout {
 		detailCout.setCoutRecurrent(coutRecurrent);
 
 		detailCout.setCoutComptantTTC(coutComptantReduitTTC);
-		// detailCout.setReductionTTC(reductionTTC);
-		// detailCout.setTva(tva);
 
 		return detailCout;
 	}
@@ -168,8 +164,6 @@ public class CoutLigneCommande extends CalculeCout {
 
 		double tarifTTC = detailCoutTarif.getCoutRecurrent().getPrix();
 		double reduction = 0d;
-
-		// reductionTTC += detailCoutTarif.getReductionTTC();
 
 		if (reductionECParent != null && reductionECParent.isReductionRecurrente()) {
 			reduction = ReductionUtil.calculeReductionRecurrent(tarifTTC - reductionRecurrentTTC, reductionECParent);

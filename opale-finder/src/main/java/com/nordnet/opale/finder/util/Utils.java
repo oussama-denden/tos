@@ -1,5 +1,7 @@
 package com.nordnet.opale.finder.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.apache.commons.logging.LogFactory;
@@ -44,6 +46,20 @@ public final class Utils {
 	 */
 	public static boolean isListNullOrEmpty(List<?> list) {
 		return (list == null) ? true : list.size() == 0;
+	}
+
+	/**
+	 * Arrondir a deux chiffres apres la virgule.
+	 * 
+	 * @param value
+	 *            double value.
+	 * @return rounded value.
+	 */
+	public static double arroundiNombre(double value) {
+
+		BigDecimal bd = new BigDecimal(String.valueOf(value));
+		bd = bd.setScale(Constants.DEUX, RoundingMode.HALF_UP);
+		return bd.doubleValue();
 	}
 
 }
