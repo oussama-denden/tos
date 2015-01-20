@@ -144,7 +144,7 @@ public class CoutLigneCommande extends CalculeCout {
 					reductionService.findReductionECParent(referenceCommande, commandeLigne.getReferenceOffre(),
 							tarif.getReference());
 			// calculer la reduction sur le tarif de ligne.
-			calculerReductionECParent(reductionECParent, detailCoutTarif, tva);
+			calculerReductionECParent(reductionECParent, detailCoutTarif, tva, tarif.getFrequence());
 		}
 
 		// trouver les reduction liees aux lignes.
@@ -155,10 +155,10 @@ public class CoutLigneCommande extends CalculeCout {
 		Reduction reductionDraft = reductionService.findReduction(referenceCommande);
 
 		// calculer la reduction de ligne.
-		calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, tva, false);
+		calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, tva, false, tarif.getFrequence());
 
 		// calculer la reduction recurrente du draft sur la ligne.
-		calculerReductionLigne(reductionDraft, coutComptantTTC, tarifTTC, tva, true);
+		calculerReductionLigne(reductionDraft, coutComptantTTC, tarifTTC, tva, true, tarif.getFrequence());
 
 		Plan normal = new Plan(tarifHT, tarifTTC);
 		Plan reduit =
@@ -194,7 +194,8 @@ public class CoutLigneCommande extends CalculeCout {
 	 * @param tva
 	 *            valeur de tva.
 	 */
-	private void calculerReductionECParent(Reduction reductionECParent, DetailCout detailCoutTarif, double tva) {
+	private void calculerReductionECParent(Reduction reductionECParent, DetailCout detailCoutTarif, double tva,
+			Integer frequence) {
 
 		double tarifTTC =
 				detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
@@ -205,7 +206,9 @@ public class CoutLigneCommande extends CalculeCout {
 		reductionTTC += detailCoutTarif.getReductionTTC();
 
 		if (reductionECParent != null && reductionECParent.isreductionRecurrente()) {
-			reduction = ReductionUtil.calculeReductionRecurrent(tarifTTC - reductionRecurrentTTC, reductionECParent);
+			reduction =
+					ReductionUtil.calculeReductionRecurrent(tarifTTC - reductionRecurrentTTC, reductionECParent,
+							frequence);
 
 			reductionTTC += reduction;
 			reductionHT = ReductionUtil.caculerReductionHT(reduction, tva);
@@ -244,13 +247,15 @@ public class CoutLigneCommande extends CalculeCout {
 	 *            indique si la reduction est associe a un draft.
 	 */
 	private void calculerReductionLigne(Reduction reductionLigne, double coutComptant, double coutRecurrent,
-			double tva, boolean isReductionDraft) {
+			double tva, boolean isReductionDraft, Integer frequence) {
 
 		double reduction = 0d;
 
 		if (reductionLigne != null && reductionLigne.isreductionRecurrente() && !isReductionDraft) {
 
-			reduction = ReductionUtil.calculeReductionRecurrent(coutRecurrent - reductionRecurrentTTC, reductionLigne);
+			reduction =
+					ReductionUtil.calculeReductionRecurrent(coutRecurrent - reductionRecurrentTTC, reductionLigne,
+							frequence);
 
 			reductionTTC += reduction;
 			reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);
@@ -272,7 +277,9 @@ public class CoutLigneCommande extends CalculeCout {
 
 		if (reductionLigne != null && reductionLigne.isreductionRecurrente() && isReductionDraft) {
 
-			reduction += ReductionUtil.calculeReductionRecurrent(coutRecurrent - reductionRecurrentTTC, reductionLigne);
+			reduction +=
+					ReductionUtil.calculeReductionRecurrent(coutRecurrent - reductionRecurrentTTC, reductionLigne,
+							frequence);
 
 			reductionTTC += reduction;
 			reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);

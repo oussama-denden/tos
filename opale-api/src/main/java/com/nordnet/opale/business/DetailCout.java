@@ -1,5 +1,6 @@
 package com.nordnet.opale.business;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.util.Utils;
 
 /**
@@ -8,6 +9,7 @@ import com.nordnet.opale.util.Utils;
  * @author akram-moncer
  * 
  */
+@JsonIgnoreProperties({ "coutRecurrentGlobale", "details" })
 public class DetailCout extends Cout {
 
 	/**

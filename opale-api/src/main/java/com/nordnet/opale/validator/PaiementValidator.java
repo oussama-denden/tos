@@ -110,6 +110,11 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.referenceModePaiement"), "0.1.4");
 		}
 
+		if (paiementInfo instanceof PaiementInfoComptant
+				&& !(((PaiementInfoComptant) paiementInfo).getModePaiement().isModePaimentComptant())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.6"), "3.1.6");
+		}
+
 	}
 
 	/**
@@ -151,6 +156,11 @@ public class PaiementValidator {
 
 		if (Utils.isStringNullOrEmpty(((PaiementInfoRecurrent) paiementInfo).getRum())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.rum"), "0.1.4");
+		}
+
+		if (!paiementInfo.getModePaiement().isModePaiementRecurrent()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.7"), "3.1.7");
+
 		}
 
 	}
