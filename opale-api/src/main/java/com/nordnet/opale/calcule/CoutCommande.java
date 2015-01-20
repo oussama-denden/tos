@@ -8,9 +8,11 @@ import com.nordnet.opale.business.CoutRecurrent;
 import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
+import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.util.Constants;
 
@@ -32,6 +34,11 @@ public class CoutCommande extends CalculeCout {
 	private ReductionService reductionService;
 
 	/**
+	 * {@link PaiementService}
+	 */
+	private PaiementService paiementService;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CoutCommande() {
@@ -47,10 +54,11 @@ public class CoutCommande extends CalculeCout {
 	 * @param reductionRepository
 	 *            {@link ReductionRepository}
 	 */
-	public CoutCommande(Commande commande, ReductionService reductionService) {
+	public CoutCommande(Commande commande, ReductionService reductionService, PaiementService paiementService) {
 		super();
 		this.commande = commande;
 		this.reductionService = reductionService;
+		this.paiementService = paiementService;
 	}
 
 	/**
@@ -59,6 +67,9 @@ public class CoutCommande extends CalculeCout {
 	 */
 	@Override
 	public Cout getCout() throws OpaleException {
+
+		List<Paiement> paiements = paiementService.getPaiementByReferenceCommande(commande.getReference());
+		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
 
 		Cout cout = new Cout();
 		double coutComptantHT = 0d;
@@ -108,64 +119,28 @@ public class CoutCommande extends CalculeCout {
 		cout.setReductionHT(reductionHT);
 		cout.setReductionTTC(reductionTTC);
 
+		// changer la trame du cout selon le paiement effectuer par le client
+		if (!(paiementCommande == null)) {
+			if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
+				cout.setCoutComptantHT(Constants.ZERO);
+				cout.setCoutComptantTTC(Constants.ZERO);
+
+				for (DetailCout detailCout : cout.getDetails()) {
+					detailCout.setCoutComptantHT(Constants.ZERO);
+					detailCout.setCoutComptantTTC(Constants.ZERO);
+				}
+
+			} else if (paiementCommande.getModePaiement().isModePaimentComptant()) {
+				cout.setCoutRecurrentGlobale(null);
+
+				for (DetailCout detailCout : cout.getDetails()) {
+					detailCout.setCoutRecurrent(null);
+				}
+
+			}
+		}
+
 		return cout;
 	}
 
-	/**
-	 * ajouter le cout recurrent gloable au trame du cout.
-	 * 
-	 * @param coutRecurrents
-	 *            liste du cout recurrent.
-	 * @param coutRecurrent
-	 *            cout recurrent a ajoute
-	 */
-	private void ajouterCoutRecurrent(List<CoutRecurrent> coutRecurrents, CoutRecurrent coutRecurrent) {
-		int index = -1;
-		if (coutRecurrents != null && coutRecurrents.size() == Constants.ZERO && coutRecurrent != null) {
-			coutRecurrents.add(coutRecurrent);
-		}
-
-		else {
-			index = coutRecurrents.indexOf(coutRecurrent);
-
-			if (index == -1) {
-				coutRecurrents.add(coutRecurrent);
-			}
-
-			else {
-
-				CoutRecurrent coutRecurrentAdditonne =
-						addiotionnerDeuxCoutRecurrent(coutRecurrents.get(index), coutRecurrent);
-				coutRecurrents.remove(index);
-				coutRecurrents.add(coutRecurrentAdditonne);
-			}
-		}
-	}
-
-	/**
-	 * additionner deux cout recurrent.
-	 * 
-	 * @param coutRecurrentAncient
-	 *            cout recurrent deja existant dans la liste des couts recurrents
-	 * @param coutRecurrentNouveau
-	 *            cout recurrent nouveau
-	 */
-	private CoutRecurrent addiotionnerDeuxCoutRecurrent(CoutRecurrent coutRecurrentAncient,
-			CoutRecurrent coutRecurrentNouveau) {
-		if (coutRecurrentAncient.getNormal() != null && coutRecurrentNouveau.getNormal() != null) {
-			coutRecurrentAncient.getNormal().setTarifHT(
-					coutRecurrentAncient.getNormal().getTarifHT() + coutRecurrentNouveau.getNormal().getTarifHT());
-			coutRecurrentAncient.getNormal().setTarifTTC(
-					coutRecurrentAncient.getNormal().getTarifTTC() + coutRecurrentNouveau.getNormal().getTarifTTC());
-		}
-
-		if (coutRecurrentAncient.getReduit() != null && coutRecurrentNouveau.getReduit() != null) {
-			coutRecurrentAncient.getReduit().setTarifHT(
-					coutRecurrentAncient.getReduit().getTarifHT() + coutRecurrentNouveau.getReduit().getTarifHT());
-			coutRecurrentAncient.getReduit().setTarifTTC(
-					coutRecurrentAncient.getReduit().getTarifTTC() + coutRecurrentNouveau.getReduit().getTarifTTC());
-		}
-
-		return coutRecurrentAncient;
-	}
 }

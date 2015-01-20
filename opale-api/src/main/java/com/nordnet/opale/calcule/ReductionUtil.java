@@ -44,10 +44,25 @@ public class ReductionUtil {
 	 *            reduction associee.
 	 * @return la reduction calculee.
 	 */
-	public static double calculeReductionRecurrent(double montant, Reduction reduction) {
+	public static double calculeReductionRecurrent(double montant, Reduction reduction, Integer frequence) {
+
+		double montantParMois = 0;
 		if (reduction == null || montant == 0) {
 			return 0;
 		} else if (reduction.getTypeValeur().equals(TypeValeur.MOIS)) {
+
+			if (frequence != null && frequence.intValue() != Constants.ZERO) {
+
+				montantParMois = montant / frequence;
+				if (reduction.getValeur() < frequence) {
+
+					return reduction.getValeur() * montantParMois;
+				}
+
+			} else {
+				return frequence * montantParMois;
+			}
+
 			return montant;
 		} else if (reduction.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
 			return ((montant * reduction.getValeur()) / 100);
@@ -127,21 +142,24 @@ public class ReductionUtil {
 	 */
 	private static CoutRecurrent addiotionnerDeuxCoutRecurrent(CoutRecurrent coutRecurrentAncient,
 			CoutRecurrent coutRecurrentNouveau) {
+
+		CoutRecurrent coutRecurrentSomme = coutRecurrentAncient.clone();
+
 		if (coutRecurrentAncient.getNormal() != null && coutRecurrentNouveau.getNormal() != null) {
-			coutRecurrentAncient.getNormal().setTarifHT(
+			coutRecurrentSomme.getNormal().setTarifHT(
 					coutRecurrentAncient.getNormal().getTarifHT() + coutRecurrentNouveau.getNormal().getTarifHT());
-			coutRecurrentAncient.getNormal().setTarifTTC(
+			coutRecurrentSomme.getNormal().setTarifTTC(
 					coutRecurrentAncient.getNormal().getTarifTTC() + coutRecurrentNouveau.getNormal().getTarifTTC());
 		}
 
 		if (coutRecurrentAncient.getReduit() != null && coutRecurrentNouveau.getReduit() != null) {
-			coutRecurrentAncient.getReduit().setTarifHT(
+			coutRecurrentSomme.getReduit().setTarifHT(
 					coutRecurrentAncient.getReduit().getTarifHT() + coutRecurrentNouveau.getReduit().getTarifHT());
-			coutRecurrentAncient.getReduit().setTarifTTC(
+			coutRecurrentSomme.getReduit().setTarifTTC(
 					coutRecurrentAncient.getReduit().getTarifTTC() + coutRecurrentNouveau.getReduit().getTarifTTC());
 		}
 
-		return coutRecurrentAncient;
+		return coutRecurrentSomme;
 	}
 
 }

@@ -133,7 +133,7 @@ public class CoutLigneDetailDraft extends CalculeCout {
 
 				// calculer la reduction du detaille ligne.
 				calculerReductionLigneDetail(reduction, detailCoutTarif.getCoutComptantTTC(), tarifTTC, tva,
-						detailCoutTarif);
+						detailCoutTarif, tarif.getFrequence());
 				detailCoutTarif.setReductionHT(reductionHT);
 				detailCoutTarif.setReductionTTC(reductionTTC);
 
@@ -170,13 +170,13 @@ public class CoutLigneDetailDraft extends CalculeCout {
 	 * @param detailCoutTarif
 	 */
 	private void calculerReductionLigneDetail(Reduction reductionLigneDetail, double coutComptant,
-			double coutRecurrent, double tva, DetailCout detailCoutTarif) {
+			double coutRecurrent, double tva, DetailCout detailCoutTarif, Integer frequence) {
 
 		double reduction = 0d;
 
 		if (reductionLigneDetail != null && reductionLigneDetail.isreductionRecurrente()) {
 
-			reduction = ReductionUtil.calculeReductionRecurrent(coutRecurrent, reductionLigneDetail);
+			reduction = ReductionUtil.calculeReductionRecurrent(coutRecurrent, reductionLigneDetail, frequence);
 
 			reductionTTC += reduction + detailCoutTarif.getReductionTTC();
 			reductionHT = ReductionUtil.caculerReductionHT(reduction, tva) + detailCoutTarif.getReductionHT();
