@@ -134,8 +134,13 @@ public class CoutCommande extends CalculeCout {
 				cout.setCoutRecurrentGlobale(null);
 
 				for (DetailCout detailCout : cout.getDetails()) {
+					coutComptantHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
+					coutComptantTTC += detailCout.getCoutRecurrent().getNormal().getTarifTTC();
 					detailCout.setCoutRecurrent(null);
 				}
+
+				cout.setCoutComptantHT(coutComptantHT);
+				cout.setCoutComptantTTC(coutComptantTTC);
 
 			}
 		}
