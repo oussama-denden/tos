@@ -222,20 +222,6 @@ public class DraftValidator {
 
 	}
 
-	// /**
-	// * valider si l'auteur est null ou pas.
-	// *
-	// * @param auteur
-	// * {@link Auteur}
-	// * @throws OpaleException
-	// * {@link OpaleException}
-	// */
-	// public static void isNull(Auteur auteur) throws OpaleException {
-	// if (auteur == null) {
-	// throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
-	// }
-	// }
-
 	/**
 	 * tester si le code n est pas null.
 	 * 

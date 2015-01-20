@@ -37,6 +37,8 @@ public final class DownPaiementUtils {
 			return PaymentType.CHECK;
 		case SEPA:
 			return PaymentType.SEPA;
+		case VIREMENT:
+			return PaymentType.OTHER;
 		default:
 			return null;
 		}

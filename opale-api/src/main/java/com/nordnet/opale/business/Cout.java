@@ -1,11 +1,9 @@
 package com.nordnet.opale.business;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.Utils;
 
 /**
  * contient les couts d'une commande.
@@ -34,6 +32,11 @@ public class Cout {
 	 * cout totale du reduction.
 	 */
 	private double reductionTTC;
+
+	/**
+	 * liste des {@link CoutRecurrent}
+	 */
+	private List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<CoutRecurrent>();
 
 	/**
 	 * liste des {@link DetailCout}.
@@ -87,7 +90,7 @@ public class Cout {
 	 *            {@link #coutComptantHT}
 	 */
 	public void setCoutComptantHT(double coutComptantHT) {
-		this.coutComptantHT = arroundiNombre(coutComptantHT);
+		this.coutComptantHT = Utils.arroundiNombre(coutComptantHT);
 	}
 
 	/**
@@ -104,7 +107,7 @@ public class Cout {
 	 *            {@link #coutComptantTTC}
 	 */
 	public void setCoutComptantTTC(double coutComptantTTC) {
-		this.coutComptantTTC = arroundiNombre(coutComptantTTC);
+		this.coutComptantTTC = Utils.arroundiNombre(coutComptantTTC);
 	}
 
 	/**
@@ -121,7 +124,7 @@ public class Cout {
 	 *            {@link #reductionHT}
 	 */
 	public void setReductionHT(double reductionHT) {
-		this.reductionHT = arroundiNombre(reductionHT);
+		this.reductionHT = Utils.arroundiNombre(reductionHT);
 	}
 
 	/**
@@ -138,22 +141,24 @@ public class Cout {
 	 *            {@link #reductionTTC}
 	 */
 	public void setReductionTTC(double reductionTTC) {
-		this.reductionTTC = arroundiNombre(reductionTTC);
+		this.reductionTTC = Utils.arroundiNombre(reductionTTC);
 	}
 
 	/**
-	 * Rounds up a double value.
 	 * 
-	 * @param value
-	 *            double value.
-	 * @param places
-	 *            the number of decimal places.
-	 * @return rounded value.
+	 * @return {@link #coutRecurrentGlobale}
 	 */
-	public double arroundiNombre(double value) {
-
-		BigDecimal bd = new BigDecimal(String.valueOf(value));
-		bd = bd.setScale(Constants.DEUX, RoundingMode.HALF_UP);
-		return bd.doubleValue();
+	public List<CoutRecurrent> getCoutRecurrentGlobale() {
+		return coutRecurrentGlobale;
 	}
+
+	/**
+	 * 
+	 * @param coutRecurrentGlobale
+	 *            {@link #coutRecurrentGlobale}
+	 */
+	public void setCoutRecurrentGlobale(List<CoutRecurrent> coutRecurrentGlobale) {
+		this.coutRecurrentGlobale = coutRecurrentGlobale;
+	}
+
 }

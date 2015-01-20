@@ -1,9 +1,7 @@
 package com.nordnet.opale.business;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import com.nordnet.opale.util.Constants;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.nordnet.opale.util.Utils;
 
 /**
  * contient les cout en detail pour un profuit.
@@ -11,6 +9,7 @@ import com.nordnet.opale.util.Constants;
  * @author akram-moncer
  * 
  */
+@JsonIgnoreProperties({ "coutRecurrentGlobale", "details" })
 public class DetailCout extends Cout {
 
 	/**
@@ -126,7 +125,7 @@ public class DetailCout extends Cout {
 	 */
 	@Override
 	public void setCoutComptantHT(double coutComptantHT) {
-		this.coutComptantHT = arroundiNombre(coutComptantHT);
+		this.coutComptantHT = Utils.arroundiNombre(coutComptantHT);
 		;
 	}
 
@@ -146,7 +145,7 @@ public class DetailCout extends Cout {
 	 */
 	@Override
 	public void setCoutComptantTTC(double coutComptantTTC) {
-		this.coutComptantTTC = arroundiNombre(coutComptantTTC);
+		this.coutComptantTTC = Utils.arroundiNombre(coutComptantTTC);
 	}
 
 	/**
@@ -165,7 +164,7 @@ public class DetailCout extends Cout {
 	 */
 	@Override
 	public void setReductionHT(double reductionHT) {
-		this.reductionHT = arroundiNombre(reductionHT);
+		this.reductionHT = Utils.arroundiNombre(reductionHT);
 	}
 
 	/**
@@ -184,7 +183,7 @@ public class DetailCout extends Cout {
 	 */
 	@Override
 	public void setReductionTTC(double reductionTTC) {
-		this.reductionTTC = arroundiNombre(reductionTTC);
+		this.reductionTTC = Utils.arroundiNombre(reductionTTC);
 	}
 
 	/**
@@ -202,23 +201,6 @@ public class DetailCout extends Cout {
 	 */
 	public void setCoutRecurrent(CoutRecurrent coutRecurrent) {
 		this.coutRecurrent = coutRecurrent;
-	}
-
-	/**
-	 * Rounds up a double value.
-	 * 
-	 * @param value
-	 *            double value.
-	 * @param places
-	 *            the number of decimal places.
-	 * @return rounded value.
-	 */
-	@Override
-	public double arroundiNombre(double value) {
-
-		BigDecimal bd = new BigDecimal(String.valueOf(value));
-		bd = bd.setScale(Constants.DEUX, RoundingMode.HALF_UP);
-		return bd.doubleValue();
 	}
 
 }
