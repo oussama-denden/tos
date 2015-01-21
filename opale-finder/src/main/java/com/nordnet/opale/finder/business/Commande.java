@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.nordnet.opale.finder.util.Utils;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Commande}.
@@ -50,11 +51,6 @@ public class Commande {
 	 * Si la commmande est paye en comptant.
 	 */
 	private boolean paye;
-
-	// /**
-	// * Le montant du paiement comptant.
-	// */
-	// private List<Double> montant;
 
 	/**
 	 * Si la commande est signe.
@@ -152,23 +148,6 @@ public class Commande {
 	public void setPaye(boolean paye) {
 		this.paye = paye;
 	}
-
-	// /**
-	// *
-	// * @return {@link #montant}
-	// */
-	// public List<Double> getMontant() {
-	// return montant;
-	// }
-	//
-	// /**
-	// *
-	// * @param montant
-	// * {@link #montant}
-	// */
-	// public void setMontant(List<Double> montant) {
-	// this.montant = montant;
-	// }
 
 	/**
 	 * 
@@ -354,7 +333,7 @@ public class Commande {
 	 *            {@link #coutComptant}
 	 */
 	public void setCoutComptant(Double coutComptant) {
-		this.coutComptant = coutComptant;
+		this.coutComptant = Utils.arroundiNombre(coutComptant);
 	}
 
 	/**

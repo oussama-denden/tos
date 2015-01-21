@@ -117,4 +117,9 @@ public final class Constants {
 	 */
 	public static final String FIND_REDUCTION = "FIND_REDUCTION";
 
+	/**
+	 * entier de valeur 2.
+	 */
+	public static final Integer DEUX = 2;
+
 }
