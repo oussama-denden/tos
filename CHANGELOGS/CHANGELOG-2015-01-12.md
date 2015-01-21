@@ -17,7 +17,8 @@ from 2015-01-12.
   * US 146  show the recurring cost for each line in the trame  cost for either command and draft.
   * US 146  make a relation between command and cost and payment and adapt cost trame to show only cash cost or recurring depending on client desire .
   * bug 409 fix the trame of cost draft issues.
-   bug  410 fix the trame of cost command issues.
+  * bug  410 fix the trame of cost command issues.
+  * bug  413 fix the reduction fee erreur .
 
  * opale-finder
   * US 138: Add the field codePartemaire  for the command.

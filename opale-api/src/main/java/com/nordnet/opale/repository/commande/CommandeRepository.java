@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Frais;
 import com.nordnet.opale.domain.commande.Tarif;
 import com.nordnet.opale.domain.draft.Draft;
@@ -51,12 +53,21 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	/**
 	 * recuperation de la liste de frais associe a une {@link Commande}.
 	 */
-	public final static String GET_FRAIS =
+	public final static String GET_FRAIS_DETAIL =
 			"SELECT distinct f.typeFrais FROM commande c, commandeligne cl, commandelignedetail cld, tarif t, frais f where"
 					+ " c.reference LIKE ?1 AND cl.referenceOffre LIKE ?2 AND c.id = cl.commandeId AND cl.id = cld.commandeLigneId AND"
 					+ " (?3 IS NULL or (cld.referenceChoix LIKE ?3)) AND"
 					+ " (cl.tarifId = t.id OR cld.tarifId = t.id) AND t.reference LIKE ?4"
 					+ " AND (t.id = f.tarifId) AND f.reference LIKE ?5";
+
+	/**
+	 * recuperation de la liste de frais associe a une {@link Commande}.
+	 */
+	public final static String GET_FRAIS_LIGNE =
+			"SELECT distinct f.typeFrais FROM commande c, commandeligne cl, tarif t, frais f where"
+					+ " c.reference LIKE ?1 AND cl.referenceOffre LIKE ?2 AND c.id = cl.commandeId AND"
+					+ " (cl.tarifId = t.id) AND t.reference LIKE ?3"
+					+ " AND (t.id = f.tarifId) AND f.reference LIKE ?4";
 
 	/**
 	 * Find by reference.
@@ -105,7 +116,24 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
 
 	/**
-	 * recuperation de la liste de {@link Frais} associe a la {@link Commande}.
+	 * recuperation de la liste de {@link Frais} associe a la {@link CommandeLigne}.
+	 * 
+	 * @param referenceCommande
+	 *            reference {@link Commande}.
+	 * @param referenceOffre
+	 *            reference de l'offre.
+	 * @param referenceTarif
+	 *            reference {@link Tarif}.
+	 * @param referenceFrais
+	 *            reference {@link Frais}.
+	 * @return liste {@link Frais}.
+	 */
+	@Query(nativeQuery = true, value = GET_FRAIS_LIGNE)
+	public String findTypeFraisLigne(String referenceCommande, String referenceOffre, String referenceTarif,
+			String referenceFrais);
+
+	/**
+	 * recuperation de la liste de {@link Frais} associe a la {@link CommandeLigneDetail}.
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
@@ -119,8 +147,8 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 *            reference {@link Frais}.
 	 * @return liste {@link Frais}.
 	 */
-	@Query(nativeQuery = true, value = GET_FRAIS)
-	public String findTypeFrais(String referenceCommande, String referenceOffre, String referenceProduit,
+	@Query(nativeQuery = true, value = GET_FRAIS_DETAIL)
+	public String findTypeFraisDetail(String referenceCommande, String referenceOffre, String referenceProduit,
 			String referenceTarif, String referenceFrais);
 
 	/**

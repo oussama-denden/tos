@@ -988,9 +988,9 @@ public class CommandeServiceImpl implements CommandeService {
 				}
 			} else {
 				String typeFrais =
-						commandeRepository.findTypeFrais(reductionLigne.getReferenceDraft(),
-								reductionLigne.getReferenceLigne(), reductionLigne.getReferenceLigneDetail(),
-								reductionLigne.getReferenceTarif(), reductionLigne.getReferenceFrais());
+						commandeRepository.findTypeFraisLigne(reductionLigne.getReferenceDraft(),
+								reductionLigne.getReferenceLigne(), reductionLigne.getReferenceTarif(),
+								reductionLigne.getReferenceFrais());
 				contratReductionInfo.getReduction().setTypeReduction(TypeReduction.FRAIS);
 				contratReductionInfo.getReduction().setTypeFrais(TypeFrais.fromSting(typeFrais));
 
@@ -1012,7 +1012,7 @@ public class CommandeServiceImpl implements CommandeService {
 				reductionContrat.setTypeValeur(reductionligneDetail.getTypeValeur());
 				if (reductionligneDetail.getReferenceFrais() != null) {
 					String typeFrais =
-							commandeRepository.findTypeFrais(reductionligneDetail.getReferenceDraft(),
+							commandeRepository.findTypeFraisDetail(reductionligneDetail.getReferenceDraft(),
 									reductionligneDetail.getReferenceLigne(),
 									reductionligneDetail.getReferenceLigneDetail(),
 									reductionligneDetail.getReferenceTarif(), reductionligneDetail.getReferenceFrais());
