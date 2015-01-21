@@ -77,8 +77,6 @@ public class CoutCommande extends CalculeCout {
 			coutComptantTTC += detailCout.getCoutComptantTTC();
 			details.add(detailCout);
 
-			// reductionTTC += detailCout.getReductionTTC();
-
 		}
 
 		// recuperation du reduction du commande.
@@ -90,7 +88,6 @@ public class CoutCommande extends CalculeCout {
 
 		cout.setCoutComptantTTC(coutComptantReduitTTC);
 		cout.setDetails(details);
-		// cout.setReductionTTC(reductionTTC);
 		commande.setCoutComptant(coutComptantReduitTTC);
 		return cout;
 	}

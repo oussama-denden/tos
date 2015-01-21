@@ -260,6 +260,11 @@ public class CommandeDaoImpl implements CommandeDao {
 			lastReferenceDetailLigneCommande = resultSet.getString("idDetailLigne");
 		}
 
+		// calculer cout du dernier element ou dans le cas d une seule commande.
+		if (commandes.size() > 0) {
+			calculerCout(commandes.get(commandes.size() - 1));
+		}
+
 		return commandes;
 
 	}

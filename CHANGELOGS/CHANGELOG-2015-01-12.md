@@ -19,6 +19,7 @@ from 2015-01-12.
   * bug 409 fix the trame of cost draft issues.
   * bug  410 fix the trame of cost command issues.
   * bug  413 fix the reduction fee erreur .
+  * Fix missing Enum values with swagger.
 
  * opale-finder
   * US 138: Add the field codePartemaire  for the command.
@@ -29,5 +30,7 @@ from 2015-01-12.
   * Fix issue 403 : do not show details.
   * Fix issue 402 : replace INNER JOIN draft with LEFT OUTER JOIN draft.
   * Fix issue 401 : line number.
+  * Fix issue cost calculation.
+  * Fix missing Enum values with swagger.
 
   

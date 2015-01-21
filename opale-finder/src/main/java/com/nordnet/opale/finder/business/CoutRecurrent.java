@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.nordnet.opale.finder.util.Utils;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link CoutRecurrent}.
@@ -60,7 +61,7 @@ public class CoutRecurrent {
 	 *            {@link #prix}.
 	 */
 	public void setPrix(Double prix) {
-		this.prix = prix;
+		this.prix = Utils.arroundiNombre(prix);
 	}
 
 	/**
