@@ -963,6 +963,7 @@ public class CommandeServiceImpl implements CommandeService {
 			reductionContrat = fromReduction(reductionDraft);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 			reductionContrat.setIsAffichableSurFacture(true);
+			reductionContrat.setOrdre(Constants.DEUX);
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
@@ -979,10 +980,10 @@ public class CommandeServiceImpl implements CommandeService {
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			if (reductionLigne.getReferenceFrais() == null) {
 				if (reductionLigne.getReferenceTarif() == null) {
-
+					reductionContrat.setOrdre(Constants.UN);
 					restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
 				} else {
-
+					reductionContrat.setOrdre(Constants.ZERO);
 					restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 							commandeLigne.getNumEC(), contratReductionInfo);
 				}
@@ -993,7 +994,7 @@ public class CommandeServiceImpl implements CommandeService {
 								reductionLigne.getReferenceFrais());
 				contratReductionInfo.getReduction().setTypeReduction(TypeReduction.FRAIS);
 				contratReductionInfo.getReduction().setTypeFrais(TypeFrais.fromSting(typeFrais));
-
+				reductionContrat.setOrdre(Constants.ZERO);
 				restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 						commandeLigne.getNumEC(), contratReductionInfo);
 
@@ -1007,6 +1008,7 @@ public class CommandeServiceImpl implements CommandeService {
 							commandeLigne.getReferenceOffre(), commandeLigneDetail.getReferenceChoix());
 			for (Reduction reductionligneDetail : reductionsligneDetail) {
 				reductionContrat = fromReduction(reductionligneDetail);
+				reductionContrat.setOrdre(Constants.ZERO);
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 				reductionContrat.setIsAffichableSurFacture(true);
 				reductionContrat.setTypeValeur(reductionligneDetail.getTypeValeur());
@@ -1037,13 +1039,13 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	private ReductionContrat fromReduction(Reduction reduction) {
 		ReductionContrat reductionContrat = new ReductionContrat();
+		reductionContrat.setReferenceReduction(reduction.getReference());
 		reductionContrat.setTitre(reduction.getLabel());
 		reductionContrat.setDateDebut(reduction.getDateDebut());
 		reductionContrat.setDateFin(reduction.getDateFin());
 		reductionContrat.setNbUtilisationMax(reduction.getNbUtilisationMax());
 		reductionContrat.setValeur(reduction.getValeur());
 		reductionContrat.setTypeValeur(TypeValeur.fromString(reduction.getTypeValeur().name()));
-		reductionContrat.setReferenceReduction(reduction.getReferenceReduction());
 		return reductionContrat;
 	}
 
