@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.nordnet.opale</groupId>
 		<artifactId>opale</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 	
 	<groupId>com.nordnet.opale-api</groupId>
