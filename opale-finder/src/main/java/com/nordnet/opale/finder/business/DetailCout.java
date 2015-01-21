@@ -1,5 +1,7 @@
 package com.nordnet.opale.finder.business;
 
+import com.nordnet.opale.finder.util.Utils;
+
 /**
  * contient les cout en detail pour un profuit.
  * 
@@ -8,20 +10,10 @@ package com.nordnet.opale.finder.business;
  */
 public class DetailCout extends Cout {
 
-	// /**
-	// * tva de l'offre.
-	// */
-	// private double tva;
-
 	/**
 	 * cout total du commande/draft.
 	 */
 	private double coutComptantTTC;
-
-	// /**
-	// * cout totale du reduction.
-	// */
-	// private double reductionTTC;
 
 	/**
 	 * {@link CoutRecurrent}.
@@ -33,23 +25,6 @@ public class DetailCout extends Cout {
 	 */
 	public DetailCout() {
 	}
-
-	// /**
-	// *
-	// * @return {@link #tva}
-	// */
-	// public double getTva() {
-	// return tva;
-	// }
-	//
-	// /**
-	// *
-	// * @param tva
-	// * {@link #tva}
-	// */
-	// public void setTva(double tva) {
-	// this.tva = tva;
-	// }
 
 	/**
 	 * 
@@ -67,27 +42,8 @@ public class DetailCout extends Cout {
 	 */
 	@Override
 	public void setCoutComptantTTC(double coutComptantTTC) {
-		this.coutComptantTTC = coutComptantTTC;
+		this.coutComptantTTC = Utils.arroundiNombre(coutComptantTTC);
 	}
-
-	// /**
-	// *
-	// * @return {@link #reductionTTC}
-	// */
-	// @Override
-	// public double getReductionTTC() {
-	// return reductionTTC;
-	// }
-	//
-	// /**
-	// *
-	// * @param reductionTTC
-	// * {@link #reductionTTC}
-	// */
-	// @Override
-	// public void setReductionTTC(double reductionTTC) {
-	// this.reductionTTC = reductionTTC;
-	// }
 
 	/**
 	 * 

@@ -82,20 +82,20 @@ public class CoutLigneCommande extends CalculeCout {
 		double tarifTTC = 0d;
 		Tarif tarif = null;
 
-		for (DetailCommandeLigne commandeLigneDetail : commandeLigne.getDetailCommandeLignes()) {
-			tarif = commandeLigneDetail.getTarif();
+		if (commandeLigne.getDetailCommandeLignes() != null) {
+			for (DetailCommandeLigne commandeLigneDetail : commandeLigne.getDetailCommandeLignes()) {
+				tarif = commandeLigneDetail.getTarif();
 
-			if (tarif != null) {
-				CoutLigneDetailCommande coutLigneDetailCommande =
-						new CoutLigneDetailCommande(commandeLigneDetail, referenceCommande,
-								commandeLigne.getReference(), tarif, segmentTVA, reductionDao);
+				if (tarif != null) {
+					CoutLigneDetailCommande coutLigneDetailCommande =
+							new CoutLigneDetailCommande(commandeLigneDetail, referenceCommande,
+									commandeLigne.getReference(), tarif, segmentTVA, reductionDao);
 
-				DetailCout detailCoutTarif = (DetailCout) coutLigneDetailCommande.getCout();
-				coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
-				tarifTTC += detailCoutTarif.getCoutRecurrent().getPrix();
+					DetailCout detailCoutTarif = (DetailCout) coutLigneDetailCommande.getCout();
+					coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
+					tarifTTC += detailCoutTarif.getCoutRecurrent().getPrix();
 
-				// reductionTTC += detailCoutTarif.getReductionTTC();
-
+				}
 			}
 		}
 
@@ -145,8 +145,6 @@ public class CoutLigneCommande extends CalculeCout {
 		detailCout.setCoutRecurrent(coutRecurrent);
 
 		detailCout.setCoutComptantTTC(coutComptantReduitTTC);
-		// detailCout.setReductionTTC(reductionTTC);
-		// detailCout.setTva(tva);
 
 		return detailCout;
 	}
@@ -166,8 +164,6 @@ public class CoutLigneCommande extends CalculeCout {
 
 		double tarifTTC = detailCoutTarif.getCoutRecurrent().getPrix();
 		double reduction = 0d;
-
-		// reductionTTC += detailCoutTarif.getReductionTTC();
 
 		if (reductionECParent != null && reductionECParent.isReductionRecurrente()) {
 			reduction = ReductionUtil.calculeReductionRecurrent(tarifTTC - reductionRecurrentTTC, reductionECParent);

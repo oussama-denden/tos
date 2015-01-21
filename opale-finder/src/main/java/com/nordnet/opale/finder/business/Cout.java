@@ -3,6 +3,8 @@ package com.nordnet.opale.finder.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nordnet.opale.finder.util.Utils;
+
 /**
  * contient les couts d'une commande.
  * 
@@ -68,7 +70,7 @@ public class Cout {
 	 *            {@link #coutComptantTTC}
 	 */
 	public void setCoutComptantTTC(double coutComptantTTC) {
-		this.coutComptantTTC = coutComptantTTC;
+		this.coutComptantTTC = Utils.arroundiNombre(coutComptantTTC);
 	}
 
 }
