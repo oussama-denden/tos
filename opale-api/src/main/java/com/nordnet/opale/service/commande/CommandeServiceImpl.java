@@ -1039,13 +1039,13 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	private ReductionContrat fromReduction(Reduction reduction) {
 		ReductionContrat reductionContrat = new ReductionContrat();
-		reductionContrat.setReferenceReduction(reduction.getReference());
 		reductionContrat.setTitre(reduction.getLabel());
 		reductionContrat.setDateDebut(reduction.getDateDebut());
 		reductionContrat.setDateFin(reduction.getDateFin());
 		reductionContrat.setNbUtilisationMax(reduction.getNbUtilisationMax());
 		reductionContrat.setValeur(reduction.getValeur());
 		reductionContrat.setTypeValeur(TypeValeur.fromString(reduction.getTypeValeur().name()));
+		reductionContrat.setReferenceReduction(reduction.getReferenceReduction());
 		return reductionContrat;
 	}
 
