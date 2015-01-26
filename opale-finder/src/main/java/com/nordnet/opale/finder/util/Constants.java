@@ -121,5 +121,9 @@ public final class Constants {
 	 * entier de valeur 2.
 	 */
 	public static final Integer DEUX = 2;
+	/**
+	 * Requette recuperer commande par reference commande.
+	 */
+	public static final String FIND_COMMANDE_BY_REFERENCE = "FIND_COMMANDE_BY_REFERENCE";
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.nordnet.opale.finder.business.Commande;
+import com.nordnet.opale.finder.business.CommandeInfo;
 import com.nordnet.opale.finder.exception.InfoErreur;
 import com.nordnet.opale.finder.exception.OpaleException;
 import com.nordnet.opale.finder.service.CommandeService;
@@ -61,6 +62,24 @@ public class FinderController {
 	public List<Commande> findByIdClient(@PathVariable String idClient) throws OpaleException {
 
 		return commandeService.findByIdClient(idClient);
+
+	}
+
+	/**
+	 * recuperer tous les {@link Commande}.
+	 * 
+	 * @param idClient
+	 *            l id du client
+	 * 
+	 * @return Liste de {@link Commande}.
+	 * @throws TopazeException
+	 *             {@link TopazeException}.
+	 */
+	@RequestMapping(value = "/commande/{refCommande:.+}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public CommandeInfo findByReferenceCommande(@PathVariable String refCommande) throws OpaleException {
+
+		return commandeService.findByReferenceCommande(refCommande);
 
 	}
 

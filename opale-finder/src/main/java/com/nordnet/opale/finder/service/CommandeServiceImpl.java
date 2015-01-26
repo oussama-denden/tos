@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.finder.business.Commande;
+import com.nordnet.opale.finder.business.CommandeInfo;
 import com.nordnet.opale.finder.dao.CommandeDao;
 import com.nordnet.opale.finder.exception.OpaleException;
 
@@ -44,6 +45,16 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Find All Orders in " + (d2.getTime() - d1.getTime()) + "ms");
 		LOGGER.info("Fin methode findByIdClient");
 		return commandes;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public CommandeInfo findByReferenceCommande(String referenceCommande) throws OpaleException {
+		LOGGER.info("Entrer methode findByReferenceCommande");
+		CommandeInfo commandeInfo = commandeDao.findByReferenceCommande(referenceCommande);
+		LOGGER.info("Fin methode findByReferenceCommande");
+		return commandeInfo;
 	}
 
 }

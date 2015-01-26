@@ -19,9 +19,11 @@ import org.springframework.stereotype.Repository;
 
 import com.nordnet.opale.finder.business.Client;
 import com.nordnet.opale.finder.business.Commande;
+import com.nordnet.opale.finder.business.CommandeInfo;
 import com.nordnet.opale.finder.business.CommandeLigne;
 import com.nordnet.opale.finder.business.DetailCommandeLigne;
 import com.nordnet.opale.finder.business.Frais;
+import com.nordnet.opale.finder.business.ModePaiement;
 import com.nordnet.opale.finder.business.Tarif;
 import com.nordnet.opale.finder.cout.CoutCommande;
 import com.nordnet.opale.finder.exception.OpaleException;
@@ -361,5 +363,63 @@ public class CommandeDaoImpl implements CommandeDao {
 		commande = coutCommande.getCommande();
 
 		return commande;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	public CommandeInfo findByReferenceCommande(String referenceCommande) throws OpaleException {
+
+		String sql =
+				String.format(sqlQueryProperties.getProperty(Constants.FIND_COMMANDE_BY_REFERENCE), referenceCommande);
+		Connection connection = null;
+		Statement stmt = null;
+		try {
+			connection = dataSource.getConnection();
+			stmt = (Statement) connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet res = stmt.executeQuery(sql);
+			CommandeInfo commande = getCommandeInfoFromResultSet(res);
+
+			return commande;
+		} catch (SQLException e) {
+			LOGGER.error("Finder :Erreur lors de la recuperation des commandes", e);
+			throw new OpaleException("Finder :Erreur lors de la recuperation des commandes", e.getMessage());
+		} catch (Exception e) {
+			LOGGER.error("Finder :Erreur lors de la recuperation des commandes", e);
+			throw new OpaleException("Finder :Erreur lors de la recuperation des commandes", e.getMessage());
+
+		} finally {
+			try {
+				stmt.close();
+				connection.close();
+			} catch (SQLException e) {
+				LOGGER.error("Finder :Erreur lors de fermeture du session", e);
+			}
+		}
+
+	}
+
+	/**
+	 * recuperer {@link CommandeInfo} a partir d un {@link ResultSet}.
+	 * 
+	 * @param resultSet
+	 *            {@link ResultSet}
+	 * @return {@link CommandeInfo}
+	 * @throws SQLException
+	 *             {@link SQLException}
+	 */
+	private CommandeInfo getCommandeInfoFromResultSet(ResultSet resultSet) throws SQLException {
+		CommandeInfo commandeInfo = null;
+		while (resultSet.next()) {
+			commandeInfo = new CommandeInfo();
+			commandeInfo.setReferenceCommande(resultSet.getString("referenceCommande"));
+			commandeInfo.setCodePartenaire(resultSet.getString("codePartenaire"));
+			commandeInfo.setTypePaiement(ModePaiement.fromString(resultSet.getString("typePaiement")));
+			commandeInfo.setDatePaiement(resultSet.getTimestamp("datePaiement"));
+			commandeInfo.setIPPaiement(resultSet.getString("IPPaiement"));
+
+		}
+		return commandeInfo;
 	}
 }
