@@ -107,9 +107,11 @@ public class Tarif {
 		this.duree = tarif.getDuree();
 		this.typeTVA = tarif.getTva();
 		this.frequence = tarif.getFrequence();
-		for (com.nordnet.opale.business.catalogue.Frais fraisCatalogue : tarif.getFrais()) {
-			Frais frais = new Frais(fraisCatalogue);
-			addFrais(frais);
+		if (tarif.getFrais() != null) {
+			for (com.nordnet.opale.business.catalogue.Frais fraisCatalogue : tarif.getFrais()) {
+				Frais frais = new Frais(fraisCatalogue);
+				addFrais(frais);
+			}
 		}
 	}
 
