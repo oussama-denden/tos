@@ -973,25 +973,4 @@ public class DraftServiceImpl implements DraftService {
 		return draftRepository.findAll();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String alertMultipleReduction(Commande commande) {
-		Reduction reductionCommande = reductionService.findReduction(commande.getReferenceDraft());
-		List<Reduction> reductionsLigne = new ArrayList<>();
-		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			Reduction reductionLigne =
-					reductionService.findReductionLigneDraftSansFrais(commande.getReference(),
-							commandeLigne.getReferenceOffre());
-			reductionsLigne.add(reductionLigne);
-		}
-
-		if (reductionCommande != null && reductionsLigne.size() > 0) {
-			return DraftValidator.alertReductionMultiple();
-		}
-
-		return null;
-	}
-
 }

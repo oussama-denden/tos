@@ -42,7 +42,6 @@ import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
-import com.nordnet.opale.util.Utils;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -281,12 +280,8 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::transformerEnCommande");
 		Object object = draftService.transformerEnCommande(refDraft, transformationInfo);
 		if (object instanceof Commande) {
-			String alert = draftService.alertMultipleReduction((Commande) object);
 			Commande commande = (Commande) object;
 			JSONObject jsonResponse = new JSONObject();
-			if (!Utils.isStringNullOrEmpty(alert)) {
-				jsonResponse.put("avertissement", alert);
-			}
 			jsonResponse.put("reference", commande.getReference());
 			return jsonResponse.toString();
 		}
