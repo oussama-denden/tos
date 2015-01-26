@@ -124,7 +124,7 @@
 
 	<dependency>
 		<groupId>com.nordnet.opale</groupId>
-		<artifactId>netCatalog-client</artifactId>
+		<artifactId>ot-netcatalog</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
