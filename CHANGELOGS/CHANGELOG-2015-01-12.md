@@ -20,6 +20,7 @@ from 2015-01-12.
   * bug  410 fix the trame of cost command issues.
   * bug  413 fix the reduction fee erreur .
   * Fix missing Enum values with swagger.
+  * change reference reduction to code catalog.
 
  * opale-finder
   * US 138: Add the field codePartemaire  for the command.

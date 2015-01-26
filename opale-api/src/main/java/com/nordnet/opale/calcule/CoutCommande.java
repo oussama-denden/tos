@@ -97,6 +97,9 @@ public class CoutCommande extends CalculeCout {
 			reductionComptantHT += coutLigneCommande.getReductionComptantHT();
 			reductionComptantTTC += coutLigneCommande.getReductionComptantTTC();
 
+			reductionRecurrentHT += coutLigneCommande.getReductionRecurrentHT();
+			reductionRecurrentTTC += coutLigneCommande.getReductionRecurrentTTC();
+
 			coutRecurentReduitHT += coutLigneCommande.getCoutRecurentReduitTTC();
 			tva = coutLigneCommande.getTva();
 		}
@@ -124,6 +127,9 @@ public class CoutCommande extends CalculeCout {
 			if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
 				cout.setCoutComptantHT(Constants.ZERO);
 				cout.setCoutComptantTTC(Constants.ZERO);
+
+				cout.setReductionHT(reductionRecurrentHT);
+				cout.setReductionTTC(reductionRecurrentTTC);
 
 				for (DetailCout detailCout : cout.getDetails()) {
 					detailCout.setCoutComptantHT(Constants.ZERO);
