@@ -39,6 +39,10 @@ public class ValiderDraftTest extends GlobalTestCase {
 	@SpringBean("draftService")
 	private DraftService draftService;
 
+	{
+		System.setProperty("netcatalog.useMock", "true");
+	}
+
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
@@ -51,6 +55,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
 	public void testValiderDraftValide() {
+
 		try {
 			TrameCatalogueInfo trameCatalogue =
 					draftInfoGenerator.getObjectFromJsonFile(TrameCatalogueInfo.class, "./requests/validerDraft.json");
