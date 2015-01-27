@@ -6,3 +6,4 @@
 .checkstyle
 .idea
 *.iml
+/target

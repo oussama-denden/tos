@@ -16,6 +16,7 @@
 	<context:component-scan base-package="com.nordnet.topaze.ws" />
 	<context:component-scan base-package="com.nordnet.opale.calcule" />
 
+    <!-- <import resource="classpath:/META-INF/clientContext.xml"/> -->
 	<!-- Load Hibernate related configuration -->
 	<import resource="hibernate-context.xml" />
 
@@ -35,6 +36,11 @@
 	</bean>
 	
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+	
+	 <bean id="netCatalogClient" class="com.nordnet.netcatalog.ws.client.NetCatalogClient" /> 
+	 <bean id="netCatalogClientFake" class="com.nordnet.netcatalog.ws.client.fake.NetCatalogClientFake" /> 
+	 <bean id="dozerMapper" class="org.dozer.DozerBeanMapper" scope="singleton"/>
+	 
 	<bean id="topazeClient" class="com.nordnet.topaze.ws.client.TopazeClient" />
 	
 	<bean id="opaleExceptionsProperties"
@@ -52,7 +58,7 @@
 			</list>
 		</property>
 	</bean>
-
+	
 	<!-- Bean d'acces au Contexte -->
 	<bean id="applicationContextHolder"
 		class="com.nordnet.opale.util.spring.ApplicationContextHolder" />

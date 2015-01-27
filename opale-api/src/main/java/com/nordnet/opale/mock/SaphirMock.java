@@ -1,7 +1,5 @@
 package com.nordnet.opale.mock;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 
 import com.nordnet.common.valueObject.identifier.Identifier;
@@ -22,8 +20,7 @@ public class SaphirMock extends SaphirTechnical {
 	private static final Logger LOGGER = Logger.getLogger(SaphirMock.class);
 
 	@Override
-	public void addDownPayment(Identifier accountId, Price price, PaymentReference paymentReference, String billingGroup)
-			throws IOException {
+	public void addDownPayment(Identifier accountId, Price price, PaymentReference paymentReference, String billingGroup) {
 		LOGGER.info("\n*******************DownPaiement Ajouté*******************\n" + "Billing Group: " + billingGroup
 				+ "\nAccount ID: " + accountId + "\nPrice.Amount: " + price.getPrice().getAmount()
 				+ "\nPrice.Currency: " + price.getCurrency() + "\nPaymentReference.PaymentType: "

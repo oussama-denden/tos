@@ -7,12 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.dozer.Mapper;
+import org.dozer.MappingException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nordnet.netcatalog.exception.NetCatalogException;
+import com.nordnet.netcatalog.ws.client.NetCatalogClient;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.DeleteInfo;
@@ -27,6 +31,7 @@ import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
 import com.nordnet.opale.business.catalogue.Tarif;
+import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.calcule.CalculeCout;
 import com.nordnet.opale.calcule.CoutDecorator;
 import com.nordnet.opale.calcule.CoutDraft;
@@ -52,6 +57,7 @@ import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
 import com.nordnet.opale.validator.ReductionValidator;
@@ -144,6 +150,17 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Autowired
 	private CoutDecorator coutDecorator;
+
+	/**
+	 * Net-catalog client.
+	 */
+	private NetCatalogClient netCatalogClient;
+
+	/**
+	 * Dozer mapper.
+	 */
+	@Autowired
+	private Mapper dozerMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -449,6 +466,12 @@ public class DraftServiceImpl implements DraftService {
 			throws OpaleException {
 		Draft draft = getDraftByReference(referenceDraft);
 		DraftValidator.isAuteurValide(trameCatalogue.getAuteur());
+		if (trameCatalogue.getTrameCatalogue() == null || trameCatalogue.getTrameCatalogue().getOffres() == null) {
+
+			TrameCatalogue catalogue = getOffreNetCatalog(draft);
+			trameCatalogue.setTrameCatalogue(catalogue);
+		}
+
 		tracageService.ajouterTrace(trameCatalogue.getAuteur() != null ? trameCatalogue.getAuteur().getQui()
 				: Constants.INTERNAL_USER, referenceDraft, "la validation du draft de reference " + referenceDraft);
 
@@ -475,6 +498,9 @@ public class DraftServiceImpl implements DraftService {
 			DraftValidator.validerIdClientUnique(draft);
 		}
 
+		if (transformationInfo.getTrameCatalogue() == null) {
+			transformationInfo.setTrameCatalogue(getOffreNetCatalog(draft));
+		}
 		DraftValidationInfo validationInfo =
 				catalogueValidator.validerDraft(draft, transformationInfo.getTrameCatalogue());
 
@@ -971,6 +997,58 @@ public class DraftServiceImpl implements DraftService {
 	@Override
 	public List<Draft> findAllDraft() {
 		return draftRepository.findAll();
+	}
+
+	/**
+	 * Recupere trame catalogue par Net-Catalog.
+	 * 
+	 * @param draft
+	 *            {@link Draft}
+	 * @return {@link TrameCatalogue}
+	 * @throws {@link OpaleException}
+	 */
+	private TrameCatalogue getOffreNetCatalog(Draft draft) throws OpaleException {
+		List<OffreCatalogue> offreCatalogues = new ArrayList<OffreCatalogue>();
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+
+			// dozerMapper = new DozerBeanMapper();
+			OffreCatalogue offreCatalogue = null;
+			try {
+
+				com.nordnet.netcatalog.ws.entity.OffreCatalogue offreCatalogueClient =
+						this.getNetCatalogClient().getOffre(draftLigne.getReferenceOffre());
+				offreCatalogue = dozerMapper.map(offreCatalogueClient, OffreCatalogue.class);
+			} catch (NetCatalogException e1) {
+				throw new OpaleException(e1.getErrorCode(), e1.getMessage());
+			} catch (MappingException e) {
+				throw new OpaleException("Erreur lors de la recuperetion de l offre a partir du netCatalog",
+						e.getMessage());
+
+			}
+			offreCatalogues.add(offreCatalogue);
+
+		}
+		TrameCatalogue catalogue = new TrameCatalogue();
+		catalogue.setOffres(offreCatalogues);
+
+		return catalogue;
+
+	}
+
+	/**
+	 * Retourn le {@link NetCatalogClient}.
+	 * 
+	 * @return {@link NetCatalogClient}
+	 */
+	public NetCatalogClient getNetCatalogClient() {
+		if (netCatalogClient == null) {
+			if (System.getProperty("netcatalog.useMock").equals("true")) {
+				netCatalogClient = (NetCatalogClient) ApplicationContextHolder.getBean("netCatalogClientFake");
+			} else {
+				netCatalogClient = (NetCatalogClient) ApplicationContextHolder.getBean("netCatalogClient");
+			}
+		}
+		return netCatalogClient;
 	}
 
 }
