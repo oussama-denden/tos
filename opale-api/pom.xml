@@ -123,7 +123,7 @@
 		</dependency>
 
 	<dependency>
-		<groupId>com.nordnet.opale</groupId>
+		<groupId>com.nordnet.ot</groupId>
 		<artifactId>ot-netcatalog</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>

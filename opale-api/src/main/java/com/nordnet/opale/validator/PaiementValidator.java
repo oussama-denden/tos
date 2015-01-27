@@ -67,10 +67,6 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.1", "Paiement.modePaiement"), "0.1.1");
 		}
 
-		if (Utils.isStringNullOrEmpty(paiementInfo.getReferenceModePaiement())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.1", "Paiement.referenceModePaiement"), "0.1.1");
-		}
-
 	}
 
 	/**
