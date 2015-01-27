@@ -11,7 +11,7 @@
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
-    timestamp CDATA #IMPLIED
+    ts CDATA #IMPLIED
     referenceExterne CDATA #IMPLIED
     dateAnnulation  CDATA #IMPLIED
 >
@@ -24,7 +24,7 @@
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
-    timestamp CDATA #IMPLIED
+    ts CDATA #IMPLIED
     draftId CDATA #IMPLIED
     referenceOffre CDATA #IMPLIED
      geste CDATA #IMPLIED
@@ -65,7 +65,7 @@
     canal CDATA #IMPLIED
   ip  CDATA #IMPLIED
   qui  CDATA #IMPLIED
-  timestamp  CDATA #IMPLIED
+  ts  CDATA #IMPLIED
   tva CDATA #IMPLIED
 >
 
@@ -83,7 +83,7 @@
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
-    timestamp CDATA #IMPLIED
+    ts CDATA #IMPLIED
     codePartenaire CDATA #IMPLIED
    
 >
@@ -95,7 +95,7 @@
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
-    timestamp CDATA #IMPLIED
+    ts CDATA #IMPLIED
     gamme CDATA #IMPLIED
     label CDATA #IMPLIED
     modeFacturation CDATA #IMPLIED
@@ -155,7 +155,7 @@
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
-    timestamp CDATA #IMPLIED
+    ts CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
     dateAnnulation  CDATA #IMPLIED
     timestampIntention CDATA #IMPLIED
@@ -173,7 +173,7 @@
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED
     canal CDATA #IMPLIED
-    timestamp CDATA #IMPLIED
+    ts CDATA #IMPLIED
     timestampIntention CDATA #IMPLIED
     timestampPaiement CDATA #IMPLIED
     typePaiement CDATA #IMPLIED
@@ -195,5 +195,5 @@
     referenceTarif CDATA #IMPLIED
     typeValeur CDATA #IMPLIED
     valeur CDATA #IMPLIED
-    referenceReduction CDATA #IMPLIED
+    codeCatalogueReduction CDATA #IMPLIED
 >

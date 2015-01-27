@@ -83,7 +83,8 @@ public class CoutCommande extends CalculeCout {
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 
 			CoutLigneCommande coutLigneCommande =
-					new CoutLigneCommande(commande.getReference(), commandeLigne, segmentTVA, reductionService);
+					new CoutLigneCommande(commande.getReference(), commandeLigne, segmentTVA, reductionService,
+							paiementCommande);
 
 			DetailCout detailCout = (DetailCout) coutLigneCommande.getCout();
 			coutComptantHT += detailCout.getCoutComptantHT();
@@ -121,6 +122,7 @@ public class CoutCommande extends CalculeCout {
 		cout.setCoutRecurrentGlobale(coutRecurrentGlobale);
 		cout.setReductionHT(reductionHT);
 		cout.setReductionTTC(reductionTTC);
+		cout.setTva(tva);
 
 		// changer la trame du cout selon le paiement effectuer par le client
 		if (!(paiementCommande == null)) {
@@ -140,6 +142,12 @@ public class CoutCommande extends CalculeCout {
 				cout.setCoutRecurrentGlobale(null);
 
 				for (DetailCout detailCout : cout.getDetails()) {
+
+					detailCout.setCoutComptantHT(detailCout.getCoutRecurrent().getNormal().getTarifHT()
+							+ detailCout.getCoutComptantHT());
+					detailCout.setCoutComptantTTC(detailCout.getCoutRecurrent().getNormal().getTarifTTC()
+							+ detailCout.getCoutComptantTTC());
+
 					coutComptantHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
 					coutComptantTTC += detailCout.getCoutRecurrent().getNormal().getTarifTTC();
 					detailCout.setCoutRecurrent(null);
@@ -150,7 +158,6 @@ public class CoutCommande extends CalculeCout {
 
 			}
 		}
-
 		return cout;
 	}
 

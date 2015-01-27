@@ -1,12 +1,7 @@
 package com.nordnet.opale.domain;
 
-import java.util.Date;
-
 import javax.persistence.Embeddable;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.nordnet.opale.business.Ip;
-import com.nordnet.opale.serializer.DateSerializer;
+import javax.persistence.Embedded;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link Auteur}.
@@ -30,13 +25,8 @@ public class Auteur {
 	/**
 	 * L adresse ip de l auteur.
 	 */
-	private String ip;
-
-	/**
-	 * date de l ip.
-	 */
-	@JsonSerialize(using = DateSerializer.class)
-	private Date timestamp;
+	@Embedded
+	private Ip ip;
 
 	/**
 	 * constructeur par defaut.
@@ -52,14 +42,13 @@ public class Auteur {
 	 */
 	public Auteur(com.nordnet.opale.business.Auteur auteur) {
 		this.setCanal(auteur.getCanal());
-		this.setIp(auteur.getIp() != null ? auteur.getIp().getIp() : null);
+		this.setIp(auteur.getIp() != null ? auteur.getIp().toIPDomain() : null);
 		this.setQui(auteur.getQui());
-		this.setTimestamp(auteur.getIp() != null ? auteur.getIp().getTs() : null);
 	}
 
 	@Override
 	public String toString() {
-		return "Auteur [qui=" + qui + ", canal=" + canal + ", ip=" + ip + ", timestamp=" + timestamp + "]";
+		return "Auteur [qui=" + qui + ", canal=" + canal + ", ip=" + ip + "]";
 	}
 
 	/**
@@ -98,36 +87,19 @@ public class Auteur {
 
 	/**
 	 * 
-	 * @return {@link #ip}.
+	 * @return {@link Ip}
 	 */
-	public String getIp() {
+	public Ip getIp() {
 		return ip;
 	}
 
 	/**
 	 * 
 	 * @param ip
-	 *            {@link #ip}.
+	 *            {@link Ip}
 	 */
-	public void setIp(String ip) {
+	public void setIp(Ip ip) {
 		this.ip = ip;
-	}
-
-	/**
-	 * 
-	 * @return {@link #timestamp}.
-	 */
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	/**
-	 * 
-	 * @param timestamp
-	 *            {@link #timestamp}.
-	 */
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	/**
@@ -138,10 +110,7 @@ public class Auteur {
 	public com.nordnet.opale.business.Auteur toAuteurBusiness() {
 		com.nordnet.opale.business.Auteur auteur = new com.nordnet.opale.business.Auteur();
 		auteur.setCanal(canal);
-		Ip ipBusiness = new Ip();
-		ipBusiness.setIp(ip);
-		ipBusiness.setTs(timestamp);
-		auteur.setIp(ipBusiness);
+		auteur.setIp(ip != null ? ip.toIPBusiness() : null);
 		auteur.setQui(qui);
 		return auteur;
 

@@ -1,6 +1,8 @@
-package com.nordnet.opale.business;
+package com.nordnet.opale.domain;
 
 import java.util.Date;
+
+import javax.persistence.Embeddable;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.serializer.DateSerializer;
@@ -11,6 +13,7 @@ import com.nordnet.opale.serializer.DateSerializer;
  * @author anisselmane.
  * 
  */
+@Embeddable
 public class Ip {
 
 	/**
@@ -67,14 +70,13 @@ public class Ip {
 
 	/**
 	 * 
-	 * @return {@link com.nordnet.opale.domain.Ip}
+	 * @return {@link com.nordnet.opale.business.Ip}
 	 */
-	public com.nordnet.opale.domain.Ip toIPDomain() {
-
-		com.nordnet.opale.domain.Ip ipDomain = new com.nordnet.opale.domain.Ip();
-		ipDomain.setIp(ip);
-		ipDomain.setTs(ts);
-		return ipDomain;
+	public com.nordnet.opale.business.Ip toIPBusiness() {
+		com.nordnet.opale.business.Ip ipBusiness = new com.nordnet.opale.business.Ip();
+		ipBusiness.setIp(ip);
+		ipBusiness.setTs(ts);
+		return ipBusiness;
 	}
 
 }

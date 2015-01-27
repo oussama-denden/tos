@@ -34,6 +34,11 @@ public class Cout {
 	private double reductionTTC;
 
 	/**
+	 * tva.
+	 */
+	private double tva;
+
+	/**
 	 * liste des {@link CoutRecurrent}
 	 */
 	private List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<CoutRecurrent>();
@@ -159,6 +164,23 @@ public class Cout {
 	 */
 	public void setCoutRecurrentGlobale(List<CoutRecurrent> coutRecurrentGlobale) {
 		this.coutRecurrentGlobale = coutRecurrentGlobale;
+	}
+
+	/**
+	 * 
+	 * @return {@link #tva}
+	 */
+	public double getTva() {
+		return tva;
+	}
+
+	/**
+	 * 
+	 * @param tva
+	 *            {@link #tva}
+	 */
+	public void setTva(double tva) {
+		this.tva = tva;
 	}
 
 }

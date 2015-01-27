@@ -5,9 +5,9 @@
 <client id="1000" clientId="1000" adresseId="1000"/>
 <client id="1001" clientId="1001" adresseId="1001"/>
 
-<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" qui="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000004" referenceDraft="00000004" clientAFacturerId="1000" clientALivrerId="1001"/>
+<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="00000004" referenceDraft="00000004" clientAFacturerId="1000" clientALivrerId="1001"/>
 
-<commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" timestamp="[now]" referenceContrat="ref_contrat" gamme="jet" modeFacturation="PREMIER_MOIS" typeProduit="SERVICE" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1006" geste="RENOUVELLEMENT"/>
+<commandeLigne id="1000" qui="GRC.WEL-JOHNDOE" ts="[now]" referenceContrat="ref_contrat" gamme="jet" modeFacturation="PREMIER_MOIS" typeProduit="SERVICE" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1006" geste="RENOUVELLEMENT"/>
 
 <commandeLigneDetail id="1000" referenceChoix="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" commandeLigneId="1000" tarifId="1000" />
 
@@ -28,6 +28,6 @@
 <frais id="1006" montant="50" typeFrais="RESILIATION" tarifId="1006" />
 <frais id="1007" montant="50" typeFrais="RESILIATION" tarifId="1007" />
 
-<paiement id="1000" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" />
+<paiement id="1000" montant="10" modePaiement="CB" reference="00000001" referenceCommande="00000004" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" />
 
 </dataset>
