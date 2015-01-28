@@ -114,4 +114,15 @@ public interface PaiementRepository extends JpaRepository<Paiement, Integer> {
 	public List<Paiement> findByReferenceCommandeAndTypePaiementAndTimestampPaiementIsNotNullAndDateAnnulationIsNull(
 			String referenceCommande, TypePaiement typePaiement);
 
+	/**
+	 * retourner la liste des paiements non annule d'une commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @param typePaiement
+	 *            {@link TypePaiement}
+	 * @return Liste de {@link Paiement}
+	 */
+	public List<Paiement> findByReferenceCommandeAndDateAnnulationIsNull(String referenceCommande);
+
 }

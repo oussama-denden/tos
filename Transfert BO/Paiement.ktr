@@ -185,6 +185,35 @@
     </step>
 
   <step>
+    <name>Add sequence</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>reference</valuename>
+      <use_database>N</use_database>
+      <connection/>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>2</increment_by>
+      <max_value>999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>216</xloc>
+      <yloc>386</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>CB</name>
     <type>SetValueConstant</type>
     <description/>
@@ -248,6 +277,25 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>826</xloc>
       <yloc>140</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Dummy &#x28;do nothing&#x29;</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>366</xloc>
+      <yloc>386</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -1161,7 +1209,7 @@
 <case_value_format/>
 <case_value_decimal/>
 <case_value_group/>
-<default_target_step>Error File</default_target_step>
+<default_target_step/>
 <cases><case><value>Carte bancaire</value>
 <target_step>CB</target_step>
 </case><case><value>Ch&#xe8;que</value>
@@ -1222,58 +1270,10 @@
       </GUI>
     </step>
 
-  <step>
-    <name>Dummy &#x28;do nothing&#x29;</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>366</xloc>
-      <yloc>386</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Add sequence</name>
-    <type>Sequence</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <valuename>reference</valuename>
-      <use_database>N</use_database>
-      <connection/>
-      <schema/>
-      <seqname>SEQ_</seqname>
-      <use_counter>Y</use_counter>
-      <counter_name/>
-      <start_at>1</start_at>
-      <increment_by>2</increment_by>
-      <max_value>999999999</max_value>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>216</xloc>
-      <yloc>386</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
   <step_error_handling>
       <error>
         <source_step>AVOIR</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1285,7 +1285,7 @@
       </error>
       <error>
         <source_step>CB</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1297,7 +1297,7 @@
       </error>
       <error>
         <source_step>CHEQUE</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1309,7 +1309,7 @@
       </error>
       <error>
         <source_step>FACTURE</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1321,7 +1321,7 @@
       </error>
       <error>
         <source_step>FACTURE FIN DE MOIS</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1333,7 +1333,7 @@
       </error>
       <error>
         <source_step>Internet&#x2b;</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1345,7 +1345,7 @@
       </error>
       <error>
         <source_step>PEL</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1357,7 +1357,7 @@
       </error>
       <error>
         <source_step>PL</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1369,7 +1369,7 @@
       </error>
       <error>
         <source_step>Paiement Comptant AVOIR</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1381,7 +1381,7 @@
       </error>
       <error>
         <source_step>Paiement Comptant CB</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1393,7 +1393,7 @@
       </error>
       <error>
         <source_step>Paiement Comptant Cheque</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1405,7 +1405,7 @@
       </error>
       <error>
         <source_step>Paiement Comptant Internet&#x2b;</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1417,7 +1417,7 @@
       </error>
       <error>
         <source_step>Paiement Comptant Virement</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1429,7 +1429,7 @@
       </error>
       <error>
         <source_step>Paiement Recurrent Facture</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1441,7 +1441,7 @@
       </error>
       <error>
         <source_step>Paiement Recurrent Facture Fin de Mois</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1453,7 +1453,7 @@
       </error>
       <error>
         <source_step>Paiement Recurrent SEPA</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
@@ -1465,7 +1465,7 @@
       </error>
       <error>
         <source_step>VIREMENT</source_step>
-        <target_step>Error File</target_step>
+        <target_step/>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename/>
