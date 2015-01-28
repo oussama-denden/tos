@@ -304,6 +304,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
 		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
 		nouveauDraftLigne.setReference(draftLigne.getReference());
+		nouveauDraftLigne.setReferenceContrat(draftLigne.getReferenceContrat());
 		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
 
 		if (draftLigneInfo.getAuteur() != null) {
