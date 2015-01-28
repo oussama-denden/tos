@@ -415,7 +415,8 @@ public class CommandeDaoImpl implements CommandeDao {
 			commandeInfo = new CommandeInfo();
 			commandeInfo.setReferenceCommande(resultSet.getString("referenceCommande"));
 			commandeInfo.setCodePartenaire(resultSet.getString("codePartenaire"));
-			commandeInfo.setTypePaiement(ModePaiement.fromString(resultSet.getString("typePaiement")));
+			commandeInfo.setTypePaiement(resultSet.getString("typePaiement") != null ? ModePaiement
+					.fromString(resultSet.getString("typePaiement")) : null);
 			commandeInfo.setDatePaiement(resultSet.getTimestamp("datePaiement"));
 			commandeInfo.setIPPaiement(resultSet.getString("IPPaiement"));
 

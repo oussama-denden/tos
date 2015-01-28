@@ -24,6 +24,9 @@ from 2015-01-12.
   * bug 421 fix the trame structure of draft.
   * bug 424 fix bug in cost calculation.
   * bug 426 fix the paiement issue.
+  * trasform draft to orders without frame.
+  * delete rest method transformetEnOrderRenouvellement
+  
  * opale-finder
   * US 138: Add the field codePartemaire  for the command.
   * US 140: Add the field geste for the command line.
@@ -35,5 +38,7 @@ from 2015-01-12.
   * Fix issue 401 : line number.
   * Fix issue cost calculation.
   * Fix missing Enum values with swagger.
+  * Add Find command by reference command.
+  * Fix issue Find command by reference command.
 
   
