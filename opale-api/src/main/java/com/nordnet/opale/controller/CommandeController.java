@@ -485,22 +485,6 @@ public class CommandeController {
 	}
 
 	/**
-	 * Transformer une commande en ordre de renouvellement afin d'acter le renouvellement pour un contrat donné.
-	 * 
-	 * @param refCommande
-	 *            refrence commande.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 * @throws JSONException
-	 *             {@link JSONException}.
-	 */
-	@RequestMapping(value = "/{refCommande:.+}/transformeEnOrdereRenouvellement", method = RequestMethod.POST, produces = "application/json")
-	@ResponseBody
-	public void transformeEnOrdereRenouvellement(@PathVariable String refCommande) throws OpaleException, JSONException {
-		commandeService.transformeEnOrdereRenouvellement(refCommande);
-	}
-
-	/**
 	 * Calculer le cout de la {@link Commande}.
 	 * 
 	 * @param refCommande

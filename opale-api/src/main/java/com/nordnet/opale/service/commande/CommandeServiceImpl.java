@@ -603,8 +603,6 @@ public class CommandeServiceImpl implements CommandeService {
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
 
-		// CommandeValidator.checkPaiementDouble(paiement);
-
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
 				CommandeValidator.testerCommandeNonTransforme(commande);
