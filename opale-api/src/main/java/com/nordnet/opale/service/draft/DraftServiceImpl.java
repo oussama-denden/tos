@@ -57,6 +57,7 @@ import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
@@ -303,6 +304,7 @@ public class DraftServiceImpl implements DraftService {
 		 */
 		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
 		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
+		ajouterNumEC(nouveauDraftLigne, draftLigne);
 		nouveauDraftLigne.setReference(draftLigne.getReference());
 		nouveauDraftLigne.setReferenceContrat(draftLigne.getReferenceContrat());
 		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
@@ -556,6 +558,7 @@ public class DraftServiceImpl implements DraftService {
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}
 	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
 	private void associerReductionCommande(Draft draft, Commande commande)
 			throws CloneNotSupportedException, OpaleException {
@@ -667,6 +670,34 @@ public class DraftServiceImpl implements DraftService {
 				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(detail.getReferenceChoix());
 				DraftLigneDetail draftLigneDetailParent = draftLigneDetailsMap.get(detail.getDependDe());
 				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
+			}
+		}
+	}
+
+	/**
+	 * ajout des numEC a la nouvelle ligne.
+	 * 
+	 * @param nouveauDraftLigne
+	 *            la nouvelle ligne {@link DraftLigne}.
+	 * @param ancienDraftLigne
+	 *            l'ancienne {@link DraftLigne}.
+	 */
+	private void ajouterNumEC(DraftLigne nouveauDraftLigne, DraftLigne ancienDraftLigne) {
+
+		if (!Utils.isStringNullOrEmpty(ancienDraftLigne.getReferenceContrat())) {
+			nouveauDraftLigne.setNumEC(ancienDraftLigne.getNumEC());
+
+			/*
+			 * transformer la list en Map pour faciliter l'accee par la suite.
+			 */
+			Map<String, Integer> ancienDraftLigneDetailsMap = new HashMap<String, Integer>();
+			for (DraftLigneDetail draftLigneDetail : ancienDraftLigne.getDraftLigneDetails()) {
+				ancienDraftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail.getNumEC());
+			}
+
+			for (DraftLigneDetail draftLigneDetail : nouveauDraftLigne.getDraftLigneDetails()) {
+				Integer numEC = ancienDraftLigneDetailsMap.get(draftLigneDetail.getReferenceChoix());
+				draftLigneDetail.setNumEC(numEC);
 			}
 		}
 	}
