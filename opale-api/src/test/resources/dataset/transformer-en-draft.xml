@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 <dataset>
-<client id="1000" adresseId="adr-fac" clientId="cl-fac"  qui="someone" timestamp="[now]"/>
-<client id="1001" adresseId="adr-sousc" clientId="cl-sousc"   qui="someone" timestamp="[now]"/>
-<client id="1002" adresseId="adr-liv" clientId="cl-livc"   qui="someone" timestamp="[now]"/>
+<client id="1000" adresseId="adr-fac" clientId="cl-fac"  qui="someone" ts="[now]"/>
+<client id="1001" adresseId="adr-sousc" clientId="cl-sousc"   qui="someone" ts="[now]"/>
+<client id="1002" adresseId="adr-liv" clientId="cl-livc"   qui="someone" ts="[now]"/>
 
-<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000001" referenceDraft="00000001" clientAFacturerId="1000" clientSouscripteurId="1001" clientALivrerId="1002" />
+<commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000001" referenceDraft="00000001" clientAFacturerId="1000" clientSouscripteurId="1001" clientALivrerId="1002" />
 
-<commandeLigne id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1002" />
+<commandeLigne id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" ts="[now]" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1002" />
 
 <commandeLigneDetail id="1000" referenceChoix="jet" label="Trafic 10 Gigas" typeProduit="SERVICE" dependDe="1001" commandeLigneId="1000" tarifId="1000" />
 <commandeLigneDetail id="1001" referenceChoix="kitsat" label="Trafic 10 Gigas" typeProduit="BIEN" commandeLigneId="1000" tarifId="1001" />

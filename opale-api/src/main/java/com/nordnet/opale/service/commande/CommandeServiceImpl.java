@@ -1035,7 +1035,7 @@ public class CommandeServiceImpl implements CommandeService {
 		reductionContrat.setNbUtilisationMax(reduction.getNbUtilisationMax());
 		reductionContrat.setValeur(reduction.getValeur());
 		reductionContrat.setTypeValeur(TypeValeur.fromString(reduction.getTypeValeur().name()));
-		reductionContrat.setReferenceReduction(reduction.getReferenceReduction());
+		reductionContrat.setCodeCatalogueReduction(reduction.getCodeCatalogueReduction());
 		return reductionContrat;
 	}
 

@@ -4,7 +4,7 @@
 <dataset>
 <keygen/>
 <draft/>
-<draft id="1" reference="REF-DRAFT-1"   codePartenaire="000111" timestamp="[now]" canal="welcome" qui="someone" />
+<draft id="1" reference="REF-DRAFT-1"   codePartenaire="000111" ts="[now]" canal="welcome" qui="someone" />
 <draftLigne/>
 <draftLigneDetail/>
 </dataset>

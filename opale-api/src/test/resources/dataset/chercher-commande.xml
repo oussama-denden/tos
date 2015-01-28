@@ -4,9 +4,9 @@
 
 <client id="1000" clientId="CLIENT-ID" adresseId="address-livraison-id" />
 
-<commande id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000001" referenceDraft="00000001" clientALivrerId="1000" />
-<commande id="1001" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000002" referenceDraft="00000002" />
-<commande id="1002" canal="welcome"  ip="GRC.WEL-JOHNDOE" timestamp="[now]" reference="00000003" referenceDraft="00000003" />
+<commande id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000001" referenceDraft="00000001" clientALivrerId="1000" />
+<commande id="1001" canal="welcome"  ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000002" referenceDraft="00000002" />
+<commande id="1002" canal="welcome"  ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000003" referenceDraft="00000003" />
 
 <commandeLigne id="1000" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1000" secteur="sat" tarifId="1002" />
 <commandeLigne id="1001" gamme="jet" modeFacturation="PREMIER_MOIS" referenceOffre="jet_surf10" commandeId="1001" secteur="sat" tarifId="1006" />
@@ -33,8 +33,8 @@
 <frais id="1005" montant="50" typeFrais="CREATION" tarifId="1005" />
 <frais id="1006" montant="50" typeFrais="RESILIATION" tarifId="1006" />
 
-<paiement id="1000" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000001" typePaiement="COMPTANT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" timestampIntention="[now]" timestampPaiement="[now]"  />
-<paiement id="1001" montant="150" modePaiement="CB" reference="00000001" referenceCommande="00000002" typePaiement="COMPTANT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" timestampPaiement="[now]"  />
-<paiement id="1002" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000003" typePaiement="RECURRENT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" timestamp="[now]" timestampPaiement="[now]"  />
+<paiement id="1000" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000001" typePaiement="COMPTANT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" timestampIntention="[now]" timestampPaiement="[now]"  />
+<paiement id="1001" montant="150" modePaiement="CB" reference="00000001" referenceCommande="00000002" typePaiement="COMPTANT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" timestampPaiement="[now]"  />
+<paiement id="1002" montant="90" modePaiement="CB" reference="00000001" referenceCommande="00000003" typePaiement="RECURRENT" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" timestampPaiement="[now]"  />
 
 </dataset>

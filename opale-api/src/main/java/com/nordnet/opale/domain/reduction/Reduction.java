@@ -42,7 +42,7 @@ public class Reduction implements Cloneable {
 	/**
 	 * reference pour les reduction regulieres.
 	 */
-	private String referenceReduction;
+	private String codeCatalogueReduction;
 
 	/**
 	 * reference draft.
@@ -142,19 +142,19 @@ public class Reduction implements Cloneable {
 
 	/**
 	 * 
-	 * @return {@link #referenceReduction}
+	 * @return {@link #codeCatalogueReduction}
 	 */
-	public String getReferenceReduction() {
-		return referenceReduction;
+	public String getCodeCatalogueReduction() {
+		return codeCatalogueReduction;
 	}
 
 	/**
 	 * 
-	 * @param referenceReduction
-	 *            {@link #referenceReduction}
+	 * @param codeCatalogueReduction
+	 *            {@link #codeCatalogueReduction}
 	 */
-	public void setReferenceReduction(String referenceReduction) {
-		this.referenceReduction = referenceReduction;
+	public void setCodeCatalogueReduction(String codeCatalogueReduction) {
+		this.codeCatalogueReduction = codeCatalogueReduction;
 	}
 
 	/**
@@ -372,7 +372,7 @@ public class Reduction implements Cloneable {
 		reduction.setReferenceLigne(referenceLigne);
 		reduction.setReferenceTarif(referenceTarif);
 		reduction.setReferenceLigneDetail(referenceLigneDetail);
-		reduction.setReferenceReduction(referenceReduction);
+		reduction.setCodeCatalogueReduction(codeCatalogueReduction);
 		return reduction;
 	}
 

@@ -38,6 +38,11 @@ public class DetailCout extends Cout {
 	private double coutComptantTTC;
 
 	/**
+	 * difference entre cout TTC et cout HT.
+	 */
+	private double montantTva;
+
+	/**
 	 * cout totale du reduction.
 	 */
 	private double reductionHT;
@@ -96,6 +101,7 @@ public class DetailCout extends Cout {
 	 * 
 	 * @return {@link #tva}
 	 */
+	@Override
 	public double getTva() {
 		return tva;
 	}
@@ -105,6 +111,7 @@ public class DetailCout extends Cout {
 	 * @param tva
 	 *            {@link #tva}
 	 */
+	@Override
 	public void setTva(double tva) {
 		this.tva = tva;
 	}
@@ -126,7 +133,25 @@ public class DetailCout extends Cout {
 	@Override
 	public void setCoutComptantHT(double coutComptantHT) {
 		this.coutComptantHT = Utils.arroundiNombre(coutComptantHT);
-		;
+	}
+
+	/**
+	 * 
+	 * @return {@link #montantTva}
+	 */
+	@Override
+	public double getMontantTva() {
+		return montantTva;
+	}
+
+	/**
+	 * 
+	 * @param montantTva
+	 *            {@link #montantTva}
+	 */
+	@Override
+	public void setMontantTva(double montantTva) {
+		this.montantTva = montantTva;
 	}
 
 	/**

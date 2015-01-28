@@ -114,6 +114,9 @@ public class CoutDraft extends CalculeCout {
 			cout.setCoutRecurrentGlobale(coutRecurrentGlobale);
 			cout.setReductionHT(reductionHT);
 			cout.setReductionTTC(reductionTTC);
+			cout.setTva(tva);
+			cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
+
 			return cout;
 		}
 	}

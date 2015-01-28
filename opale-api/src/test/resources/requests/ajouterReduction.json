@@ -3,7 +3,7 @@
   "typeValeur": "POURCENTAGE",
   "nbUtilisationMax":2,
   "label": "string",
-  "referenceReduction" :"ref6reduc",
+  "codeCatalogueReduction" :"ref6reduc",
   "auteur": {
     "qui": "string"
     

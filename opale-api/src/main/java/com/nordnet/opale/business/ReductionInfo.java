@@ -23,7 +23,7 @@ public class ReductionInfo {
 	/**
 	 * reference du reduction.
 	 */
-	private String referenceReduction;
+	private String codeCatalogueReduction;
 
 	/**
 	 * le label.
@@ -84,19 +84,19 @@ public class ReductionInfo {
 
 	/**
 	 * 
-	 * @return {@link #referenceReduction}
+	 * @return {@link #codeCatalogueReduction}
 	 */
-	public String getReferenceReduction() {
-		return referenceReduction;
+	public String getCodeCatalogueReduction() {
+		return codeCatalogueReduction;
 	}
 
 	/**
 	 * 
-	 * @param referenceReduction
-	 *            {@link #referenceReduction}
+	 * @param codeCatalogueReduction
+	 *            {@link #codeCatalogueReduction}
 	 */
-	public void setReferenceReduction(String referenceReduction) {
-		this.referenceReduction = referenceReduction;
+	public void setCodeCatalogueReduction(String codeCatalogueReduction) {
+		this.codeCatalogueReduction = codeCatalogueReduction;
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class ReductionInfo {
 		reduction.setNbUtilisationMax(nbUtilisationMax);
 		reduction.setDateDebut(dateDebut);
 		reduction.setDateFin(dateFin);
-		reduction.setReferenceReduction(referenceReduction);
+		reduction.setCodeCatalogueReduction(codeCatalogueReduction);
 		return reduction;
 	}
 

@@ -92,9 +92,8 @@ public class Auteur {
 	public com.nordnet.opale.domain.Auteur toDomain() {
 		com.nordnet.opale.domain.Auteur auteur = new com.nordnet.opale.domain.Auteur();
 		auteur.setCanal(canal);
-		auteur.setIp(ip != null ? ip.getIp() : null);
+		auteur.setIp(ip != null ? ip.toIPDomain() : null);
 		auteur.setQui(qui);
-		auteur.setTimestamp(ip != null ? ip.getTs() : null);
 
 		return auteur;
 	}
