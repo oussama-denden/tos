@@ -21,7 +21,9 @@ from 2015-01-12.
   * bug  413 fix the reduction fee erreur .
   * Fix missing Enum values with swagger.
   * change reference reduction to code catalog.
-
+  * bug 421 fix the trame structure of draft.
+  * bug 424 fix bug in cost calculation.
+  * bug 426 fix the paiement issue.
  * opale-finder
   * US 138: Add the field codePartemaire  for the command.
   * US 140: Add the field geste for the command line.

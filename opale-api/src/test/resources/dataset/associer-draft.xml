@@ -3,11 +3,11 @@
 
 <dataset>
 	<draft id="1" reference="00000001" codePartenaire="000111"
-		timestamp="[now]" />
+		ts="[now]" />
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="jet_surf10"
 		referenceOffre="mensuel_jet10_base" qui="GRC.WEL-JOHNDOE" canal="Welcome"
-		ip="127.0.0.1" timestamp="[now]" draftId="1" />
+		ip="127.0.0.1" ts="[now]" draftId="1" />
 
 	<draftLigneDetail id="1000" referenceChoix="kitsat"
 		referenceTarif="achat_kit_mensuel" configurationJson="" draftLigneId="1000" />

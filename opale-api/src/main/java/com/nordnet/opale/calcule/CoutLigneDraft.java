@@ -207,6 +207,7 @@ public class CoutLigneDraft extends CalculeCout {
 			detailCout.setReductionTTC(reductionTTC);
 			detailCout.setTva(tva);
 			detailCout.setLabel(label);
+			detailCout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 			coutRecurentReduitTTC = (tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0;
 			coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitTTC, tva);

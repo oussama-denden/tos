@@ -13,7 +13,7 @@
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
-		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="ts" use="optional" />
 		<xsd:attribute name="referenceExterne" use="optional" />
 		<xsd:attribute name="dateAnnulation" use="optional" />
 	</xsd:complexType>
@@ -28,7 +28,7 @@
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
-		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="ts" use="optional" />
 		<xsd:attribute name="draftId" use="optional" />
 		<xsd:attribute name="referenceOffre" use="optional" />
 		<xsd:attribute name="geste" use="optional" />
@@ -71,7 +71,7 @@
 		<xsd:attribute name="tva" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
-		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="ts" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="commande" type="commande_type"/>
@@ -87,7 +87,7 @@
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
-		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="ts" use="optional" />
 		<xsd:attribute name="dateAnnulation" use="optional" />
 	</xsd:complexType>
 	
@@ -99,7 +99,7 @@
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
-		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="ts" use="optional" />
 		<xsd:attribute name="gamme" use="optional" />
 		<xsd:attribute name="label" use="optional" />
 		<xsd:attribute name="modeFacturation" use="optional" />
@@ -161,7 +161,7 @@
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
-		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="ts" use="optional" />
 		<xsd:attribute name="timestampIntention" use="optional" />
 		<xsd:attribute name="timestampPaiement" use="optional" />
 		<xsd:attribute name="typePaiement" use="optional" />
@@ -182,7 +182,7 @@
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
-		<xsd:attribute name="timestamp" use="optional" />
+		<xsd:attribute name="ts" use="optional" />
 		<xsd:attribute name="referenceCommande" use="optional" />
 		<xsd:attribute name="dateAnnulation" use="optional" />
 		<xsd:attribute name="timestampIntention" use="optional" />
@@ -205,7 +205,7 @@
 		<xsd:attribute name="referenceTarif" use="optional" />
 		<xsd:attribute name="typeValeur" use="optional" />
 		<xsd:attribute name="valeur" use="optional" />
-		<xsd:attribute name="referenceReduction" use="optional" />
+		<xsd:attribute name="codeCatalogueReduction" use="optional" />
 	</xsd:complexType>
 	
 	

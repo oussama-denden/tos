@@ -6,40 +6,40 @@
 	<client id="2" clientId="client-1245" adresseId="Adr_Souscripteur_1" />
 	<client id="3" clientId="client-1245" adresseId="Adr_Livraison_1" />
 	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
-		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
 		clientSouscripteurId="2" />
 	<draft id="2" reference="REF-DRAFT-3" codePartenaire="000111"
-		timestamp="[now]" />
+		ts="[now]" />
 	<draft id="3" reference="REF-DRAFT-4" codePartenaire="000111"
-		timestamp="[now]" />
+		ts="[now]" />
 	<draft id="4" reference="REF-DRAFT-5" codePartenaire="000111"
-		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
 		clientSouscripteurId="2" />
 	<draft id="5" reference="REF-DRAFT-6" codePartenaire="000111"
-		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
 		clientSouscripteurId="2" />
 	<draft id="6" reference="REF-DRAFT-7" codePartenaire="000111"
-		timestamp="[now]" clientAFacturerId="1" clientALivrerId="3"
+		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
 		clientSouscripteurId="2" />
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="1" />
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="1" />
 	<draftLigne id="1001" reference="00000002" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf100" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="2" />
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="2" />
 	<draftLigne id="1002" reference="00000003" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="3" />
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="3" />
 	<draftLigne id="1003" reference="00000001" referenceTarif="mensuel_jet10_base10"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="4" />
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="4" />
 	<draftLigne id="1004" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="5" />
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="5" />
 	<draftLigne id="1005" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="6" />
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="6" />
 
 	<draftLigneDetail id="1000" referenceSelection="kitsat"
 		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"

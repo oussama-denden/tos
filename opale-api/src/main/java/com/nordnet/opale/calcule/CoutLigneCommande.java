@@ -6,6 +6,7 @@ import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
+import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
@@ -40,6 +41,11 @@ public class CoutLigneCommande extends CalculeCout {
 	private ReductionService reductionService;
 
 	/**
+	 * {@link Paiement}
+	 */
+	private Paiement paiementCommande;
+
+	/**
 	 * valeur de tva.
 	 */
 	private double tva;
@@ -62,11 +68,12 @@ public class CoutLigneCommande extends CalculeCout {
 	 *            {@link ReductionRepository}
 	 */
 	public CoutLigneCommande(String refenrenceCommande, CommandeLigne commandeLigne, String segmentTVA,
-			ReductionService reductionService) {
+			ReductionService reductionService, Paiement paiementCommande) {
 		this.referenceCommande = refenrenceCommande;
 		this.commandeLigne = commandeLigne;
 		this.segmentTVA = segmentTVA;
 		this.reductionService = reductionService;
+		this.paiementCommande = paiementCommande;
 	}
 
 	/**
@@ -172,6 +179,7 @@ public class CoutLigneCommande extends CalculeCout {
 		detailCout.setTva(tva);
 		detailCout.setLabel(label);
 		detailCout.setNumero(numero);
+		detailCout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 		coutRecurentReduitTTC = (tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0;
 		coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitTTC, tva);

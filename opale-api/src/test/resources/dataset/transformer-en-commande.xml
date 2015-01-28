@@ -5,24 +5,24 @@
 	<keygen />
 	<draft />
 	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
-		timestamp="[now]" />
+		ts="[now]" />
 	<draft id="2" reference="REF-DRAFT-3" codePartenaire="000111"
-		timestamp="[now]" />
+		ts="[now]" />
 
 	<draft id="3" reference="REF-DRAFT-4" codePartenaire="000111"
-		timestamp="[now]" />
+		ts="[now]" />
 	<draftLigne />
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="1" geste="VENTE"/>
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="1" geste="VENTE"/>
 
 	<draftLigne id="1001" reference="00000002" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf100" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="2" geste="VENTE"/>
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="2" geste="VENTE"/>
 
 	<draftLigne id="1002" reference="00000003" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
-		canal="Welcome" ip="127.0.0.1" timestamp="[now]" draftId="3" geste="VENTE"/>
+		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="3" geste="VENTE"/>
 
 	<draftLigneDetail />
 	<draftLigneDetail id="1000" referenceSelection="kitsat"
