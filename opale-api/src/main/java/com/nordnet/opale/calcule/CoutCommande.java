@@ -68,7 +68,7 @@ public class CoutCommande extends CalculeCout {
 	@Override
 	public Cout getCout() throws OpaleException {
 
-		List<Paiement> paiements = paiementService.getPaiementByReferenceCommande(commande.getReference());
+		List<Paiement> paiements = paiementService.getPaiementNonAnnulees(commande.getReference());
 		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
 
 		Cout cout = new Cout();
@@ -123,6 +123,7 @@ public class CoutCommande extends CalculeCout {
 		cout.setReductionHT(reductionHT);
 		cout.setReductionTTC(reductionTTC);
 		cout.setTva(tva);
+		cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 		// changer la trame du cout selon le paiement effectuer par le client
 		if (!(paiementCommande == null)) {

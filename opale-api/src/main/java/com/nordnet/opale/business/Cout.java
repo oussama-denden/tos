@@ -24,6 +24,11 @@ public class Cout {
 	private double coutComptantTTC;
 
 	/**
+	 * difference entre cout TTC et cout HT.
+	 */
+	private double montantTva;
+
+	/**
 	 * cout totale du reduction.
 	 */
 	private double reductionHT;
@@ -113,6 +118,23 @@ public class Cout {
 	 */
 	public void setCoutComptantTTC(double coutComptantTTC) {
 		this.coutComptantTTC = Utils.arroundiNombre(coutComptantTTC);
+	}
+
+	/**
+	 * 
+	 * @return {@link #montantTva}
+	 */
+	public double getMontantTva() {
+		return montantTva;
+	}
+
+	/**
+	 * 
+	 * @param montantTva
+	 *            {@link #montantTva}
+	 */
+	public void setMontantTva(double montantTva) {
+		this.montantTva = montantTva;
 	}
 
 	/**
