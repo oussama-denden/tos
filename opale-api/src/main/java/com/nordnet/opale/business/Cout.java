@@ -24,6 +24,11 @@ public class Cout {
 	private double coutComptantTTC;
 
 	/**
+	 * difference entre cout TTC et cout HT.
+	 */
+	private double montantTva;
+
+	/**
 	 * cout totale du reduction.
 	 */
 	private double reductionHT;
@@ -32,6 +37,11 @@ public class Cout {
 	 * cout totale du reduction.
 	 */
 	private double reductionTTC;
+
+	/**
+	 * tva.
+	 */
+	private double tva;
 
 	/**
 	 * liste des {@link CoutRecurrent}
@@ -112,6 +122,24 @@ public class Cout {
 
 	/**
 	 * 
+	 * @return {@link #montantTva}
+	 */
+	public double getMontantTva() {
+		return montantTva;
+	}
+
+	/**
+	 * 
+	 * @param montantTva
+	 *            {@link #montantTva}
+	 */
+	public void setMontantTva(double montantTva) {
+		this.montantTva = Utils.arroundiNombre(montantTva);
+		;
+	}
+
+	/**
+	 * 
 	 * @return {@link Cout#reductionHT}
 	 */
 	public double getReductionHT() {
@@ -159,6 +187,23 @@ public class Cout {
 	 */
 	public void setCoutRecurrentGlobale(List<CoutRecurrent> coutRecurrentGlobale) {
 		this.coutRecurrentGlobale = coutRecurrentGlobale;
+	}
+
+	/**
+	 * 
+	 * @return {@link #tva}
+	 */
+	public double getTva() {
+		return tva;
+	}
+
+	/**
+	 * 
+	 * @param tva
+	 *            {@link #tva}
+	 */
+	public void setTva(double tva) {
+		this.tva = tva;
 	}
 
 }

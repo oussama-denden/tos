@@ -424,8 +424,8 @@ public class Paiement {
 	@PrePersist
 	@PreUpdate
 	public void prePersist() throws OpaleException {
-		if (auteur != null && auteur.getTimestamp() == null) {
-			auteur.setTimestamp(PropertiesUtil.getInstance().getDateDuJour());
+		if (auteur != null && auteur.getIp() != null && auteur.getIp().getTs() == null) {
+			auteur.getIp().setTs(PropertiesUtil.getInstance().getDateDuJour());
 		}
 	}
 

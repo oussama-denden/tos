@@ -602,8 +602,6 @@ public class CommandeServiceImpl implements CommandeService {
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
 
-		// CommandeValidator.checkPaiementDouble(paiement);
-
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
 				CommandeValidator.testerCommandeNonTransforme(commande);
@@ -1045,7 +1043,7 @@ public class CommandeServiceImpl implements CommandeService {
 		reductionContrat.setNbUtilisationMax(reduction.getNbUtilisationMax());
 		reductionContrat.setValeur(reduction.getValeur());
 		reductionContrat.setTypeValeur(TypeValeur.fromString(reduction.getTypeValeur().name()));
-		reductionContrat.setCodeCatalogueReduction(reduction.getReferenceReduction());
+		reductionContrat.setCodeCatalogueReduction(reduction.getCodeCatalogueReduction());
 		return reductionContrat;
 	}
 

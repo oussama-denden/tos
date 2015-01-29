@@ -21,6 +21,11 @@ public class Plan implements Cloneable {
 	private double tarifTTC;
 
 	/**
+	 * difference entre tarif TTC et tarif HT.
+	 */
+	private double tarifTva;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Plan() {
@@ -37,6 +42,7 @@ public class Plan implements Cloneable {
 	public Plan(double tarifHT, double tarifTTC) {
 		setTarifHT(tarifHT);
 		setTarifTTC(tarifTTC);
+		setTarifTva(tarifTTC > tarifHT ? tarifTTC - tarifHT : 0d);
 	}
 
 	/**
@@ -71,6 +77,24 @@ public class Plan implements Cloneable {
 	 */
 	public void setTarifTTC(double tarifTTC) {
 		this.tarifTTC = Utils.arroundiNombre(tarifTTC);
+	}
+
+	/**
+	 * 
+	 * @return {@link #tarifTva}
+	 */
+	public double getTarifTva() {
+		return tarifTva;
+	}
+
+	/**
+	 * 
+	 * @param tarifTva
+	 *            {@link #tarifTva}
+	 */
+	public void setTarifTva(double tarifTva) {
+		this.tarifTva = Utils.arroundiNombre(tarifTva);
+		;
 	}
 
 	/**

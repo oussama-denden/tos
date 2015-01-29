@@ -2,5 +2,5 @@
 <!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
 
 <dataset>
-	<draft id="1" reference="00000001" timestamp="[now]" />
+	<draft id="1" reference="00000001" ts="[now]" />
 </dataset>

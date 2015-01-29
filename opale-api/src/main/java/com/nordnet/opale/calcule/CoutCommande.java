@@ -68,7 +68,7 @@ public class CoutCommande extends CalculeCout {
 	@Override
 	public Cout getCout() throws OpaleException {
 
-		List<Paiement> paiements = paiementService.getPaiementByReferenceCommande(commande.getReference());
+		List<Paiement> paiements = paiementService.getPaiementNonAnnulees(commande.getReference());
 		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
 
 		Cout cout = new Cout();
@@ -83,7 +83,8 @@ public class CoutCommande extends CalculeCout {
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 
 			CoutLigneCommande coutLigneCommande =
-					new CoutLigneCommande(commande.getReference(), commandeLigne, segmentTVA, reductionService);
+					new CoutLigneCommande(commande.getReference(), commandeLigne, segmentTVA, reductionService,
+							paiementCommande);
 
 			DetailCout detailCout = (DetailCout) coutLigneCommande.getCout();
 			coutComptantHT += detailCout.getCoutComptantHT();
@@ -121,12 +122,14 @@ public class CoutCommande extends CalculeCout {
 		cout.setCoutRecurrentGlobale(coutRecurrentGlobale);
 		cout.setReductionHT(reductionHT);
 		cout.setReductionTTC(reductionTTC);
+		cout.setTva(tva);
 
 		// changer la trame du cout selon le paiement effectuer par le client
 		if (!(paiementCommande == null)) {
 			if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
 				cout.setCoutComptantHT(Constants.ZERO);
 				cout.setCoutComptantTTC(Constants.ZERO);
+				cout.setMontantTva(Constants.ZERO);
 
 				cout.setReductionHT(reductionRecurrentHT);
 				cout.setReductionTTC(reductionRecurrentTTC);
@@ -134,12 +137,21 @@ public class CoutCommande extends CalculeCout {
 				for (DetailCout detailCout : cout.getDetails()) {
 					detailCout.setCoutComptantHT(Constants.ZERO);
 					detailCout.setCoutComptantTTC(Constants.ZERO);
+					detailCout.setMontantTva(Constants.ZERO);
 				}
 
 			} else if (paiementCommande.getModePaiement().isModePaimentComptant()) {
 				cout.setCoutRecurrentGlobale(null);
 
 				for (DetailCout detailCout : cout.getDetails()) {
+
+					detailCout.setCoutComptantHT(detailCout.getCoutRecurrent().getNormal().getTarifHT()
+							+ detailCout.getCoutComptantHT());
+					detailCout.setCoutComptantTTC(detailCout.getCoutRecurrent().getNormal().getTarifTTC()
+							+ detailCout.getCoutComptantTTC());
+					detailCout.setMontantTva(detailCout.getCoutComptantTTC() > detailCout.getCoutComptantHT()
+							? detailCout.getCoutComptantTTC() - detailCout.getCoutComptantHT() : 0d);
+
 					coutComptantHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
 					coutComptantTTC += detailCout.getCoutRecurrent().getNormal().getTarifTTC();
 					detailCout.setCoutRecurrent(null);
@@ -147,8 +159,11 @@ public class CoutCommande extends CalculeCout {
 
 				cout.setCoutComptantHT(coutComptantHT);
 				cout.setCoutComptantTTC(coutComptantTTC);
+				cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 			}
+		} else {
+			cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 		}
 
 		return cout;

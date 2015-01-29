@@ -6,12 +6,12 @@
 	<client id="2" clientId="client-1245" adresseId="Adr_Souscripteur_1" />
 	<client id="3" clientId="client-1245" />
 	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
-		timestamp="[now]" clientAFacturerId="1" clientSouscripteurId="2"
+		ts="[now]" clientAFacturerId="1" clientSouscripteurId="2"
 		clientALivrerId="3" />
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE" canal="Welcome" ip="127.0.0.1"
-		timestamp="[now]" draftId="1" />
+		ts="[now]" draftId="1" />
 
 	<draftLigneDetail id="1000" referenceSelection="kitsat"
 		referenceChoix="trafic10g" referenceTarif="annuel_jet10_base"

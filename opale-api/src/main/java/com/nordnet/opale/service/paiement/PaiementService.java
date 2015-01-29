@@ -156,4 +156,13 @@ public interface PaiementService {
 	 */
 	List<Paiement> getPaiementEnCours(String referenceCommande);
 
+	/**
+	 * retourner la liste des paiements non annulees..
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @return Liste de {@link Paiement}
+	 */
+	List<Paiement> getPaiementNonAnnulees(String referenceCommande);
+
 }

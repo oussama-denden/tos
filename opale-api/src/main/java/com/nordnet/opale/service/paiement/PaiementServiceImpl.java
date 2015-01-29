@@ -232,4 +232,12 @@ public class PaiementServiceImpl implements PaiementService {
 		LOGGER.info("Fin methode supprimer");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Paiement> getPaiementNonAnnulees(String referenceCommande) {
+		return paiementRepository.findByReferenceCommandeAndDateAnnulationIsNull(referenceCommande);
+	}
+
 }
