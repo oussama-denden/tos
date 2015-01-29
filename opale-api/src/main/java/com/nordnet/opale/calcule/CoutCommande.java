@@ -159,11 +159,12 @@ public class CoutCommande extends CalculeCout {
 
 				cout.setCoutComptantHT(coutComptantHT);
 				cout.setCoutComptantTTC(coutComptantTTC);
+				cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 			}
+		} else {
+			cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 		}
-
-		cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 		return cout;
 	}
