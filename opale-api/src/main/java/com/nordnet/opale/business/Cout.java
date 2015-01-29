@@ -134,7 +134,8 @@ public class Cout {
 	 *            {@link #montantTva}
 	 */
 	public void setMontantTva(double montantTva) {
-		this.montantTva = montantTva;
+		this.montantTva = Utils.arroundiNombre(montantTva);
+		;
 	}
 
 	/**

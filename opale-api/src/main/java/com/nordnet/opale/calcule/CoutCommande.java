@@ -123,13 +123,13 @@ public class CoutCommande extends CalculeCout {
 		cout.setReductionHT(reductionHT);
 		cout.setReductionTTC(reductionTTC);
 		cout.setTva(tva);
-		cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 		// changer la trame du cout selon le paiement effectuer par le client
 		if (!(paiementCommande == null)) {
 			if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
 				cout.setCoutComptantHT(Constants.ZERO);
 				cout.setCoutComptantTTC(Constants.ZERO);
+				cout.setMontantTva(Constants.ZERO);
 
 				cout.setReductionHT(reductionRecurrentHT);
 				cout.setReductionTTC(reductionRecurrentTTC);
@@ -137,6 +137,7 @@ public class CoutCommande extends CalculeCout {
 				for (DetailCout detailCout : cout.getDetails()) {
 					detailCout.setCoutComptantHT(Constants.ZERO);
 					detailCout.setCoutComptantTTC(Constants.ZERO);
+					detailCout.setMontantTva(Constants.ZERO);
 				}
 
 			} else if (paiementCommande.getModePaiement().isModePaimentComptant()) {
@@ -148,6 +149,8 @@ public class CoutCommande extends CalculeCout {
 							+ detailCout.getCoutComptantHT());
 					detailCout.setCoutComptantTTC(detailCout.getCoutRecurrent().getNormal().getTarifTTC()
 							+ detailCout.getCoutComptantTTC());
+					detailCout.setMontantTva(detailCout.getCoutComptantTTC() > detailCout.getCoutComptantHT()
+							? detailCout.getCoutComptantTTC() - detailCout.getCoutComptantHT() : 0d);
 
 					coutComptantHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
 					coutComptantTTC += detailCout.getCoutRecurrent().getNormal().getTarifTTC();
@@ -156,9 +159,13 @@ public class CoutCommande extends CalculeCout {
 
 				cout.setCoutComptantHT(coutComptantHT);
 				cout.setCoutComptantTTC(coutComptantTTC);
+				cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 
 			}
+		} else {
+			cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
 		}
+
 		return cout;
 	}
 

@@ -126,6 +126,7 @@ public class ReductionUtil {
 
 				CoutRecurrent coutRecurrentAdditonne =
 						addiotionnerDeuxCoutRecurrent(coutRecurrents.get(index), coutRecurrent);
+
 				coutRecurrents.remove(index);
 				coutRecurrents.add(coutRecurrentAdditonne);
 			}
@@ -150,6 +151,8 @@ public class ReductionUtil {
 					coutRecurrentAncient.getNormal().getTarifHT() + coutRecurrentNouveau.getNormal().getTarifHT());
 			coutRecurrentSomme.getNormal().setTarifTTC(
 					coutRecurrentAncient.getNormal().getTarifTTC() + coutRecurrentNouveau.getNormal().getTarifTTC());
+			coutRecurrentSomme.getNormal().setTarifTva(
+					coutRecurrentAncient.getNormal().getTarifTva() + coutRecurrentNouveau.getNormal().getTarifTva());
 		}
 
 		if (coutRecurrentAncient.getReduit() != null && coutRecurrentNouveau.getReduit() != null) {
@@ -157,6 +160,8 @@ public class ReductionUtil {
 					coutRecurrentAncient.getReduit().getTarifHT() + coutRecurrentNouveau.getReduit().getTarifHT());
 			coutRecurrentSomme.getReduit().setTarifTTC(
 					coutRecurrentAncient.getReduit().getTarifTTC() + coutRecurrentNouveau.getReduit().getTarifTTC());
+			coutRecurrentSomme.getReduit().setTarifTva(
+					coutRecurrentAncient.getReduit().getTarifTva() + coutRecurrentNouveau.getReduit().getTarifTva());
 		}
 
 		return coutRecurrentSomme;
