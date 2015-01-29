@@ -318,7 +318,7 @@ CREATE TABLE `reduction` (
   `referenceFrais` varchar(255) DEFAULT NULL,
   `referenceLigne` varchar(255) DEFAULT NULL,
   `referenceLigneDetail` varchar(255) DEFAULT NULL,
-  `referenceReduction` varchar(255) DEFAULT NULL,
+  `codeCatalogueReduction` varchar(255) DEFAULT NULL,
   `referenceTarif` varchar(255) DEFAULT NULL,
   `typeValeur` varchar(255) DEFAULT NULL,
   `valeur` double DEFAULT NULL,
