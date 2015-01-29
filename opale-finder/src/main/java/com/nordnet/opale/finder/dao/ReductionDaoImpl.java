@@ -243,7 +243,7 @@ public class ReductionDaoImpl implements ReductionDao {
 			reduction.setReferenceFrais(resultSet.getString("referenceFrais"));
 			reduction.setReferenceLigne(resultSet.getString("referenceLigne"));
 			reduction.setReferenceLigneDetail(resultSet.getString("referenceLigneDetail"));
-			reduction.setReferenceReduction(resultSet.getString("referenceReduction"));
+			reduction.setReferenceReduction(resultSet.getString("codeCatalogueReduction"));
 			reduction.setReferenceTarif(resultSet.getString("referenceTarif"));
 			reduction.setTypeValeur(TypeValeur.fromString(resultSet.getString("typeValeur")));
 			reduction.setValeur(resultSet.getDouble("valeur"));
