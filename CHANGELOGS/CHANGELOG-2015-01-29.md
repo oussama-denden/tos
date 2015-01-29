@@ -8,6 +8,9 @@ from 2015-01-29.
   * bug 429 set the "montantTva" fiel to zero when the client has done recurrent payment.
   * bug 428 fix the mistake in calculation
   
+ * opale-finder
+  * Fix regression due to codeCatalogueReduction.
+  
 
 
   
