@@ -151,7 +151,7 @@ public class DetailCout extends Cout {
 	 */
 	@Override
 	public void setMontantTva(double montantTva) {
-		this.montantTva = montantTva;
+		this.montantTva = Utils.arroundiNombre(montantTva);
 	}
 
 	/**
