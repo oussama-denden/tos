@@ -55,7 +55,6 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.validator.CommandeValidator;
-import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
@@ -952,12 +951,22 @@ public class CommandeServiceImpl implements CommandeService {
 	 *            {@link CommandeLigne}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
-	 * @throws TopazeException
-	 *             {@link TopazeException}.
 	 */
 	private void transformerReductionCommandeEnReductionContrat(Commande commande, CommandeLigne commandeLigne)
 			throws OpaleException {
 		ReductionContrat reductionContrat = null;
+
+		Reduction reductionDraft = reductionService.findReduction(commande.getReference());
+		if (reductionDraft != null) {
+			reductionContrat = fromReduction(reductionDraft);
+			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
+			reductionContrat.setIsAffichableSurFacture(true);
+			reductionContrat.setOrdre(Constants.DEUX);
+			ContratReductionInfo contratReductionInfo =
+					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
+			restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
+		}
+
 		List<Reduction> reductionsLigne =
 				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReferenceOffre());
 		for (Reduction reductionLigne : reductionsLigne) {
@@ -969,10 +978,10 @@ public class CommandeServiceImpl implements CommandeService {
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			if (reductionLigne.getReferenceFrais() == null) {
 				if (reductionLigne.getReferenceTarif() == null) {
-
+					reductionContrat.setOrdre(Constants.UN);
 					restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
 				} else {
-
+					reductionContrat.setOrdre(Constants.ZERO);
 					restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 							commandeLigne.getNumEC(), contratReductionInfo);
 				}
@@ -983,7 +992,7 @@ public class CommandeServiceImpl implements CommandeService {
 								reductionLigne.getReferenceFrais());
 				contratReductionInfo.getReduction().setTypeReduction(TypeReduction.FRAIS);
 				contratReductionInfo.getReduction().setTypeFrais(TypeFrais.fromSting(typeFrais));
-
+				reductionContrat.setOrdre(Constants.ZERO);
 				restClient.ajouterReductionSurElementContractuel(commandeLigne.getReferenceContrat(),
 						commandeLigne.getNumEC(), contratReductionInfo);
 
@@ -997,6 +1006,7 @@ public class CommandeServiceImpl implements CommandeService {
 							commandeLigne.getReferenceOffre(), commandeLigneDetail.getReferenceChoix());
 			for (Reduction reductionligneDetail : reductionsligneDetail) {
 				reductionContrat = fromReduction(reductionligneDetail);
+				reductionContrat.setOrdre(Constants.ZERO);
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 				reductionContrat.setIsAffichableSurFacture(true);
 				reductionContrat.setTypeValeur(reductionligneDetail.getTypeValeur());
