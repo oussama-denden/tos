@@ -120,12 +120,12 @@
       <yloc>138</yloc>
       </entry>
     <entry>
-      <name>Renouvellement</name>
+      <name>Mig &#x2b; Renouvellement</name>
       <description/>
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;OrdreRenouvellement.ktr</filename>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;Migration&#x2b;Renouvellement.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -240,7 +240,7 @@
     </hop>
     <hop>
       <from>ElementContractuel</from>
-      <to>Renouvellement</to>
+      <to>Mig &#x2b; Renouvellement</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -248,7 +248,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Renouvellement</from>
+      <from>Mig &#x2b; Renouvellement</from>
       <to>Livraison-BP</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
