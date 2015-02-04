@@ -10,6 +10,7 @@ from 2015-01-29.
   * add order to reduction
   * remove the alert message on multiple reduction
   * add ordre to reduction
+  * add possibility to transform may contract to a draft(add ws call /opale-api/contrats)
   
   
  * opale-finder
