@@ -49,14 +49,14 @@ public class KeygenServiceImpl implements KeygenService {
 		} else {
 			keygen = new Keygen();
 			keygen.setEntite(clazz.getName());
-			inc = Long.parseLong(Constants.REF_DRAFT_INIT) + 1;
+			inc = Long.parseLong(Constants.REF_DRAFT_INIT);
 		}
 
 		// generer la nouvelle reference.
 
 		String newReferenceDraft = String.format("%08d", inc);
 		keygen.setReferenceDraft(newReferenceDraft);
-		String reference = keygen != null ? keygen.getReferenceDraft() : Constants.REF_DRAFT_INIT;
+		String reference = keygen.getReferenceDraft();
 		// ADD CRC
 		// CheckDigit crc = new LRICRCISO7064Mod97_10();
 		//
