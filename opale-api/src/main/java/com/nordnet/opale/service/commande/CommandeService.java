@@ -365,4 +365,16 @@ public interface CommandeService {
 	 */
 	public Cout calculerCout(String referenceCommande) throws OpaleException;
 
+	/**
+	 * Cette methode sera appele par le batch de transformation automatique pour verifier si la commande est eligible
+	 * pour transformation.
+	 * 
+	 * @param commande
+	 *            {@link Commande}
+	 * @return true si la commande est prete a transformee
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public boolean validerCommandeEnTransformationAutomatique(Commande commande) throws OpaleException;
+
 }

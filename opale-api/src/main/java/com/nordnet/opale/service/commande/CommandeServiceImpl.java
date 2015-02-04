@@ -1126,4 +1126,29 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 		return paiementComptant;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean validerCommandeEnTransformationAutomatique(Commande commande) throws OpaleException {
+
+		List<Paiement> paiements = paiementService.getPaiementNonAnnulees(commande.getReference());
+		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
+
+		Cout coutCommande = calculerCout(commande.getReference());
+
+		if (commande.isAnnule() || paiementCommande == null) {
+			return false;
+		} else if (paiementCommande.getModePaiement().isModePaimentComptant() && coutCommande != null) {
+			if (coutCommande.getCoutComptantTTC() > paiementCommande.getMontant()) {
+				return false;
+			} else
+				return true;
+		} else if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
+			return true;
+		}
+
+		return false;
+	}
 }
