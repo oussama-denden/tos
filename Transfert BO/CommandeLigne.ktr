@@ -161,7 +161,7 @@
   <hop> <from>prestige - 12mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Order_item</name>
+    <name>Commande</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -171,8 +171,8 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>ProdNN</connection>
-    <sql>SELECT&#xd;&#xa;  oi.itemCode&#xd;&#xa;, oi.productCode&#xd;&#xa;, oi.description&#xd;&#xa;, oi.creationDate&#xd;&#xa;, oi.changeDate&#xd;&#xa;, o.orderKey as &#x27;referenceCommande&#x27;&#xd;&#xa;&#xd;&#xa;, oi.htPrice&#xd;&#xa;, oig.frequency&#xd;&#xa;, &#x27;S&#x27; as &#x27;typeTVA&#x27;&#xd;&#xa;, &#x27;&#x27; as &#x27;referenceTarif&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;BackOffice&#x28;Migration&#x29;&#x27; as &#x27;canal&#x27;&#xd;&#xa;, o.createdBy as &#x27;qui&#x27;&#xd;&#xa;, NOW&#x28;&#x29; as &#x27;timestamp&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;0&#x27; as &#x27;numero&#x27;&#xd;&#xa;, &#x27;Securit&#xe9;&#x27; as &#x27;secteur&#x27;&#xd;&#xa;, &#x27;securitoo&#x27; as &#x27;gamme&#x27;&#xd;&#xa;, o.type as &#x27;geste&#x27;&#xd;&#xa;, &#x27;DATE_ANNIVERSAIRE&#x27; as &#x27;modeFacturation&#x27;&#xd;&#xa;, &#x27;SERVICE&#x27; as &#x27;typeProduit&#x27;&#xd;&#xa;FROM order_item oi&#xd;&#xa;  INNER JOIN order_item_group oig on &#x28;oig.id &#x3d; oi.group_idFK&#x29;&#xd;&#xa;  INNER JOIN order_info o on &#x28;oig.order_idFK &#x3d; o.id&#x29;&#xd;&#xa;WHERE itemCode like &#x22;avfw.&#x25;&#x22;&#xd;&#xa;order by o.orderKey</sql>
+    <connection>Opale</connection>
+    <sql>SELECT&#xd;&#xa;  id as &#x27;commandeId&#x27;&#xd;&#xa;, reference as &#x27;commandeReference&#x27;&#xd;&#xa;FROM commande&#xd;&#xa;order by reference&#xd;&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -180,8 +180,8 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>91</xloc>
-      <yloc>111</yloc>
+      <xloc>465</xloc>
+      <yloc>382</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -281,146 +281,6 @@
     </step>
 
   <step>
-    <name>Switch &#x2f; Case</name>
-    <type>SwitchCase</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<fieldname>geste</fieldname>
-<use_contains>N</use_contains>
-<case_value_type>String</case_value_type>
-<case_value_format/>
-<case_value_decimal/>
-<case_value_group/>
-<default_target_step>Vente</default_target_step>
-<cases><case><value>RENEW</value>
-<target_step>Renouvellement</target_step>
-</case><case><value>MIGRATE</value>
-<target_step>Migration</target_step>
-</case></cases>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>196</xloc>
-      <yloc>112</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Vente</name>
-    <type>SetValueConstant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-   <usevar>N</usevar>
-    <fields>
-      <field>
-        <name>geste</name>
-        <value>VENTE</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>327</xloc>
-      <yloc>29</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Renouvellement</name>
-    <type>SetValueConstant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-   <usevar>N</usevar>
-    <fields>
-      <field>
-        <name>geste</name>
-        <value>RENOUVELLEMENT</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>327</xloc>
-      <yloc>111</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Migration</name>
-    <type>SetValueConstant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-   <usevar>N</usevar>
-    <fields>
-      <field>
-        <name>geste</name>
-        <value>MIGRATION</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>326</xloc>
-      <yloc>194</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Commande</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>Opale</connection>
-    <sql>SELECT&#xd;&#xa;  id as &#x27;commandeId&#x27;&#xd;&#xa;, reference as &#x27;commandeReference&#x27;&#xd;&#xa;FROM commande&#xd;&#xa;order by reference&#xd;&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>465</xloc>
-      <yloc>382</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
     <name>Dummy &#x28;do nothing&#x29;</name>
     <type>Dummy</type>
     <description/>
@@ -463,6 +323,118 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>465</xloc>
       <yloc>267</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Migration</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>geste</name>
+        <value>MIGRATION</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>326</xloc>
+      <yloc>194</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Order_item</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ProdNN</connection>
+    <sql>SELECT&#xd;&#xa;  oi.itemCode&#xd;&#xa;, oi.productCode&#xd;&#xa;, oi.description&#xd;&#xa;, oi.creationDate&#xd;&#xa;, oi.changeDate&#xd;&#xa;, o.orderKey as &#x27;referenceCommande&#x27;&#xd;&#xa;&#xd;&#xa;, oi.htPrice&#xd;&#xa;, oig.frequency&#xd;&#xa;, &#x27;S&#x27; as &#x27;typeTVA&#x27;&#xd;&#xa;, &#x27;&#x27; as &#x27;referenceTarif&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;BackOffice&#x28;Migration&#x29;&#x27; as &#x27;canal&#x27;&#xd;&#xa;, o.createdBy as &#x27;qui&#x27;&#xd;&#xa;, NOW&#x28;&#x29; as &#x27;timestamp&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;0&#x27; as &#x27;numero&#x27;&#xd;&#xa;, &#x27;Securit&#xe9;&#x27; as &#x27;secteur&#x27;&#xd;&#xa;, &#x27;securitoo&#x27; as &#x27;gamme&#x27;&#xd;&#xa;, o.type as &#x27;geste&#x27;&#xd;&#xa;, &#x27;DATE_ANNIVERSAIRE&#x27; as &#x27;modeFacturation&#x27;&#xd;&#xa;, &#x27;SERVICE&#x27; as &#x27;typeProduit&#x27;&#xd;&#xa;FROM order_item oi&#xd;&#xa;  INNER JOIN order_item_group oig on &#x28;oig.id &#x3d; oi.group_idFK&#x29;&#xd;&#xa;  INNER JOIN order_info o on &#x28;oig.order_idFK &#x3d; o.id&#x29;&#xd;&#xa;WHERE itemCode like &#x22;avfw.&#x25;&#x22;&#xd;&#xa;order by o.orderKey</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>91</xloc>
+      <yloc>111</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Renouvellement</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>geste</name>
+        <value>RENOUVELLEMENT</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>327</xloc>
+      <yloc>111</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Switch &#x2f; Case</name>
+    <type>SwitchCase</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<fieldname>geste</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>String</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step>Vente</default_target_step>
+<cases><case><value>RENEW</value>
+<target_step>Renouvellement</target_step>
+</case><case><value>MIGRATE</value>
+<target_step>Migration</target_step>
+</case></cases>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>196</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -522,7 +494,35 @@
     </step>
 
   <step>
-    <name>referenceProduit</name>
+    <name>Vente</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>geste</name>
+        <value>VENTE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>327</xloc>
+      <yloc>29</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>avfw.confort</name>
     <type>SwitchCase</type>
     <description/>
     <distribute>Y</distribute>
@@ -532,23 +532,23 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<fieldname>itemCode</fieldname>
+<fieldname>frequency</fieldname>
 <use_contains>N</use_contains>
-<case_value_type>String</case_value_type>
+<case_value_type>Integer</case_value_type>
 <case_value_format/>
 <case_value_decimal/>
 <case_value_group/>
 <default_target_step/>
-<cases><case><value>avfw.essentiel</value>
-<target_step>avfw.essentiel</target_step>
-</case><case><value>avfw.confort</value>
-<target_step>avfw.confort</target_step>
-</case><case><value>avfw.prestige</value>
-<target_step>avfw.prestige</target_step>
+<cases><case><value>1</value>
+<target_step>confort - 1mois</target_step>
+</case><case><value>3</value>
+<target_step>confort - 3mois</target_step>
+</case><case><value>12</value>
+<target_step>confort - 12mois</target_step>
 </case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>562</xloc>
-      <yloc>267</yloc>
+      <xloc>679</xloc>
+      <yloc>298</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -581,6 +581,150 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>691</xloc>
       <yloc>77</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>avfw.prestige</name>
+    <type>SwitchCase</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<fieldname>frequency</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>Integer</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step/>
+<cases><case><value>1</value>
+<target_step>prestige - 1mois</target_step>
+</case><case><value>3</value>
+<target_step>prestige - 3mois</target_step>
+</case><case><value>12</value>
+<target_step>prestige - 12mois</target_step>
+</case></cases>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>702</xloc>
+      <yloc>527</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>confort - 12mois</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>referenceTarif</name>
+        <value>35</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>808</xloc>
+      <yloc>371</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>confort - 1mois</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>referenceTarif</name>
+        <value>31</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>798</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>confort - 3mois</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>referenceTarif</name>
+        <value>33</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>803</xloc>
+      <yloc>294</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>essentiel - 12mois</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>referenceTarif</name>
+        <value>25</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>820</xloc>
+      <yloc>150</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -642,7 +786,7 @@
     </step>
 
   <step>
-    <name>essentiel - 12mois</name>
+    <name>prestige - 12mois</name>
     <type>SetValueConstant</type>
     <description/>
     <distribute>Y</distribute>
@@ -656,163 +800,15 @@
     <fields>
       <field>
         <name>referenceTarif</name>
-        <value>25</value>
+        <value>41</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>820</xloc>
-      <yloc>150</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>avfw.confort</name>
-    <type>SwitchCase</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<fieldname>frequency</fieldname>
-<use_contains>N</use_contains>
-<case_value_type>Integer</case_value_type>
-<case_value_format/>
-<case_value_decimal/>
-<case_value_group/>
-<default_target_step/>
-<cases><case><value>1</value>
-<target_step>confort - 1mois</target_step>
-</case><case><value>3</value>
-<target_step>confort - 3mois</target_step>
-</case><case><value>12</value>
-<target_step>confort - 12mois</target_step>
-</case></cases>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>679</xloc>
-      <yloc>298</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>confort - 1mois</name>
-    <type>SetValueConstant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-   <usevar>N</usevar>
-    <fields>
-      <field>
-        <name>referenceTarif</name>
-        <value>30</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>798</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>confort - 3mois</name>
-    <type>SetValueConstant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-   <usevar>N</usevar>
-    <fields>
-      <field>
-        <name>referenceTarif</name>
-        <value>31</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>803</xloc>
-      <yloc>294</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>confort - 12mois</name>
-    <type>SetValueConstant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-   <usevar>N</usevar>
-    <fields>
-      <field>
-        <name>referenceTarif</name>
-        <value>32</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>808</xloc>
-      <yloc>371</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>avfw.prestige</name>
-    <type>SwitchCase</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<fieldname>frequency</fieldname>
-<use_contains>N</use_contains>
-<case_value_type>Integer</case_value_type>
-<case_value_format/>
-<case_value_decimal/>
-<case_value_group/>
-<default_target_step/>
-<cases><case><value>1</value>
-<target_step>prestige - 1mois</target_step>
-</case><case><value>3</value>
-<target_step>prestige - 3mois</target_step>
-</case><case><value>12</value>
-<target_step>prestige - 12mois</target_step>
-</case></cases>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>702</xloc>
-      <yloc>527</yloc>
+      <xloc>831</xloc>
+      <yloc>600</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -832,7 +828,7 @@
     <fields>
       <field>
         <name>referenceTarif</name>
-        <value>33</value>
+        <value>37</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
@@ -860,7 +856,7 @@
     <fields>
       <field>
         <name>referenceTarif</name>
-        <value>34</value>
+        <value>39</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
@@ -874,8 +870,8 @@
     </step>
 
   <step>
-    <name>prestige - 12mois</name>
-    <type>SetValueConstant</type>
+    <name>referenceProduit</name>
+    <type>SwitchCase</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -884,19 +880,23 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-   <usevar>N</usevar>
-    <fields>
-      <field>
-        <name>referenceTarif</name>
-        <value>35</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-        </field>
-      </fields>
-     <cluster_schema/>
+<fieldname>itemCode</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>String</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step/>
+<cases><case><value>avfw.essentiel</value>
+<target_step>avfw.essentiel</target_step>
+</case><case><value>avfw.confort</value>
+<target_step>avfw.confort</target_step>
+</case><case><value>avfw.prestige</value>
+<target_step>avfw.prestige</target_step>
+</case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>831</xloc>
-      <yloc>600</yloc>
+      <xloc>562</xloc>
+      <yloc>267</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

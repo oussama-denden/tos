@@ -262,6 +262,7 @@ public class DraftServiceImpl implements DraftService {
 		for (DraftLigneInfo draftLigneInfo : draftLignesInfo) {
 			// verifier que l auteur existe dans la trame.
 			DraftValidator.validerAuteur(draftLigneInfo.getAuteur());
+			DraftValidator.isExistGeste(draftLigneInfo.getGeste());
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
@@ -292,6 +293,8 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
+		DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+		DraftValidator.validerReference(draftLigne, draftLigneInfo);
 
 		/*
 		 * suppression de ligne a modifier
@@ -1032,33 +1035,13 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String alertMultipleReduction(Commande commande) {
-		Reduction reductionCommande = reductionService.findReduction(commande.getReferenceDraft());
-		List<Reduction> reductionsLigne = new ArrayList<>();
-		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			Reduction reductionLigne =
-					reductionService.findReductionLigneDraftSansFrais(commande.getReference(),
-							commandeLigne.getReferenceOffre());
-			reductionsLigne.add(reductionLigne);
-		}
-
-		if (reductionCommande != null && reductionsLigne.size() > 0) {
-			return DraftValidator.alertReductionMultiple();
-		}
-
-		return null;
-	}
-
-	/**
 	 * Recupere trame catalogue par Net-Catalog.
 	 * 
 	 * @param draft
 	 *            {@link Draft}
 	 * @return {@link TrameCatalogue}
-	 * @throws {@link OpaleException}
+	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
 	private TrameCatalogue getOffreNetCatalog(Draft draft) throws OpaleException {
 		List<OffreCatalogue> offreCatalogues = new ArrayList<OffreCatalogue>();

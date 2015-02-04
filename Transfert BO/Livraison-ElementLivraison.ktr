@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Contrat</name>
+    <name>Livraison-ElementLivraison</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -66,9 +66,9 @@
     <clusterschemas>
     </clusterschemas>
   <created_user>-</created_user>
-  <created_date>2015&#x2f;01&#x2f;28 17&#x3a;00&#x3a;03.408</created_date>
+  <created_date>2015&#x2f;01&#x2f;30 16&#x3a;46&#x3a;35.646</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2015&#x2f;01&#x2f;28 17&#x3a;00&#x3a;03.408</modified_date>
+  <modified_date>2015&#x2f;01&#x2f;30 16&#x3a;46&#x3a;35.646</modified_date>
   </info>
   <notepads>
   </notepads>
@@ -127,174 +127,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Order &#x28;Normal&#x29;</from><to>PolitiqueValidation</to><enabled>Y</enabled> </hop>
-  <hop> <from>PolitiqueResiliation</from><to>Contrat R&#xe9;sili&#xe9;</to><enabled>Y</enabled> </hop>
-  <hop> <from>PolitiqueValidation</from><to>Filter rows</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter rows</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter rows</from><to>Contrat actif</to><enabled>Y</enabled> </hop>
+  <hop> <from>ElementContractuel</from><to>ElementLivraison</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Contrat R&#xe9;sili&#xe9;</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>Topaze</connection>
-    <schema/>
-    <table>contrat</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>reference</column_name>
-          <stream_name>referenceContrat</stream_name>
-        </field>
-        <field>
-          <column_name>idClient</column_name>
-          <stream_name>referenceClient</stream_name>
-        </field>
-        <field>
-          <column_name>dateDebutFacturation</column_name>
-          <stream_name>dateDebutFacturation</stream_name>
-        </field>
-        <field>
-          <column_name>titre</column_name>
-          <stream_name>labelContrat</stream_name>
-        </field>
-        <field>
-          <column_name>politiqueValidationId</column_name>
-          <stream_name>politiqueValidationId</stream_name>
-        </field>
-        <field>
-          <column_name>segmentTVA</column_name>
-          <stream_name>segmentTVA</stream_name>
-        </field>
-        <field>
-          <column_name>datePreparation</column_name>
-          <stream_name>datePreparation</stream_name>
-        </field>
-        <field>
-          <column_name>dateValidation</column_name>
-          <stream_name>dateValidation</stream_name>
-        </field>
-        <field>
-          <column_name>politiqueResiliationId</column_name>
-          <stream_name>politiqueResiliationId</stream_name>
-        </field>
-        <field>
-          <column_name>typeResiliation</column_name>
-          <stream_name>typeResil</stream_name>
-        </field>
-        <field>
-          <column_name>dateFinContrat</column_name>
-          <stream_name>dateResil</stream_name>
-        </field>
-        <field>
-          <column_name>dateDerniereFacture</column_name>
-          <stream_name>dateDerniereFacturationResil</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>648</xloc>
-      <yloc>76</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Contrat actif</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>Topaze</connection>
-    <schema/>
-    <table>contrat</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>reference</column_name>
-          <stream_name>referenceContrat</stream_name>
-        </field>
-        <field>
-          <column_name>idClient</column_name>
-          <stream_name>referenceClient</stream_name>
-        </field>
-        <field>
-          <column_name>dateDebutFacturation</column_name>
-          <stream_name>dateDebutFacturation</stream_name>
-        </field>
-        <field>
-          <column_name>dateDerniereFacture</column_name>
-          <stream_name>dateDerniereFacturation</stream_name>
-        </field>
-        <field>
-          <column_name>titre</column_name>
-          <stream_name>labelContrat</stream_name>
-        </field>
-        <field>
-          <column_name>politiqueValidationId</column_name>
-          <stream_name>politiqueValidationId</stream_name>
-        </field>
-        <field>
-          <column_name>segmentTVA</column_name>
-          <stream_name>segmentTVA</stream_name>
-        </field>
-        <field>
-          <column_name>datePreparation</column_name>
-          <stream_name>datePreparation</stream_name>
-        </field>
-        <field>
-          <column_name>dateValidation</column_name>
-          <stream_name>dateValidation</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>643</xloc>
-      <yloc>213</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Order &#x28;Normal&#x29;</name>
+    <name>ElementContractuel</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -304,8 +140,8 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>ProdNN</connection>
-    <sql>SELECT&#xd;&#xa;  p.productKey as &#x27;referenceContrat&#x27;&#xd;&#xa;, p.catalogReference as &#x27;referenceOffre&#x27;&#xd;&#xa;, IF&#x28;&#x28;COALESCE&#x28;p.customLabel, &#x27;&#x27;&#x29; like &#x27;Personnaliser&#x25;&#x27;&#x29;, p.label,COALESCE&#x28;p.customLabel, p.label&#x29;&#x29; as &#x27;labelContrat&#x27;&#xd;&#xa;, p.state&#xd;&#xa;, p.renewMode&#xd;&#xa;, p.creationDate as &#x27;datePreparation&#x27;&#xd;&#xa;, p.creationDate as &#x27;dateValidation&#x27;&#xd;&#xa;, p.changeDate as &#x27;dateDerniereFacturation&#x27;&#xd;&#xa;, p.paymentDate as &#x27;dateDebutFacturation&#x27;&#xd;&#xa;, p.duration as &#x27;frequence&#x27;&#xd;&#xa;, p.dueDate&#xd;&#xa;, p.paymentMethod&#xd;&#xa;, p.renewCount &#xd;&#xa;, c.customerKey as &#x27;referenceClient&#x27;&#xd;&#xa;, p.isRejection&#xd;&#xa;&#xd;&#xa;, &#x27;00&#x27; as &#x27;segmentTVA&#x27;&#xd;&#xa;&#xd;&#xa;, true as &#x27;checkPackagerIsPossible&#x27;&#xd;&#xa;, true as &#x27;fraisCreation&#x27;&#xd;&#xa;&#xd;&#xa;, t.initiativeCode as &#x27;typeResil&#x27;&#xd;&#xa;, t.code as &#x27;motifResil&#x27;&#xd;&#xa;, t.creationDate as &#x27;dateCreationResil&#x27;&#xd;&#xa;, t.date as &#x27;dateResil&#x27;&#xd;&#xa;, t.date as &#x27;dateDerniereFacturationResil&#x27;&#xd;&#xa;, true as &#x27;enCascade&#x27;&#xd;&#xa;, true as &#x27;remboursement&#x27;&#xd;&#xa;, true as &#x27;penalite&#x27;&#xd;&#xa;, true as &#x27;fraisResiliation&#x27;&#xd;&#xa;, &#x27;Migration Donn&#xe9;es BO&#x27; as &#x27;commentaire&#x27;&#xd;&#xa;FROM product p&#xd;&#xa;  INNER JOIN customer c on &#x28;c.id &#x3d; p.customer_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN termination t on &#x28;t.id &#x3d; p.termination_idFK&#x29;&#xd;&#xa;where &#x28;p.catalogReference like &#x22;avfw.&#x25;&#x22; or p.catalogReference like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;and p.state NOT IN &#x28;&#x27;AD&#x27;, &#x27;PE&#x27;&#x29;&#xd;&#xa;and p.type &#x3c;&#x3e; &#x27;TRIAL&#x27;&#x3b;&#xd;&#xa;</sql>
+    <connection>Topaze</connection>
+    <sql>SELECT&#xd;&#xa;  ec.dateDebutFacturation as &#x27;dateLivraisonTermine&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;dateInitiation&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;dateDebutPreparation&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;datePreparation&#x27;&#xd;&#xa;, ec.idAdrLivraison&#xd;&#xa;, ec.referenceProduit&#xd;&#xa;, ec.numEC&#xd;&#xa;&#xd;&#xa;, c.reference&#xd;&#xa;, c.reference as &#x27;retailerPackagerId&#x27;&#xd;&#xa;&#xd;&#xa;, bp.id as &#x27;bonPreparationParent&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;PACKAGER&#x27; as &#x27;acteur&#x27;&#xd;&#xa;, &#x27;ABONNEMENT&#x27; as &#x27;typeContrat&#x27;&#xd;&#xa;, &#x27;LIVRAISON&#x27; as &#x27;typeBonPreparation&#x27;&#xd;&#xa;&#xd;&#xa;FROM elementcontractuel ec&#xd;&#xa;  INNER JOIN contrat c ON &#x28;c.id &#x3d; ec.contratParent&#x29;&#xd;&#xa;  INNER JOIN bonpreparation bp on &#x28;bp.reference &#x3d; c.reference&#x29;&#xd;&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -313,14 +149,14 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>109</xloc>
-      <yloc>141</yloc>
+      <xloc>149</xloc>
+      <yloc>169</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>PolitiqueResiliation</name>
+    <name>ElementLivraison</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -332,11 +168,11 @@
            </partitioning>
     <connection>Topaze</connection>
     <schema/>
-    <table>politiqueresiliation</table>
+    <table>elementlivraison</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
+    <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
     <partitioning_enabled>N</partitioning_enabled>
     <partitioning_field/>
@@ -345,121 +181,66 @@
     <tablename_in_field>N</tablename_in_field>
     <tablename_field/>
     <tablename_in_table>Y</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>politiqueResiliationId</return_field>
+    <return_keys>N</return_keys>
+    <return_field/>
     <fields>
         <field>
-          <column_name>enCascade</column_name>
-          <stream_name>enCascade</stream_name>
+          <column_name>dateLivraisonTermine</column_name>
+          <stream_name>dateLivraisonTermine</stream_name>
         </field>
         <field>
-          <column_name>typeResiliation</column_name>
-          <stream_name>typeResil</stream_name>
+          <column_name>dateInitiation</column_name>
+          <stream_name>dateInitiation</stream_name>
         </field>
         <field>
-          <column_name>motif</column_name>
-          <stream_name>motifResil</stream_name>
+          <column_name>dateDebutPreparation</column_name>
+          <stream_name>dateDebutPreparation</stream_name>
         </field>
         <field>
-          <column_name>dateResiliation</column_name>
-          <stream_name>dateResil</stream_name>
+          <column_name>datePreparation</column_name>
+          <stream_name>datePreparation</stream_name>
         </field>
         <field>
-          <column_name>fraisResiliation</column_name>
-          <stream_name>fraisResiliation</stream_name>
+          <column_name>referenceProduit</column_name>
+          <stream_name>referenceProduit</stream_name>
         </field>
         <field>
-          <column_name>penalite</column_name>
-          <stream_name>penalite</stream_name>
+          <column_name>numEC</column_name>
+          <stream_name>numEC</stream_name>
         </field>
         <field>
-          <column_name>remboursement</column_name>
-          <stream_name>remboursement</stream_name>
+          <column_name>reference</column_name>
+          <stream_name>reference</stream_name>
         </field>
         <field>
-          <column_name>commentaire</column_name>
-          <stream_name>commentaire</stream_name>
+          <column_name>acteur</column_name>
+          <stream_name>acteur</stream_name>
+        </field>
+        <field>
+          <column_name>addresseLivraison</column_name>
+          <stream_name>idAdrLivraison</stream_name>
+        </field>
+        <field>
+          <column_name>retailerPackagerId</column_name>
+          <stream_name>retailerPackagerId</stream_name>
+        </field>
+        <field>
+          <column_name>typeBonPreparation</column_name>
+          <stream_name>typeBonPreparation</stream_name>
+        </field>
+        <field>
+          <column_name>typeContrat</column_name>
+          <stream_name>typeContrat</stream_name>
+        </field>
+        <field>
+          <column_name>bonPreparationParent</column_name>
+          <stream_name>bonPreparationParent</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>510</xloc>
-      <yloc>75</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>PolitiqueValidation</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>Topaze</connection>
-    <schema/>
-    <table>politiquevalidation</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>politiqueValidationId</return_field>
-    <fields>
-        <field>
-          <column_name>checkIsPackagerCreationPossible</column_name>
-          <stream_name>checkPackagerIsPossible</stream_name>
-        </field>
-        <field>
-          <column_name>fraisCreation</column_name>
-          <stream_name>fraisCreation</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>252</xloc>
-      <yloc>141</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter rows</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>PolitiqueResiliation</send_true_to>
-<send_false_to>Contrat actif</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>state</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>String</type><text>RE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>352</xloc>
-      <yloc>137</yloc>
+      <xloc>443</xloc>
+      <yloc>169</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

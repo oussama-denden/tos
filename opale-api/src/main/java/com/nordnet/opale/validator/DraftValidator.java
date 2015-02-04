@@ -1,5 +1,6 @@
 package com.nordnet.opale.validator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -599,4 +600,42 @@ public class DraftValidator {
 		return propertiesUtil.getErrorMessage("1.1.38");
 	}
 
+	/**
+	 * validation des references pour respecter les regles de topaze.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 * @param draftLigneInfo
+	 *            {@link DraftLigneInfo}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerReference(DraftLigne draftLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
+
+		Offre offre = draftLigneInfo.getOffre();
+
+		if (draftLigneInfo.getGeste() == Geste.RENOUVELLEMENT) {
+
+			/*
+			 * valider la reference de l'offre.
+			 */
+			if (!draftLigne.getReferenceOffre().equals(offre.getReferenceOffre())) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("1.1.40"), "1.1.40");
+			}
+
+			/*
+			 * valider les reference des details.
+			 */
+			List<String> referenceDetails = new ArrayList<String>();
+			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
+				referenceDetails.add(draftLigneDetail.getReferenceChoix());
+			}
+
+			for (Detail detail : offre.getDetails()) {
+				if (!referenceDetails.contains(detail.getReferenceChoix())) {
+					throw new OpaleException(propertiesUtil.getErrorMessage("1.1.41"), "1.1.41");
+				}
+			}
+		}
+	}
 }

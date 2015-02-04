@@ -120,13 +120,10 @@ public class DraftLigne {
 	 * 
 	 * @param draftLigneInfo
 	 *            {@link DraftLigneInfo}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
 	 */
-	public DraftLigne(DraftLigneInfo draftLigneInfo) throws OpaleException {
+	public DraftLigne(DraftLigneInfo draftLigneInfo) {
 		this.referenceOffre = draftLigneInfo.getOffre().getReferenceOffre();
 		this.referenceTarif = draftLigneInfo.getOffre().getReferenceTarif();
-		DraftValidator.isExistGeste(draftLigneInfo.getGeste());
 		this.geste = draftLigneInfo.getGeste();
 		for (Detail detail : draftLigneInfo.getOffre().getDetails()) {
 			draftLigneDetails.add(new DraftLigneDetail(detail));
