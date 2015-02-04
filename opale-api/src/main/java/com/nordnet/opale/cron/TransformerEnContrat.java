@@ -9,7 +9,6 @@ import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.nordnet.opale.business.Auteur;
-import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
@@ -42,8 +41,7 @@ public class TransformerEnContrat extends QuartzJobBean {
 
 		try {
 			for (Commande commande : commandes) {
-				CommandeValidationInfo commandeValidationInfo = commandeService.validerCommande(commande);
-				if (commandeValidationInfo.isValide()) {
+				if (commandeService.validerCommandeEnTransformationAutomatique(commande)) {
 					LOGGER.info("TransformerEnContrat: contrat valide " + commande.getReference());
 					Auteur auteur = new Auteur();
 					auteur.setQui(Constants.INTERNAL_USER);
