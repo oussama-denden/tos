@@ -31,6 +31,7 @@ import com.nordnet.opale.business.GesteInfo;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
+import com.nordnet.opale.business.TrameTransformationInfo;
 import com.nordnet.opale.business.TransformationInfo;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.domain.commande.Commande;
@@ -44,7 +45,6 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
 
 /**
  * Gerer l'ensemble des requetes qui ont en rapport avec le {@link Draft}.
@@ -83,7 +83,6 @@ public class DraftController {
 	 * @throws OpaleException
 	 *             exception {@link OpaleException}.
 	 */
-	@ApiOperation(value = "addEvent", notes = "Add a new event")
 	@RequestMapping(value = "/{reference:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Draft getDraftByReference(@PathVariable String reference) throws OpaleException {
@@ -537,6 +536,37 @@ public class DraftController {
 			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
 		Draft draft = draftService.transformerContratEnDraft(refContrat, trameCatalogue);
+		JSONObject rsc = new JSONObject();
+		rsc.put("reference", draft.getReference());
+		List<JSONObject> lignes = new ArrayList<>();
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			JSONObject ligne = new JSONObject();
+			ligne.put("referenceLigne", draftLigne.getReference());
+			lignes.add(ligne);
+		}
+		rsc.put("lignes", lignes);
+		return rsc.toString();
+	}
+
+	/**
+	 * Transformer un contrat en draft.
+	 * 
+	 * @param trameTransformationInfo
+	 *            {@link TrameTransformationInfo}.
+	 * @return reference du draft.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/contrats", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public String transformerContratsEnDraft(@RequestBody TrameTransformationInfo trameTransformationInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::transformerContratsEnDraft");
+		Draft draft =
+				draftService.transformerContratsEnDraft(trameTransformationInfo.getReferencesContrat(),
+						(TrameCatalogueInfo) trameTransformationInfo);
 		JSONObject rsc = new JSONObject();
 		rsc.put("reference", draft.getReference());
 		List<JSONObject> lignes = new ArrayList<>();

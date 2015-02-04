@@ -709,8 +709,13 @@ public class DraftServiceImpl implements DraftService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(Draft draft) {
+	public Draft save(Draft draft) {
+		draft.setReference(keygenService.getNextKey(Draft.class));
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
+		}
 		draftRepository.save(draft);
+		return draft;
 	}
 
 	/**
@@ -892,16 +897,60 @@ public class DraftServiceImpl implements DraftService {
 		reductionService.supprimer(refReduction);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogueInfo trameCatalogue)
 			throws OpaleException {
 		LOGGER.info("Debut methode transformerContratEnDraft");
-		Contrat contrat = restClient.getContratByReference(referenceContrat);
+
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
+		Contrat contrat = restClient.getContratByReference(referenceContrat);
+		Draft draft = new Draft(contrat, trameCatalogue);
+		DraftLigne draftLigne = transformerContratEnLigneDraft(contrat, trameCatalogue);
+		draft.addLigne(draftLigne);
+		save(draft);
+		return draft;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Draft transformerContratsEnDraft(List<String> referencesContrat, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException {
+		LOGGER.info("Debut methode transformerContratsEnDraft");
+
+		DraftValidator.validerListeReference(referencesContrat);
+		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
+
+		Draft draft = new Draft();
+		draft.setAuteur(new Auteur(trameCatalogue.getAuteur()));
+		for (String referenceContrat : referencesContrat) {
+			Contrat contrat = restClient.getContratByReference(referenceContrat);
+			try {
+				draft.addLigne(transformerContratEnLigneDraft(contrat, trameCatalogue));
+			} catch (OpaleException ex) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.42", referenceContrat),
+						"1.1.42");
+			}
+		}
+		save(draft);
+		return draft;
+	}
+
+	/**
+	 * transformer un {@link Contrat} en {@link DraftLigne}.
+	 * 
+	 * @param contrat
+	 *            {@link Contrat}.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogueInfo}.
+	 * @return {@link DraftLigne}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	private DraftLigne transformerContratEnLigneDraft(Contrat contrat, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException {
+		LOGGER.info("Debut methode transformerContratEnLigneDraft");
+
 		String referenceOffre = contrat.getParent().getReferenceProduit();
 		OffreCatalogue offreCatalogue =
 				trameCatalogue.getTrameCatalogue().getOffreMap().get(contrat.getParent().getReferenceProduit());
@@ -912,18 +961,12 @@ public class DraftServiceImpl implements DraftService {
 					Arrays.asList(referenceOffre));
 			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 		} else {
-			Draft draft = new Draft(contrat, trameCatalogue);
+			DraftLigne draftLigne = new DraftLigne(contrat, trameCatalogue);
+			Draft draft = new Draft();
+			draft.addLigne(draftLigne);
 			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 			if (validationInfo.isValide()) {
-				/*
-				 * attribution des reference au draft/draftLigne.
-				 */
-				draft.setReference(keygenService.getNextKey(Draft.class));
-				for (DraftLigne draftLigne : draft.getDraftLignes()) {
-					draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
-				}
-				draftRepository.save(draft);
-				return draft;
+				return draftLigne;
 			} else {
 				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 			}

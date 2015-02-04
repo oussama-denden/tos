@@ -32,7 +32,6 @@ import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
 import com.nordnet.opale.domain.commande.Frais;
 import com.nordnet.opale.domain.draft.Draft;
-import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.domain.signature.Signature;
@@ -701,13 +700,6 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
 
-		/*
-		 * attribution des reference au draft/draftLigne.
-		 */
-		draft.setReference(keygenService.getNextKey(Draft.class));
-		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
-		}
 		draftService.save(draft);
 
 		return draft;

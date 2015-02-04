@@ -638,4 +638,18 @@ public class DraftValidator {
 			}
 		}
 	}
+
+	/**
+	 * valider la liste des references contrat.
+	 * 
+	 * @param referencescontrat
+	 *            liste des references contrat.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerListeReference(List<String> referencescontrat) throws OpaleException {
+		if (Utils.isListNullOrEmpty(referencescontrat)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.43"), "1.1.43");
+		}
+	}
 }

@@ -187,8 +187,6 @@ public class Draft {
 		// TODO verifier comment recuperer l'addresse du client suscripteur.
 		Client clientSouscripteur = new Client(contrat.getIdClient(), "", null, auteur);
 		this.clientSouscripteur = clientSouscripteur;
-
-		addLigne(new DraftLigne(contrat, trameCatalogue));
 	}
 
 	@Override

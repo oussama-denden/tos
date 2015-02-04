@@ -209,8 +209,9 @@ public interface DraftService {
 	 * 
 	 * @param draft
 	 *            {@link Draft}.
+	 * @return {@link Draft}.
 	 */
-	public void save(Draft draft);
+	public Draft save(Draft draft);
 
 	/**
 	 * Associer un code partenaire a un draft.
@@ -261,6 +262,20 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException;
+
+	/**
+	 * Transformer un contrat en draft.
+	 * 
+	 * @param referencesContrat
+	 *            liste des references contrat dans Topaze
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogueInfo}.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Draft transformerContratsEnDraft(List<String> referencesContrat, TrameCatalogueInfo trameCatalogue)
 			throws OpaleException;
 
 	/**
