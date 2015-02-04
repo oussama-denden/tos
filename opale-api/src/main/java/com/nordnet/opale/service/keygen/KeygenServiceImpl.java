@@ -40,31 +40,32 @@ public class KeygenServiceImpl implements KeygenService {
 
 		LOGGER.info("Enter methode getNextKey– Class = " + clazz.getName());
 		String referenceRetour = null;
-		String prefix =
-				clazz.equals(Draft.class) ? Prefix.Dra.toString() : clazz.equals(Commande.class) ? Prefix.Cmd
-						.toString() : null;
 
 		Keygen keygen = keygenRepository.findDernier(clazz.getName());
 
-		Keygen keygen2 = new Keygen();
-		int inc = 0;
+		long inc = 0;
 		if (keygen != null) {
-			inc = Integer.parseInt(keygen.getReferenceDraft()) + 1;
+			inc = Long.parseLong(keygen.getReferenceDraft()) + 1;
 		} else {
-			inc = Integer.parseInt(Constants.REF_DRAFT_INIT) + 1;
+			keygen = new Keygen();
+			keygen.setEntite(clazz.getName());
+			inc = Long.parseLong(Constants.REF_DRAFT_INIT);
 		}
 
-		// generer la nouvelle reference draft.
+		// generer la nouvelle reference.
 
 		String newReferenceDraft = String.format("%08d", inc);
-		keygen2.setReferenceDraft(newReferenceDraft);
-		keygen2.setEntite(clazz.getName());
-		keygenRepository.save(keygen2);
+		keygen.setReferenceDraft(newReferenceDraft);
+		String reference = keygen.getReferenceDraft();
+		// ADD CRC
+		// CheckDigit crc = new LRICRCISO7064Mod97_10();
+		//
+		// reference = crc.encode(reference);
 
-		String reference = keygen != null ? keygen.getReferenceDraft() : Constants.REF_DRAFT_INIT;
 		referenceRetour =
 				clazz.equals(Draft.class) ? Prefix.Dra + "-" + reference : clazz.equals(Commande.class) ? Prefix.Cmd
 						+ "-" + reference : reference;
+		keygenRepository.save(keygen);
 
 		LOGGER.info("Fin methode getNextKey – Class = " + clazz.getName());
 		return referenceRetour;
