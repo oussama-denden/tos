@@ -130,9 +130,79 @@
   <hop> <from>Order &#x28;Normal&#x29;</from><to>PolitiqueValidation</to><enabled>Y</enabled> </hop>
   <hop> <from>PolitiqueResiliation</from><to>Contrat R&#xe9;sili&#xe9;</to><enabled>Y</enabled> </hop>
   <hop> <from>PolitiqueValidation</from><to>Filter rows</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter rows</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
   <hop> <from>Filter rows</from><to>Contrat actif</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter rows</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>REMBOURSEMENT</to><enabled>Y</enabled> </hop>
+  <hop> <from>REMBOURSEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>AUTRE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>IMPAYE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>SAISIE_JUDICIAIRE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>CLIENT_INSOLVABLE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>DEMANDE_DE_NON_RENOUVELLEMENT</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>RESILIATION_SANS_REMBOURSEMENT</to><enabled>Y</enabled> </hop>
+  <hop> <from>IMPAYE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>SAISIE_JUDICIAIRE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>CLIENT_INSOLVABLE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>DEMANDE_DE_NON_RENOUVELLEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>RESILIATION_SANS_REMBOURSEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>AUTRE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>AUTRE</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>AUTRE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>615</xloc>
+      <yloc>449</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>CLIENT_INSOLVABLE</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>CLIENT_INSOLVABLE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>613</xloc>
+      <yloc>237</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Contrat R&#xe9;sili&#xe9;</name>
     <type>TableOutput</type>
@@ -213,8 +283,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>648</xloc>
-      <yloc>76</yloc>
+      <xloc>1010</xloc>
+      <yloc>137</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -287,8 +357,93 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>643</xloc>
-      <yloc>213</yloc>
+      <xloc>351</xloc>
+      <yloc>348</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>DEMANDE_DE_NON_RENOUVELLEMENT</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>DEMANDE_DE_NON_RENOUVELLEMENT</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>613</xloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Filter rows</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<send_true_to>Switch &#x2f; Case</send_true_to>
+<send_false_to>Contrat actif</send_false_to>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>state</leftvalue>
+ <function>&#x3d;</function>
+ <rightvalue/>
+ <value><name>constant</name><type>String</type><text>RE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>352</xloc>
+      <yloc>137</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>IMPAYE</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>IMPAYE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>614</xloc>
+      <yloc>109</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -383,8 +538,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>510</xloc>
-      <yloc>75</yloc>
+      <xloc>862</xloc>
+      <yloc>137</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -436,8 +591,8 @@
     </step>
 
   <step>
-    <name>Filter rows</name>
-    <type>FilterRows</type>
+    <name>REMBOURSEMENT</name>
+    <type>SetValueConstant</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -446,20 +601,115 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>PolitiqueResiliation</send_true_to>
-<send_false_to>Contrat actif</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>state</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>String</type><text>RE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
-    </compare>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>REMBOURSEMENT</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>352</xloc>
-      <yloc>137</yloc>
+      <xloc>615</xloc>
+      <yloc>45</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>RESILIATION_SANS_REMBOURSEMENT</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>RESILIATION_SANS_REMBOURSEMENT</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>614</xloc>
+      <yloc>372</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>SAISIE_JUDICIAIRE</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>SAISIE_JUDICIAIRE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>615</xloc>
+      <yloc>172</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Switch &#x2f; Case</name>
+    <type>SwitchCase</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<fieldname>motifResil</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>String</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step>AUTRE</default_target_step>
+<cases><case><value>REM</value>
+<target_step>REMBOURSEMENT</target_step>
+</case><case><value>RPL</value>
+<target_step>IMPAYE</target_step>
+</case><case><value>LG</value>
+<target_step>SAISIE_JUDICIAIRE</target_step>
+</case><case><value>NR</value>
+<target_step>DEMANDE_DE_NON_RENOUVELLEMENT</target_step>
+</case><case><value>DNR</value>
+<target_step>DEMANDE_DE_NON_RENOUVELLEMENT</target_step>
+</case><case><value>IMP</value>
+<target_step>IMPAYE</target_step>
+</case><case><value>NRE</value>
+<target_step>DEMANDE_DE_NON_RENOUVELLEMENT</target_step>
+</case></cases>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>475</xloc>
+      <yloc>138</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
