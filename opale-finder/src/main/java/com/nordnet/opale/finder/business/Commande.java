@@ -53,6 +53,11 @@ public class Commande {
 	private boolean paye;
 
 	/**
+	 * Intention de paiement.
+	 */
+	private String intentionPaiement;
+
+	/**
 	 * Si la commande est signe.
 	 */
 	private boolean signe;
@@ -317,6 +322,23 @@ public class Commande {
 	 */
 	public void setMoyenPaiementRecurrent(String moyenPaiementRecurrent) {
 		this.moyenPaiementRecurrent = moyenPaiementRecurrent;
+	}
+
+	/**
+	 * 
+	 * @return {@link #intentionPaiement}
+	 */
+	public String getIntentionPaiement() {
+		return intentionPaiement;
+	}
+
+	/**
+	 * 
+	 * @param intentionPaiement
+	 *            {@link #intentionPaiement}
+	 */
+	public void setIntentionPaiement(String intentionPaiement) {
+		this.intentionPaiement = intentionPaiement;
 	}
 
 	/**

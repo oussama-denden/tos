@@ -154,8 +154,14 @@ public class CommandeDaoImpl implements CommandeDao {
 			if (!Utils.isStringNullOrEmpty(resultSet.getString("refPaiement"))
 					&& resultSet.getString("typePaiement").equals("COMPTANT")) {
 				if (!refPaiement.contains(resultSet.getString("refPaiement"))) {
-					commande.setPaye(true);
-					commande.addMoyenPaiementComptant(resultSet.getString("modePaiement"));
+
+					if (Utils.isStringNullOrEmpty(resultSet.getString("timestampPaiement"))) {
+						commande.setIntentionPaiement(resultSet.getString("modePaiement"));
+					} else {
+
+						commande.setPaye(true);
+						commande.addMoyenPaiementComptant(resultSet.getString("modePaiement"));
+					}
 					refPaiement.add(resultSet.getString("refPaiement"));
 				}
 			}
@@ -165,8 +171,15 @@ public class CommandeDaoImpl implements CommandeDao {
 					&& resultSet.getString("typePaiement").equals("RECURRENT")) {
 				if (lastReferencePaiementRecurrent == null
 						|| !lastReferencePaiementRecurrent.equals(resultSet.getString("refPaiement"))) {
-					commande.addMoyenPaiementRecurrent(resultSet.getString("modePaiement"));
-					commande.setPaiementRecurrent(true);
+
+					if (Utils.isStringNullOrEmpty(resultSet.getString("timestampPaiement"))) {
+						commande.setIntentionPaiement(resultSet.getString("modePaiement"));
+					} else {
+
+						commande.addMoyenPaiementRecurrent(resultSet.getString("modePaiement"));
+						commande.setPaiementRecurrent(true);
+					}
+
 					lastReferencePaiementRecurrent = resultSet.getString("refPaiement");
 				}
 			}
