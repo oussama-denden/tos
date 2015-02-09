@@ -20,10 +20,12 @@ import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.topaze.ws.entity.ContratRenouvellementInfo;
 
 /**
  * Contient les operation sur les {@link Commande}.
@@ -376,5 +378,16 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public boolean validerCommandeEnTransformationAutomatique(Commande commande) throws OpaleException;
+
+	/**
+	 * Creer les informations de renouvellement de contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param ligne
+	 *            {@link CommandeLigne}.
+	 * @return {@link ContratRenouvellementInfo}.
+	 */
+	public ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne);
 
 }

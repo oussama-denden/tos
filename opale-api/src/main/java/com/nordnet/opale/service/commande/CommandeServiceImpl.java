@@ -745,15 +745,10 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
-	 * Creer les informations de renouvellement de contrat.
-	 * 
-	 * @param commande
-	 *            {@link Commande}.
-	 * @param ligne
-	 *            {@link CommandeLigne}.
-	 * @return {@link ContratRenouvellementInfo}.
+	 * {@inheritDoc}
 	 */
-	private ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne) {
+	@Override
+	public ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne) {
 		ContratRenouvellementInfo renouvellementInfo = new ContratRenouvellementInfo();
 
 		// Creer la politique de renouvellement.

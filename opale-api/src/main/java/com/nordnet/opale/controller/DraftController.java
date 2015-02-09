@@ -43,6 +43,7 @@ import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.wordnik.swagger.annotations.Api;
 
@@ -270,12 +271,14 @@ public class DraftController {
 	 *             {@link JSONException}.
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}.
+	 * @throws TopazeException
+	 *             {@link OpaleException}.
 	 */
 	@RequestMapping(value = "/{refDraft:.+}/transformerEnCommande", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public Object transformerEnCommande(@PathVariable String refDraft,
 			@RequestBody TransformationInfo transformationInfo)
-			throws OpaleException, JSONException, CloneNotSupportedException {
+			throws OpaleException, JSONException, CloneNotSupportedException, TopazeException {
 		LOGGER.info(":::ws-rec:::transformerEnCommande");
 		Object object = draftService.transformerEnCommande(refDraft, transformationInfo);
 		if (object instanceof Commande) {
@@ -570,6 +573,37 @@ public class DraftController {
 		JSONObject rsc = new JSONObject();
 		rsc.put("reference", draft.getReference());
 		List<JSONObject> lignes = new ArrayList<>();
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+			JSONObject ligne = new JSONObject();
+			ligne.put("referenceLigne", draftLigne.getReference());
+			lignes.add(ligne);
+		}
+		rsc.put("lignes", lignes);
+		return rsc.toString();
+	}
+
+	/**
+	 * Transformer un contrat en draft.
+	 * 
+	 * @param trameTransformationInfo
+	 *            {@link TrameTransformationInfo}.
+	 * @throws JSONException
+	 *             {@link JSONException}.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/creerDraftPourRenouvellement", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public String creerDraftPourRenouvellement(@RequestBody TrameTransformationInfo trameTransformationInfo)
+			throws OpaleException, JSONException {
+		LOGGER.info(":::ws-rec:::creerDraftPourRenouvellement");
+		Draft draft =
+				draftService.creerDraftPourRenouvellement(trameTransformationInfo.getReferencesContrat(),
+						(TrameCatalogueInfo) trameTransformationInfo);
+		JSONObject rsc = new JSONObject();
+		rsc.put("reference", draft.getReference());
+		List<JSONObject> lignes = new ArrayList<JSONObject>();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			JSONObject ligne = new JSONObject();
 			ligne.put("referenceLigne", draftLigne.getReference());

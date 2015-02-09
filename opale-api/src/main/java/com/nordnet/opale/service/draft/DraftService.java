@@ -21,6 +21,7 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.topaze.exception.TopazeException;
 
 /**
  * La service DraftService va contenir tous les operations le draft.
@@ -186,9 +187,11 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 * @throws CloneNotSupportedException
 	 *             {@link CloneNotSupportedException}
+	 * @throws TopazeException
+	 *             {@link TopazeException}.
 	 */
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
-			throws OpaleException, CloneNotSupportedException;
+			throws OpaleException, CloneNotSupportedException, TopazeException;
 
 	/**
 	 * Associer un geste a une ligne draft.
@@ -262,6 +265,20 @@ public interface DraftService {
 	 *             {@link OpaleException}.
 	 */
 	public Draft transformerContratEnDraft(String referenceContrat, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException;
+
+	/**
+	 * Transformer un contrat en draft.
+	 * 
+	 * @param referencesContrat
+	 *            refernce des contrat a transformer en draft pour le renouvellement.
+	 * @param trameCatalogue
+	 *            {@link TrameCatalogue}.
+	 * @return {@link Draft}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Draft creerDraftPourRenouvellement(List<String> referencesContrat, TrameCatalogueInfo trameCatalogue)
 			throws OpaleException;
 
 	/**

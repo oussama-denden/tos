@@ -457,6 +457,32 @@ public class Draft {
 	}
 
 	/**
+	 * associer les {@link Client} livraison/facturation/souscripteur.
+	 * 
+	 * @param idClient
+	 *            id client.
+	 * @param idAdresseLivraison
+	 *            id adresse livraison
+	 * @param idAdresseFacturation
+	 *            id adresse facturation.
+	 * @param idAdressSouscripteur
+	 *            id adresse souscripteur.
+	 * @param auteur
+	 *            {@link Auteur}.
+	 */
+	public void associerClients(String idClient, String idAdresseLivraison, String idAdresseFacturation,
+			String idAdressSouscripteur, Auteur auteur) {
+		Client clientAFacturer = new Client(idClient, idAdresseFacturation, null, auteur);
+		this.clientAFacturer = clientAFacturer;
+		Client clientALivrer = new Client(idClient, idAdresseLivraison, null, auteur);
+		this.clientALivrer = clientALivrer;
+
+		// TODO verifier comment recuperer l'addresse du client suscripteur.
+		Client clientSouscripteur = new Client(idClient, idAdressSouscripteur, null, auteur);
+		this.clientSouscripteur = clientSouscripteur;
+	}
+
+	/**
 	 * the code partenaire.
 	 * 
 	 * @return {@link #codePartenaire}
