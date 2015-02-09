@@ -40,11 +40,13 @@ public class Commande {
 	/**
 	 * Le moyen de paiement comptant.
 	 */
+	@JsonInclude(Include.ALWAYS)
 	private String moyenPaiementComptant;
 
 	/**
 	 * Le moyen de paiement recurrent.
 	 */
+	@JsonInclude(Include.ALWAYS)
 	private String moyenPaiementRecurrent;
 
 	/**
