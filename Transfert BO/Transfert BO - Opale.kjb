@@ -97,41 +97,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>271</xloc>
-      <yloc>132</yloc>
-      </entry>
-    <entry>
-      <name>CommandeLigneDetail</name>
-      <description/>
-      <type>TRANS</type>
-      <specification_method>filename</specification_method>
-      <trans_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;CommandeLigneDetail.ktr</filename>
-      <transname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Basic</loglevel>
-      <cluster>N</cluster>
-      <slave_server_name/>
-      <set_append_logfile>N</set_append_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <create_parent_folder>N</create_parent_folder>
-      <logging_remote_work>N</logging_remote_work>
-      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>418</xloc>
-      <yloc>132</yloc>
+      <xloc>305</xloc>
+      <yloc>133</yloc>
       </entry>
     <entry>
       <name>START</name>
@@ -183,23 +150,14 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>563</xloc>
-      <yloc>136</yloc>
+      <xloc>453</xloc>
+      <yloc>132</yloc>
       </entry>
   </entries>
   <hops>
     <hop>
       <from>Commande</from>
       <to>CommandeLigne</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CommandeLigne</from>
-      <to>CommandeLigneDetail</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -216,7 +174,7 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>CommandeLigneDetail</from>
+      <from>CommandeLigne</from>
       <to>Paiement</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>

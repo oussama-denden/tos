@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Commande</name>
+    <name>ResiliationFuture</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -66,39 +66,12 @@
     <clusterschemas>
     </clusterschemas>
   <created_user>-</created_user>
-  <created_date>2015&#x2f;01&#x2f;20 15&#x3a;27&#x3a;01.175</created_date>
+  <created_date>2015&#x2f;02&#x2f;04 10&#x3a;13&#x3a;35.248</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2015&#x2f;01&#x2f;20 15&#x3a;27&#x3a;01.175</modified_date>
+  <modified_date>2015&#x2f;02&#x2f;04 10&#x3a;13&#x3a;35.248</modified_date>
   </info>
   <notepads>
   </notepads>
-  <connection>
-    <name>Opale</name>
-    <server/>
-    <type>MYSQL</type>
-    <access>, </access>
-    <database>Opale</database>
-    <port>1521</port>
-    <username/>
-    <password>Encrypted </password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
-      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
-      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>N</attribute></attribute>
-      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
-      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
-    </attributes>
-  </connection>
   <connection>
     <name>ProdNN</name>
     <server/>
@@ -126,17 +99,54 @@
       <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
     </attributes>
   </connection>
+  <connection>
+    <name>Topaze</name>
+    <server/>
+    <type>MYSQL</type>
+    <access>, </access>
+    <database>Topaze</database>
+    <port>1521</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>N</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
   <order>
-  <hop> <from>Order</from><to>ClientSouscription</to><enabled>Y</enabled> </hop>
-  <hop> <from>ClientSouscription</from><to>ClientLivraison</to><enabled>Y</enabled> </hop>
-  <hop> <from>ClientLivraison</from><to>ClientFacturation</to><enabled>Y</enabled> </hop>
-  <hop> <from>ClientFacturation</from><to>Check Commande Annul&#xe9;e</to><enabled>Y</enabled> </hop>
-  <hop> <from>Check Commande Annul&#xe9;e</from><to>Commande Annul&#xe9;e</to><enabled>Y</enabled> </hop>
-  <hop> <from>Check Commande Annul&#xe9;e</from><to>Commande En Cours ou Pay&#xe9;e</to><enabled>Y</enabled> </hop>
+  <hop> <from>PolitiqueResiliation</from><to>Update</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>REMBOURSEMENT</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>RESILIATION_SANS_REMBOURSEMENT</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>IMPAYE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>SAISIE_JUDICIAIRE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>CLIENT_INSOLVABLE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>DEMANDE_DE_NON_RENOUVELLEMENT</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>AUTRE</to><enabled>Y</enabled> </hop>
+  <hop> <from>Termination DI</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
+  <hop> <from>REMBOURSEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>IMPAYE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>SAISIE_JUDICIAIRE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>CLIENT_INSOLVABLE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>DEMANDE_DE_NON_RENOUVELLEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>RESILIATION_SANS_REMBOURSEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>AUTRE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Check Commande Annul&#xe9;e</name>
-    <type>FilterRows</type>
+    <name>AUTRE</name>
+    <type>SetValueConstant</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -145,26 +155,109 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Commande Annul&#xe9;e</send_true_to>
-<send_false_to>Commande En Cours ou Pay&#xe9;e</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>state</leftvalue>
- <function>IN LIST</function>
- <rightvalue/>
- <value><name>constant</name><type>String</type><text>&#x5b;RBP, RB, PE, AN&#x5d;</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
-    </compare>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>AUTRE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>314</xloc>
-      <yloc>331</yloc>
+      <xloc>461</xloc>
+      <yloc>489</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>ClientFacturation</name>
+    <name>CLIENT_INSOLVABLE</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>CLIENT_INSOLVABLE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>459</xloc>
+      <yloc>277</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>DEMANDE_DE_NON_RENOUVELLEMENT</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>DEMANDE_DE_NON_RENOUVELLEMENT</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>459</xloc>
+      <yloc>344</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>IMPAYE</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>motifResil</name>
+        <value>IMPAYE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>460</xloc>
+      <yloc>149</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>PolitiqueResiliation</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -174,9 +267,9 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>Opale</connection>
+    <connection>Topaze</connection>
     <schema/>
-    <table>client</table>
+    <table>politiqueresiliation</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -190,44 +283,52 @@
     <tablename_field/>
     <tablename_in_table>Y</tablename_in_table>
     <return_keys>Y</return_keys>
-    <return_field>ClientFacturationId</return_field>
+    <return_field>politiqueResiliationId</return_field>
     <fields>
         <field>
-          <column_name>clientId</column_name>
-          <stream_name>customerReference</stream_name>
+          <column_name>typeResiliation</column_name>
+          <stream_name>typeResil</stream_name>
         </field>
         <field>
-          <column_name>canal</column_name>
-          <stream_name>canal</stream_name>
+          <column_name>motif</column_name>
+          <stream_name>motifResil</stream_name>
         </field>
         <field>
-          <column_name>qui</column_name>
-          <stream_name>createdBy</stream_name>
+          <column_name>dateResiliation</column_name>
+          <stream_name>dateResil</stream_name>
         </field>
         <field>
-          <column_name>tva</column_name>
-          <stream_name>tva</stream_name>
+          <column_name>enCascade</column_name>
+          <stream_name>enCascade</stream_name>
         </field>
         <field>
-          <column_name>adresseId</column_name>
-          <stream_name>adresseFacturation</stream_name>
+          <column_name>remboursement</column_name>
+          <stream_name>remboursement</stream_name>
         </field>
         <field>
-          <column_name>timestamp</column_name>
-          <stream_name>adresseFacturationDateCreation</stream_name>
+          <column_name>penalite</column_name>
+          <stream_name>penalite</stream_name>
+        </field>
+        <field>
+          <column_name>fraisResiliation</column_name>
+          <stream_name>fraisResiliation</stream_name>
+        </field>
+        <field>
+          <column_name>commentaire</column_name>
+          <stream_name>commentaire</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>521</xloc>
-      <yloc>196</yloc>
+      <xloc>821</xloc>
+      <yloc>186</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>ClientLivraison</name>
-    <type>TableOutput</type>
+    <name>REMBOURSEMENT</name>
+    <type>SetValueConstant</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -236,60 +337,26 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>Opale</connection>
-    <schema/>
-    <table>client</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>ClientLivraisonId</return_field>
+   <usevar>N</usevar>
     <fields>
-        <field>
-          <column_name>clientId</column_name>
-          <stream_name>customerReference</stream_name>
+      <field>
+        <name>motifResil</name>
+        <value>REMBOURSEMENT</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
         </field>
-        <field>
-          <column_name>canal</column_name>
-          <stream_name>canal</stream_name>
-        </field>
-        <field>
-          <column_name>qui</column_name>
-          <stream_name>createdBy</stream_name>
-        </field>
-        <field>
-          <column_name>timestamp</column_name>
-          <stream_name>adresseLivraisonDateCreation</stream_name>
-        </field>
-        <field>
-          <column_name>tva</column_name>
-          <stream_name>tva</stream_name>
-        </field>
-        <field>
-          <column_name>adresseId</column_name>
-          <stream_name>adresseLivraison</stream_name>
-        </field>
-    </fields>
+      </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>383</xloc>
-      <yloc>197</yloc>
+      <xloc>461</xloc>
+      <yloc>85</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>ClientSouscription</name>
-    <type>TableOutput</type>
+    <name>RESILIATION_SANS_REMBOURSEMENT</name>
+    <type>SetValueConstant</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -298,60 +365,26 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>Opale</connection>
-    <schema/>
-    <table>client</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>ClientSouscripteurId</return_field>
+   <usevar>N</usevar>
     <fields>
-        <field>
-          <column_name>adresseId</column_name>
-          <stream_name>adresse</stream_name>
+      <field>
+        <name>motifResil</name>
+        <value>RESILIATION_SANS_REMBOURSEMENT</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
         </field>
-        <field>
-          <column_name>clientId</column_name>
-          <stream_name>customerReference</stream_name>
-        </field>
-        <field>
-          <column_name>canal</column_name>
-          <stream_name>canal</stream_name>
-        </field>
-        <field>
-          <column_name>qui</column_name>
-          <stream_name>createdBy</stream_name>
-        </field>
-        <field>
-          <column_name>tva</column_name>
-          <stream_name>tva</stream_name>
-        </field>
-        <field>
-          <column_name>timestamp</column_name>
-          <stream_name>adresseDateCreation</stream_name>
-        </field>
-    </fields>
+      </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>239</xloc>
-      <yloc>197</yloc>
+      <xloc>460</xloc>
+      <yloc>412</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Commande Annul&#xe9;e</name>
-    <type>TableOutput</type>
+    <name>SAISIE_JUDICIAIRE</name>
+    <type>SetValueConstant</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -360,76 +393,26 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>Opale</connection>
-    <schema/>
-    <table>commande</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
+   <usevar>N</usevar>
     <fields>
-        <field>
-          <column_name>canal</column_name>
-          <stream_name>canal</stream_name>
+      <field>
+        <name>motifResil</name>
+        <value>SAISIE_JUDICIAIRE</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
         </field>
-        <field>
-          <column_name>qui</column_name>
-          <stream_name>createdBy</stream_name>
-        </field>
-        <field>
-          <column_name>codePartenaire</column_name>
-          <stream_name>codePartenaire</stream_name>
-        </field>
-        <field>
-          <column_name>dateTransformationContrat</column_name>
-          <stream_name>changeDate</stream_name>
-        </field>
-        <field>
-          <column_name>reference</column_name>
-          <stream_name>orderKey</stream_name>
-        </field>
-        <field>
-          <column_name>clientSouscripteurId</column_name>
-          <stream_name>ClientSouscripteurId</stream_name>
-        </field>
-        <field>
-          <column_name>clientALivrerId</column_name>
-          <stream_name>ClientLivraisonId</stream_name>
-        </field>
-        <field>
-          <column_name>clientAFacturerId</column_name>
-          <stream_name>ClientFacturationId</stream_name>
-        </field>
-        <field>
-          <column_name>dateCreation</column_name>
-          <stream_name>orderDate</stream_name>
-        </field>
-        <field>
-          <column_name>timestamp</column_name>
-          <stream_name>timestamp</stream_name>
-        </field>
-    </fields>
+      </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>174</xloc>
-      <yloc>471</yloc>
+      <xloc>461</xloc>
+      <yloc>212</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Commande En Cours ou Pay&#xe9;e</name>
-    <type>TableOutput</type>
+    <name>Switch &#x2f; Case</name>
+    <type>SwitchCase</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -438,75 +421,37 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>Opale</connection>
-    <schema/>
-    <table>commande</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>reference</column_name>
-          <stream_name>orderKey</stream_name>
-        </field>
-        <field>
-          <column_name>dateCreation</column_name>
-          <stream_name>orderDate</stream_name>
-        </field>
-        <field>
-          <column_name>qui</column_name>
-          <stream_name>createdBy</stream_name>
-        </field>
-        <field>
-          <column_name>codePartenaire</column_name>
-          <stream_name>codePartenaire</stream_name>
-        </field>
-        <field>
-          <column_name>dateAnnulation</column_name>
-          <stream_name>changeDate</stream_name>
-        </field>
-        <field>
-          <column_name>canal</column_name>
-          <stream_name>canal</stream_name>
-        </field>
-        <field>
-          <column_name>clientSouscripteurId</column_name>
-          <stream_name>ClientSouscripteurId</stream_name>
-        </field>
-        <field>
-          <column_name>clientALivrerId</column_name>
-          <stream_name>ClientLivraisonId</stream_name>
-        </field>
-        <field>
-          <column_name>clientAFacturerId</column_name>
-          <stream_name>ClientFacturationId</stream_name>
-        </field>
-        <field>
-          <column_name>timestamp</column_name>
-          <stream_name>timestamp</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
+<fieldname>motifResil</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>String</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step>AUTRE</default_target_step>
+<cases><case><value>REM</value>
+<target_step>REMBOURSEMENT</target_step>
+</case><case><value>RPL</value>
+<target_step>IMPAYE</target_step>
+</case><case><value>LG</value>
+<target_step>SAISIE_JUDICIAIRE</target_step>
+</case><case><value>NR</value>
+<target_step>DEMANDE_DE_NON_RENOUVELLEMENT</target_step>
+</case><case><value>DNR</value>
+<target_step>DEMANDE_DE_NON_RENOUVELLEMENT</target_step>
+</case><case><value>IMP</value>
+<target_step>IMPAYE</target_step>
+</case><case><value>NRE</value>
+<target_step>DEMANDE_DE_NON_RENOUVELLEMENT</target_step>
+</case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>447</xloc>
-      <yloc>470</yloc>
+      <xloc>321</xloc>
+      <yloc>178</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Order</name>
+    <name>Termination DI</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -517,7 +462,7 @@
            <schema_name/>
            </partitioning>
     <connection>ProdNN</connection>
-    <sql>SELECT&#xd;&#xa;  o.orderKey&#xd;&#xa;, o.orderDate&#xd;&#xa;, o.state&#xd;&#xa;, o.createdBy&#xd;&#xa;, p.partnerKey as &#x27;codePartenaire&#x27;&#xd;&#xa;, c.customerKey as &#x27;customerReference&#x27;&#xd;&#xa;&#xd;&#xa;, hShipping.handleKey as &#x27;adresseLivraison&#x27;&#xd;&#xa;, hShipping.creationDate as &#x27;adresseLivraisonDateCreation&#x27;&#xd;&#xa;, hInvoice.handleKey as &#x27;adresseFacturation&#x27;&#xd;&#xa;, hInvoice.creationDate as &#x27;adresseFacturationDateCreation&#x27;&#xd;&#xa;, hInstallation.handleKey as &#x27;adresse&#x27;&#xd;&#xa;, hInstallation.creationDate as &#x27;adresseDateCreation&#x27;&#xd;&#xa;, &#x27;00&#x27; as &#x27;tva&#x27;&#xd;&#xa;&#xd;&#xa;, o.creationDate&#xd;&#xa;, o.changeDate&#xd;&#xa;, &#x27;BackOffice&#x28;Migration&#x29;&#x27; as &#x27;canal&#x27;&#xd;&#xa;, NOW&#x28;&#x29; as &#x27;timestamp&#x27;&#xd;&#xa;FROM order_info o&#xd;&#xa;  INNER JOIN order_item_group oig ON &#x28;o.id &#x3d; oig.order_idFk&#x29;&#xd;&#xa;  INNER JOIN order_item oi on &#x28;oi.group_idFK &#x3d; oig.id&#x29;&#xd;&#xa;  LEFT OUTER JOIN partner p on &#x28;p.id &#x3d; o.partner_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN customer c on &#x28;c.id &#x3d; o.customer_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN handle hInvoice on &#x28;hInvoice.id &#x3d; o.invoiceHandle_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN handle hInstallation on &#x28;hInstallation.id &#x3d; o.installationHandle_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN handle hShipping on &#x28;hShipping.id &#x3d; o.shippingHandle_idFK&#x29;&#xd;&#xa;WHERE &#x28;oi.itemCode like &#x22;avfw.&#x25;&#x22; or oi.itemCode like &#x22;mobileprotection.&#x25;&#x22;&#x29;</sql>
+    <sql>SELECT&#xd;&#xa;  t.initiativeCode as &#x27;typeResil&#x27;&#xd;&#xa;, t.code as &#x27;motifResil&#x27;&#xd;&#xa;, t.creationDate as &#x27;dateCreationResil&#x27;&#xd;&#xa;, t.date as &#x27;dateResil&#x27;&#xd;&#xa;, true as &#x27;enCascade&#x27;&#xd;&#xa;, true as &#x27;remboursement&#x27;&#xd;&#xa;, true as &#x27;penalite&#x27;&#xd;&#xa;, true as &#x27;fraisResiliation&#x27;&#xd;&#xa;, &#x27;Migration Donn&#xe9;es BO&#x27; as &#x27;commentaire&#x27;&#xd;&#xa;&#xd;&#xa;, p.productKey as &#x27;referenceContrat&#x27;&#xd;&#xa;FROM termination t&#xd;&#xa;  INNER JOIN product p on &#x28;p.termination_idFK &#x3d; t.id and &#x28;p.catalogReference like &#x22;avfw.&#x25;&#x22; or p.catalogReference like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#x29;&#xd;&#xa;where t.date &#x3e;&#x3d; NOW&#x28;&#x29;&#xd;&#xa;  and t.state &#x3c;&#x3e; &#x27;AN&#x27;&#xd;&#xa;order by t.date</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -525,8 +470,47 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>94</xloc>
-      <yloc>197</yloc>
+      <xloc>131</xloc>
+      <yloc>178</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Update</name>
+    <type>Update</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>Topaze</connection>
+    <skip_lookup>N</skip_lookup>
+    <commit>100</commit>
+    <use_batch>N</use_batch>
+    <error_ignored>N</error_ignored>
+    <ignore_flag_field/>
+    <lookup>
+      <schema/>
+      <table>contrat</table>
+      <key>
+        <name>referenceContrat</name>
+        <field>reference</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+        </key>
+      <value>
+        <name>politiqueResiliationId</name>
+        <rename>politiqueResiliationId</rename>
+        </value>
+      </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>967</xloc>
+      <yloc>186</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
