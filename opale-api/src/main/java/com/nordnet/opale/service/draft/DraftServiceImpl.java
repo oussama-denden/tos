@@ -1011,7 +1011,7 @@ public class DraftServiceImpl implements DraftService {
 				} else {
 					coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
 				}
-			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.EURO)) {
+			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
 				coutReduction += reductionProduit.getValeur();
 			}
 		}
@@ -1031,7 +1031,7 @@ public class DraftServiceImpl implements DraftService {
 			if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
 				if (reductionFrais.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
 					coutReduction += (frais.getMontant() * reductionFrais.getValeur()) / 100;
-				} else if (reductionFrais.getTypeValeur().equals(TypeValeur.EURO)) {
+				} else if (reductionFrais.getTypeValeur().equals(TypeValeur.MONTANT)) {
 					coutReduction += reductionFrais.getValeur();
 
 				}

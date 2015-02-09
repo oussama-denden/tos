@@ -57,7 +57,7 @@ public class ReductionValidator {
 				throw new OpaleException(propertiesUtil.getErrorMessage("5.1.2"), "5.1.2");
 			}
 		}
-		if (!reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getNbUtilisationMax() == null
+		if (!reductionInfo.getTypeValeur().equals(TypeValeur.MONTANT) && reductionInfo.getNbUtilisationMax() == null
 				&& reductionInfo.getDateDebut() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3",
 					"Reduction.NbUtilisationMax ou Reduction.DateDebut "), "5.1.3");
@@ -74,22 +74,22 @@ public class ReductionValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void validerReduction(ReductionInfo reductionInfo) throws OpaleException {
-		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getDateDebut() != null) {
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.MONTANT) && reductionInfo.getDateDebut() != null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.11"), "5.1.11");
 		}
 
-		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getDateFin() != null) {
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.MONTANT) && reductionInfo.getDateFin() != null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.12"), "5.1.12");
 		}
 
-		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getNbUtilisationMax() != null
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.MONTANT) && reductionInfo.getNbUtilisationMax() != null
 				&& reductionInfo.getNbUtilisationMax() != Constants.UN) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.13"), "5.1.13");
 		}
 		if (reductionInfo.getDateFin() != null && reductionInfo.getDateDebut() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.14"), "5.1.14");
 		}
-		if (reductionInfo.getTypeValeur().equals(TypeValeur.EURO) && reductionInfo.getNbUtilisationMax() == null) {
+		if (reductionInfo.getTypeValeur().equals(TypeValeur.MONTANT) && reductionInfo.getNbUtilisationMax() == null) {
 			reductionInfo.setNbUtilisationMax(Constants.UN);
 		}
 	}

@@ -3,6 +3,8 @@ CHANGELOG from 2015-01-29
 
 This changelog references the relevant changes (bug fixes and minor features) done
 from 2015-01-29.
+ *opale
+  * Implemting US #159: Changing TypeValeurReduction.EURO to TypeValeurReduction.MONTANT
 
  * opale-api
   * bug 429 set the "montantTva" fiel to zero when the client has done recurrent payment.
