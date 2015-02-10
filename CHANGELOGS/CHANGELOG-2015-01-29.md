@@ -17,7 +17,7 @@ from 2015-01-29.
  * opale-finder
   * Fix regression due to codeCatalogueReduction.
   * Add intention for payment.
-  * Make moyenPaiementComptant and moyenPaiementRecurrent always show
+  * Make moyenPaiementComptant and moyenPaiementRecurrent always show.
   
 
 
