@@ -556,37 +556,6 @@ public class DraftController {
 	 * 
 	 * @param trameTransformationInfo
 	 *            {@link TrameTransformationInfo}.
-	 * @return reference du draft.
-	 * @throws JSONException
-	 *             {@link JSONException}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	@RequestMapping(value = "/contrats", method = RequestMethod.POST, produces = "application/json")
-	@ResponseBody
-	public String transformerContratsEnDraft(@RequestBody TrameTransformationInfo trameTransformationInfo)
-			throws OpaleException, JSONException {
-		LOGGER.info(":::ws-rec:::transformerContratsEnDraft");
-		Draft draft =
-				draftService.transformerContratsEnDraft(trameTransformationInfo.getReferencesContrat(),
-						(TrameCatalogueInfo) trameTransformationInfo);
-		JSONObject rsc = new JSONObject();
-		rsc.put("reference", draft.getReference());
-		List<JSONObject> lignes = new ArrayList<>();
-		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-			JSONObject ligne = new JSONObject();
-			ligne.put("referenceLigne", draftLigne.getReference());
-			lignes.add(ligne);
-		}
-		rsc.put("lignes", lignes);
-		return rsc.toString();
-	}
-
-	/**
-	 * Transformer un contrat en draft.
-	 * 
-	 * @param trameTransformationInfo
-	 *            {@link TrameTransformationInfo}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 * @return {@link Draft}.

@@ -296,7 +296,9 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
-		DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+		if (draftLigne.getGeste() == null) {
+			DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+		}
 		DraftValidator.validerReference(draftLigne, draftLigneInfo);
 
 		/*
@@ -946,14 +948,29 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 
 		Set<String> idClients = new HashSet<String>();
+		Set<String> idAdresseLivraisons = new HashSet<String>();
+		Set<String> idAdresseFacturations = new HashSet<String>();
 		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 		for (String referenceContrat : referencesContrat) {
 			Contrat contrat = restClient.getContratByReference(referenceContrat);
 			idClients.add(contrat.getIdClient());
+			idAdresseLivraisons.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrLivraison());
+			idAdresseFacturations.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation());
 			if (idClients.size() > Constants.UN) {
 				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.44", referenceContrat),
 						"1.1.44");
 			}
+
+			if (idAdresseFacturations.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.45", referenceContrat),
+						"1.1.45");
+			}
+
+			if (idAdresseLivraisons.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.46", referenceContrat),
+						"1.1.46");
+			}
+
 			try {
 				draftLignes.add(transformerContratEnLigneDraft(contrat, trameCatalogue));
 			} catch (OpaleException ex) {
@@ -963,6 +980,8 @@ public class DraftServiceImpl implements DraftService {
 		}
 		Draft draft = new Draft();
 		draft.setAuteur(new Auteur(trameCatalogue.getAuteur()));
+		draft.associerClients(idClients.iterator().next(), idAdresseLivraisons.iterator().next(), idAdresseFacturations
+				.iterator().next(), "", new Auteur(trameCatalogue.getAuteur()));
 		draft.setDraftLignes(draftLignes);
 		save(draft);
 		return draft;
@@ -978,6 +997,8 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 
 		Set<String> idClients = new HashSet<String>();
+		Set<String> idAdresseLivraisons = new HashSet<String>();
+		Set<String> idAdresseFacturations = new HashSet<String>();
 		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 		for (String referenceContrat : referencesContrat) {
 			try {
@@ -986,11 +1007,25 @@ public class DraftServiceImpl implements DraftService {
 				throw new OpaleException(e.getMessage(), e.getErrorCode());
 			}
 			Contrat contrat = restClient.getContratByReference(referenceContrat);
+
 			idClients.add(contrat.getIdClient());
+			idAdresseLivraisons.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrLivraison());
+			idAdresseFacturations.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation());
 			if (idClients.size() > Constants.UN) {
 				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.44", referenceContrat),
 						"1.1.44");
 			}
+
+			if (idAdresseFacturations.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.45", referenceContrat),
+						"1.1.45");
+			}
+
+			if (idAdresseLivraisons.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.46", referenceContrat),
+						"1.1.46");
+			}
+
 			try {
 				DraftLigne draftLigne = transformerContratEnLigneDraft(contrat, trameCatalogue);
 				draftLigne.setGeste(Geste.RENOUVELLEMENT);
@@ -1002,6 +1037,8 @@ public class DraftServiceImpl implements DraftService {
 		}
 		Draft draft = new Draft();
 		draft.setAuteur(new Auteur(trameCatalogue.getAuteur()));
+		draft.associerClients(idClients.iterator().next(), idAdresseLivraisons.iterator().next(), idAdresseFacturations
+				.iterator().next(), "", new Auteur(trameCatalogue.getAuteur()));
 		draft.setDraftLignes(draftLignes);
 		save(draft);
 		return draft;
