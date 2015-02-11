@@ -628,7 +628,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 				referencesContrats.add(refContrat);
 			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				transformeEnOrdereRenouvellement(commande.getReference());
+				transformeEnOrdereRenouvellement(commande, ligne);
 			}
 		}
 
@@ -729,31 +729,21 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException {
-		CommandeValidator.checkReferenceCommande(refCommande);
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+	public void transformeEnOrdereRenouvellement(Commande commande, CommandeLigne ligne)
+			throws OpaleException, JSONException {
 		CommandeValidator.testerCommandeNonTransforme(commande);
-		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
-				restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
-			}
-
+		if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+			ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
+			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
 		}
 
 	}
 
 	/**
-	 * Creer les informations de renouvellement de contrat.
-	 * 
-	 * @param commande
-	 *            {@link Commande}.
-	 * @param ligne
-	 *            {@link CommandeLigne}.
-	 * @return {@link ContratRenouvellementInfo}.
+	 * {@inheritDoc}
 	 */
-	private ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne) {
+	@Override
+	public ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne) {
 		ContratRenouvellementInfo renouvellementInfo = new ContratRenouvellementInfo();
 
 		// Creer la politique de renouvellement.

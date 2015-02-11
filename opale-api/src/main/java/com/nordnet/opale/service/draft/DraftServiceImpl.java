@@ -3,8 +3,10 @@ package com.nordnet.opale.service.draft;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
@@ -62,6 +64,7 @@ import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.opale.validator.CatalogueValidator;
 import com.nordnet.opale.validator.DraftValidator;
 import com.nordnet.opale.validator.ReductionValidator;
+import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.enums.TypeValeur;
@@ -293,7 +296,11 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne, refDraft);
 		DraftValidator.isOffreValide(draftLigneInfo.getOffre());
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
-		DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+		if (draftLigne.getGeste() == null) {
+			DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+		} else if (draftLigneInfo.getGeste() == null) {
+			draftLigneInfo.setGeste(draftLigne.getGeste());
+		}
 		DraftValidator.validerReference(draftLigne, draftLigneInfo);
 
 		/*
@@ -489,7 +496,7 @@ public class DraftServiceImpl implements DraftService {
 	 */
 	@Override
 	public Object transformerEnCommande(String referenceDraft, TransformationInfo transformationInfo)
-			throws OpaleException, CloneNotSupportedException {
+			throws OpaleException, CloneNotSupportedException, TopazeException {
 
 		DraftValidator.validerAuteur(transformationInfo.getAuteur());
 		Draft draft = getDraftByReference(referenceDraft);
@@ -526,6 +533,27 @@ public class DraftServiceImpl implements DraftService {
 			return commande;
 		} else {
 			return validationInfo;
+		}
+	}
+
+	/**
+	 * valider avec topaze si l'operation a effectue est valide ou non.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	private void validerOperation(Commande commande) throws OpaleException {
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			if (commandeLigne.getGeste() == Geste.RENOUVELLEMENT) {
+				try {
+					topazeClient.isContratRenouvelable(commandeLigne.getReferenceContrat(), commandeService
+							.creerContratRenouvellementInfo(commande, commandeLigne).getProduitRenouvellements());
+				} catch (TopazeException e) {
+					throw new OpaleException(e.getMessage(), e.getErrorCode());
+				}
+			}
 		}
 	}
 
@@ -921,19 +949,102 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerListeReference(referencesContrat);
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 
-		Draft draft = new Draft();
-		draft.setAuteur(new Auteur(trameCatalogue.getAuteur()));
+		Set<String> idClients = new HashSet<String>();
+		Set<String> idAdresseLivraisons = new HashSet<String>();
+		Set<String> idAdresseFacturations = new HashSet<String>();
+		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 		for (String referenceContrat : referencesContrat) {
 			Contrat contrat = restClient.getContratByReference(referenceContrat);
+			idClients.add(contrat.getIdClient());
+			idAdresseLivraisons.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrLivraison());
+			idAdresseFacturations.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation());
+			if (idClients.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.44", referenceContrat),
+						"1.1.44");
+			}
+
+			if (idAdresseFacturations.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.45", referenceContrat),
+						"1.1.45");
+			}
+
+			if (idAdresseLivraisons.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.46", referenceContrat),
+						"1.1.46");
+			}
+
 			try {
-				draft.addLigne(transformerContratEnLigneDraft(contrat, trameCatalogue));
+				draftLignes.add(transformerContratEnLigneDraft(contrat, trameCatalogue));
 			} catch (OpaleException ex) {
 				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.42", referenceContrat),
 						"1.1.42");
 			}
 		}
+		Draft draft = new Draft();
+		draft.setAuteur(new Auteur(trameCatalogue.getAuteur()));
+		draft.associerClients(idClients.iterator().next(), idAdresseLivraisons.iterator().next(), idAdresseFacturations
+				.iterator().next(), "", new Auteur(trameCatalogue.getAuteur()));
+		draft.setDraftLignes(draftLignes);
 		save(draft);
 		return draft;
+	}
+
+	@Override
+	@Transactional
+	public Draft creerDraftPourRenouvellement(List<String> referencesContrat, TrameCatalogueInfo trameCatalogue)
+			throws OpaleException {
+		LOGGER.info("Debut methode creerDraftPourRenouvellement");
+
+		DraftValidator.validerListeReference(referencesContrat);
+		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
+
+		Set<String> idClients = new HashSet<String>();
+		Set<String> idAdresseLivraisons = new HashSet<String>();
+		Set<String> idAdresseFacturations = new HashSet<String>();
+		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
+		for (String referenceContrat : referencesContrat) {
+			try {
+				topazeClient.isContratRenouvelable(referenceContrat);
+			} catch (TopazeException e) {
+				throw new OpaleException(e.getMessage(), e.getErrorCode());
+			}
+			Contrat contrat = restClient.getContratByReference(referenceContrat);
+
+			idClients.add(contrat.getIdClient());
+			idAdresseLivraisons.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrLivraison());
+			idAdresseFacturations.add(contrat.getSousContrats().get(Constants.ZERO).getIdAdrFacturation());
+			if (idClients.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.44", referenceContrat),
+						"1.1.44");
+			}
+
+			if (idAdresseFacturations.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.45", referenceContrat),
+						"1.1.45");
+			}
+
+			if (idAdresseLivraisons.size() > Constants.UN) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.46", referenceContrat),
+						"1.1.46");
+			}
+
+			try {
+				DraftLigne draftLigne = transformerContratEnLigneDraft(contrat, trameCatalogue);
+				draftLigne.setGeste(Geste.RENOUVELLEMENT);
+				draftLignes.add(draftLigne);
+			} catch (OpaleException ex) {
+				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.42", referenceContrat),
+						"1.1.42");
+			}
+		}
+		Draft draft = new Draft();
+		draft.setAuteur(new Auteur(trameCatalogue.getAuteur()));
+		draft.associerClients(idClients.iterator().next(), idAdresseLivraisons.iterator().next(), idAdresseFacturations
+				.iterator().next(), "", new Auteur(trameCatalogue.getAuteur()));
+		draft.setDraftLignes(draftLignes);
+		save(draft);
+		return draft;
+
 	}
 
 	/**
@@ -961,8 +1072,8 @@ public class DraftServiceImpl implements DraftService {
 					Arrays.asList(referenceOffre));
 			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 		} else {
-			DraftLigne draftLigne = new DraftLigne(contrat, trameCatalogue);
 			Draft draft = new Draft();
+			DraftLigne draftLigne = new DraftLigne(contrat, trameCatalogue);
 			draft.addLigne(draftLigne);
 			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
 			if (validationInfo.isValide()) {
