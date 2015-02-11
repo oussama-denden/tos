@@ -298,6 +298,8 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isAuteurValide(draftLigneInfo.getAuteur());
 		if (draftLigne.getGeste() == null) {
 			DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+		} else if (draftLigneInfo.getGeste() == null) {
+			draftLigneInfo.setGeste(draftLigne.getGeste());
 		}
 		DraftValidator.validerReference(draftLigne, draftLigneInfo);
 
