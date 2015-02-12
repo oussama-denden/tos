@@ -28,6 +28,7 @@ import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
+import com.nordnet.opale.business.InfosBonCommande;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -90,6 +91,25 @@ public class CommandeController {
 	public CommandeInfo getCommande(@PathVariable String refCommande) throws OpaleException {
 		LOGGER.info(":::ws-rec:::getCommande");
 		return commandeService.getCommande(refCommande);
+
+	}
+
+	/**
+	 * Recuperer les informations de la commande utiles et necessaires a l'envoi du Bon de Commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande
+	 * 
+	 * @return {@link InfosBonCommande}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/getInfosBonCommande", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public InfosBonCommande getInfosBonCommande(@PathVariable String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::getInfosBonCommande");
+		return commandeService.getInfosBonCommande(refCommande);
 
 	}
 

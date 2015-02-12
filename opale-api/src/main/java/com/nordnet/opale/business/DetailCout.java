@@ -1,5 +1,9 @@
 package com.nordnet.opale.business;
 
+import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.util.Utils;
 
@@ -228,4 +232,28 @@ public class DetailCout extends Cout {
 		this.coutRecurrent = coutRecurrent;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof DetailCout)) {
+			return false;
+		}
+		DetailCout rhs = (DetailCout) obj;
+		return new EqualsBuilder().append(numero, rhs.numero).isEquals();
+	}
+
+	public List<InfosReductionPourBonCommande> getInfosReductionPourBonCommande() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
