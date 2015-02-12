@@ -347,15 +347,18 @@ public interface CommandeService {
 	/**
 	 * Transformer une commande en ordre de renouvellement afin d'acter le renouvellement pour un contrat donné.
 	 * 
-	 * @param refCommande
-	 *            refrence du commande.
+	 * @param commande
+	 *            {@link Commande}
+	 * @param ligne
+	 *            {@link CommandeLigne}.
 	 * 
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException;
+	public void transformeEnOrdereRenouvellement(Commande commande, CommandeLigne ligne)
+			throws OpaleException, JSONException;
 
 	/**
 	 * Calculer le cout de la {@link Commande}.

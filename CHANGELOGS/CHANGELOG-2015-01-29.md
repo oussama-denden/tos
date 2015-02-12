@@ -14,6 +14,7 @@ from 2015-01-29.
   * add ordre to reduction
   * add possibility to transform may contract to a draft(add ws call /opale-api/contrats)
   * add creerDraftPourRenouvellement ws.
+  * add controle to address on the contracts when calling creerdraftForRenouvellement.
   
   
  * opale-finder

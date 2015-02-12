@@ -17,8 +17,7 @@ import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * tester la methode
- * {@link CommandeService#transformeEnOrdereRenouvellement(String)}.
+ * tester la methode {@link CommandeService#transformeEnOrdereRenouvellement(String)}.
  * 
  * @author Oussama Denden
  * 
@@ -49,12 +48,11 @@ public class TransformeEnOrdreDeRenouvellementTest extends GlobalTestCase {
 		Commande commande = commandeService.getCommandeByReference("00000004");
 		assertNotNull(commande);
 
-		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			assertNotNull(ligne.getReferenceContrat());
-		}
-
 		try {
-			commandeService.transformeEnOrdereRenouvellement("00000004");
+			for (CommandeLigne ligne : commande.getCommandeLignes()) {
+				assertNotNull(ligne.getReferenceContrat());
+				commandeService.transformeEnOrdereRenouvellement(commande, ligne);
+			}
 		} catch (JSONException exception) {
 			LOGGER.error("erreur dans la transmission de commande en contrat  :" + exception.getMessage());
 			fail(exception.getMessage());
