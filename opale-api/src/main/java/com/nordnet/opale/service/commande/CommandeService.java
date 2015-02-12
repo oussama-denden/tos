@@ -15,6 +15,7 @@ import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
+import com.nordnet.opale.business.InfosBonCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -389,5 +390,18 @@ public interface CommandeService {
 	 * @return {@link ContratRenouvellementInfo}.
 	 */
 	public ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne);
+
+	/**
+	 * Recuperer les informations de la commande utiles et necessaires à l'envoi du Bon de Commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande
+	 * 
+	 * @return {@link InfosBonCommande}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public InfosBonCommande getInfosBonCommande(String refCommande) throws OpaleException;
 
 }
