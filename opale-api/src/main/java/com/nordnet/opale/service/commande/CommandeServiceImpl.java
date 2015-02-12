@@ -1130,7 +1130,7 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public boolean validerCommandeEnTransformationAutomatique(Commande commande) throws OpaleException {
 
-		List<Paiement> paiements = paiementService.getPaiementNonAnnulees(commande.getReference());
+		List<Paiement> paiements = paiementService.getPaiementEnCours(commande.getReference());
 		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
 
 		Cout coutCommande = calculerCout(commande.getReference());
