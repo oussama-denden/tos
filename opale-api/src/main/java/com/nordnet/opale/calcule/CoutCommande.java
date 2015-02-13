@@ -6,6 +6,7 @@ import java.util.List;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CoutRecurrent;
 import com.nordnet.opale.business.DetailCout;
+import com.nordnet.opale.business.InfosReductionPourBonCommande;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
@@ -37,6 +38,11 @@ public class CoutCommande extends CalculeCout {
 	 * {@link PaiementService}
 	 */
 	private PaiementService paiementService;
+
+	/**
+	 * {@link InfosReductionPourBonCommande}
+	 */
+	private InfosReductionPourBonCommande infosReductionPourBonCommande;
 
 	/**
 	 * constructeur par defaut.
@@ -107,14 +113,22 @@ public class CoutCommande extends CalculeCout {
 
 		// recuperation du reduction du draft.
 		Reduction reductionDraft = reductionService.findReduction(commande.getReference());
-
-		reductionTTC += ReductionUtil.calculeReductionComptant(coutComptantTTC - reductionComptantTTC, reductionDraft);
+		double coutReduction =
+				ReductionUtil.calculeReductionComptant(coutComptantTTC - reductionComptantTTC, reductionDraft);
+		reductionTTC += coutReduction;
 		reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);
 
 		coutComptantReduitTTC = coutComptantTTC - reductionComptantTTC;
 		coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
 
 		coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitHT, tva);
+		creerInfosReductionBonCommande(reductionDraft, tva, coutReduction);
+
+		if (infosReductionPourBonCommande != null) {
+			for (DetailCout detailCout : details) {
+				detailCout.getInfosReductionPourBonCommande().add(infosReductionPourBonCommande);
+			}
+		}
 
 		cout.setCoutComptantHT(coutComptantHT);
 		cout.setCoutComptantTTC(coutComptantTTC);
@@ -167,6 +181,27 @@ public class CoutCommande extends CalculeCout {
 		}
 
 		return cout;
+	}
+
+	/**
+	 * ajouter une reduction au liste des reduction ligne.
+	 * 
+	 * @param reduction
+	 *            reduction a joute.
+	 * @param tva
+	 *            taux du tva.
+	 * @param prixHT
+	 *            valeur du reduction HT.
+	 */
+	private void creerInfosReductionBonCommande(Reduction reduction, double tva, double prixHT) {
+		if (reduction != null && reduction.isreductionComptant()) {
+			infosReductionPourBonCommande = new InfosReductionPourBonCommande();
+			infosReductionPourBonCommande.setReference(reduction.getReference());
+			infosReductionPourBonCommande.setLabel(reduction.getLabel());
+			infosReductionPourBonCommande.setReferenceCatalogue(reduction.getCodeCatalogueReduction());
+			infosReductionPourBonCommande.setPrixTTC(prixHT);
+			infosReductionPourBonCommande.setPrixHT(ReductionUtil.caculerReductionHT(prixHT, tva));
+		}
 	}
 
 }
