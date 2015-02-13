@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.rest.RestClient;
+import com.nordnet.opale.util.Constants;
 
 /**
  * L'implementation de service {@link TracageService}.
@@ -29,8 +30,8 @@ public class TracageServiceImpl implements TracageService {
 	@Override
 	public void ajouterTrace(String target, String key, String descr, Auteur user) throws OpaleException {
 
-		restClient
-				.addLog(target, key, descr, user.getIp() != null ? user.getIp().getIp() : null, user.getQui(), "type");
+		restClient.addLog(target, key, descr, user.getIp() != null ? user.getIp().getIp() : null, user.getQui(),
+				Constants.TYPE_LOG);
 	}
 
 }

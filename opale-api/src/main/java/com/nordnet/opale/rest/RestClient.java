@@ -273,11 +273,17 @@ public class RestClient {
 	 * Ajouter le log.
 	 * 
 	 * @param target
+	 *            produit
 	 * @param key
+	 *            reference
 	 * @param descr
+	 *            description
 	 * @param ip
+	 *            ip
 	 * @param user
+	 *            user
 	 * @param type
+	 *            type log
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */

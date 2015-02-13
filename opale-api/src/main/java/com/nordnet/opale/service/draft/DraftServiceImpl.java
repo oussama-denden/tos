@@ -189,7 +189,7 @@ public class DraftServiceImpl implements DraftService {
 		LOGGER.info("Enter methode supprimerDraft");
 		Draft draft = getDraftByReference(reference);
 		draftRepository.delete(draft);
-		tracageService.ajouterTrace(Constants.DRAFT, reference, "Draft " + reference + " supprimé",
+		tracageService.ajouterTrace(Constants.ORDER, reference, "Draft " + reference + " supprimé",
 				Utils.getInternalAuteur());
 		LOGGER.info("Fin methode supprimerDraft");
 
@@ -244,7 +244,7 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(Constants.DRAFT, draft.getReference(), "Draft " + draft.getReference() + " crée",
+		tracageService.ajouterTrace(Constants.ORDER, draft.getReference(), "Draft " + draft.getReference() + " crée",
 				draft.getAuteur() != null ? draft.getAuteur().toAuteurBusiness() : Utils.getInternalAuteur());
 		LOGGER.info("Fin methode creerDraft");
 		return draft;
@@ -273,7 +273,7 @@ public class DraftServiceImpl implements DraftService {
 
 			draftRepository.save(draft);
 
-			tracageService.ajouterTrace(Constants.DRAFT, refDraft, "ajout de ligne aux draft " + refDraft,
+			tracageService.ajouterTrace(Constants.ORDER, refDraft, "ajout de ligne aux draft " + refDraft,
 					draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur() : Utils.getInternalAuteur());
 			referencesLignes.add(draftLigne.getReference());
 		}
@@ -325,7 +325,7 @@ public class DraftServiceImpl implements DraftService {
 		draft.addLigne(nouveauDraftLigne);
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(Constants.DRAFT, refDraft, "ajout de ligne aux draft " + refDraft,
+		tracageService.ajouterTrace(Constants.ORDER, refDraft, "ajout de ligne aux draft " + refDraft,
 				draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur() : Utils.getInternalAuteur());
 
 	}
@@ -346,7 +346,7 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(Constants.DRAFT, refDraft, "le draft " + refDraft + " annulé", auteur);
+		tracageService.ajouterTrace(Constants.ORDER, refDraft, "le draft " + refDraft + " annulé", auteur);
 		LOGGER.info("Fin methode annulerDraft");
 	}
 
@@ -367,7 +367,7 @@ public class DraftServiceImpl implements DraftService {
 		draftRepository.save(draft);
 		tracageService
 				.ajouterTrace(
-						Constants.DRAFT,
+						Constants.ORDER,
 						referenceDraft,
 						"ajout de reference externe au draft  " + referenceDraft,
 						referenceExterneInfo.getAuteur() != null ? referenceExterneInfo.getAuteur() : Utils
@@ -398,7 +398,7 @@ public class DraftServiceImpl implements DraftService {
 		draftLigneRepository.delete(draftLigne);
 		draftLigneRepository.flush();
 
-		tracageService.ajouterTrace(Constants.DRAFT, referenceDraft, "la ligne " + referenceLigne + " du draft "
+		tracageService.ajouterTrace(Constants.ORDER, referenceDraft, "la ligne " + referenceLigne + " du draft "
 				+ referenceDraft + " supprimée",
 				deleteInfo.getAuteur() != null ? deleteInfo.getAuteur() : Utils.getInternalAuteur());
 
@@ -434,7 +434,7 @@ public class DraftServiceImpl implements DraftService {
 
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(Constants.DRAFT, refDraft, "associer le client souscripteur "
+		tracageService.ajouterTrace(Constants.ORDER, refDraft, "associer le client souscripteur "
 				+ idClientSouscripteur + " client facturation " + idClientFacturation + " client livraison "
 				+ idClientLivraison + " au draft" + refDraft, clientInfo.getAuteur() != null ? clientInfo.getAuteur()
 				: Utils.getInternalAuteur());
@@ -483,7 +483,7 @@ public class DraftServiceImpl implements DraftService {
 			trameCatalogue.setTrameCatalogue(catalogue);
 		}
 
-		tracageService.ajouterTrace(Constants.DRAFT, referenceDraft, "la validation du draft de reference "
+		tracageService.ajouterTrace(Constants.ORDER, referenceDraft, "la validation du draft de reference "
 				+ referenceDraft,
 				trameCatalogue.getAuteur() != null ? trameCatalogue.getAuteur() : Utils.getInternalAuteur());
 
@@ -526,7 +526,7 @@ public class DraftServiceImpl implements DraftService {
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
 
-			tracageService.ajouterTrace(Constants.DRAFT, referenceDraft, "la transformation du draft de reference "
+			tracageService.ajouterTrace(Constants.ORDER, referenceDraft, "la transformation du draft de reference "
 					+ referenceDraft + " en commande de reference " + commande.getReference(), commande.getAuteur()
 					.toAuteurBusiness());
 			return commande;
@@ -556,7 +556,7 @@ public class DraftServiceImpl implements DraftService {
 
 		draftLigneRepository.save(draftLigne);
 
-		tracageService.ajouterTrace(Constants.DRAFT, refDraft, "Associer le geste " + geste.name() + " au draft "
+		tracageService.ajouterTrace(Constants.ORDER, refDraft, "Associer le geste " + geste.name() + " au draft "
 				+ refDraft, Utils.getInternalAuteur());
 
 	}
@@ -795,7 +795,7 @@ public class DraftServiceImpl implements DraftService {
 		String referenceReduction = reductionService.ajouterReduction(refDraft, reductionInfo);
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
-		tracageService.ajouterTrace(Constants.DRAFT, draft.getReference(),
+		tracageService.ajouterTrace(Constants.ORDER, draft.getReference(),
 				"associer reduction " + reductionInfo.getTypeValeur() + " au draft " + refDraft,
 				reductionInfo.getAuteur() != null ? reductionInfo.getAuteur() : Utils.getInternalAuteur());
 		return reductionResponse.toString();
@@ -921,7 +921,7 @@ public class DraftServiceImpl implements DraftService {
 		DraftLigne draftLigne = transformerContratEnLigneDraft(contrat, trameCatalogue);
 		draft.addLigne(draftLigne);
 
-		tracageService.ajouterTrace(Constants.DRAFT, draft.getReference(), "transformaet le contrat "
+		tracageService.ajouterTrace(Constants.ORDER, draft.getReference(), "transformaet le contrat "
 				+ referenceContrat + " a un draft " + draft.getReference(), trameCatalogue.getAuteur() != null
 				? trameCatalogue.getAuteur() : Utils.getInternalAuteur());
 		save(draft);

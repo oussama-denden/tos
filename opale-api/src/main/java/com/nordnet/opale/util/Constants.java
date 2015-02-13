@@ -173,4 +173,9 @@ public final class Constants {
 	 */
 	public static final String COMMANDE = "COMMANDE";
 
+	/**
+	 * Order constant.
+	 */
+	public static final String ORDER = "order";
+
 }

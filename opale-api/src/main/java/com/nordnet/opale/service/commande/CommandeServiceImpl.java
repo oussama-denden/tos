@@ -238,8 +238,8 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 
-		tracageService.ajouterTrace(Constants.PAIEMENT, refCommande,
-				"Créer une intention de paiement pour la commande " + refCommande, paiementInfo.getAuteur());
+		tracageService.ajouterTrace(Constants.ORDER, refCommande, "Créer une intention de paiement pour la commande "
+				+ refCommande, paiementInfo.getAuteur());
 
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
@@ -263,9 +263,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		downPaiementService.envoiePaiement(commande, paiementService.getPaiementByReference(referencePaiement));
 
-		tracageService.ajouterTrace(Constants.PAIEMENT, referenceCommande,
-				"Payer l'intention de paiement de reference " + referencePaiement + " de la commande "
-						+ referenceCommande, paiementInfo.getAuteur());
+		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Payer l'intention de paiement de reference "
+				+ referencePaiement + " de la commande " + referenceCommande, paiementInfo.getAuteur());
 
 	}
 
@@ -287,8 +286,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		commandeRepository.save(commande);
 
-		tracageService.ajouterTrace(Constants.PAIEMENT, referenceCommande,
-				"Paiement directe de la commande de reference" + referenceCommande, paiementInfo.getAuteur());
+		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Paiement directe de la commande de reference"
+				+ referenceCommande, paiementInfo.getAuteur());
 
 		if (typePaiement == TypePaiement.COMPTANT) {
 			downPaiementService.envoiePaiement(commande, paiement);
@@ -423,8 +422,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		getCommandeByReference(refCommande);
 		paiementService.supprimer(refCommande, refPaiement);
-		tracageService.ajouterTrace(Constants.PAIEMENT, refCommande, "Supprimer le paiement de reference "
-				+ refPaiement + "de la commande de reference" + refCommande, auteur);
+		tracageService.ajouterTrace(Constants.ORDER, refCommande, "Supprimer le paiement de reference " + refPaiement
+				+ "de la commande de reference" + refCommande, auteur);
 
 	}
 

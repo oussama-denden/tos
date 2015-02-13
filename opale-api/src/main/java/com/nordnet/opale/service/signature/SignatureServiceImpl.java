@@ -94,7 +94,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 		}
 
-		tracageService.ajouterTrace(Constants.SIGNATURE, refCommande,
+		tracageService.ajouterTrace(Constants.ORDER, refCommande,
 				"Ajouter un intention de signature pour la commande de reference " + refCommande,
 				ajoutSignatureInfo.getAuteur());
 		JSONObject jsonResponse = new JSONObject();
@@ -136,7 +136,7 @@ public class SignatureServiceImpl implements SignatureService {
 
 			}
 		}
-		tracageService.ajouterTrace(Constants.SIGNATURE, refCommande, "Signer la commande de reference " + refCommande,
+		tracageService.ajouterTrace(Constants.ORDER, refCommande, "Signer la commande de reference " + refCommande,
 				signatureInfo.getAuteur());
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("signatureReference", referenceSignature);
@@ -257,15 +257,15 @@ public class SignatureServiceImpl implements SignatureService {
 		if (!signature.isSigne()) {
 			signatureRepository.delete(signature);
 			signatureRepository.flush();
-			tracageService.ajouterTrace(Constants.SIGNATURE, refCommande,
+			tracageService.ajouterTrace(Constants.ORDER, refCommande,
 					"Supprimer l'intention de signature de reference " + refSignature, auteur);
 		} else {
 			SignatureValidator.checkIfSignatureAnnule(signature);
 			signature.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());
 			signatureRepository.save(signature);
 		}
-		tracageService.ajouterTrace(Constants.SIGNATURE, refCommande, "Supprimer la signature de reference "
-				+ refSignature, auteur);
+		tracageService.ajouterTrace(Constants.ORDER, refCommande,
+				"Supprimer la signature de reference " + refSignature, auteur);
 
 		LOGGER.info("Fin methode supprimer");
 	}
