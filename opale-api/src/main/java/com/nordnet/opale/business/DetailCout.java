@@ -13,7 +13,7 @@ import com.nordnet.opale.util.Utils;
  * @author akram-moncer
  * 
  */
-@JsonIgnoreProperties({ "coutRecurrentGlobale", "details" })
+@JsonIgnoreProperties({ "coutRecurrentGlobale", "details", })
 public class DetailCout extends Cout {
 
 	/**
@@ -60,6 +60,11 @@ public class DetailCout extends Cout {
 	 * {@link Plan}.
 	 */
 	private CoutRecurrent coutRecurrent;
+
+	/**
+	 * liste des reduction calculé et associé a une ligne
+	 */
+	private List<InfosReductionPourBonCommande> infosReductionPourBonCommande;
 
 	/**
 	 * constructeur par defaut.
@@ -252,8 +257,22 @@ public class DetailCout extends Cout {
 		return new EqualsBuilder().append(numero, rhs.numero).isEquals();
 	}
 
+	/**
+	 * la liset des reduciton associes a une ligne qui sont calcules<s
+	 * 
+	 * @return liste des reductions.
+	 */
 	public List<InfosReductionPourBonCommande> getInfosReductionPourBonCommande() {
-		// TODO Auto-generated method stub
-		return null;
+		return infosReductionPourBonCommande;
 	}
+
+	/**
+	 * 
+	 * @param infosReductionPourBonCommande
+	 *            {@link InfosReductionPourBonCommande}
+	 */
+	public void setInfosReductionPourBonCommande(List<InfosReductionPourBonCommande> infosReductionPourBonCommande) {
+		this.infosReductionPourBonCommande = infosReductionPourBonCommande;
+	}
+
 }
