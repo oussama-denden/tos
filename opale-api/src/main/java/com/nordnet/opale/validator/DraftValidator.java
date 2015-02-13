@@ -613,8 +613,8 @@ public class DraftValidator {
 	public static void validerReference(DraftLigne draftLigne, DraftLigneInfo draftLigneInfo) throws OpaleException {
 
 		Offre offre = draftLigneInfo.getOffre();
-
-		if (draftLigneInfo.getGeste() == Geste.RENOUVELLEMENT) {
+		Geste geste = draftLigneInfo.getGeste() != null ? draftLigneInfo.getGeste() : draftLigne.getGeste();
+		if (geste == Geste.RENOUVELLEMENT) {
 
 			/*
 			 * valider la reference de l'offre.

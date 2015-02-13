@@ -317,7 +317,7 @@ public class Reduction {
 	 * @return true si la reduction est comptante.
 	 */
 	public boolean isReductionComptant() {
-		return (typeValeur.equals(TypeValeur.EURO) || typeValeur.equals(TypeValeur.POURCENTAGE));
+		return (typeValeur.equals(TypeValeur.MONTANT) || typeValeur.equals(TypeValeur.POURCENTAGE));
 	}
 
 }

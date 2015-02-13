@@ -233,16 +233,12 @@
           <stream_name>qui</stream_name>
         </field>
         <field>
-          <column_name>timestamp</column_name>
+          <column_name>ts</column_name>
           <stream_name>timestamp</stream_name>
         </field>
         <field>
-          <column_name>dateCreation</column_name>
-          <stream_name>creationDate</stream_name>
-        </field>
-        <field>
-          <column_name>referenceOffre</column_name>
-          <stream_name>itemCode</stream_name>
+          <column_name>numero</column_name>
+          <stream_name>numero</stream_name>
         </field>
         <field>
           <column_name>secteur</column_name>
@@ -253,8 +249,8 @@
           <stream_name>gamme</stream_name>
         </field>
         <field>
-          <column_name>numero</column_name>
-          <stream_name>numero</stream_name>
+          <column_name>geste</column_name>
+          <stream_name>geste</stream_name>
         </field>
         <field>
           <column_name>modeFacturation</column_name>
@@ -265,20 +261,24 @@
           <stream_name>typeProduit</stream_name>
         </field>
         <field>
-          <column_name>tarifId</column_name>
-          <stream_name>tarifId</stream_name>
-        </field>
-        <field>
           <column_name>commandeId</column_name>
           <stream_name>commandeId</stream_name>
+        </field>
+        <field>
+          <column_name>tarifId</column_name>
+          <stream_name>tarifId</stream_name>
         </field>
         <field>
           <column_name>label</column_name>
           <stream_name>description</stream_name>
         </field>
         <field>
-          <column_name>geste</column_name>
-          <stream_name>geste</stream_name>
+          <column_name>dateCreation</column_name>
+          <stream_name>creationDate</stream_name>
+        </field>
+        <field>
+          <column_name>referenceOffre</column_name>
+          <stream_name>itemCode</stream_name>
         </field>
     </fields>
      <cluster_schema/>
@@ -590,7 +590,7 @@
     <appendLines>N</appendLines>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non Pr&#xe9;vu.xls</name>
+      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;CmdLigne-NonPr&#xe9;vu.xls</name>
       <extention>xls</extention>
       <do_not_open_newfile_init>N</do_not_open_newfile_init>
       <split>N</split>

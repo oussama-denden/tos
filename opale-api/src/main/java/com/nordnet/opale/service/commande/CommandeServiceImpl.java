@@ -21,6 +21,9 @@ import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
+import com.nordnet.opale.business.DetailCout;
+import com.nordnet.opale.business.InfosBonCommande;
+import com.nordnet.opale.business.InfosLignePourBonCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -627,7 +630,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 				referencesContrats.add(refContrat);
 			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				transformeEnOrdereRenouvellement(commande.getReference());
+				transformeEnOrdereRenouvellement(commande, ligne);
 			}
 		}
 
@@ -728,31 +731,21 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException {
-		CommandeValidator.checkReferenceCommande(refCommande);
-		Commande commande = commandeRepository.findByReference(refCommande);
-		CommandeValidator.isExiste(refCommande, commande);
+	public void transformeEnOrdereRenouvellement(Commande commande, CommandeLigne ligne)
+			throws OpaleException, JSONException {
 		CommandeValidator.testerCommandeNonTransforme(commande);
-		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
-				restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
-			}
-
+		if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+			ContratRenouvellementInfo renouvellementInfo = creerContratRenouvellementInfo(commande, ligne);
+			restClient.renouvelerContrat(ligne.getReferenceContrat(), renouvellementInfo);
 		}
 
 	}
 
 	/**
-	 * Creer les informations de renouvellement de contrat.
-	 * 
-	 * @param commande
-	 *            {@link Commande}.
-	 * @param ligne
-	 *            {@link CommandeLigne}.
-	 * @return {@link ContratRenouvellementInfo}.
+	 * {@inheritDoc}
 	 */
-	private ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne) {
+	@Override
+	public ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne) {
 		ContratRenouvellementInfo renouvellementInfo = new ContratRenouvellementInfo();
 
 		// Creer la politique de renouvellement.
@@ -1151,5 +1144,78 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public InfosBonCommande getInfosBonCommande(String refCommande) throws OpaleException {
+		Commande commande = commandeRepository.findByReference(refCommande);
+		CommandeValidator.isExiste(refCommande, commande);
+		InfosBonCommande infosBonCommande = new InfosBonCommande();
+		infosBonCommande.setReference(refCommande);
+		infosBonCommande.setDateCreation(commande.getDateCreation());
+		Cout cout = calculerCout(refCommande);
+		infosBonCommande.setMontantTVA(cout.getMontantTva());
+		infosBonCommande.setTauxTVA(cout.getTva());
+
+		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
+		SetPaiement: for (Paiement paiement : paiements) {
+			if (infosBonCommande.getMoyenDePaiement() == null) {
+				infosBonCommande.setMoyenDePaiement(paiement.getModePaiement());
+				infosBonCommande.setReferencePaiement(paiement.getReference());
+				break SetPaiement;
+			}
+		}
+
+		infosBonCommande.setRefClient(commande.getClientSouscripteur().getClientId());
+
+		double prixRecurrentTotalHT = 0;
+		double prixRecurrentTotalTTC = 0;
+		double prixRecurrentReduitHT = 0;
+		double prixRecurrentReduitTTC = 0;
+
+		List<InfosLignePourBonCommande> lignesPourBonCommandes = new ArrayList<>();
+		for (CommandeLigne ligne : commande.getCommandeLignes()) {
+			InfosLignePourBonCommande lignePourBonCommande = new InfosLignePourBonCommande();
+			lignePourBonCommande.setLabel(ligne.getLabel());
+			lignePourBonCommande.setReferenceContrat(ligne.getReferenceContrat());
+
+			for (DetailCout detailCout : cout.getDetails()) {
+				if (detailCout.getNumero() != null && detailCout.getNumero().equals(ligne.getNumero())) {
+					double prixHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
+					double prixTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
+					double prixReduitHT = detailCout.getCoutRecurrent().getReduit().getTarifHT();
+					double prixReduitTTC = detailCout.getCoutRecurrent().getReduit().getTarifTTC();
+					lignePourBonCommande.setPrixHT(prixHT);
+					lignePourBonCommande.setPrixTTC(prixTTC);
+					lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
+
+					prixRecurrentTotalHT += prixHT;
+					prixRecurrentTotalTTC += prixTTC;
+					prixRecurrentReduitHT += prixReduitHT;
+					prixRecurrentReduitTTC += prixReduitTTC;
+				}
+			}
+
+			lignesPourBonCommandes.add(lignePourBonCommande);
+			if (infosBonCommande.getGeste() == null) {
+				infosBonCommande.setGeste(ligne.getGeste());
+			}
+
+			if (infosBonCommande.getFrequence() == null) {
+				infosBonCommande.setFrequence(ligne.getTarif().getFrequence());
+			}
+
+		}
+
+		infosBonCommande.setPrixRecurrentTotalHT(prixRecurrentTotalHT);
+		infosBonCommande.setPrixRecurrentTotalTTC(prixRecurrentTotalTTC);
+		infosBonCommande.setPrixRecurrentReduitHT(prixRecurrentReduitHT);
+		infosBonCommande.setPrixRecurrentReduitTTC(prixRecurrentReduitTTC);
+		infosBonCommande.getLignes().addAll(lignesPourBonCommandes);
+
+		return infosBonCommande;
 	}
 }

@@ -25,9 +25,9 @@ public class ReductionUtil {
 	public static double calculeReductionComptant(double montant, Reduction reduction) {
 		if (reduction == null || montant == 0) {
 			return 0;
-		} else if (reduction.getTypeValeur().equals(TypeValeur.EURO) && reduction.getValeur() > montant) {
+		} else if (reduction.getTypeValeur().equals(TypeValeur.MONTANT) && reduction.getValeur() > montant) {
 			return 0;
-		} else if (reduction.getTypeValeur().equals(TypeValeur.EURO)) {
+		} else if (reduction.getTypeValeur().equals(TypeValeur.MONTANT)) {
 			return reduction.getValeur().doubleValue();
 		} else if (reduction.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
 			return ((montant * reduction.getValeur()) / 100);

@@ -1,6 +1,5 @@
 package com.nordnet.opale.finder.business;
 
-
 /**
  * Enumeration que definit le type de valeur de {@link Reduction}.
  * 
@@ -8,7 +7,7 @@ package com.nordnet.opale.finder.business;
  * Trois types de valeur:
  * </p>
  * <ul>
- * <li><b>EURO</b> : la promotion est une reduction en Euros.</li>
+ * <li><b>MONTANT</b> : la promotion est une reduction en Montant.</li>
  * <li><b>POURCENTAGE</b> : la promotion est une reduction en pourcentage.</li>
  * <li><b>MOIS</b> : la promotion est en mois gratuit offert.</li>
  * </ul>
@@ -19,9 +18,9 @@ package com.nordnet.opale.finder.business;
 public enum TypeValeur {
 
 	/**
-	 * la promotion est une reduction en Euros.
+	 * la promotion est une reduction en Montant.
 	 */
-	EURO,
+	MONTANT,
 
 	/**
 	 * la promotion est une reduction en pourcentage.
@@ -42,8 +41,8 @@ public enum TypeValeur {
 	 */
 	public static TypeValeur fromString(String typeValeurReduction) {
 		switch (typeValeurReduction) {
-		case "EURO":
-			return EURO;
+		case "MONTANT":
+			return MONTANT;
 		case "POURCENTAGE":
 			return POURCENTAGE;
 		case "MOIS":

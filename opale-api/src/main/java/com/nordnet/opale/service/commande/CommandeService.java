@@ -15,15 +15,18 @@ import com.nordnet.opale.business.CommandePaiementInfo;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
+import com.nordnet.opale.business.InfosBonCommande;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.topaze.ws.entity.ContratRenouvellementInfo;
 
 /**
  * Contient les operation sur les {@link Commande}.
@@ -344,15 +347,18 @@ public interface CommandeService {
 	/**
 	 * Transformer une commande en ordre de renouvellement afin d'acter le renouvellement pour un contrat donné.
 	 * 
-	 * @param refCommande
-	 *            refrence du commande.
+	 * @param commande
+	 *            {@link Commande}
+	 * @param ligne
+	 *            {@link CommandeLigne}.
 	 * 
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public void transformeEnOrdereRenouvellement(String refCommande) throws OpaleException, JSONException;
+	public void transformeEnOrdereRenouvellement(Commande commande, CommandeLigne ligne)
+			throws OpaleException, JSONException;
 
 	/**
 	 * Calculer le cout de la {@link Commande}.
@@ -376,5 +382,29 @@ public interface CommandeService {
 	 *             {@link OpaleException}
 	 */
 	public boolean validerCommandeEnTransformationAutomatique(Commande commande) throws OpaleException;
+
+	/**
+	 * Creer les informations de renouvellement de contrat.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param ligne
+	 *            {@link CommandeLigne}.
+	 * @return {@link ContratRenouvellementInfo}.
+	 */
+	public ContratRenouvellementInfo creerContratRenouvellementInfo(Commande commande, CommandeLigne ligne);
+
+	/**
+	 * Recuperer les informations de la commande utiles et necessaires à l'envoi du Bon de Commande.
+	 * 
+	 * @param refCommande
+	 *            reference du commande
+	 * 
+	 * @return {@link InfosBonCommande}
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public InfosBonCommande getInfosBonCommande(String refCommande) throws OpaleException;
 
 }

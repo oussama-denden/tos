@@ -150,10 +150,36 @@
     <compare>
 <condition>
  <negated>N</negated>
- <leftvalue>state</leftvalue>
- <function>IN LIST</function>
- <rightvalue/>
- <value><name>constant</name><type>String</type><text>&#x5b;RBP, RB, PE, AN&#x5d;</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
+ <conditions>
+  <condition>
+   <negated>N</negated>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>RBP</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  <condition>
+   <negated>N</negated>
+   <operator>OR</operator>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>RB</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  <condition>
+   <negated>N</negated>
+   <operator>OR</operator>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>PE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  <condition>
+   <negated>N</negated>
+   <operator>OR</operator>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>AN</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  </conditions>
+ </condition>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -213,8 +239,8 @@
           <stream_name>adresseFacturation</stream_name>
         </field>
         <field>
-          <column_name>timestamp</column_name>
-          <stream_name>adresseFacturationDateCreation</stream_name>
+          <column_name>ts</column_name>
+          <stream_name>timestamp</stream_name>
         </field>
     </fields>
      <cluster_schema/>
@@ -267,16 +293,16 @@
           <stream_name>createdBy</stream_name>
         </field>
         <field>
-          <column_name>timestamp</column_name>
-          <stream_name>adresseLivraisonDateCreation</stream_name>
-        </field>
-        <field>
           <column_name>tva</column_name>
           <stream_name>tva</stream_name>
         </field>
         <field>
           <column_name>adresseId</column_name>
           <stream_name>adresseLivraison</stream_name>
+        </field>
+        <field>
+          <column_name>ts</column_name>
+          <stream_name>timestamp</stream_name>
         </field>
     </fields>
      <cluster_schema/>
@@ -337,8 +363,8 @@
           <stream_name>tva</stream_name>
         </field>
         <field>
-          <column_name>timestamp</column_name>
-          <stream_name>adresseDateCreation</stream_name>
+          <column_name>ts</column_name>
+          <stream_name>timestamp</stream_name>
         </field>
     </fields>
      <cluster_schema/>
@@ -415,7 +441,7 @@
           <stream_name>orderDate</stream_name>
         </field>
         <field>
-          <column_name>timestamp</column_name>
+          <column_name>ts</column_name>
           <stream_name>timestamp</stream_name>
         </field>
     </fields>
@@ -493,7 +519,7 @@
           <stream_name>ClientFacturationId</stream_name>
         </field>
         <field>
-          <column_name>timestamp</column_name>
+          <column_name>ts</column_name>
           <stream_name>timestamp</stream_name>
         </field>
     </fields>

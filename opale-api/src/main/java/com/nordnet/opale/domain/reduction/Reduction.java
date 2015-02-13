@@ -413,7 +413,7 @@ public class Reduction implements Cloneable {
 	 * @return true si la reduction est comptante.
 	 */
 	public boolean isreductionComptant() {
-		return (typeValeur.equals(TypeValeur.EURO) || typeValeur.equals(TypeValeur.POURCENTAGE));
+		return (typeValeur.equals(TypeValeur.MONTANT) || typeValeur.equals(TypeValeur.POURCENTAGE));
 	}
 
 }
