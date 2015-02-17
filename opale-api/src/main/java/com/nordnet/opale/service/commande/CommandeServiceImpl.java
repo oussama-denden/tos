@@ -1183,19 +1183,21 @@ public class CommandeServiceImpl implements CommandeService {
 			lignePourBonCommande.setReferenceContrat(ligne.getReferenceContrat());
 
 			for (DetailCout detailCout : cout.getDetails()) {
-				if (detailCout.getNumero() != null && detailCout.getNumero().equals(ligne.getNumero())) {
-					double prixHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
-					double prixTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
-					double prixReduitHT = detailCout.getCoutRecurrent().getReduit().getTarifHT();
-					double prixReduitTTC = detailCout.getCoutRecurrent().getReduit().getTarifTTC();
-					lignePourBonCommande.setPrixHT(prixHT);
-					lignePourBonCommande.setPrixTTC(prixTTC);
-					lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
+				if (detailCout.getNumero() != null && Integer.valueOf(detailCout.getNumero()).equals(ligne.getNumero())) {
+					if (detailCout.getCoutRecurrent() != null) {
+						double prixHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
+						double prixTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
+						double prixReduitHT = detailCout.getCoutRecurrent().getReduit().getTarifHT();
+						double prixReduitTTC = detailCout.getCoutRecurrent().getReduit().getTarifTTC();
+						lignePourBonCommande.setPrixHT(prixHT);
+						lignePourBonCommande.setPrixTTC(prixTTC);
+						lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
 
-					prixRecurrentTotalHT += prixHT;
-					prixRecurrentTotalTTC += prixTTC;
-					prixRecurrentReduitHT += prixReduitHT;
-					prixRecurrentReduitTTC += prixReduitTTC;
+						prixRecurrentTotalHT += prixHT;
+						prixRecurrentTotalTTC += prixTTC;
+						prixRecurrentReduitHT += prixReduitHT;
+						prixRecurrentReduitTTC += prixReduitTTC;
+					}
 				}
 			}
 

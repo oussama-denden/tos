@@ -1,5 +1,6 @@
 package com.nordnet.opale.business;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class InfosBonCommande {
 	/**
 	 * {@link InfosLignePourBonCommande}.
 	 */
-	private List<InfosLignePourBonCommande> lignes;
+	private List<InfosLignePourBonCommande> lignes = new ArrayList<InfosLignePourBonCommande>();
 
 	/**
 	 * constructeur par defaut.

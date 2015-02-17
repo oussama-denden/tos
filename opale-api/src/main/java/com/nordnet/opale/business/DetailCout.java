@@ -13,7 +13,7 @@ import com.nordnet.opale.util.Utils;
  * @author akram-moncer
  * 
  */
-@JsonIgnoreProperties({ "coutRecurrentGlobale", "details", })
+@JsonIgnoreProperties({ "coutRecurrentGlobale", "details", "infosReductionPourBonCommande" })
 public class DetailCout extends Cout {
 
 	/**
