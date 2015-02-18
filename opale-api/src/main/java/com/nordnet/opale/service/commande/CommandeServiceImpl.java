@@ -1196,6 +1196,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 			for (DetailCout detailCout : cout.getDetails()) {
 				if (detailCout.getNumero() != null && Integer.valueOf(detailCout.getNumero()).equals(ligne.getNumero())) {
+					lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
+
 					if (detailCout.getCoutRecurrent() != null) {
 						double prixHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
 						double prixTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
@@ -1203,7 +1205,6 @@ public class CommandeServiceImpl implements CommandeService {
 						double prixReduitTTC = detailCout.getCoutRecurrent().getReduit().getTarifTTC();
 						lignePourBonCommande.setPrixHT(prixHT);
 						lignePourBonCommande.setPrixTTC(prixTTC);
-						lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
 
 						prixRecurrentTotalHT += prixHT;
 						prixRecurrentTotalTTC += prixTTC;
