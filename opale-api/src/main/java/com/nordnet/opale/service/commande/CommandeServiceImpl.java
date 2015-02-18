@@ -947,6 +947,9 @@ public class CommandeServiceImpl implements CommandeService {
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 			reductionContrat.setIsAffichableSurFacture(true);
 			reductionContrat.setOrdre(Constants.DEUX);
+			if (reductionContrat.getTypeValeur().equals(TypeValeur.MOIS)) {
+				checkReductionWithTypeMois(reductionContrat, commandeLigne.getTarif().getFrequence());
+			}
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			restClient.ajouterReductionSurContrat(commandeLigne.getReferenceContrat(), contratReductionInfo);
@@ -959,6 +962,10 @@ public class CommandeServiceImpl implements CommandeService {
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 			reductionContrat.setIsAffichableSurFacture(true);
 			reductionContrat.setTypeValeur(reductionLigne.getTypeValeur());
+
+			if (reductionContrat.getTypeValeur().equals(TypeValeur.MOIS)) {
+				checkReductionWithTypeMois(reductionContrat, commandeLigne.getTarif().getFrequence());
+			}
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
 			if (reductionLigne.getReferenceFrais() == null) {
@@ -995,6 +1002,10 @@ public class CommandeServiceImpl implements CommandeService {
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 				reductionContrat.setIsAffichableSurFacture(true);
 				reductionContrat.setTypeValeur(reductionligneDetail.getTypeValeur());
+
+				if (reductionContrat.getTypeValeur().equals(TypeValeur.MOIS)) {
+					checkReductionWithTypeMois(reductionContrat, commandeLigneDetail.getTarif().getFrequence());
+				}
 				if (reductionligneDetail.getReferenceFrais() != null) {
 					String typeFrais =
 							commandeRepository.findTypeFraisDetail(reductionligneDetail.getReferenceDraft(),
@@ -1218,5 +1229,23 @@ public class CommandeServiceImpl implements CommandeService {
 		infosBonCommande.getLignes().addAll(lignesPourBonCommandes);
 
 		return infosBonCommande;
+	}
+
+	/**
+	 * Verifier que la valeur reduction de typr MOIS ne depasse pas la frequence sinon alligner la frequence et valeur
+	 * reduction.
+	 * 
+	 * @param reductions
+	 * @param frequence
+	 */
+	private void checkReductionWithTypeMois(ReductionContrat reduction, Integer frequence) {
+
+		if (reduction.getTypeValeur().equals(TypeValeur.MOIS) && reduction.getValeur() > frequence) {
+
+			reduction.setNbUtilisationMax(reduction.getValeur().intValue());
+			reduction.setValeur(new Double(Constants.UN));
+
+		}
+
 	}
 }

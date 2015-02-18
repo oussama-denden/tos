@@ -2,9 +2,8 @@ package com.nordnet.opale.validator;
 
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import com.nordnet.common.valueObject.money.RUM;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -155,10 +154,9 @@ public class PaiementValidator {
 		if (Utils.isStringNullOrEmpty(((PaiementInfoRecurrent) paiementInfo).getRum())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.rum"), "0.1.4");
 		}
-		if (!isRumValide(((PaiementInfoRecurrent) paiementInfo).getRum())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.8"), "3.1.8");
 
-		}
+		// verifer le format du rum
+		isRumValide(((PaiementInfoRecurrent) paiementInfo).getRum());
 
 		if (!paiementInfo.getModePaiement().isModePaiementRecurrent()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.7"), "3.1.7");
@@ -189,12 +187,14 @@ public class PaiementValidator {
 	 * @param rum
 	 *            String rum.
 	 * @return true si la rum est valide .
+	 * @throws OpaleException
 	 */
-	public static boolean isRumValide(String rum) {
-		String rumPattern = "R[0-9]{7}";
-		Pattern pattern = Pattern.compile(rumPattern);
-		Matcher matcher = pattern.matcher(rum);
-		return matcher.matches();
+	public static void isRumValide(String rum) throws OpaleException {
+		try {
+			RUM rfum = RUM.build(rum);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.8"), "3.1.8");
+		}
 
 	}
 }
