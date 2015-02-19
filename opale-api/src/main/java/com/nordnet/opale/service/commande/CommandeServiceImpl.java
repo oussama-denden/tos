@@ -704,9 +704,11 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException {
+
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
-
+		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Transformer la commande " + referenceCommande
+				+ " en draft", Utils.getInternalAuteur());
 		draftService.save(draft);
 
 		return draft;
