@@ -332,7 +332,7 @@ public class DraftServiceImpl implements DraftService {
 		draft.addLigne(nouveauDraftLigne);
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(Constants.ORDER, refDraft, "ajout de ligne aux draft " + refDraft,
+		tracageService.ajouterTrace(Constants.ORDER, refDraft, "Modifier ligne draft " + refDraft,
 				draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur() : Utils.getInternalAuteur());
 
 	}
@@ -770,6 +770,8 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isCodePartenaireValide(codePartenaireInfo.getCodePartenaire());
 		draft.setCodePartenaire(codePartenaireInfo.getCodePartenaire());
 		draftRepository.save(draft);
+		tracageService.ajouterTrace(Constants.ORDER, draft.getReference(), "associer code partenaire "
+				+ codePartenaireInfo.getCodePartenaire() + " au draft " + refDraft, Utils.getInternalAuteur());
 		LOGGER.info("Fin methode service associerCodePartenaire");
 
 	}
@@ -841,6 +843,10 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
 
 		String referenceReduction = reductionService.ajouterReductionLigne(refDraft, refLigne, reductionInfo);
+
+		tracageService.ajouterTrace(Constants.ORDER, refLigne, "associer reduction " + reductionInfo.getTypeValeur()
+				+ " a la ligne draft " + refLigne + " du draft " + refDraft, reductionInfo.getAuteur() != null
+				? reductionInfo.getAuteur() : Utils.getInternalAuteur());
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
@@ -866,6 +872,11 @@ public class DraftServiceImpl implements DraftService {
 
 		String referenceReduction =
 				reductionService.ajouterReductionDetailLigne(draftLigneDetail, refDraft, refLigne, reductionInfo);
+
+		tracageService.ajouterTrace(Constants.ORDER, refLigne, "associer reduction " + reductionInfo.getTypeValeur()
+				+ " a la detail ligne draft " + refProduit + " de la ligne " + refLigne + " du draft " + refDraft,
+				reductionInfo.getAuteur() != null ? reductionInfo.getAuteur() : Utils.getInternalAuteur());
+
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
@@ -894,6 +905,11 @@ public class DraftServiceImpl implements DraftService {
 
 				reductionService.ajouterReductionFraisLigneDetaille(refDraft, refLigne, draftLigneDetail, refFrais,
 						reductionInfo);
+
+		tracageService.ajouterTrace(Constants.ORDER, refLigne, "associer reduction " + reductionInfo.getTypeValeur()
+				+ " a la detail ligne draft " + refProduit + " de la ligne " + refLigne + " du draft " + refDraft,
+				reductionInfo.getAuteur() != null ? reductionInfo.getAuteur() : Utils.getInternalAuteur());
+
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
@@ -917,6 +933,11 @@ public class DraftServiceImpl implements DraftService {
 
 		String referenceReduction =
 				reductionService.ajouterReductionFraisLigne(refDraft, draftLigne, refFrais, reductionInfo);
+
+		tracageService.ajouterTrace(Constants.ORDER, refLigne, "associer reduction " + reductionInfo.getTypeValeur()
+				+ " a la ligne " + refLigne + " du draft " + refDraft, reductionInfo.getAuteur() != null
+				? reductionInfo.getAuteur() : Utils.getInternalAuteur());
+
 		JSONObject reductionResponse = new JSONObject();
 		reductionResponse.put("referenceReduction", referenceReduction);
 
