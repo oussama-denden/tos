@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
@@ -57,14 +58,17 @@ import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.validator.CommandeValidator;
+import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
 import com.nordnet.topaze.ws.entity.ContratReductionInfo;
 import com.nordnet.topaze.ws.entity.ContratRenouvellementInfo;
+import com.nordnet.topaze.ws.entity.ContratResiliationtInfo;
 import com.nordnet.topaze.ws.entity.ContratValidationInfo;
 import com.nordnet.topaze.ws.entity.FraisRenouvellement;
 import com.nordnet.topaze.ws.entity.PolitiqueRenouvellement;
+import com.nordnet.topaze.ws.entity.PolitiqueResiliation;
 import com.nordnet.topaze.ws.entity.PolitiqueValidation;
 import com.nordnet.topaze.ws.entity.Prix;
 import com.nordnet.topaze.ws.entity.PrixRenouvellemnt;
@@ -75,6 +79,7 @@ import com.nordnet.topaze.ws.enums.ModePaiement;
 import com.nordnet.topaze.ws.enums.TypeFrais;
 import com.nordnet.topaze.ws.enums.TypeProduit;
 import com.nordnet.topaze.ws.enums.TypeReduction;
+import com.nordnet.topaze.ws.enums.TypeResiliation;
 import com.nordnet.topaze.ws.enums.TypeTVA;
 import com.nordnet.topaze.ws.enums.TypeValeur;
 
@@ -154,13 +159,13 @@ public class CommandeServiceImpl implements CommandeService {
 	private TopazeClient topazeClient;
 
 	/**
-	 * {@link CoutDecorator}
+	 * {@link CoutDecorator}.
 	 */
 	@Autowired
 	private CoutDecorator coutDecorator;
 
 	/**
-	 * {@link ReductionRepository}
+	 * {@link ReductionRepository}.
 	 */
 	private ReductionRepository reductionRepository;
 
@@ -638,6 +643,50 @@ public class CommandeServiceImpl implements CommandeService {
 		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
 		commandeRepository.save(commande);
 		return referencesContrats;
+	}
+
+	@Override
+	public void annulerCommande(String refCommande, Auteur auteur) throws OpaleException {
+		Commande commande = getCommandeByReference(refCommande);
+		CommandeValidator.validerCommandePourAnnulation(commande);
+		CommandeValidator.isAuteurValide(auteur);
+
+		List<Paiement> paiements = paiementService.getPaiementByReferenceCommande(refCommande);
+		Paiement paiementParSepa = null;
+		for (Paiement paiement : paiements) {
+			if (paiement.getModePaiement() == ModePaiement.SEPA && !paiement.isAnnule()) {
+				paiementParSepa = paiement;
+				break;
+			}
+		}
+
+		if (!Optional.fromNullable(paiementParSepa).isPresent()) {
+			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("2.1.17"), "2.1.17");
+		} else {
+			CommandeValidator.checkPeriodeDepuisPaiement(paiementParSepa, Constants.DIX);
+		}
+
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			if (Optional.fromNullable(commandeLigne.getReferenceContrat()).isPresent()) {
+
+				// resiliation du contrat associe a la commande.
+				ContratResiliationtInfo contratResiliationtInfo = new ContratResiliationtInfo();
+				PolitiqueResiliation politiqueResiliation = new PolitiqueResiliation();
+				politiqueResiliation.setRemboursement(false);
+				politiqueResiliation.setPenalite(false);
+				politiqueResiliation.setFraisResiliation(false);
+				politiqueResiliation.setTypeResiliation(TypeResiliation.RIC);
+				try {
+					topazeClient.resilierContrat(commandeLigne.getReferenceContrat(), contratResiliationtInfo);
+				} catch (TopazeException e) {
+					throw new OpaleException(e.getMessage(), e.getErrorCode());
+				}
+			}
+		}
+
+		// annulation de la commande
+		commande.annuler();
+		commandeRepository.save(commande);
 	}
 
 	/**

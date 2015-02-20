@@ -468,6 +468,20 @@ public class CommandeController {
 	}
 
 	/**
+	 * annuler une {@link Commande}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param auteur
+	 *            {@link Auteur}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void annulerCommande(String refCommande, Auteur auteur) throws OpaleException {
+		commandeService.annulerCommande(refCommande, auteur);
+	}
+
+	/**
 	 * transformer une {@link Commande} en {@link Draft}.
 	 * 
 	 * @param refCommande
