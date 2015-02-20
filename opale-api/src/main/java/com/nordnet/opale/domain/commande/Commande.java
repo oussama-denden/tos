@@ -439,4 +439,14 @@ public class Commande {
 			auteur.getIp().setTs(PropertiesUtil.getInstance().getDateDuJour());
 		}
 	}
+
+	/**
+	 * annuler une commande.
+	 * 
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public void annuler() throws OpaleException {
+		this.dateAnnulation = PropertiesUtil.getInstance().getDateDuJour();
+	}
 }

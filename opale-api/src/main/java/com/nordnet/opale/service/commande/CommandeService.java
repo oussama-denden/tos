@@ -16,6 +16,7 @@ import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.InfosBonCommande;
+import com.nordnet.opale.business.OptionTransformation;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -285,11 +286,14 @@ public interface CommandeService {
 	 * 
 	 * @param referenceCommande
 	 *            reference {@link Commande}.
+	 * @param optionTransformation
+	 *            {@link OptionTransformation}.
 	 * @return {@link Draft}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public Draft transformerEnDraft(String referenceCommande) throws OpaleException;
+	public Draft transformerEnDraft(String referenceCommande, OptionTransformation optionTransformation)
+			throws OpaleException;
 
 	/**
 	 * Transformer une commande en contrats Afin de passer a la contractualisation de la commande, sa livraison, et sa

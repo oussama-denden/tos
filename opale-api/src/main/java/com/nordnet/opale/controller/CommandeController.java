@@ -29,6 +29,7 @@ import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.InfosBonCommande;
+import com.nordnet.opale.business.OptionTransformation;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -472,15 +473,18 @@ public class CommandeController {
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
+	 * @param optionTransformation
+	 *            {@link OptionTransformation}.
 	 * @return {@link Draft}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/transformerEnDraft", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public Draft transformerEnDraft(@PathVariable String refCommande) throws OpaleException {
+	public Draft transformerEnDraft(@PathVariable String refCommande,
+			@RequestBody OptionTransformation optionTransformation) throws OpaleException {
 		LOGGER.info(":::ws-rec:::transformerEnDraft");
-		return commandeService.transformerEnDraft(refCommande);
+		return commandeService.transformerEnDraft(refCommande, optionTransformation);
 	}
 
 	/**
