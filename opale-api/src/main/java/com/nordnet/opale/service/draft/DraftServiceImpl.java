@@ -332,7 +332,7 @@ public class DraftServiceImpl implements DraftService {
 		draft.addLigne(nouveauDraftLigne);
 		draftRepository.save(draft);
 
-		tracageService.ajouterTrace(Constants.ORDER, refDraft, "Modifier ligne draft " + refDraft,
+		tracageService.ajouterTrace(Constants.ORDER, refDraft, "Modifier ligne " + refLigne + " du draft " + refDraft,
 				draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur() : Utils.getInternalAuteur());
 
 	}
