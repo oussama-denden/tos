@@ -605,8 +605,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
-				tracageService.ajouterTrace(Constants.ORDER, ligne.getReferenceOffre(),
-						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
+				tracageService.ajouterTrace(Constants.ORDER, commande.getReference(), "Transformer la ligne commande "
+						+ ligne.getReferenceOffre() + " en contrat", auteur);
 				CommandeValidator.testerCommandeNonTransforme(commande);
 				CommandeValidator.isAuteurValide(auteur);
 				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
@@ -632,9 +632,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 				referencesContrats.add(refContrat);
 			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				tracageService.ajouterTrace(Constants.ORDER, ligne.getReferenceOffre(),
-						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en ordre de renouvelement",
-						auteur);
+				tracageService.ajouterTrace(Constants.ORDER, commande.getReference(), "Transformer la ligne commande "
+						+ ligne.getReferenceOffre() + " en ordre de renouvelement", auteur);
 				transformeEnOrdereRenouvellement(commande, ligne);
 			}
 		}
