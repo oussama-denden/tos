@@ -7,11 +7,19 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nordnet.netcatalog.ws.client.rest.RestUtil;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.topaze.exception.TopazeException;
@@ -259,6 +267,56 @@ public class RestClient {
 		} catch (ResourceAccessException e) {
 			throw new OpaleException("la connection vers topaze est refuse", e);
 		}
+	}
+
+	/**
+	 * Ajouter le log.
+	 * 
+	 * @param target
+	 *            produit
+	 * @param key
+	 *            reference
+	 * @param descr
+	 *            description
+	 * @param ip
+	 *            ip
+	 * @param user
+	 *            user
+	 * @param type
+	 *            type log
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void addLog(String target, String key, String descr, String ip, String user, String type)
+			throws OpaleException {
+		try {
+			LOGGER.info(":::ws-call:::addLog");
+
+			String url = System.getProperty("log.url").toString();
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+			HttpEntity entity = new HttpEntity(headers);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			UriComponentsBuilder builder =
+					UriComponentsBuilder.fromHttpUrl(url).queryParam("target", target).queryParam("key", key)
+							.queryParam("descr", descr).queryParam("ip", ip).queryParam("user", user)
+							.queryParam("type", type);
+
+			ResponseEntity<String> response =
+					restTemplate.exchange(builder.build().toUri(), HttpMethod.GET, entity, String.class);
+			if (RestUtil.isError(response.getStatusCode())) {
+				InfoErreur infoErreur = objectMapper.readValue(response.getBody(), InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+			}
+		} catch (RestClientException | IOException e) {
+			LOGGER.error("failed to send REST request log", e);
+			throw new OpaleException("la connection vers log est refuse", e);
+		}
+
 	}
 
 }

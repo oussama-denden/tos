@@ -253,14 +253,17 @@ CREATE TABLE `tarif` (
 --
 
 DROP TABLE IF EXISTS `tracage`;
-CREATE TABLE `tracage` (
+CREATE TABLE  `tracage` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `action` longtext,
   `date` datetime DEFAULT NULL,
-  `referenceDraft` varchar(255) DEFAULT NULL,
+  `descr` longtext,
+  `ip` varchar(255) DEFAULT NULL,
+  `reference` varchar(255) DEFAULT NULL,
+  `target` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
   `user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `paiement`

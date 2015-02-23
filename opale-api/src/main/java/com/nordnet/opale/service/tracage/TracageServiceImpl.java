@@ -1,12 +1,12 @@
 package com.nordnet.opale.service.tracage;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nordnet.opale.domain.Tracage;
-import com.nordnet.opale.repository.TracageRepository;
+import com.nordnet.opale.business.Auteur;
+import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.rest.RestClient;
+import com.nordnet.opale.util.Constants;
 
 /**
  * L'implementation de service {@link TracageService}.
@@ -18,23 +18,20 @@ import com.nordnet.opale.repository.TracageRepository;
 public class TracageServiceImpl implements TracageService {
 
 	/**
-	 * le tracage repository. {@link TracageRepository}.
+	 * client REST.
 	 */
 	@Autowired
-	private TracageRepository tracageRepository;
+	private RestClient restClient;
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
-	public void ajouterTrace(String user, String referenceDraft, String action) {
-		Tracage tracage = new Tracage();
-		tracage.setUser(user);
-		tracage.setReferenceDraft(referenceDraft);
-		tracage.setAction(action);
-		tracage.setDate(new Date());
-		tracageRepository.save(tracage);
+	public void ajouterTrace(String target, String key, String descr, Auteur user) throws OpaleException {
 
+		restClient.addLog(target, key, descr, user.getIp() != null ? user.getIp().getIp() : null, user.getQui(),
+				Constants.TYPE_LOG);
 	}
 
 }

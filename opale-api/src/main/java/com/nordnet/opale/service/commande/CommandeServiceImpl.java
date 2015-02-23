@@ -241,8 +241,8 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 
-		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), refCommande,
-				"Créer une intention de paiement pour la commande " + refCommande);
+		tracageService.ajouterTrace(Constants.ORDER, refCommande, "Créer une intention de paiement pour la commande "
+				+ refCommande, paiementInfo.getAuteur());
 
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
@@ -266,9 +266,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		downPaiementService.envoiePaiement(commande, paiementService.getPaiementByReference(referencePaiement));
 
-		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
-				"Payer l'intention de paiement de reference " + referencePaiement + " de la commande "
-						+ referenceCommande);
+		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Payer l'intention de paiement de reference "
+				+ referencePaiement + " de la commande " + referenceCommande, paiementInfo.getAuteur());
 
 	}
 
@@ -290,8 +289,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		commandeRepository.save(commande);
 
-		tracageService.ajouterTrace(paiementInfo.getAuteur().getQui(), referenceCommande,
-				"Paiement directe de la commande de reference" + referenceCommande);
+		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Paiement directe de la commande de reference"
+				+ referenceCommande, paiementInfo.getAuteur());
 
 		if (typePaiement == TypePaiement.COMPTANT) {
 			downPaiementService.envoiePaiement(commande, paiement);
@@ -426,8 +425,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		getCommandeByReference(refCommande);
 		paiementService.supprimer(refCommande, refPaiement);
-		tracageService.ajouterTrace(auteur.getQui(), refCommande, "Supprimer le paiement de reference " + refPaiement
-				+ "de la commande de reference" + refCommande);
+		tracageService.ajouterTrace(Constants.ORDER, refCommande, "Supprimer le paiement de reference " + refPaiement
+				+ "de la commande de reference" + refCommande, auteur);
 
 	}
 
@@ -606,6 +605,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
+				tracageService.ajouterTrace(Constants.ORDER, commande.getReference(), "Transformer la ligne commande "
+						+ ligne.getReferenceOffre() + " en contrat", auteur);
 				CommandeValidator.testerCommandeNonTransforme(commande);
 				CommandeValidator.isAuteurValide(auteur);
 				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
@@ -631,6 +632,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 				referencesContrats.add(refContrat);
 			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+				tracageService.ajouterTrace(Constants.ORDER, commande.getReference(), "Transformer la ligne commande "
+						+ ligne.getReferenceOffre() + " en ordre de renouvelement", auteur);
 				transformeEnOrdereRenouvellement(commande, ligne);
 			}
 		}
@@ -700,9 +703,11 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Draft transformerEnDraft(String referenceCommande) throws OpaleException {
+
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
-
+		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Transformer la commande " + referenceCommande
+				+ " en draft", Utils.getInternalAuteur());
 		draftService.save(draft);
 
 		return draft;
