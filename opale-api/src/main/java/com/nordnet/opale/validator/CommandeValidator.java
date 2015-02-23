@@ -3,7 +3,7 @@ package com.nordnet.opale.validator;
 import java.util.List;
 
 import org.joda.time.Hours;
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -220,8 +220,8 @@ public class CommandeValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void checkPeriodeDepuisPaiement(Paiement paiement, Integer nombreHeure) throws OpaleException {
-		if (Hours.hoursBetween(LocalDate.fromDateFields(PropertiesUtil.getInstance().getDateDuJour()),
-				LocalDate.fromDateFields(paiement.getDateCreation())).getHours() > nombreHeure) {
+		if (Hours.hoursBetween(new LocalDateTime(paiement.getTimestampPaiement()),
+				new LocalDateTime(PropertiesUtil.getInstance().getDateDuJour())).getHours() > nombreHeure) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.16", nombreHeure), "2.1.16");
 		}
 	}

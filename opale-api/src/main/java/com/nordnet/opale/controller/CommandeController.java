@@ -477,7 +477,9 @@ public class CommandeController {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public void annulerCommande(String refCommande, Auteur auteur) throws OpaleException {
+	@RequestMapping(value = "/{refCommande:.+}/annuler", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void annulerCommande(@PathVariable String refCommande, @RequestBody Auteur auteur) throws OpaleException {
 		commandeService.annulerCommande(refCommande, auteur);
 	}
 

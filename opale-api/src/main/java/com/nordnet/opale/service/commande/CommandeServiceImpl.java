@@ -651,10 +651,10 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.validerCommandePourAnnulation(commande);
 		CommandeValidator.isAuteurValide(auteur);
 
-		List<Paiement> paiements = paiementService.getPaiementByReferenceCommande(refCommande);
+		List<Paiement> paiements = paiementService.getPaiementRecurrent(refCommande, false);
 		Paiement paiementParSepa = null;
 		for (Paiement paiement : paiements) {
-			if (paiement.getModePaiement() == ModePaiement.SEPA && !paiement.isAnnule()) {
+			if (paiement.getModePaiement() == ModePaiement.SEPA) {
 				paiementParSepa = paiement;
 				break;
 			}
@@ -670,12 +670,14 @@ public class CommandeServiceImpl implements CommandeService {
 			if (Optional.fromNullable(commandeLigne.getReferenceContrat()).isPresent()) {
 
 				// resiliation du contrat associe a la commande.
-				ContratResiliationtInfo contratResiliationtInfo = new ContratResiliationtInfo();
 				PolitiqueResiliation politiqueResiliation = new PolitiqueResiliation();
 				politiqueResiliation.setRemboursement(false);
 				politiqueResiliation.setPenalite(false);
 				politiqueResiliation.setFraisResiliation(false);
 				politiqueResiliation.setTypeResiliation(TypeResiliation.RIC);
+				ContratResiliationtInfo contratResiliationtInfo = new ContratResiliationtInfo();
+				contratResiliationtInfo.setPolitiqueResiliation(politiqueResiliation);
+				contratResiliationtInfo.setUser(auteur.getQui());
 				try {
 					topazeClient.resilierContrat(commandeLigne.getReferenceContrat(), contratResiliationtInfo);
 				} catch (TopazeException e) {
