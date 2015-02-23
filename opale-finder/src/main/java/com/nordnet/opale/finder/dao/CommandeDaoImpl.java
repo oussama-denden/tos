@@ -151,8 +151,7 @@ public class CommandeDaoImpl implements CommandeDao {
 			}
 
 			// tester si la commande a un paiement comptant.
-			if (!Utils.isStringNullOrEmpty(resultSet.getString("refPaiement"))
-					&& resultSet.getString("typePaiement").equals("COMPTANT")) {
+			if (!Utils.isStringNullOrEmpty(resultSet.getString("refPaiement"))) {
 				if (!refPaiement.contains(resultSet.getString("refPaiement"))) {
 					commande.setPaye(true);
 					commande.addMoyenPaiementComptant(resultSet.getString("modePaiement"));
