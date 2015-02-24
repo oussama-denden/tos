@@ -1186,7 +1186,6 @@ public class CommandeServiceImpl implements CommandeService {
 		Cout cout = calculerCout(refCommande);
 		infosBonCommande.setMontantTVA(cout.getMontantTva());
 		infosBonCommande.setTauxTVA(cout.getTva());
-
 		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
 		SetPaiement: for (Paiement paiement : paiements) {
 			if (infosBonCommande.getMoyenDePaiement() == null) {
@@ -1207,6 +1206,7 @@ public class CommandeServiceImpl implements CommandeService {
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			InfosLignePourBonCommande lignePourBonCommande = new InfosLignePourBonCommande();
 			lignePourBonCommande.setLabel(ligne.getLabel());
+			lignePourBonCommande.setReferenceOffre(ligne.getReferenceOffre());
 			lignePourBonCommande.setReferenceContrat(ligne.getReferenceContrat());
 
 			for (DetailCout detailCout : cout.getDetails()) {
@@ -1216,15 +1216,18 @@ public class CommandeServiceImpl implements CommandeService {
 					if (detailCout.getCoutRecurrent() != null) {
 						double prixHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
 						double prixTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
-						double prixReduitHT = detailCout.getCoutRecurrent().getReduit().getTarifHT();
-						double prixReduitTTC = detailCout.getCoutRecurrent().getReduit().getTarifTTC();
+
 						lignePourBonCommande.setPrixHT(prixHT);
 						lignePourBonCommande.setPrixTTC(prixTTC);
+						lignePourBonCommande.setMontantTVA(detailCout.getCoutRecurrent().getNormal().getTarifTva());
+						lignePourBonCommande.setMontantTVAReduit(detailCout.getCoutRecurrent().getReduit()
+								.getTarifTva());
+						lignePourBonCommande.setTauxTVA(detailCout.getTva());
 
 						prixRecurrentTotalHT += prixHT;
 						prixRecurrentTotalTTC += prixTTC;
-						prixRecurrentReduitHT += prixReduitHT;
-						prixRecurrentReduitTTC += prixReduitTTC;
+						prixRecurrentReduitHT += detailCout.getCoutRecurrent().getReduit().getTarifHT();
+						prixRecurrentReduitTTC += detailCout.getCoutRecurrent().getReduit().getTarifTTC();
 					}
 				}
 			}

@@ -17,6 +17,11 @@ public class InfosLignePourBonCommande {
 	private String label;
 
 	/**
+	 * reference de l'offre.
+	 */
+	private String referenceOffre;
+
+	/**
 	 * Reference du contrat.
 	 */
 	private String referenceContrat;
@@ -37,6 +42,21 @@ public class InfosLignePourBonCommande {
 	private Double prixTTC;
 
 	/**
+	 * difference entre cout TTC et cout HT.
+	 */
+	private Double montantTVA;
+
+	/**
+	 * difference entre cout TTC et cout HT.
+	 */
+	private Double montantTVAReduit;
+
+	/**
+	 * Taux TVA.
+	 */
+	private Double tauxTVA;
+
+	/**
 	 * {@link InfosReductionPourBonCommande}.
 	 */
 	private List<InfosReductionPourBonCommande> reductions = new ArrayList<InfosReductionPourBonCommande>();
@@ -53,6 +73,21 @@ public class InfosLignePourBonCommande {
 	 */
 	public String getLabel() {
 		return label;
+	}
+
+	/**
+	 * @return {@link #referenceOffre}.
+	 */
+	public String getReferenceOffre() {
+		return referenceOffre;
+	}
+
+	/**
+	 * @param referenceOffre
+	 *            {@link #referenceOffre}.
+	 */
+	public void setReferenceOffre(String referenceOffre) {
+		this.referenceOffre = referenceOffre;
 	}
 
 	/**
@@ -128,6 +163,51 @@ public class InfosLignePourBonCommande {
 	 */
 	public void setReductions(List<InfosReductionPourBonCommande> reductions) {
 		this.reductions = reductions;
+	}
+
+	/**
+	 * @return {@link #montantTVA}.
+	 */
+	public Double getMontantTVA() {
+		return montantTVA;
+	}
+
+	/**
+	 * @param montantTVA
+	 *            {@link #montantTVA}.
+	 */
+	public void setMontantTVA(Double montantTVA) {
+		this.montantTVA = montantTVA;
+	}
+
+	/**
+	 * @return {@link #montantTVAReduit}.
+	 */
+	public Double getMontantTVAReduit() {
+		return montantTVAReduit;
+	}
+
+	/**
+	 * @param montantTVAReduit
+	 *            {@link #montantTVAReduit}.
+	 */
+	public void setMontantTVAReduit(Double montantTVAReduit) {
+		this.montantTVAReduit = montantTVAReduit;
+	}
+
+	/**
+	 * @return {@link #tauxTVA}.
+	 */
+	public Double getTauxTVA() {
+		return tauxTVA;
+	}
+
+	/**
+	 * @param tauxTVA
+	 *            {@link #tauxTVA}.
+	 */
+	public void setTauxTVA(Double tauxTVA) {
+		this.tauxTVA = tauxTVA;
 	}
 
 }
