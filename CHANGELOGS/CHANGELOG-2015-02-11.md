@@ -1,9 +1,8 @@
-<<<<<<< HEAD
-CHANGELOG from 2015-02-06
+CHANGELOG from 2015-02-11
 ===================
 
 This changelog references the relevant changes (bug fixes and minor features) done
-from 2015-02-06.
+from 2015-02-11.
 
  * opale-api
   * add log.
