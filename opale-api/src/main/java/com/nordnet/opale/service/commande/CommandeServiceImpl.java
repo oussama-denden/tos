@@ -1268,7 +1268,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
-<<<<<<< HEAD
+	 * 
 	 * Retourn le {@link TracageService}.
 	 * 
 	 * @return {@link TracageService}
@@ -1282,12 +1282,13 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 		}
 		return tracageService;
-=======
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public List<String> getReferenceCommandeNonAnnuleEtNonTransformes() {
 		return commandeRepository.recupererReferenceCommandeNonTransformeeEtNonAnnulee();
->>>>>>> d4c7ede7e847ce886e77ca549160243824357010
 	}
 }
