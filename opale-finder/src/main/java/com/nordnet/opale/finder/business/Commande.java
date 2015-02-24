@@ -40,17 +40,24 @@ public class Commande {
 	/**
 	 * Le moyen de paiement comptant.
 	 */
+	@JsonInclude(Include.ALWAYS)
 	private String moyenPaiementComptant;
 
 	/**
 	 * Le moyen de paiement recurrent.
 	 */
+	@JsonInclude(Include.ALWAYS)
 	private String moyenPaiementRecurrent;
 
 	/**
 	 * Si la commmande est paye en comptant.
 	 */
 	private boolean paye;
+
+	/**
+	 * Intention de paiement.
+	 */
+	private String intentionPaiement;
 
 	/**
 	 * Si la commande est signe.
@@ -317,6 +324,23 @@ public class Commande {
 	 */
 	public void setMoyenPaiementRecurrent(String moyenPaiementRecurrent) {
 		this.moyenPaiementRecurrent = moyenPaiementRecurrent;
+	}
+
+	/**
+	 * 
+	 * @return {@link #intentionPaiement}
+	 */
+	public String getIntentionPaiement() {
+		return intentionPaiement;
+	}
+
+	/**
+	 * 
+	 * @param intentionPaiement
+	 *            {@link #intentionPaiement}
+	 */
+	public void setIntentionPaiement(String intentionPaiement) {
+		this.intentionPaiement = intentionPaiement;
 	}
 
 	/**
