@@ -27,19 +27,34 @@ public class Tracage {
 	private Integer id;
 
 	/**
-	 * La reference du draft.
+	 * Le produit.
 	 */
-	private String referenceDraft;
+	private String target;
+
+	/**
+	 * La reference.
+	 */
+	private String reference;
 	/**
 	 * Action executer.
 	 */
 	@Type(type = "text")
-	private String action;
+	private String descr;
+
+	/**
+	 * ip qui a appliquer l'opération.
+	 */
+	private String ip;
 
 	/**
 	 * L'usager qui a appliquer l'opération.
 	 */
 	private String user;
+
+	/**
+	 * Type de log.
+	 */
+	private String type;
 
 	/**
 	 * Date de l'opération.
@@ -53,22 +68,48 @@ public class Tracage {
 
 	}
 
+	/**
+	 * constructeur parametre.
+	 * 
+	 * @param target
+	 *            target
+	 * @param reference
+	 *            reference
+	 * @param descr
+	 *            descreption
+	 * @param ip
+	 *            ip
+	 * @param user
+	 *            user
+	 * @param type
+	 *            type
+	 * @param date
+	 *            date
+	 */
+	public Tracage(String target, String reference, String descr, String ip, String user, String type, Date date) {
+		this.target = target;
+		this.reference = reference;
+		this.descr = descr;
+		this.ip = ip;
+		this.user = user;
+		this.type = type;
+		this.date = date;
+	}
+
 	/* Getters & Setters */
 
 	/**
-	 * Gets the id.
 	 * 
-	 * @return {@link #id}.
+	 * @return {@link #id}
 	 */
 	public Integer getId() {
 		return id;
 	}
 
 	/**
-	 * Sets the id.
 	 * 
 	 * @param id
-	 *            the new id {@link #id}.
+	 *            {@link #id}
 	 */
 	public void setId(Integer id) {
 		this.id = id;
@@ -76,73 +117,118 @@ public class Tracage {
 
 	/**
 	 * 
-	 * @return {@link #action}.
+	 * @return {@link #target}
 	 */
-	public String getAction() {
-		return action;
+	public String getTarget() {
+		return target;
 	}
 
 	/**
 	 * 
-	 * @return {@link #referenceContrat}.
+	 * @param target
+	 *            {@link #target}
 	 */
-	public String getReferenceDraft() {
-		return referenceDraft;
+	public void setTarget(String target) {
+		this.target = target;
 	}
 
 	/**
 	 * 
-	 * @param referenceDraft
-	 *            {@link #referenceContrat}.
+	 * @return {@link #reference}
 	 */
-	public void setReferenceDraft(String referenceDraft) {
-		this.referenceDraft = referenceDraft;
+	public String getReference() {
+		return reference;
 	}
 
 	/**
 	 * 
-	 * 
-	 * @param action
-	 *            {@link #action}
-	 * 
+	 * @param reference
+	 *            {@link #reference}
 	 */
-	public void setAction(String action) {
-		this.action = action;
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 	/**
-	 * Gets the user.
 	 * 
-	 * @return the user
+	 * @return {@link #type}
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * 
+	 * @param type
+	 *            {@link #type}
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
+	 * 
+	 * @return {@link #descr}
+	 */
+	public String getDescr() {
+		return descr;
+	}
+
+	/**
+	 * 
+	 * @param descr
+	 *            {@link #descr}
+	 */
+	public void setDescr(String descr) {
+		this.descr = descr;
+	}
+
+	/**
+	 * 
+	 * @return {@link #ip}
+	 */
+	public String getIp() {
+		return ip;
+	}
+
+	/**
+	 * 
+	 * @param ip
+	 *            {@link #ip}
+	 */
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	/**
+	 * 
+	 * @return {@link #user}
 	 */
 	public String getUser() {
 		return user;
 	}
 
 	/**
-	 * Sets the user.
 	 * 
 	 * @param user
-	 *            the new user
+	 *            {@link #user}
 	 */
 	public void setUser(String user) {
 		this.user = user;
 	}
 
 	/**
-	 * Gets the date.
 	 * 
-	 * @return the date
+	 * @return {@link #date}
 	 */
 	public Date getDate() {
 		return date;
 	}
 
 	/**
-	 * Sets the date.
 	 * 
 	 * @param date
-	 *            the new date
+	 *            {@link #date}
 	 */
 	public void setDate(Date date) {
 		this.date = date;

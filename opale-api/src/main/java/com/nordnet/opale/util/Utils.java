@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.LocalDate;
 
+import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.exception.OpaleException;
 
 /**
@@ -136,6 +137,15 @@ public final class Utils {
 		BigDecimal bd = new BigDecimal(String.valueOf(value));
 		bd = bd.setScale(Constants.DEUX, RoundingMode.HALF_UP);
 		return bd.doubleValue();
+	}
+
+	/**
+	 * creer un auteur interne.
+	 * 
+	 * @return {@link Auteur}
+	 */
+	public static com.nordnet.opale.business.Auteur getInternalAuteur() {
+		return new com.nordnet.opale.business.Auteur(Constants.INTERNAL_USER);
 	}
 
 }
