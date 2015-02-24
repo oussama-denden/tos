@@ -961,7 +961,7 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		List<Reduction> reductionsLigne =
-				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReferenceOffre());
+				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReference());
 		for (Reduction reductionLigne : reductionsLigne) {
 			reductionContrat = fromReduction(reductionLigne);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);

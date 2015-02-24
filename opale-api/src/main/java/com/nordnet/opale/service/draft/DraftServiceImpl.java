@@ -30,9 +30,7 @@ import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.business.TransformationInfo;
-import com.nordnet.opale.business.catalogue.Frais;
 import com.nordnet.opale.business.catalogue.OffreCatalogue;
-import com.nordnet.opale.business.catalogue.Tarif;
 import com.nordnet.opale.business.catalogue.TrameCatalogue;
 import com.nordnet.opale.calcule.CalculeCout;
 import com.nordnet.opale.calcule.CoutDecorator;
@@ -46,7 +44,6 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.enums.Geste;
-import com.nordnet.opale.enums.TypeFrais;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
@@ -67,7 +64,6 @@ import com.nordnet.opale.validator.ReductionValidator;
 import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
-import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * L'implementation de service {@link DraftService}.
@@ -525,6 +521,9 @@ public class DraftServiceImpl implements DraftService {
 
 		if (validationInfo.isValide()) {
 			Commande commande = new Commande(draft, transformationInfo);
+			for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+				commandeLigne.setReference(keygenService.getNextKey(CommandeLigne.class));
+			}
 			commande.setReference(keygenService.getNextKey(Commande.class));
 			commande.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			commandeService.save(commande);
@@ -631,7 +630,7 @@ public class DraftServiceImpl implements DraftService {
 			}
 
 			ajouterReductionCommande(reductionLigneDraft, commande.getReference(),
-					commandeLigneEnReduction.getReferenceOffre(), null);
+					commandeLigneEnReduction.getReference(), null);
 
 			// copier reduction detail ligne draft
 			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
@@ -656,8 +655,7 @@ public class DraftServiceImpl implements DraftService {
 					}
 
 					ajouterReductionCommande(reductionDetailLigneDraft, commande.getReference(),
-							commandeLigneEnReduction.getReferenceOffre(),
-							commandeLigneDetailEnReduction.getReferenceChoix());
+							commandeLigneEnReduction.getReference(), commandeLigneDetailEnReduction.getReferenceChoix());
 				}
 			}
 		}
@@ -1119,74 +1117,6 @@ public class DraftServiceImpl implements DraftService {
 				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 			}
 		}
-	}
-
-	/**
-	 * Calculer le cout du reduction.
-	 * 
-	 * @param refDraft
-	 *            reference du draft.
-	 * @param refLinge
-	 *            reference du ligne.
-	 * @param refDetailLigne
-	 *            reference detai ligne.
-	 * @param coutDetail
-	 *            cout de detail ligne
-	 * @param tarif
-	 *            {@link Tarif}
-	 * @param isLigne
-	 *            true si on va calculer la reduction sir la ligne
-	 * @param plan
-	 *            cout recurrent.
-	 * @return somme di reduction.
-	 */
-	private Double calculerReductionLignetETDetail(String refDraft, String refLinge, String refDetailLigne,
-			Double coutDetail, double reduction, Double plan, Tarif tarif, boolean isLigne) {
-		double coutReduction = 0d;
-		Reduction reductionProduit = null;
-		if (isLigne) {
-			reductionProduit = reductionService.findReductionLigneDraftSansFrais(refDraft, refLinge);
-		} else {
-			reductionProduit =
-					reductionService.findReductionDetailLigneDraftSansFrais(refDraft, refLinge, refDetailLigne);
-		}
-
-		// calculer la reduction
-		if (reductionProduit != null) {
-			if (reductionProduit.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-				if (isLigne) {
-					coutReduction += ((plan + coutDetail - reduction) * reductionProduit.getValeur()) / 100;
-				} else {
-					coutReduction += ((plan + coutDetail) * reductionProduit.getValeur()) / 100;
-				}
-			} else if (reductionProduit.getTypeValeur().equals(TypeValeur.MONTANT)) {
-				coutReduction += reductionProduit.getValeur();
-			}
-		}
-
-		// calculer reduction su frais de detaille ligne draft.
-		for (Frais frais : tarif.getFrais()) {
-			Reduction reductionFrais = null;
-			if (isLigne) {
-				reductionFrais =
-						reductionService.findReductionlLigneDraftFrais(refDraft, refLinge, tarif.getIdTarif(),
-								frais.getIdFrais());
-			} else {
-				reductionFrais =
-						reductionService.findReductionDetailLigneDraftFrais(refDraft, refLinge, refDetailLigne,
-								tarif.getIdTarif(), frais.getIdFrais());
-			}
-			if ((frais.getTypeFrais() == TypeFrais.CREATION) && reductionFrais != null) {
-				if (reductionFrais.getTypeValeur().equals(TypeValeur.POURCENTAGE)) {
-					coutReduction += (frais.getMontant() * reductionFrais.getValeur()) / 100;
-				} else if (reductionFrais.getTypeValeur().equals(TypeValeur.MONTANT)) {
-					coutReduction += reductionFrais.getValeur();
-
-				}
-			}
-		}
-		return coutReduction;
-
 	}
 
 	/**
