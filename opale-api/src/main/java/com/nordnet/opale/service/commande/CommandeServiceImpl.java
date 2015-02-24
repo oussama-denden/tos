@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nordnet.mandatelibrary.ws.types.Mandate;
+import com.nordnet.opale.adapter.MandateLibraryAdapter;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
@@ -44,7 +46,6 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
-import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.downpaiement.DownPaiementService;
 import com.nordnet.opale.service.draft.DraftService;
@@ -154,15 +155,16 @@ public class CommandeServiceImpl implements CommandeService {
 	private TopazeClient topazeClient;
 
 	/**
-	 * {@link CoutDecorator}
+	 * {@link CoutDecorator}.
 	 */
 	@Autowired
 	private CoutDecorator coutDecorator;
 
 	/**
-	 * {@link ReductionRepository}
+	 * {@link MandateLibraryAdapter}.
 	 */
-	private ReductionRepository reductionRepository;
+	@Autowired
+	private MandateLibraryAdapter mandateLibraryAdapter;
 
 	/**
 	 * 
@@ -285,6 +287,9 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
+		if (typePaiement == TypePaiement.RECURRENT && paiementInfo.getModePaiement() == ModePaiement.SEPA) {
+			Mandate mandate = mandateLibraryAdapter.getMandate(((PaiementInfoRecurrent) paiementInfo).getRum());
+		}
 
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 

@@ -6,7 +6,7 @@
 		<artifactId>opale</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	
+
 	<groupId>com.nordnet.opale-api</groupId>
 	<artifactId>opale-api</artifactId>
 	<packaging>war</packaging>
@@ -94,7 +94,7 @@
 			<version>${version.spring}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- QuartzJobBean in spring-context-support.jar -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -108,36 +108,42 @@
 			<artifactId>quartz</artifactId>
 			<version>1.8.6</version>
 		</dependency>
-		
+
 		<!-- client saphir -->
 		<dependency>
 			<groupId>com.nordnet.saphir</groupId>
 			<artifactId>saphir.ws.client</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.nordnet.topaze</groupId>
 			<artifactId>topaze-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
-	<dependency>
-		<groupId>com.nordnet.ot</groupId>
-		<artifactId>ot-netcatalog</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-		<groupId>net.sf.dozer</groupId>
-		<artifactId>dozer</artifactId>
-		<version>5.4.0</version>
-	</dependency>
+		<dependency>
+			<groupId>com.nordnet.ot</groupId>
+			<artifactId>ot-netcatalog</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>5.4.0</version>
+		</dependency>
 
-    	<dependency>
-      		<groupId>com.nordnet.common</groupId>
-     		<artifactId>vat.ws.client</artifactId>
-      		<version>0.0.1-SNAPSHOT</version>
-    	</dependency>
+		<dependency>
+			<groupId>com.nordnet.common</groupId>
+			<artifactId>vat.ws.client</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>client.ws</groupId>
+			<artifactId>mandatelibrary-ws-client</artifactId>
+			<version>1.0.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>opale-api</finalName>
@@ -198,7 +204,7 @@
 					<testFailureIgnore>false</testFailureIgnore>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 </project>
