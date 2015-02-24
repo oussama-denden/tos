@@ -16,9 +16,10 @@ from 2015-01-29.
   * add creerDraftPourRenouvellement ws.
   * add controle to address on the contracts when calling creerdraftForRenouvellement.
   
-  
  * opale-finder
   * Fix regression due to codeCatalogueReduction.
+  * Add intention for payment.
+  * Make moyenPaiementComptant and moyenPaiementRecurrent always show.
   
 
 

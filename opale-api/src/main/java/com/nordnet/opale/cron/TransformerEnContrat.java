@@ -41,6 +41,7 @@ public class TransformerEnContrat extends QuartzJobBean {
 
 		try {
 			for (Commande commande : commandes) {
+				LOGGER.info(" traittement du commande " + commande.getReference());
 				if (commandeService.validerCommandeEnTransformationAutomatique(commande)) {
 					LOGGER.info("TransformerEnContrat: contrat valide " + commande.getReference());
 					Auteur auteur = new Auteur();

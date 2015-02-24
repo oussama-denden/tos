@@ -157,4 +157,25 @@ public final class Constants {
 	 */
 	public static final String CODE_ERREUR_SYNTAXE = "0.4";
 
+	/**
+	 * URL service log.
+	 */
+	public static final String LOG_URL = "log.url";
+
+	/**
+	 * type du log.
+	 */
+
+	public static final String TYPE_LOG = "comment";
+
+	/**
+	 * Produit commande.
+	 */
+	public static final String COMMANDE = "COMMANDE";
+
+	/**
+	 * Order constant.
+	 */
+	public static final String ORDER = "order";
+
 }

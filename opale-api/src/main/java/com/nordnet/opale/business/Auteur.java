@@ -34,6 +34,17 @@ public class Auteur {
 	}
 
 	/**
+	 * constructeur.
+	 * 
+	 * @param qui
+	 *            l utilisateur.
+	 */
+	public Auteur(String qui) {
+		this.qui = qui;
+
+	}
+
+	/**
 	 * 
 	 * @return {@link Auteur#qui}.
 	 */
