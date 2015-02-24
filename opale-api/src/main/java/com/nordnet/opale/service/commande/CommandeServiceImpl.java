@@ -1151,18 +1151,23 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Paiement> paiements = paiementService.getPaiementEnCours(commande.getReference());
 		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
+		try {
+			Cout coutCommande = calculerCout(commande.getReference());
 
-		Cout coutCommande = calculerCout(commande.getReference());
-
-		if (commande.isAnnule() || paiementCommande == null) {
-			return false;
-		} else if (paiementCommande.getModePaiement().isModePaimentComptant() && coutCommande != null) {
-			if (coutCommande.getCoutComptantTTC() > paiementCommande.getMontant()) {
+			if (commande.isAnnule() || paiementCommande == null) {
 				return false;
-			} else
+			} else if (paiementCommande.getModePaiement().isModePaimentComptant() && coutCommande != null) {
+				if (coutCommande.getCoutComptantTTC() > paiementCommande.getMontant()) {
+					return false;
+				} else
+					return true;
+			} else if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
 				return true;
-		} else if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
-			return true;
+			}
+		} catch (Exception ex) {
+			throw new OpaleException("erreur dans la validation du commande " + commande.getReference()
+					+ " pour transformation automatique ", ex);
+
 		}
 
 		return false;
@@ -1263,6 +1268,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Retourn le {@link TracageService}.
 	 * 
 	 * @return {@link TracageService}
@@ -1276,5 +1282,12 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 		}
 		return tracageService;
+=======
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getReferenceCommandeNonAnnuleEtNonTransformes() {
+		return commandeRepository.recupererReferenceCommandeNonTransformeeEtNonAnnulee();
+>>>>>>> d4c7ede7e847ce886e77ca549160243824357010
 	}
 }
