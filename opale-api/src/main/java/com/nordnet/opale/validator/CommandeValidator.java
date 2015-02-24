@@ -215,8 +215,12 @@ public class CommandeValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void validerMandat(Mandate mandate, Commande commande) throws OpaleException {
-		if (mandate.getAccount().getAccountKey().equals(commande.getClientAFacturer().getClientId())) {
+		if (!mandate.getAccount().getAccountKey().equals(commande.getClientAFacturer().getClientId())) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.15"), "2.1.15");
+		}
+
+		if (!mandate.getEnabled()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.16"), "2.1.16");
 		}
 	}
 
