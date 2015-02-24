@@ -288,6 +288,7 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 		if (typePaiement == TypePaiement.RECURRENT && paiementInfo.getModePaiement() == ModePaiement.SEPA) {
 			Mandate mandate = mandateLibraryAdapter.getMandate(((PaiementInfoRecurrent) paiementInfo).getRum());
+			CommandeValidator.validerMandat(mandate, commande);
 		}
 
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
