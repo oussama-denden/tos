@@ -1190,7 +1190,7 @@ public class CommandeServiceImpl implements CommandeService {
 		SetPaiement: for (Paiement paiement : paiements) {
 			if (infosBonCommande.getMoyenDePaiement() == null) {
 				infosBonCommande.setMoyenDePaiement(paiement.getModePaiement());
-				infosBonCommande.setReferencePaiement(paiement.getReference());
+				infosBonCommande.setReferencePaiement(paiement.getIdPaiement());
 				break SetPaiement;
 			}
 		}
