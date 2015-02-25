@@ -116,6 +116,14 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
 
 	/**
+	 * recuperer la list des reference commandes non transformes et non annules.
+	 * 
+	 * @return {@link List<String>}
+	 */
+	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c.reference FROM Commande c WHERE c.dateAnnulation=null AND dateTransformationContrat=null")
+	public List<String> recupererReferenceCommandeNonTransformeeEtNonAnnulee();
+
+	/**
 	 * recuperation de la liste de {@link Frais} associe a la {@link CommandeLigne}.
 	 * 
 	 * @param referenceCommande

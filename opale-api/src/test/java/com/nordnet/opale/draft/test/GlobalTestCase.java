@@ -56,6 +56,7 @@ public abstract class GlobalTestCase extends UnitilsJUnit4 {
 		System.setProperty(com.nordnet.opale.util.Constants.ENV_PROPERTY, "dev");
 		System.setProperty("ws.saphir.useMock", "true");
 		System.setProperty("ws.nordNetVat.useMock", "true");
+		System.setProperty("log.useMock", "true");
 	}
 
 }
