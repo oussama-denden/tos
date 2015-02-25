@@ -345,6 +345,13 @@ public interface CommandeService {
 	public List<Commande> getCommandeNonAnnuleEtNonTransformes();
 
 	/**
+	 * recuperer la list des references commandes non transformes et non annules.
+	 * 
+	 * @return {@link List<String>}
+	 */
+	public List<String> getReferenceCommandeNonAnnuleEtNonTransformes();
+
+	/**
 	 * recuperer le dernier date d'accee sur une commande.
 	 * 
 	 * @param refCommande

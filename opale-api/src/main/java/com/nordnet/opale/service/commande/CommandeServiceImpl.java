@@ -57,6 +57,7 @@ import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
+import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.opale.validator.CommandeValidator;
 import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
@@ -119,7 +120,6 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@link TracageService}.
 	 */
-	@Autowired
 	private TracageService tracageService;
 
 	/**
@@ -247,8 +247,8 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
 
-		tracageService.ajouterTrace(Constants.ORDER, refCommande, "Créer une intention de paiement pour la commande "
-				+ refCommande, paiementInfo.getAuteur());
+		getTracage().ajouterTrace(Constants.ORDER, refCommande,
+				"Créer une intention de paiement pour la commande " + refCommande, paiementInfo.getAuteur());
 
 		return paiementService.ajouterIntentionPaiement(refCommande, paiementInfo);
 	}
@@ -272,8 +272,11 @@ public class CommandeServiceImpl implements CommandeService {
 
 		downPaiementService.envoiePaiement(commande, paiementService.getPaiementByReference(referencePaiement));
 
-		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Payer l'intention de paiement de reference "
-				+ referencePaiement + " de la commande " + referenceCommande, paiementInfo.getAuteur());
+		getTracage().ajouterTrace(
+				Constants.ORDER,
+				referenceCommande,
+				"Payer l'intention de paiement de reference " + referencePaiement + " de la commande "
+						+ referenceCommande, paiementInfo.getAuteur());
 
 	}
 
@@ -295,8 +298,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		commandeRepository.save(commande);
 
-		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Paiement directe de la commande de reference"
-				+ referenceCommande, paiementInfo.getAuteur());
+		getTracage().ajouterTrace(Constants.ORDER, referenceCommande,
+				"Paiement directe de la commande de reference" + referenceCommande, paiementInfo.getAuteur());
 
 		if (typePaiement == TypePaiement.COMPTANT) {
 			downPaiementService.envoiePaiement(commande, paiement);
@@ -431,8 +434,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 		getCommandeByReference(refCommande);
 		paiementService.supprimer(refCommande, refPaiement);
-		tracageService.ajouterTrace(Constants.ORDER, refCommande, "Supprimer le paiement de reference " + refPaiement
-				+ "de la commande de reference" + refCommande, auteur);
+		getTracage().ajouterTrace(Constants.ORDER, refCommande,
+				"Supprimer le paiement de reference " + refPaiement + "de la commande de reference" + refCommande,
+				auteur);
 
 	}
 
@@ -611,8 +615,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			if (ligne.getGeste().equals(Geste.VENTE)) {
-				tracageService.ajouterTrace(Constants.ORDER, commande.getReference(), "Transformer la ligne commande "
-						+ ligne.getReferenceOffre() + " en contrat", auteur);
+				getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
+						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
 				CommandeValidator.testerCommandeNonTransforme(commande);
 				CommandeValidator.isAuteurValide(auteur);
 				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
@@ -638,8 +642,9 @@ public class CommandeServiceImpl implements CommandeService {
 
 				referencesContrats.add(refContrat);
 			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				tracageService.ajouterTrace(Constants.ORDER, commande.getReference(), "Transformer la ligne commande "
-						+ ligne.getReferenceOffre() + " en ordre de renouvelement", auteur);
+				getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
+						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en ordre de renouvelement",
+						auteur);
 				transformeEnOrdereRenouvellement(commande, ligne);
 			}
 		}
@@ -759,8 +764,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
-		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Transformer la commande " + referenceCommande
-				+ " en draft", Utils.getInternalAuteur());
+		getTracage().ajouterTrace(Constants.ORDER, referenceCommande,
+				"Transformer la commande " + referenceCommande + " en draft", Utils.getInternalAuteur());
 		draftService.save(draft);
 
 		return draft;
@@ -1199,18 +1204,23 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Paiement> paiements = paiementService.getPaiementEnCours(commande.getReference());
 		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
+		try {
+			Cout coutCommande = calculerCout(commande.getReference());
 
-		Cout coutCommande = calculerCout(commande.getReference());
-
-		if (commande.isAnnule() || paiementCommande == null) {
-			return false;
-		} else if (paiementCommande.getModePaiement().isModePaimentComptant() && coutCommande != null) {
-			if (coutCommande.getCoutComptantTTC() > paiementCommande.getMontant()) {
+			if (commande.isAnnule() || paiementCommande == null) {
 				return false;
-			} else
+			} else if (paiementCommande.getModePaiement().isModePaimentComptant() && coutCommande != null) {
+				if (coutCommande.getCoutComptantTTC() > paiementCommande.getMontant()) {
+					return false;
+				} else
+					return true;
+			} else if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
 				return true;
-		} else if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
-			return true;
+			}
+		} catch (Exception ex) {
+			throw new OpaleException("erreur dans la validation du commande " + commande.getReference()
+					+ " pour transformation automatique ", ex);
+
 		}
 
 		return false;
@@ -1308,5 +1318,30 @@ public class CommandeServiceImpl implements CommandeService {
 
 		}
 
+	}
+
+	/**
+	 * 
+	 * Retourn le {@link TracageService}.
+	 * 
+	 * @return {@link TracageService}
+	 */
+	public TracageService getTracage() {
+		if (tracageService == null) {
+			if (System.getProperty("log.useMock").equals("true")) {
+				tracageService = (TracageService) ApplicationContextHolder.getBean("tracageServiceMock");
+			} else {
+				tracageService = (TracageService) ApplicationContextHolder.getBean("tracageService");
+			}
+		}
+		return tracageService;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getReferenceCommandeNonAnnuleEtNonTransformes() {
+		return commandeRepository.recupererReferenceCommandeNonTransformeeEtNonAnnulee();
 	}
 }
