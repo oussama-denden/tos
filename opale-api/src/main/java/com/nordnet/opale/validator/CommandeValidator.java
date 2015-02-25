@@ -6,9 +6,11 @@ import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
+import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 
@@ -201,6 +203,26 @@ public class CommandeValidator {
 			}
 		}
 
+	}
+
+	/**
+	 * validation de l'annulation de la commande lors de ca transformation en {@link Draft}.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @param paiements
+	 *            liste des paiement associe a la {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void validerAnnulationCommande(Commande commande, List<Paiement> paiements) throws OpaleException {
+		if (commande.isTransformerEnContrat()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.15"), "2.1.15");
+		}
+
+		if (paiements != null && paiements.size() > Constants.ZERO) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.16"), "2.1.16");
+		}
 	}
 
 }

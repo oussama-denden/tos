@@ -428,6 +428,18 @@ public class Commande {
 	}
 
 	/**
+	 * verifier si la commande a ete transforme en contrat ou non.
+	 * 
+	 * @return true si la commande a ete transformer en contrat.
+	 */
+	public boolean isTransformerEnContrat() {
+		if (Optional.fromNullable(dateTransformationContrat).isPresent()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * methode appel avant la persistance du la commande.
 	 * 
 	 * @throws OpaleException

@@ -708,14 +708,18 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
-		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Transformer la commande " + referenceCommande
-				+ " en draft", Utils.getInternalAuteur());
-		draftService.save(draft);
 
 		if (optionTransformation.isAnnulerCommande() == null || optionTransformation.isAnnulerCommande()) {
+			List<Paiement> paiements = paiementService.getPaiementEnCours(referenceCommande);
+			CommandeValidator.validerAnnulationCommande(commande, paiements);
 			commande.annuler();
 			commandeRepository.save(commande);
 		}
+
+		draftService.save(draft);
+
+		tracageService.ajouterTrace(Constants.ORDER, referenceCommande, "Transformer la commande " + referenceCommande
+				+ " en draft", Utils.getInternalAuteur());
 
 		return draft;
 	}
