@@ -111,6 +111,7 @@
 		<xsd:attribute name="commandeId" use="optional" />
 		<xsd:attribute name="tarifId" use="optional" />
 		<xsd:attribute name="geste" use="optional" />
+		<xsd:attribute name="reference" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:element name="commandeLigneDetail" type="commandeLigneDetail_type"/>

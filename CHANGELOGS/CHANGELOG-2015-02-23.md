@@ -5,4 +5,5 @@ This changelog references the relevant changes (bug fixes and minor features) do
 from 2015-02-23.
 
     * opale-api
-      * get the list of references  command and iterate over the references to get each command when the command is being processed for automatic transformation .
+      * get the list of references  command and iterate over the references to get each command when the it is being processed for automatic transformation .
+	  * set the reference of line command instead of "referenceOffre" in reduction entity.
