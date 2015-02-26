@@ -8,20 +8,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nordnet.common.alert.ws.client.SendAlert;
 import com.nordnet.netcatalog.ws.client.rest.RestUtil;
+import com.nordnet.opale.business.TracageInfo;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
@@ -55,6 +56,11 @@ public class RestClient {
 	 */
 	@Autowired
 	private ObjectMapper objectMapper;
+
+	/**
+	 * Alert service.
+	 */
+	private SendAlert sendAlert;
 
 	/**
 	 * constructeur par defaut.
@@ -287,36 +293,58 @@ public class RestClient {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addLog(String target, String key, String descr, String ip, String user, String type)
 			throws OpaleException {
 		try {
 			LOGGER.info(":::ws-call:::addLog");
 
-			String url = System.getProperty("log.url").toString();
-			HttpHeaders headers = new HttpHeaders();
-			headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+			TracageInfo tracageInfo = new TracageInfo();
+			tracageInfo.setDescription(descr);
+			tracageInfo.setIp(ip);
+			tracageInfo.setKey(key);
+			tracageInfo.setTarget(target);
+			tracageInfo.setType(type);
+			tracageInfo.setUser(user);
 
-			HttpEntity entity = new HttpEntity(headers);
-
+			ResponseEntity<String> response = null;
+			String url = (System.getProperty("log.url").toString());
 			RestTemplate restTemplate = new RestTemplate();
+			try {
 
-			UriComponentsBuilder builder =
-					UriComponentsBuilder.fromHttpUrl(url).queryParam("target", target).queryParam("key", key)
-							.queryParam("descr", descr).queryParam("ip", ip).queryParam("user", user)
-							.queryParam("type", type);
-
-			ResponseEntity<String> response =
-					restTemplate.exchange(builder.build().toUri(), HttpMethod.GET, entity, String.class);
-			if (RestUtil.isError(response.getStatusCode())) {
-				InfoErreur infoErreur = objectMapper.readValue(response.getBody(), InfoErreur.class);
-				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+				HttpEntity<TracageInfo> requestEntity = new HttpEntity<TracageInfo>(tracageInfo);
+				response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+				String responseBody = response.getBody();
+				if (RestUtil.isError(response.getStatusCode())) {
+					LOGGER.error("failed to send request log" + response.getStatusCode() + " " + responseBody);
+					getSendAlert().send(System.getProperty(Constants.PRODUCT_ID),
+							"error occurs during call of log web service", "caused by " + response.getStatusCode(),
+							responseBody);
+				}
+			} catch (RestClientException e) {
+				LOGGER.error("failed to send REST request log", e);
+				getSendAlert().send(System.getProperty(Constants.PRODUCT_ID),
+						"error occurs during call of log web service",
+						"caused by " + e.getCause().getLocalizedMessage(), e.getMessage());
 			}
-		} catch (RestClientException | IOException e) {
-			LOGGER.error("failed to send REST request log", e);
-			throw new OpaleException("la connection vers log est refuse", e);
-		}
 
+		} catch (Exception e) {
+			LOGGER.error("failed to send REST request log", e);
+		}
 	}
 
+	/**
+	 * Get send alert.
+	 * 
+	 * @return {@link #sendAlert}
+	 */
+	private SendAlert getSendAlert() {
+		if (this.sendAlert == null) {
+			if (System.getProperty("alert.useMock").equals("true")) {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlertMock");
+			} else {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlert");
+			}
+		}
+		return sendAlert;
+	}
 }

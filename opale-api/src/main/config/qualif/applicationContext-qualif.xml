@@ -65,5 +65,12 @@
 	<bean id="tracageServiceMock" class="com.nordnet.opale.mock.LogMock"/>
 	
 	<bean id="tracageService" class="com.nordnet.opale.service.tracage.TracageServiceImpl"/>
-
+	
+	<bean id="sendAlert" class="com.nordnet.common.alert.ws.client.SendAlert">
+		<property name="url">
+			<value>${sendAlertServiceUrl}</value>
+		</property>
+	</bean>
+	<bean id="sendAlertMock" class="com.nordnet.opale.mock.SendAlertMock" />
+	
 </beans>

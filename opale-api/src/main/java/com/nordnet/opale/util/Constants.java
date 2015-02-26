@@ -178,4 +178,8 @@ public final class Constants {
 	 */
 	public static final String ORDER = "order";
 
+	/**
+	 * L'ID du produit.
+	 */
+	public static final String PRODUCT_ID = "productId";
 }
