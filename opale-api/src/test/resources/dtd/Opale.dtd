@@ -171,6 +171,7 @@
     modePaiement CDATA #IMPLIED
     montant CDATA #IMPLIED
     reference CDATA #IMPLIED
+    idPaiement CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED

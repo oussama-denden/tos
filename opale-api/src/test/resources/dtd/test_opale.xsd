@@ -158,7 +158,7 @@
 		<xsd:attribute name="montant" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceCommande" use="optional" />
-		
+		<xsd:attribute name="idPaiement" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />
