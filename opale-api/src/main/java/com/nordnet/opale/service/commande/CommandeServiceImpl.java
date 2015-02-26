@@ -25,6 +25,7 @@ import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.InfosBonCommande;
 import com.nordnet.opale.business.InfosLignePourBonCommande;
+import com.nordnet.opale.business.OptionTransformation;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -760,13 +761,23 @@ public class CommandeServiceImpl implements CommandeService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Draft transformerEnDraft(String referenceCommande) throws OpaleException {
+	public Draft transformerEnDraft(String referenceCommande, OptionTransformation optionTransformation)
+			throws OpaleException {
 
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
+
+		if (optionTransformation.isAnnulerCommande() == null || optionTransformation.isAnnulerCommande()) {
+			List<Paiement> paiements = paiementService.getPaiementEnCours(referenceCommande);
+			CommandeValidator.validerAnnulationCommande(commande, paiements);
+			commande.annuler();
+			commandeRepository.save(commande);
+		}
+
+		draftService.save(draft);
+
 		getTracage().ajouterTrace(Constants.ORDER, referenceCommande,
 				"Transformer la commande " + referenceCommande + " en draft", Utils.getInternalAuteur());
-		draftService.save(draft);
 
 		return draft;
 	}
