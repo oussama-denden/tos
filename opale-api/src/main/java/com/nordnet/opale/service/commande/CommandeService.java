@@ -330,6 +330,18 @@ public interface CommandeService {
 	List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException;
 
 	/**
+	 * annuler une {@link Commande}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param auteur
+	 *            {@link Auteur}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public void annulerCommande(String refCommande, Auteur auteur) throws OpaleException;
+
+	/**
 	 * recuperer la list des commandes non transformes et non annules.
 	 * 
 	 * @return {@link List<Commande>}

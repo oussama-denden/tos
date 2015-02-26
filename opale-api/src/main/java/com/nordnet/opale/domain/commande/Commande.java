@@ -28,6 +28,7 @@ import com.nordnet.opale.domain.Auteur;
 import com.nordnet.opale.domain.Client;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
+import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.PropertiesUtil;
 
@@ -453,12 +454,51 @@ public class Commande {
 	}
 
 	/**
-	 * annuler une commande.
+	 * annuler la commande.
 	 * 
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
 	public void annuler() throws OpaleException {
 		this.dateAnnulation = PropertiesUtil.getInstance().getDateDuJour();
+	}
+
+	/**
+	 * verifier si la commande contient le geste 'VENTE' parmis c'est ligne.
+	 * 
+	 * @return true si la commande contient le geste 'VENTE' parmis c'est ligne.
+	 */
+	public boolean isContientVente() {
+		for (CommandeLigne commandeLigne : this.commandeLignes) {
+			if (commandeLigne.getGeste() == Geste.VENTE)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * verifier si la commande contient le geste 'RENOUVELLEMENT' parmis c'est ligne.
+	 * 
+	 * @return true si la commande contient le geste 'RENOUVELLEMENT' parmis c'est ligne.
+	 */
+	public boolean isContientRenouvellement() {
+		for (CommandeLigne commandeLigne : this.commandeLignes) {
+			if (commandeLigne.getGeste() == Geste.RENOUVELLEMENT)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * verifier si la commande contient le geste 'MIGRATION' parmis c'est ligne.
+	 * 
+	 * @return true si la commande contient le geste 'MIGRATION' parmis c'est ligne.
+	 */
+	public boolean isContientMigration() {
+		for (CommandeLigne commandeLigne : this.commandeLignes) {
+			if (commandeLigne.getGeste() == Geste.MIGRATION)
+				return true;
+		}
+		return false;
 	}
 }

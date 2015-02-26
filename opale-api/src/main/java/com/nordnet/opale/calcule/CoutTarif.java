@@ -107,9 +107,6 @@ public class CoutTarif extends CalculeCout {
 						new Plan(tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(), tarif.getTypeTVA(),
 								segmentTVA));
 				detailCout.setCoutRecurrent(new CoutRecurrent(tarif.getFrequence(), normal, null));
-				// detailCout.setPlan(new Plan(tarif.getFrequence(), tarif.getPrix(),
-				// VatClient.appliquerTVA(tarif.getPrix(),
-				// tarif.getTva(), segmentTVA)));
 			}
 
 			else

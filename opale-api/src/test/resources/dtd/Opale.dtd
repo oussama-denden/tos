@@ -107,6 +107,7 @@
     tarifId CDATA #IMPLIED
     geste CDATA #IMPLIED
     numero CDATA #IMPLIED
+    reference CDATA #IMPLIED
 >
 
 <!ELEMENT commandeLigneDetail EMPTY>
@@ -170,6 +171,7 @@
     modePaiement CDATA #IMPLIED
     montant CDATA #IMPLIED
     reference CDATA #IMPLIED
+    idPaiement CDATA #IMPLIED
     referenceCommande CDATA #IMPLIED
     qui CDATA #IMPLIED
     ip CDATA #IMPLIED

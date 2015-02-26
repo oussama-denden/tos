@@ -469,6 +469,22 @@ public class CommandeController {
 	}
 
 	/**
+	 * annuler une {@link Commande}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param auteur
+	 *            {@link Auteur}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/annuler", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void annulerCommande(@PathVariable String refCommande, @RequestBody Auteur auteur) throws OpaleException {
+		commandeService.annulerCommande(refCommande, auteur);
+	}
+
+	/**
 	 * transformer une {@link Commande} en {@link Draft}.
 	 * 
 	 * @param refCommande

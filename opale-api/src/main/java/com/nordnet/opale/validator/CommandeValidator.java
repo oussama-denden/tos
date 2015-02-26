@@ -2,6 +2,9 @@ package com.nordnet.opale.validator;
 
 import java.util.List;
 
+import org.joda.time.Hours;
+import org.joda.time.LocalDateTime;
+
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.commande.Commande;
@@ -160,6 +163,8 @@ public class CommandeValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.9", action), "2.1.9");
 		} else if (commande.isAnnule() && action.equalsIgnoreCase("TRANSFORMER_EN_CONTRAT")) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.11", action), "2.1.11");
+		} else if (commande.isAnnule() && action.equalsIgnoreCase("ANNULATION")) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.15", action), "2.1.15");
 		}
 	}
 
@@ -203,6 +208,38 @@ public class CommandeValidator {
 			}
 		}
 
+	}
+
+	/**
+	 * valider que le paiement n'a pas ete effectuer depuis plus de X heures pour annuler la commande.
+	 * 
+	 * @param paiement
+	 *            {@link Paiement}.
+	 * @param nombreHeure
+	 *            nombre des jours dont lesquels l'annulation reste possible.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkPeriodeDepuisPaiement(Paiement paiement, Integer nombreHeure) throws OpaleException {
+		if (Hours.hoursBetween(new LocalDateTime(paiement.getTimestampPaiement()),
+				new LocalDateTime(PropertiesUtil.getInstance().getDateDuJour())).getHours() > nombreHeure) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.16", nombreHeure), "2.1.16");
+		}
+	}
+
+	/**
+	 * valider la commande pour l'annulation.
+	 * 
+	 * @param commande
+	 *            {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerCommandePourAnnulation(Commande commande) throws OpaleException {
+		checkIsCommandeAnnule(commande, Constants.ANNULATION);
+		if (commande.isContientMigration() || commande.isContientRenouvellement()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.18"), "2.1.18");
+		}
 	}
 
 	/**
