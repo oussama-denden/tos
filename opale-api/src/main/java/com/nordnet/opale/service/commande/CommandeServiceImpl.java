@@ -77,6 +77,7 @@ import com.nordnet.topaze.ws.entity.Produit;
 import com.nordnet.topaze.ws.entity.ProduitRenouvellement;
 import com.nordnet.topaze.ws.entity.ReductionContrat;
 import com.nordnet.topaze.ws.enums.ModePaiement;
+import com.nordnet.topaze.ws.enums.MotifResiliation;
 import com.nordnet.topaze.ws.enums.TypeFrais;
 import com.nordnet.topaze.ws.enums.TypeProduit;
 import com.nordnet.topaze.ws.enums.TypeReduction;
@@ -679,10 +680,11 @@ public class CommandeServiceImpl implements CommandeService {
 
 				// resiliation du contrat associe a la commande.
 				PolitiqueResiliation politiqueResiliation = new PolitiqueResiliation();
-				politiqueResiliation.setRemboursement(false);
+				politiqueResiliation.setRemboursement(true);
 				politiqueResiliation.setPenalite(false);
 				politiqueResiliation.setFraisResiliation(false);
 				politiqueResiliation.setTypeResiliation(TypeResiliation.RIC);
+				politiqueResiliation.setMotif(MotifResiliation.ANNULATION_COMMANDE);
 				ContratResiliationtInfo contratResiliationtInfo = new ContratResiliationtInfo();
 				contratResiliationtInfo.setPolitiqueResiliation(politiqueResiliation);
 				contratResiliationtInfo.setUser(auteur.getQui());
