@@ -22,22 +22,4 @@ public final class ConstantsConnexion {
 			(System.getProperty("ws.mandatelibrary.useMock") == null || !System
 					.getProperty("ws.mandatelibrary.useMock").trim().equals("true")) ? false : true;
 
-	/**
-	 * l'url de connexion au mandatelibrary.
-	 */
-	public static final String MANDATELIBRARY_URL = System.getProperty("ws.mandatelibrary.url") != null ? System
-			.getProperty("ws.mandatelibrary.url").trim() : null;
-
-	/**
-	 * l'utilisateur de connexion au mandatelibrary.
-	 */
-	public static final String MANDATELIBRARY_USER = System.getProperty("ws.mandatelibrary.login") != null ? System
-			.getProperty("ws.mandatelibrary.login").trim() : null;
-
-	/**
-	 * le mot de passe de connexion au mandatelibrary.
-	 */
-	public static final String MANDATELIBRARY_PWD = System.getProperty("ws.mandatelibrary.password") != null ? System
-			.getProperty("ws.mandatelibrary.password").trim() : null;
-
 }

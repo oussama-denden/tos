@@ -1,13 +1,13 @@
 package com.nordnet.opale.adapter;
 
-import java.io.IOException;
-
 import org.springframework.stereotype.Component;
 
-import com.nordnet.mandatelibrary.ws.client.MandateLibrary;
-import com.nordnet.mandatelibrary.ws.client.fake.MandateLibraryFake;
+import com.nordnet.mandatelibrary.ws.MandateException;
+import com.nordnet.mandatelibrary.ws.MandateLibraryWS;
+import com.nordnet.mandatelibrary.ws.impl.MandateLibraryWSImplService;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.exception.OpaleException;
+import com.nordnet.opale.mock.MandateLibraryMock;
 import com.nordnet.opale.util.ConstantsConnexion;
 
 /**
@@ -22,13 +22,13 @@ public class MandateLibraryAdapter {
 	/**
 	 * {@link MandateLibrary}.
 	 */
-	private MandateLibrary mandateLibrary;
+	private MandateLibraryWS mandateLibrary;
 
 	/**
 	 * constructeur par defaut.
 	 */
 	public MandateLibraryAdapter() {
-		create();
+		init();
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class MandateLibraryAdapter {
 	public Mandate getMandate(String rum) throws OpaleException {
 		try {
 			return mandateLibrary.getMandate(rum);
-		} catch (IOException e) {
+		} catch (MandateException e) {
 			throw new OpaleException("Erreur lors de l'appel vers mandateLibrary", e);
 		}
 	}
@@ -51,17 +51,13 @@ public class MandateLibraryAdapter {
 	/**
 	 * creation de l'instance du client mandateLibrary.
 	 */
-	private void create() {
+	private void init() {
 		if (mandateLibrary == null) {
 			if (ConstantsConnexion.USE_MANDATELIBRARY_MOCK) {
-				mandateLibrary = new MandateLibraryFake();
+				mandateLibrary = new MandateLibraryMock();
 			} else {
-				mandateLibrary = new MandateLibrary();
-				mandateLibrary.setUrl(ConstantsConnexion.MANDATELIBRARY_URL);
-				mandateLibrary.setUsername(ConstantsConnexion.MANDATELIBRARY_USER);
-				mandateLibrary.setPassword(ConstantsConnexion.MANDATELIBRARY_PWD);
+				mandateLibrary = new MandateLibraryWSImplService().getMandateLibraryWSImplPort();
 			}
 		}
 	}
-
 }
