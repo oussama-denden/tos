@@ -254,11 +254,11 @@ public class CommandeValidator {
 	 */
 	public static void validerAnnulationCommande(Commande commande, List<Paiement> paiements) throws OpaleException {
 		if (commande.isTransformerEnContrat()) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.15"), "2.1.15");
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.19"), "2.1.19");
 		}
 
 		if (paiements != null && paiements.size() > Constants.ZERO) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.16"), "2.1.16");
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.20"), "2.1.20");
 		}
 	}
 
