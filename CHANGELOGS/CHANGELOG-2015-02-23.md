@@ -11,6 +11,7 @@ from 2015-02-23.
       * get the list of references  command and iterate over the references to get each command when the command is being processed for automatic transformation .
       * Implementing US #173: adding new fields to a "BonDeCommande".
 	  *  add ws '/commande/refCmmande/annuler' to cancel commande and resiliate the associated contract(s).
+	  * improve each cron in opale to be able to get list of reference for objects ans iterate over the list to retrieve the object using it's reference.
 
 
 

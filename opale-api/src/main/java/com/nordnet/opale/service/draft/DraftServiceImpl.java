@@ -1240,4 +1240,9 @@ public class DraftServiceImpl implements DraftService {
 		return tracageService;
 	}
 
+	@Override
+	public List<String> findReferenceDraftAnnule() {
+		return draftRepository.findReferenceDraftAnnule();
+	}
+
 }
