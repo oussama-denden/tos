@@ -59,6 +59,11 @@ public class CommandeLigne {
 	private Integer id;
 
 	/**
+	 * reference de la ligne.
+	 */
+	private String reference;
+
+	/**
 	 * numero de la ligne dans la commande.
 	 */
 	private Integer numero;
@@ -197,6 +202,23 @@ public class CommandeLigne {
 	 */
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	/**
+	 * 
+	 * @return {@link #reference}
+	 */
+	public String getReference() {
+		return reference;
+	}
+
+	/**
+	 * 
+	 * @param reference
+	 *            {@link #reference}
+	 */
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 	/**

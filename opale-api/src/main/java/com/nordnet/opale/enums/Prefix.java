@@ -16,5 +16,15 @@ public enum Prefix {
 	/**
 	 * prefix du commande.
 	 */
-	Cmd;
+	Cmd,
+
+	/**
+	 * prefix du commande ligne.
+	 */
+	Lic,
+
+	/**
+	 * prefix du draft ligne.
+	 */
+	Lid;
 }

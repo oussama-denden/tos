@@ -39,9 +39,10 @@ public class SupprimerCommandes extends QuartzJobBean {
 
 		LOGGER.info("Cron: Supprimer commandes");
 
-		List<Commande> commandes = commandeService.getCommandeNonAnnuleEtNonTransformes();
-		for (Commande commande : commandes) {
+		List<String> referenceCommandes = commandeService.getReferenceCommandeNonAnnuleEtNonTransformes();
+		for (String reference : referenceCommandes) {
 			try {
+				Commande commande = commandeService.getCommandeByReference(reference);
 				if (checkCommandeActive(commande)) {
 					LOGGER.info("annulation automatique du commande :" + commande.getReference());
 					commande.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());

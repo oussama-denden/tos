@@ -61,5 +61,10 @@
 	<!-- Bean d'acces au Contexte -->
 	<bean id="applicationContextHolder"
 		class="com.nordnet.opale.util.spring.ApplicationContextHolder" />
+		
+				
+	<bean id="tracageServiceMock" class="com.nordnet.opale.mock.LogMock"/>
+	
+	<bean id="tracageService" class="com.nordnet.opale.service.tracage.TracageServiceImpl"/>
 
 </beans>

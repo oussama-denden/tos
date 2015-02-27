@@ -29,6 +29,7 @@ import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.InfosBonCommande;
+import com.nordnet.opale.business.OptionTransformation;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.PaiementRecurrentInfo;
@@ -468,19 +469,38 @@ public class CommandeController {
 	}
 
 	/**
+	 * annuler une {@link Commande}.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @param auteur
+	 *            {@link Auteur}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/annuler", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void annulerCommande(@PathVariable String refCommande, @RequestBody Auteur auteur) throws OpaleException {
+		commandeService.annulerCommande(refCommande, auteur);
+	}
+
+	/**
 	 * transformer une {@link Commande} en {@link Draft}.
 	 * 
 	 * @param refCommande
 	 *            reference {@link Commande}.
+	 * @param optionTransformation
+	 *            {@link OptionTransformation}.
 	 * @return {@link Draft}.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/transformerEnDraft", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public Draft transformerEnDraft(@PathVariable String refCommande) throws OpaleException {
+	public Draft transformerEnDraft(@PathVariable String refCommande,
+			@RequestBody OptionTransformation optionTransformation) throws OpaleException {
 		LOGGER.info(":::ws-rec:::transformerEnDraft");
-		return commandeService.transformerEnDraft(refCommande);
+		return commandeService.transformerEnDraft(refCommande, optionTransformation);
 	}
 
 	/**

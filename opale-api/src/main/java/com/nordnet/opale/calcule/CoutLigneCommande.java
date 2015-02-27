@@ -107,7 +107,7 @@ public class CoutLigneCommande extends CalculeCout {
 			if (tarif != null) {
 				CoutLigneDetailCommande coutLigneDetailCommande =
 						new CoutLigneDetailCommande(commandeLigneDetail, referenceCommande,
-								commandeLigne.getReferenceOffre(), tarif, segmentTVA, reductionService);
+								commandeLigne.getReference(), tarif, segmentTVA, reductionService);
 
 				DetailCout detailCoutTarif = (DetailCout) coutLigneDetailCommande.getCout();
 				coutComptantHT += detailCoutTarif.getCoutComptantHT();
@@ -141,7 +141,7 @@ public class CoutLigneCommande extends CalculeCout {
 			tva = VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA);
 
 			CoutTarif coutTarifCommande =
-					new CoutTarif(tarif, segmentTVA, null, commandeLigne.getReferenceOffre(), referenceCommande, true,
+					new CoutTarif(tarif, segmentTVA, null, commandeLigne.getReference(), referenceCommande, true,
 							false, reductionService);
 
 			DetailCout detailCoutTarif = (DetailCout) coutTarifCommande.getCout();
@@ -162,7 +162,7 @@ public class CoutLigneCommande extends CalculeCout {
 			reductionComptantTTC += coutTarifCommande.getReductionComptantTTC();
 
 			Reduction reductionECParent =
-					reductionService.findReductionECParent(referenceCommande, commandeLigne.getReferenceOffre(),
+					reductionService.findReductionECParent(referenceCommande, commandeLigne.getReference(),
 							tarif.getReference());
 			// calculer la reduction sur le tarif de ligne.
 			calculerReductionECParent(reductionECParent, detailCoutTarif, tva, tarif.getFrequence());
@@ -170,7 +170,7 @@ public class CoutLigneCommande extends CalculeCout {
 
 		// trouver les reduction liees aux lignes.
 		Reduction reductionLigne =
-				reductionService.findReductionLigneDraftSansFrais(referenceCommande, commandeLigne.getReferenceOffre());
+				reductionService.findReductionLigneDraftSansFrais(referenceCommande, commandeLigne.getReference());
 
 		// recuperer les reductions recurrentes liees au draft
 		Reduction reductionDraft = reductionService.findReduction(referenceCommande);

@@ -52,7 +52,7 @@ public class GetInfosBonCommandeTest extends GlobalTestCase {
 			assertEquals(infosBonCommande.getFrequence(), new Integer(12));
 			assertEquals(infosBonCommande.getMontantTVA(), new Double(0));
 			assertEquals(infosBonCommande.getMoyenDePaiement(), ModePaiement.SEPA);
-			assertEquals(infosBonCommande.getReferencePaiement(), "00000001");
+			assertEquals(infosBonCommande.getReferencePaiement(), "R1234567");
 			assertEquals(infosBonCommande.getPrixRecurrentReduitHT(), new Double(15.27));
 			assertEquals(infosBonCommande.getPrixRecurrentReduitTTC(), new Double(18.32));
 			assertEquals(infosBonCommande.getPrixRecurrentTotalHT(), new Double(69.8));
