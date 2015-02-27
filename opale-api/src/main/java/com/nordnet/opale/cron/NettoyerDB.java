@@ -35,12 +35,13 @@ public class NettoyerDB extends QuartzJobBean {
 
 		LOGGER.info("Cron: nettoyer DB");
 
-		List<Draft> draftsAnnule = new ArrayList<Draft>();
+		List<String> referenceDraftsAnnule = new ArrayList<String>();
 
-		draftsAnnule = draftService.findDraftAnnule();
+		referenceDraftsAnnule = draftService.findReferenceDraftAnnule();
 
-		for (Draft draft : draftsAnnule) {
+		for (String reference : referenceDraftsAnnule) {
 			try {
+				Draft draft = draftService.getDraftByReference(reference);
 				draftService.supprimerDraft(draft.getReference());
 			} catch (OpaleException e) {
 				LOGGER.error("erreur lors du netoyage de la base de donnees", e);

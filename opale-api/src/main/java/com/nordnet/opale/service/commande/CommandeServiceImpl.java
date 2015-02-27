@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.CommandeInfo;
@@ -24,6 +25,7 @@ import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.InfosBonCommande;
 import com.nordnet.opale.business.InfosLignePourBonCommande;
+import com.nordnet.opale.business.OptionTransformation;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -58,14 +60,17 @@ import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.opale.validator.CommandeValidator;
+import com.nordnet.topaze.exception.TopazeException;
 import com.nordnet.topaze.ws.client.TopazeClient;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
 import com.nordnet.topaze.ws.entity.ContratReductionInfo;
 import com.nordnet.topaze.ws.entity.ContratRenouvellementInfo;
+import com.nordnet.topaze.ws.entity.ContratResiliationtInfo;
 import com.nordnet.topaze.ws.entity.ContratValidationInfo;
 import com.nordnet.topaze.ws.entity.FraisRenouvellement;
 import com.nordnet.topaze.ws.entity.PolitiqueRenouvellement;
+import com.nordnet.topaze.ws.entity.PolitiqueResiliation;
 import com.nordnet.topaze.ws.entity.PolitiqueValidation;
 import com.nordnet.topaze.ws.entity.Prix;
 import com.nordnet.topaze.ws.entity.PrixRenouvellemnt;
@@ -73,9 +78,11 @@ import com.nordnet.topaze.ws.entity.Produit;
 import com.nordnet.topaze.ws.entity.ProduitRenouvellement;
 import com.nordnet.topaze.ws.entity.ReductionContrat;
 import com.nordnet.topaze.ws.enums.ModePaiement;
+import com.nordnet.topaze.ws.enums.MotifResiliation;
 import com.nordnet.topaze.ws.enums.TypeFrais;
 import com.nordnet.topaze.ws.enums.TypeProduit;
 import com.nordnet.topaze.ws.enums.TypeReduction;
+import com.nordnet.topaze.ws.enums.TypeResiliation;
 import com.nordnet.topaze.ws.enums.TypeTVA;
 import com.nordnet.topaze.ws.enums.TypeValeur;
 
@@ -154,13 +161,13 @@ public class CommandeServiceImpl implements CommandeService {
 	private TopazeClient topazeClient;
 
 	/**
-	 * {@link CoutDecorator}
+	 * {@link CoutDecorator}.
 	 */
 	@Autowired
 	private CoutDecorator coutDecorator;
 
 	/**
-	 * {@link ReductionRepository}
+	 * {@link ReductionRepository}.
 	 */
 	private ReductionRepository reductionRepository;
 
@@ -648,6 +655,53 @@ public class CommandeServiceImpl implements CommandeService {
 		return referencesContrats;
 	}
 
+	@Override
+	public void annulerCommande(String refCommande, Auteur auteur) throws OpaleException {
+		Commande commande = getCommandeByReference(refCommande);
+		CommandeValidator.validerCommandePourAnnulation(commande);
+		CommandeValidator.isAuteurValide(auteur);
+
+		List<Paiement> paiements = paiementService.getPaiementRecurrent(refCommande, false);
+		Paiement paiementParSepa = null;
+		for (Paiement paiement : paiements) {
+			if (paiement.getModePaiement() == ModePaiement.SEPA) {
+				paiementParSepa = paiement;
+				break;
+			}
+		}
+
+		if (!Optional.fromNullable(paiementParSepa).isPresent()) {
+			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("2.1.17"), "2.1.17");
+		} else {
+			CommandeValidator.checkPeriodeDepuisPaiement(paiementParSepa, Constants.DIX);
+		}
+
+		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			if (Optional.fromNullable(commandeLigne.getReferenceContrat()).isPresent()) {
+
+				// resiliation du contrat associe a la commande.
+				PolitiqueResiliation politiqueResiliation = new PolitiqueResiliation();
+				politiqueResiliation.setRemboursement(true);
+				politiqueResiliation.setPenalite(false);
+				politiqueResiliation.setFraisResiliation(false);
+				politiqueResiliation.setTypeResiliation(TypeResiliation.RIC);
+				politiqueResiliation.setMotif(MotifResiliation.ANNULATION_COMMANDE);
+				ContratResiliationtInfo contratResiliationtInfo = new ContratResiliationtInfo();
+				contratResiliationtInfo.setPolitiqueResiliation(politiqueResiliation);
+				contratResiliationtInfo.setUser(auteur.getQui());
+				try {
+					topazeClient.resilierContrat(commandeLigne.getReferenceContrat(), contratResiliationtInfo);
+				} catch (TopazeException e) {
+					throw new OpaleException(e.getMessage(), e.getErrorCode());
+				}
+			}
+		}
+
+		// annulation de la commande
+		commande.annuler();
+		commandeRepository.save(commande);
+	}
+
 	/**
 	 * Creer les information de validation de contrat.
 	 * 
@@ -707,13 +761,23 @@ public class CommandeServiceImpl implements CommandeService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Draft transformerEnDraft(String referenceCommande) throws OpaleException {
+	public Draft transformerEnDraft(String referenceCommande, OptionTransformation optionTransformation)
+			throws OpaleException {
 
 		Commande commande = getCommandeByReference(referenceCommande);
 		Draft draft = new Draft(commande);
+
+		if (optionTransformation.isAnnulerCommande() == null || optionTransformation.isAnnulerCommande()) {
+			List<Paiement> paiements = paiementService.getPaiementEnCours(referenceCommande);
+			CommandeValidator.validerAnnulationCommande(commande, paiements);
+			commande.annuler();
+			commandeRepository.save(commande);
+		}
+
+		draftService.save(draft);
+
 		getTracage().ajouterTrace(Constants.ORDER, referenceCommande,
 				"Transformer la commande " + referenceCommande + " en draft", Utils.getInternalAuteur());
-		draftService.save(draft);
 
 		return draft;
 	}
@@ -966,7 +1030,7 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		List<Reduction> reductionsLigne =
-				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReferenceOffre());
+				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReference());
 		for (Reduction reductionLigne : reductionsLigne) {
 			reductionContrat = fromReduction(reductionLigne);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
@@ -1186,12 +1250,11 @@ public class CommandeServiceImpl implements CommandeService {
 		Cout cout = calculerCout(refCommande);
 		infosBonCommande.setMontantTVA(cout.getMontantTva());
 		infosBonCommande.setTauxTVA(cout.getTva());
-
 		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
 		SetPaiement: for (Paiement paiement : paiements) {
 			if (infosBonCommande.getMoyenDePaiement() == null) {
 				infosBonCommande.setMoyenDePaiement(paiement.getModePaiement());
-				infosBonCommande.setReferencePaiement(paiement.getReference());
+				infosBonCommande.setReferencePaiement(paiement.getIdPaiement());
 				break SetPaiement;
 			}
 		}
@@ -1207,6 +1270,7 @@ public class CommandeServiceImpl implements CommandeService {
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			InfosLignePourBonCommande lignePourBonCommande = new InfosLignePourBonCommande();
 			lignePourBonCommande.setLabel(ligne.getLabel());
+			lignePourBonCommande.setReferenceOffre(ligne.getReferenceOffre());
 			lignePourBonCommande.setReferenceContrat(ligne.getReferenceContrat());
 
 			for (DetailCout detailCout : cout.getDetails()) {
@@ -1216,15 +1280,18 @@ public class CommandeServiceImpl implements CommandeService {
 					if (detailCout.getCoutRecurrent() != null) {
 						double prixHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
 						double prixTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
-						double prixReduitHT = detailCout.getCoutRecurrent().getReduit().getTarifHT();
-						double prixReduitTTC = detailCout.getCoutRecurrent().getReduit().getTarifTTC();
+
 						lignePourBonCommande.setPrixHT(prixHT);
 						lignePourBonCommande.setPrixTTC(prixTTC);
+						lignePourBonCommande.setMontantTVA(detailCout.getCoutRecurrent().getNormal().getTarifTva());
+						lignePourBonCommande.setMontantTVAReduit(detailCout.getCoutRecurrent().getReduit()
+								.getTarifTva());
+						lignePourBonCommande.setTauxTVA(detailCout.getTva());
 
 						prixRecurrentTotalHT += prixHT;
 						prixRecurrentTotalTTC += prixTTC;
-						prixRecurrentReduitHT += prixReduitHT;
-						prixRecurrentReduitTTC += prixReduitTTC;
+						prixRecurrentReduitHT += detailCout.getCoutRecurrent().getReduit().getTarifHT();
+						prixRecurrentReduitTTC += detailCout.getCoutRecurrent().getReduit().getTarifTTC();
 					}
 				}
 			}
