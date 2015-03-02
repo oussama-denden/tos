@@ -193,5 +193,5 @@ public final class Constants {
 	/**
 	 * L'ID du produit.
 	 */
-	public static final String PRODUCT_ID = "productId";
+	public static final String PRODUCT_ID = "opale.productId";
 }
