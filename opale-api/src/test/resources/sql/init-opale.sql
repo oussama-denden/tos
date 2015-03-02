@@ -98,6 +98,7 @@ CREATE TABLE `commandeligne` (
   `tarifId` int(11) DEFAULT NULL,
   `commandeId` int(11) DEFAULT NULL,
    `geste` varchar(255) DEFAULT NULL,
+   `reference` varchar(255) DEFAULT NULL,
 
   PRIMARY KEY (`id`),
   KEY `FK2872A7878D480C8F` (`tarifId`),
@@ -253,14 +254,17 @@ CREATE TABLE `tarif` (
 --
 
 DROP TABLE IF EXISTS `tracage`;
-CREATE TABLE `tracage` (
+CREATE TABLE  `tracage` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `action` longtext,
   `date` datetime DEFAULT NULL,
-  `referenceDraft` varchar(255) DEFAULT NULL,
+  `descr` longtext,
+  `ip` varchar(255) DEFAULT NULL,
+  `reference` varchar(255) DEFAULT NULL,
+  `target` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
   `user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `paiement`

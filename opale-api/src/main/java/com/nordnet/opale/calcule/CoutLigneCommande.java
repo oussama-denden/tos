@@ -1,8 +1,12 @@
 package com.nordnet.opale.calcule;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.CoutRecurrent;
 import com.nordnet.opale.business.DetailCout;
+import com.nordnet.opale.business.InfosReductionPourBonCommande;
 import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
@@ -51,6 +55,11 @@ public class CoutLigneCommande extends CalculeCout {
 	private double tva;
 
 	/**
+	 * liste des reduction pour une ligne.
+	 */
+	private List<InfosReductionPourBonCommande> infosReductionPourBonCommande;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CoutLigneCommande() {
@@ -74,6 +83,7 @@ public class CoutLigneCommande extends CalculeCout {
 		this.segmentTVA = segmentTVA;
 		this.reductionService = reductionService;
 		this.paiementCommande = paiementCommande;
+		infosReductionPourBonCommande = new ArrayList<InfosReductionPourBonCommande>();
 	}
 
 	/**
@@ -97,7 +107,7 @@ public class CoutLigneCommande extends CalculeCout {
 			if (tarif != null) {
 				CoutLigneDetailCommande coutLigneDetailCommande =
 						new CoutLigneDetailCommande(commandeLigneDetail, referenceCommande,
-								commandeLigne.getReferenceOffre(), tarif, segmentTVA, reductionService);
+								commandeLigne.getReference(), tarif, segmentTVA, reductionService);
 
 				DetailCout detailCoutTarif = (DetailCout) coutLigneDetailCommande.getCout();
 				coutComptantHT += detailCoutTarif.getCoutComptantHT();
@@ -118,6 +128,10 @@ public class CoutLigneCommande extends CalculeCout {
 
 				reductionComptantHT += coutLigneDetailCommande.getReductionComptantHT();
 				reductionComptantTTC += coutLigneDetailCommande.getReductionComptantTTC();
+
+				if (coutLigneDetailCommande.getInfosReductionPourBonCommande() != null) {
+					infosReductionPourBonCommande.add(coutLigneDetailCommande.getInfosReductionPourBonCommande());
+				}
 			}
 		}
 
@@ -127,7 +141,7 @@ public class CoutLigneCommande extends CalculeCout {
 			tva = VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA);
 
 			CoutTarif coutTarifCommande =
-					new CoutTarif(tarif, segmentTVA, null, commandeLigne.getReferenceOffre(), referenceCommande, true,
+					new CoutTarif(tarif, segmentTVA, null, commandeLigne.getReference(), referenceCommande, true,
 							false, reductionService);
 
 			DetailCout detailCoutTarif = (DetailCout) coutTarifCommande.getCout();
@@ -148,7 +162,7 @@ public class CoutLigneCommande extends CalculeCout {
 			reductionComptantTTC += coutTarifCommande.getReductionComptantTTC();
 
 			Reduction reductionECParent =
-					reductionService.findReductionECParent(referenceCommande, commandeLigne.getReferenceOffre(),
+					reductionService.findReductionECParent(referenceCommande, commandeLigne.getReference(),
 							tarif.getReference());
 			// calculer la reduction sur le tarif de ligne.
 			calculerReductionECParent(reductionECParent, detailCoutTarif, tva, tarif.getFrequence());
@@ -156,7 +170,7 @@ public class CoutLigneCommande extends CalculeCout {
 
 		// trouver les reduction liees aux lignes.
 		Reduction reductionLigne =
-				reductionService.findReductionLigneDraftSansFrais(referenceCommande, commandeLigne.getReferenceOffre());
+				reductionService.findReductionLigneDraftSansFrais(referenceCommande, commandeLigne.getReference());
 
 		// recuperer les reductions recurrentes liees au draft
 		Reduction reductionDraft = reductionService.findReduction(referenceCommande);
@@ -187,6 +201,8 @@ public class CoutLigneCommande extends CalculeCout {
 		coutComptantReduitTTC =
 				(coutComptantTTC - reductionComptantTTC) > 0 ? coutComptantTTC - reductionComptantTTC : 0;
 		coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
+
+		detailCout.setInfosReductionPourBonCommande(infosReductionPourBonCommande);
 
 		return detailCout;
 	}
@@ -223,6 +239,7 @@ public class CoutLigneCommande extends CalculeCout {
 
 			reductionRecurrentTTC += reduction;
 			reductionRecurrentHT = ReductionUtil.caculerReductionHT(reduction, tva);
+			addReductionLigneToList(reductionECParent, tva, reduction);
 
 		}
 
@@ -236,6 +253,7 @@ public class CoutLigneCommande extends CalculeCout {
 
 			reductionComptantTTC += reduction;
 			reductionComptantHT = ReductionUtil.caculerReductionHT(reduction, tva);
+			addReductionLigneToList(reductionECParent, tva, reduction);
 		}
 
 	}
@@ -270,6 +288,7 @@ public class CoutLigneCommande extends CalculeCout {
 
 			reductionRecurrentTTC += reduction;
 			reductionRecurrentHT = ReductionUtil.caculerReductionHT(reductionRecurrentTTC, tva);
+			addReductionLigneToList(reductionLigne, tva, reduction);
 
 		}
 
@@ -281,19 +300,23 @@ public class CoutLigneCommande extends CalculeCout {
 
 			reductionComptantTTC += reduction;
 			reductionComptantHT = ReductionUtil.caculerReductionHT(reductionComptantTTC, tva);
+			addReductionLigneToList(reductionLigne, tva, reduction);
+
 		}
 
 		if (reductionLigne != null && reductionLigne.isreductionRecurrente() && isReductionDraft) {
 
-			reduction +=
+			double coutReduction =
 					ReductionUtil.calculeReductionRecurrent(coutRecurrent - reductionRecurrentTTC, reductionLigne,
 							frequence);
+			reduction += coutReduction;
 
 			reductionTTC += reduction;
 			reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);
 
 			reductionRecurrentTTC += reduction;
 			reductionRecurrentHT = ReductionUtil.caculerReductionHT(reductionRecurrentTTC, tva);
+			addReductionLigneToList(reductionLigne, tva, coutReduction);
 		}
 
 	}
@@ -343,4 +366,26 @@ public class CoutLigneCommande extends CalculeCout {
 			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
 	}
 
+	/**
+	 * ajouter une reduction au liste des reduction ligne.
+	 * 
+	 * @param reduction
+	 *            reduction a joute.
+	 * @param tva
+	 *            taux du tva.
+	 * @param prixHT
+	 *            valeur du reduction HT.
+	 */
+	private void addReductionLigneToList(Reduction reduction, double tva, double prixHT) {
+		InfosReductionPourBonCommande reductionLigne = new InfosReductionPourBonCommande();
+		reductionLigne.setReference(reduction.getReference());
+		if (!infosReductionPourBonCommande.contains(reductionLigne)) {
+			reductionLigne.setLabel(reduction.getLabel());
+			reductionLigne.setReferenceCatalogue(reduction.getCodeCatalogueReduction());
+			reductionLigne.setPrixTTC(prixHT);
+			reductionLigne.setPrixHT(ReductionUtil.caculerReductionHT(prixHT, tva));
+			infosReductionPourBonCommande.add(reductionLigne);
+		}
+
+	}
 }

@@ -33,4 +33,12 @@ public interface DraftRepository extends JpaRepository<Draft, Integer> {
 	@Query(name = "findDraftAnnule", value = "SELECT d FROM Draft d WHERE d.dateAnnulation IS NOT NULL")
 	public List<Draft> findDraftAnnule();
 
+	/**
+	 * Récupérer les reference du drafts annulés.
+	 * 
+	 * @return {@link Draft}.
+	 */
+	@Query(name = "findReferenceDraftAnnule", value = "SELECT d.reference FROM Draft d WHERE d.dateAnnulation IS NOT NULL")
+	public List<String> findReferenceDraftAnnule();
+
 }

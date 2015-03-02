@@ -19,7 +19,9 @@ import com.nordnet.opale.repository.signature.SignatureRepository;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.tracage.TracageService;
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.opale.validator.SignatureValidator;
 
 /**
@@ -63,7 +65,6 @@ public class SignatureServiceImpl implements SignatureService {
 	/**
 	 * {@link TracageService}.
 	 */
-	@Autowired
 	private TracageService tracageService;
 
 	/**
@@ -93,8 +94,9 @@ public class SignatureServiceImpl implements SignatureService {
 
 		}
 
-		tracageService.ajouterTrace(ajoutSignatureInfo.getAuteur().getQui(), refCommande,
-				"Ajouter un intention de signature pour la commande de reference " + refCommande);
+		getTracage().ajouterTrace(Constants.ORDER, refCommande,
+				"Ajouter un intention de signature pour la commande de reference " + refCommande,
+				ajoutSignatureInfo.getAuteur());
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("signatureReference", signatureReference);
 		return jsonResponse.toString();
@@ -134,8 +136,8 @@ public class SignatureServiceImpl implements SignatureService {
 
 			}
 		}
-		tracageService.ajouterTrace(signatureInfo.getAuteur().getQui(), refCommande, "Signer la commande de reference "
-				+ refCommande);
+		getTracage().ajouterTrace(Constants.ORDER, refCommande, "Signer la commande de reference " + refCommande,
+				signatureInfo.getAuteur());
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("signatureReference", referenceSignature);
 		return jsonResponse.toString();
@@ -255,15 +257,15 @@ public class SignatureServiceImpl implements SignatureService {
 		if (!signature.isSigne()) {
 			signatureRepository.delete(signature);
 			signatureRepository.flush();
-			tracageService.ajouterTrace(auteur.getQui(), refCommande,
-					"Supprimer l'intention de signature de reference " + refSignature);
+			getTracage().ajouterTrace(Constants.ORDER, refCommande,
+					"Supprimer l'intention de signature de reference " + refSignature, auteur);
 		} else {
 			SignatureValidator.checkIfSignatureAnnule(signature);
 			signature.setDateAnnulation(PropertiesUtil.getInstance().getDateDuJour());
 			signatureRepository.save(signature);
 		}
-		tracageService
-				.ajouterTrace(auteur.getQui(), refCommande, "Supprimer la signature de reference " + refSignature);
+		getTracage().ajouterTrace(Constants.ORDER, refCommande, "Supprimer la signature de reference " + refSignature,
+				auteur);
 
 		LOGGER.info("Fin methode supprimer");
 	}
@@ -274,5 +276,21 @@ public class SignatureServiceImpl implements SignatureService {
 	@Override
 	public Signature getSignatureByReferenceCommande(String refCommande) throws OpaleException {
 		return signatureRepository.findByReferenceCommande(refCommande);
+	}
+
+	/**
+	 * Retourn le {@link TracageService}.
+	 * 
+	 * @return {@link TracageService}
+	 */
+	public TracageService getTracage() {
+		if (tracageService == null) {
+			if (System.getProperty("log.useMock").equals("true")) {
+				tracageService = (TracageService) ApplicationContextHolder.getBean("tracageServiceMock");
+			} else {
+				tracageService = (TracageService) ApplicationContextHolder.getBean("tracageService");
+			}
+		}
+		return tracageService;
 	}
 }

@@ -3,6 +3,7 @@ package com.nordnet.opale.validator;
 import java.util.Date;
 import java.util.List;
 
+import com.nordnet.common.valueObject.money.RUM;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -154,6 +155,9 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.rum"), "0.1.4");
 		}
 
+		// verifer le format du rum
+		isRumValide(((PaiementInfoRecurrent) paiementInfo).getRum());
+
 		if (!paiementInfo.getModePaiement().isModePaiementRecurrent()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.7"), "3.1.7");
 
@@ -173,6 +177,23 @@ public class PaiementValidator {
 
 		if (paiement.getDateAnnulation() != null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.5", paiement.getDateAnnulation()), "3.1.5");
+		}
+
+	}
+
+	/**
+	 * valider les RUM en cas du paiemebt recurrent.
+	 * 
+	 * @param rum
+	 *            String rum.
+	 * @return true si la rum est valide .
+	 * @throws OpaleException
+	 */
+	public static void isRumValide(String rum) throws OpaleException {
+		try {
+			RUM rfum = RUM.build(rum);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.8"), "3.1.8");
 		}
 
 	}

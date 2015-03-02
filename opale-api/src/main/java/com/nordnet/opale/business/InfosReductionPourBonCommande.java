@@ -3,12 +3,17 @@
  */
 package com.nordnet.opale.business;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Infos Reduction pour {@link InfosBonCommande}.
  * 
  * @author Oussama Denden
  * 
  */
+@JsonIgnoreProperties({ "reference" })
 public class InfosReductionPourBonCommande {
 
 	/**
@@ -30,6 +35,11 @@ public class InfosReductionPourBonCommande {
 	 * Montant TTC.
 	 */
 	private Double prixTTC;
+
+	/**
+	 * reference reduction.
+	 */
+	private String reference;
 
 	/**
 	 * constructeur par defaut.
@@ -96,6 +106,44 @@ public class InfosReductionPourBonCommande {
 	 */
 	public void setPrixTTC(Double prixTTC) {
 		this.prixTTC = prixTTC;
+	}
+
+	/**
+	 * 
+	 * @return reference reduction
+	 * 
+	 */
+	public String getReference() {
+		return reference;
+	}
+
+	/**
+	 * 
+	 * @param reference
+	 *            {@link #reference}
+	 */
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof InfosReductionPourBonCommande)) {
+			return false;
+		}
+		InfosReductionPourBonCommande rhs = (InfosReductionPourBonCommande) obj;
+		return new EqualsBuilder().append(reference, rhs.reference).isEquals();
 	}
 
 }

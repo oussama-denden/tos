@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.nordnet.opale.domain.Keygen;
 import com.nordnet.opale.domain.commande.Commande;
+import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.draft.Draft;
+import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.enums.Prefix;
 import com.nordnet.opale.repository.KeygenRepository;
 import com.nordnet.opale.util.Constants;
@@ -61,10 +63,17 @@ public class KeygenServiceImpl implements KeygenService {
 		// CheckDigit crc = new LRICRCISO7064Mod97_10();
 		//
 		// reference = crc.encode(reference);
-
-		referenceRetour =
-				clazz.equals(Draft.class) ? Prefix.Dra + "-" + reference : clazz.equals(Commande.class) ? Prefix.Cmd
-						+ "-" + reference : reference;
+		if (clazz.equals(Draft.class)) {
+			referenceRetour = Prefix.Dra + "-" + reference;
+		} else if (clazz.equals(Commande.class)) {
+			referenceRetour = Prefix.Cmd + "-" + reference;
+		} else if (clazz.equals(CommandeLigne.class)) {
+			referenceRetour = Prefix.Lic + "-" + reference;
+		} else if (clazz.equals(DraftLigne.class)) {
+			referenceRetour = Prefix.Lid + "-" + reference;
+		} else {
+			referenceRetour = reference;
+		}
 		keygenRepository.save(keygen);
 
 		LOGGER.info("Fin methode getNextKey – Class = " + clazz.getName());

@@ -13,6 +13,7 @@ import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.validator.CommandeValidator;
 
 /**
  * Cron pour transforme les commandes en contrats.
@@ -37,10 +38,15 @@ public class TransformerEnContrat extends QuartzJobBean {
 
 		LOGGER.info("Cron: Transformer Commande En Contrat");
 
-		List<Commande> commandes = commandeService.getCommandeNonAnnuleEtNonTransformes();
+		List<String> Referencecommandes = commandeService.getReferenceCommandeNonAnnuleEtNonTransformes();
 
 		try {
-			for (Commande commande : commandes) {
+			for (String reference : Referencecommandes) {
+				LOGGER.info(" traittement du commande " + reference);
+
+				Commande commande = commandeService.getCommandeByReference(reference);
+				CommandeValidator.isExiste(reference, commande);
+
 				if (commandeService.validerCommandeEnTransformationAutomatique(commande)) {
 					LOGGER.info("TransformerEnContrat: contrat valide " + commande.getReference());
 					Auteur auteur = new Auteur();

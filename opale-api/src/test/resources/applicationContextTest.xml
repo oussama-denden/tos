@@ -101,5 +101,8 @@
     
 	 <bean id="netCatalogClientFake" class="com.nordnet.netcatalog.ws.client.fake.NetCatalogClientFake" /> 
 	 <bean id="dozerMapper" class="org.dozer.DozerBeanMapper" scope="singleton"/>
+	 
+	 		
+	<bean id="tracageServiceMock" class="com.nordnet.opale.mock.LogMock"/>
     
 </beans>

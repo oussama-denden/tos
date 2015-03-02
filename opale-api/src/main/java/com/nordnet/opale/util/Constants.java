@@ -2,6 +2,8 @@ package com.nordnet.opale.util;
 
 import java.text.SimpleDateFormat;
 
+import com.nordnet.opale.domain.commande.Commande;
+
 /**
  * Constants.
  * 
@@ -73,6 +75,11 @@ public final class Constants {
 	public static final Integer QUATRE = 4;
 
 	/**
+	 * entrier de valeur 10.
+	 */
+	public static final Integer DIX = 10;
+
+	/**
 	 * L'utilisateur interne de topaze.
 	 */
 	public static final String INTERNAL_USER = "OPALE";
@@ -111,6 +118,11 @@ public final class Constants {
 	 * constante indique la transformation du dratf en commande.
 	 */
 	public static final String TRANSFORMER_EN_COMMANDE = "TRANSFORMER_EN_COMMANDE";
+
+	/**
+	 * constante indique l'annulation de la {@link Commande}.
+	 */
+	public static final String ANNULATION = "ANNULATION";
 
 	/**
 	 * constante indique la validation du draft.
@@ -157,4 +169,29 @@ public final class Constants {
 	 */
 	public static final String CODE_ERREUR_SYNTAXE = "0.4";
 
+	/**
+	 * URL service log.
+	 */
+	public static final String LOG_URL = "log.url";
+
+	/**
+	 * type du log.
+	 */
+
+	public static final String TYPE_LOG = "comment";
+
+	/**
+	 * Produit commande.
+	 */
+	public static final String COMMANDE = "COMMANDE";
+
+	/**
+	 * Order constant.
+	 */
+	public static final String ORDER = "order";
+
+	/**
+	 * L'ID du produit.
+	 */
+	public static final String PRODUCT_ID = "opale.productId";
 }

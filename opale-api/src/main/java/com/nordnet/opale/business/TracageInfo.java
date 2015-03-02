@@ -1,30 +1,14 @@
-package com.nordnet.opale.domain;
+package com.nordnet.opale.business;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Type;
-
 /**
- * Cette classe regroupe les informations qui definissent un {@link Tracage}.
+ * Cette classe regroupe les informations qui definissent un {@link TracageInfo}.
  * 
- * @author mahjoub-MARZOUGUI
+ * @author anisselmane.
  * 
  */
-@Entity
-@Table(name = "tracage")
-public class Tracage {
-
-	/**
-	 * cle primaire.
-	 */
-	@Id
-	@GeneratedValue
-	private Integer id;
+public class TracageInfo {
 
 	/**
 	 * Le produit.
@@ -34,12 +18,12 @@ public class Tracage {
 	/**
 	 * La reference.
 	 */
-	private String reference;
+	private String key;
+
 	/**
 	 * Action executer.
 	 */
-	@Type(type = "text")
-	private String descr;
+	private String description;
 
 	/**
 	 * ip qui a appliquer l'opération.
@@ -57,14 +41,9 @@ public class Tracage {
 	private String type;
 
 	/**
-	 * Date de l'opération.
-	 */
-	private Date date;
-
-	/**
 	 * constructeur par defaut.
 	 */
-	public Tracage() {
+	public TracageInfo() {
 
 	}
 
@@ -86,34 +65,16 @@ public class Tracage {
 	 * @param date
 	 *            date
 	 */
-	public Tracage(String target, String reference, String descr, String ip, String user, String type, Date date) {
+	public TracageInfo(String target, String key, String description, String ip, String user, String type, Date date) {
 		this.target = target;
-		this.reference = reference;
-		this.descr = descr;
+		this.key = key;
+		this.description = description;
 		this.ip = ip;
 		this.user = user;
 		this.type = type;
-		this.date = date;
 	}
 
 	/* Getters & Setters */
-
-	/**
-	 * 
-	 * @return {@link #id}
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 *            {@link #id}
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	/**
 	 * 
@@ -134,19 +95,19 @@ public class Tracage {
 
 	/**
 	 * 
-	 * @return {@link #reference}
+	 * @return {@link #key}
 	 */
-	public String getReference() {
-		return reference;
+	public String getKey() {
+		return key;
 	}
 
 	/**
 	 * 
-	 * @param reference
-	 *            {@link #reference}
+	 * @param key
+	 *            {@link #key}
 	 */
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	/**
@@ -168,19 +129,19 @@ public class Tracage {
 
 	/**
 	 * 
-	 * @return {@link #descr}
+	 * @return {@link #description}
 	 */
-	public String getDescr() {
-		return descr;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
 	 * 
-	 * @param descr
-	 *            {@link #descr}
+	 * @param description
+	 *            {@link #description}
 	 */
-	public void setDescr(String descr) {
-		this.descr = descr;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
@@ -215,23 +176,6 @@ public class Tracage {
 	 */
 	public void setUser(String user) {
 		this.user = user;
-	}
-
-	/**
-	 * 
-	 * @return {@link #date}
-	 */
-	public Date getDate() {
-		return date;
-	}
-
-	/**
-	 * 
-	 * @param date
-	 *            {@link #date}
-	 */
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 }
