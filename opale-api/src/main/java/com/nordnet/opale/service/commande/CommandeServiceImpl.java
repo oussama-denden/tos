@@ -44,7 +44,6 @@ import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.commande.CommandeRepository;
 import com.nordnet.opale.repository.commande.CommandeSpecifications;
-import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.rest.RestClient;
 import com.nordnet.opale.service.downpaiement.DownPaiementService;
 import com.nordnet.opale.service.draft.DraftService;
@@ -158,11 +157,6 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private CoutDecorator coutDecorator;
-
-	/**
-	 * {@link ReductionRepository}
-	 */
-	private ReductionRepository reductionRepository;
 
 	/**
 	 * 
@@ -835,6 +829,11 @@ public class CommandeServiceImpl implements CommandeService {
 			if (paiement2.getTypePaiement() == TypePaiement.RECURRENT) {
 				hasRecurrent = true;
 				prix.setReferenceModePaiement(paiement2.getIdPaiement());
+			} else if (paiement2.getTypePaiement() == TypePaiement.COMPTANT
+					&& (paiement2.getModePaiement().equals(ModePaiement.SEPA)
+							|| paiement2.getModePaiement().equals(ModePaiement.FACTURE) || paiement2.getModePaiement()
+							.equals(ModePaiement.FACTURE_FIN_DE_MOIS))) {
+				prix.setReferenceModePaiement(paiement2.getIdPaiement());
 			}
 		}
 		// deterniner la duree selon le type de paiement(si recurrent : duree=null sinon duree= frequence)
@@ -884,6 +883,11 @@ public class CommandeServiceImpl implements CommandeService {
 		for (Paiement paiement2 : paiement) {
 			if (paiement2.getTypePaiement() == TypePaiement.RECURRENT) {
 				hasRecurrent = true;
+				prix.setReferenceModePaiement(paiement2.getIdPaiement());
+			} else if (paiement2.getTypePaiement() == TypePaiement.COMPTANT
+					&& (paiement2.getModePaiement().equals(ModePaiement.SEPA)
+							|| paiement2.getModePaiement().equals(ModePaiement.FACTURE) || paiement2.getModePaiement()
+							.equals(ModePaiement.FACTURE_FIN_DE_MOIS))) {
 				prix.setReferenceModePaiement(paiement2.getIdPaiement());
 			}
 		}
@@ -1156,12 +1160,12 @@ public class CommandeServiceImpl implements CommandeService {
 
 			if (commande.isAnnule() || paiementCommande == null) {
 				return false;
-			} else if (paiementCommande.getModePaiement().isModePaimentComptant() && coutCommande != null) {
+			} else if (paiementCommande.getTypePaiement().equals(TypePaiement.COMPTANT) && coutCommande != null) {
 				if (coutCommande.getCoutComptantTTC() > paiementCommande.getMontant()) {
 					return false;
 				} else
 					return true;
-			} else if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
+			} else if (paiementCommande.getTypePaiement().equals(TypePaiement.RECURRENT)) {
 				return true;
 			}
 		} catch (Exception ex) {

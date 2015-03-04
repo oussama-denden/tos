@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.spring.annotation.SpringBean;
 
+import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -61,8 +62,8 @@ public class PaiementDirectTest extends GlobalTestCase {
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
 	public void testerPaiementDirectValide() {
 		try {
-			PaiementInfoRecurrent paiementInfo =
-					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoRecurrent.class,
+			PaiementInfoComptant paiementInfo =
+					draftInfoGenerator.getObjectFromJsonFile(PaiementInfoComptant.class,
 							"./requests/paiementDirect.json");
 			List<Paiement> paiements = paiementService.getPaiementByReferenceCommande("00000005");
 			assertEquals(Double.valueOf(Constants.ZERO), Double.valueOf(paiements.size()));

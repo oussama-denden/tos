@@ -18,6 +18,11 @@ public class PaiementInfoComptant extends PaiementInfo {
 	/**
 	 * RUM.
 	 */
+	private String rum;
+
+	/**
+	 * reference mode paiement.
+	 */
 	private String referenceModePaiement;
 
 	/**
@@ -41,9 +46,10 @@ public class PaiementInfoComptant extends PaiementInfo {
 	 *            {@link #referenceModePaiement}
 	 */
 	public PaiementInfoComptant(ModePaiement modePaiement, Double montant, Date timestampIntention,
-			Date timestampPaiement, String referenceModePaiement) {
+			Date timestampPaiement, String rum, String referenceModePaiement) {
 		super(modePaiement, montant, timestampIntention, timestampPaiement);
 		this.referenceModePaiement = referenceModePaiement;
+		this.rum = rum;
 
 	}
 
@@ -62,6 +68,21 @@ public class PaiementInfoComptant extends PaiementInfo {
 	 */
 	public void setReferenceModePaiement(String referenceModePaiement) {
 		this.referenceModePaiement = referenceModePaiement;
+	}
+
+	/**
+	 * @return {@link #rum}.
+	 */
+	public String getRum() {
+		return rum;
+	}
+
+	/**
+	 * @param rum
+	 *            {@link #rum}.
+	 */
+	public void setRum(String rum) {
+		this.rum = rum;
 	}
 
 }

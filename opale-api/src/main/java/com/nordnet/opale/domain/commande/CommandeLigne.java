@@ -559,6 +559,7 @@ public class CommandeLigne {
 	 * @return {@link Produit}.
 	 */
 	private Produit toProduitParent(String referenceCommande, List<Paiement> paiement) {
+
 		Produit produitParent = new Produit();
 		produitParent.setLabel(label);
 		produitParent.setNumEC(Constants.UN);
