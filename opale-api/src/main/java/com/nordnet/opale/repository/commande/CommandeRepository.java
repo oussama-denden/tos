@@ -65,7 +65,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	public final static String GET_FRAIS_LIGNE =
 			"SELECT distinct f.typeFrais FROM commande c, commandeligne cl, tarif t, frais f where"
-					+ " c.reference LIKE ?1 AND cl.referenceOffre LIKE ?2 AND c.id = cl.commandeId AND"
+					+ " c.reference LIKE ?1 AND cl.reference LIKE ?2 AND c.id = cl.commandeId AND"
 					+ " (cl.tarifId = t.id) AND t.reference LIKE ?3"
 					+ " AND (t.id = f.tarifId) AND f.reference LIKE ?4";
 

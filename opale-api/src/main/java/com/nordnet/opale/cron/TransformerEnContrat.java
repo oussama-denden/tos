@@ -6,8 +6,10 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import com.nordnet.common.alert.ws.client.SendAlert;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.exception.OpaleException;
@@ -33,6 +35,12 @@ public class TransformerEnContrat extends QuartzJobBean {
 	 */
 	private CommandeService commandeService;
 
+	/**
+	 * {@link SendAlert}
+	 */
+	@Autowired
+	private SendAlert sendAlert;
+
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
@@ -53,14 +61,30 @@ public class TransformerEnContrat extends QuartzJobBean {
 					auteur.setQui(Constants.INTERNAL_USER);
 					try {
 						commandeService.transformeEnContrat(commande, auteur);
-					} catch (JSONException e) {
-						LOGGER.error("erreur lors de la transformation des commandes en contrats", e);
+					} catch (JSONException exception) {
+						LOGGER.error("erreur lors de la transformation des commandes en contrats", exception);
+
+						try {
+							sendAlert.send(System.getProperty(Constants.PRODUCT_ID),
+									"Erreur dans le cron Transformer Commande En Contrat ", "cause: "
+											+ exception.getCause().getLocalizedMessage(), exception.getMessage());
+						} catch (Exception e) {
+							LOGGER.error("fail to send alert", e);
+						}
 					}
 				}
 			}
 
 		} catch (OpaleException ex) {
 			LOGGER.error("erreur lors de la transformation des commandes en contrats", ex);
+
+			try {
+				sendAlert.send(System.getProperty(Constants.PRODUCT_ID),
+						"Erreur dans le cron Transformer Commande En Contrat ", "cause: "
+								+ ex.getCause().getLocalizedMessage(), ex.getMessage());
+			} catch (Exception e) {
+				LOGGER.error("fail to send alert", e);
+			}
 		}
 
 	}

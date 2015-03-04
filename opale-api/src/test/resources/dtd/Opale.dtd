@@ -107,6 +107,7 @@
     tarifId CDATA #IMPLIED
     geste CDATA #IMPLIED
     numero CDATA #IMPLIED
+    reference CDATA #IMPLIED
 >
 
 <!ELEMENT commandeLigneDetail EMPTY>

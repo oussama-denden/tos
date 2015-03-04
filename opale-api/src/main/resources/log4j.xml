@@ -32,7 +32,23 @@
 			<param name="ConversionPattern" value="%5p %d{ISO8601} %c.%M - %m%n" />
 		</layout>
 	</appender>
+	
+	     <appender name="ALERT-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+                <!-- The active file to log to -->
+                <param name="file" value="/var/log/tomcat/default/opale/opale.alert.log" />
+                <param name="append" value="true" />
+                <param name="DatePattern" value="'.'yyyy-ww" />
+                <param name="encoding" value="UTF-8" />
+                <layout class="org.apache.log4j.PatternLayout">
+                        <!-- The log message pattern -->
+                        <param name="ConversionPattern" value="%5p %d{ISO8601} %c.%M - %m%n" />
+                </layout>
+        </appender>
 
+	<category name="com.nordnet.opale.mock.SendAlertMock" additivity="true">
+		<appender-ref ref="ALERT-APPENDER"/>
+	</category>
+	
 	<logger name="log4j.logger.org.springframework.ws">
 		<level value="DEBUG" />
 	</logger>

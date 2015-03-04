@@ -150,6 +150,13 @@ public interface DraftService {
 	public List<Draft> findDraftAnnule();
 
 	/**
+	 * Récupérer les references du drafts annulés.
+	 * 
+	 * @return {@link Draft}.
+	 */
+	public List<String> findReferenceDraftAnnule();
+
+	/**
 	 * Associe une draft à un client.
 	 * 
 	 * @param refDraft
