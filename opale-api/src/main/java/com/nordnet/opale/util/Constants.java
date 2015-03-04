@@ -65,6 +65,11 @@ public final class Constants {
 	public static final Integer DEUX = 2;
 
 	/**
+	 * entier de valeur 6.
+	 */
+	public static final Integer SIX = 6;
+
+	/**
 	 * entier de valeur 3.
 	 */
 	public static final Integer TROIS = 3;

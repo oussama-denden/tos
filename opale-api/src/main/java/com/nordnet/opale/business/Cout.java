@@ -3,6 +3,7 @@ package com.nordnet.opale.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.Utils;
 
 /**
@@ -100,7 +101,7 @@ public class Cout {
 	 *            {@link #coutComptantHT}
 	 */
 	public void setCoutComptantHT(double coutComptantHT) {
-		this.coutComptantHT = Utils.arroundiNombre(coutComptantHT);
+		this.coutComptantHT = Utils.round(coutComptantHT, Constants.DEUX);
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class Cout {
 	 *            {@link #coutComptantTTC}
 	 */
 	public void setCoutComptantTTC(double coutComptantTTC) {
-		this.coutComptantTTC = Utils.arroundiNombre(coutComptantTTC);
+		this.coutComptantTTC = Utils.round(coutComptantTTC, Constants.DEUX);
 	}
 
 	/**
@@ -134,7 +135,7 @@ public class Cout {
 	 *            {@link #montantTva}
 	 */
 	public void setMontantTva(double montantTva) {
-		this.montantTva = Utils.arroundiNombre(montantTva);
+		this.montantTva = Utils.round(montantTva, Constants.DEUX);
 		;
 	}
 
@@ -152,7 +153,7 @@ public class Cout {
 	 *            {@link #reductionHT}
 	 */
 	public void setReductionHT(double reductionHT) {
-		this.reductionHT = Utils.arroundiNombre(reductionHT);
+		this.reductionHT = Utils.round(reductionHT, Constants.DEUX);
 	}
 
 	/**
@@ -169,7 +170,7 @@ public class Cout {
 	 *            {@link #reductionTTC}
 	 */
 	public void setReductionTTC(double reductionTTC) {
-		this.reductionTTC = Utils.arroundiNombre(reductionTTC);
+		this.reductionTTC = Utils.round(reductionTTC, Constants.DEUX);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.nordnet.opale.business;
 
+import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.Utils;
 
 /**
@@ -59,7 +60,7 @@ public class Plan implements Cloneable {
 	 *            {@link #tarifHT}
 	 */
 	public void setTarifHT(double tarifHT) {
-		this.tarifHT = Utils.arroundiNombre(tarifHT);
+		this.tarifHT = Utils.round(tarifHT, Constants.DEUX);
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class Plan implements Cloneable {
 	 *            {@link #tarifTTC}
 	 */
 	public void setTarifTTC(double tarifTTC) {
-		this.tarifTTC = Utils.arroundiNombre(tarifTTC);
+		this.tarifTTC = Utils.round(tarifTTC, Constants.DEUX);
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class Plan implements Cloneable {
 	 *            {@link #tarifTva}
 	 */
 	public void setTarifTva(double tarifTva) {
-		this.tarifTva = Utils.arroundiNombre(tarifTva);
+		this.tarifTva = Utils.round(tarifTva, Constants.DEUX);
 		;
 	}
 

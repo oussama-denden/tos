@@ -1,7 +1,9 @@
 {
   "modePaiement": "CB",
   "montant": "5",
-   "auteur": {
+  "timestampPaiement": "2014-12-15",
+  "rum": "R0000000",
+  "auteur": {
     "qui": "GRC.WEL-JOHNDOE",
     "canal": "welcome",
     "ip": {

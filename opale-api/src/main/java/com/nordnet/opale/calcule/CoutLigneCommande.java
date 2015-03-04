@@ -10,7 +10,6 @@ import com.nordnet.opale.business.InfosReductionPourBonCommande;
 import com.nordnet.opale.business.Plan;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.commande.CommandeLigneDetail;
-import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
@@ -45,11 +44,6 @@ public class CoutLigneCommande extends CalculeCout {
 	private ReductionService reductionService;
 
 	/**
-	 * {@link Paiement}
-	 */
-	private Paiement paiementCommande;
-
-	/**
 	 * valeur de tva.
 	 */
 	private double tva;
@@ -77,12 +71,11 @@ public class CoutLigneCommande extends CalculeCout {
 	 *            {@link ReductionRepository}
 	 */
 	public CoutLigneCommande(String refenrenceCommande, CommandeLigne commandeLigne, String segmentTVA,
-			ReductionService reductionService, Paiement paiementCommande) {
+			ReductionService reductionService) {
 		this.referenceCommande = refenrenceCommande;
 		this.commandeLigne = commandeLigne;
 		this.segmentTVA = segmentTVA;
 		this.reductionService = reductionService;
-		this.paiementCommande = paiementCommande;
 		infosReductionPourBonCommande = new ArrayList<InfosReductionPourBonCommande>();
 	}
 

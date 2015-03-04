@@ -15,3 +15,4 @@ from 2015-02-23.
 	  * improve each cron in opale to be able to get list of reference for objects ans iterate over the list to retrieve the object using it's reference.
       * change log request to POST.
       * Mock log and alert.
+      * Implementing US #168: differentiating the payment method from the renewal mode.

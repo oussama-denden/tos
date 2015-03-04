@@ -17,6 +17,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.paiement.PaiementRepository;
 import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.util.PropertiesUtil;
+import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.validator.PaiementValidator;
 
 /**
@@ -134,7 +135,12 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setMontant(paiementInfo.getMontant());
 			paiement.setAuteur(new Auteur(paiementInfo.getAuteur()));
 			if (paiementInfo instanceof PaiementInfoComptant) {
-				paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement());
+				if (!Utils.isStringNullOrEmpty(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement())) {
+					paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement());
+				} else {
+					paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getRum());
+				}
+
 			} else {
 				paiement.setIdPaiement(((PaiementInfoRecurrent) paiementInfo).getRum());
 			}
@@ -147,7 +153,11 @@ public class PaiementServiceImpl implements PaiementService {
 			paiement.setReferenceCommande(referenceCommande);
 			paiement.setTypePaiement(typePaiement);
 			if (paiementInfo instanceof PaiementInfoComptant) {
-				paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement());
+				if (!Utils.isStringNullOrEmpty(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement())) {
+					paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getReferenceModePaiement());
+				} else {
+					paiement.setIdPaiement(((PaiementInfoComptant) paiementInfo).getRum());
+				}
 			} else {
 				paiement.setIdPaiement(((PaiementInfoRecurrent) paiementInfo).getRum());
 			}
