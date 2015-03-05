@@ -430,4 +430,15 @@ public interface CommandeService {
 	 */
 	public InfosBonCommande getInfosBonCommande(String refCommande) throws OpaleException;
 
+	/**
+	 * Calcule cout pour bon de commande.
+	 * 
+	 * @param referenceCommande
+	 *            reference de la commande.
+	 * @return cout avant paiement.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	Cout calculerCoutPourBonDeCommande(String referenceCommande) throws OpaleException;
+
 }

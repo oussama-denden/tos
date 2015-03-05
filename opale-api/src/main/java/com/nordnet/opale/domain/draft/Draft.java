@@ -122,6 +122,11 @@ public class Draft {
 	private String codePartenaire;
 
 	/**
+	 * un flag pour indiquer si la commande source sera annule lors de la transformation du draft en commande.
+	 */
+	private boolean annulerCommandeSource = false;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public Draft() {
@@ -499,6 +504,23 @@ public class Draft {
 	 */
 	public void setCodePartenaire(String codePartenaire) {
 		this.codePartenaire = codePartenaire;
+	}
+
+	/**
+	 * 
+	 * @return {@link #annulerCommandeSource}.
+	 */
+	public boolean isAnnulerCommandeSource() {
+		return annulerCommandeSource;
+	}
+
+	/**
+	 * 
+	 * @param annulerCommandeSource
+	 *            {@link #annulerCommandeSource}.
+	 */
+	public void setAnnulerCommandeSource(boolean annulerCommandeSource) {
+		this.annulerCommandeSource = annulerCommandeSource;
 	}
 
 	/**

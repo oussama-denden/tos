@@ -533,6 +533,13 @@ public class DraftServiceImpl implements DraftService {
 			draft.setDateTransformationCommande(PropertiesUtil.getInstance().getDateDuJour());
 			draftRepository.save(draft);
 
+			// annulation de la commande source
+			if (draft.isAnnulerCommandeSource()) {
+				Commande commandeSource = commandeService.getCommandeByReference(draft.getCommandeSource());
+				commandeSource.annuler();
+				commandeService.save(commandeSource);
+			}
+
 			getTracage().ajouterTrace(
 					Constants.ORDER,
 					referenceDraft,

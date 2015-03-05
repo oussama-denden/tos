@@ -15,4 +15,5 @@ from 2015-02-23.
       * change log request to POST.
       * Mock log and alert.
       * Implementing US #168: differentiating the payment method from the renewal mode.
-      * validate the mandate information (call the mandateLibrary ws).
+	  * ReImplementing US #173: updating the cost fields.
+	  * validate the mandate information (call the mandateLibrary ws).
