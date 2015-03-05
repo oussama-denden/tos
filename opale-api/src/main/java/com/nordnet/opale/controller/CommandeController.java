@@ -541,6 +541,22 @@ public class CommandeController {
 	}
 
 	/**
+	 * Calculer le cout de la {@link Commande} avant paiement.
+	 * 
+	 * @param refCommande
+	 *            reference {@link Commande}.
+	 * @return {@link Cout} cout de la {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	@RequestMapping(value = "/{refCommande:.+}/beforePaymentCost", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public Cout calculerCoutAvantPaiement(@PathVariable("refCommande") String refCommande) throws OpaleException {
+		LOGGER.info(":::ws-rec:::calculerCoutAvantPaiement");
+		return commandeService.calculerCoutPourBonDeCommande(refCommande);
+	}
+
+	/**
 	 * 
 	 * Gerer le cas ou on a une {@link OpaleException}.
 	 * 

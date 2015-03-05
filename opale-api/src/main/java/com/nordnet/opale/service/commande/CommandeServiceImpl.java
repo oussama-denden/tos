@@ -1006,6 +1006,16 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public Cout calculerCoutPourBonDeCommande(String referenceCommande) throws OpaleException {
+		Commande commande = getCommandeByReference(referenceCommande);
+		CoutCommande coutCommande = new CoutCommande(commande, reductionService, paiementService);
+		coutDecorator.setCalculeCout(coutCommande);
+		return coutDecorator.getCoutPourBonDeCommande();
+	}
+
+	/**
 	 * transferer la liste des reduction associe a la {@link CommandeLigne} vers le contrat dans topaze.
 	 * 
 	 * @param commande
@@ -1248,12 +1258,16 @@ public class CommandeServiceImpl implements CommandeService {
 	public InfosBonCommande getInfosBonCommande(String refCommande) throws OpaleException {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
+
 		InfosBonCommande infosBonCommande = new InfosBonCommande();
 		infosBonCommande.setReference(refCommande);
 		infosBonCommande.setDateCreation(commande.getDateCreation());
-		Cout cout = calculerCout(refCommande);
-		infosBonCommande.setMontantTVA(cout.getMontantTva());
-		infosBonCommande.setTauxTVA(cout.getTva());
+
+		Cout coutAvantPaiement = calculerCoutPourBonDeCommande(refCommande);
+		Cout coutApresPaiement = calculerCout(refCommande);
+		infosBonCommande.setMontantTVA(coutApresPaiement.getMontantTva());
+		infosBonCommande.setTauxTVA(coutApresPaiement.getTva());
+
 		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
 		SetPaiement: for (Paiement paiement : paiements) {
 			if (infosBonCommande.getMoyenDePaiement() == null) {
@@ -1265,10 +1279,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		infosBonCommande.setRefClient(commande.getClientSouscripteur().getClientId());
 
-		double prixRecurrentTotalHT = 0;
-		double prixRecurrentTotalTTC = 0;
-		double prixRecurrentReduitHT = 0;
-		double prixRecurrentReduitTTC = 0;
+		double coutRecurrentTotalHT = 0;
+		double coutRecurrentTotalTTC = 0;
+		double coutRecurrentTotalReduitHT = 0;
+		double coutRecurrentReduitTotalTTC = 0;
 
 		List<InfosLignePourBonCommande> lignesPourBonCommandes = new ArrayList<>();
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
@@ -1277,26 +1291,31 @@ public class CommandeServiceImpl implements CommandeService {
 			lignePourBonCommande.setReferenceOffre(ligne.getReferenceOffre());
 			lignePourBonCommande.setReferenceContrat(ligne.getReferenceContrat());
 
-			for (DetailCout detailCout : cout.getDetails()) {
+			for (DetailCout detailCout : coutAvantPaiement.getDetails()) {
 				if (detailCout.getNumero() != null && Integer.valueOf(detailCout.getNumero()).equals(ligne.getNumero())) {
+
 					lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
-
+					double coutLigneHT = detailCout.getCoutComptantHT();
+					double coutLigneTTC = detailCout.getCoutComptantTTC();
 					if (detailCout.getCoutRecurrent() != null) {
-						double prixHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
-						double prixTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
 
-						lignePourBonCommande.setPrixHT(prixHT);
-						lignePourBonCommande.setPrixTTC(prixTTC);
+						coutRecurrentTotalHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
+						coutRecurrentTotalTTC += detailCout.getCoutRecurrent().getNormal().getTarifTTC();
+						coutRecurrentTotalReduitHT += detailCout.getCoutRecurrent().getReduit().getTarifHT();
+						coutRecurrentReduitTotalTTC += detailCout.getCoutRecurrent().getReduit().getTarifTTC();
+
 						lignePourBonCommande.setMontantTVA(detailCout.getCoutRecurrent().getNormal().getTarifTva());
 						lignePourBonCommande.setMontantTVAReduit(detailCout.getCoutRecurrent().getReduit()
 								.getTarifTva());
 						lignePourBonCommande.setTauxTVA(detailCout.getTva());
 
-						prixRecurrentTotalHT += prixHT;
-						prixRecurrentTotalTTC += prixTTC;
-						prixRecurrentReduitHT += detailCout.getCoutRecurrent().getReduit().getTarifHT();
-						prixRecurrentReduitTTC += detailCout.getCoutRecurrent().getReduit().getTarifTTC();
+						coutLigneHT = Math.max(coutLigneHT, detailCout.getCoutRecurrent().getNormal().getTarifHT());
+						coutLigneTTC = Math.max(coutLigneHT, detailCout.getCoutRecurrent().getNormal().getTarifTTC());
+
 					}
+
+					lignePourBonCommande.setPrixHT(coutLigneHT);
+					lignePourBonCommande.setPrixTTC(coutLigneTTC);
 				}
 			}
 
@@ -1311,10 +1330,14 @@ public class CommandeServiceImpl implements CommandeService {
 
 		}
 
-		infosBonCommande.setPrixRecurrentTotalHT(prixRecurrentTotalHT);
-		infosBonCommande.setPrixRecurrentTotalTTC(prixRecurrentTotalTTC);
-		infosBonCommande.setPrixRecurrentReduitHT(prixRecurrentReduitHT);
-		infosBonCommande.setPrixRecurrentReduitTTC(prixRecurrentReduitTTC);
+		infosBonCommande.setPrixTotalHT(Math.max(coutAvantPaiement.getCoutComptantHT(), coutRecurrentTotalHT));
+		infosBonCommande.setPrixTotalTTC(Math.max(coutAvantPaiement.getCoutComptantTTC(), coutRecurrentTotalTTC));
+		infosBonCommande
+				.setPrixReduitHT(Math.max(coutAvantPaiement.getCoutComptantHT() - coutAvantPaiement.getReductionHT(),
+						coutRecurrentTotalReduitHT));
+		infosBonCommande.setPrixReduitTTC(Math.max(
+				coutAvantPaiement.getCoutComptantTTC() - coutAvantPaiement.getReductionTTC(),
+				coutRecurrentReduitTotalTTC));
 		infosBonCommande.getLignes().addAll(lignesPourBonCommandes);
 
 		return infosBonCommande;

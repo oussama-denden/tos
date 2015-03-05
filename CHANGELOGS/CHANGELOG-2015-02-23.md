@@ -16,3 +16,4 @@ from 2015-02-23.
       * change log request to POST.
       * Mock log and alert.
       * Implementing US #168: differentiating the payment method from the renewal mode.
+	  * ReImplementing US #173: updating the cost fields.
