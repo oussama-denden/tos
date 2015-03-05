@@ -151,6 +151,7 @@ CREATE TABLE `draft` (
   `clientAFacturerId` int(11) DEFAULT NULL,
   `clientALivrerId` int(11) DEFAULT NULL,
   `clientSouscripteurId` int(11) DEFAULT NULL,
+  `annulerCommandeSource` bit(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `FK5B679A1411643F6` (`clientAFacturerId`),
   KEY `FK5B679A12A2C2866` (`clientALivrerId`),
