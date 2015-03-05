@@ -764,8 +764,7 @@ public class CommandeServiceImpl implements CommandeService {
 		if (optionTransformation.isAnnulerCommande() == null || optionTransformation.isAnnulerCommande()) {
 			List<Paiement> paiements = paiementService.getPaiementEnCours(referenceCommande);
 			CommandeValidator.validerAnnulationCommande(commande, paiements);
-			commande.annuler();
-			commandeRepository.save(commande);
+			draft.setAnnulerCommandeSource(true);
 		}
 
 		draftService.save(draft);
