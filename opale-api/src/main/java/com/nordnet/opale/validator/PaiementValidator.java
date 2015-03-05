@@ -13,6 +13,7 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
+import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
  * valider les info de paiement.
@@ -102,14 +103,23 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.montant"), "0.1.4");
 		}
 
-		if (paiementInfo instanceof PaiementInfoComptant
-				&& ((PaiementInfoComptant) paiementInfo).getReferenceModePaiement() == null) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Paiement.referenceModePaiement"), "0.1.4");
+		if (!(paiementInfo instanceof PaiementInfoComptant)) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("0.6"), "0.6");
+		}
+		PaiementInfoComptant paiementInfoComptant = (PaiementInfoComptant) paiementInfo;
+
+		if ((paiementInfoComptant.getModePaiement().equals(ModePaiement.SEPA)
+				|| paiementInfoComptant.getModePaiement().equals(ModePaiement.FACTURE) || paiementInfoComptant
+				.getModePaiement().equals(ModePaiement.FACTURE_FIN_DE_MOIS))
+				&& (Utils.isStringNullOrEmpty(paiementInfoComptant.getRum()) || !Utils
+						.isStringNullOrEmpty(paiementInfoComptant.getReferenceModePaiement()))) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.10"), "3.1.10");
 		}
 
-		if (paiementInfo instanceof PaiementInfoComptant
-				&& !(((PaiementInfoComptant) paiementInfo).getModePaiement().isModePaimentComptant())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.6"), "3.1.6");
+		if (paiementInfoComptant.getModePaiement().equals(ModePaiement.CB)
+				&& !(Utils.isStringNullOrEmpty(paiementInfoComptant.getReferenceModePaiement()) ^ Utils
+						.isStringNullOrEmpty(paiementInfoComptant.getRum()))) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.9"), "3.1.9");
 		}
 
 	}
@@ -158,7 +168,7 @@ public class PaiementValidator {
 		// verifer le format du rum
 		isRumValide(((PaiementInfoRecurrent) paiementInfo).getRum());
 
-		if (!paiementInfo.getModePaiement().isModePaiementRecurrent()) {
+		if (!paiementInfo.getModePaiement().isModeComptant()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.7"), "3.1.7");
 
 		}

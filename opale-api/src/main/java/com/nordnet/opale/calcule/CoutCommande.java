@@ -11,6 +11,7 @@ import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
+import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.service.paiement.PaiementService;
@@ -89,8 +90,7 @@ public class CoutCommande extends CalculeCout {
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 
 			CoutLigneCommande coutLigneCommande =
-					new CoutLigneCommande(commande.getReference(), commandeLigne, segmentTVA, reductionService,
-							paiementCommande);
+					new CoutLigneCommande(commande.getReference(), commandeLigne, segmentTVA, reductionService);
 
 			DetailCout detailCout = (DetailCout) coutLigneCommande.getCout();
 			coutComptantHT += detailCout.getCoutComptantHT();
@@ -140,7 +140,7 @@ public class CoutCommande extends CalculeCout {
 
 		// changer la trame du cout selon le paiement effectuer par le client
 		if (!(paiementCommande == null)) {
-			if (paiementCommande.getModePaiement().isModePaiementRecurrent()) {
+			if (paiementCommande.getTypePaiement().equals(TypePaiement.RECURRENT)) {
 				cout.setCoutComptantHT(Constants.ZERO);
 				cout.setCoutComptantTTC(Constants.ZERO);
 				cout.setMontantTva(Constants.ZERO);
@@ -154,7 +154,7 @@ public class CoutCommande extends CalculeCout {
 					detailCout.setMontantTva(Constants.ZERO);
 				}
 
-			} else if (paiementCommande.getModePaiement().isModePaimentComptant()) {
+			} else if (paiementCommande.getTypePaiement().equals(TypePaiement.COMPTANT)) {
 				cout.setCoutRecurrentGlobale(null);
 
 				for (DetailCout detailCout : cout.getDetails()) {

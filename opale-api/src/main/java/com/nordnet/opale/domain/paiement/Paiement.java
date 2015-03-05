@@ -409,7 +409,13 @@ public class Paiement {
 		paiementInfo.setTimestampIntention(timestampIntention);
 		paiementInfo.setTimestampPaiement(timestampPaiement);
 		paiementInfo.setReference(reference);
-		paiementInfo.setReferenceModePaiement(idPaiement);
+		if (typePaiement.equals(TypePaiement.COMPTANT)
+				&& (modePaiement.equals(ModePaiement.CB) || modePaiement.equals(ModePaiement.CHEQUE) || modePaiement
+						.equals(ModePaiement.VIREMENT))) {
+			paiementInfo.setReferenceModePaiement(idPaiement);
+		} else {
+			paiementInfo.setRum(idPaiement);
+		}
 
 		return paiementInfo;
 

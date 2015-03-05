@@ -116,8 +116,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>412</xloc>
-      <yloc>138</yloc>
+      <xloc>408</xloc>
+      <yloc>139</yloc>
       </entry>
     <entry>
       <name>Mig &#x2b; Renouvellement</name>
@@ -149,8 +149,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>574</xloc>
-      <yloc>139</yloc>
+      <xloc>774</xloc>
+      <yloc>138</yloc>
       </entry>
     <entry>
       <name>Livraison-BP</name>
@@ -182,8 +182,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>706</xloc>
-      <yloc>139</yloc>
+      <xloc>530</xloc>
+      <yloc>136</yloc>
       </entry>
     <entry>
       <name>Livraison-EL</name>
@@ -215,8 +215,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>810</xloc>
-      <yloc>139</yloc>
+      <xloc>637</xloc>
+      <yloc>138</yloc>
       </entry>
     <entry>
       <name>PolitiqueResiliation Future</name>
@@ -272,8 +272,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>ElementContractuel</from>
-      <to>Mig &#x2b; Renouvellement</to>
+      <from>Contrat</from>
+      <to>PolitiqueResiliation Future</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -281,7 +281,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Mig &#x2b; Renouvellement</from>
+      <from>ElementContractuel</from>
       <to>Livraison-BP</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -299,8 +299,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Contrat</from>
-      <to>PolitiqueResiliation Future</to>
+      <from>Livraison-EL</from>
+      <to>Mig &#x2b; Renouvellement</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

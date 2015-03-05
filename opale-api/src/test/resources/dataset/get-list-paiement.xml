@@ -4,8 +4,8 @@
 <dataset>
 <commande id="1000" reference="REF-COMMANDE" />
 
-<paiement id="1000" reference="REF-PAIEMENT-1" qui="auteur" montant="50" typePaiement="COMPTANT" referenceCommande="REF-COMMANDE" />
-<paiement id="1001" reference="REF-PAIEMENT-2" qui="auteur" montant="50" typePaiement="COMPTANT" referenceCommande="REF-COMMANDE" />
-<paiement id="1002" reference="REF-PAIEMENT-3" qui="auteur" montant="50" typePaiement="RECURRENT" referenceCommande="REF-COMMANDE" />
-<paiement id="1003" reference="REF-PAIEMENT-4" qui="auteur" montant="50" typePaiement="RECURRENT" referenceCommande="REF-COMMANDE" />
+<paiement id="1000" reference="REF-PAIEMENT-1" qui="auteur" montant="50" typePaiement="COMPTANT" modePaiement="CB" referenceCommande="REF-COMMANDE" />
+<paiement id="1001" reference="REF-PAIEMENT-2" qui="auteur" montant="50" typePaiement="COMPTANT" modePaiement="CB" referenceCommande="REF-COMMANDE" />
+<paiement id="1002" reference="REF-PAIEMENT-3" qui="auteur" montant="50" typePaiement="RECURRENT" modePaiement="SEPA" referenceCommande="REF-COMMANDE" />
+<paiement id="1003" reference="REF-PAIEMENT-4" qui="auteur" montant="50" typePaiement="RECURRENT" modePaiement="SEPA" referenceCommande="REF-COMMANDE" />
 </dataset>
