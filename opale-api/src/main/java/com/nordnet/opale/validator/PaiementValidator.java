@@ -168,7 +168,7 @@ public class PaiementValidator {
 		// verifer le format du rum
 		isRumValide(((PaiementInfoRecurrent) paiementInfo).getRum());
 
-		if (!paiementInfo.getModePaiement().isModeComptant()) {
+		if (!paiementInfo.getModePaiement().isModeRecurrent()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.7"), "3.1.7");
 
 		}

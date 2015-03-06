@@ -19,3 +19,4 @@ from 2015-02-23.
 	  * validate the mandate information (call the mandateLibrary ws).
 	  * Fixing Bug #445: TimeStamp and DateTime.
 	  * Fixing Bug #446: round off prices to maximum 2 decimal places.
+	  * Fixing Bug #451: downpayement with invoice payment mode was not accepted for "TypePayment = COMPTANT".
