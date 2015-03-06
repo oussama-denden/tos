@@ -6,6 +6,8 @@ package com.nordnet.opale.business;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.Utils;
 
 /**
  * Infos Reduction pour {@link InfosBonCommande}.
@@ -90,7 +92,7 @@ public class InfosReductionPourBonCommande {
 	 *            {@link #prixHT}.
 	 */
 	public void setPrixHT(Double prixHT) {
-		this.prixHT = prixHT;
+		this.prixHT = Utils.round(prixHT, Constants.DEUX);
 	}
 
 	/**
@@ -105,7 +107,7 @@ public class InfosReductionPourBonCommande {
 	 *            {@link #prixTTC}.
 	 */
 	public void setPrixTTC(Double prixTTC) {
-		this.prixTTC = prixTTC;
+		this.prixTTC = Utils.round(prixTTC, Constants.DEUX);
 	}
 
 	/**

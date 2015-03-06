@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.enums.Geste;
+import com.nordnet.opale.serializer.DateSerializer;
+import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.Utils;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
@@ -28,6 +32,7 @@ public class InfosBonCommande {
 	/**
 	 * Date creation commande.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date dateCreation;
 
 	/**
@@ -169,7 +174,7 @@ public class InfosBonCommande {
 	 *            {@link #prixTotalHT}.
 	 */
 	public void setPrixTotalHT(Double prixTotalHT) {
-		this.prixTotalHT = prixTotalHT;
+		this.prixTotalHT = Utils.round(prixTotalHT, Constants.DEUX);
 	}
 
 	/**
@@ -184,7 +189,7 @@ public class InfosBonCommande {
 	 *            {@link #prixTotalTTC}.
 	 */
 	public void setPrixTotalTTC(Double prixTotalTTC) {
-		this.prixTotalTTC = prixTotalTTC;
+		this.prixTotalTTC = Utils.round(prixTotalTTC, Constants.DEUX);
 	}
 
 	/**
@@ -199,7 +204,7 @@ public class InfosBonCommande {
 	 *            {@link #prixReduitHT}.
 	 */
 	public void setPrixReduitHT(Double prixReduitHT) {
-		this.prixReduitHT = prixReduitHT;
+		this.prixReduitHT = Utils.round(prixReduitHT, Constants.DEUX);
 	}
 
 	/**
@@ -214,7 +219,7 @@ public class InfosBonCommande {
 	 *            {@link #prixReduitTTC}.
 	 */
 	public void setPrixReduitTTC(Double prixReduitTTC) {
-		this.prixReduitTTC = prixReduitTTC;
+		this.prixReduitTTC = Utils.round(prixReduitTTC, Constants.DEUX);
 	}
 
 	/**

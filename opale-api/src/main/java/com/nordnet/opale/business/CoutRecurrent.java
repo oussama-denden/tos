@@ -1,6 +1,5 @@
 package com.nordnet.opale.business;
 
-import org.apache.log4j.Logger;
 
 /**
  * contient des info sur le plan de paiement d'une offre.
@@ -9,11 +8,6 @@ import org.apache.log4j.Logger;
  * 
  */
 public class CoutRecurrent implements Cloneable {
-
-	/**
-	 * Declaration du log.
-	 */
-	private final static Logger LOGGER = Logger.getLogger(CoutRecurrent.class);
 
 	/**
 	 * frequence/periodicite de paiement.

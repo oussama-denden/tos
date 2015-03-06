@@ -17,3 +17,5 @@ from 2015-02-23.
       * Implementing US #168: differentiating the payment method from the renewal mode.
 	  * ReImplementing US #173: updating the cost fields.
 	  * validate the mandate information (call the mandateLibrary ws).
+	  * Fixing Bug #445: TimeStamp and DateTime.
+	  * Fixing Bug #446: round off prices to maximum 2 decimal places.
