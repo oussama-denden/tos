@@ -20,3 +20,4 @@ from 2015-02-23.
 	  * Fixing Bug #445: TimeStamp and DateTime.
 	  * Fixing Bug #446: round off prices to maximum 2 decimal places.
 	  * Fixing Bug #451: downpayement with invoice payment mode was not accepted for "TypePayment = COMPTANT".
+	  * Improving US #168: For payment mode CHEQUE Payment Mode Reference is mandatory.
