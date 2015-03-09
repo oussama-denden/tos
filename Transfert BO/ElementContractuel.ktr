@@ -155,18 +155,18 @@
   <hop> <from>Mode de Paiement</from><to>SEPA</to><enabled>Y</enabled> </hop>
   <hop> <from>Mode de Paiement</from><to>VIREMENT</to><enabled>Y</enabled> </hop>
   <hop> <from>Dummy</from><to>Mode de Paiement</to><enabled>Y</enabled> </hop>
-  <hop> <from>IsResilie</from><to>Element Contractuel</to><enabled>Y</enabled> </hop>
-  <hop> <from>IsResilie</from><to>Element Contractuel R&#xe9;sili&#xe9;</to><enabled>Y</enabled> </hop>
+  <hop> <from>&#x2a;</from><to>Element Contractuel</to><enabled>Y</enabled> </hop>
+  <hop> <from>&#x2a;</from><to>Element Contractuel R&#xe9;sili&#xe9;</to><enabled>Y</enabled> </hop>
   <hop> <from>Product</from><to>Sort rows</to><enabled>Y</enabled> </hop>
   <hop> <from>Get Contrats</from><to>Sort rows Contrats</to><enabled>Y</enabled> </hop>
   <hop> <from>Sort rows Contrats</from><to>Merge Join</to><enabled>Y</enabled> </hop>
   <hop> <from>IF state &#x3d; OP AND rum IS NOT NULL THEN sepa</from><to>SEPA</to><enabled>Y</enabled> </hop>
-  <hop> <from>SEPA</from><to>IsResilie</to><enabled>Y</enabled> </hop>
-  <hop> <from>Internet&#x2b;</from><to>IsResilie</to><enabled>Y</enabled> </hop>
-  <hop> <from>FACTURE</from><to>IsResilie</to><enabled>Y</enabled> </hop>
-  <hop> <from>CHEQUE</from><to>IsResilie</to><enabled>Y</enabled> </hop>
-  <hop> <from>VIREMENT</from><to>IsResilie</to><enabled>Y</enabled> </hop>
-  <hop> <from>CB</from><to>IsResilie</to><enabled>Y</enabled> </hop>
+  <hop> <from>SEPA</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Internet&#x2b;</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
+  <hop> <from>FACTURE</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
+  <hop> <from>CHEQUE</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
+  <hop> <from>VIREMENT</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
+  <hop> <from>CB</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
   <hop> <from>Sort rows</from><to>Merge Infos Order</to><enabled>Y</enabled> </hop>
   <hop> <from>Merge Infos Order</from><to>Merge Join</to><enabled>Y</enabled> </hop>
   <hop> <from>GetOrderInfos</from><to>Merge Infos Order</to><enabled>Y</enabled> </hop>
@@ -178,12 +178,59 @@
   <hop> <from>mobile - 1mois</from><to>Dummy</to><enabled>Y</enabled> </hop>
   <hop> <from>mobile - 3mois</from><to>Dummy</to><enabled>Y</enabled> </hop>
   <hop> <from>mobile - 12mois</from><to>Dummy</to><enabled>Y</enabled> </hop>
-  <hop> <from>Offre &#x26; Tarif</from><to>Offres non-pr&#xe9;vues</to><enabled>Y</enabled> </hop>
-  <hop> <from>Mode de Paiement</from><to>Moyens de Paiements Non Pr&#xe9;vus</to><enabled>Y</enabled> </hop>
   <hop> <from>IF state &#x3d; OP AND rum IS NOT NULL THEN sepa</from><to>AVOIR</to><enabled>Y</enabled> </hop>
-  <hop> <from>AVOIR</from><to>IsResilie</to><enabled>Y</enabled> </hop>
+  <hop> <from>AVOIR</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
   <hop> <from>Mode de Paiement</from><to>IF state &#x3d; OP AND rum IS NOT NULL THEN sepa</to><enabled>Y</enabled> </hop>
+  <hop> <from>Mode de Paiement</from><to>FACTURE FIN DE MOIS</to><enabled>Y</enabled> </hop>
+  <hop> <from>FACTURE FIN DE MOIS</from><to>&#x2a;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Offre &#x26; Tarif</from><to>Write to log</to><enabled>Y</enabled> </hop>
+  <hop> <from>Write to log</from><to>Offres non-pr&#xe9;vues</to><enabled>Y</enabled> </hop>
+  <hop> <from>mobile</from><to>mobile - 6mois</to><enabled>Y</enabled> </hop>
+  <hop> <from>mobile - 6mois</from><to>Dummy</to><enabled>Y</enabled> </hop>
+  <hop> <from>Mode de Paiement</from><to>log - mode pay</to><enabled>Y</enabled> </hop>
+  <hop> <from>log - mode pay</from><to>Moyens de Paiements Non Pr&#xe9;vus</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>&#x2a;</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<send_true_to>Element Contractuel R&#xe9;sili&#xe9;</send_true_to>
+<send_false_to>Element Contractuel</send_false_to>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <conditions>
+  <condition>
+   <negated>N</negated>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>RE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  <condition>
+   <negated>N</negated>
+   <operator>OR</operator>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>LT</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  </conditions>
+ </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1249</xloc>
+      <yloc>323</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>AVOIR</name>
     <type>SetValueConstant</type>
@@ -199,7 +246,7 @@
     <fields>
       <field>
         <name>paymentMethod</name>
-        <value>null</value>
+        <value>AUTRE</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
@@ -302,7 +349,7 @@
     <schema/>
     <table>elementcontractuel</table>
     <commit>1000</commit>
-    <truncate>Y</truncate>
+    <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -428,7 +475,7 @@
     <schema/>
     <table>elementcontractuel</table>
     <commit>1000</commit>
-    <truncate>Y</truncate>
+    <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -576,6 +623,34 @@
     </step>
 
   <step>
+    <name>FACTURE FIN DE MOIS</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>paymentMethod</name>
+        <value>FACTURE_FIN_DE_MOIS</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>929</xloc>
+      <yloc>665</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Get Contrats</name>
     <type>TableInput</type>
     <description/>
@@ -613,7 +688,7 @@
            <schema_name/>
            </partitioning>
     <connection>ProdNN</connection>
-    <sql>SELECT DISTINCT&#xd;&#xa;  p.productKey&#xd;&#xa;, o.orderKey as &#x27;referenceCommande&#x27;&#xd;&#xa;&#xd;&#xa;, COALESCE&#x28;hInstallation.handleKey, hFacturation.handleKey&#x29; as &#x27;idAdrLivraison&#x27;&#xd;&#xa;, hFacturation.handleKey as &#x27;idAdrFacturation&#x27;&#xd;&#xa;&#xd;&#xa;FROM join_order_product jop&#xd;&#xa;  INNER JOIN order_info o ON &#x28;o.id &#x3d; jop.order_idFK&#x29;&#xd;&#xa;  INNER JOIN product p    ON &#x28;p.id &#x3d; jop.product_idFK&#x29;&#xd;&#xa;  INNER JOIN order_item_group oig on &#x28;oig.order_idFK &#x3d; o.id&#x29;&#xd;&#xa;  INNER JOIN order_item oi ON &#x28;oi.group_idFK &#x3d; oig.id&#x29;&#xd;&#xa;  LEFT OUTER JOIN handle hInstallation 	ON &#x28;hInstallation.id &#x3d; o.installationHandle_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN handle hFacturation 	ON &#x28;hFacturation.id &#x3d; o.invoiceHandle_idFK&#x29;&#xd;&#xa;&#xd;&#xa;WHERE o.type IN &#x28;&#x27;NORMAL&#x27;, &#x27;CONFIRMATION&#x27;&#x29;&#xd;&#xa;  AND &#x28;oi.itemCode like &#x22;avfw.&#x25;&#x22; OR oi.itemCode like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;  AND o.id &#x3c;&#x3e; 41978&#xd;&#xa;order by p.productKey, o.orderKey&#x3b;&#xd;&#xa;  &#xd;&#xa;</sql>
+    <sql>SELECT DISTINCT&#xd;&#xa;  p.productKey&#xd;&#xa;, o.orderKey as &#x27;referenceCommande&#x27;&#xd;&#xa;&#xd;&#xa;, COALESCE&#x28;hInstallation.handleKey, hFacturation.handleKey&#x29; as &#x27;idAdrLivraison&#x27;&#xd;&#xa;, hFacturation.handleKey as &#x27;idAdrFacturation&#x27;&#xd;&#xa;&#xd;&#xa;FROM join_order_product jop&#xd;&#xa;  INNER JOIN order_info o ON &#x28;o.id &#x3d; jop.order_idFK&#x29;&#xd;&#xa;  INNER JOIN product p    ON &#x28;p.id &#x3d; jop.product_idFK&#x29;&#xd;&#xa;  INNER JOIN order_item_group oig on &#x28;oig.order_idFK &#x3d; o.id&#x29;&#xd;&#xa;  INNER JOIN order_item oi ON &#x28;oi.group_idFK &#x3d; oig.id&#x29;&#xd;&#xa;  LEFT OUTER JOIN handle hInstallation 	ON &#x28;hInstallation.id &#x3d; o.installationHandle_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN handle hFacturation 	ON &#x28;hFacturation.id &#x3d; o.invoiceHandle_idFK&#x29;&#xd;&#xa;&#xd;&#xa;WHERE o.type IN &#x28;&#x27;NORMAL&#x27;, &#x27;CONFIRMATION&#x27;&#x29;&#xd;&#xa;  AND &#x28;oi.itemCode like &#x22;avfw.&#x25;&#x22; OR oi.itemCode like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;  AND &#x28;p.catalogReference like &#x22;avfw.&#x25;&#x22; OR p.catalogReference like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;  AND o.id &#x3c;&#x3e; 41978&#xd;&#xa;order by p.productKey, o.orderKey&#x3b;&#xd;&#xa;  &#xd;&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -697,35 +772,6 @@
     </step>
 
   <step>
-    <name>IsResilie</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Element Contractuel R&#xe9;sili&#xe9;</send_true_to>
-<send_false_to>Element Contractuel</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>state</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>String</type><text>RE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1249</xloc>
-      <yloc>323</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
     <name>Merge Infos Order</name>
     <type>MergeJoin</type>
     <description/>
@@ -798,7 +844,7 @@
 <case_value_format/>
 <case_value_decimal/>
 <case_value_group/>
-<default_target_step>Moyens de Paiements Non Pr&#xe9;vus</default_target_step>
+<default_target_step>log - mode pay</default_target_step>
 <cases><case><value>CB</value>
 <target_step>CB</target_step>
 </case><case><value>CH</value>
@@ -811,10 +857,12 @@
 <target_step>SEPA</target_step>
 </case><case><value>PL</value>
 <target_step>SEPA</target_step>
-</case><case><value> IP</value>
+</case><case><value>IP</value>
 <target_step>Internet&#x2b;</target_step>
 </case><case><value>AV</value>
 <target_step>IF state &#x3d; OP AND rum IS NOT NULL THEN sepa</target_step>
+</case><case><value>FM</value>
+<target_step>FACTURE FIN DE MOIS</target_step>
 </case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>762</xloc>
@@ -848,7 +896,7 @@
     <appendLines>N</appendLines>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non Pr&#xe9;vu.xls</name>
+      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non Pr&#xe9;vu</name>
       <extention>xls</extention>
       <do_not_open_newfile_init>N</do_not_open_newfile_init>
       <split>N</split>
@@ -863,7 +911,7 @@
       <password>Encrypted </password>
       <protected_by/>
       <splitevery>0</splitevery>
-      <if_file_exists>new</if_file_exists>
+      <if_file_exists>reuse</if_file_exists>
       <if_sheet_exists>new</if_sheet_exists>
       </file>
     <template>
@@ -899,7 +947,7 @@
 <case_value_format/>
 <case_value_decimal/>
 <case_value_group/>
-<default_target_step>Offres non-pr&#xe9;vues</default_target_step>
+<default_target_step>Write to log</default_target_step>
 <cases><case><value>avfw.essentiel</value>
 <target_step>avfw.essentiel</target_step>
 </case><case><value>avfw.confort</value>
@@ -941,7 +989,7 @@
     <appendLines>N</appendLines>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non Pr&#xe9;vu.xls</name>
+      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non Pr&#xe9;vu</name>
       <extention>xls</extention>
       <do_not_open_newfile_init>N</do_not_open_newfile_init>
       <split>N</split>
@@ -956,8 +1004,8 @@
       <password>Encrypted </password>
       <protected_by/>
       <splitevery>0</splitevery>
-      <if_file_exists>new</if_file_exists>
-      <if_sheet_exists>new</if_sheet_exists>
+      <if_file_exists>reuse</if_file_exists>
+      <if_sheet_exists>reuse</if_sheet_exists>
       </file>
     <template>
       <enabled>N</enabled>
@@ -987,7 +1035,7 @@
            <schema_name/>
            </partitioning>
     <connection>ProdNN</connection>
-    <sql>SELECT DISTINCT&#xd;&#xa;  p.productKey as &#x27;referenceContrat&#x27;&#xd;&#xa;, p.catalogReference as &#x27;referenceProduit&#x27;&#xd;&#xa;, IF&#x28;&#x28;COALESCE&#x28;p.customLabel, &#x27;&#x27;&#x29; like &#x27;Personnaliser&#x25;&#x27;&#x29;, p.label,COALESCE&#x28;p.customLabel, p.label&#x29;&#x29; as &#x27;titre&#x27;&#xd;&#xa;, p.state&#xd;&#xa;, p.creationDate as &#x27;datePreparation&#x27;&#xd;&#xa;, p.creationDate as &#x27;dateValidation&#x27;&#xd;&#xa;, p.changeDate as &#x27;dateDerniereFacturation&#x27;&#xd;&#xa;, p.paymentDate as &#x27;dateDebutFacturation&#x27;&#xd;&#xa;, p.duration as &#x27;periodicite&#x27;&#xd;&#xa;, &#x28;CASE WHEN p.renewMode &#x3d; &#x27;AUTO_RENEWAL&#x27; THEN null ELSE p.duration END&#x29; as &#x27;duree&#x27;&#xd;&#xa;, &#x28;CASE WHEN p.renewMode &#x3d; &#x27;AUTO_RENEWAL&#x27; THEN null ELSE p.dueDate END&#x29; as &#x27;dateFinDuree&#x27;&#xd;&#xa;&#xd;&#xa;, p.paymentMethod&#xd;&#xa;, p.RUM&#xd;&#xa;&#xd;&#xa;, 0.00 as &#x27;montant&#x27;&#xd;&#xa;, &#x27;&#x27; as &#x27;referenceTarif&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;1&#x27; as &#x27;numEC&#x27;&#xd;&#xa;, true as &#x27;remboursable&#x27;&#xd;&#xa;, &#x27;DATE_ANNIVERSAIRE&#x27; as &#x27;modeFacturation&#x27;&#xd;&#xa;, &#x27;SERVICE&#x27; as &#x27;typeProduit&#x27;&#xd;&#xa;, &#x27;S&#x27; as &#x27;typeTVA&#x27;&#xd;&#xa;&#xd;&#xa;, t.date as &#x27;dateResil&#x27;&#xd;&#xa;, t.initiativeCode as &#x27;typeResil&#x27;&#xd;&#xa;&#xd;&#xa;FROM product p&#xd;&#xa;  LEFT OUTER JOIN termination t     ON &#x28;t.id &#x3d; p.termination_idFK&#x29;&#xd;&#xa;&#xd;&#xa;WHERE &#x28;p.catalogReference like &#x22;avfw.&#x25;&#x22; or p.catalogReference like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;  AND p.state NOT IN &#x28;&#x27;AD&#x27;, &#x27;PE&#x27;&#x29;&#xd;&#xa;  AND p.type &#x3c;&#x3e; &#x27;TRIAL&#x27;&#x3b;</sql>
+    <sql>SELECT DISTINCT&#xd;&#xa;  p.productKey as &#x27;referenceContrat&#x27;&#xd;&#xa;, p.catalogReference as &#x27;referenceProduit&#x27;&#xd;&#xa;, IF&#x28;&#x28;COALESCE&#x28;p.customLabel, &#x27;&#x27;&#x29; like &#x27;Personnaliser&#x25;&#x27;&#x29;, p.label,COALESCE&#x28;p.customLabel, p.label&#x29;&#x29; as &#x27;titre&#x27;&#xd;&#xa;, p.state&#xd;&#xa;, p.creationDate as &#x27;datePreparation&#x27;&#xd;&#xa;, p.creationDate as &#x27;dateValidation&#x27;&#xd;&#xa;, SUBDATE&#x28;p.duedate, INTERVAL p.duration MONTH&#x29; as &#x27;dateDerniereFacturation&#x27;&#xd;&#xa;, COALESCE&#x28;s.changeDate, p.creationDate&#x29; as &#x27;dateDebutFacturation&#x27;&#xd;&#xa;, p.duration as &#x27;periodicite&#x27;&#xd;&#xa;, &#x28;CASE WHEN p.renewMode &#x3d; &#x27;AUTO_RENEWAL&#x27; THEN null ELSE p.duration END&#x29; as &#x27;duree&#x27;&#xd;&#xa;, &#x28;CASE WHEN p.renewMode &#x3d; &#x27;AUTO_RENEWAL&#x27; THEN null ELSE p.dueDate END&#x29; as &#x27;dateFinDuree&#x27;&#xd;&#xa;&#xd;&#xa;, p.paymentMethod&#xd;&#xa;, p.RUM&#xd;&#xa;&#xd;&#xa;, 0.00 as &#x27;montant&#x27;&#xd;&#xa;, &#x27;&#x27; as &#x27;referenceTarif&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;1&#x27; as &#x27;numEC&#x27;&#xd;&#xa;, true as &#x27;remboursable&#x27;&#xd;&#xa;, &#x27;DATE_ANNIVERSAIRE&#x27; as &#x27;modeFacturation&#x27;&#xd;&#xa;, &#x27;SERVICE&#x27; as &#x27;typeProduit&#x27;&#xd;&#xa;, &#x27;S&#x27; as &#x27;typeTVA&#x27;&#xd;&#xa;&#xd;&#xa;, IF &#x28;t.state &#x3d; &#x27;RED&#x27;, COALESCE&#x28;t1.date, t.date&#x29;, t.date&#x29; as &#x27;dateResil&#x27;&#xd;&#xa;, IF &#x28;p.state &#x3d; &#x27;LT&#x27;, &#x27;RIN&#x27;, COALESCE&#x28;t.initiativeCode, &#x27;RIN&#x27;&#x29;&#x29; as &#x27;typeResil&#x27;&#xd;&#xa;&#xd;&#xa;FROM product p&#xd;&#xa;  LEFT OUTER JOIN termination t ON &#x28;t.id &#x3d; p.termination_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN termination t1 ON &#x28;t1.id &#x3d; t.parentTermination_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN state_change_log s ON &#x28;p.id &#x3d; s.product_idFK AND s.oldState &#x3d; &#x27;CT&#x27; AND s.newState &#x3d; &#x27;OP&#x27;&#x29;&#xd;&#xa;WHERE &#x28;p.catalogReference like &#x22;avfw.&#x25;&#x22; or p.catalogReference like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;  AND p.state NOT IN &#x28;&#x27;AD&#x27;, &#x27;PE&#x27;&#x29;&#xd;&#xa;  AND p.type &#x3c;&#x3e; &#x27;TRIAL&#x27;&#x3b;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -1121,6 +1169,32 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>935</xloc>
       <yloc>225</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Write to log</name>
+    <type>WriteToLog</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <loglevel>log_level_basic</loglevel>
+      <displayHeader>Y</displayHeader>
+      <limitRows>N</limitRows>
+      <limitRowsNumber>0</limitRowsNumber>
+      <logmessage/>
+    <fields>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>268</xloc>
+      <yloc>557</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -1426,6 +1500,32 @@
     </step>
 
   <step>
+    <name>log - mode pay</name>
+    <type>WriteToLog</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <loglevel>log_level_basic</loglevel>
+      <displayHeader>Y</displayHeader>
+      <limitRows>N</limitRows>
+      <limitRowsNumber>0</limitRowsNumber>
+      <logmessage/>
+    <fields>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>763</xloc>
+      <yloc>577</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>mobile</name>
     <type>SwitchCase</type>
     <description/>
@@ -1449,6 +1549,8 @@
 <target_step>mobile - 3mois</target_step>
 </case><case><value>12</value>
 <target_step>mobile - 12mois</target_step>
+</case><case><value>6</value>
+<target_step>mobile - 6mois</target_step>
 </case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>408</xloc>
@@ -1485,8 +1587,8 @@
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>564</xloc>
-      <yloc>783</yloc>
+      <xloc>563</xloc>
+      <yloc>850</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -1555,6 +1657,40 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>563</xloc>
       <yloc>706</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>mobile - 6mois</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>referenceTarif</name>
+        <value/>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      <field>
+        <name>montant</name>
+        <value/>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>562</xloc>
+      <yloc>771</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

@@ -127,18 +127,14 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Order &#x28;Normal&#x29;</from><to>PolitiqueValidation</to><enabled>Y</enabled> </hop>
-  <hop> <from>PolitiqueResiliation</from><to>Contrat R&#xe9;sili&#xe9;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Product</from><to>PolitiqueValidation</to><enabled>Y</enabled> </hop>
   <hop> <from>PolitiqueValidation</from><to>Filter rows</to><enabled>Y</enabled> </hop>
   <hop> <from>Filter rows</from><to>Contrat actif</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter rows</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
-  <hop> <from>Switch &#x2f; Case</from><to>REMBOURSEMENT</to><enabled>Y</enabled> </hop>
   <hop> <from>REMBOURSEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>AUTRE</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>IMPAYE</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>SAISIE_JUDICIAIRE</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>CLIENT_INSOLVABLE</to><enabled>Y</enabled> </hop>
-  <hop> <from>Switch &#x2f; Case</from><to>DEMANDE_DE_NON_RENOUVELLEMENT</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>RESILIATION_SANS_REMBOURSEMENT</to><enabled>Y</enabled> </hop>
   <hop> <from>IMPAYE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
   <hop> <from>SAISIE_JUDICIAIRE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
@@ -146,6 +142,10 @@
   <hop> <from>DEMANDE_DE_NON_RENOUVELLEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
   <hop> <from>RESILIATION_SANS_REMBOURSEMENT</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
   <hop> <from>AUTRE</from><to>PolitiqueResiliation</to><enabled>Y</enabled> </hop>
+  <hop> <from>PolitiqueResiliation</from><to>Contrat R&#xe9;sili&#xe9;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>REMBOURSEMENT</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter rows</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>DEMANDE_DE_NON_RENOUVELLEMENT</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>AUTRE</name>
@@ -170,7 +170,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>615</xloc>
-      <yloc>449</yloc>
+      <yloc>481</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -218,7 +218,7 @@
     <schema/>
     <table>contrat</table>
     <commit>1000</commit>
-    <truncate>Y</truncate>
+    <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -283,8 +283,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1010</xloc>
-      <yloc>137</yloc>
+      <xloc>977</xloc>
+      <yloc>136</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -304,7 +304,7 @@
     <schema/>
     <table>contrat</table>
     <commit>1000</commit>
-    <truncate>Y</truncate>
+    <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -357,8 +357,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>351</xloc>
-      <yloc>348</yloc>
+      <xloc>352</xloc>
+      <yloc>459</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -407,15 +407,27 @@
     <compare>
 <condition>
  <negated>N</negated>
- <leftvalue>state</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>String</type><text>RE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
+ <conditions>
+  <condition>
+   <negated>N</negated>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>RE</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  <condition>
+   <negated>N</negated>
+   <operator>OR</operator>
+   <leftvalue>state</leftvalue>
+   <function>&#x3d;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>LT</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  </conditions>
+ </condition>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>352</xloc>
-      <yloc>137</yloc>
+      <yloc>141</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -444,32 +456,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>614</xloc>
       <yloc>109</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Order &#x28;Normal&#x29;</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ProdNN</connection>
-    <sql>SELECT&#xd;&#xa;  p.productKey as &#x27;referenceContrat&#x27;&#xd;&#xa;, p.catalogReference as &#x27;referenceOffre&#x27;&#xd;&#xa;, IF&#x28;&#x28;COALESCE&#x28;p.customLabel, &#x27;&#x27;&#x29; like &#x27;Personnaliser&#x25;&#x27;&#x29;, p.label,COALESCE&#x28;p.customLabel, p.label&#x29;&#x29; as &#x27;labelContrat&#x27;&#xd;&#xa;, p.state&#xd;&#xa;, p.renewMode&#xd;&#xa;, p.creationDate as &#x27;datePreparation&#x27;&#xd;&#xa;, p.creationDate as &#x27;dateValidation&#x27;&#xd;&#xa;, p.changeDate as &#x27;dateDerniereFacturation&#x27;&#xd;&#xa;, p.paymentDate as &#x27;dateDebutFacturation&#x27;&#xd;&#xa;, p.duration as &#x27;frequence&#x27;&#xd;&#xa;, p.dueDate&#xd;&#xa;, p.paymentMethod&#xd;&#xa;, p.renewCount &#xd;&#xa;, c.customerKey as &#x27;referenceClient&#x27;&#xd;&#xa;, p.isRejection&#xd;&#xa;&#xd;&#xa;, &#x27;00&#x27; as &#x27;segmentTVA&#x27;&#xd;&#xa;&#xd;&#xa;, true as &#x27;checkPackagerIsPossible&#x27;&#xd;&#xa;, true as &#x27;fraisCreation&#x27;&#xd;&#xa;&#xd;&#xa;, t.initiativeCode as &#x27;typeResil&#x27;&#xd;&#xa;, t.code as &#x27;motifResil&#x27;&#xd;&#xa;, t.creationDate as &#x27;dateCreationResil&#x27;&#xd;&#xa;, t.date as &#x27;dateResil&#x27;&#xd;&#xa;, t.date as &#x27;dateDerniereFacturationResil&#x27;&#xd;&#xa;, true as &#x27;enCascade&#x27;&#xd;&#xa;, true as &#x27;remboursement&#x27;&#xd;&#xa;, true as &#x27;penalite&#x27;&#xd;&#xa;, true as &#x27;fraisResiliation&#x27;&#xd;&#xa;, &#x27;Migration Donn&#xe9;es BO&#x27; as &#x27;commentaire&#x27;&#xd;&#xa;FROM product p&#xd;&#xa;  INNER JOIN customer c on &#x28;c.id &#x3d; p.customer_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN termination t on &#x28;t.id &#x3d; p.termination_idFK&#x29;&#xd;&#xa;where &#x28;p.catalogReference like &#x22;avfw.&#x25;&#x22; or p.catalogReference like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;and p.state NOT IN &#x28;&#x27;AD&#x27;, &#x27;PE&#x27;&#x29;&#xd;&#xa;and p.type &#x3c;&#x3e; &#x27;TRIAL&#x27;&#x3b;&#xd;&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>109</xloc>
-      <yloc>141</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -535,11 +521,15 @@
           <column_name>commentaire</column_name>
           <stream_name>commentaire</stream_name>
         </field>
+        <field>
+          <column_name>dateAnnulation</column_name>
+          <stream_name>dateAnnulationResil</stream_name>
+        </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>862</xloc>
-      <yloc>137</yloc>
+      <xloc>817</xloc>
+      <yloc>136</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -584,7 +574,33 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>252</xloc>
+      <xloc>174</xloc>
+      <yloc>141</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Product</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ProdNN</connection>
+    <sql>SELECT&#xd;&#xa;  p.productKey as &#x27;referenceContrat&#x27;&#xd;&#xa;, p.catalogReference as &#x27;referenceOffre&#x27;&#xd;&#xa;, IF&#x28;&#x28;COALESCE&#x28;p.customLabel, &#x27;&#x27;&#x29; like &#x27;Personnaliser&#x25;&#x27;&#x29;, p.label,COALESCE&#x28;p.customLabel, p.label&#x29;&#x29; as &#x27;labelContrat&#x27;&#xd;&#xa;, p.state&#xd;&#xa;, p.renewMode&#xd;&#xa;, p.creationDate as &#x27;datePreparation&#x27;&#xd;&#xa;, p.creationDate as &#x27;dateValidation&#x27;&#xd;&#xa;, SUBDATE&#x28;p.duedate, INTERVAL p.duration MONTH&#x29; as &#x27;dateDerniereFacturation&#x27;&#xd;&#xa;, COALESCE&#x28;s.changeDate, p.creationDate&#x29; as &#x27;dateDebutFacturation&#x27;&#xd;&#xa;, p.duration as &#x27;frequence&#x27;&#xd;&#xa;, p.dueDate&#xd;&#xa;, p.paymentMethod&#xd;&#xa;, p.renewCount &#xd;&#xa;, c.customerKey as &#x27;referenceClient&#x27;&#xd;&#xa;, p.isRejection&#xd;&#xa;&#xd;&#xa;, &#x27;00&#x27; as &#x27;segmentTVA&#x27;&#xd;&#xa;&#xd;&#xa;, true as &#x27;checkPackagerIsPossible&#x27;&#xd;&#xa;, true as &#x27;fraisCreation&#x27;&#xd;&#xa;&#xd;&#xa;, IF &#x28;p.state &#x3d; &#x27;LT&#x27;, &#x27;RIN&#x27;, COALESCE&#x28;t.initiativeCode, &#x27;RIN&#x27;&#x29;&#x29; as &#x27;typeResil&#x27;&#xd;&#xa;, IF &#x28;p.state &#x3d; &#x27;LT&#x27;, &#x27;LG&#x27;, t.code&#x29; as &#x27;motifResil&#x27;&#xd;&#xa;, IF &#x28;t.state &#x3d; &#x27;RED&#x27;, COALESCE&#x28;t1.creationDate, t.creationDate&#x29;, t.creationDate&#x29; as &#x27;dateCreationResil&#x27;&#xd;&#xa;, IF &#x28;t.state &#x3d; &#x27;RED&#x27;, COALESCE&#x28;t1.date, t.date&#x29;, t.date&#x29; as &#x27;dateResil&#x27;&#xd;&#xa;, IF &#x28;t.state &#x3d; &#x27;RED&#x27;, COALESCE&#x28;t1.date, t.date&#x29;, t.date&#x29; as &#x27;dateDerniereFacturationResil&#x27;&#xd;&#xa;, IF &#x28;t.state &#x3d; &#x27;AN&#x27;, t.date, null&#x29; as &#x27;dateAnnulationResil&#x27;&#xd;&#xa;&#xd;&#xa;, true as &#x27;enCascade&#x27;&#xd;&#xa;, true as &#x27;remboursement&#x27;&#xd;&#xa;, true as &#x27;penalite&#x27;&#xd;&#xa;, true as &#x27;fraisResiliation&#x27;&#xd;&#xa;, &#x27;Migration Donn&#xe9;es BO&#x27; as &#x27;commentaire&#x27;&#xd;&#xa;&#xd;&#xa;FROM product p&#xd;&#xa;  INNER JOIN customer c on &#x28;c.id &#x3d; p.customer_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN termination t on &#x28;t.id &#x3d; p.termination_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN termination t1 ON &#x28;t1.id &#x3d; t.parentTermination_idFK&#x29;&#xd;&#xa;  LEFT OUTER JOIN state_change_log s ON &#x28;p.id &#x3d; s.product_idFK AND s.oldState &#x3d; &#x27;CT&#x27; AND s.newState &#x3d; &#x27;OP&#x27;&#x29;&#xd;&#xa;where &#x28;p.catalogReference like &#x22;avfw.&#x25;&#x22; or p.catalogReference like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;and p.state NOT IN &#x28;&#x27;AD&#x27;, &#x27;PE&#x27;&#x29;&#xd;&#xa;and p.type &#x3c;&#x3e; &#x27;TRIAL&#x27;&#x3b;&#xd;&#xa;</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>31</xloc>
       <yloc>141</yloc>
       <draw>Y</draw>
       </GUI>
@@ -640,8 +656,8 @@
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>614</xloc>
-      <yloc>372</yloc>
+      <xloc>615</xloc>
+      <yloc>393</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -706,10 +722,12 @@
 <target_step>IMPAYE</target_step>
 </case><case><value>NRE</value>
 <target_step>DEMANDE_DE_NON_RENOUVELLEMENT</target_step>
+</case><case><value>LG</value>
+<target_step>CLIENT_INSOLVABLE</target_step>
 </case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>475</xloc>
-      <yloc>138</yloc>
+      <xloc>440</xloc>
+      <yloc>140</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

@@ -128,7 +128,59 @@
   </connection>
   <order>
   <hop> <from>ElementContractuel</from><to>ElementLivraison</to><enabled>Y</enabled> </hop>
+  <hop> <from>EC r&#xe9;sili&#xe9;</from><to>EC actif</to><enabled>Y</enabled> </hop>
+  <hop> <from>EC r&#xe9;sili&#xe9;</from><to>type &#x3d; RETOUR</to><enabled>Y</enabled> </hop>
+  <hop> <from>ElementLivraison</from><to>EC r&#xe9;sili&#xe9;</to><enabled>Y</enabled> </hop>
+  <hop> <from>type &#x3d; RETOUR</from><to>ElementRetour</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>EC actif</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>514</xloc>
+      <yloc>283</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>EC r&#xe9;sili&#xe9;</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<send_true_to>type &#x3d; RETOUR</send_true_to>
+<send_false_to>EC actif</send_false_to>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>dateResiliationLivraisonTermine</leftvalue>
+ <function>IS NOT NULL</function>
+ <rightvalue/>
+ </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>516</xloc>
+      <yloc>169</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>ElementContractuel</name>
     <type>TableInput</type>
@@ -141,7 +193,7 @@
            <schema_name/>
            </partitioning>
     <connection>Topaze</connection>
-    <sql>SELECT&#xd;&#xa;  ec.dateDebutFacturation as &#x27;dateLivraisonTermine&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;dateInitiation&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;dateDebutPreparation&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;datePreparation&#x27;&#xd;&#xa;, ec.idAdrLivraison&#xd;&#xa;, ec.referenceProduit&#xd;&#xa;, ec.numEC&#xd;&#xa;&#xd;&#xa;, c.reference&#xd;&#xa;, c.reference as &#x27;retailerPackagerId&#x27;&#xd;&#xa;&#xd;&#xa;, bp.id as &#x27;bonPreparationParent&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;PACKAGER&#x27; as &#x27;acteur&#x27;&#xd;&#xa;, &#x27;ABONNEMENT&#x27; as &#x27;typeContrat&#x27;&#xd;&#xa;, &#x27;LIVRAISON&#x27; as &#x27;typeBonPreparation&#x27;&#xd;&#xa;&#xd;&#xa;FROM elementcontractuel ec&#xd;&#xa;  INNER JOIN contrat c ON &#x28;c.id &#x3d; ec.contratParent&#x29;&#xd;&#xa;  INNER JOIN bonpreparation bp on &#x28;bp.reference &#x3d; c.reference&#x29;&#xd;&#xa;</sql>
+    <sql>SELECT&#xd;&#xa;  ec.dateDebutFacturation as &#x27;dateLivraisonTermine&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;dateInitiation&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;dateDebutPreparation&#x27;&#xd;&#xa;, ec.dateValidation       as &#x27;datePreparation&#x27;&#xd;&#xa;, ec.idAdrLivraison&#xd;&#xa;, ec.referenceProduit&#xd;&#xa;, ec.numEC&#xd;&#xa;&#xd;&#xa;, ec.dateFinContrat       as &#x27;dateResiliationInitiation&#x27;&#xd;&#xa;, ec.dateFinContrat       as &#x27;dateResiliationDebutPreparation&#x27;&#xd;&#xa;, ec.dateFinContrat       as &#x27;dateResiliationPreparation&#x27;&#xd;&#xa;, ec.dateFinContrat       as &#x27;dateResiliationLivraisonTermine&#x27;&#xd;&#xa;&#xd;&#xa;&#xd;&#xa;, c.reference&#xd;&#xa;, c.reference as &#x27;retailerPackagerId&#x27;&#xd;&#xa;&#xd;&#xa;, bp.id as &#x27;bonPreparationParent&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;PACKAGER&#x27; as &#x27;acteur&#x27;&#xd;&#xa;, &#x27;ABONNEMENT&#x27; as &#x27;typeContrat&#x27;&#xd;&#xa;, &#x27;LIVRAISON&#x27; as &#x27;typeBonPreparation&#x27;&#xd;&#xa;&#xd;&#xa;FROM elementcontractuel ec&#xd;&#xa;  INNER JOIN contrat c ON &#x28;c.id &#x3d; ec.contratParent&#x29;&#xd;&#xa;  INNER JOIN bonpreparation bp on &#x28;bp.reference &#x3d; c.reference&#x29;&#xd;&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -170,7 +222,7 @@
     <schema/>
     <table>elementlivraison</table>
     <commit>1000</commit>
-    <truncate>Y</truncate>
+    <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -239,8 +291,126 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>443</xloc>
+      <xloc>352</xloc>
       <yloc>169</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>type &#x3d; RETOUR</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <usevar>N</usevar>
+    <fields>
+      <field>
+        <name>typeBonPreparation</name>
+        <value>RETOUR</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>642</xloc>
+      <yloc>168</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>ElementRetour</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>Topaze</connection>
+    <schema/>
+    <table>elementlivraison</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>referenceProduit</column_name>
+          <stream_name>referenceProduit</stream_name>
+        </field>
+        <field>
+          <column_name>numEC</column_name>
+          <stream_name>numEC</stream_name>
+        </field>
+        <field>
+          <column_name>reference</column_name>
+          <stream_name>reference</stream_name>
+        </field>
+        <field>
+          <column_name>acteur</column_name>
+          <stream_name>acteur</stream_name>
+        </field>
+        <field>
+          <column_name>addresseLivraison</column_name>
+          <stream_name>idAdrLivraison</stream_name>
+        </field>
+        <field>
+          <column_name>retailerPackagerId</column_name>
+          <stream_name>retailerPackagerId</stream_name>
+        </field>
+        <field>
+          <column_name>typeBonPreparation</column_name>
+          <stream_name>typeBonPreparation</stream_name>
+        </field>
+        <field>
+          <column_name>typeContrat</column_name>
+          <stream_name>typeContrat</stream_name>
+        </field>
+        <field>
+          <column_name>bonPreparationParent</column_name>
+          <stream_name>bonPreparationParent</stream_name>
+        </field>
+        <field>
+          <column_name>dateInitiation</column_name>
+          <stream_name>dateResiliationInitiation</stream_name>
+        </field>
+        <field>
+          <column_name>dateDebutPreparation</column_name>
+          <stream_name>dateResiliationDebutPreparation</stream_name>
+        </field>
+        <field>
+          <column_name>datePreparation</column_name>
+          <stream_name>dateResiliationPreparation</stream_name>
+        </field>
+        <field>
+          <column_name>dateRetourTermine</column_name>
+          <stream_name>dateResiliationLivraisonTermine</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>791</xloc>
+      <yloc>167</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

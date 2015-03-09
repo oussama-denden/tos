@@ -5,6 +5,7 @@ import java.util.List;
 import org.joda.time.Hours;
 import org.joda.time.LocalDateTime;
 
+import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.commande.Commande;
@@ -208,6 +209,26 @@ public class CommandeValidator {
 			}
 		}
 
+	}
+
+	/**
+	 * validation du mandat.
+	 * 
+	 * @param mandate
+	 *            {@link Mandate}.
+	 * @param commande
+	 *            {@link Commande}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerMandat(Mandate mandate, Commande commande) throws OpaleException {
+		if (!mandate.getAccount().getAccountKey().equals(commande.getClientAFacturer().getClientId())) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.21"), "2.1.21");
+		}
+
+		if (!mandate.isEnabled()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.22"), "2.1.22");
+		}
 	}
 
 	/**

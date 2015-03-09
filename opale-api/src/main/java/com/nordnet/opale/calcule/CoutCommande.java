@@ -9,14 +9,11 @@ import com.nordnet.opale.business.DetailCout;
 import com.nordnet.opale.business.InfosReductionPourBonCommande;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
-import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.domain.reduction.Reduction;
-import com.nordnet.opale.enums.TypePaiement;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.reduction.ReductionRepository;
 import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.service.reduction.ReductionService;
-import com.nordnet.opale.util.Constants;
 
 /**
  * 
@@ -74,9 +71,6 @@ public class CoutCommande extends CalculeCout {
 	 */
 	@Override
 	public Cout getCout() throws OpaleException {
-
-		List<Paiement> paiements = paiementService.getPaiementNonAnnulees(commande.getReference());
-		Paiement paiementCommande = paiements.size() != Constants.ZERO ? paiements.get(Constants.ZERO) : null;
 
 		Cout cout = new Cout();
 		double coutComptantHT = 0d;
@@ -137,48 +131,6 @@ public class CoutCommande extends CalculeCout {
 		cout.setReductionHT(reductionHT);
 		cout.setReductionTTC(reductionTTC);
 		cout.setTva(tva);
-
-		// changer la trame du cout selon le paiement effectuer par le client
-		if (!(paiementCommande == null)) {
-			if (paiementCommande.getTypePaiement().equals(TypePaiement.RECURRENT)) {
-				cout.setCoutComptantHT(Constants.ZERO);
-				cout.setCoutComptantTTC(Constants.ZERO);
-				cout.setMontantTva(Constants.ZERO);
-
-				cout.setReductionHT(reductionRecurrentHT);
-				cout.setReductionTTC(reductionRecurrentTTC);
-
-				for (DetailCout detailCout : cout.getDetails()) {
-					detailCout.setCoutComptantHT(Constants.ZERO);
-					detailCout.setCoutComptantTTC(Constants.ZERO);
-					detailCout.setMontantTva(Constants.ZERO);
-				}
-
-			} else if (paiementCommande.getTypePaiement().equals(TypePaiement.COMPTANT)) {
-				cout.setCoutRecurrentGlobale(null);
-
-				for (DetailCout detailCout : cout.getDetails()) {
-
-					detailCout.setCoutComptantHT(detailCout.getCoutRecurrent().getNormal().getTarifHT()
-							+ detailCout.getCoutComptantHT());
-					detailCout.setCoutComptantTTC(detailCout.getCoutRecurrent().getNormal().getTarifTTC()
-							+ detailCout.getCoutComptantTTC());
-					detailCout.setMontantTva(detailCout.getCoutComptantTTC() > detailCout.getCoutComptantHT()
-							? detailCout.getCoutComptantTTC() - detailCout.getCoutComptantHT() : 0d);
-
-					coutComptantHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
-					coutComptantTTC += detailCout.getCoutRecurrent().getNormal().getTarifTTC();
-					detailCout.setCoutRecurrent(null);
-				}
-
-				cout.setCoutComptantHT(coutComptantHT);
-				cout.setCoutComptantTTC(coutComptantTTC);
-				cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
-
-			}
-		} else {
-			cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
-		}
 
 		return cout;
 	}

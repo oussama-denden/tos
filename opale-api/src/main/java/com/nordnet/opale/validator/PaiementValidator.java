@@ -192,16 +192,16 @@ public class PaiementValidator {
 	}
 
 	/**
-	 * valider les RUM en cas du paiemebt recurrent.
+	 * valider les RUM en cas du paiement recurrent.
 	 * 
 	 * @param rum
 	 *            String rum.
-	 * @return true si la rum est valide .
 	 * @throws OpaleException
+	 *             {@link OpaleException}
 	 */
 	public static void isRumValide(String rum) throws OpaleException {
 		try {
-			RUM rfum = RUM.build(rum);
+			RUM.build(rum);
 		} catch (IllegalArgumentException illegalArgumentException) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.8"), "3.1.8");
 		}

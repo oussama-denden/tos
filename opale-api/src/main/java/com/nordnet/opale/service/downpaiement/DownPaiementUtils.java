@@ -39,6 +39,9 @@ public final class DownPaiementUtils {
 			return PaymentType.SEPA;
 		case VIREMENT:
 			return PaymentType.OTHER;
+		case FACTURE:
+		case FACTURE_FIN_DE_MOIS:
+			return PaymentType.INVOICE;
 		default:
 			return null;
 		}

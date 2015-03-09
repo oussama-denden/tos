@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nordnet.opale.enums.Geste;
+import com.nordnet.opale.serializer.DateSerializer;
+import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.Utils;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
@@ -28,6 +32,7 @@ public class InfosBonCommande {
 	/**
 	 * Date creation commande.
 	 */
+	@JsonSerialize(using = DateSerializer.class)
 	private Date dateCreation;
 
 	/**
@@ -41,9 +46,24 @@ public class InfosBonCommande {
 	private String trancheTarifaire = "A";
 
 	/**
-	 * Cout reucurrent totale HT.
+	 * Cout totale HT.
 	 */
-	private Double prixRecurrentTotalHT;
+	private Double prixTotalHT;
+
+	/**
+	 * Cout total TTC.
+	 */
+	private Double prixTotalTTC;
+
+	/**
+	 * Cout reduit HT.
+	 */
+	private Double prixReduitHT;
+
+	/**
+	 * Cout reduit TTC.
+	 */
+	private Double prixReduitTTC;
 
 	/**
 	 * Taux de TVA.
@@ -54,21 +74,6 @@ public class InfosBonCommande {
 	 * Montant de TVA.
 	 */
 	private Double montantTVA;
-
-	/**
-	 * Cout recurrent total TTC.
-	 */
-	private Double prixRecurrentTotalTTC;
-
-	/**
-	 * Cout recurrent reduit HT.
-	 */
-	private Double prixRecurrentReduitHT;
-
-	/**
-	 * Cout recurrent reduit TTC.
-	 */
-	private Double prixRecurrentReduitTTC;
 
 	/**
 	 * {@link ModePaiement}.
@@ -158,18 +163,63 @@ public class InfosBonCommande {
 	}
 
 	/**
-	 * @return {@link #prixRecurrentTotalHT}.
+	 * @return {@link #prixTotalHT}.
 	 */
-	public Double getPrixRecurrentTotalHT() {
-		return prixRecurrentTotalHT;
+	public Double getPrixTotalHT() {
+		return prixTotalHT;
 	}
 
 	/**
-	 * @param prixRecurrentTotalHT
-	 *            {@link #prixRecurrentTotalHT}.
+	 * @param prixTotalHT
+	 *            {@link #prixTotalHT}.
 	 */
-	public void setPrixRecurrentTotalHT(Double prixRecurrentTotalHT) {
-		this.prixRecurrentTotalHT = prixRecurrentTotalHT;
+	public void setPrixTotalHT(Double prixTotalHT) {
+		this.prixTotalHT = Utils.round(prixTotalHT, Constants.DEUX);
+	}
+
+	/**
+	 * @return {@link #prixTotalTTC}.
+	 */
+	public Double getPrixTotalTTC() {
+		return prixTotalTTC;
+	}
+
+	/**
+	 * @param prixTotalTTC
+	 *            {@link #prixTotalTTC}.
+	 */
+	public void setPrixTotalTTC(Double prixTotalTTC) {
+		this.prixTotalTTC = Utils.round(prixTotalTTC, Constants.DEUX);
+	}
+
+	/**
+	 * @return {@link #prixReduitHT}.
+	 */
+	public Double getPrixReduitHT() {
+		return prixReduitHT;
+	}
+
+	/**
+	 * @param prixReduitHT
+	 *            {@link #prixReduitHT}.
+	 */
+	public void setPrixReduitHT(Double prixReduitHT) {
+		this.prixReduitHT = Utils.round(prixReduitHT, Constants.DEUX);
+	}
+
+	/**
+	 * @return {@link #prixReduitTTC}.
+	 */
+	public Double getPrixReduitTTC() {
+		return prixReduitTTC;
+	}
+
+	/**
+	 * @param prixReduitTTC
+	 *            {@link #prixReduitTTC}.
+	 */
+	public void setPrixReduitTTC(Double prixReduitTTC) {
+		this.prixReduitTTC = Utils.round(prixReduitTTC, Constants.DEUX);
 	}
 
 	/**
@@ -200,51 +250,6 @@ public class InfosBonCommande {
 	 */
 	public void setMontantTVA(Double montantTVA) {
 		this.montantTVA = montantTVA;
-	}
-
-	/**
-	 * @return {@link #prixRecurrentTotalTTC}.
-	 */
-	public Double getPrixRecurrentTotalTTC() {
-		return prixRecurrentTotalTTC;
-	}
-
-	/**
-	 * @param prixRecurrentTotalTTC
-	 *            {@link #prixRecurrentTotalTTC}.
-	 */
-	public void setPrixRecurrentTotalTTC(Double prixRecurrentTotalTTC) {
-		this.prixRecurrentTotalTTC = prixRecurrentTotalTTC;
-	}
-
-	/**
-	 * @return {@link #prixRecurrentReduitHT}.
-	 */
-	public Double getPrixRecurrentReduitHT() {
-		return prixRecurrentReduitHT;
-	}
-
-	/**
-	 * @param prixRecurrentReduitHT
-	 *            {@link #prixRecurrentReduitHT}.
-	 */
-	public void setPrixRecurrentReduitHT(Double prixRecurrentReduitHT) {
-		this.prixRecurrentReduitHT = prixRecurrentReduitHT;
-	}
-
-	/**
-	 * @return {@link #prixRecurrentReduitTTC}.
-	 */
-	public Double getPrixRecurrentReduitTTC() {
-		return prixRecurrentReduitTTC;
-	}
-
-	/**
-	 * @param prixRecurrentReduitTTC
-	 *            {@link #prixRecurrentReduitTTC}.
-	 */
-	public void setPrixRecurrentReduitTTC(Double prixRecurrentReduitTTC) {
-		this.prixRecurrentReduitTTC = prixRecurrentReduitTTC;
 	}
 
 	/**

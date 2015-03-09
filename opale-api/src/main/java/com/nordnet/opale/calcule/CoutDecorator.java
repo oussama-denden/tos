@@ -19,11 +19,27 @@ public class CoutDecorator extends CalculeCout {
 	private CalculeCout calculeCout;
 
 	/**
-	 * @throws OpaleException
+	 * {@inheritDoc}
 	 * 
 	 */
 	@Override
 	public Cout getCout() throws OpaleException {
+		if (calculeCout instanceof CoutCommande) {
+			CoutCommande coutCommande = (CoutCommande) calculeCout;
+			calculeCout = new CoutCommandeAvecPaiement(coutCommande.getPaiementService(), coutCommande);
+		}
+		return calculeCout.getCout();
+
+	}
+
+	/**
+	 * Cout sans paiement pour le bon de commande.
+	 * 
+	 * @return cout sans tenir compte le paiement.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public Cout getCoutPourBonDeCommande() throws OpaleException {
 		return calculeCout.getCout();
 
 	}

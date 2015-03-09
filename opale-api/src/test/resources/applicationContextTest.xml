@@ -52,6 +52,7 @@
 
 	<!-- <context:annotation-config /> -->
 	<!-- scan du projet -->
+	<context:component-scan base-package="com.nordnet.opale.adapter" />
 	<context:component-scan base-package="com.nordnet.opale.domain" />
 	<context:component-scan base-package="com.nordnet.opale.repository" />
 	<context:component-scan base-package="com.nordnet.opale.service" />
