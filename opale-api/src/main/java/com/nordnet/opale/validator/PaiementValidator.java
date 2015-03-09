@@ -122,6 +122,12 @@ public class PaiementValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.9"), "3.1.9");
 		}
 
+		if (paiementInfoComptant.getModePaiement().equals(ModePaiement.CHEQUE)
+				&& (Utils.isStringNullOrEmpty(paiementInfoComptant.getReferenceModePaiement()) || !Utils
+						.isStringNullOrEmpty(paiementInfoComptant.getRum()))) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("3.1.11"), "3.1.11");
+		}
+
 	}
 
 	/**
