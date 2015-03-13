@@ -1,5 +1,6 @@
 package com.nordnet.opale.validator;
 
+import com.nordnet.mandatelibrary.ws.types.ArrayOfCustomer;
 import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.business.Auteur;
@@ -222,27 +223,25 @@ public class CommandeValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void validerMandat(Mandate mandate, Commande commande) throws OpaleException {
-		if (!validerMandatEtClient(mandate, commande.getClientAFacturer().getClientId())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.21"), "2.1.21");
-		}
+		ArrayOfCustomer customers = mandate.getAccount().getCustomers();
+		boolean isClientExist = false;
 
-		if (!validerMandatActif(mandate)) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.22"), "2.1.22");
-		}
-	}
-	private static boolean validerMandatEtClient(Mandate mandate, String idClient) {
-		if (mandate.getAccount().getCustomers() != null) {
-			for (Customer customer : mandate.getAccount().getCustomers().getCustomer()) {
-				if (customer.getCustomerKey().equals(idClient)) {
-					return true;
+		if (customers != null) {
+			for (Customer customer : customers.getCustomer()) {
+				if (customer.getCustomerKey().equals(commande.getClientAFacturer().getClientId())) {
+					isClientExist = true;
+					break;
 				}
+			}
+
+			if (!isClientExist) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("2.1.21"), "2.1.21");
 			}
 		}
 
-		return false;
-	}
-	private static boolean validerMandatActif(Mandate mandate){
-		return mandate.isEnabled();
+		if (!mandate.isEnabled()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.22"), "2.1.22");
+		}
 	}
 
 	/**
