@@ -133,7 +133,7 @@
   <hop> <from>Commande</from><to>Sort rows 2</to><enabled>Y</enabled> </hop>
   <hop> <from>Sort rows 2</from><to>Merge Join</to><enabled>Y</enabled> </hop>
   <hop> <from>Sort rows</from><to>Merge Join</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Join</from><to>Reduction</to><enabled>Y</enabled> </hop>
+  <hop> <from>Merge Join</from><to>Reduction</to><enabled>N</enabled> </hop>
   </order>
   <step>
     <name>Commande</name>

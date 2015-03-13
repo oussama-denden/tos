@@ -758,7 +758,7 @@
     <fields>
       <field>
         <name>paymentMethod</name>
-        <value>INTERNET&#x2b;</value>
+        <value>AUTRE</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
