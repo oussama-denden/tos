@@ -10,6 +10,7 @@ import com.nordnet.mandatelibrary.ws.MandateLibraryWS;
 import com.nordnet.mandatelibrary.ws.types.Account;
 import com.nordnet.mandatelibrary.ws.types.Account2;
 import com.nordnet.mandatelibrary.ws.types.AddCustomerResponse;
+import com.nordnet.mandatelibrary.ws.types.ArrayOfCustomer;
 import com.nordnet.mandatelibrary.ws.types.ArrayOfMandate;
 import com.nordnet.mandatelibrary.ws.types.CheckIbanResponse;
 import com.nordnet.mandatelibrary.ws.types.CreateForOldCustomerResponse;
@@ -67,7 +68,8 @@ public class MandateLibraryMock implements MandateLibraryWS {
 
 		Mandate mandate = new Mandate();
 		Account2 account2 = new Account2();
-		account2.setAccountKey("accountKey");
+		ArrayOfCustomer arrayOfCustomer = new ArrayOfCustomerMock();
+		account2.setCustomers(arrayOfCustomer);
 		mandate.setAccount(account2);
 		if (rum.equalsIgnoreCase("R0000001")) {
 			mandate.setEnabled(false);

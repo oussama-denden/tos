@@ -1,5 +1,10 @@
 package com.nordnet.opale.validator;
 
+import java.util.List;
+
+import org.joda.time.Hours;
+import org.joda.time.LocalDateTime;
+
 import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.business.Auteur;
@@ -13,10 +18,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
-import org.joda.time.Hours;
-import org.joda.time.LocalDateTime;
-
-import java.util.List;
 
 /**
  * cette classe responsable de valider les informations liés a une commande.
@@ -230,6 +231,16 @@ public class CommandeValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.22"), "2.1.22");
 		}
 	}
+
+	/**
+	 * valider que idClient correspond bien a celui associe au mandat.
+	 * 
+	 * @param mandate
+	 *            {@link Mandate}.
+	 * @param idClient
+	 *            id du client.
+	 * @return true si le client est associe au mandat.
+	 */
 	private static boolean validerMandatEtClient(Mandate mandate, String idClient) {
 		if (mandate.getAccount().getCustomers() != null) {
 			for (Customer customer : mandate.getAccount().getCustomers().getCustomer()) {
@@ -241,7 +252,15 @@ public class CommandeValidator {
 
 		return false;
 	}
-	private static boolean validerMandatActif(Mandate mandate){
+
+	/**
+	 * valider que le mandat est actif.
+	 * 
+	 * @param mandate
+	 *            {@link Mandate}.
+	 * @return true si le mandate est actif.
+	 */
+	private static boolean validerMandatActif(Mandate mandate) {
 		return mandate.isEnabled();
 	}
 
