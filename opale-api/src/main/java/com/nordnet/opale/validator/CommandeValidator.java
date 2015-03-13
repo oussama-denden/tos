@@ -6,6 +6,7 @@ import org.joda.time.Hours;
 import org.joda.time.LocalDateTime;
 
 import com.nordnet.mandatelibrary.ws.types.ArrayOfCustomer;
+import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
@@ -224,10 +225,19 @@ public class CommandeValidator {
 	 */
 	public static void validerMandat(Mandate mandate, Commande commande) throws OpaleException {
 		ArrayOfCustomer customers = mandate.getAccount().getCustomers();
-		if (customers != null
-				&& !customers.getCustomer().get(Constants.ZERO).getCustomerKey()
-						.equals(commande.getClientAFacturer().getClientId())) {
-			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.21"), "2.1.21");
+		boolean isClientExist = false;
+
+		if (customers != null) {
+			for (Customer customer : customers.getCustomer()) {
+				if (customer.getCustomerKey().equals(commande.getClientAFacturer().getClientId())) {
+					isClientExist = true;
+					break;
+				}
+			}
+
+			if (!isClientExist) {
+				throw new OpaleException(propertiesUtil.getErrorMessage("2.1.21"), "2.1.21");
+			}
 		}
 
 		if (!mandate.isEnabled()) {
