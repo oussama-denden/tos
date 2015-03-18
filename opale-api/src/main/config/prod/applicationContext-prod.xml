@@ -16,7 +16,7 @@
 	<context:component-scan base-package="com.nordnet.opale.validator" />
 	<context:component-scan base-package="com.nordnet.topaze.ws" />
 	<context:component-scan base-package="com.nordnet.opale.calcule" />
-	
+
 
 	<!-- Load Hibernate related configuration -->
 	<import resource="hibernate-context.xml" />
@@ -28,20 +28,21 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:rest-url.properties" />
 	</bean>
-	
+
 	<!-- declaration du restTemplate avec un custom 'errorHandler' -->
 	<bean class="org.springframework.web.client.RestTemplate">
-    	<property name="errorHandler">
-        	<bean class="com.nordnet.opale.rest.RestClientResponseErrorHandler" />
-    	</property>
+		<property name="errorHandler">
+			<bean class="com.nordnet.opale.rest.RestClientResponseErrorHandler" />
+		</property>
 	</bean>
-	
+
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
 	<bean id="topazeClient" class="com.nordnet.topaze.ws.client.TopazeClient" />
-	 <bean id="netCatalogClient" class="com.nordnet.netcatalog.ws.client.NetCatalogClient" /> 
-	 <bean id="netCatalogClientFake" class="com.nordnet.netcatalog.ws.client.fake.NetCatalogClientFake" /> 
-	 <bean id="dozerMapper" class="org.dozer.DozerBeanMapper" scope="singleton"/>
-	
+	<bean id="netCatalogClient" class="com.nordnet.netcatalog.ws.client.NetCatalogClient" />
+	<bean id="netCatalogClientFake"
+		class="com.nordnet.netcatalog.ws.client.fake.NetCatalogClientFake" />
+	<bean id="dozerMapper" class="org.dozer.DozerBeanMapper" scope="singleton" />
+
 	<bean id="opaleExceptionsProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:opale-exceptions.properties" />
@@ -59,20 +60,19 @@
 	</bean>
 
 	<!-- Bean d'acces au Contexte -->
-	<bean id="applicationContextHolder"
-		class="com.nordnet.opale.util.spring.ApplicationContextHolder" />
-		
-				
-	<bean id="tracageServiceMock" class="com.nordnet.opale.mock.LogMock"/>
-	
-	<bean id="tracageService" class="com.nordnet.opale.service.tracage.TracageServiceImpl"/>
-	
+	<bean id="applicationContextHolder" class="com.nordnet.opale.util.spring.ApplicationContextHolder" />
+
+
+	<bean id="tracageServiceMock" class="com.nordnet.opale.mock.LogMock" />
+
+	<bean id="tracageService" class="com.nordnet.opale.service.tracage.TracageServiceImpl" />
+
 	<bean id="sendAlert" class="com.nordnet.common.alert.ws.client.SendAlert">
 		<property name="url">
 			<value>${sendAlertServiceUrl}</value>
 		</property>
 	</bean>
-	
+
 	<bean id="log4jInitialization"
 		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
@@ -83,7 +83,20 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="sendAlertMock" class="com.nordnet.opale.mock.SendAlertMock" />
+
+	<!-- MandateLibrary ws client -->
+	<bean id="mandatelibrary" class="com.nordnet.mandatelibrary.ws.client.MandateLibrary">
+		<property name="url">
+			<value>${ws.mandatelibrary.url}</value>
+		</property>
+		<property name="username">
+			<value>${ws.mandatelibrary.login}</value>
+		</property>
+		<property name="password">
+			<value>${ws.mandatelibrary.password}</value>
+		</property>
+	</bean>
 
 </beans>

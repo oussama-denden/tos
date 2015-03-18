@@ -261,7 +261,7 @@ public class CommandeValidator {
 	 * @return true si le mandate est actif.
 	 */
 	private static boolean validerMandatActif(Mandate mandate) {
-		return mandate.isEnabled();
+		return mandate.getEnabled();
 	}
 
 	/**
