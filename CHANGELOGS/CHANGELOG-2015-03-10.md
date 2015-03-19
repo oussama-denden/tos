@@ -6,5 +6,4 @@ from 2015-03-10.
 
 
     * opale-api
-      * show only WARN/ERROR/FATAL levels in log in the qualif/prod env.
 	  * validate mandate using customerkey.
