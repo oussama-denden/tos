@@ -297,11 +297,16 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
-		if (typePaiement == TypePaiement.RECURRENT && paiementInfo.getModePaiement() == ModePaiement.SEPA) {
-			Mandate mandate = mandateLibraryAdapter.getMandate(((PaiementInfoRecurrent) paiementInfo).getRum());
-			logMandate(mandate);
-			CommandeValidator.validerMandat(mandate, commande);
-		}
+
+		/*
+		 * desactivation du controle du mandat.
+		 */
+
+		// if (typePaiement == TypePaiement.RECURRENT && paiementInfo.getModePaiement() == ModePaiement.SEPA) {
+		// Mandate mandate = mandateLibraryAdapter.getMandate(((PaiementInfoRecurrent) paiementInfo).getRum());
+		// logMandate(mandate);
+		// CommandeValidator.validerMandat(mandate, commande);
+		// }
 
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 
