@@ -1404,6 +1404,11 @@ public class CommandeServiceImpl implements CommandeService {
 		return commandeRepository.recupererReferenceCommandeNonTransformeeEtNonAnnulee();
 	}
 
+	@Override
+	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat) {
+		return commandeRepository.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
+	}
+
 	private void logMandate(Mandate mandate) {
 		LOGGER.info("/********** Info Mandate *************/");
 		LOGGER.info("RUM: " + mandate.getRum());

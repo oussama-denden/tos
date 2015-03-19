@@ -652,4 +652,20 @@ public class DraftValidator {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.43"), "1.1.43");
 		}
 	}
+
+	/**
+	 * valider qu'il n'existe pas d'autre commande renouvellement non transforme pour un contrat.
+	 * 
+	 * @param commandesRenouvellement
+	 *            liste des {@link Commande} renouvellement.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerAncienneCommandeRenouvellement(List<Commande> commandesRenouvellement)
+			throws OpaleException {
+		if (commandesRenouvellement.size() > Constants.ZERO) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.47",
+					commandesRenouvellement.get(Constants.ZERO).getReference()), "1.1.47");
+		}
+	}
 }

@@ -441,4 +441,13 @@ public interface CommandeService {
 	 */
 	Cout calculerCoutPourBonDeCommande(String referenceCommande) throws OpaleException;
 
+	/**
+	 * retourne les commandes qui contiennent un ordre de renouvellement et qui sont non annule et non transformee.
+	 * 
+	 * @param referenceContrat
+	 *            reference contrat.
+	 * @return list {@link Commande}.
+	 */
+	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat);
+
 }

@@ -586,6 +586,13 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
+		
+		if(draftLigne.getReferenceContrat() != null && geste == Geste.RENOUVELLEMENT){
+			List<Commande> commandesRenouvellement =
+					commandeService.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(draftLigne.getReferenceContrat());
+
+			DraftValidator.validerAncienneCommandeRenouvellement(commandesRenouvellement);
+		}
 
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
 
@@ -1061,6 +1068,12 @@ public class DraftServiceImpl implements DraftService {
 		Set<String> idAdresseFacturations = new HashSet<String>();
 		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 		for (String referenceContrat : referencesContrat) {
+
+			List<Commande> commandesRenouvellement =
+					commandeService.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
+
+			DraftValidator.validerAncienneCommandeRenouvellement(commandesRenouvellement);
+
 			try {
 				topazeClient.isContratRenouvelable(referenceContrat);
 			} catch (TopazeException e) {

@@ -535,6 +535,7 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
+	@Deprecated
 	public String transformerContratEnDraft(@PathVariable String refContrat,
 			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
