@@ -105,8 +105,5 @@
 	 
 	 		
 	<bean id="tracageServiceMock" class="com.nordnet.opale.mock.LogMock"/>
-	
-	<!-- Mandatelibrary service Fake -->
-    <bean id="mandatelibrary" class="com.nordnet.mandatelibrary.ws.client.fake.MandateLibraryFake" />
     
 </beans>

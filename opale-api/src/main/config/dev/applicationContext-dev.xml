@@ -85,9 +85,6 @@
 		</property>
 	</bean>
 	
-	<bean id="sendAlertMock" class="com.nordnet.opale.mock.SendAlertMock" />
-	
-	<!-- Mandatelibrary service Fake -->
-    <bean id="mandatelibrary" class="com.nordnet.mandatelibrary.ws.client.fake.MandateLibraryFake" />
+		<bean id="sendAlertMock" class="com.nordnet.opale.mock.SendAlertMock" />
 		
 </beans>

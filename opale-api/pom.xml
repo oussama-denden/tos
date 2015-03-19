@@ -139,26 +139,25 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
-		<!-- Mandattheque ws client -->
 		<dependency>
 			<groupId>client.ws</groupId>
-			<artifactId>mandattheque-ws-client</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>mandatelibrary-ws-client</artifactId>
+			<version>1.0.5</version>
 		</dependency>
-
-		<!-- client nordNet -->
+    	
+    			<!-- client nordNet -->
 		<dependency>
 			<groupId>nordnet.common</groupId>
 			<artifactId>alert</artifactId>
 			<version>1.0.1</version>
 			<exclusions>
-				<exclusion>
-					<groupId>nordnet.common</groupId>
-					<artifactId>valueObject</artifactId>
-				</exclusion>
+			<exclusion>
+			<groupId>nordnet.common</groupId>
+			<artifactId>valueObject</artifactId>
+			</exclusion>
 			</exclusions>
 		</dependency>
-
+		
 	</dependencies>
 	<build>
 		<finalName>opale-api</finalName>

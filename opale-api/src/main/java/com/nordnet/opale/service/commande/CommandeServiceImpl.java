@@ -1414,7 +1414,7 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 		LOGGER.info("Mandate account key: " + accountKey);
 		LOGGER.info("Mandate CustomerIds: " + customerIds);
-		LOGGER.info("Mandate Enabled: " + mandate.getEnabled());
+		LOGGER.info("Mandate Enabled: " + mandate.isEnabled());
 
 	}
 }

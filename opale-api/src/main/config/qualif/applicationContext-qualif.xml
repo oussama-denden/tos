@@ -85,17 +85,4 @@
 		</property>
 	</bean>
 	
-		<!-- MandateLibrary ws client -->
-	<bean id="mandatelibrary" class="com.nordnet.mandatelibrary.ws.client.MandateLibrary">
-		<property name="url">
-			<value>${ws.mandatelibrary.url}</value>
-		</property>
-		<property name="username">
-			<value>${ws.mandatelibrary.login}</value>
-		</property>
-		<property name="password">
-			<value>${ws.mandatelibrary.password}</value>
-		</property>
-	</bean>
-	
 </beans>
