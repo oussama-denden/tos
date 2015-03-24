@@ -145,6 +145,11 @@ public class CommandeLigne {
 	private Geste geste;
 
 	/**
+	 * Cause de non transformation.
+	 */
+	private String causeNonTransformation;
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {
@@ -454,6 +459,23 @@ public class CommandeLigne {
 	 */
 	public void setGeste(Geste geste) {
 		this.geste = geste;
+	}
+
+	/**
+	 * 
+	 * @return {@link #causeNonTransformation}
+	 */
+	public String getCauseNonTransformation() {
+		return causeNonTransformation;
+	}
+
+	/**
+	 * 
+	 * @param causeNonTransformation
+	 *            {@link #causeNonTransformation}
+	 */
+	public void setCauseNonTransformation(String causeNonTransformation) {
+		this.causeNonTransformation = causeNonTransformation;
 	}
 
 	/**
