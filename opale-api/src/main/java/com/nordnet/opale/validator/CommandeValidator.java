@@ -1,10 +1,5 @@
 package com.nordnet.opale.validator;
 
-import java.util.List;
-
-import org.joda.time.Hours;
-import org.joda.time.LocalDateTime;
-
 import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.business.Auteur;
@@ -18,6 +13,10 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
+import org.joda.time.Hours;
+import org.joda.time.LocalDateTime;
+
+import java.util.List;
 
 /**
  * cette classe responsable de valider les informations liés a une commande.
