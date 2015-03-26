@@ -24,6 +24,7 @@
 	<appender name="ROLL" class="org.apache.log4j.DailyRollingFileAppender">
 		<!-- The active file to log to -->
 		<param name="file" value="/var/log/tomcat/default/opale/opale.log" />
+		<param name="Threshold" value="WARN"/>
 		<param name="append" value="true" />
 		<param name="DatePattern" value="'.'yyyy-ww" />
 		<param name="encoding" value="UTF-8" />
@@ -36,6 +37,7 @@
 	<appender name="FIND-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
 		<!-- The active file to log to -->
 		<param name="file" value="/var/log/tomcat/default/opale/opale.finder.log" />
+		<param name="Threshold" value="WARN"/>
 		<param name="append" value="true" />
 		<param name="DatePattern" value="'.'yyyy-ww" />
 		<param name="encoding" value="UTF-8" />
@@ -68,7 +70,6 @@
 	<!-- ======================= -->
 	<root>
 		<priority value="INFO" />
-		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="ROLL" />
 	</root>
 
