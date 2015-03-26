@@ -297,11 +297,16 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CommandeValidator.isAuteurValide(paiementInfo.getAuteur());
 		CommandeValidator.checkIsCommandeAnnule(commande, Constants.PAIEMENT);
-		if (typePaiement == TypePaiement.RECURRENT && paiementInfo.getModePaiement() == ModePaiement.SEPA) {
-			Mandate mandate = mandateLibraryAdapter.getMandate(((PaiementInfoRecurrent) paiementInfo).getRum());
-			logMandate(mandate);
-			CommandeValidator.validerMandat(mandate, commande);
-		}
+
+		/*
+		 * desactivation du controle du mandat.
+		 */
+
+		// if (typePaiement == TypePaiement.RECURRENT && paiementInfo.getModePaiement() == ModePaiement.SEPA) {
+		// Mandate mandate = mandateLibraryAdapter.getMandate(((PaiementInfoRecurrent) paiementInfo).getRum());
+		// logMandate(mandate);
+		// CommandeValidator.validerMandat(mandate, commande);
+		// }
 
 		Paiement paiement = paiementService.effectuerPaiement(null, referenceCommande, paiementInfo, typePaiement);
 
@@ -1402,14 +1407,19 @@ public class CommandeServiceImpl implements CommandeService {
 	private void logMandate(Mandate mandate) {
 		LOGGER.info("/********** Info Mandate *************/");
 		LOGGER.info("RUM: " + mandate.getRum());
+		String accountKey = null;
 		List<String> customerIds = new ArrayList<String>();
-		if (mandate.getAccount().getCustomers() != null) {
-			for (Customer customer : mandate.getAccount().getCustomers().getCustomer()) {
-				customerIds.add(customer.getCustomerKey());
+		if (mandate.getAccount() != null) {
+			accountKey = mandate.getAccount().getAccountKey();
+			if (mandate.getAccount().getCustomers() != null) {
+				for (Customer customer : mandate.getAccount().getCustomers().getCustomer()) {
+					customerIds.add(customer.getCustomerKey());
+				}
 			}
 		}
+		LOGGER.info("Mandate account key: " + accountKey);
 		LOGGER.info("Mandate CustomerIds: " + customerIds);
-		LOGGER.info("Mandate Enabled: " + mandate.isEnabled());
+		LOGGER.info("Mandate Enabled: " + mandate.getEnabled());
 
 	}
 }
