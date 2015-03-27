@@ -360,6 +360,20 @@ public class DraftValidator {
 	}
 
 	/**
+	 * valider le geste lors de l'ajout d'une ligne au draft.
+	 * 
+	 * @param geste
+	 *            {@link Geste}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerGestePourAjouterLigne(Geste geste) throws OpaleException {
+		if (geste != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.48"), "1.1.48");
+		}
+	}
+
+	/**
 	 * Verifier si le geste existe dans la commande.
 	 * 
 	 * @param draft
