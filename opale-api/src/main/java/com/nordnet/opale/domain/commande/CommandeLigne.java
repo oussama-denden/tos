@@ -23,6 +23,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Type;
 
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
@@ -147,6 +148,7 @@ public class CommandeLigne {
 	/**
 	 * Cause de non transformation.
 	 */
+	@Type(type = "text")
 	private String causeNonTransformation;
 
 	/**

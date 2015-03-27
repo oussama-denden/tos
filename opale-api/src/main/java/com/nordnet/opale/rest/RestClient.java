@@ -89,6 +89,12 @@ public class RestClient {
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
 				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+			} else if (RestUtil.isNotFound(response.getStatusCode())) {
+				InfoErreur infoErreur = new InfoErreur();
+				infoErreur.setErrorCode("404");
+				infoErreur.setErrorMessage("Not Found");
+				infoErreur.setUrl(response.getBody());
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (TopazeException e1) {
 			LOGGER.error("failed to send REST request", e1);

@@ -633,44 +633,50 @@ public class CommandeServiceImpl implements CommandeService {
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			try {
-				if (ligne.getGeste().equals(Geste.VENTE)) {
-					getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
-							"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
+				if (Utils.isStringNullOrEmpty(ligne.getCauseNonTransformation())) {
+					if (ligne.getGeste().equals(Geste.VENTE)) {
+						getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
+								"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
 
-					ContratPreparationInfo contratPreparationInfo =
-							ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
+						ContratPreparationInfo contratPreparationInfo =
+								ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
-					/*
-					 * ajout du mode de paiement au produits prepare.
-					 */
-					ajouterModePaiementProduit(contratPreparationInfo.getProduits());
-					String refContrat = restClient.preparerContrat(contratPreparationInfo);
-					ligne.setReferenceContrat(refContrat);
+						/*
+						 * ajout du mode de paiement au produits prepare.
+						 */
+						ajouterModePaiementProduit(contratPreparationInfo.getProduits());
+						String refContrat = restClient.preparerContrat(contratPreparationInfo);
+						ligne.setReferenceContrat(refContrat);
 
-					/*
-					 * association des reductions au nouveau contrat creer.
-					 */
-					transformerReductionCommandeEnReductionContrat(commande, ligne);
+						/*
+						 * association des reductions au nouveau contrat creer.
+						 */
+						transformerReductionCommandeEnReductionContrat(commande, ligne);
 
-					ContratValidationInfo contratValidationInfo =
-							creeContratValidationInfo(commande, ligne, refContrat);
+						ContratValidationInfo contratValidationInfo =
+								creeContratValidationInfo(commande, ligne, refContrat);
 
-					restClient.validerContrat(refContrat, contratValidationInfo);
+						restClient.validerContrat(refContrat, contratValidationInfo);
 
-					referencesContrats.add(refContrat);
-				} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-					getTracage()
-							.ajouterTrace(
-									Constants.ORDER,
-									commande.getReference(),
-									"Transformer la ligne commande " + ligne.getReferenceOffre()
-											+ " en ordre de renouvelement", auteur);
-					transformeEnOrdereRenouvellement(commande, ligne);
+						referencesContrats.add(refContrat);
+					} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+						getTracage().ajouterTrace(
+								Constants.ORDER,
+								commande.getReference(),
+								"Transformer la ligne commande " + ligne.getReferenceOffre()
+										+ " en ordre de renouvelement", auteur);
+						transformeEnOrdereRenouvellement(commande, ligne);
+					}
 				}
 			} catch (OpaleException e) {
-				ligne.setCauseNonTransformation(e.getMessage());
-				commandeRepository.save(commande);
-				// throw new OpaleException(e.getMessage(), e.getErrorCode());
+				if (e.getErrorCode().equals("404")) {
+					throw new OpaleException(e.getMessage(), e.getErrorCode());
+
+				} else {
+
+					ligne.setCauseNonTransformation(e.getMessage());
+				}
+
 			}
 		}
 
