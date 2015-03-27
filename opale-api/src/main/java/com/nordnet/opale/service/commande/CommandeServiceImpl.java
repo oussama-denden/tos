@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Optional;
+import com.nordnet.common.alert.ws.client.SendAlert;
 import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.adapter.MandateLibraryAdapter;
@@ -173,6 +174,11 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private MandateLibraryAdapter mandateLibraryAdapter;
+
+	/**
+	 * {@link SendAlert}
+	 */
+	private SendAlert sendAlert;
 
 	/**
 	 * 
@@ -630,10 +636,10 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
-
+		boolean isCommandeTransformer = true;
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			try {
-				if (Utils.isStringNullOrEmpty(ligne.getCauseNonTransformation())) {
+				if (ligne.getDateTransformationContrat() == null) {
 					if (ligne.getGeste().equals(Geste.VENTE)) {
 						getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
 								"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
@@ -657,6 +663,7 @@ public class CommandeServiceImpl implements CommandeService {
 								creeContratValidationInfo(commande, ligne, refContrat);
 
 						restClient.validerContrat(refContrat, contratValidationInfo);
+						ligne.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
 
 						referencesContrats.add(refContrat);
 					} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
@@ -673,14 +680,27 @@ public class CommandeServiceImpl implements CommandeService {
 					throw new OpaleException(e.getMessage(), e.getErrorCode());
 
 				} else {
-
+					isCommandeTransformer = false;
 					ligne.setCauseNonTransformation(e.getMessage());
+
+				}
+
+				try {
+					getSendAlert().send(
+							System.getProperty(Constants.PRODUCT_ID),
+							"Erreur dans la Transformer Commande " + commande.getReference()
+									+ " En Contrat  dans la ligne " + ligne.getReference(), "cause: " + e.getMessage(),
+							e.getErrorCode());
+				} catch (Exception exception) {
+					LOGGER.error("fail to send alert", e);
 				}
 
 			}
 		}
 
-		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		if (isCommandeTransformer) {
+			commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		}
 		commandeRepository.save(commande);
 		return referencesContrats;
 	}
@@ -1438,5 +1458,21 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Mandate CustomerIds: " + customerIds);
 		LOGGER.info("Mandate Enabled: " + mandate.getEnabled());
 
+	}
+
+	/**
+	 * Get send alert.
+	 * 
+	 * @return {@link #sendAlert}
+	 */
+	private SendAlert getSendAlert() {
+		if (this.sendAlert == null) {
+			if (System.getProperty("alert.useMock").equals("true")) {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlertMock");
+			} else {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlert");
+			}
+		}
+		return sendAlert;
 	}
 }

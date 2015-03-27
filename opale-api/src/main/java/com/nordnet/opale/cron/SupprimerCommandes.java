@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.nordnet.common.alert.ws.client.SendAlert;
@@ -18,6 +17,7 @@ import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
+import com.nordnet.opale.util.spring.ApplicationContextHolder;
 
 /**
  * Cron responsable de supprimer automatiquement les commandes inactives.
@@ -40,7 +40,6 @@ public class SupprimerCommandes extends QuartzJobBean {
 	/**
 	 * 
 	 */
-	@Autowired
 	private SendAlert sendAlert;
 
 	@Override
@@ -61,7 +60,7 @@ public class SupprimerCommandes extends QuartzJobBean {
 				LOGGER.error("erreur lors de la suppression des commandes inactives", ex);
 
 				try {
-					sendAlert.send(System.getProperty(Constants.PRODUCT_ID),
+					getSendAlert().send(System.getProperty(Constants.PRODUCT_ID),
 							"Erreur dans le cron Supprimer commandes ",
 							"cause: " + ex.getCause().getLocalizedMessage(), ex.getMessage());
 				} catch (Exception e) {
@@ -110,6 +109,22 @@ public class SupprimerCommandes extends QuartzJobBean {
 	 */
 	public void setCommandeService(CommandeService commandeService) {
 		this.commandeService = commandeService;
+	}
+
+	/**
+	 * Get send alert.
+	 * 
+	 * @return {@link #sendAlert}
+	 */
+	private SendAlert getSendAlert() {
+		if (this.sendAlert == null) {
+			if (System.getProperty("alert.useMock").equals("true")) {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlertMock");
+			} else {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlert");
+			}
+		}
+		return sendAlert;
 	}
 
 }

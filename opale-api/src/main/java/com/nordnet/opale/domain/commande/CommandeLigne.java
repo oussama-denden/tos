@@ -152,6 +152,26 @@ public class CommandeLigne {
 	private String causeNonTransformation;
 
 	/**
+	 * date de transformation du commande vers contrat.
+	 */
+	private Date dateTransformationContrat;
+
+	/**
+	 * @return {@link #dateTransformationContrat}.
+	 */
+	public Date getDateTransformationContrat() {
+		return dateTransformationContrat;
+	}
+
+	/**
+	 * @param dateTransformationContrat
+	 *            {@link #dateTransformationContrat}.
+	 */
+	public void setDateTransformationContrat(Date dateTransformationContrat) {
+		this.dateTransformationContrat = dateTransformationContrat;
+	}
+
+	/**
 	 * constructeur par defaut.
 	 */
 	public CommandeLigne() {

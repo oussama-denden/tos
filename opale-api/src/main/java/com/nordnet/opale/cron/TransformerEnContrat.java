@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.nordnet.common.alert.ws.client.SendAlert;
@@ -15,6 +14,7 @@ import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.spring.ApplicationContextHolder;
 import com.nordnet.opale.validator.CommandeValidator;
 
 /**
@@ -38,7 +38,6 @@ public class TransformerEnContrat extends QuartzJobBean {
 	/**
 	 * {@link SendAlert}
 	 */
-	@Autowired
 	private SendAlert sendAlert;
 
 	@Override
@@ -65,9 +64,9 @@ public class TransformerEnContrat extends QuartzJobBean {
 						LOGGER.error("erreur lors de la transformation des commandes en contrats", exception);
 
 						try {
-							sendAlert.send(System.getProperty(Constants.PRODUCT_ID),
-									"Erreur dans le cron Transformer Commande En Contrat ", "cause: "
-											+ exception.getCause().getLocalizedMessage(), exception.getMessage());
+							getSendAlert().send(System.getProperty(Constants.PRODUCT_ID),
+									"Erreur dans le cron Transformer Commande En Contrat ",
+									"cause: " + exception.getCause().getLocalizedMessage(), exception.getMessage());
 						} catch (Exception e) {
 							LOGGER.error("fail to send alert", e);
 						}
@@ -79,9 +78,9 @@ public class TransformerEnContrat extends QuartzJobBean {
 			LOGGER.error("erreur lors de la transformation des commandes en contrats", ex);
 
 			try {
-				sendAlert.send(System.getProperty(Constants.PRODUCT_ID),
-						"Erreur dans le cron Transformer Commande En Contrat ", "cause: "
-								+ ex.getCause().getLocalizedMessage(), ex.getMessage());
+				getSendAlert().send(System.getProperty(Constants.PRODUCT_ID),
+						"Erreur dans le cron Transformer Commande En Contrat ",
+						"cause: " + ex.getCause().getLocalizedMessage(), ex.getMessage());
 			} catch (Exception e) {
 				LOGGER.error("fail to send alert", e);
 			}
@@ -96,4 +95,21 @@ public class TransformerEnContrat extends QuartzJobBean {
 	public void setCommandeService(CommandeService commandeService) {
 		this.commandeService = commandeService;
 	}
+
+	/**
+	 * Get send alert.
+	 * 
+	 * @return {@link #sendAlert}
+	 */
+	private SendAlert getSendAlert() {
+		if (this.sendAlert == null) {
+			if (System.getProperty("alert.useMock").equals("true")) {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlertMock");
+			} else {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlert");
+			}
+		}
+		return sendAlert;
+	}
+
 }
