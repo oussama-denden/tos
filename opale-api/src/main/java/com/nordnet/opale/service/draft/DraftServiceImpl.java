@@ -590,6 +590,8 @@ public class DraftServiceImpl implements DraftService {
 
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
 
+		DraftValidator.validerAssocierGeste(draftLigne, geste);
+
 		draftLigne.setGeste(geste);
 
 		draftLigneRepository.save(draftLigne);

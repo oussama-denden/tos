@@ -369,6 +369,22 @@ public class DraftValidator {
 	 */
 	public static void validerGestePourAjouterLigne(Geste geste) throws OpaleException {
 		if (geste != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.49"), "1.1.49");
+		}
+	}
+
+	/**
+	 * valider l'association d'un {@link Geste} a une {@link DraftLigne}.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 * @param geste
+	 *            {@link Geste}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerAssocierGeste(DraftLigne draftLigne, Geste geste) throws OpaleException {
+		if (draftLigne.getReferenceContrat() == null && geste != Geste.VENTE) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.48"), "1.1.48");
 		}
 	}
@@ -383,8 +399,9 @@ public class DraftValidator {
 	 */
 	public static void checkGesteNotNull(Draft draft) throws OpaleException {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-
-			isExistGeste(draftLigne.getGeste());
+			if (!Utils.isStringNullOrEmpty(draftLigne.getReferenceContrat())) {
+				isExistGeste(draftLigne.getGeste());
+			}
 		}
 
 	}
