@@ -586,15 +586,16 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.isExistDraft(draft, refDraft);
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
-		
-		if(draftLigne.getReferenceContrat() != null && geste == Geste.RENOUVELLEMENT){
+
+		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+
+		if (draftLigne.getReferenceContrat() != null && geste == Geste.RENOUVELLEMENT) {
 			List<Commande> commandesRenouvellement =
-					commandeService.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(draftLigne.getReferenceContrat());
+					commandeService.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(draftLigne
+							.getReferenceContrat());
 
 			DraftValidator.validerAncienneCommandeRenouvellement(commandesRenouvellement);
 		}
-
-		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
 
 		draftLigne.setGeste(geste);
 
