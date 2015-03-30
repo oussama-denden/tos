@@ -59,7 +59,7 @@ public class TransformerEnContrat extends QuartzJobBean {
 					Auteur auteur = new Auteur();
 					auteur.setQui(Constants.INTERNAL_USER);
 					try {
-						commandeService.transformeEnContrat(commande, auteur);
+						commandeService.transformeEnContrat(commande, auteur, true);
 					} catch (JSONException exception) {
 						LOGGER.error("erreur lors de la transformation des commandes en contrats", exception);
 

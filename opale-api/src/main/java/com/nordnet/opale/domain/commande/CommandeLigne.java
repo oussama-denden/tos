@@ -25,6 +25,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
@@ -677,4 +678,15 @@ public class CommandeLigne {
 		return new HashCodeBuilder(43, 11).append(id).append(referenceOffre).append(modeFacturation).toHashCode();
 	}
 
+	/**
+	 * verifier si la ligne commande a ete transforme en contrat ou non.
+	 * 
+	 * @return true si la commande a ete transformer en contrat.
+	 */
+	public boolean isTransformerEnContrat() {
+		if (Optional.fromNullable(dateTransformationContrat).isPresent()) {
+			return true;
+		}
+		return false;
+	}
 }

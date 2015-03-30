@@ -619,7 +619,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 
-		return transformeEnContrat(commande, auteur);
+		return transformeEnContrat(commande, auteur, false);
 	}
 
 	/**
@@ -628,7 +628,8 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
+	public List<String> transformeEnContrat(Commande commande, Auteur auteur, boolean isCronCall)
+			throws OpaleException, JSONException {
 
 		CommandeValidator.testerCommandeNonTransforme(commande);
 		CommandeValidator.isAuteurValide(auteur);
@@ -638,8 +639,10 @@ public class CommandeServiceImpl implements CommandeService {
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
 		boolean isCommandeTransformer = true;
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
+
 			try {
-				if (ligne.getDateTransformationContrat() == null) {
+				if (!ligne.isTransformerEnContrat()) {
+					CommandeValidator.checkIsTransformPossible(commande.getReference(), ligne, isCronCall);
 					if (ligne.getGeste().equals(Geste.VENTE)) {
 						getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
 								"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
