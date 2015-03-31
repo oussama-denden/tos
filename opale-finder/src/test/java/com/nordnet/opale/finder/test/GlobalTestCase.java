@@ -11,10 +11,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DbUnitConfiguration;
-import com.nordnet.opale.finder.test.utils.NordnetDataSetLoader;
-
 /**
  * Abstract class for Test classes.
  * 
@@ -23,8 +19,7 @@ import com.nordnet.opale.finder.test.utils.NordnetDataSetLoader;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContextTest.xml")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-		TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
-@DbUnitConfiguration(dataSetLoader = NordnetDataSetLoader.class)
+		TransactionalTestExecutionListener.class })
 @Ignore
 public abstract class GlobalTestCase {
 
