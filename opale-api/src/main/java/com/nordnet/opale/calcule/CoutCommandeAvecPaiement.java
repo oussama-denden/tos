@@ -67,8 +67,8 @@ public class CoutCommandeAvecPaiement extends CalculeCout {
 					cout.setCoutComptantTTC(Constants.ZERO);
 					cout.setMontantTva(Constants.ZERO);
 
-					cout.setReductionHT(reductionRecurrentHT);
-					cout.setReductionTTC(reductionRecurrentTTC);
+					cout.setReductionHT(coutCommande.getReductionRecurrentHT());
+					cout.setReductionTTC(coutCommande.getReductionRecurrentTTC());
 
 					for (DetailCout detailCout : cout.getDetails()) {
 						detailCout.setCoutComptantHT(Constants.ZERO);

@@ -159,7 +159,9 @@ public class CommandeDaoImpl implements CommandeDao {
 					} else {
 
 						commande.setPaye(true);
-						commande.addMoyenPaiementComptant(resultSet.getString("modePaiement"));
+						if (resultSet.getString("typePaiement").equals("COMPTANT")) {
+							commande.addMoyenPaiementComptant(resultSet.getString("modePaiement"));
+						}
 					}
 					refPaiement.add(resultSet.getString("refPaiement"));
 				}

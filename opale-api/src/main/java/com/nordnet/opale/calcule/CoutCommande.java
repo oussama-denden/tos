@@ -157,36 +157,69 @@ public class CoutCommande extends CalculeCout {
 	}
 
 	/**
-	 * @return
+	 * 
+	 * @return {@link Commande}
 	 */
 	public Commande getCommande() {
 		return commande;
 	}
 
+	/**
+	 * 
+	 * @param commande
+	 *            {@link Commande}
+	 */
 	public void setCommande(Commande commande) {
 		this.commande = commande;
 	}
 
+	/**
+	 * 
+	 * @return {@link ReductionService}
+	 */
 	public ReductionService getReductionService() {
 		return reductionService;
 	}
 
+	/**
+	 * 
+	 * @param reductionService
+	 *            {@link ReductionService}
+	 */
 	public void setReductionService(ReductionService reductionService) {
 		this.reductionService = reductionService;
 	}
 
+	/**
+	 * 
+	 * @return {@link PaiementService}
+	 */
 	public PaiementService getPaiementService() {
 		return paiementService;
 	}
 
+	/**
+	 * 
+	 * @param paiementService
+	 *            {@link PaiementService}
+	 */
 	public void setPaiementService(PaiementService paiementService) {
 		this.paiementService = paiementService;
 	}
 
+	/**
+	 * 
+	 * @return {@link #infosReductionPourBonCommande}
+	 */
 	public InfosReductionPourBonCommande getInfosReductionPourBonCommande() {
 		return infosReductionPourBonCommande;
 	}
 
+	/**
+	 * 
+	 * @param infosReductionPourBonCommande
+	 *            {@link #infosReductionPourBonCommande}
+	 */
 	public void setInfosReductionPourBonCommande(InfosReductionPourBonCommande infosReductionPourBonCommande) {
 		this.infosReductionPourBonCommande = infosReductionPourBonCommande;
 	}

@@ -131,13 +131,9 @@
   <hop> <from>Switch &#x2f; Case</from><to>Vente</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>Renouvellement</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>Migration</to><enabled>Y</enabled> </hop>
-  <hop> <from>Migration</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
-  <hop> <from>Renouvellement</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
-  <hop> <from>Vente</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
-  <hop> <from>Dummy &#x28;do nothing&#x29;</from><to>Merge Join</to><enabled>Y</enabled> </hop>
-  <hop> <from>Commande</from><to>Merge Join</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tarif</from><to>CommandeLigne</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Join</from><to>referenceProduit</to><enabled>Y</enabled> </hop>
+  <hop> <from>Migration</from><to>Group</to><enabled>Y</enabled> </hop>
+  <hop> <from>Renouvellement</from><to>Group</to><enabled>Y</enabled> </hop>
+  <hop> <from>Vente</from><to>Group</to><enabled>Y</enabled> </hop>
   <hop> <from>referenceProduit</from><to>avfw.essentiel</to><enabled>Y</enabled> </hop>
   <hop> <from>referenceProduit</from><to>avfw.confort</to><enabled>Y</enabled> </hop>
   <hop> <from>referenceProduit</from><to>avfw.prestige</to><enabled>Y</enabled> </hop>
@@ -150,25 +146,62 @@
   <hop> <from>avfw.prestige</from><to>prestige - 1mois</to><enabled>Y</enabled> </hop>
   <hop> <from>avfw.prestige</from><to>prestige - 3mois</to><enabled>Y</enabled> </hop>
   <hop> <from>avfw.prestige</from><to>prestige - 12mois</to><enabled>Y</enabled> </hop>
-  <hop> <from>essentiel - 1mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>essentiel - 12mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>essentiel - 3 mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>confort - 1mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>confort - 3mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>confort - 12mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>prestige - 1mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>prestige - 3mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>prestige - 12mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
+  <hop> <from>essentiel - 1mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>essentiel - 12mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>essentiel - 3 mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>confort - 1mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>confort - 12mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>prestige - 1mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>prestige - 3mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>prestige - 12mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
   <hop> <from>mobile</from><to>mobile - 12mois</to><enabled>Y</enabled> </hop>
   <hop> <from>mobile</from><to>mobile - 1mois</to><enabled>Y</enabled> </hop>
   <hop> <from>mobile</from><to>mobile - 3mois</to><enabled>Y</enabled> </hop>
   <hop> <from>referenceProduit</from><to>mobile</to><enabled>Y</enabled> </hop>
   <hop> <from>referenceProduit</from><to>Offres non-pr&#xe9;vues</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>Type non-pr&#xe9;vu</to><enabled>Y</enabled> </hop>
-  <hop> <from>mobile - 1mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>mobile - 3mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
-  <hop> <from>mobile - 12mois</from><to>Tarif</to><enabled>Y</enabled> </hop>
+  <hop> <from>mobile - 1mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>mobile - 3mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>mobile - 12mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Tarif</from><to>Add RefLigne</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add RefLigne</from><to>CommandeLigne</to><enabled>Y</enabled> </hop>
+  <hop> <from>Group</from><to>Sort Order Key</to><enabled>Y</enabled> </hop>
+  <hop> <from>Sort Order Key</from><to>Merge Join</to><enabled>Y</enabled> </hop>
+  <hop> <from>Commande</from><to>Sort reference</to><enabled>Y</enabled> </hop>
+  <hop> <from>Sort reference</from><to>Merge Join</to><enabled>Y</enabled> </hop>
+  <hop> <from>confort - 3mois</from><to>Group 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Group 2</from><to>Tarif</to><enabled>Y</enabled> </hop>
+  <hop> <from>Merge Join</from><to>referenceProduit</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>Add RefLigne</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>referenceLigne</valuename>
+      <use_database>N</use_database>
+      <connection/>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>150000</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1216</xloc>
+      <yloc>267</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Commande</name>
     <type>TableInput</type>
@@ -189,8 +222,8 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>465</xloc>
-      <yloc>382</yloc>
+      <xloc>466</xloc>
+      <yloc>483</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -269,28 +302,32 @@
           <stream_name>tarifId</stream_name>
         </field>
         <field>
-          <column_name>label</column_name>
-          <stream_name>description</stream_name>
+          <column_name>referenceOffre</column_name>
+          <stream_name>productCode</stream_name>
         </field>
         <field>
           <column_name>dateCreation</column_name>
           <stream_name>creationDate</stream_name>
         </field>
         <field>
-          <column_name>referenceOffre</column_name>
-          <stream_name>itemCode</stream_name>
+          <column_name>label</column_name>
+          <stream_name>description</stream_name>
+        </field>
+        <field>
+          <column_name>reference</column_name>
+          <stream_name>referenceLigne</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1202</xloc>
-      <yloc>267</yloc>
+      <xloc>1323</xloc>
+      <yloc>268</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Dummy &#x28;do nothing&#x29;</name>
+    <name>Group</name>
     <type>Dummy</type>
     <description/>
     <distribute>Y</distribute>
@@ -309,6 +346,25 @@
     </step>
 
   <step>
+    <name>Group 2</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1003</xloc>
+      <yloc>270</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Merge Join</name>
     <type>MergeJoin</type>
     <description/>
@@ -319,9 +375,9 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<join_type>LEFT OUTER</join_type>
-<step1>Dummy &#x28;do nothing&#x29;</step1>
-<step2>Commande</step2>
+<join_type>RIGHT OUTER</join_type>
+<step1>Sort Order Key</step1>
+<step2>Sort reference</step2>
     <keys_1>
       <key>referenceCommande</key>
     </keys_1>
@@ -330,7 +386,7 @@
     </keys_2>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>465</xloc>
+      <xloc>466</xloc>
       <yloc>267</yloc>
       <draw>Y</draw>
       </GUI>
@@ -389,22 +445,22 @@
     <appendLines>N</appendLines>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non Pr&#xe9;vu.xls</name>
+      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non-Prevu</name>
       <extention>xls</extention>
-      <do_not_open_newfile_init>N</do_not_open_newfile_init>
+      <do_not_open_newfile_init>Y</do_not_open_newfile_init>
       <split>N</split>
       <add_date>N</add_date>
       <add_time>N</add_time>
       <SpecifyFormat>N</SpecifyFormat>
       <date_time_format/>
       <sheetname>Order-Offre</sheetname>
-      <autosizecolums>N</autosizecolums>
+      <autosizecolums>Y</autosizecolums>
       <stream_data>N</stream_data>
       <protect_sheet>N</protect_sheet>
       <password>Encrypted </password>
       <protected_by/>
       <splitevery>0</splitevery>
-      <if_file_exists>new</if_file_exists>
+      <if_file_exists>reuse</if_file_exists>
       <if_sheet_exists>new</if_sheet_exists>
       </file>
     <template>
@@ -417,8 +473,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>539</xloc>
-      <yloc>662</yloc>
+      <xloc>566</xloc>
+      <yloc>626</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -435,7 +491,7 @@
            <schema_name/>
            </partitioning>
     <connection>ProdNN</connection>
-    <sql>SELECT&#xd;&#xa;  oi.itemCode&#xd;&#xa;, oi.productCode&#xd;&#xa;, oi.description&#xd;&#xa;, oi.creationDate&#xd;&#xa;, oi.changeDate&#xd;&#xa;, o.orderKey as &#x27;referenceCommande&#x27;&#xd;&#xa;&#xd;&#xa;, oi.htPrice&#xd;&#xa;, oig.frequency&#xd;&#xa;, &#x27;S&#x27; as &#x27;typeTVA&#x27;&#xd;&#xa;, &#x27;&#x27; as &#x27;referenceTarif&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;BackOffice&#x28;Migration&#x29;&#x27; as &#x27;canal&#x27;&#xd;&#xa;, o.createdBy as &#x27;qui&#x27;&#xd;&#xa;, NOW&#x28;&#x29; as &#x27;timestamp&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;0&#x27; as &#x27;numero&#x27;&#xd;&#xa;, &#x27;Securit&#xe9;&#x27; as &#x27;secteur&#x27;&#xd;&#xa;, &#x27;securitoo&#x27; as &#x27;gamme&#x27;&#xd;&#xa;, o.type as &#x27;geste&#x27;&#xd;&#xa;, &#x27;DATE_ANNIVERSAIRE&#x27; as &#x27;modeFacturation&#x27;&#xd;&#xa;, &#x27;SERVICE&#x27; as &#x27;typeProduit&#x27;&#xd;&#xa;FROM order_item oi&#xd;&#xa;  INNER JOIN order_item_group oig on &#x28;oig.id &#x3d; oi.group_idFK&#x29;&#xd;&#xa;  INNER JOIN order_info o on &#x28;oig.order_idFK &#x3d; o.id&#x29;&#xd;&#xa;WHERE &#x28;oi.itemCode like &#x22;avfw.&#x25;&#x22; or oi.itemCode like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;order by o.orderKey</sql>
+    <sql>SELECT&#xd;&#xa;  oi.itemCode&#xd;&#xa;, oi.productCode&#xd;&#xa;, oi.description&#xd;&#xa;, oi.creationDate&#xd;&#xa;, oi.changeDate&#xd;&#xa;, o.orderKey as &#x27;referenceCommande&#x27;&#xd;&#xa;&#xd;&#xa;, oi.htPrice&#xd;&#xa;, oig.frequency&#xd;&#xa;, &#x27;S&#x27; as &#x27;typeTVA&#x27;&#xd;&#xa;, &#x27;&#x27; as &#x27;referenceTarif&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;BackOffice&#x28;Migration&#x29;&#x27; as &#x27;canal&#x27;&#xd;&#xa;, o.createdBy as &#x27;qui&#x27;&#xd;&#xa;, NOW&#x28;&#x29; as &#x27;timestamp&#x27;&#xd;&#xa;&#xd;&#xa;, &#x27;0&#x27; as &#x27;numero&#x27;&#xd;&#xa;, &#x27;Securit&#xe9;&#x27; as &#x27;secteur&#x27;&#xd;&#xa;, &#x27;securitoo&#x27; as &#x27;gamme&#x27;&#xd;&#xa;, o.type as &#x27;geste&#x27;&#xd;&#xa;, &#x27;DATE_ANNIVERSAIRE&#x27; as &#x27;modeFacturation&#x27;&#xd;&#xa;, &#x27;SERVICE&#x27; as &#x27;typeProduit&#x27;&#xd;&#xa;&#xd;&#xa;FROM order_item oi&#xd;&#xa;  INNER JOIN order_item_group oig on &#x28;oig.id &#x3d; oi.group_idFK&#x29;&#xd;&#xa;  INNER JOIN order_info o on &#x28;oig.order_idFK &#x3d; o.id&#x29;&#xd;&#xa;&#xd;&#xa;WHERE &#x28;oi.itemCode like &#x22;avfw.&#x25;&#x22; or oi.itemCode like &#x22;mobileprotection.&#x25;&#x22;&#x29;&#xd;&#xa;&#xd;&#xa;ORDER BY o.orderKey</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -473,6 +529,74 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>327</xloc>
       <yloc>111</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Sort Order Key</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>out</prefix>
+      <sort_size>1000000</sort_size>
+      <free_memory/>
+      <compress>N</compress>
+      <compress_variable/>
+      <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>referenceCommande</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>465</xloc>
+      <yloc>181</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Sort reference</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>out</prefix>
+      <sort_size>1000000</sort_size>
+      <free_memory/>
+      <compress>N</compress>
+      <compress_variable/>
+      <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>commandeReference</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>466</xloc>
+      <yloc>366</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -559,7 +683,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1021</xloc>
+      <xloc>1114</xloc>
       <yloc>267</yloc>
       <draw>Y</draw>
       </GUI>
@@ -590,9 +714,9 @@
     <appendLines>N</appendLines>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;CmdLigne-NonPr&#xe9;vu.xls</name>
+      <name>C&#x3a;&#x5c;Users&#x5c;gmassy.ext&#x5c;Desktop&#x5c;Non-Prevu</name>
       <extention>xls</extention>
-      <do_not_open_newfile_init>N</do_not_open_newfile_init>
+      <do_not_open_newfile_init>Y</do_not_open_newfile_init>
       <split>N</split>
       <add_date>N</add_date>
       <add_time>N</add_time>
@@ -605,7 +729,7 @@
       <password>Encrypted </password>
       <protected_by/>
       <splitevery>0</splitevery>
-      <if_file_exists>new</if_file_exists>
+      <if_file_exists>reuse</if_file_exists>
       <if_sheet_exists>new</if_sheet_exists>
       </file>
     <template>
@@ -1144,8 +1268,8 @@
 <target_step>mobile</target_step>
 </case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>562</xloc>
-      <yloc>267</yloc>
+      <xloc>582</xloc>
+      <yloc>264</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
