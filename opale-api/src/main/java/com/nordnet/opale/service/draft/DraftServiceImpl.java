@@ -261,8 +261,9 @@ public class DraftServiceImpl implements DraftService {
 		for (DraftLigneInfo draftLigneInfo : draftLignesInfo) {
 			// verifier que l auteur existe dans la trame.
 			DraftValidator.validerAuteur(draftLigneInfo.getAuteur());
-			DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+			DraftValidator.validerGestePourAjouterLigne(draftLigneInfo.getGeste());
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
+			draftLigne.setGeste(Geste.VENTE);
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
@@ -596,6 +597,8 @@ public class DraftServiceImpl implements DraftService {
 
 			DraftValidator.validerAncienneCommandeRenouvellement(commandesRenouvellement);
 		}
+
+		DraftValidator.validerAssocierGeste(draftLigne, geste);
 
 		draftLigne.setGeste(geste);
 

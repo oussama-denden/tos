@@ -170,7 +170,7 @@ public class CommandeLigne {
 		this.auteur = draftLigne.getAuteur();
 		this.dateCreation = draftLigne.getDateCreation();
 		this.tarif = new Tarif(offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif()));
-		this.geste = draftLigne.getGeste();
+		this.geste = draftLigne.getGeste() == null ? Geste.VENTE : draftLigne.getGeste();
 		DetailCatalogue detailCatalogue = null;
 		for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
 			detailCatalogue = offreCatalogue.getDetailsMap().get(detail.getReferenceSelection());
