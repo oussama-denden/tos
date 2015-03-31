@@ -7,9 +7,10 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.Cout;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.TransformationInfo;
@@ -20,7 +21,6 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.draft.DraftServiceImpl;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 import com.nordnet.opale.util.Constants;
 
 /**
@@ -40,20 +40,21 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * cas de calcule du cout d'un {@link Reduction} valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/calculer-cout-draft-reduction.xml" })
+	@Transactional
 	public void calculerCoutReductionValide() {
 		try {
 			TransformationInfo calculInfo =
@@ -96,7 +97,7 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	 * cas de calcule pour un {@link Draft} qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/calculer-cout-draft.xml" })
 	public void calculerCoutDraftNonExiste() {
 		try {
 			TransformationInfo calculInfo =
@@ -116,7 +117,8 @@ public class CaculerCoutReductionTest extends GlobalTestCase {
 	 * cas de calcule pour un {@link Draft} non valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/calculer-cout-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/calculer-cout-draft.xml" })
+	@Transactional
 	public void calculerCoutDraftNonValide() {
 		try {
 			TransformationInfo calculInfo =

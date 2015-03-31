@@ -5,14 +5,13 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.CommandeValidationInfo;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.test.utils.Constants;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode {@link CommandeService#validerCommande(String)}.
@@ -30,14 +29,14 @@ public class ValiderCommandeTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * tester le cas de validation d'une commande valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-commande.xml" })
 	public void testerValiderCommandeValide() {
 
 		try {
@@ -54,7 +53,7 @@ public class ValiderCommandeTest extends GlobalTestCase {
 	 * tester le cas de validation d'une commande annule.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-commande.xml" })
 	public void testerValiderCommandeAnnule() {
 		try {
 			CommandeValidationInfo validationInfo = commandeService.validerCommande("00000002");
@@ -70,7 +69,7 @@ public class ValiderCommandeTest extends GlobalTestCase {
 	 * tester le cas de validation d'une commande non valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-commande.xml" })
 	public void testerValiderCommandeNonValide() {
 		try {
 			CommandeValidationInfo validationInfo = commandeService.validerCommande("00000004");

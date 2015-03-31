@@ -5,9 +5,9 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.OptionTransformation;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.draft.Draft;
@@ -15,7 +15,6 @@ import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode {@link CommandeService#transformerEnDraft(String)}.
@@ -33,20 +32,20 @@ public class TransformerEnDraftTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * tester la cas de transformation d'une commande qui n'existe pas en draft.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-en-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/transformer-en-draft.xml" })
 	public void testerTransformerCommandeNonExiste() {
 		try {
 			OptionTransformation optionTransformation =
@@ -67,7 +66,7 @@ public class TransformerEnDraftTest extends GlobalTestCase {
 	 * tester transformerEnCommandeValide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transformer-en-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/transformer-en-draft.xml" })
 	public void testerTransformerEnDraftValide() {
 		try {
 			OptionTransformation optionTransformation =

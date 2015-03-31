@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 
 <dataset>
 	<client id="1" clientId="client-1245" adresseId="Adr_Facturation_1" />
@@ -7,20 +7,20 @@
 	<client id="3" clientId="client-1245" adresseId="Adr_Livraison_1" />
 	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
 		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
-		clientSouscripteurId="2" />
+		clientSouscripteurId="2" annulerCommandeSource="false"/>
 	<draft id="2" reference="REF-DRAFT-3" codePartenaire="000111"
-		ts="[now]" />
+		ts="[now]" annulerCommandeSource="false"/>
 	<draft id="3" reference="REF-DRAFT-4" codePartenaire="000111"
-		ts="[now]" />
+		ts="[now]" annulerCommandeSource="false"/>
 	<draft id="4" reference="REF-DRAFT-5" codePartenaire="000111"
 		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
-		clientSouscripteurId="2" />
+		clientSouscripteurId="2" annulerCommandeSource="false"/>
 	<draft id="5" reference="REF-DRAFT-6" codePartenaire="000111"
 		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
-		clientSouscripteurId="2" />
+		clientSouscripteurId="2" annulerCommandeSource="false"/>
 	<draft id="6" reference="REF-DRAFT-7" codePartenaire="000111"
 		ts="[now]" clientAFacturerId="1" clientALivrerId="3"
-		clientSouscripteurId="2" />
+		clientSouscripteurId="2" annulerCommandeSource="false"/>
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"

@@ -7,18 +7,17 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.ReferenceExterneInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * 
@@ -35,13 +34,13 @@ public class AjouterReferenceExterneTest extends GlobalTestCase {
 	/**
 	 * service de draft.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
@@ -54,16 +53,16 @@ public class AjouterReferenceExterneTest extends GlobalTestCase {
 	 * @throws JsonMappingException
 	 *             the json mapping exception
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 *             {@link OpaleException}
+	 *             Signals that an I/O exception has occurred. {@link OpaleException}
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-reference-externe.xml" })
-	public void TestAjouterReferenceExterneValid() throws OpaleException, JsonParseException, JsonMappingException,
-			IOException {
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajouter-reference-externe.xml" })
+	public void TestAjouterReferenceExterneValid()
+			throws OpaleException, JsonParseException, JsonMappingException, IOException {
 		LOGGER.info("Debut methode :::TestAjouterReferenceExterneValid");
-		ReferenceExterneInfo referenceExterneInfo = draftInfoGenerator.getObjectFromJsonFile(
-				ReferenceExterneInfo.class, "./requests/ajouterReferenceExterne.json");
+		ReferenceExterneInfo referenceExterneInfo =
+				draftInfoGenerator.getObjectFromJsonFile(ReferenceExterneInfo.class,
+						"./requests/ajouterReferenceExterne.json");
 		draftService.ajouterReferenceExterne("REF-DRAFT-1", referenceExterneInfo);
 		Draft draft = draftService.getDraftByReference("REF-DRAFT-1");
 		assertNotNull(draft.getReferenceExterne());

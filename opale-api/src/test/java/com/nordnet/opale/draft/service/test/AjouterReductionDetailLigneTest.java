@@ -6,9 +6,9 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.domain.draft.DraftLigneDetail;
 import com.nordnet.opale.domain.reduction.Reduction;
@@ -18,7 +18,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.reduction.ReductionService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
@@ -36,19 +35,19 @@ public class AjouterReductionDetailLigneTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("reductionService")
+	@Autowired
 	private ReductionService reductionService;
 
 	/**
 	 * {@link DraftLigneDetailRepository}.
 	 */
-	@SpringBean("draftLigneDetailRepository")
+	@Autowired
 	private DraftLigneDetailRepository draftLigneDetailRepository;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
@@ -58,7 +57,7 @@ public class AjouterReductionDetailLigneTest extends GlobalTestCase {
 	 *             {@link OpaleException}
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajout-reduction.xml" })
 	public void ajoutReductiondetailLigneValide() throws OpaleException {
 
 		try {
@@ -82,7 +81,7 @@ public class AjouterReductionDetailLigneTest extends GlobalTestCase {
 	 * 
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajout-reduction.xml" })
 	public void ajoutReductiondetailLigneInValide() {
 
 		try {

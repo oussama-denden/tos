@@ -5,9 +5,9 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.reduction.Reduction;
@@ -18,8 +18,6 @@ import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.reduction.ReductionService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
-import com.nordnet.topaze.ws.enums.TypeValeur;
 
 /**
  * Classe de test de la methode.
@@ -37,19 +35,19 @@ public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("reductionService")
+	@Autowired
 	private ReductionService reductionService;
 
 	/**
 	 * {@link DraftLigneDetailRepository}.
 	 */
-	@SpringBean("draftLigneRepository")
+	@Autowired
 	private DraftLigneRepository draftLigneRepository;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
@@ -59,7 +57,7 @@ public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 	 *             {@link OpaleException}
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajout-reduction.xml" })
 	public void testajouterReductionFraisLigneValide() throws OpaleException {
 
 		try {

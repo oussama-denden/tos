@@ -5,9 +5,10 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.DeleteInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -15,11 +16,9 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.service.draft.DraftService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * Classe de test pour la methode
- * {@link DraftService#supprimerLigneDraft(String, String, DeleteInfo)} .
+ * Classe de test pour la methode {@link DraftService#supprimerLigneDraft(String, String, DeleteInfo)} .
  * 
  * @author anisselmane.
  * 
@@ -34,26 +33,27 @@ public class SupprimerLigneDraftTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * {@link DraftLigneRepository}.
 	 */
-	@SpringBean("draftLigneRepository")
+	@Autowired
 	private DraftLigneRepository draftLigneRepository;
 
 	/**
 	 * Supprimer ligne draft valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/annuler-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/annuler-draft.xml" })
+	@Transactional
 	public void testerSupprimerLigneDraftValide() {
 
 		try {
@@ -73,7 +73,7 @@ public class SupprimerLigneDraftTest extends GlobalTestCase {
 	 * Supprimer une ligne draft quand lla ligne draft est inexistante.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml" })
 	public void GivenLigneDraftNotExistsWhenSupprimerLigneDraftThenFail() {
 
 		try {
@@ -92,7 +92,7 @@ public class SupprimerLigneDraftTest extends GlobalTestCase {
 	 * Supprimer une ligne draft quand le draft est inexistant.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml" })
 	public void GivenDraftNotExistsWhenSupprimerLigneDraftThenFail() {
 
 		try {

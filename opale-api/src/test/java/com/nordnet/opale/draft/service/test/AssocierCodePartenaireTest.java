@@ -7,16 +7,15 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * classe de test de la methode
@@ -35,20 +34,20 @@ public class AssocierCodePartenaireTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * tester le cas valide d'association du code partenaire.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-code-partenaire.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-code-partenaire.xml" })
 	public void testerAssocierCodePartenaireValide() {
 		try {
 			Draft draft = draftService.getDraftByReference("00000001");
@@ -69,7 +68,7 @@ public class AssocierCodePartenaireTest extends GlobalTestCase {
 	 * tester le cas d'association du code partenaire a un draft qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-code-partenaire.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-code-partenaire.xml" })
 	public void testerAssocierCodePartenaireAvecDraftNonExist() {
 		try {
 			CodePartenaireInfo codePartenaireInfo =

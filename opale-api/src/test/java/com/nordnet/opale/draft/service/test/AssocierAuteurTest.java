@@ -6,9 +6,9 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -16,7 +16,6 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.draft.DraftServiceImpl;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * classe de test de la methode {@link DraftServiceImpl#associerAuteur(String, com.nordnet.opale.business.Auteur)}.
@@ -34,20 +33,20 @@ public class AssocierAuteurTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * tester le cas valide d'association d'un auteur au {@link Draft}.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-auteur.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-auteur.xml" })
 	public void associerAuteurValide() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/associerAuteur.json");
@@ -64,7 +63,7 @@ public class AssocierAuteurTest extends GlobalTestCase {
 	 * tester la cas d'association d'un auteur a un Draft qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-auteur.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-auteur.xml" })
 	public void associerAuteurAvecDraftNonExiste() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/associerAuteur.json");
@@ -82,7 +81,7 @@ public class AssocierAuteurTest extends GlobalTestCase {
 	 * tester la cas d'association d'un auteur sans indiquer le champs qui.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-auteur.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-auteur.xml" })
 	public void associerAuteurSansQui() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/associerAuteur.json");

@@ -8,18 +8,17 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test pour la methode {@link DraftService#annulerDraft(String)} .
@@ -37,13 +36,13 @@ public class AnnulerDraftTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
@@ -57,7 +56,7 @@ public class AnnulerDraftTest extends GlobalTestCase {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/annuler-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/annuler-draft.xml" })
 	public void testerAnnulerDraftValide() throws JsonParseException, JsonMappingException, IOException {
 		Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/auteur.json");
 		try {
@@ -83,9 +82,9 @@ public class AnnulerDraftTest extends GlobalTestCase {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
-	public void GivenDraftNotExistsWhenAnnulerDraftThenFail() throws JsonParseException, JsonMappingException,
-			IOException {
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml" })
+	public void GivenDraftNotExistsWhenAnnulerDraftThenFail()
+			throws JsonParseException, JsonMappingException, IOException {
 
 		Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/auteur.json");
 		try {

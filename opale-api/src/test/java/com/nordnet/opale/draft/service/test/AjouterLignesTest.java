@@ -7,9 +7,10 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -17,7 +18,6 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.Constants;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode {@link DraftService#ajouterLignes(String, java.util.List)} .
@@ -35,20 +35,21 @@ public class AjouterLignesTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * Tester le cas de l'ajout valid d'une ligne valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajouter-ligne-draft.xml" })
+	@Transactional
 	public void testAjouterLignesValide() {
 		try {
 			DraftLigneInfo[] draftLignesInfo =
@@ -68,7 +69,7 @@ public class AjouterLignesTest extends GlobalTestCase {
 	 * Tester le cas ou le draft n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/emptyDB.xml", "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLignesAvecDraftNonExist() {
 		try {
 			DraftLigneInfo[] draftLignesInfo =
@@ -87,7 +88,7 @@ public class AjouterLignesTest extends GlobalTestCase {
 	 * Tester le cas d'ajout avec une offre non valid.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajouter-ligne-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/emptyDB.xml", "/dataset/ajouter-ligne-draft.xml" })
 	public void testAjouterLignesAvecOffreNonValide() {
 		try {
 			DraftLigneInfo[] draftLignesInfo =

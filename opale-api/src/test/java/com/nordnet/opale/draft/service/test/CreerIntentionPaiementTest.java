@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -17,7 +17,6 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.paiement.PaiementService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 import com.nordnet.topaze.ws.enums.ModePaiement;
 
 /**
@@ -37,26 +36,26 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * {@link PaiementService}.
 	 */
-	@SpringBean("paiementService")
+	@Autowired
 	private PaiementService paiementService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * Tester le cas d'ajout d'une intention de paiement valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-intention-paiement.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/creer-intention-paiement.xml" })
 	public void testerCreerIntentionPaiementValide() {
 		try {
 			PaiementInfoComptant paiementInfo =
@@ -76,7 +75,7 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 	 * creer un intention de paiement alors qu'une autre existe.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-intention-paiement.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/creer-intention-paiement.xml" })
 	public void testerCreerIntentionPaiementAvecAutreExiste() {
 		try {
 			Paiement paiement = paiementService.getIntentionPaiement("00000004");
@@ -98,7 +97,7 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 	 * Tester le cas d'ajout d'une intention de paiement avec une commande qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-intention-paiement.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/creer-intention-paiement.xml" })
 	public void testerCreerIntentionPaiementAvecCommandeNonExiste() {
 		try {
 			PaiementInfoComptant paiementInfo =
@@ -118,7 +117,7 @@ public class CreerIntentionPaiementTest extends GlobalTestCase {
 	 * Tester le cas d'ajout d'une intention de paiement valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-intention-paiement.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/creer-intention-paiement.xml" })
 	public void testerCreerIntentionPaiementSansModePaiement() {
 		try {
 			PaiementInfoComptant paiementInfo =

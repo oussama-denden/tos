@@ -8,13 +8,11 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nordnet.opale.finder.business.Commande;
 import com.nordnet.opale.finder.service.CommandeService;
 import com.nordnet.opale.finder.test.GlobalTestCase;
-import com.nordnet.opale.finder.test.utils.TopazeMultiSchemaXmlDataSetFactory;
 
 /**
  * class tests {@link CommandeService#findByIdClient(String)}.
@@ -27,18 +25,17 @@ public class FindCommandeTest extends GlobalTestCase {
 	/**
 	 * Commande service.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	CommandeService commandeService;
 
 	/**
 	 * Test execute.
 	 */
 	@Test
-	@DataSet(factory = TopazeMultiSchemaXmlDataSetFactory.class, value = "/dataset/findCommandeTest.xml")
 	public void testFindAllValide() {
 
 		try {
-			System.setProperty("ws.nordNetVat.useMock","true");
+			System.setProperty("ws.nordNetVat.useMock", "true");
 			Date d1 = new Date();
 			List<Commande> commandes = commandeService.findByIdClient("000003");
 			Date d2 = new Date();

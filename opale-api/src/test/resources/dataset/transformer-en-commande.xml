@@ -1,17 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 
 <dataset>
-	<keygen />
-	<draft />
 	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
-		ts="[now]" />
+		ts="[now]" annulerCommandeSource="false"/>
 	<draft id="2" reference="REF-DRAFT-3" codePartenaire="000111"
-		ts="[now]" />
+		ts="[now]" annulerCommandeSource="false"/>
 
 	<draft id="3" reference="REF-DRAFT-4" codePartenaire="000111"
-		ts="[now]" />
-	<draftLigne />
+		ts="[now]" annulerCommandeSource="false"/>
 	<draftLigne id="1000" reference="00000001" referenceTarif="mensuel_jet10_base"
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
 		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="1" geste="VENTE"/>
@@ -24,7 +21,6 @@
 		referenceOffre="jet_surf10" qui="GRC.WEL-JOHNDOE"
 		canal="Welcome" ip="127.0.0.1" ts="[now]" draftId="3" geste="VENTE"/>
 
-	<draftLigneDetail />
 	<draftLigneDetail id="1000" referenceSelection="kitsat"
 		referenceChoix="trafic10g" referenceTarif="mensuel_jet10_base"
 		configurationJson="" draftLigneId="1000" />

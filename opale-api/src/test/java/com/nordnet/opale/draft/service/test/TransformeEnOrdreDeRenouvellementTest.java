@@ -6,15 +6,14 @@ import static org.junit.Assert.fail;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.commande.CommandeLigne;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * tester la methode {@link CommandeService#transformeEnOrdereRenouvellement(String)}.
@@ -32,7 +31,7 @@ public class TransformeEnOrdreDeRenouvellementTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
@@ -42,7 +41,7 @@ public class TransformeEnOrdreDeRenouvellementTest extends GlobalTestCase {
 	 *             {@link OpaleException}.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/transforme-en-ordre-renouvellement.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/transforme-en-ordre-renouvellement.xml" })
 	public void testTransformeEnContratValide() throws OpaleException {
 
 		Commande commande = commandeService.getCommandeByReference("00000004");

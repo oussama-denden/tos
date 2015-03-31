@@ -1,10 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 
 <dataset>
-<keygen/>
-<draft/>
-<draft id="1" reference="REF-DRAFT-1"   codePartenaire="000111" ts="[now]" canal="welcome" qui="someone" />
-<draftLigne/>
-<draftLigneDetail/>
+
+<draft id="1" reference="REF-DRAFT-1"   codePartenaire="000111" ts="[now]" canal="welcome" qui="someone" annulerCommandeSource="false"/>
+
 </dataset>

@@ -7,11 +7,12 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.domain.draft.DraftLigne;
@@ -20,7 +21,6 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.Constants;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test pour la methode
@@ -39,13 +39,13 @@ public class ModifierLigneTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
@@ -59,7 +59,8 @@ public class ModifierLigneTest extends GlobalTestCase {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/modifier-ligne-draft.xml" })
+	@Transactional
 	public void testerModifierLigneValide() throws JsonParseException, JsonMappingException, IOException {
 		DraftLigneInfo draftLigneInfo =
 				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");
@@ -87,7 +88,7 @@ public class ModifierLigneTest extends GlobalTestCase {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/modifier-ligne-draft.xml" })
 	public void testerModifierLignePourDraftNonExist() throws JsonParseException, JsonMappingException, IOException {
 		DraftLigneInfo draftLigneInfo =
 				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");
@@ -110,7 +111,7 @@ public class ModifierLigneTest extends GlobalTestCase {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/modifier-ligne-draft.xml" })
 	public void testerModifierLigneNonExist() throws JsonParseException, JsonMappingException, IOException {
 		DraftLigneInfo draftLigneInfo =
 				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");
@@ -133,7 +134,7 @@ public class ModifierLigneTest extends GlobalTestCase {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/modifier-ligne-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/modifier-ligne-draft.xml" })
 	public void testModifierLigneAvecOffreNonValide() throws JsonParseException, JsonMappingException, IOException {
 		DraftLigneInfo draftLigneInfo =
 				draftInfoGenerator.getObjectFromJsonFile(DraftLigneInfo.class, "./requests/modifierLignes.json");

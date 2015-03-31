@@ -27,16 +27,23 @@
 		<property name="password" value="test" />
 	</bean>
 	
+	<jdbc:initialize-database data-source="dataSource">
+		<jdbc:script location="classpath:/sql/init_mysql.sql"
+			encoding="UTF-8" />
+	</jdbc:initialize-database>
+	
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="persistenceUnitName" value="opale" />
 		<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence-test.xml" />
 		<property name="jpaVendorAdapter">
-			<bean
-				class="org.unitils.orm.jpa.util.provider.hibernate.UnitilsHibernateJpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 				<property name="database" value="MYSQL" />
-				<property name="showSql" value="false" />
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+				<property name="showSql" value="true" />
+				<property name="generateDdl" value="true" />
+
 			</bean>
 		</property>
 	</bean>

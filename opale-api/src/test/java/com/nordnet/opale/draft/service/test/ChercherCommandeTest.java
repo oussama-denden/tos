@@ -6,16 +6,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.CommandeInfo;
 import com.nordnet.opale.business.CriteresCommande;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.commande.CommandeServiceImpl;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * classe de test de la methode
@@ -34,20 +33,20 @@ public class ChercherCommandeTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * tester chercher commande valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/chercher-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/chercher-commande.xml" })
 	public void testerChercherCommande() {
 		try {
 

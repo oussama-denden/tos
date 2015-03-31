@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.domain.paiement.Paiement;
@@ -21,7 +21,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.test.utils.Constants;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
@@ -40,26 +39,26 @@ public class PaiementDirectTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * {@link PaiementService}.
 	 */
-	@SpringBean("paiementService")
+	@Autowired
 	private PaiementService paiementService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * tester le cas d'un paiement direct valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/paiement-direct.xml" })
 	public void testerPaiementDirectValide() {
 		try {
 			PaiementInfoComptant paiementInfo =
@@ -81,7 +80,7 @@ public class PaiementDirectTest extends GlobalTestCase {
 	 * Tester le cas de paiement direct avec une commande qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/paiement-direct.xml" })
 	public void testerPaiementDirectAvecCommandeNonExiste() {
 		try {
 			PaiementInfoRecurrent paiementInfo =
@@ -101,7 +100,7 @@ public class PaiementDirectTest extends GlobalTestCase {
 	 * tester le cas de paiement d'une intention sans indiquer le mode paiement.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/paiement-direct.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansModePaiement() {
 		try {
 			PaiementInfoRecurrent paiementInfo =
@@ -122,7 +121,7 @@ public class PaiementDirectTest extends GlobalTestCase {
 	 * tester le cas de paiement direct sans indiquer le mode paiement.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/paiement-direct.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/paiement-direct.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansMontant() {
 		try {
 			PaiementInfoRecurrent paiementInfo =

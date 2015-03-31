@@ -8,9 +8,9 @@ import static org.junit.Assert.fail;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.signature.Signature;
@@ -19,7 +19,6 @@ import com.nordnet.opale.draft.test.generator.SignatureInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.signature.SignatureService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * tester la methode {@link SignatureService#transmettreSignature(String, com.nordnet.opale.business.SignatureInfo)}.
@@ -37,13 +36,13 @@ public class SignerCommandeDirectTest extends GlobalTestCase {
 	/**
 	 * {@link SignatureService}.
 	 */
-	@SpringBean("signatureService")
+	@Autowired
 	private SignatureService signatureService;
 
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
@@ -53,7 +52,7 @@ public class SignerCommandeDirectTest extends GlobalTestCase {
 	 *             {@link OpaleException}.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/signer-commande.xml" })
 	public void testSignerCommandeDirectValide() throws OpaleException {
 
 		Commande commande = null;

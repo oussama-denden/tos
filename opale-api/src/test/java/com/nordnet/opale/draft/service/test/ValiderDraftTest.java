@@ -6,9 +6,10 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.DraftValidationInfo;
 import com.nordnet.opale.business.TrameCatalogueInfo;
 import com.nordnet.opale.domain.draft.Draft;
@@ -17,7 +18,6 @@ import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.Constants;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
@@ -36,7 +36,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	{
@@ -46,14 +46,15 @@ public class ValiderDraftTest extends GlobalTestCase {
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * Tester le de validation d'un {@link Draft} valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-draft.xml" })
+	@Transactional
 	public void testValiderDraftValide() {
 
 		try {
@@ -71,7 +72,7 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le cas ou le draft n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-draft.xml" })
 	public void testValiderDraftAvecDraftNonExist() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -90,7 +91,8 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le de validation d'un {@link Draft} valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-draft.xml" })
+	@Transactional
 	public void testValiderDraftAvecOffreNonValide() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -108,7 +110,8 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le de validation d'un {@link Draft} valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-draft.xml" })
+	@Transactional
 	public void testValiderDraftAvecDetailOffreNonValide() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -126,7 +129,9 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le de validation d'un {@link Draft} possedant un bien et qui n'a pas de client livraison.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftBienWithoutClientLivraisonWhenValiderDraftFail.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml",
+			"/dataset/GivenDraftBienWithoutClientLivraisonWhenValiderDraftFail.xml" })
+	@Transactional
 	public void givenDraftBienWithoutClientLivraisonWhenValiderDraftFail() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -144,7 +149,9 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le de validation d'un {@link Draft} possedant un bien et qui n'a pas de client livraison.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftServiceWithoutClientLivraisonWhenValiderDraftValid.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml",
+			"/dataset/GivenDraftServiceWithoutClientLivraisonWhenValiderDraftValid.xml" })
+	@Transactional
 	public void givenDraftServiceWithoutClientLivraisonWhenValiderDraftValid() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -161,7 +168,9 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le de validation d'un {@link Draft} qui a de client livraison sans adresse id.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenClientLivraisonWithoutAdresseIdWhenValiderDraftFail.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml",
+			"/dataset/GivenClientLivraisonWithoutAdresseIdWhenValiderDraftFail.xml" })
+	@Transactional
 	public void givenClientLivraisonWithoutAdresseIdWhenValiderDraftFail() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -179,7 +188,9 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le de validation d'un {@link Draft} qui n'a pas de client facturation.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftWithoutClientFacturationWhenValiderDraftFail.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml",
+			"/dataset/GivenDraftWithoutClientFacturationWhenValiderDraftFail.xml" })
+	@Transactional
 	public void givenDraftWithoutClientFacturationWhenValiderDraftFail() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -197,7 +208,9 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * Tester le de validation d'un {@link Draft} qui n'a pas de client souscripteur.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/GivenDraftWithoutClientSouscripteurWhenValiderDraftFail.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml",
+			"/dataset/GivenDraftWithoutClientSouscripteurWhenValiderDraftFail.xml" })
+	@Transactional
 	public void givenDraftWithoutClientSouscripteurWhenValiderDraftFail() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -215,7 +228,8 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * validation d'un draft avec un tarif ligne non valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-draft.xml" })
+	@Transactional
 	public void testDraftAvecTarifLigneInvalide() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -233,7 +247,8 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * validation d'un draft avec un tarif associe au detail non valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-draft.xml" })
+	@Transactional
 	public void testDraftAvecTarifDetailInvalide() {
 		try {
 			TrameCatalogueInfo trameCatalogue =
@@ -251,7 +266,8 @@ public class ValiderDraftTest extends GlobalTestCase {
 	 * validation d'un draft avec une reference choix invalide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/valider-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/valider-draft.xml" })
+	@Transactional
 	public void testDraftAvecChoixInvalide() {
 		try {
 			TrameCatalogueInfo trameCatalogue =

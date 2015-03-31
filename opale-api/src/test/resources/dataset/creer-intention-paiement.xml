@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 <dataset>
-<keygen/>
 <commande id="1000" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000001" referenceDraft="00000001" />
 <commande id="1001" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000003" referenceDraft="00000003" />
 <commande id="1002" canal="welcome" codePartenaire="part_123456" ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000004" referenceDraft="00000004" />

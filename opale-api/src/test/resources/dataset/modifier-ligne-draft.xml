@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 
 <dataset>
 	<draft id="1" reference="REF-DRAFT-1" codePartenaire="000111"
-		ts="[now]" />
+		ts="[now]" annulerCommandeSource="false"/>
 
 	<draftLigne id="1000" reference="00000001" referenceTarif="jet_surf10"
 		referenceOffre="mensuel_jet10_base" qui="GRC.WEL-JOHNDOE" canal="Welcome"

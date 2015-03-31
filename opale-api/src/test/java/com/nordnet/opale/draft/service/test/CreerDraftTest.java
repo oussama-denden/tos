@@ -5,16 +5,15 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test pour la methode {@link DraftService#creerDraft(DraftInfo)} .
@@ -32,20 +31,20 @@ public class CreerDraftTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * Creer un draft incomplet.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml" })
 	public void testerCreerDraftValide() {
 
 		try {
@@ -64,7 +63,7 @@ public class CreerDraftTest extends GlobalTestCase {
 	 * Creer un draft incomplet.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml" })
 	public void testerCreerDraftCompletValide() {
 
 		try {
@@ -83,7 +82,7 @@ public class CreerDraftTest extends GlobalTestCase {
 	 * Creer un draft incomplet.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml" })
 	public void GivenWithoutClientIdWhenCreerDraftCompletThenFail() {
 
 		try {
@@ -103,7 +102,7 @@ public class CreerDraftTest extends GlobalTestCase {
 	// * Creer un draft incomplet.
 	// */
 	// @Test
-	// @DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/creer-draft.xml" })
+	// @DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/creer-draft.xml" })
 	// public void GivenWithoutCodeWhenCreerDraftCompletThenFail() {
 	//
 	// try {

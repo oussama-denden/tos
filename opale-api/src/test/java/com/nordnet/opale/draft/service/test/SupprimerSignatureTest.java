@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.Auteur;
 import com.nordnet.opale.domain.signature.Signature;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -18,7 +18,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.commande.CommandeServiceImpl;
 import com.nordnet.opale.service.signature.SignatureService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode. {@link CommandeServiceImpl#supprimerSignature(String, String, Auteur)}.
@@ -36,19 +35,19 @@ public class SupprimerSignatureTest extends GlobalTestCase {
 	/**
 	 * {@link SignatureService}.
 	 */
-	@SpringBean("signatureService")
+	@Autowired
 	private SignatureService signatureService;
 
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
@@ -56,7 +55,7 @@ public class SupprimerSignatureTest extends GlobalTestCase {
 	 * 
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/signer-commande.xml" })
 	public void supprimerIntentionSignatureValide() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/auteur.json");
@@ -77,7 +76,7 @@ public class SupprimerSignatureTest extends GlobalTestCase {
 	 * 
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/signer-commande.xml" })
 	public void supprimerSignatureValide() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/auteur.json");
@@ -97,7 +96,7 @@ public class SupprimerSignatureTest extends GlobalTestCase {
 	 * tester la suppression d'une signature pour une commande qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/signer-commande.xml" })
 	public void supprimerSignatureAvecCommandeNonExiste() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/auteur.json");
@@ -114,7 +113,7 @@ public class SupprimerSignatureTest extends GlobalTestCase {
 	 * tester la suppression d'une signature qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/signer-commande.xml" })
 	public void supprimerSignatureAvecSignatureNonExiste() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/auteur.json");
@@ -131,7 +130,7 @@ public class SupprimerSignatureTest extends GlobalTestCase {
 	 * tester la suppression d'une signature annule.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/signer-commande.xml" })
 	public void supprimerSignatureAnnule() {
 		try {
 			Auteur auteur = draftInfoGenerator.getObjectFromJsonFile(Auteur.class, "./requests/auteur.json");

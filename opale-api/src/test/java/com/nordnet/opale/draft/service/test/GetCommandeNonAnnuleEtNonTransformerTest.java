@@ -7,14 +7,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.commande.CommandeServiceImpl;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 import com.nordnet.opale.util.Constants;
 
 /**
@@ -33,14 +32,14 @@ public class GetCommandeNonAnnuleEtNonTransformerTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * tester la recherche des commande non transforme et non annule.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/get-commande-non-transforme-non-annule.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/get-commande-non-transforme-non-annule.xml" })
 	public void testerGetCommandeNonAnnuleEtNonTransformer() {
 		try {
 			List<Commande> commandes = commandeService.getCommandeNonAnnuleEtNonTransformes();

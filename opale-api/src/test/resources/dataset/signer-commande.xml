@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 
 <dataset>
-
 
 <commande id="1"  reference="REF-COMMANDE-1" ts="[now]"/>
 

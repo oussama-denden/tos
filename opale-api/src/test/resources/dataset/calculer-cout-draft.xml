@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 
 <dataset>
 <client id="1000" adresseId="address-id" canal="welcome" clientId="client-id" ts="[now]" ip="1.1.1.1" qui="welcome" tva="00" />
 
-<draft id="1000" canal="welcome" codePartenaire="PART_CODE" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="Dra-00000001"  />
-<draft id="1001" canal="welcome" codePartenaire="PART_CODE" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="Dra-00000002"  />
-<draft id="1002" canal="welcome" codePartenaire="PART_CODE" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="Dra-00000003" clientAFacturerId="1000" />
+<draft id="1000" canal="welcome" codePartenaire="PART_CODE" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="Dra-00000001"  annulerCommandeSource="false"/>
+<draft id="1001" canal="welcome" codePartenaire="PART_CODE" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="Dra-00000002"  annulerCommandeSource="false"/>
+<draft id="1002" canal="welcome" codePartenaire="PART_CODE" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="Dra-00000003" clientAFacturerId="1000" annulerCommandeSource="false"/>
 
 <draftLigne id="1000" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="00000001" referenceOffre="jet_surf10" referenceTarif="annuel_jet10_base" draftId="1000" />
 <draftLigne id="1001" canal="welcome" ip="127.0.0.1" qui="GRC.WEL-JOHNDOE" ts="[now]" reference="00000002" referenceOffre="jet_surf10" referenceTarif="annuel_jet10_base" draftId="1001" />

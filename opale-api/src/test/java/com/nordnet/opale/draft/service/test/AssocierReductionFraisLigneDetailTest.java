@@ -6,16 +6,15 @@ import static org.junit.Assert.fail;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.draft.DraftServiceImpl;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
@@ -35,20 +34,20 @@ public class AssocierReductionFraisLigneDetailTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("draftService")
+	@Autowired
 	private DraftService draftService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * tester le cas valide d'association d'une reduction au frais associe au ligne detail.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-reduction.xml" })
 	public void testerAssocierReductionFraisLigneDetailValide() {
 		try {
 			ReductionInfo reductionInfo =
@@ -68,7 +67,7 @@ public class AssocierReductionFraisLigneDetailTest extends GlobalTestCase {
 	 * pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-reduction.xml" })
 	public void testerAssocierReductionFraisLigneDetailAvecDraftNonExiste() {
 		try {
 			ReductionInfo reductionInfo =
@@ -88,7 +87,7 @@ public class AssocierReductionFraisLigneDetailTest extends GlobalTestCase {
 	 * tester le cas d'associaion d'une reduction au draft ligne pour un detail qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/associer-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/associer-reduction.xml" })
 	public void testerAssocierReductionFraisLigneDetailAvecProduitNonExiste() {
 		try {
 			ReductionInfo reductionInfo =

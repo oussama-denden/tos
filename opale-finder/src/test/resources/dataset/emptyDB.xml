@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <client/>
+  <commande/>
+  <tarif/>
+  <commandeligne/>
+  <commandelignedetail/>
+   <draftlignedetail/>
+   <draftligne/>
+  <draft/>
+  <frais/>
+  <keygen/>
+  <paiement/>
+  <reduction/>
+  <signature/>
+  <tracage/>
+</dataset>

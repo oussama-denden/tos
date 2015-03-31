@@ -4,15 +4,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.reduction.ReductionService;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  *  Classe de test de la methode {@link ReductionService#supprimer(String).
@@ -24,7 +23,7 @@ public class SupprimerReductionTest extends GlobalTestCase {
 	/**
 	 * {@link DraftService}.
 	 */
-	@SpringBean("reductionService")
+	@Autowired
 	private ReductionService reductionService;
 
 	/**
@@ -34,7 +33,7 @@ public class SupprimerReductionTest extends GlobalTestCase {
 	 *             {@link OpaleException}
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/ajout-reduction.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajout-reduction.xml" })
 	public void testSupprimerReduction() throws OpaleException {
 		Reduction reductionAvant = reductionService.findReduction("REF-DRAFT-3");
 		assertNotNull(reductionAvant);

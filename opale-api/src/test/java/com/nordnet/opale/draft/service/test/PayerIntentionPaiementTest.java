@@ -7,9 +7,10 @@ import static org.junit.Assert.fail;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
-import org.unitils.dbunit.annotation.DataSet;
-import org.unitils.spring.annotation.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.nordnet.opale.business.PaiementInfoComptant;
 import com.nordnet.opale.domain.paiement.Paiement;
 import com.nordnet.opale.draft.test.GlobalTestCase;
@@ -18,7 +19,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.commande.CommandeService;
 import com.nordnet.opale.service.paiement.PaiementService;
 import com.nordnet.opale.test.utils.Constants;
-import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
  * Classe de test de la methode
@@ -37,26 +37,27 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	/**
 	 * {@link CommandeService}.
 	 */
-	@SpringBean("commandeService")
+	@Autowired
 	private CommandeService commandeService;
 
 	/**
 	 * {@link PaiementService}.
 	 */
-	@SpringBean("paiementService")
+	@Autowired
 	private PaiementService paiementService;
 
 	/**
 	 * {@link DraftInfoGenerator}.
 	 */
-	@SpringBean("draftInfoGenerator")
+	@Autowired
 	private DraftInfoGenerator draftInfoGenerator;
 
 	/**
 	 * tester le cas de paiement d'une intention valide.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/payer-intention.xml" })
+	@Transactional
 	public void testerPayerIntentionPaiementValide() {
 		try {
 			Paiement paiement = paiementService.getPaiementByReference("00000001");
@@ -77,7 +78,7 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	 * Tester le cas de paiement d'une intention avec une commande qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementAvecCommandeNonExiste() {
 		try {
 			PaiementInfoComptant paiementInfo =
@@ -97,7 +98,7 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	 * Tester le cas de paiement d'une intention qui n'existe pas.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementNonExiste() {
 		try {
 			PaiementInfoComptant paiementInfo =
@@ -117,7 +118,7 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	 * tester le cas de paiement d'une intention deja paye.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementDejaPaye() {
 		try {
 			PaiementInfoComptant paiementInfo =
@@ -137,7 +138,7 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	 * tester le cas de paiement d'une intention sans indiquer le mode paiement.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansModePaiement() {
 		try {
 			PaiementInfoComptant paiementInfo =
@@ -158,7 +159,7 @@ public class PayerIntentionPaiementTest extends GlobalTestCase {
 	 * tester le cas de paiement d'une intention sans indiquer le mode paiement.
 	 */
 	@Test
-	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/payer-intention.xml" })
+	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/payer-intention.xml" })
 	public void testerPayerIntentionPaiementAvecPaiementInfoSansMontant() {
 		try {
 			PaiementInfoComptant paiementInfo =

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM "..\dtd\Opale.dtd">
+<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
 
 <dataset>
 <client id="1000" adresseId="address-facturation" clientId="client-id" ip="1.1.1.1" ts="[now]" qui="TEST" tva="00" />
