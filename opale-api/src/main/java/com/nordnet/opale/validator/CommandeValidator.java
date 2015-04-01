@@ -141,7 +141,7 @@ public class CommandeValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void testerCommandeNonTransforme(Commande commande) throws OpaleException {
-		if (commande.getDateTransformationContrat() != null) {
+		if (commande.isTransformerEnContrat()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8", commande.getReference()), "2.1.8");
 		}
 

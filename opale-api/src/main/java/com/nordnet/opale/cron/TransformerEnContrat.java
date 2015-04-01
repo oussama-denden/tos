@@ -66,7 +66,7 @@ public class TransformerEnContrat extends QuartzJobBean {
 						try {
 							getSendAlert().send(System.getProperty(Constants.PRODUCT_ID),
 									"Erreur dans le cron Transformer Commande En Contrat ",
-									"cause: " + exception.getCause().getLocalizedMessage(), exception.getMessage());
+									"cause: " + exception.getMessage(), exception.getMessage());
 						} catch (Exception e) {
 							LOGGER.error("fail to send alert", e);
 						}
@@ -79,8 +79,8 @@ public class TransformerEnContrat extends QuartzJobBean {
 
 			try {
 				getSendAlert().send(System.getProperty(Constants.PRODUCT_ID),
-						"Erreur dans le cron Transformer Commande En Contrat ",
-						"cause: " + ex.getCause().getLocalizedMessage(), ex.getMessage());
+						"Erreur dans le cron Transformer Commande En Contrat ", "cause: " + ex.getMessage(),
+						ex.getMessage());
 			} catch (Exception e) {
 				LOGGER.error("fail to send alert", e);
 			}

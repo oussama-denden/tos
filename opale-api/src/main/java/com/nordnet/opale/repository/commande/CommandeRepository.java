@@ -120,7 +120,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 * 
 	 * @return {@link List<String>}
 	 */
-	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c.reference FROM Commande c WHERE c.dateAnnulation=null AND dateTransformationContrat=null")
+	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c.reference FROM Commande c inner join c.commandeLignes cl WHERE c.dateAnnulation is null AND cl.dateTransformationContrat is null")
 	public List<String> recupererReferenceCommandeNonTransformeeEtNonAnnulee();
 
 	/**

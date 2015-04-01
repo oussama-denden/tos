@@ -637,7 +637,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
-		boolean isCommandeTransformer = true;
+		// boolean isCommandeTransformer = true;
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 
 			try {
@@ -679,11 +679,11 @@ public class CommandeServiceImpl implements CommandeService {
 					}
 				}
 			} catch (OpaleException e) {
+
 				if (e.getErrorCode().equals("404")) {
 					throw new OpaleException(e.getMessage(), e.getErrorCode());
 
-				} else {
-					isCommandeTransformer = false;
+				} else if (!e.getErrorCode().equals("2.1.23")) {
 					ligne.setCauseNonTransformation(e.getMessage());
 
 				}
@@ -701,9 +701,9 @@ public class CommandeServiceImpl implements CommandeService {
 			}
 		}
 
-		if (isCommandeTransformer) {
-			commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
-		}
+		// if (isCommandeTransformer) {
+		// commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+		// }
 		commandeRepository.save(commande);
 		return referencesContrats;
 	}
