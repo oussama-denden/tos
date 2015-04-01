@@ -30,12 +30,9 @@ public class SendAlertMock extends SendAlert {
 	 *            {@link String} the alertDetail to set.
 	 * @param throwable
 	 *            {@link Throwable} the optional throwable to set.
-	 * @throws Exception
-	 *             if error occurs.
 	 */
 	@Override
-	public void send(final String projectId, final String alertMessage, final String alertDetail, final String throwable)
-			throws Exception {
+	public void send(final String projectId, final String alertMessage, final String alertDetail, final String throwable) {
 		// check parameters
 		checkNotNullOrEmpty("projectId", projectId);
 		checkNotNullOrEmpty("alertMessage", alertMessage);

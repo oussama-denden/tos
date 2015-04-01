@@ -9,3 +9,4 @@ from 2015-03-17.
       * show only WARN/ERROR/FATAL levels in log in the qualif/prod env.
 	  * desactivate mandate validation.
 	  * Migrating test api from unitils to spring-dbunit.
+	  * Migration from Spring 3 to spring 4.
