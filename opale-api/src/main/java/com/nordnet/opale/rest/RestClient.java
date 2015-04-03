@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nordnet.common.alert.ws.client.SendAlert;
-import com.nordnet.netcatalog.ws.client.rest.RestUtil;
 import com.nordnet.opale.business.TracageInfo;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
