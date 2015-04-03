@@ -823,6 +823,7 @@ public class CommandeServiceImpl implements CommandeService {
 		produitRenouvellement.setNumEC(ligne.getNumEC());
 
 		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
+		produitRenouvellement.setReferenceTarif(ligne.getTarif().getReference());
 		produitRenouvellement.setRemboursable(true);
 		produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligne.getTypeProduit().toString()));
 
@@ -840,6 +841,7 @@ public class CommandeServiceImpl implements CommandeService {
 				produitRenouvellement.setNumECParent(ligneDetail.getCommandeLigneDetailParent().getNumEC());
 			}
 			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceChoix());
+			produitRenouvellement.setReferenceTarif(ligneDetail.getTarif().getReference());
 			produitRenouvellement.setRemboursable(true);
 			produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligneDetail.getTypeProduit().toString()));
 
@@ -1300,4 +1302,10 @@ public class CommandeServiceImpl implements CommandeService {
 	public List<String> getReferenceCommandeNonAnnuleEtNonTransformes() {
 		return commandeRepository.recupererReferenceCommandeNonTransformeeEtNonAnnulee();
 	}
+
+	@Override
+	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat) {
+		return commandeRepository.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
+	}
+
 }

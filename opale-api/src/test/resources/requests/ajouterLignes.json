@@ -1,5 +1,4 @@
 [{
-  "geste" : "VENTE",
   "offre": {
     "referenceTarif": "mensuel_jet10_base",
     "referenceOffre": "jet_surf10",
