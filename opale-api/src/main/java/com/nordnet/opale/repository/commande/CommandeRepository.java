@@ -177,7 +177,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 *            reference contrat.
 	 * @return list {@link Commande}.
 	 */
-	@Query(name = "findCommandeActiveNonTransformeeByReferenceContrat", value = "SELECT DISTINCT c FROM Commande c INNER JOIN c.commandeLignes cl WHERE c.dateAnnulation is NULL AND c.dateTransformationContrat is NULL AND cl.referenceContrat LIKE :referenceContrat AND cl.geste = 'RENOUVELLEMENT'")
+	@Query(name = "findCommandeActiveNonTransformeeByReferenceContrat", value = "SELECT DISTINCT c FROM Commande c INNER JOIN c.commandeLignes cl WHERE c.dateAnnulation is NULL AND cl.dateTransformationContrat is NULL AND cl.referenceContrat LIKE :referenceContrat AND cl.geste = 'RENOUVELLEMENT'")
 	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(
 			@Param("referenceContrat") String referenceContrat);
 }
