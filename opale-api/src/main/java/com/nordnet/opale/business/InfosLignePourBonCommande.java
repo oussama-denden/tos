@@ -180,7 +180,7 @@ public class InfosLignePourBonCommande {
 	 *            {@link #montantTVA}.
 	 */
 	public void setMontantTVA(Double montantTVA) {
-		this.montantTVA = montantTVA;
+		this.montantTVA = Utils.round(montantTVA, Constants.DEUX);
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class InfosLignePourBonCommande {
 	 *            {@link #montantTVAReduit}.
 	 */
 	public void setMontantTVAReduit(Double montantTVAReduit) {
-		this.montantTVAReduit = montantTVAReduit;
+		this.montantTVAReduit = Utils.round(montantTVAReduit, Constants.DEUX);
 	}
 
 	/**

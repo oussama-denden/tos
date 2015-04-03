@@ -897,6 +897,7 @@ public class CommandeServiceImpl implements CommandeService {
 		produitRenouvellement.setNumEC(ligne.getNumEC());
 
 		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
+		produitRenouvellement.setReferenceTarif(ligne.getTarif().getReference());
 		produitRenouvellement.setRemboursable(true);
 		produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligne.getTypeProduit().toString()));
 
@@ -914,6 +915,7 @@ public class CommandeServiceImpl implements CommandeService {
 				produitRenouvellement.setNumECParent(ligneDetail.getCommandeLigneDetailParent().getNumEC());
 			}
 			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceChoix());
+			produitRenouvellement.setReferenceTarif(ligneDetail.getTarif().getReference());
 			produitRenouvellement.setRemboursable(true);
 			produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligneDetail.getTypeProduit().toString()));
 
@@ -1322,9 +1324,7 @@ public class CommandeServiceImpl implements CommandeService {
 		infosBonCommande.setDateCreation(commande.getDateCreation());
 
 		Cout coutAvantPaiement = calculerCoutPourBonDeCommande(refCommande);
-		Cout coutApresPaiement = calculerCout(refCommande);
-		infosBonCommande.setMontantTVA(coutApresPaiement.getMontantTva());
-		infosBonCommande.setTauxTVA(coutApresPaiement.getTva());
+		infosBonCommande.setTauxTVA(coutAvantPaiement.getTva());
 
 		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
 		SetPaiement: for (Paiement paiement : paiements) {
@@ -1349,12 +1349,15 @@ public class CommandeServiceImpl implements CommandeService {
 			lignePourBonCommande.setReferenceOffre(ligne.getReferenceOffre());
 			lignePourBonCommande.setReferenceContrat(ligne.getReferenceContrat());
 
-			for (DetailCout detailCout : coutAvantPaiement.getDetails()) {
+			FindCoutLigne: for (DetailCout detailCout : coutAvantPaiement.getDetails()) {
 				if (detailCout.getNumero() != null && Integer.valueOf(detailCout.getNumero()).equals(ligne.getNumero())) {
 
 					lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
 					double coutLigneHT = detailCout.getCoutComptantHT();
 					double coutLigneTTC = detailCout.getCoutComptantTTC();
+
+					lignePourBonCommande.setTauxTVA(detailCout.getTva());
+
 					if (detailCout.getCoutRecurrent() != null) {
 
 						coutRecurrentTotalHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
@@ -1362,18 +1365,24 @@ public class CommandeServiceImpl implements CommandeService {
 						coutRecurrentTotalReduitHT += detailCout.getCoutRecurrent().getReduit().getTarifHT();
 						coutRecurrentReduitTotalTTC += detailCout.getCoutRecurrent().getReduit().getTarifTTC();
 
-						lignePourBonCommande.setMontantTVA(detailCout.getCoutRecurrent().getNormal().getTarifTva());
-						lignePourBonCommande.setMontantTVAReduit(detailCout.getCoutRecurrent().getReduit()
-								.getTarifTva());
-						lignePourBonCommande.setTauxTVA(detailCout.getTva());
+						double coutRecurrentLigneHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
+						double coutRecurrentLigneTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
+						if (Math.max(coutLigneHT, coutRecurrentLigneHT) == coutRecurrentLigneHT) {
+							lignePourBonCommande.setMontantTVA(detailCout.getCoutRecurrent().getNormal().getTarifTva());
+							lignePourBonCommande.setMontantTVAReduit(detailCout.getCoutRecurrent().getReduit()
+									.getTarifTva());
+						} else {
+							lignePourBonCommande.setMontantTVA(detailCout.getMontantTva());
+						}
 
-						coutLigneHT = Math.max(coutLigneHT, detailCout.getCoutRecurrent().getNormal().getTarifHT());
-						coutLigneTTC = Math.max(coutLigneHT, detailCout.getCoutRecurrent().getNormal().getTarifTTC());
+						coutLigneHT = Math.max(coutLigneHT, coutRecurrentLigneHT);
+						coutLigneTTC = Math.max(coutLigneTTC, coutRecurrentLigneTTC);
 
 					}
 
 					lignePourBonCommande.setPrixHT(coutLigneHT);
 					lignePourBonCommande.setPrixTTC(coutLigneTTC);
+					break FindCoutLigne;
 				}
 			}
 
@@ -1397,7 +1406,7 @@ public class CommandeServiceImpl implements CommandeService {
 				coutAvantPaiement.getCoutComptantTTC() - coutAvantPaiement.getReductionTTC(),
 				coutRecurrentReduitTotalTTC));
 		infosBonCommande.getLignes().addAll(lignesPourBonCommandes);
-
+		infosBonCommande.setMontantTVA(infosBonCommande.getPrixTotalTTC() - infosBonCommande.getPrixTotalHT());
 		return infosBonCommande;
 	}
 
@@ -1442,6 +1451,11 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public List<String> getReferenceCommandeNonAnnuleEtNonTransformes() {
 		return commandeRepository.recupererReferenceCommandeNonTransformeeEtNonAnnulee();
+	}
+
+	@Override
+	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat) {
+		return commandeRepository.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
 	}
 
 	private void logMandate(Mandate mandate) {

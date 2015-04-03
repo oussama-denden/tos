@@ -360,6 +360,36 @@ public class DraftValidator {
 	}
 
 	/**
+	 * valider le geste lors de l'ajout d'une ligne au draft.
+	 * 
+	 * @param geste
+	 *            {@link Geste}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerGestePourAjouterLigne(Geste geste) throws OpaleException {
+		if (geste != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.49"), "1.1.49");
+		}
+	}
+
+	/**
+	 * valider l'association d'un {@link Geste} a une {@link DraftLigne}.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 * @param geste
+	 *            {@link Geste}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerAssocierGeste(DraftLigne draftLigne, Geste geste) throws OpaleException {
+		if (draftLigne.getReferenceContrat() == null && geste != Geste.VENTE) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.48"), "1.1.48");
+		}
+	}
+
+	/**
 	 * Verifier si le geste existe dans la commande.
 	 * 
 	 * @param draft
@@ -369,8 +399,9 @@ public class DraftValidator {
 	 */
 	public static void checkGesteNotNull(Draft draft) throws OpaleException {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-
-			isExistGeste(draftLigne.getGeste());
+			if (!Utils.isStringNullOrEmpty(draftLigne.getReferenceContrat())) {
+				isExistGeste(draftLigne.getGeste());
+			}
 		}
 
 	}
@@ -650,6 +681,22 @@ public class DraftValidator {
 	public static void validerListeReference(List<String> referencescontrat) throws OpaleException {
 		if (Utils.isListNullOrEmpty(referencescontrat)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.43"), "1.1.43");
+		}
+	}
+
+	/**
+	 * valider qu'il n'existe pas d'autre commande renouvellement non transforme pour un contrat.
+	 * 
+	 * @param commandesRenouvellement
+	 *            liste des {@link Commande} renouvellement.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerAncienneCommandeRenouvellement(List<Commande> commandesRenouvellement)
+			throws OpaleException {
+		if (commandesRenouvellement.size() > Constants.ZERO) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.50",
+					commandesRenouvellement.get(Constants.ZERO).getReference()), "1.1.50");
 		}
 	}
 }

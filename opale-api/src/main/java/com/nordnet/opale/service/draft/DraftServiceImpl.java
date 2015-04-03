@@ -261,8 +261,9 @@ public class DraftServiceImpl implements DraftService {
 		for (DraftLigneInfo draftLigneInfo : draftLignesInfo) {
 			// verifier que l auteur existe dans la trame.
 			DraftValidator.validerAuteur(draftLigneInfo.getAuteur());
-			DraftValidator.isExistGeste(draftLigneInfo.getGeste());
+			DraftValidator.validerGestePourAjouterLigne(draftLigneInfo.getGeste());
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
+			draftLigne.setGeste(Geste.VENTE);
 			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
 			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
@@ -588,6 +589,16 @@ public class DraftServiceImpl implements DraftService {
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(refDraft, refLigne);
 
 		DraftValidator.isExistLigneDraft(draftLigne, refLigne);
+
+		if (draftLigne.getReferenceContrat() != null && geste == Geste.RENOUVELLEMENT) {
+			List<Commande> commandesRenouvellement =
+					commandeService.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(draftLigne
+							.getReferenceContrat());
+
+			DraftValidator.validerAncienneCommandeRenouvellement(commandesRenouvellement);
+		}
+
+		DraftValidator.validerAssocierGeste(draftLigne, geste);
 
 		draftLigne.setGeste(geste);
 
@@ -1061,6 +1072,12 @@ public class DraftServiceImpl implements DraftService {
 		Set<String> idAdresseFacturations = new HashSet<String>();
 		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
 		for (String referenceContrat : referencesContrat) {
+
+			List<Commande> commandesRenouvellement =
+					commandeService.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
+
+			DraftValidator.validerAncienneCommandeRenouvellement(commandesRenouvellement);
+
 			try {
 				topazeClient.isContratRenouvelable(referenceContrat);
 			} catch (TopazeException e) {

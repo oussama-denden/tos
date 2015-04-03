@@ -50,7 +50,7 @@ public class GetInfosBonCommandeTest extends GlobalTestCase {
 			assertEquals(infosBonCommande.getRefClient(), "1002");
 			assertEquals(infosBonCommande.getGeste(), Geste.VENTE);
 			assertEquals(infosBonCommande.getFrequence(), new Integer(12));
-			assertEquals(infosBonCommande.getMontantTVA(), new Double(0));
+			assertEquals(infosBonCommande.getMontantTVA(), new Double(13.96));
 			assertEquals(infosBonCommande.getMoyenDePaiement(), ModePaiement.SEPA);
 			assertEquals(infosBonCommande.getReferencePaiement(), "R1234567");
 			assertEquals(infosBonCommande.getPrixReduitHT(), new Double(15.27));

@@ -249,7 +249,7 @@ public class InfosBonCommande {
 	 *            {@link #montantTVA}.
 	 */
 	public void setMontantTVA(Double montantTVA) {
-		this.montantTVA = montantTVA;
+		this.montantTVA = Utils.round(montantTVA, Constants.DEUX);
 	}
 
 	/**
