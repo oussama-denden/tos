@@ -74,7 +74,7 @@ public class DraftLigneDetail {
 	 * list des sous {@link DraftLigneDetail}.
 	 */
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "draftLigneDetailParent")
-	private List<DraftLigneDetail> sousDraftLigneDetails = new ArrayList<DraftLigneDetail>();
+	private List<DraftLigneDetail> sousDraftLigneDetails = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.

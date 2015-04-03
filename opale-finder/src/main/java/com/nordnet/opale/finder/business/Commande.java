@@ -368,7 +368,7 @@ public class Commande {
 	 */
 	public void addLigne(CommandeLigne commandeLigne) {
 		if (lignes == null)
-			lignes = new ArrayList<CommandeLigne>();
+			lignes = new ArrayList<>();
 		this.lignes.add(commandeLigne);
 
 	}

@@ -60,7 +60,7 @@ public class CoutCommande extends CalculeCout {
 
 		Cout cout = new Cout();
 		double coutComptantTTC = 0d;
-		List<DetailCout> details = new ArrayList<DetailCout>();
+		List<DetailCout> details = new ArrayList<>();
 
 		String segmentTVA = commande.getClientAFacturer().getTva();
 

@@ -44,6 +44,7 @@ public class ReductionUtil {
 	 *            reduction associee.
 	 * @return la reduction calculee.
 	 */
+	@SuppressWarnings("null")
 	public static double calculeReductionRecurrent(double montant, Reduction reduction, Integer frequence) {
 
 		double montantParMois = 0;
@@ -109,6 +110,7 @@ public class ReductionUtil {
 	 * @param coutRecurrent
 	 *            cout recurrent a ajoute
 	 */
+	@SuppressWarnings("null")
 	public static void ajouterCoutRecurrent(List<CoutRecurrent> coutRecurrents, CoutRecurrent coutRecurrent) {
 		int index = -1;
 		if (coutRecurrents != null && coutRecurrents.size() == Constants.ZERO && coutRecurrent != null) {

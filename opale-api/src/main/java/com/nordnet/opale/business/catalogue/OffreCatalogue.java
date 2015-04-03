@@ -57,12 +57,12 @@ public class OffreCatalogue {
 	/**
 	 * liste des {@link Tarif}.
 	 */
-	private List<Tarif> tarifs = new ArrayList<Tarif>();
+	private List<Tarif> tarifs = new ArrayList<>();
 
 	/**
 	 * liste des {@link DetailCatalogue} associe a l'offre.
 	 */
-	private List<DetailCatalogue> details = new ArrayList<DetailCatalogue>();
+	private List<DetailCatalogue> details = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.
@@ -179,9 +179,8 @@ public class OffreCatalogue {
 		Optional<TypeProduit> typeProduitOp = Optional.fromNullable(type);
 		if (typeProduitOp.isPresent()) {
 			return type;
-		} else {
-			return TypeProduit.SERVICE;
 		}
+		return TypeProduit.SERVICE;
 	}
 
 	/**
@@ -250,7 +249,7 @@ public class OffreCatalogue {
 	 * @return {@link Map<String, DetailCatalogue>}
 	 */
 	public Map<String, DetailCatalogue> getDetailsMap() {
-		Map<String, DetailCatalogue> detailsMap = new HashMap<String, DetailCatalogue>();
+		Map<String, DetailCatalogue> detailsMap = new HashMap<>();
 		for (DetailCatalogue detailCatalogue : details) {
 			detailsMap.put(detailCatalogue.getReferenceSelection(), detailCatalogue);
 		}
@@ -277,7 +276,7 @@ public class OffreCatalogue {
 	 * @return referenceSelection.
 	 */
 	public String findReferenceSelection(String referenceChoix) {
-		Map<String, String> refChoixRefSelectionMap = new HashMap<String, String>();
+		Map<String, String> refChoixRefSelectionMap = new HashMap<>();
 		for (DetailCatalogue detailCatalogue : details) {
 			refChoixRefSelectionMap.putAll(detailCatalogue.getReferenceChoixReferenceSelectionMap());
 		}
@@ -290,7 +289,7 @@ public class OffreCatalogue {
 	 * @return {@link Map<string, Tarif>}.
 	 */
 	public Map<String, Tarif> getTarifsMap() {
-		Map<String, Tarif> map = new HashMap<String, Tarif>();
+		Map<String, Tarif> map = new HashMap<>();
 		for (Tarif tarif : tarifs) {
 			map.put(tarif.getIdTarif(), tarif);
 		}

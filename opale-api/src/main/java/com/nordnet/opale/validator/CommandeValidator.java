@@ -1,5 +1,10 @@
 package com.nordnet.opale.validator;
 
+import java.util.List;
+
+import org.joda.time.Hours;
+import org.joda.time.LocalDateTime;
+
 import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.business.Auteur;
@@ -13,10 +18,6 @@ import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.util.Constants;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
-import org.joda.time.Hours;
-import org.joda.time.LocalDateTime;
-
-import java.util.List;
 
 /**
  * cette classe responsable de valider les informations liés a une commande.
@@ -90,15 +91,12 @@ public class CommandeValidator {
 	/**
 	 * valider l'auteur.
 	 * 
-	 * @param refCommande
-	 *            reference de commande.
-	 * 
 	 * @param auteur
 	 *            {@link Auteur}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void validerAuteur(String refCommande, Auteur auteur) throws OpaleException {
+	public static void validerAuteur(Auteur auteur) throws OpaleException {
 
 		if (auteur == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");

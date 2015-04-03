@@ -93,7 +93,7 @@ public class Draft {
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "draftId")
-	private List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
+	private List<DraftLigne> draftLignes = new ArrayList<>();
 
 	/**
 	 * Le client souscripteur {@link Client}.

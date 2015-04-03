@@ -17,7 +17,7 @@ public class CommandeValidationInfo {
 	/**
 	 * liste des cause des erreur lors de la validation d'un {@link Commande}.
 	 */
-	private List<ReasonCommande> reasons = new ArrayList<ReasonCommande>();
+	private List<ReasonCommande> reasons = new ArrayList<>();
 
 	/**
 	 * constructeur par default.

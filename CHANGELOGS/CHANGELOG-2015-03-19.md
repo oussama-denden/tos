@@ -7,3 +7,4 @@ from 2015-03-19.
 
     * opale-api
 	  * Fixing but relate to VAT value in "InformationBonCommand".
+	  * Fixing eclipse warnings.

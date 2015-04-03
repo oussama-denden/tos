@@ -27,7 +27,7 @@ public class Offre {
 	/**
 	 * liste des {@link Detail} associe a une offre.
 	 */
-	List<Detail> details = new ArrayList<Detail>();
+	List<Detail> details = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.

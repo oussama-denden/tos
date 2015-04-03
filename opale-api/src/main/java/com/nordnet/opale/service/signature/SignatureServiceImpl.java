@@ -83,7 +83,7 @@ public class SignatureServiceImpl implements SignatureService {
 		if (signature == null) {
 			signatureReference = creerSignature(ajoutSignatureInfo, null, refCommande);
 		} else {
-			SignatureValidator.checkSignatureComplete(refCommande, signature, true);
+			SignatureValidator.checkSignatureComplete(signature, true);
 			SignatureValidator.checkIfSignatureAnnule(signature);
 			signature.setMode(ajoutSignatureInfo.getMode());
 			signature.setAuteur(new Auteur(ajoutSignatureInfo.getAuteur()));
@@ -118,14 +118,14 @@ public class SignatureServiceImpl implements SignatureService {
 		if (refSignature != null) {
 			Signature signature = signatureRepository.findByReferenceAndReferenceCommande(refSignature, refCommande);
 			SignatureValidator.checkSignatureExiste(signature, refSignature, refCommande);
-			SignatureValidator.checkSignatureComplete(refCommande, signature, false);
+			SignatureValidator.checkSignatureComplete(signature, false);
 			SignatureValidator.validerSignature(signatureInfo);
 			SignatureValidator.checkIfSignatureAnnule(signature);
 			ajouterSignature(signature, signatureInfo);
 		} else {
 			Signature signature = getSignatureByReferenceCommande(refCommande);
 			if (signature != null) {
-				SignatureValidator.checkSignatureComplete(refCommande, signature, false);
+				SignatureValidator.checkSignatureComplete(signature, false);
 				SignatureValidator.validerSignature(signatureInfo);
 				SignatureValidator.checkIfSignatureAnnule(signature);
 				referenceSignature = ajouterSignature(signature, signatureInfo);
@@ -151,7 +151,7 @@ public class SignatureServiceImpl implements SignatureService {
 	public List<SignatureInfo> getSignatures(String refCommande, Boolean afficheAnnule) throws OpaleException {
 
 		LOGGER.info("Debut methode  getSignature");
-		List<SignatureInfo> listeDeSignature = new ArrayList<SignatureInfo>();
+		List<SignatureInfo> listeDeSignature = new ArrayList<>();
 		List<Signature> signaturesAnnules = signatureRepository.getSignaturesAnnules(refCommande);
 		Signature signature = signatureRepository.findByReferenceCommande(refCommande);
 		SignatureValidator.checkSignatureExiste(signature, null, refCommande);

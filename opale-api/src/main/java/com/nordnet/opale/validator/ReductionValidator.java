@@ -32,13 +32,10 @@ public class ReductionValidator {
 	 * 
 	 * @param reductionInfo
 	 *            {@link ReductionInfo}
-	 * @param type
-	 *            type de reduction
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void chekReductionValide(ReductionInfo reductionInfo, String type, Object objetEnReduction)
-			throws OpaleException {
+	public static void chekReductionValide(ReductionInfo reductionInfo, Object objetEnReduction) throws OpaleException {
 
 		if (reductionInfo.getValeur() == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("5.1.3", "Reduction.Valeur"), "5.1.3");

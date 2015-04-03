@@ -108,7 +108,7 @@ public class Commande {
 	 */
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "commandeId")
-	List<CommandeLigne> commandeLignes = new ArrayList<CommandeLigne>();
+	List<CommandeLigne> commandeLignes = new ArrayList<>();
 
 	/**
 	 * code auteur.
@@ -389,7 +389,7 @@ public class Commande {
 		CommandeInfo commandeInfo = new CommandeInfo();
 		commandeInfo.setAuteur(auteur.toAuteurBusiness());
 		commandeInfo.setCodePartenaire(codePartenaire);
-		List<CommandeLigneInfo> lignes = new ArrayList<CommandeLigneInfo>();
+		List<CommandeLigneInfo> lignes = new ArrayList<>();
 
 		for (CommandeLigne commandeLigne : commandeLignes) {
 			CommandeLigneInfo commandeLigneInfo = new CommandeLigneInfo();

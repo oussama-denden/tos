@@ -50,9 +50,8 @@ public class SwaggerConfig {
 	 * 
 	 * @return {@link ApiInfo}.
 	 */
-	private ApiInfo apiInfo() {
+	private static ApiInfo apiInfo() {
 		ApiInfo apiInfo = new ApiInfo("Opale Finder API", "Liste des services Opale-Finder", null, null, null, null);
 		return apiInfo;
 	}
-
 }

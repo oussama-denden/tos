@@ -1,5 +1,6 @@
 package com.nordnet.opale.draft.service.test;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -55,6 +56,7 @@ public class ChercherCommandeTest extends GlobalTestCase {
 					draftInfoGenerator
 							.getObjectFromJsonFile(CriteresCommande.class, "./requests/chercherCommande.json");
 			List<CommandeInfo> commandeInfos = commandeService.chercherCommande(criteresCommande);
+			assertTrue(commandeInfos.size() > 0);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

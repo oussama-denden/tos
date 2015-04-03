@@ -87,78 +87,48 @@ public class CoutLigneDraft extends CalculeCout {
 	 * 
 	 * @throws OpaleException
 	 */
+	@SuppressWarnings("null")
 	@Override
 	public Cout getCout() throws OpaleException {
 
 		if (draft == null || transformationInfo == null || reductionService == null || draftLigne == null) {
 			return null;
-		} else {
-			String segmentTVA = null;
-			DetailCout detailCout = new DetailCout();
-			double coutComptantHT = 0d;
-			double coutComptantTTC = 0d;
-			double tarifHT = 0d;
-			double tarifTTC = 0d;
-			Integer frequence = null;
-			Choice choice = null;
-			Tarif tarif = null;
-			DetailCatalogue detailCatalogue = null;
-			String label = draftLigne.getReferenceOffre();
+		}
+		String segmentTVA = null;
+		DetailCout detailCout = new DetailCout();
+		double coutComptantHT = 0d;
+		double coutComptantTTC = 0d;
+		double tarifHT = 0d;
+		double tarifTTC = 0d;
+		Integer frequence = null;
+		Choice choice = null;
+		Tarif tarif = null;
+		DetailCatalogue detailCatalogue = null;
+		String label = draftLigne.getReferenceOffre();
 
-			if (transformationInfo.getClientInfo() != null
-					&& transformationInfo.getClientInfo().getFacturation() != null) {
-				DraftValidator.isIndicatifTVAValide(transformationInfo.getClientInfo().getFacturation());
-				segmentTVA = transformationInfo.getClientInfo().getFacturation().getTva();
-			} else if (draft.getClientAFacturer() != null) {
-				segmentTVA = draft.getClientAFacturer().getTva();
-			}
-			detailCout.setNumero(draftLigne.getReference());
-			detailCout.setLabel(draftLigne.getReferenceOffre());
-			TrameCatalogue trameCatalogue = transformationInfo.getTrameCatalogue();
-			OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
+		if (transformationInfo.getClientInfo() != null && transformationInfo.getClientInfo().getFacturation() != null) {
+			DraftValidator.isIndicatifTVAValide(transformationInfo.getClientInfo().getFacturation());
+			segmentTVA = transformationInfo.getClientInfo().getFacturation().getTva();
+		} else if (draft.getClientAFacturer() != null) {
+			segmentTVA = draft.getClientAFacturer().getTva();
+		}
+		detailCout.setNumero(draftLigne.getReference());
+		detailCout.setLabel(draftLigne.getReferenceOffre());
+		TrameCatalogue trameCatalogue = transformationInfo.getTrameCatalogue();
+		OffreCatalogue offreCatalogue = trameCatalogue.getOffreMap().get(draftLigne.getReferenceOffre());
 
-			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
-				detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
-				choice = detailCatalogue.getChoice(draftLigneDetail.getReferenceChoix());
-				tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
+		for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
+			detailCatalogue = offreCatalogue.getDetailsMap().get(draftLigneDetail.getReferenceSelection());
+			choice = detailCatalogue.getChoice(draftLigneDetail.getReferenceChoix());
+			tarif = choice.getTarifsMap().get(draftLigneDetail.getReferenceTarif());
 
-				if (tarif != null) {
-
-					CoutLigneDetailDraft coutLigneDetailDraft =
-							new CoutLigneDetailDraft(draftLigneDetail, transformationInfo, draftLigne, draft,
-									reductionService);
-
-					DetailCout detailCoutTarif = (DetailCout) coutLigneDetailDraft.getCout();
-					coutComptantHT += detailCoutTarif.getCoutComptantHT();
-					coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
-					tarifHT +=
-							detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
-									.getTarifHT() : 0d;
-					tarifTTC +=
-							detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
-									.getTarifTTC() : 0d;
-					frequence = tarif.getFrequence();
-
-					reductionHT += detailCoutTarif.getReductionHT();
-					reductionTTC += detailCoutTarif.getReductionTTC();
-
-					reductionRecurrentHT += coutLigneDetailDraft.getReductionRecurrentHT();
-					reductionRecurrentTTC += coutLigneDetailDraft.getReductionRecurrentTTC();
-
-					reductionComptantHT += coutLigneDetailDraft.getReductionComptantHT();
-					reductionComptantTTC += coutLigneDetailDraft.getReductionComptantTTC();
-				}
-			}
-
-			tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
 			if (tarif != null) {
-				tva = VatClient.getValeurTVA(tarif.getTva(), segmentTVA);
 
-				CoutTarif coutTarif =
-						new CoutTarif(tarif.toTarifDomain(), segmentTVA, null, draftLigne.getReference(),
-								draft.getReference(), true, false, reductionService);
+				CoutLigneDetailDraft coutLigneDetailDraft =
+						new CoutLigneDetailDraft(draftLigneDetail, transformationInfo, draftLigne, draft,
+								reductionService);
 
-				DetailCout detailCoutTarif = (DetailCout) coutTarif.getCout();
+				DetailCout detailCoutTarif = (DetailCout) coutLigneDetailDraft.getCout();
 				coutComptantHT += detailCoutTarif.getCoutComptantHT();
 				coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
 				tarifHT +=
@@ -169,55 +139,84 @@ public class CoutLigneDraft extends CalculeCout {
 								.getTarifTTC() : 0d;
 				frequence = tarif.getFrequence();
 
-				reductionRecurrentHT += coutTarif.getReductionRecurrentHT();
-				reductionRecurrentTTC += coutTarif.getReductionRecurrentTTC();
+				reductionHT += detailCoutTarif.getReductionHT();
+				reductionTTC += detailCoutTarif.getReductionTTC();
 
-				reductionComptantHT += coutTarif.getReductionComptantHT();
-				reductionComptantTTC += coutTarif.getReductionComptantTTC();
+				reductionRecurrentHT += coutLigneDetailDraft.getReductionRecurrentHT();
+				reductionRecurrentTTC += coutLigneDetailDraft.getReductionRecurrentTTC();
 
-				Reduction reductionECParent =
-						reductionService.findReductionECParent(draft.getReference(), draftLigne.getReference(),
-								tarif.getIdTarif());
-				// calculer la reduction sur le tarif de ligne.
-				calculerReductionECParent(reductionECParent, detailCoutTarif, tva, tarif.getFrequence());
-
+				reductionComptantHT += coutLigneDetailDraft.getReductionComptantHT();
+				reductionComptantTTC += coutLigneDetailDraft.getReductionComptantTTC();
 			}
-
-			// trouver les reduction liees aux lignes.
-			Reduction reductionLigne =
-					reductionService.findReductionLigneDraftSansFrais(draft.getReference(), draftLigne.getReference());
-
-			// recuperer les reductions recurrentes liees au draft
-			Reduction reductionDraft = reductionService.findReduction(draft.getReference());
-
-			// calculer la reduction de ligne.
-			calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, tva, false, tarif.getFrequence());
-
-			// calculer la reduction recurrente du draft sur la ligne.
-			calculerReductionLigne(reductionDraft, coutComptantTTC, tarifTTC, tva, true, tarif.getFrequence());
-
-			Plan normal = new Plan(tarifHT, tarifTTC);
-			Plan reduit =
-					new Plan((tarifHT - reductionRecurrentHT) > 0 ? tarifHT - reductionRecurrentHT : 0,
-							(tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0);
-			detailCout.setCoutRecurrent(new CoutRecurrent(frequence, normal, reduit));
-			detailCout.setCoutComptantHT(coutComptantHT);
-			detailCout.setCoutComptantTTC(coutComptantTTC);
-			detailCout.setReductionHT(reductionHT);
-			detailCout.setReductionTTC(reductionTTC);
-			detailCout.setTva(tva);
-			detailCout.setLabel(label);
-			detailCout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
-
-			coutRecurentReduitTTC = (tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0;
-			coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitTTC, tva);
-
-			coutComptantReduitTTC =
-					(coutComptantTTC - reductionComptantTTC) > 0 ? coutComptantTTC - reductionComptantTTC : 0;
-			coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
-
-			return detailCout;
 		}
+
+		tarif = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
+		if (tarif != null) {
+			tva = VatClient.getValeurTVA(tarif.getTva(), segmentTVA);
+
+			CoutTarif coutTarif =
+					new CoutTarif(tarif.toTarifDomain(), segmentTVA, null, draftLigne.getReference(),
+							draft.getReference(), true, false, reductionService);
+
+			DetailCout detailCoutTarif = (DetailCout) coutTarif.getCout();
+			coutComptantHT += detailCoutTarif.getCoutComptantHT();
+			coutComptantTTC += detailCoutTarif.getCoutComptantTTC();
+			tarifHT +=
+					detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+							.getTarifHT() : 0d;
+			tarifTTC +=
+					detailCoutTarif.getCoutRecurrent() != null ? detailCoutTarif.getCoutRecurrent().getNormal()
+							.getTarifTTC() : 0d;
+			frequence = tarif.getFrequence();
+
+			reductionRecurrentHT += coutTarif.getReductionRecurrentHT();
+			reductionRecurrentTTC += coutTarif.getReductionRecurrentTTC();
+
+			reductionComptantHT += coutTarif.getReductionComptantHT();
+			reductionComptantTTC += coutTarif.getReductionComptantTTC();
+
+			Reduction reductionECParent =
+					reductionService.findReductionECParent(draft.getReference(), draftLigne.getReference(),
+							tarif.getIdTarif());
+			// calculer la reduction sur le tarif de ligne.
+			calculerReductionECParent(reductionECParent, detailCoutTarif, tva, tarif.getFrequence());
+
+		}
+
+		// trouver les reduction liees aux lignes.
+		Reduction reductionLigne =
+				reductionService.findReductionLigneDraftSansFrais(draft.getReference(), draftLigne.getReference());
+
+		// recuperer les reductions recurrentes liees au draft
+		Reduction reductionDraft = reductionService.findReduction(draft.getReference());
+
+		// calculer la reduction de ligne.
+		calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, tva, false, tarif.getFrequence());
+
+		// calculer la reduction recurrente du draft sur la ligne.
+		calculerReductionLigne(reductionDraft, coutComptantTTC, tarifTTC, tva, true, tarif.getFrequence());
+
+		Plan normal = new Plan(tarifHT, tarifTTC);
+		Plan reduit =
+				new Plan((tarifHT - reductionRecurrentHT) > 0 ? tarifHT - reductionRecurrentHT : 0,
+						(tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0);
+		detailCout.setCoutRecurrent(new CoutRecurrent(frequence, normal, reduit));
+		detailCout.setCoutComptantHT(coutComptantHT);
+		detailCout.setCoutComptantTTC(coutComptantTTC);
+		detailCout.setReductionHT(reductionHT);
+		detailCout.setReductionTTC(reductionTTC);
+		detailCout.setTva(tva);
+		detailCout.setLabel(label);
+		detailCout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
+
+		coutRecurentReduitTTC = (tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0;
+		coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitTTC, tva);
+
+		coutComptantReduitTTC =
+				(coutComptantTTC - reductionComptantTTC) > 0 ? coutComptantTTC - reductionComptantTTC : 0;
+		coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
+
+		return detailCout;
 	}
 
 	/**
@@ -354,8 +353,8 @@ public class CoutLigneDraft extends CalculeCout {
 	public double getCoutRecurrentHT() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
 	}
 
 	/**
@@ -368,8 +367,8 @@ public class CoutLigneDraft extends CalculeCout {
 	public double getCoutRecurrentTTC() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
 	}
 
 }

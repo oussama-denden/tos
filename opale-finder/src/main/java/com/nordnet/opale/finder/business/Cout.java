@@ -21,7 +21,7 @@ public class Cout {
 	/**
 	 * liste des {@link DetailCout}.
 	 */
-	List<DetailCout> details = new ArrayList<DetailCout>();
+	List<DetailCout> details = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.

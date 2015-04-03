@@ -86,7 +86,7 @@ public class Tarif {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "tarifId")
-	private List<Frais> frais = new ArrayList<Frais>();
+	private List<Frais> frais = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.
@@ -279,7 +279,7 @@ public class Tarif {
 		tarifInfo.setFrequence(frequence);
 		tarifInfo.setDuree(duree);
 		tarifInfo.setEngagement(engagement);
-		List<FraisInfo> fraisInfos = new ArrayList<FraisInfo>();
+		List<FraisInfo> fraisInfos = new ArrayList<>();
 		for (Frais frai : frais) {
 			fraisInfos.add(frai.tofraisInfo());
 		}

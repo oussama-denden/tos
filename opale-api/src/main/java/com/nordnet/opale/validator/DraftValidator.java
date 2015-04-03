@@ -378,15 +378,12 @@ public class DraftValidator {
 	/**
 	 * Verifer que la ligne detail existe.
 	 * 
-	 * @param refProduit
-	 *            reference du produit.
 	 * @param draftLigneDetail
 	 *            reference du draft ligne detail
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isExistLigneDetailDraft(String refProduit, DraftLigneDetail draftLigneDetail)
-			throws OpaleException {
+	public static void isExistLigneDetailDraft(DraftLigneDetail draftLigneDetail) throws OpaleException {
 		if (draftLigneDetail == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", draftLigneDetail), "1.1.24");
 		}
@@ -424,22 +421,20 @@ public class DraftValidator {
 	 */
 	public static void validerClient(ClientInfo clientInfo) throws OpaleException {
 
+		clientIdNotNull(clientInfo.getFacturation());
+		clientIdNotNull(clientInfo.getLivraison());
+		clientIdNotNull(clientInfo.getSouscripteur());
+
+		isIndicatifTVAValide(clientInfo.getFacturation());
+		isIndicatifTVAValide(clientInfo.getLivraison());
+		isIndicatifTVAValide(clientInfo.getSouscripteur());
+
 		Client clientFacturation = clientInfo.getFacturation();
 		Client clientLivraison = clientInfo.getLivraison();
 		Client clientSouscripteur = clientInfo.getSouscripteur();
 
 		if (clientFacturation == null && clientLivraison == null && clientSouscripteur == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.35"), "1.1.35");
-		}
-
-		if (clientInfo != null) {
-			clientIdNotNull(clientInfo.getFacturation());
-			clientIdNotNull(clientInfo.getLivraison());
-			clientIdNotNull(clientInfo.getSouscripteur());
-
-			isIndicatifTVAValide(clientInfo.getFacturation());
-			isIndicatifTVAValide(clientInfo.getLivraison());
-			isIndicatifTVAValide(clientInfo.getSouscripteur());
 		}
 
 	}
@@ -454,6 +449,14 @@ public class DraftValidator {
 	 */
 	public static void validerClientCommande(ClientInfo clientInfo) throws OpaleException {
 
+		clientNotNull(clientInfo.getFacturation());
+		clientNotNull(clientInfo.getLivraison());
+		clientNotNull(clientInfo.getSouscripteur());
+
+		isIndicatifTVAValide(clientInfo.getFacturation());
+		isIndicatifTVAValide(clientInfo.getLivraison());
+		isIndicatifTVAValide(clientInfo.getSouscripteur());
+
 		Client clientFacturation = clientInfo.getFacturation();
 		Client clientLivraison = clientInfo.getLivraison();
 		Client clientSouscripteur = clientInfo.getSouscripteur();
@@ -461,17 +464,6 @@ public class DraftValidator {
 		if (clientFacturation == null || clientLivraison == null || clientSouscripteur == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.37"), "1.1.37");
 		}
-
-		if (clientInfo != null) {
-			clientNotNull(clientInfo.getFacturation());
-			clientNotNull(clientInfo.getLivraison());
-			clientNotNull(clientInfo.getSouscripteur());
-
-			isIndicatifTVAValide(clientInfo.getFacturation());
-			isIndicatifTVAValide(clientInfo.getLivraison());
-			isIndicatifTVAValide(clientInfo.getSouscripteur());
-		}
-
 	}
 
 	/**
@@ -500,7 +492,7 @@ public class DraftValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void validerIdClientUnique(Draft draft) throws OpaleException {
-		Set<String> idClientSet = new HashSet<String>();
+		Set<String> idClientSet = new HashSet<>();
 		String errorMessage = "";
 		if (draft.getClientAFacturer() != null) {
 			idClientSet.add(draft.getClientAFacturer().getClientId());
@@ -626,7 +618,7 @@ public class DraftValidator {
 			/*
 			 * valider les reference des details.
 			 */
-			List<String> referenceDetails = new ArrayList<String>();
+			List<String> referenceDetails = new ArrayList<>();
 			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
 				referenceDetails.add(draftLigneDetail.getReferenceChoix());
 			}

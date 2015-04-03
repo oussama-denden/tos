@@ -2,9 +2,7 @@ package com.nordnet.opale.domain.commande;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -37,6 +35,7 @@ import com.nordnet.opale.enums.Geste;
 import com.nordnet.opale.enums.ModeFacturation;
 import com.nordnet.opale.enums.TypeProduit;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.OpaleApiUtils;
 import com.nordnet.topaze.ws.entity.Contrat;
 import com.nordnet.topaze.ws.entity.ContratPreparationInfo;
 import com.nordnet.topaze.ws.entity.Produit;
@@ -129,7 +128,7 @@ public class CommandeLigne {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "commandeLigneId")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<CommandeLigneDetail> commandeLigneDetails = new ArrayList<CommandeLigneDetail>();
+	private List<CommandeLigneDetail> commandeLigneDetails = new ArrayList<>();
 
 	/**
 	 * liste des {@link Tarif} associe a la ligne de commande.
@@ -177,7 +176,7 @@ public class CommandeLigne {
 			CommandeLigneDetail commandeLigneDetail = new CommandeLigneDetail(detail, detailCatalogue);
 			addCommandeLigneDetail(commandeLigneDetail);
 		}
-		creerArborescence(draftLigne.getDraftLigneDetails(), this.commandeLigneDetails);
+		OpaleApiUtils.creerArborescence(draftLigne.getDraftLigneDetails(), this.commandeLigneDetails);
 	}
 
 	@Override
@@ -482,7 +481,7 @@ public class CommandeLigne {
 
 		offreCatalogueInfo.setTarif(tarif.toTarifInfo());
 
-		List<DetailCommandeLigneInfo> detailCommandeLigneInfos = new ArrayList<DetailCommandeLigneInfo>();
+		List<DetailCommandeLigneInfo> detailCommandeLigneInfos = new ArrayList<>();
 		for (CommandeLigneDetail commandeLigneDetail : commandeLigneDetails) {
 			detailCommandeLigneInfos.add(commandeLigneDetail.toDetailCommandeLigneInfo());
 		}
@@ -547,31 +546,6 @@ public class CommandeLigne {
 	}
 
 	/**
-	 * creer l'arborescence entre les {@link CommandeLigneDetail}.
-	 * 
-	 * @param draftDetails
-	 *            liste des {@link DraftLigneDetail}.
-	 * @param commandeDetails
-	 *            liste des {@link CommandeLigneDetail}.
-	 */
-	private void creerArborescence(List<DraftLigneDetail> draftDetails, List<CommandeLigneDetail> commandeDetails) {
-		Map<String, CommandeLigneDetail> commandeLigneDetailMap = new HashMap<String, CommandeLigneDetail>();
-		for (CommandeLigneDetail commandeLigneDetail : commandeDetails) {
-			commandeLigneDetailMap.put(commandeLigneDetail.getReferenceChoix(), commandeLigneDetail);
-		}
-
-		for (DraftLigneDetail draftLigneDetail : draftDetails) {
-			if (!draftLigneDetail.isParent()) {
-				CommandeLigneDetail commandeLigneDetail =
-						commandeLigneDetailMap.get(draftLigneDetail.getReferenceChoix());
-				CommandeLigneDetail commandeLigneDetailParent =
-						commandeLigneDetailMap.get(draftLigneDetail.getDraftLigneDetailParent().getReferenceChoix());
-				commandeLigneDetail.setCommandeLigneDetailParent(commandeLigneDetailParent);
-			}
-		}
-	}
-
-	/**
 	 * transfometion de la commande ligne en {@link Produit} parent dans le {@link Contrat} a prepare.
 	 * 
 	 * @param referenceCommande
@@ -617,10 +591,9 @@ public class CommandeLigne {
 			CommandeLigne commmandeLigne = (CommandeLigne) obj;
 			return new EqualsBuilder().append(referenceOffre, commmandeLigne.referenceOffre)
 					.append(modeFacturation, commmandeLigne.modeFacturation).isEquals();
-		} else {
-			DraftLigne draftLigne = (DraftLigne) obj;
-			return new EqualsBuilder().append(referenceOffre, draftLigne.getReferenceOffre()).isEquals();
 		}
+		DraftLigne draftLigne = (DraftLigne) obj;
+		return new EqualsBuilder().append(referenceOffre, draftLigne.getReferenceOffre()).isEquals();
 	}
 
 	/*

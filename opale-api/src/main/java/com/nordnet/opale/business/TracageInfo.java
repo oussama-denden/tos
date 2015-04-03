@@ -1,6 +1,5 @@
 package com.nordnet.opale.business;
 
-import java.util.Date;
 
 /**
  * Cette classe regroupe les informations qui definissent un {@link TracageInfo}.
@@ -62,10 +61,8 @@ public class TracageInfo {
 	 *            user
 	 * @param type
 	 *            type
-	 * @param date
-	 *            date
 	 */
-	public TracageInfo(String target, String key, String description, String ip, String user, String type, Date date) {
+	public TracageInfo(String target, String key, String description, String ip, String user, String type) {
 		this.target = target;
 		this.key = key;
 		this.description = description;

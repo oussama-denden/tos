@@ -9,8 +9,7 @@ import com.nordnet.common.valueObject.money.PaymentReference;
 import com.nordnet.common.valueObject.money.Price;
 import com.nordnet.opale.domain.commande.Commande;
 import com.nordnet.opale.domain.paiement.Paiement;
-import com.nordnet.opale.mock.SaphirMock;
-import com.nordnet.saphir.ws.client.SaphirTechnical;
+import com.nordnet.opale.util.OpaleApiUtils;
 
 /**
  * l'implementation de l'interface {@link DownPaiementService}.
@@ -26,23 +25,6 @@ public class DownPaiementServiceImpl implements DownPaiementService {
 	 */
 	private final static Logger LOGGER = Logger.getLogger(DownPaiementServiceImpl.class);
 
-	/**
-	 * creation du client saphir.
-	 * 
-	 * @return {@link SaphirTechnical}.
-	 */
-	private SaphirTechnical getSaphirTechnical() {
-		SaphirTechnical saphirTechnical = null;
-		if (System.getProperty("ws.saphir.useMock").equals("true")) {
-			saphirTechnical = new SaphirMock();
-		} else {
-			saphirTechnical = new SaphirTechnical();
-			saphirTechnical.setUrl(System.getProperty("saphir.url"));
-		}
-
-		return saphirTechnical;
-	}
-
 	@Override
 	public void envoiePaiement(Commande commande, Paiement paiement) {
 		Price price = new Price(paiement.getMontant(), CurrencyCode.EUR);
@@ -50,8 +32,9 @@ public class DownPaiementServiceImpl implements DownPaiementService {
 				new PaymentReference(DownPaiementUtils.getPayementType(paiement.getModePaiement()),
 						paiement.getReference());
 		try {
-			getSaphirTechnical().addDownPayment(Identifier.build(commande.getClientAFacturer().getClientId()), price,
-					paymentReference, commande.getReference());
+			OpaleApiUtils.getSaphirTechnical().addDownPayment(
+					Identifier.build(commande.getClientAFacturer().getClientId()), price, paymentReference,
+					commande.getReference());
 		} catch (Exception e) {
 			LOGGER.error("Erreur lors de l'appel vers saphir", e);
 		}

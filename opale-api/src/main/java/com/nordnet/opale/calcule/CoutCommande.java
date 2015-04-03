@@ -76,8 +76,8 @@ public class CoutCommande extends CalculeCout {
 		double coutComptantHT = 0d;
 		double coutComptantTTC = 0d;
 		double tva = 0d;
-		List<DetailCout> details = new ArrayList<DetailCout>();
-		List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<CoutRecurrent>();
+		List<DetailCout> details = new ArrayList<>();
+		List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<>();
 
 		String segmentTVA = commande.getClientAFacturer().getTva();
 

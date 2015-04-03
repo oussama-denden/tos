@@ -2,10 +2,8 @@ package com.nordnet.opale.service.draft;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -22,7 +20,6 @@ import com.nordnet.netcatalog.ws.client.NetCatalogClient;
 import com.nordnet.opale.business.ClientInfo;
 import com.nordnet.opale.business.CodePartenaireInfo;
 import com.nordnet.opale.business.DeleteInfo;
-import com.nordnet.opale.business.Detail;
 import com.nordnet.opale.business.DraftInfo;
 import com.nordnet.opale.business.DraftLigneInfo;
 import com.nordnet.opale.business.DraftValidationInfo;
@@ -55,6 +52,7 @@ import com.nordnet.opale.service.keygen.KeygenService;
 import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.OpaleApiUtils;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.util.spring.ApplicationContextHolder;
@@ -220,7 +218,7 @@ public class DraftServiceImpl implements DraftService {
 			clientInfo.setFacturation(draftInfo.getFacturation());
 			clientInfo.setLivraison(draftInfo.getLivraison());
 			clientInfo.setSouscripteur(draftInfo.getSouscripteur());
-			associerClient(draft, clientInfo);
+			OpaleApiUtils.associerClient(draft, clientInfo);
 		}
 
 		if (draftInfo.getAuteur() != null) {
@@ -263,7 +261,8 @@ public class DraftServiceImpl implements DraftService {
 			DraftValidator.validerAuteur(draftLigneInfo.getAuteur());
 			DraftValidator.isExistGeste(draftLigneInfo.getGeste());
 			DraftLigne draftLigne = new DraftLigne(draftLigneInfo);
-			creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), draftLigne.getDraftLigneDetails());
+			OpaleApiUtils.creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(),
+					draftLigne.getDraftLigneDetails());
 			draftLigne.setReference(keygenService.getNextKey(DraftLigne.class));
 			draftLigne.setDateCreation(PropertiesUtil.getInstance().getDateDuJour());
 			draftLigne.setAuteur(draftLigneInfo.getAuteur() != null ? draftLigneInfo.getAuteur().toDomain() : null);
@@ -309,8 +308,9 @@ public class DraftServiceImpl implements DraftService {
 		 * creation de la nouvelle ligne.
 		 */
 		DraftLigne nouveauDraftLigne = new DraftLigne(draftLigneInfo);
-		creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(), nouveauDraftLigne.getDraftLigneDetails());
-		ajouterNumEC(nouveauDraftLigne, draftLigne);
+		OpaleApiUtils.creerArborescenceDraft(draftLigneInfo.getOffre().getDetails(),
+				nouveauDraftLigne.getDraftLigneDetails());
+		OpaleApiUtils.ajouterNumEC(nouveauDraftLigne, draftLigne);
 		nouveauDraftLigne.setReference(draftLigne.getReference());
 		nouveauDraftLigne.setReferenceContrat(draftLigne.getReferenceContrat());
 		nouveauDraftLigne.setDateCreation(draftLigne.getDateCreation());
@@ -388,8 +388,6 @@ public class DraftServiceImpl implements DraftService {
 			throws OpaleException {
 
 		LOGGER.info("Enter methode supprimerLigneDraft");
-		Draft draft = getDraftByReference(referenceDraft);
-
 		DraftValidator.validerAuteur(deleteInfo.getAuteur());
 
 		DraftLigne draftLigne = draftLigneRepository.findByRefDraftAndRef(referenceDraft, referenceLigne);
@@ -417,7 +415,7 @@ public class DraftServiceImpl implements DraftService {
 
 		Draft draft = getDraftByReference(refDraft);
 
-		associerClient(draft, clientInfo);
+		OpaleApiUtils.associerClient(draft, clientInfo);
 
 		String idClientFacturation = null;
 		if (clientInfo.getFacturation() != null) {
@@ -444,31 +442,6 @@ public class DraftServiceImpl implements DraftService {
 				clientInfo.getAuteur() != null ? clientInfo.getAuteur() : Utils.getInternalAuteur());
 
 		LOGGER.info("fin methode associerClient");
-
-	}
-
-	/**
-	 * associer client a un {@link Draft}.
-	 * 
-	 * @param draft
-	 *            {@link Draft}.
-	 * @param clientInfo
-	 *            {@link ClientInfo}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private void associerClient(Draft draft, ClientInfo clientInfo) throws OpaleException {
-
-		DraftValidator.validerAuteur(clientInfo.getAuteur());
-
-		// verifier si le clientId n'est pas null ou empty.
-		DraftValidator.validerClient(clientInfo);
-
-		draft.setClientAFacturer(clientInfo.getFacturation(), clientInfo.getAuteur());
-		draft.setClientALivrer(clientInfo.getLivraison(), clientInfo.getAuteur());
-		draft.setClientSouscripteur(clientInfo.getSouscripteur(), clientInfo.getAuteur());
-
-		DraftValidator.validerIdClientUnique(draft);
 
 	}
 
@@ -546,30 +519,8 @@ public class DraftServiceImpl implements DraftService {
 					"la transformation du draft de reference " + referenceDraft + " en commande de reference "
 							+ commande.getReference(), commande.getAuteur().toAuteurBusiness());
 			return commande;
-		} else {
-			return validationInfo;
 		}
-	}
-
-	/**
-	 * valider avec topaze si l'operation a effectue est valide ou non.
-	 * 
-	 * @param commande
-	 *            {@link Commande}.
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
-	 */
-	private void validerOperation(Commande commande) throws OpaleException {
-		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
-			if (commandeLigne.getGeste() == Geste.RENOUVELLEMENT) {
-				try {
-					topazeClient.isContratRenouvelable(commandeLigne.getReferenceContrat(), commandeService
-							.creerContratRenouvellementInfo(commande, commandeLigne).getProduitRenouvellements());
-				} catch (TopazeException e) {
-					throw new OpaleException(e.getMessage(), e.getErrorCode());
-				}
-			}
-		}
+		return validationInfo;
 	}
 
 	/**
@@ -605,15 +556,13 @@ public class DraftServiceImpl implements DraftService {
 	 *            {@link Draft}
 	 * @param commande
 	 *            {@link Commande}
-	 * @throws CloneNotSupportedException
-	 *             {@link CloneNotSupportedException}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	private void associerReductionCommande(Draft draft, Commande commande)
-			throws CloneNotSupportedException, OpaleException {
+	@SuppressWarnings("null")
+	private void associerReductionCommande(Draft draft, Commande commande) throws OpaleException {
 		// copier reduction draft
-		List<Reduction> reductionDraft = new ArrayList<Reduction>();
+		List<Reduction> reductionDraft = new ArrayList<>();
 		Reduction reduction = reductionService.findReduction(draft.getReference());
 		if (reduction != null)
 			reductionDraft.add(reduction);
@@ -627,10 +576,10 @@ public class DraftServiceImpl implements DraftService {
 					reductionService.findReductionLigneDraft(draft.getReference(), draftLigne.getReference());
 
 			CommandeLigne commandeLigneEnReduction = null;
-			for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
+			FindCommandeLigneEnReduction: for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 				if (commandeLigne.equals(draftLigne)) {
 					commandeLigneEnReduction = commandeLigne;
-					break;
+					break FindCommandeLigneEnReduction;
 				}
 			}
 
@@ -682,11 +631,9 @@ public class DraftServiceImpl implements DraftService {
 	 *            reference ligne commande
 	 * @param refCommandeLigneDetail
 	 *            reference detail ligne commande
-	 * @throws CloneNotSupportedException
-	 *             {@link CloneNotSupportedException}
 	 */
 	private void ajouterReductionCommande(List<Reduction> reductions, String refCommande, String refLigneCommande,
-			String refCommandeLigneDetail) throws CloneNotSupportedException {
+			String refCommandeLigneDetail) {
 		for (Reduction reduction : reductions) {
 			Reduction reductionCommande = reduction.copy();
 			reductionCommande.setReferenceDraft(refCommande);
@@ -694,60 +641,6 @@ public class DraftServiceImpl implements DraftService {
 			reductionCommande.setReferenceLigneDetail(refCommandeLigneDetail);
 			reductionCommande.setReference(keygenService.getNextKey(Reduction.class));
 			reductionService.save(reductionCommande);
-		}
-	}
-
-	/**
-	 * creer l'arborescence entre les {@link DraftLigneDetail}.
-	 * 
-	 * @param details
-	 *            liste des {@link Detail}.
-	 * @param draftLigneDetails
-	 *            liste des {@link DraftLigneDetail}.
-	 */
-	private void creerArborescenceDraft(List<Detail> details, List<DraftLigneDetail> draftLigneDetails) {
-		/*
-		 * transformer la list en Map pour faciliter l'accee par la suite.
-		 */
-		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
-		for (DraftLigneDetail draftLigneDetail : draftLigneDetails) {
-			draftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail);
-		}
-
-		for (Detail detail : details) {
-			if (!detail.isParent()) {
-				DraftLigneDetail draftLigneDetail = draftLigneDetailsMap.get(detail.getReferenceChoix());
-				DraftLigneDetail draftLigneDetailParent = draftLigneDetailsMap.get(detail.getDependDe());
-				draftLigneDetail.setDraftLigneDetailParent(draftLigneDetailParent);
-			}
-		}
-	}
-
-	/**
-	 * ajout des numEC a la nouvelle ligne.
-	 * 
-	 * @param nouveauDraftLigne
-	 *            la nouvelle ligne {@link DraftLigne}.
-	 * @param ancienDraftLigne
-	 *            l'ancienne {@link DraftLigne}.
-	 */
-	private void ajouterNumEC(DraftLigne nouveauDraftLigne, DraftLigne ancienDraftLigne) {
-
-		if (!Utils.isStringNullOrEmpty(ancienDraftLigne.getReferenceContrat())) {
-			nouveauDraftLigne.setNumEC(ancienDraftLigne.getNumEC());
-
-			/*
-			 * transformer la list en Map pour faciliter l'accee par la suite.
-			 */
-			Map<String, Integer> ancienDraftLigneDetailsMap = new HashMap<String, Integer>();
-			for (DraftLigneDetail draftLigneDetail : ancienDraftLigne.getDraftLigneDetails()) {
-				ancienDraftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail.getNumEC());
-			}
-
-			for (DraftLigneDetail draftLigneDetail : nouveauDraftLigne.getDraftLigneDetails()) {
-				Integer numEC = ancienDraftLigneDetailsMap.get(draftLigneDetail.getReferenceChoix());
-				draftLigneDetail.setNumEC(numEC);
-			}
 		}
 	}
 
@@ -801,9 +694,8 @@ public class DraftServiceImpl implements DraftService {
 			coutDecorator.setCalculeCout(coutDraft);
 			return coutDecorator.getCout();
 
-		} else {
-			return validationInfo;
 		}
+		return validationInfo;
 	}
 
 	/**
@@ -1007,10 +899,10 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerListeReference(referencesContrat);
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 
-		Set<String> idClients = new HashSet<String>();
-		Set<String> idAdresseLivraisons = new HashSet<String>();
-		Set<String> idAdresseFacturations = new HashSet<String>();
-		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
+		Set<String> idClients = new HashSet<>();
+		Set<String> idAdresseLivraisons = new HashSet<>();
+		Set<String> idAdresseFacturations = new HashSet<>();
+		List<DraftLigne> draftLignes = new ArrayList<>();
 		for (String referenceContrat : referencesContrat) {
 			Contrat contrat = restClient.getContratByReference(referenceContrat);
 			idClients.add(contrat.getIdClient());
@@ -1056,10 +948,10 @@ public class DraftServiceImpl implements DraftService {
 		DraftValidator.validerListeReference(referencesContrat);
 		DraftValidator.validerAuteur(trameCatalogue.getAuteur());
 
-		Set<String> idClients = new HashSet<String>();
-		Set<String> idAdresseLivraisons = new HashSet<String>();
-		Set<String> idAdresseFacturations = new HashSet<String>();
-		List<DraftLigne> draftLignes = new ArrayList<DraftLigne>();
+		Set<String> idClients = new HashSet<>();
+		Set<String> idAdresseLivraisons = new HashSet<>();
+		Set<String> idAdresseFacturations = new HashSet<>();
+		List<DraftLigne> draftLignes = new ArrayList<>();
 		for (String referenceContrat : referencesContrat) {
 			try {
 				topazeClient.isContratRenouvelable(referenceContrat);
@@ -1129,17 +1021,15 @@ public class DraftServiceImpl implements DraftService {
 					PropertiesUtil.getInstance().getErrorMessage("1.1.6", referenceOffre),
 					Arrays.asList(referenceOffre));
 			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
-		} else {
-			Draft draft = new Draft();
-			DraftLigne draftLigne = new DraftLigne(contrat, trameCatalogue);
-			draft.addLigne(draftLigne);
-			validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
-			if (validationInfo.isValide()) {
-				return draftLigne;
-			} else {
-				throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
-			}
 		}
+		Draft draft = new Draft();
+		DraftLigne draftLigne = new DraftLigne(contrat, trameCatalogue);
+		draft.addLigne(draftLigne);
+		validationInfo = catalogueValidator.validerReferencesDraft(draft, trameCatalogue.getTrameCatalogue());
+		if (validationInfo.isValide()) {
+			return draftLigne;
+		}
+		throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("1.1.30"), "1.1.30");
 	}
 
 	/**
@@ -1188,7 +1078,7 @@ public class DraftServiceImpl implements DraftService {
 	 *             {@link OpaleException}
 	 */
 	private TrameCatalogue getOffreNetCatalog(Draft draft) throws OpaleException {
-		List<OffreCatalogue> offreCatalogues = new ArrayList<OffreCatalogue>();
+		List<OffreCatalogue> offreCatalogues = new ArrayList<>();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 
 			// dozerMapper = new DozerBeanMapper();

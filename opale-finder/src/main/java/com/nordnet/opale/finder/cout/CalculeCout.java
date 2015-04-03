@@ -75,8 +75,8 @@ public abstract class CalculeCout {
 	public double getCoutComptantTTC() throws OpaleException {
 		if (getCout() == null) {
 			return 0;
-		} else
-			return getCout().getCoutComptantTTC();
+		}
+		return getCout().getCoutComptantTTC();
 	}
 
 	/**
@@ -91,10 +91,9 @@ public abstract class CalculeCout {
 	/**
 	 * 
 	 * @return {@link #coutRecurrentTTC}
-	 * @throws OpaleException
-	 *             {@link OpaleException}
+	 * 
 	 */
-	public double getCoutRecurrentTTC() throws OpaleException {
+	public double getCoutRecurrentTTC() {
 		return coutRecurrentTTC;
 	}
 

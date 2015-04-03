@@ -76,13 +76,14 @@ public class CoutLigneCommande extends CalculeCout {
 		this.commandeLigne = commandeLigne;
 		this.segmentTVA = segmentTVA;
 		this.reductionService = reductionService;
-		infosReductionPourBonCommande = new ArrayList<InfosReductionPourBonCommande>();
+		infosReductionPourBonCommande = new ArrayList<>();
 	}
 
 	/**
 	 * 
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("null")
 	@Override
 	public Cout getCout() throws OpaleException {
 
@@ -341,8 +342,8 @@ public class CoutLigneCommande extends CalculeCout {
 	public double getCoutRecurrentHT() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
 	}
 
 	/**
@@ -355,8 +356,8 @@ public class CoutLigneCommande extends CalculeCout {
 	public double getCoutRecurrentTTC() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
 	}
 
 	/**

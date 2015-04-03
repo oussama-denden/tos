@@ -75,19 +75,17 @@ public class PropertiesUtil {
 		if (Utils.isStringNullOrEmpty(dateDuJourString) || dateDuJourString.equals(Constants.NOW)
 				|| System.getProperty(Constants.ENV_PROPERTY).equals(Constants.PROD_ENV)) {
 			return new LocalDateTime().toDate();
-		} else {
-			try {
-				SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
-				Date dateDuJour = formatter.parse(dateDuJourString);
-				LocalDateTime date = new LocalDateTime(dateDuJour);
-				LocalTime time = new LocalTime();
-				return date.withTime(time.hourOfDay().get(), time.minuteOfHour().get(), time.secondOfMinute().get(),
-						time.millisOfSecond().get()).toDate();
+		}
+		try {
+			SimpleDateFormat formatter = Constants.DEFAULT_DATE_WITHOUT_TIME_FORMAT;
+			Date dateDuJour = formatter.parse(dateDuJourString);
+			LocalDateTime date = new LocalDateTime(dateDuJour);
+			LocalTime time = new LocalTime();
+			return date.withTime(time.hourOfDay().get(), time.minuteOfHour().get(), time.secondOfMinute().get(),
+					time.millisOfSecond().get()).toDate();
 
-			} catch (Exception e) {
-				throw new OpaleException("erreur lors de la recuperation de la date du jour", e);
-			}
-
+		} catch (Exception e) {
+			throw new OpaleException("erreur lors de la recuperation de la date du jour", e);
 		}
 	}
 

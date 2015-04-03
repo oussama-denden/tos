@@ -48,16 +48,10 @@ public class CreerIntentionDesignatureTest extends GlobalTestCase {
 
 	/**
 	 * tester la signautre d'une commande avec des informations valides.
-	 * 
-	 * @throws JSONException
-	 *             {@link JSONException}.
-	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
-	public void testCreerIntentionDesignatureValide() throws OpaleException, JSONException {
+	public void testCreerIntentionDesignatureValide() {
 		Commande commande = null;
 		Signature signature = null;
 		try {
@@ -89,7 +83,7 @@ public class CreerIntentionDesignatureTest extends GlobalTestCase {
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
-	public void testCreerIntentionDesignatureValideAVecTimeNulle() throws OpaleException, JSONException {
+	public void testCreerIntentionDesignatureValideAVecTimeNulle() {
 		Commande commande = null;
 		Signature signature = null;
 		try {

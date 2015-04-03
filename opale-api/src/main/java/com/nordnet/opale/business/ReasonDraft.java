@@ -31,7 +31,7 @@ public class ReasonDraft {
 	/**
 	 * les valeur des champs non valide.
 	 */
-	private List<String> values = new ArrayList<String>();
+	private List<String> values = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.

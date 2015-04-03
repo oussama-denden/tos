@@ -93,7 +93,7 @@ public class InfosBonCommande {
 	/**
 	 * {@link InfosLignePourBonCommande}.
 	 */
-	private List<InfosLignePourBonCommande> lignes = new ArrayList<InfosLignePourBonCommande>();
+	private List<InfosLignePourBonCommande> lignes = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.

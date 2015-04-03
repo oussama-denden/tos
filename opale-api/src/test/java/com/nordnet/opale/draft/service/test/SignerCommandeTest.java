@@ -49,13 +49,10 @@ public class SignerCommandeTest extends GlobalTestCase {
 
 	/**
 	 * tester la methode transmettre une signature avec des inforamtions valides.
-	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
 	 */
 	@Test
 	@DataSet(factory = OpaleMultiSchemaXmlDataSetFactory.class, value = { "/dataset/signer-commande.xml" })
-	public void testSignerCommandeValide() throws OpaleException {
+	public void testSignerCommandeValide() {
 		Commande commande = null;
 		Signature signature = null;
 		try {
@@ -78,12 +75,10 @@ public class SignerCommandeTest extends GlobalTestCase {
 	/**
 	 * tester la transmission d'une signature a une commande qui possed deja un signature signée.
 	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public void testTranmsttreSifnatureAvecSignatureComplete() throws OpaleException, JSONException {
+	public void testTranmsttreSifnatureAvecSignatureComplete() throws JSONException {
 		Commande commande = null;
 		Signature signature = null;
 		try {

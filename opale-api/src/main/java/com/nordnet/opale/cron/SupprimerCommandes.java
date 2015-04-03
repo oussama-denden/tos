@@ -93,8 +93,8 @@ public class SupprimerCommandes extends QuartzJobBean {
 		Integer delaiInactive = PropertiesUtil.getInstance().getDureeInactive();
 		if ((dateCreationCommande != null && dateCreationCommande.plusDays(delaiInactive).isBefore(dateJour) && dateCreationCommande
 				.isAfter(dateDerniereAction))
-				|| (dateCreationCommande.isBefore(dateDerniereAction) && dateDerniereAction.plusDays(delaiInactive)
-						.isBefore(dateJour))) {
+				|| (dateCreationCommande != null && dateCreationCommande.isBefore(dateDerniereAction) && dateDerniereAction
+						.plusDays(delaiInactive).isBefore(dateJour))) {
 			return true;
 		}
 

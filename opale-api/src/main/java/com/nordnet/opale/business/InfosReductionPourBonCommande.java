@@ -4,6 +4,7 @@
 package com.nordnet.opale.business;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.util.Constants;
@@ -146,6 +147,16 @@ public class InfosReductionPourBonCommande {
 		}
 		InfosReductionPourBonCommande rhs = (InfosReductionPourBonCommande) obj;
 		return new EqualsBuilder().append(reference, rhs.reference).isEquals();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(reference).toHashCode();
 	}
 
 }

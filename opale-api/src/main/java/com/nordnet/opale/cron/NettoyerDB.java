@@ -41,7 +41,7 @@ public class NettoyerDB extends QuartzJobBean {
 
 		LOGGER.info("Cron: nettoyer DB");
 
-		List<String> referenceDraftsAnnule = new ArrayList<String>();
+		List<String> referenceDraftsAnnule = new ArrayList<>();
 
 		referenceDraftsAnnule = draftService.findReferenceDraftAnnule();
 
