@@ -38,7 +38,6 @@ CREATE TABLE `commande` (
   `qui` varchar(255) DEFAULT NULL,
   `ts` datetime DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
-  `dateTransformationContrat` datetime DEFAULT NULL,
   `dateAnnulation` datetime DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `referenceDraft` varchar(255) DEFAULT NULL,
@@ -88,6 +87,7 @@ CREATE TABLE `commandeligne` (
   `qui` varchar(255) DEFAULT NULL,
   `ts` datetime DEFAULT NULL,
   `dateCreation` datetime DEFAULT NULL,
+  `dateTransformationContrat` datetime DEFAULT NULL,
   `gamme` varchar(255) DEFAULT NULL,
   `label` varchar(255) DEFAULT NULL,
   `modeFacturation` varchar(255) DEFAULT NULL,
@@ -99,6 +99,8 @@ CREATE TABLE `commandeligne` (
   `commandeId` int(11) DEFAULT NULL,
    `geste` varchar(255) DEFAULT NULL,
    `reference` varchar(255) DEFAULT NULL,
+   `causeNonTransformation` longtext,
+   
 
   PRIMARY KEY (`id`),
   KEY `FK2872A7878D480C8F` (`tarifId`),
