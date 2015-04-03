@@ -54,7 +54,7 @@ public class TransformeEnContratTest extends GlobalTestCase {
 
 		Commande commande = commandeService.getCommandeByReference("00000004");
 		assertNotNull(commande);
-		assertNull(commande.getDateTransformationContrat());
+		assertNull(commande.getCommandeLignes().get(0).getDateTransformationContrat());
 
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
 			assertNull(ligne.getReferenceContrat());
@@ -66,7 +66,7 @@ public class TransformeEnContratTest extends GlobalTestCase {
 			List<String> referencesContrats = commandeService.transformeEnContrat("00000004", auteur);
 			assertTrue(referencesContrats.size() == Constants.UN);
 			commande = commandeService.getCommandeByReference("00000004");
-			assertNotNull(commande.getDateTransformationContrat());
+			assertNotNull(commande.getCommandeLignes().get(0).getDateTransformationContrat());
 			for (CommandeLigne ligne : commande.getCommandeLignes()) {
 				assertNotNull(ligne.getReferenceContrat());
 			}
