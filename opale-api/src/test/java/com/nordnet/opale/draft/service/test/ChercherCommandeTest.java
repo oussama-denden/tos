@@ -54,6 +54,7 @@ public class ChercherCommandeTest extends GlobalTestCase {
 					draftInfoGenerator
 							.getObjectFromJsonFile(CriteresCommande.class, "./requests/chercherCommande.json");
 			List<CommandeInfo> commandeInfos = commandeService.chercherCommande(criteresCommande);
+			// assertTrue(commandeInfos.size() > 0);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());

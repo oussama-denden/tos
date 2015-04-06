@@ -12,7 +12,6 @@ import com.nordnet.opale.business.ReductionInfo;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
-import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.service.reduction.ReductionService;
 
@@ -44,14 +43,10 @@ public class AjouterReductionTest extends GlobalTestCase {
 
 	/**
 	 * ajout reduction valide a un draft.
-	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}
 	 */
 	@Test
 	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajout-reduction.xml" })
-	public void testAjoutReductionValide() throws OpaleException {
-
+	public void testAjoutReductionValide() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");

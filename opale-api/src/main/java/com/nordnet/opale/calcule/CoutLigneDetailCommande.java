@@ -182,8 +182,8 @@ public class CoutLigneDetailCommande extends CalculeCout {
 	public double getCoutRecurrentHT() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
 	}
 
 	/**
@@ -196,8 +196,8 @@ public class CoutLigneDetailCommande extends CalculeCout {
 	public double getCoutRecurrentTTC() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
 	}
 
 	/**

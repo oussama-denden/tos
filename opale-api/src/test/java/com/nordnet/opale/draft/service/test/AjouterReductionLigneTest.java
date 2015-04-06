@@ -45,14 +45,10 @@ public class AjouterReductionLigneTest extends GlobalTestCase {
 
 	/**
 	 * ajout reduction valide a un draft.
-	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}
 	 */
 	@Test
 	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajout-reduction.xml" })
-	public void testAjoutReductionLigneValide() throws OpaleException {
-
+	public void testAjoutReductionLigneValide() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");

@@ -50,6 +50,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CommandeInfo findByReferenceCommande(String referenceCommande) throws OpaleException {
 		LOGGER.info("Entrer methode findByReferenceCommande");
 		CommandeInfo commandeInfo = commandeDao.findByReferenceCommande(referenceCommande);

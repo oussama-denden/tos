@@ -125,15 +125,13 @@ public class FinderController {
 	 * 
 	 * @param req
 	 *            requete HttpServletRequest.
-	 * @param ex
-	 *            exception
 	 * @return {@link InfoErreur}
 	 * @throws Exception
 	 */
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ HttpMessageNotReadableException.class })
 	@ResponseBody
-	InfoErreur handleMessageNotReadableException(HttpServletRequest req, HttpMessageNotReadableException ex) {
+	InfoErreur handleMessageNotReadableException(HttpServletRequest req) {
 		return new InfoErreur(req.getRequestURI(), Constants.CODE_ERREUR_SYNTAXE, PropertiesUtil.getInstance()
 				.getErrorMessage(Constants.CODE_ERREUR_SYNTAXE));
 	}

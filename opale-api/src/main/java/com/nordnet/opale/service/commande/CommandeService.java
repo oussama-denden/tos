@@ -320,6 +320,7 @@ public interface CommandeService {
 	 *            {@link Commande} a transformer.
 	 * @param auteur
 	 *            {@link Auteur}.
+	 * @param boolean si c est appel cron.
 	 * @return liste des references des contrat cree.
 	 * 
 	 * @throws OpaleException
@@ -327,7 +328,8 @@ public interface CommandeService {
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException;
+	List<String> transformeEnContrat(Commande commande, Auteur auteur, boolean isCronCall)
+			throws OpaleException, JSONException;
 
 	/**
 	 * annuler une {@link Commande}.
@@ -440,5 +442,14 @@ public interface CommandeService {
 	 *             {@link OpaleException}.
 	 */
 	Cout calculerCoutPourBonDeCommande(String referenceCommande) throws OpaleException;
+
+	/**
+	 * retourne les commandes qui contiennent un ordre de renouvellement et qui sont non annule et non transformee.
+	 * 
+	 * @param referenceContrat
+	 *            reference contrat.
+	 * @return list {@link Commande}.
+	 */
+	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat);
 
 }

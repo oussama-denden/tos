@@ -25,6 +25,7 @@ public class InitEnveronement implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(final ServletContextEvent event) {
+		LOGGER.info("context destroyed");
 	}
 
 	@Override
@@ -32,8 +33,7 @@ public class InitEnveronement implements ServletContextListener {
 
 		final String props = new File(System.getProperty("catalina.base")) + "/webapps/env.properties";
 		final Properties propsFromFile = new Properties();
-		try {
-			final FileInputStream in = new FileInputStream(props);
+		try (final FileInputStream in = new FileInputStream(props)) {
 			propsFromFile.load(in);
 		} catch (final IOException e) {
 			LOGGER.error("Le fichier env.properties n'existe pas sous le serveur", e);

@@ -95,48 +95,45 @@ public class CoutTarif extends CalculeCout {
 		if (referenceDraft == null || tarif == null || reductionService == null
 				|| (isLigne && referenceDraftLigne == null) || (isDetail && referenceDraftLigneDetail == null)) {
 			return null;
-		} else {
-
-			DetailCout detailCout = new DetailCout();
-			double coutComptantHT = 0d;
-			double coutComptantTTC = 0d;
-			double tva = VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA);
-
-			if (tarif.isRecurrent()) {
-				Plan normal =
-						new Plan(tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(), tarif.getTypeTVA(),
-								segmentTVA));
-				detailCout.setCoutRecurrent(new CoutRecurrent(tarif.getFrequence(), normal, null));
-			}
-
-			else
-
-			{
-
-				coutComptantHT += tarif.getPrix();
-			}
-
-			for (Frais frais : tarif.getFrais()) {
-
-				if (frais.getTypeFrais() == TypeFrais.CREATION) {
-
-					coutComptantHT += frais.getMontant();
-
-					// application du reduction.
-					calculerReductionTarif(frais, tva);
-				}
-			}
-
-			coutComptantTTC = VatClient.appliquerTVA(coutComptantHT, tarif.getTypeTVA(), segmentTVA);
-			coutComptantReduitTTC = coutComptantTTC - reductionTTC;
-			coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
-			detailCout.setCoutComptantHT(coutComptantHT);
-			detailCout.setCoutComptantTTC(coutComptantTTC);
-			detailCout.setReductionHT(reductionHT);
-			detailCout.setReductionTTC(reductionTTC);
-
-			return detailCout;
 		}
+		DetailCout detailCout = new DetailCout();
+		double coutComptantHT = 0d;
+		double coutComptantTTC = 0d;
+		double tva = VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA);
+
+		if (tarif.isRecurrent()) {
+			Plan normal =
+					new Plan(tarif.getPrix(), VatClient.appliquerTVA(tarif.getPrix(), tarif.getTypeTVA(), segmentTVA));
+			detailCout.setCoutRecurrent(new CoutRecurrent(tarif.getFrequence(), normal, null));
+		}
+
+		else
+
+		{
+
+			coutComptantHT += tarif.getPrix();
+		}
+
+		for (Frais frais : tarif.getFrais()) {
+
+			if (frais.getTypeFrais() == TypeFrais.CREATION) {
+
+				coutComptantHT += frais.getMontant();
+
+				// application du reduction.
+				calculerReductionTarif(frais, tva);
+			}
+		}
+
+		coutComptantTTC = VatClient.appliquerTVA(coutComptantHT, tarif.getTypeTVA(), segmentTVA);
+		coutComptantReduitTTC = coutComptantTTC - reductionTTC;
+		coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
+		detailCout.setCoutComptantHT(coutComptantHT);
+		detailCout.setCoutComptantTTC(coutComptantTTC);
+		detailCout.setReductionHT(reductionHT);
+		detailCout.setReductionTTC(reductionTTC);
+
+		return detailCout;
 	}
 
 	/**
@@ -179,8 +176,8 @@ public class CoutTarif extends CalculeCout {
 	public double getCoutRecurrentHT() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifHT();
 	}
 
 	/**
@@ -193,8 +190,8 @@ public class CoutTarif extends CalculeCout {
 	public double getCoutRecurrentTTC() throws OpaleException {
 		if (getCout() == null && ((DetailCout) this.getCout()).getCoutRecurrent() == null) {
 			return 0;
-		} else
-			return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
+		}
+		return ((DetailCout) this.getCout()).getCoutRecurrent().getNormal().getTarifTTC();
 	}
 
 }

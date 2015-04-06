@@ -108,8 +108,8 @@ public abstract class CalculeCout {
 	public double getCoutComptantHT() throws OpaleException {
 		if (getCout() == null) {
 			return 0;
-		} else
-			return getCout().getCoutComptantHT();
+		}
+		return getCout().getCoutComptantHT();
 	}
 
 	/**
@@ -129,8 +129,8 @@ public abstract class CalculeCout {
 	public double getCoutComptantTTC() throws OpaleException {
 		if (getCout() == null) {
 			return 0;
-		} else
-			return getCout().getCoutComptantTTC();
+		}
+		return getCout().getCoutComptantTTC();
 	}
 
 	/**
@@ -146,6 +146,7 @@ public abstract class CalculeCout {
 	 * 
 	 * @return {@link #coutRecurrentHTT}
 	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	public double getCoutRecurrentHT() throws OpaleException {
 		return coutRecurrentHT;
@@ -155,16 +156,16 @@ public abstract class CalculeCout {
 	 * 
 	 * @param coutRecurrentHT
 	 *            {@link #coutRecurrentHT}
-	 * @throws OpaleException
 	 */
-	public void setCoutRecurrentHT(double coutRecurrentHT) throws OpaleException {
+	public void setCoutRecurrentHT(double coutRecurrentHT) {
 		this.coutRecurrentHT = coutRecurrentHT;
 	}
 
 	/**
 	 * 
-	 * @return {@link #coutRecurrentTTC}
+	 * @return {@link #coutRecurrentTTC}.
 	 * @throws OpaleException
+	 *             {@link OpaleException}.
 	 */
 	public double getCoutRecurrentTTC() throws OpaleException {
 		return coutRecurrentTTC;

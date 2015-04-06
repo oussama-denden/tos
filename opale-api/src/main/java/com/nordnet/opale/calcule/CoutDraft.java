@@ -68,57 +68,54 @@ public class CoutDraft extends CalculeCout {
 
 		if (draft == null || transformationInfo == null || reductionService == null) {
 			return null;
-		} else {
-			Cout cout = new Cout();
-			double coutComptantHT = 0d;
-			double coutComptantTTC = 0d;
-			double tva = 0;
-			List<DetailCout> details = new ArrayList<DetailCout>();
-			List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<CoutRecurrent>();
-
-			for (DraftLigne draftLigne : draft.getDraftLignes()) {
-
-				CoutLigneDraft coutLigneDraft =
-						new CoutLigneDraft(draft, transformationInfo, draftLigne, reductionService);
-				DetailCout detailCoutLigne = (DetailCout) coutLigneDraft.getCout();
-				coutComptantHT += detailCoutLigne.getCoutComptantHT();
-				coutComptantTTC += detailCoutLigne.getCoutComptantTTC();
-				details.add(detailCoutLigne);
-				ReductionUtil.ajouterCoutRecurrent(coutRecurrentGlobale, detailCoutLigne.getCoutRecurrent());
-				tva = coutLigneDraft.getTva();
-
-				reductionHT += detailCoutLigne.getReductionHT();
-				reductionTTC += detailCoutLigne.getReductionTTC();
-
-				reductionComptantHT += coutLigneDraft.getReductionComptantHT();
-				reductionComptantTTC += coutLigneDraft.getReductionComptantTTC();
-
-				coutRecurentReduitHT += coutLigneDraft.getCoutRecurentReduitTTC();
-			}
-
-			// recuperation du reduction du draft.
-			Reduction reductionDraft = reductionService.findReduction(draft.getReference());
-
-			reductionTTC +=
-					ReductionUtil.calculeReductionComptant(coutComptantTTC - reductionComptantTTC, reductionDraft);
-			reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);
-
-			coutComptantReduitTTC = coutComptantTTC - reductionComptantTTC;
-			coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
-
-			coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitHT, tva);
-
-			cout.setCoutComptantHT(coutComptantHT);
-			cout.setCoutComptantTTC(coutComptantTTC);
-			cout.setDetails(details);
-			cout.setCoutRecurrentGlobale(coutRecurrentGlobale);
-			cout.setReductionHT(reductionHT);
-			cout.setReductionTTC(reductionTTC);
-			cout.setTva(tva);
-			cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
-
-			return cout;
 		}
+		Cout cout = new Cout();
+		double coutComptantHT = 0d;
+		double coutComptantTTC = 0d;
+		double tva = 0;
+		List<DetailCout> details = new ArrayList<>();
+		List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<>();
+
+		for (DraftLigne draftLigne : draft.getDraftLignes()) {
+
+			CoutLigneDraft coutLigneDraft = new CoutLigneDraft(draft, transformationInfo, draftLigne, reductionService);
+			DetailCout detailCoutLigne = (DetailCout) coutLigneDraft.getCout();
+			coutComptantHT += detailCoutLigne.getCoutComptantHT();
+			coutComptantTTC += detailCoutLigne.getCoutComptantTTC();
+			details.add(detailCoutLigne);
+			ReductionUtil.ajouterCoutRecurrent(coutRecurrentGlobale, detailCoutLigne.getCoutRecurrent());
+			tva = coutLigneDraft.getTva();
+
+			reductionHT += detailCoutLigne.getReductionHT();
+			reductionTTC += detailCoutLigne.getReductionTTC();
+
+			reductionComptantHT += coutLigneDraft.getReductionComptantHT();
+			reductionComptantTTC += coutLigneDraft.getReductionComptantTTC();
+
+			coutRecurentReduitHT += coutLigneDraft.getCoutRecurentReduitTTC();
+		}
+
+		// recuperation du reduction du draft.
+		Reduction reductionDraft = reductionService.findReduction(draft.getReference());
+
+		reductionTTC += ReductionUtil.calculeReductionComptant(coutComptantTTC - reductionComptantTTC, reductionDraft);
+		reductionHT = ReductionUtil.caculerReductionHT(reductionTTC, tva);
+
+		coutComptantReduitTTC = coutComptantTTC - reductionComptantTTC;
+		coutComptantReduitHT = ReductionUtil.caculerCoutReduitHT(coutComptantReduitTTC, tva);
+
+		coutRecurentReduitHT = ReductionUtil.caculerCoutReduitHT(coutRecurentReduitHT, tva);
+
+		cout.setCoutComptantHT(coutComptantHT);
+		cout.setCoutComptantTTC(coutComptantTTC);
+		cout.setDetails(details);
+		cout.setCoutRecurrentGlobale(coutRecurrentGlobale);
+		cout.setReductionHT(reductionHT);
+		cout.setReductionTTC(reductionTTC);
+		cout.setTva(tva);
+		cout.setMontantTva(coutComptantTTC >= coutComptantHT ? coutComptantTTC - coutComptantHT : 0d);
+
+		return cout;
 	}
 
 }

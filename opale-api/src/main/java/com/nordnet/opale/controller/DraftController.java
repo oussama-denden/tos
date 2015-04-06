@@ -535,6 +535,7 @@ public class DraftController {
 	 */
 	@RequestMapping(value = "/contrat/{refContrat:.+}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
+	@Deprecated
 	public String transformerContratEnDraft(@PathVariable String refContrat,
 			@RequestBody TrameCatalogueInfo trameCatalogue) throws OpaleException, JSONException {
 		LOGGER.info(":::ws-rec:::transformerContratEnDraft");
@@ -569,10 +570,10 @@ public class DraftController {
 		LOGGER.info(":::ws-rec:::creerDraftPourRenouvellement");
 		Draft draft =
 				draftService.creerDraftPourRenouvellement(trameTransformationInfo.getReferencesContrat(),
-						(TrameCatalogueInfo) trameTransformationInfo);
+						trameTransformationInfo);
 		JSONObject rsc = new JSONObject();
 		rsc.put("reference", draft.getReference());
-		List<JSONObject> lignes = new ArrayList<JSONObject>();
+		List<JSONObject> lignes = new ArrayList<>();
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			JSONObject ligne = new JSONObject();
 			ligne.put("referenceLigne", draftLigne.getReference());
@@ -643,15 +644,13 @@ public class DraftController {
 	 * 
 	 * @param req
 	 *            requete HttpServletRequest.
-	 * @param ex
-	 *            exception
 	 * @return {@link InfoErreur}
 	 * @throws Exception
 	 */
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ HttpMessageNotReadableException.class })
 	@ResponseBody
-	InfoErreur handleMessageNotReadableException(HttpServletRequest req, HttpMessageNotReadableException ex) {
+	InfoErreur handleMessageNotReadableException(HttpServletRequest req) {
 		return new InfoErreur(req.getRequestURI(), Constants.CODE_ERREUR_SYNTAXE, PropertiesUtil.getInstance()
 				.getErrorMessage(Constants.CODE_ERREUR_SYNTAXE));
 	}

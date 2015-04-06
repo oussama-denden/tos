@@ -47,12 +47,12 @@ public class Cout {
 	/**
 	 * liste des {@link CoutRecurrent}
 	 */
-	private List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<CoutRecurrent>();
+	private List<CoutRecurrent> coutRecurrentGlobale = new ArrayList<>();
 
 	/**
 	 * liste des {@link DetailCout}.
 	 */
-	List<DetailCout> details = new ArrayList<DetailCout>();
+	List<DetailCout> details = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.

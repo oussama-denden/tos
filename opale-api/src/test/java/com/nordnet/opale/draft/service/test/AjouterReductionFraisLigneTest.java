@@ -13,7 +13,6 @@ import com.nordnet.opale.domain.draft.DraftLigne;
 import com.nordnet.opale.domain.reduction.Reduction;
 import com.nordnet.opale.draft.test.GlobalTestCase;
 import com.nordnet.opale.draft.test.generator.DraftInfoGenerator;
-import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.repository.draft.DraftLigneDetailRepository;
 import com.nordnet.opale.repository.draft.DraftLigneRepository;
 import com.nordnet.opale.service.draft.DraftService;
@@ -52,14 +51,10 @@ public class AjouterReductionFraisLigneTest extends GlobalTestCase {
 
 	/**
 	 * ajout reduction valide a un frais ligne du draft.
-	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}
 	 */
 	@Test
 	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/ajout-reduction.xml" })
-	public void testajouterReductionFraisLigneValide() throws OpaleException {
-
+	public void testajouterReductionFraisLigneValide() {
 		try {
 			ReductionInfo reductionInfo =
 					draftInfoGenerator.getObjectFromJsonFile(ReductionInfo.class, "./requests/ajouterReduction.json");

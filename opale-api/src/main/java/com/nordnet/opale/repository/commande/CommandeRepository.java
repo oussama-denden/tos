@@ -112,7 +112,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 * 
 	 * @return {@link List<Commande>}
 	 */
-	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c FROM Commande c WHERE c.dateAnnulation=null AND dateTransformationContrat=null")
+	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c FROM Commande c inner join c.commandeLignes cl WHERE c.dateAnnulation is null AND cl.dateTransformationContrat is null")
 	public List<Commande> recupererCommandeNonTransformeeEtNonAnnulee();
 
 	/**
@@ -120,7 +120,7 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 * 
 	 * @return {@link List<String>}
 	 */
-	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c.reference FROM Commande c WHERE c.dateAnnulation=null AND dateTransformationContrat=null")
+	@Query(name = "recupererCommandeNonTransformeeEtNonAnnulee", value = "SELECT c.reference FROM Commande c inner join c.commandeLignes cl WHERE c.dateAnnulation is null AND cl.dateTransformationContrat is null")
 	public List<String> recupererReferenceCommandeNonTransformeeEtNonAnnulee();
 
 	/**
@@ -169,4 +169,15 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer>, Jp
 	 */
 	@Query(nativeQuery = true, value = MAX_DATE_ACTIVATION)
 	public String getRecentDate(@Param("referenceCommande") String refCommande);
+
+	/**
+	 * retourne les commandes qui contiennent un ordre de renouvellement et qui sont non annule et non transformee.
+	 * 
+	 * @param referenceContrat
+	 *            reference contrat.
+	 * @return list {@link Commande}.
+	 */
+	@Query(name = "findCommandeActiveNonTransformeeByReferenceContrat", value = "SELECT DISTINCT c FROM Commande c INNER JOIN c.commandeLignes cl WHERE c.dateAnnulation is NULL AND cl.dateTransformationContrat is NULL AND cl.referenceContrat LIKE :referenceContrat AND cl.geste = 'RENOUVELLEMENT'")
+	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(
+			@Param("referenceContrat") String referenceContrat);
 }

@@ -91,7 +91,7 @@ public class CommandeLigneDetail {
 	 * les sous {@link CommandeLigneDetail}.
 	 */
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "commandeLigneDetailParent")
-	private List<CommandeLigneDetail> sousCommandeLigneDetails = new ArrayList<CommandeLigneDetail>();
+	private List<CommandeLigneDetail> sousCommandeLigneDetails = new ArrayList<>();
 
 	/**
 	 * {@link Tarif}.
@@ -371,9 +371,8 @@ public class CommandeLigneDetail {
 		Optional<CommandeLigneDetail> commandeLigneDetailOptional = Optional.fromNullable(commandeLigneDetailParent);
 		if (commandeLigneDetailOptional.isPresent()) {
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	/*
@@ -396,11 +395,10 @@ public class CommandeLigneDetail {
 			CommandeLigneDetail rhs = (CommandeLigneDetail) obj;
 			return new EqualsBuilder().append(referenceSelection, rhs.referenceSelection)
 					.append(referenceChoix, rhs.referenceChoix).isEquals();
-		} else {
-			DraftLigneDetail draftLigneDetail = (DraftLigneDetail) obj;
-			return new EqualsBuilder().append(referenceSelection, draftLigneDetail.getReferenceSelection())
-					.append(referenceChoix, draftLigneDetail.getReferenceChoix()).isEquals();
 		}
+		DraftLigneDetail draftLigneDetail = (DraftLigneDetail) obj;
+		return new EqualsBuilder().append(referenceSelection, draftLigneDetail.getReferenceSelection())
+				.append(referenceChoix, draftLigneDetail.getReferenceChoix()).isEquals();
 
 	}
 

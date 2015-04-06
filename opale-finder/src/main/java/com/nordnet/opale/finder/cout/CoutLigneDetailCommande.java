@@ -87,8 +87,6 @@ public class CoutLigneDetailCommande extends CalculeCout {
 	@Override
 	public Cout getCout() throws OpaleException {
 
-		double tva = VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA);
-
 		CoutTarif coutTarifCommande =
 				new CoutTarif(tarif, segmentTVA, commandeLigneDetail.getReference(), referenceCommandeLigne,
 						referenceCommande, false, true, reductionDao);
@@ -100,7 +98,7 @@ public class CoutLigneDetailCommande extends CalculeCout {
 				reductionDao.findReductionLigneDetailleSansFrais(referenceCommande, referenceCommandeLigne,
 						commandeLigneDetail.getReference());
 
-		calculerReductionLigneDetail(reduction, detailCout.getCoutComptantTTC(), tarifTTC, tva, detailCout);
+		calculerReductionLigneDetail(reduction, detailCout.getCoutComptantTTC(), tarifTTC);
 
 		// detailCout.setReductionTTC(reductionTTC);
 
@@ -130,13 +128,8 @@ public class CoutLigneDetailCommande extends CalculeCout {
 	 *            cout comptant du detail.
 	 * @param coutRecurrent
 	 *            cout recurrent du
-	 * @param tva
-	 *            {@link TVA}
-	 * @param detailCoutTarif
-	 *            {@link DetailCout}
 	 */
-	private void calculerReductionLigneDetail(Reduction reductionLigneDetail, double coutComptant,
-			double coutRecurrent, double tva, DetailCout detailCoutTarif) {
+	private void calculerReductionLigneDetail(Reduction reductionLigneDetail, double coutComptant, double coutRecurrent) {
 
 		double reduction = 0d;
 

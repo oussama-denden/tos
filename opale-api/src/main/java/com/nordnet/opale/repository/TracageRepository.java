@@ -13,5 +13,5 @@ import com.nordnet.opale.domain.Tracage;
  */
 @Repository("tracageRepository")
 public interface TracageRepository extends JpaRepository<Tracage, Integer> {
-
+	// no method
 }

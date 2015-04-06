@@ -141,7 +141,7 @@ public class CoutRecurrent {
 	 */
 	public void addFrais(Frais frais) {
 		if (this.frais == null)
-			this.frais = new ArrayList<Frais>();
+			this.frais = new ArrayList<>();
 		this.frais.add(frais);
 	}
 

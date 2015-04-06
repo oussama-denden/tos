@@ -211,13 +211,11 @@ public class CommandeController {
 	 * @return la liste liste paiement recurrent
 	 * @throws OpaleException
 	 *             {@link OpaleException}
-	 * @throws JSONException
-	 *             the jSON exception {@link JSONException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/comptant/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<Paiement> getListePaiementComptant(@PathVariable String refCommande, @PathVariable boolean isAnnule)
-			throws OpaleException, JSONException {
+			throws OpaleException {
 		return commandeService.getListePaiementComptant(refCommande, isAnnule);
 	}
 
@@ -231,16 +229,14 @@ public class CommandeController {
 	 * @return la liste paiements recurrents
 	 * @throws OpaleException
 	 *             {@link OpaleException}
-	 * @throws JSONException
-	 *             the jSON exception {@link JSONException}
 	 */
 	@RequestMapping(value = "/{refCommande:.+}/paiement/recurrent/annule/{isAnnule:.+}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<PaiementRecurrentInfo> getListePaiementRecurrent(@PathVariable String refCommande,
-			@PathVariable boolean isAnnule) throws OpaleException, JSONException {
+			@PathVariable boolean isAnnule) throws OpaleException {
 		List<Paiement> paiements = commandeService.getPaiementRecurrent(refCommande, isAnnule);
 
-		List<PaiementRecurrentInfo> paiementRecurrentInfos = new ArrayList<PaiementRecurrentInfo>();
+		List<PaiementRecurrentInfo> paiementRecurrentInfos = new ArrayList<>();
 
 		for (Paiement paiement : paiements) {
 			paiementRecurrentInfos.add(new PaiementRecurrentInfo(paiement));
@@ -321,7 +317,7 @@ public class CommandeController {
 
 		Commande commande = commandeService.getCommandeByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
-		CommandeValidator.validerAuteur(refCommande, signatureInfo.getAuteur());
+		CommandeValidator.validerAuteur(signatureInfo.getAuteur());
 
 		commandeService.signerCommande(refCommande, refSignature, signatureInfo);
 	}
@@ -374,12 +370,10 @@ public class CommandeController {
 	 * @param criteresCommande
 	 *            the criteres commande
 	 * @return {@link CommandeInfo}
-	 * @throws OpaleException
-	 *             the opale exception {@link OpaleException}
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	@ResponseBody
-	public List<CommandeInfo> chercherCommande(@RequestBody CriteresCommande criteresCommande) throws OpaleException {
+	public List<CommandeInfo> chercherCommande(@RequestBody CriteresCommande criteresCommande) {
 		LOGGER.info(":::ws-rec:::chercherCommande");
 		return commandeService.chercherCommande(criteresCommande);
 
@@ -598,14 +592,12 @@ public class CommandeController {
 	 * 
 	 * @param req
 	 *            requete HttpServletRequest.
-	 * @param ex
-	 *            exception
 	 * @return {@link InfoErreur}
 	 */
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ HttpMessageNotReadableException.class })
 	@ResponseBody
-	InfoErreur handleMessageNotReadableException(HttpServletRequest req, HttpMessageNotReadableException ex) {
+	InfoErreur handleMessageNotReadableException(HttpServletRequest req) {
 		return new InfoErreur(req.getRequestURI(), Constants.CODE_ERREUR_SYNTAXE, PropertiesUtil.getInstance()
 				.getErrorMessage(Constants.CODE_ERREUR_SYNTAXE));
 	}

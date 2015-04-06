@@ -112,52 +112,49 @@ public class CoutTarif extends CalculeCout {
 		if (referenceDraft == null || tarif == null || reductionDao == null || (isLigne && referenceDraftLigne == null)
 				|| (isDetail && referenceDraftLigneDetail == null)) {
 			return null;
-		} else {
-			double coutComptantHT = 0.0;
-			DetailCout detailCout = new DetailCout();
-			double coutComptantTTC = 0d;
-			double tva = VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA);
+		}
+		double coutComptantHT = 0.0;
+		DetailCout detailCout = new DetailCout();
+		double coutComptantTTC = 0d;
+		if (tarif.isRecurrent()) {
 
-			if (tarif.isRecurrent()) {
+			coutRecurrentTTC = VatClient.appliquerTVA(tarif.getPrix(), tarif.getTypeTVA(), segmentTVA);
+		}
 
-				coutRecurrentTTC = VatClient.appliquerTVA(tarif.getPrix(), tarif.getTypeTVA(), segmentTVA);
-			}
+		else
 
-			else
+		{
 
-			{
+			coutComptantHT += tarif.getPrix();
+		}
 
-				coutComptantHT += tarif.getPrix();
-			}
+		if (tarif.getFrais() != null) {
+			for (Frais frais : tarif.getFrais()) {
 
-			if (tarif.getFrais() != null) {
-				for (Frais frais : tarif.getFrais()) {
+				if (frais != null && frais.getType().equals(TypeFrais.CREATION.name())) {
 
-					if (frais != null && frais.getType().equals(TypeFrais.CREATION.name())) {
+					coutComptantHT += frais.getMontant();
 
-						coutComptantHT += frais.getMontant();
-
-						// application du reduction.
-						calculerReductionTarif(frais, tva);
-					}
+					// application du reduction.
+					calculerReductionTarif(frais);
 				}
 			}
-
-			coutComptantTTC = VatClient.appliquerTVA(coutComptantHT, tarif.getTypeTVA(), segmentTVA);
-			coutComptantReduitTTC = coutComptantTTC - reductionTTC;
-
-			detailCout.setCoutComptantTTC(coutComptantReduitTTC);
-			// detailCout.setReductionTTC(reductionTTC);
-			CoutRecurrent coutRecurrent = new CoutRecurrent();
-			coutRecurrent.setEngagement(tarif.getEngagement());
-			coutRecurrent.setFrais(tarif.getFrais());
-			coutRecurrent.setFrequence(tarif.getFrequence());
-			coutRecurrent.setPrix(coutRecurrentTTC);
-			coutRecurrent.setTVA(VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA));
-			detailCout.setCoutRecurrent(coutRecurrent);
-
-			return detailCout;
 		}
+
+		coutComptantTTC = VatClient.appliquerTVA(coutComptantHT, tarif.getTypeTVA(), segmentTVA);
+		coutComptantReduitTTC = coutComptantTTC - reductionTTC;
+
+		detailCout.setCoutComptantTTC(coutComptantReduitTTC);
+		// detailCout.setReductionTTC(reductionTTC);
+		CoutRecurrent coutRecurrent = new CoutRecurrent();
+		coutRecurrent.setEngagement(tarif.getEngagement());
+		coutRecurrent.setFrais(tarif.getFrais());
+		coutRecurrent.setFrequence(tarif.getFrequence());
+		coutRecurrent.setPrix(coutRecurrentTTC);
+		coutRecurrent.setTVA(VatClient.getValeurTVA(tarif.getTypeTVA(), segmentTVA));
+		detailCout.setCoutRecurrent(coutRecurrent);
+
+		return detailCout;
 	}
 
 	/**
@@ -165,12 +162,10 @@ public class CoutTarif extends CalculeCout {
 	 * 
 	 * @param frais
 	 *            frais creation du tarif.
-	 * @param tva
-	 *            valeur de tva.
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	private void calculerReductionTarif(Frais frais, double tva) throws OpaleException {
+	private void calculerReductionTarif(Frais frais) throws OpaleException {
 		Reduction reduction = null;
 		if (isLigne) {
 			reduction =

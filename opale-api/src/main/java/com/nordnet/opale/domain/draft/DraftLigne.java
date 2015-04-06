@@ -101,7 +101,7 @@ public class DraftLigne {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "draftLigneId")
-	private List<DraftLigneDetail> draftLigneDetails = new ArrayList<DraftLigneDetail>();
+	private List<DraftLigneDetail> draftLigneDetails = new ArrayList<>();
 
 	/**
 	 * Le geste effectue.
@@ -438,7 +438,7 @@ public class DraftLigne {
 	 */
 	private void creerArboressence(List<ElementContractuel> elementContractuels) {
 		Map<String, DraftLigneDetail> draftLigneDetailsMap = getDraftLigneDetailsMap();
-		Map<Integer, ElementContractuel> elementContractuelsMap = new HashMap<Integer, ElementContractuel>();
+		Map<Integer, ElementContractuel> elementContractuelsMap = new HashMap<>();
 		for (ElementContractuel elementContractuel : elementContractuels) {
 			elementContractuelsMap.put(elementContractuel.getNumEC(), elementContractuel);
 		}
@@ -464,7 +464,7 @@ public class DraftLigne {
 	 * @return map des {@link DraftLigneDetail}.
 	 */
 	private Map<String, DraftLigneDetail> getDraftLigneDetailsMap() {
-		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<String, DraftLigneDetail>();
+		Map<String, DraftLigneDetail> draftLigneDetailsMap = new HashMap<>();
 		for (DraftLigneDetail draftLigneDetail : this.draftLigneDetails) {
 			draftLigneDetailsMap.put(draftLigneDetail.getReferenceChoix(), draftLigneDetail);
 		}

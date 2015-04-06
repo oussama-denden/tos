@@ -16,7 +16,7 @@ public class DraftValidationInfo {
 	/**
 	 * liste des cause des erreur lors de la validation d'un {@link Draft}.
 	 */
-	private List<ReasonDraft> reasons = new ArrayList<ReasonDraft>();
+	private List<ReasonDraft> reasons = new ArrayList<>();
 
 	/**
 	 * constructeur par default.

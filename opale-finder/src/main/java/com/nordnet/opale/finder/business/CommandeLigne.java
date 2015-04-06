@@ -189,7 +189,7 @@ public class CommandeLigne {
 	 */
 	public void addDetail(DetailCommandeLigne detailCommandeLigne) {
 		if (this.detailCommandeLignes == null) {
-			this.detailCommandeLignes = new ArrayList<DetailCommandeLigne>();
+			this.detailCommandeLignes = new ArrayList<>();
 		}
 		this.detailCommandeLignes.add(detailCommandeLigne);
 	}

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Optional;
+import com.nordnet.common.alert.ws.client.SendAlert;
 import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.adapter.MandateLibraryAdapter;
@@ -31,7 +32,6 @@ import com.nordnet.opale.business.InfosLignePourBonCommande;
 import com.nordnet.opale.business.OptionTransformation;
 import com.nordnet.opale.business.PaiementInfo;
 import com.nordnet.opale.business.PaiementInfoComptant;
-import com.nordnet.opale.business.PaiementInfoRecurrent;
 import com.nordnet.opale.business.SignatureInfo;
 import com.nordnet.opale.calcule.CoutCommande;
 import com.nordnet.opale.calcule.CoutDecorator;
@@ -58,6 +58,7 @@ import com.nordnet.opale.service.reduction.ReductionService;
 import com.nordnet.opale.service.signature.SignatureService;
 import com.nordnet.opale.service.tracage.TracageService;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.OpaleApiUtils;
 import com.nordnet.opale.util.PropertiesUtil;
 import com.nordnet.opale.util.Utils;
 import com.nordnet.opale.util.spring.ApplicationContextHolder;
@@ -175,6 +176,11 @@ public class CommandeServiceImpl implements CommandeService {
 	private MandateLibraryAdapter mandateLibraryAdapter;
 
 	/**
+	 * {@link SendAlert}
+	 */
+	private SendAlert sendAlert;
+
+	/**
 	 * 
 	 * {@inheritDoc}
 	 */
@@ -207,7 +213,7 @@ public class CommandeServiceImpl implements CommandeService {
 		CommandeInfo commandeInfo = getCommande(refCommande);
 		CommandeInfoDetaille commandeInfoDetail = new CommandeInfoDetaille(commandeInfo);
 		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
-		List<PaiementInfo> paiementInfos = new ArrayList<PaiementInfo>();
+		List<PaiementInfo> paiementInfos = new ArrayList<>();
 		for (Paiement paiement : paiements) {
 			if (paiement.getTypePaiement() == TypePaiement.COMPTANT) {
 				paiementInfos.add(paiement.fromPaiementToPaiementInfoComptant());
@@ -345,7 +351,7 @@ public class CommandeServiceImpl implements CommandeService {
 						.and(CommandeSpecifications.creationDateBetween(dateStart, dateEnd))
 						.and(CommandeSpecifications.isSigne(signe)).and(CommandeSpecifications.isPaye(paye)));
 
-		List<CommandeInfo> commandeInfos = new ArrayList<CommandeInfo>();
+		List<CommandeInfo> commandeInfos = new ArrayList<>();
 
 		for (Commande commande : commandes) {
 			commandeInfos.add(commande.toCommandInfo());
@@ -433,7 +439,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 		List<Paiement> paiementComptants = paiementService.getListePaiementComptant(refCommande, isAnnule);
 		List<Paiement> paiementRecurrent = paiementService.getPaiementRecurrent(refCommande, isAnnule);
-		return getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
+		return OpaleApiUtils.getCommandePaiementInfoFromPaiement(paiementComptants, paiementRecurrent);
 	}
 
 	/**
@@ -451,35 +457,6 @@ public class CommandeServiceImpl implements CommandeService {
 		getTracage().ajouterTrace(Constants.ORDER, refCommande,
 				"Supprimer le paiement de reference " + refPaiement + "de la commande de reference" + refCommande,
 				auteur);
-
-	}
-
-	/**
-	 * mapping paiement domain to paiement info.
-	 * 
-	 * @param paiementComptants
-	 *            {@link List<Paiement>}
-	 * @param paiementRecurrents
-	 *            {@link List<Paiement>}
-	 * @return {@link CommandePaiementInfo}
-	 */
-	private CommandePaiementInfo getCommandePaiementInfoFromPaiement(List<Paiement> paiementComptants,
-			List<Paiement> paiementRecurrents) {
-		CommandePaiementInfo commandePaiementInfo = new CommandePaiementInfo();
-		List<PaiementInfoComptant> paiementInfosComptant = new ArrayList<PaiementInfoComptant>();
-		for (Paiement paiement : paiementComptants) {
-			paiementInfosComptant.add(paiement.fromPaiementToPaiementInfoComptant());
-		}
-		commandePaiementInfo.setComptant(paiementInfosComptant);
-
-		List<PaiementInfoRecurrent> paiementInfosRecurrent = new ArrayList<PaiementInfoRecurrent>();
-		for (Paiement paiementReccurent : paiementRecurrents) {
-			paiementInfosRecurrent.add(paiementReccurent.fromPaiementToPaiementInfoRecurrent());
-		}
-
-		commandePaiementInfo.setRecurrent(paiementInfosRecurrent);
-
-		return commandePaiementInfo;
 
 	}
 
@@ -613,7 +590,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 
-		return transformeEnContrat(commande, auteur);
+		return transformeEnContrat(commande, auteur, false);
 	}
 
 	/**
@@ -622,48 +599,78 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
+	public List<String> transformeEnContrat(Commande commande, Auteur auteur, boolean isCronCall)
+			throws OpaleException, JSONException {
+
+		CommandeValidator.testerCommandeNonTransforme(commande);
+		CommandeValidator.isAuteurValide(auteur);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
-
+		// boolean isCommandeTransformer = true;
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			if (ligne.getGeste().equals(Geste.VENTE)) {
-				getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
-						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
-				CommandeValidator.testerCommandeNonTransforme(commande);
-				CommandeValidator.isAuteurValide(auteur);
-				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 
-				ContratPreparationInfo contratPreparationInfo =
-						ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
+			try {
+				if (!ligne.isTransformerEnContrat()) {
+					CommandeValidator.checkIsTransformPossible(commande.getReference(), ligne, isCronCall);
+					if (ligne.getGeste().equals(Geste.VENTE)) {
+						getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
+								"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
 
-				/*
-				 * ajout du mode de paiement au produits prepare.
-				 */
-				ajouterModePaiementProduit(contratPreparationInfo.getProduits());
-				String refContrat = restClient.preparerContrat(contratPreparationInfo);
-				ligne.setReferenceContrat(refContrat);
+						ContratPreparationInfo contratPreparationInfo =
+								ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
-				/*
-				 * association des reductions au nouveau contrat creer.
-				 */
-				transformerReductionCommandeEnReductionContrat(commande, ligne);
+						/*
+						 * ajout du mode de paiement au produits prepare.
+						 */
+						ajouterModePaiementProduit(contratPreparationInfo.getProduits());
+						String refContrat = restClient.preparerContrat(contratPreparationInfo);
+						ligne.setReferenceContrat(refContrat);
 
-				ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne, refContrat);
+						/*
+						 * association des reductions au nouveau contrat creer.
+						 */
+						transformerReductionCommandeEnReductionContrat(commande, ligne);
 
-				restClient.validerContrat(refContrat, contratValidationInfo);
+						ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne);
 
-				referencesContrats.add(refContrat);
-			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
-						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en ordre de renouvelement",
-						auteur);
-				transformeEnOrdereRenouvellement(commande, ligne);
+						restClient.validerContrat(refContrat, contratValidationInfo);
+						ligne.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+
+						referencesContrats.add(refContrat);
+					} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+						getTracage().ajouterTrace(
+								Constants.ORDER,
+								commande.getReference(),
+								"Transformer la ligne commande " + ligne.getReferenceOffre()
+										+ " en ordre de renouvelement", auteur);
+						transformeEnOrdereRenouvellement(commande, ligne);
+					}
+				}
+			} catch (OpaleException e) {
+
+				if (e.getErrorCode().equals("404")) {
+					throw new OpaleException(e.getMessage(), e.getErrorCode());
+
+				} else if (!e.getErrorCode().equals("2.1.23")) {
+					ligne.setCauseNonTransformation(e.getMessage());
+
+				}
+
+				try {
+					getSendAlert().send(
+							System.getProperty(Constants.PRODUCT_ID),
+							"Erreur dans la Transformer Commande " + commande.getReference()
+									+ " En Contrat  dans la ligne " + ligne.getReference(), "cause: " + e.getMessage(),
+							e.getErrorCode());
+				} catch (Exception exception) {
+					LOGGER.error("fail to send alert", e);
+				}
+
 			}
 		}
 
-		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
 		commandeRepository.save(commande);
 		return referencesContrats;
 	}
@@ -685,9 +692,8 @@ public class CommandeServiceImpl implements CommandeService {
 
 		if (!Optional.fromNullable(paiementParSepa).isPresent()) {
 			throw new OpaleException(PropertiesUtil.getInstance().getErrorMessage("2.1.17"), "2.1.17");
-		} else {
-			CommandeValidator.checkPeriodeDepuisPaiement(paiementParSepa, Constants.DIX);
 		}
+		CommandeValidator.checkPeriodeDepuisPaiement(paiementParSepa, Constants.DIX);
 
 		for (CommandeLigne commandeLigne : commande.getCommandeLignes()) {
 			if (Optional.fromNullable(commandeLigne.getReferenceContrat()).isPresent()) {
@@ -722,11 +728,9 @@ public class CommandeServiceImpl implements CommandeService {
 	 *            {@link Commande}.
 	 * @param ligne
 	 *            {@link CommandeLigne}.
-	 * @param refContrat
-	 *            refrence de commande.
 	 * @return {@link ContratValidationInfo}.
 	 */
-	private ContratValidationInfo creeContratValidationInfo(Commande commande, CommandeLigne ligne, String refContrat) {
+	private ContratValidationInfo creeContratValidationInfo(Commande commande, CommandeLigne ligne) {
 		ContratValidationInfo validationInfo = new ContratValidationInfo();
 		validationInfo.setIdAdrFacturation(commande.getClientAFacturer().getAdresseId());
 		validationInfo.setIdClient(commande.getClientSouscripteur().getClientId());
@@ -743,14 +747,14 @@ public class CommandeServiceImpl implements CommandeService {
 		paiementInfoParent.setIdAdrLivraison(commande.getClientALivrer().getAdresseId());
 		paiementInfoParent.setNumEC(ligne.getNumEC());
 		List<Paiement> paiements = paiementService.getPaiementEnCours(commande.getReference());
-		Paiement paiement = getPaiementRecurrent(paiements);
+		Paiement paiement = OpaleApiUtils.getPaiementRecurrent(paiements);
 		String referenceModePaiement = null;
 
 		if (paiement != null) {
 			referenceModePaiement = paiement.getIdPaiement();
 		} else {
-			if (getPaiementComptant(paiements).size() > 0) {
-				referenceModePaiement = getPaiementComptant(paiements).get(0).getIdPaiement();
+			if (OpaleApiUtils.getPaiementComptant(paiements).size() > 0) {
+				referenceModePaiement = OpaleApiUtils.getPaiementComptant(paiements).get(0).getIdPaiement();
 			}
 		}
 
@@ -857,6 +861,7 @@ public class CommandeServiceImpl implements CommandeService {
 		produitRenouvellement.setNumEC(ligne.getNumEC());
 
 		produitRenouvellement.setReferenceProduit(ligne.getReferenceOffre());
+		produitRenouvellement.setReferenceTarif(ligne.getTarif().getReference());
 		produitRenouvellement.setRemboursable(true);
 		produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligne.getTypeProduit().toString()));
 
@@ -874,6 +879,7 @@ public class CommandeServiceImpl implements CommandeService {
 				produitRenouvellement.setNumECParent(ligneDetail.getCommandeLigneDetailParent().getNumEC());
 			}
 			produitRenouvellement.setReferenceProduit(ligneDetail.getReferenceChoix());
+			produitRenouvellement.setReferenceTarif(ligneDetail.getTarif().getReference());
 			produitRenouvellement.setRemboursable(true);
 			produitRenouvellement.setTypeProduit(TypeProduit.fromString(ligneDetail.getTypeProduit().toString()));
 
@@ -926,9 +932,9 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		// creer le frais
-		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
+		Set<FraisRenouvellement> frais = new HashSet<>();
 		for (Frais fraisCommande : ligne.getTarif().getFrais()) {
-			frais.add(mappingToFraisRenouvellement(fraisCommande));
+			frais.add(OpaleApiUtils.mappingToFraisRenouvellement(fraisCommande));
 		}
 
 		prix.setFrais(frais);
@@ -981,34 +987,14 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 
 		// creer le frais
-		Set<FraisRenouvellement> frais = new HashSet<FraisRenouvellement>();
+		Set<FraisRenouvellement> frais = new HashSet<>();
 		for (Frais fraisCommande : ligneDetail.getTarif().getFrais()) {
-			frais.add(mappingToFraisRenouvellement(fraisCommande));
+			frais.add(OpaleApiUtils.mappingToFraisRenouvellement(fraisCommande));
 		}
 
 		prix.setFrais(frais);
 
 		return prix;
-	}
-
-	/**
-	 * Mapping frais commade à frais renouvellement.
-	 * 
-	 * @param fraisCommande
-	 *            {@link Frais}
-	 * @return {@link FraisRenouvellement}
-	 */
-	private FraisRenouvellement mappingToFraisRenouvellement(Frais fraisCommande) {
-		FraisRenouvellement fraisRenouvellement = new FraisRenouvellement();
-		fraisRenouvellement.setMontant(fraisCommande.getMontant());
-		// fraisRenouvellement.setNombreMois(fraisCommande.getNombreMois());
-		// fraisRenouvellement.setOrdre(fraisCommande.getOrdre());
-
-		fraisRenouvellement.setTypeFrais(com.nordnet.topaze.ws.enums.TypeFrais.fromSting(fraisCommande.getTypeFrais()
-				.name()));
-
-		return fraisRenouvellement;
-
 	}
 
 	/**
@@ -1026,6 +1012,7 @@ public class CommandeServiceImpl implements CommandeService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Cout calculerCoutPourBonDeCommande(String referenceCommande) throws OpaleException {
 		Commande commande = getCommandeByReference(referenceCommande);
 		CoutCommande coutCommande = new CoutCommande(commande, reductionService, paiementService);
@@ -1049,12 +1036,12 @@ public class CommandeServiceImpl implements CommandeService {
 
 		Reduction reductionDraft = reductionService.findReduction(commande.getReference());
 		if (reductionDraft != null) {
-			reductionContrat = fromReduction(reductionDraft);
+			reductionContrat = OpaleApiUtils.fromReduction(reductionDraft);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 			reductionContrat.setIsAffichableSurFacture(true);
 			reductionContrat.setOrdre(Constants.DEUX);
 			if (reductionContrat.getTypeValeur().equals(TypeValeur.MOIS)) {
-				checkReductionWithTypeMois(reductionContrat, commandeLigne.getTarif().getFrequence());
+				OpaleApiUtils.checkReductionWithTypeMois(reductionContrat, commandeLigne.getTarif().getFrequence());
 			}
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
@@ -1064,13 +1051,13 @@ public class CommandeServiceImpl implements CommandeService {
 		List<Reduction> reductionsLigne =
 				reductionService.findReductionLigneDraft(commande.getReference(), commandeLigne.getReference());
 		for (Reduction reductionLigne : reductionsLigne) {
-			reductionContrat = fromReduction(reductionLigne);
+			reductionContrat = OpaleApiUtils.fromReduction(reductionLigne);
 			reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 			reductionContrat.setIsAffichableSurFacture(true);
 			reductionContrat.setTypeValeur(reductionLigne.getTypeValeur());
 
 			if (reductionContrat.getTypeValeur().equals(TypeValeur.MOIS)) {
-				checkReductionWithTypeMois(reductionContrat, commandeLigne.getTarif().getFrequence());
+				OpaleApiUtils.checkReductionWithTypeMois(reductionContrat, commandeLigne.getTarif().getFrequence());
 			}
 			ContratReductionInfo contratReductionInfo =
 					new ContratReductionInfo(commandeLigne.getAuteur().getQui(), reductionContrat);
@@ -1103,14 +1090,15 @@ public class CommandeServiceImpl implements CommandeService {
 					reductionService.findReductionDetailLigneDraft(commande.getReference(),
 							commandeLigne.getReferenceOffre(), commandeLigneDetail.getReferenceChoix());
 			for (Reduction reductionligneDetail : reductionsligneDetail) {
-				reductionContrat = fromReduction(reductionligneDetail);
+				reductionContrat = OpaleApiUtils.fromReduction(reductionligneDetail);
 				reductionContrat.setOrdre(Constants.ZERO);
 				reductionContrat.setTypeReduction(TypeReduction.CONTRAT);
 				reductionContrat.setIsAffichableSurFacture(true);
 				reductionContrat.setTypeValeur(reductionligneDetail.getTypeValeur());
 
 				if (reductionContrat.getTypeValeur().equals(TypeValeur.MOIS)) {
-					checkReductionWithTypeMois(reductionContrat, commandeLigneDetail.getTarif().getFrequence());
+					OpaleApiUtils.checkReductionWithTypeMois(reductionContrat, commandeLigneDetail.getTarif()
+							.getFrequence());
 				}
 				if (reductionligneDetail.getReferenceFrais() != null) {
 					String typeFrais =
@@ -1128,25 +1116,6 @@ public class CommandeServiceImpl implements CommandeService {
 						commandeLigneDetail.getNumEC(), contratReductionInfo);
 			}
 		}
-	}
-
-	/**
-	 * Creer deduction contrat d une reduction ligne.
-	 * 
-	 * @param reduction
-	 *            {@link Reduction}
-	 * @return {@link ReductionContrat}
-	 */
-	private ReductionContrat fromReduction(Reduction reduction) {
-		ReductionContrat reductionContrat = new ReductionContrat();
-		reductionContrat.setTitre(reduction.getLabel());
-		reductionContrat.setDateDebut(reduction.getDateDebut());
-		reductionContrat.setDateFin(reduction.getDateFin());
-		reductionContrat.setNbUtilisationMax(reduction.getNbUtilisationMax());
-		reductionContrat.setValeur(reduction.getValeur());
-		reductionContrat.setTypeValeur(TypeValeur.fromString(reduction.getTypeValeur().name()));
-		reductionContrat.setCodeCatalogueReduction(reduction.getCodeCatalogueReduction());
-		return reductionContrat;
 	}
 
 	/**
@@ -1218,27 +1187,6 @@ public class CommandeServiceImpl implements CommandeService {
 		}
 	}
 
-	private Paiement getPaiementRecurrent(List<Paiement> paiements) {
-		for (Paiement paiement : paiements) {
-			if (paiement.getTypePaiement() == TypePaiement.RECURRENT) {
-				return paiement;
-			}
-
-		}
-		return null;
-	}
-
-	private List<Paiement> getPaiementComptant(List<Paiement> paiements) {
-		List<Paiement> paiementComptant = new ArrayList<>();
-		for (Paiement paiement : paiements) {
-			if (paiement.getTypePaiement() == TypePaiement.COMPTANT) {
-				paiementComptant.add(paiement);
-			}
-
-		}
-		return paiementComptant;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -1255,8 +1203,8 @@ public class CommandeServiceImpl implements CommandeService {
 			} else if (paiementCommande.getTypePaiement().equals(TypePaiement.COMPTANT) && coutCommande != null) {
 				if (coutCommande.getCoutComptantTTC() > paiementCommande.getMontant()) {
 					return false;
-				} else
-					return true;
+				}
+				return true;
 			} else if (paiementCommande.getTypePaiement().equals(TypePaiement.RECURRENT)) {
 				return true;
 			}
@@ -1282,9 +1230,7 @@ public class CommandeServiceImpl implements CommandeService {
 		infosBonCommande.setDateCreation(commande.getDateCreation());
 
 		Cout coutAvantPaiement = calculerCoutPourBonDeCommande(refCommande);
-		Cout coutApresPaiement = calculerCout(refCommande);
-		infosBonCommande.setMontantTVA(coutApresPaiement.getMontantTva());
-		infosBonCommande.setTauxTVA(coutApresPaiement.getTva());
+		infosBonCommande.setTauxTVA(coutAvantPaiement.getTva());
 
 		List<Paiement> paiements = paiementService.getPaiementEnCours(refCommande);
 		SetPaiement: for (Paiement paiement : paiements) {
@@ -1309,12 +1255,15 @@ public class CommandeServiceImpl implements CommandeService {
 			lignePourBonCommande.setReferenceOffre(ligne.getReferenceOffre());
 			lignePourBonCommande.setReferenceContrat(ligne.getReferenceContrat());
 
-			for (DetailCout detailCout : coutAvantPaiement.getDetails()) {
+			FindCoutLigne: for (DetailCout detailCout : coutAvantPaiement.getDetails()) {
 				if (detailCout.getNumero() != null && Integer.valueOf(detailCout.getNumero()).equals(ligne.getNumero())) {
 
 					lignePourBonCommande.setReductions(detailCout.getInfosReductionPourBonCommande());
 					double coutLigneHT = detailCout.getCoutComptantHT();
 					double coutLigneTTC = detailCout.getCoutComptantTTC();
+
+					lignePourBonCommande.setTauxTVA(detailCout.getTva());
+
 					if (detailCout.getCoutRecurrent() != null) {
 
 						coutRecurrentTotalHT += detailCout.getCoutRecurrent().getNormal().getTarifHT();
@@ -1322,18 +1271,24 @@ public class CommandeServiceImpl implements CommandeService {
 						coutRecurrentTotalReduitHT += detailCout.getCoutRecurrent().getReduit().getTarifHT();
 						coutRecurrentReduitTotalTTC += detailCout.getCoutRecurrent().getReduit().getTarifTTC();
 
-						lignePourBonCommande.setMontantTVA(detailCout.getCoutRecurrent().getNormal().getTarifTva());
-						lignePourBonCommande.setMontantTVAReduit(detailCout.getCoutRecurrent().getReduit()
-								.getTarifTva());
-						lignePourBonCommande.setTauxTVA(detailCout.getTva());
+						double coutRecurrentLigneHT = detailCout.getCoutRecurrent().getNormal().getTarifHT();
+						double coutRecurrentLigneTTC = detailCout.getCoutRecurrent().getNormal().getTarifTTC();
+						if (Math.max(coutLigneHT, coutRecurrentLigneHT) == coutRecurrentLigneHT) {
+							lignePourBonCommande.setMontantTVA(detailCout.getCoutRecurrent().getNormal().getTarifTva());
+							lignePourBonCommande.setMontantTVAReduit(detailCout.getCoutRecurrent().getReduit()
+									.getTarifTva());
+						} else {
+							lignePourBonCommande.setMontantTVA(detailCout.getMontantTva());
+						}
 
-						coutLigneHT = Math.max(coutLigneHT, detailCout.getCoutRecurrent().getNormal().getTarifHT());
-						coutLigneTTC = Math.max(coutLigneHT, detailCout.getCoutRecurrent().getNormal().getTarifTTC());
+						coutLigneHT = Math.max(coutLigneHT, coutRecurrentLigneHT);
+						coutLigneTTC = Math.max(coutLigneTTC, coutRecurrentLigneTTC);
 
 					}
 
 					lignePourBonCommande.setPrixHT(coutLigneHT);
 					lignePourBonCommande.setPrixTTC(coutLigneTTC);
+					break FindCoutLigne;
 				}
 			}
 
@@ -1357,26 +1312,9 @@ public class CommandeServiceImpl implements CommandeService {
 				coutAvantPaiement.getCoutComptantTTC() - coutAvantPaiement.getReductionTTC(),
 				coutRecurrentReduitTotalTTC));
 		infosBonCommande.getLignes().addAll(lignesPourBonCommandes);
-
+		infosBonCommande.setMontantTVA(infosBonCommande.getPrixTotalTTC() - infosBonCommande.getPrixTotalHT());
+		infosBonCommande.setMontantTVAReduit(infosBonCommande.getPrixReduitTTC() - infosBonCommande.getPrixReduitHT());
 		return infosBonCommande;
-	}
-
-	/**
-	 * Verifier que la valeur reduction de typr MOIS ne depasse pas la frequence sinon alligner la frequence et valeur
-	 * reduction.
-	 * 
-	 * @param reductions
-	 * @param frequence
-	 */
-	private void checkReductionWithTypeMois(ReductionContrat reduction, Integer frequence) {
-
-		if (reduction.getTypeValeur().equals(TypeValeur.MOIS) && reduction.getValeur() > frequence) {
-
-			reduction.setNbUtilisationMax(reduction.getValeur().intValue());
-			reduction.setValeur(new Double(Constants.UN));
-
-		}
-
 	}
 
 	/**
@@ -1404,6 +1342,11 @@ public class CommandeServiceImpl implements CommandeService {
 		return commandeRepository.recupererReferenceCommandeNonTransformeeEtNonAnnulee();
 	}
 
+	@Override
+	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat) {
+		return commandeRepository.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
+	}
+
 	private void logMandate(Mandate mandate) {
 		LOGGER.info("/********** Info Mandate *************/");
 		LOGGER.info("RUM: " + mandate.getRum());
@@ -1421,5 +1364,21 @@ public class CommandeServiceImpl implements CommandeService {
 		LOGGER.info("Mandate CustomerIds: " + customerIds);
 		LOGGER.info("Mandate Enabled: " + mandate.getEnabled());
 
+	}
+
+	/**
+	 * Get send alert.
+	 * 
+	 * @return {@link #sendAlert}
+	 */
+	private SendAlert getSendAlert() {
+		if (this.sendAlert == null) {
+			if (System.getProperty("alert.useMock").equals("true")) {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlertMock");
+			} else {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlert");
+			}
+		}
+		return sendAlert;
 	}
 }

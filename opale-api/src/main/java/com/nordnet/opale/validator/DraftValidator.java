@@ -360,6 +360,36 @@ public class DraftValidator {
 	}
 
 	/**
+	 * valider le geste lors de l'ajout d'une ligne au draft.
+	 * 
+	 * @param geste
+	 *            {@link Geste}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerGestePourAjouterLigne(Geste geste) throws OpaleException {
+		if (geste != null) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.49"), "1.1.49");
+		}
+	}
+
+	/**
+	 * valider l'association d'un {@link Geste} a une {@link DraftLigne}.
+	 * 
+	 * @param draftLigne
+	 *            {@link DraftLigne}.
+	 * @param geste
+	 *            {@link Geste}.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerAssocierGeste(DraftLigne draftLigne, Geste geste) throws OpaleException {
+		if (draftLigne.getReferenceContrat() == null && geste != Geste.VENTE) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.48"), "1.1.48");
+		}
+	}
+
+	/**
 	 * Verifier si le geste existe dans la commande.
 	 * 
 	 * @param draft
@@ -369,8 +399,9 @@ public class DraftValidator {
 	 */
 	public static void checkGesteNotNull(Draft draft) throws OpaleException {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
-
-			isExistGeste(draftLigne.getGeste());
+			if (!Utils.isStringNullOrEmpty(draftLigne.getReferenceContrat())) {
+				isExistGeste(draftLigne.getGeste());
+			}
 		}
 
 	}
@@ -378,15 +409,12 @@ public class DraftValidator {
 	/**
 	 * Verifer que la ligne detail existe.
 	 * 
-	 * @param refProduit
-	 *            reference du produit.
 	 * @param draftLigneDetail
 	 *            reference du draft ligne detail
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	public static void isExistLigneDetailDraft(String refProduit, DraftLigneDetail draftLigneDetail)
-			throws OpaleException {
+	public static void isExistLigneDetailDraft(DraftLigneDetail draftLigneDetail) throws OpaleException {
 		if (draftLigneDetail == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.24", draftLigneDetail), "1.1.24");
 		}
@@ -423,6 +451,13 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void validerClient(ClientInfo clientInfo) throws OpaleException {
+		clientIdNotNull(clientInfo.getFacturation());
+		clientIdNotNull(clientInfo.getLivraison());
+		clientIdNotNull(clientInfo.getSouscripteur());
+
+		isIndicatifTVAValide(clientInfo.getFacturation());
+		isIndicatifTVAValide(clientInfo.getLivraison());
+		isIndicatifTVAValide(clientInfo.getSouscripteur());
 
 		Client clientFacturation = clientInfo.getFacturation();
 		Client clientLivraison = clientInfo.getLivraison();
@@ -431,17 +466,6 @@ public class DraftValidator {
 		if (clientFacturation == null && clientLivraison == null && clientSouscripteur == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.35"), "1.1.35");
 		}
-
-		if (clientInfo != null) {
-			clientIdNotNull(clientInfo.getFacturation());
-			clientIdNotNull(clientInfo.getLivraison());
-			clientIdNotNull(clientInfo.getSouscripteur());
-
-			isIndicatifTVAValide(clientInfo.getFacturation());
-			isIndicatifTVAValide(clientInfo.getLivraison());
-			isIndicatifTVAValide(clientInfo.getSouscripteur());
-		}
-
 	}
 
 	/**
@@ -453,6 +477,13 @@ public class DraftValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void validerClientCommande(ClientInfo clientInfo) throws OpaleException {
+		clientNotNull(clientInfo.getFacturation());
+		clientNotNull(clientInfo.getLivraison());
+		clientNotNull(clientInfo.getSouscripteur());
+
+		isIndicatifTVAValide(clientInfo.getFacturation());
+		isIndicatifTVAValide(clientInfo.getLivraison());
+		isIndicatifTVAValide(clientInfo.getSouscripteur());
 
 		Client clientFacturation = clientInfo.getFacturation();
 		Client clientLivraison = clientInfo.getLivraison();
@@ -461,17 +492,6 @@ public class DraftValidator {
 		if (clientFacturation == null || clientLivraison == null || clientSouscripteur == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.37"), "1.1.37");
 		}
-
-		if (clientInfo != null) {
-			clientNotNull(clientInfo.getFacturation());
-			clientNotNull(clientInfo.getLivraison());
-			clientNotNull(clientInfo.getSouscripteur());
-
-			isIndicatifTVAValide(clientInfo.getFacturation());
-			isIndicatifTVAValide(clientInfo.getLivraison());
-			isIndicatifTVAValide(clientInfo.getSouscripteur());
-		}
-
 	}
 
 	/**
@@ -500,7 +520,7 @@ public class DraftValidator {
 	 *             {@link OpaleException}
 	 */
 	public static void validerIdClientUnique(Draft draft) throws OpaleException {
-		Set<String> idClientSet = new HashSet<String>();
+		Set<String> idClientSet = new HashSet<>();
 		String errorMessage = "";
 		if (draft.getClientAFacturer() != null) {
 			idClientSet.add(draft.getClientAFacturer().getClientId());
@@ -626,7 +646,7 @@ public class DraftValidator {
 			/*
 			 * valider les reference des details.
 			 */
-			List<String> referenceDetails = new ArrayList<String>();
+			List<String> referenceDetails = new ArrayList<>();
 			for (DraftLigneDetail draftLigneDetail : draftLigne.getDraftLigneDetails()) {
 				referenceDetails.add(draftLigneDetail.getReferenceChoix());
 			}
@@ -650,6 +670,22 @@ public class DraftValidator {
 	public static void validerListeReference(List<String> referencescontrat) throws OpaleException {
 		if (Utils.isListNullOrEmpty(referencescontrat)) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.43"), "1.1.43");
+		}
+	}
+
+	/**
+	 * valider qu'il n'existe pas d'autre commande renouvellement non transforme pour un contrat.
+	 * 
+	 * @param commandesRenouvellement
+	 *            liste des {@link Commande} renouvellement.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	public static void validerAncienneCommandeRenouvellement(List<Commande> commandesRenouvellement)
+			throws OpaleException {
+		if (commandesRenouvellement.size() > Constants.ZERO) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("1.1.50",
+					commandesRenouvellement.get(Constants.ZERO).getReference()), "1.1.50");
 		}
 	}
 }

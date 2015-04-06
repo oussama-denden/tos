@@ -39,13 +39,13 @@ public class RestClientMock extends RestClient {
 
 	@Override
 	public void validerContrat(String refContrat, ContratValidationInfo contratValidationInfo) throws OpaleException {
-
+		LOGGER.info("contrat valider");
 	}
 
 	@Override
 	public void renouvelerContrat(String referenceContrat, ContratRenouvellementInfo renouvellementInfo)
 			throws OpaleException {
-
+		LOGGER.info("contrat renouveler");
 	}
 
 	@Override
@@ -67,10 +67,12 @@ public class RestClientMock extends RestClient {
 	@Override
 	public void ajouterReductionSurContrat(String referenceContrat, ContratReductionInfo contratReductionInfo)
 			throws OpaleException {
+		LOGGER.info("contrat renouveler");
 	}
 
 	@Override
 	public void ajouterReductionSurElementContractuel(String referenceContrat, Integer numEC,
 			ContratReductionInfo contratReductionInfo) throws OpaleException {
+		LOGGER.info("reduction ajouter pou l'elementcontractuel");
 	}
 }

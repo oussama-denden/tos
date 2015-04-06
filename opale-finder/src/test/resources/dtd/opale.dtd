@@ -36,7 +36,6 @@
     codePartenaire CDATA #IMPLIED
     dateAnnulation CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
-    dateTransformationContrat CDATA #IMPLIED
     reference CDATA #IMPLIED
     referenceDraft CDATA #IMPLIED
     clientAFacturerId CDATA #IMPLIED
@@ -51,7 +50,9 @@
     ip CDATA #IMPLIED
     ts CDATA #IMPLIED
     qui CDATA #IMPLIED
+    causeNonTransformation CDATA #IMPLIED
     dateCreation CDATA #IMPLIED
+    dateTransformationContrat CDATA #IMPLIED
     gamme CDATA #IMPLIED
     geste CDATA #IMPLIED
     label CDATA #IMPLIED

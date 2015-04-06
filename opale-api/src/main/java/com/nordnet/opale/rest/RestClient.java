@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nordnet.common.alert.ws.client.SendAlert;
-import com.nordnet.netcatalog.ws.client.rest.RestUtil;
 import com.nordnet.opale.business.TracageInfo;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
@@ -88,6 +87,12 @@ public class RestClient {
 			responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+			} else if (RestUtil.isNotFound(response.getStatusCode())) {
+				InfoErreur infoErreur = new InfoErreur();
+				infoErreur.setErrorCode("404");
+				infoErreur.setErrorMessage("Not Found");
+				infoErreur.setUrl(response.getBody());
 				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (TopazeException e1) {
@@ -161,9 +166,8 @@ public class RestClient {
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
 				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
-			} else {
-				return objectMapper.readValue(responseBody, Contrat.class);
 			}
+			return objectMapper.readValue(responseBody, Contrat.class);
 		} catch (IOException e) {
 			throw new OpaleException("erreur dans l'appel vers topaze", e);
 		} catch (ResourceAccessException e) {
@@ -290,11 +294,8 @@ public class RestClient {
 	 *            user
 	 * @param type
 	 *            type log
-	 * @throws OpaleException
-	 *             {@link OpaleException}
 	 */
-	public void addLog(String target, String key, String descr, String ip, String user, String type)
-			throws OpaleException {
+	public void addLog(String target, String key, String descr, String ip, String user, String type) {
 		try {
 			LOGGER.info(":::ws-call:::addLog");
 
@@ -311,7 +312,7 @@ public class RestClient {
 			RestTemplate restTemplate = new RestTemplate();
 			try {
 
-				HttpEntity<TracageInfo> requestEntity = new HttpEntity<TracageInfo>(tracageInfo);
+				HttpEntity<TracageInfo> requestEntity = new HttpEntity<>(tracageInfo);
 				response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 				String responseBody = response.getBody();
 				if (RestUtil.isError(response.getStatusCode())) {

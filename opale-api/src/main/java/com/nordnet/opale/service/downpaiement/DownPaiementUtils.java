@@ -60,7 +60,7 @@ public final class DownPaiementUtils {
 	 */
 	public static final Collection<MovementAppendixItem> creerAppendixItem(String label, double montant,
 			String productReferenceId) {
-		Collection<MovementAppendixItem> appendixItems = new ArrayList<MovementAppendixItem>();
+		Collection<MovementAppendixItem> appendixItems = new ArrayList<>();
 		Price price = new Price(montant, CurrencyCode.EUR);
 		Identifier productReferenceIDenIdentifier = Identifier.build(productReferenceId);
 
@@ -87,7 +87,7 @@ public final class DownPaiementUtils {
 	 */
 	public static final Transaction<Price> createTransaction(Double prix, CurrencyCode eur, TransactionType tt) {
 		Price p = new Price(prix, eur);
-		return new Transaction<Price>(p, tt);
+		return new Transaction<>(p, tt);
 	}
 
 }

@@ -47,16 +47,14 @@ public class VatClient {
 	public static NordNetVat getClientInstance() {
 		if (instance != null) {
 			return instance;
-		} else {
-			if (System.getProperty("ws.nordNetVat.useMock").equals("true")) {
-				instance = new NordNetVatFake();
-				return instance;
-			} else {
-				instance = new NordNetVat();
-				instance.setUrl(System.getProperty("ws.nordNetVat.endpoint"));
-				return instance;
-			}
 		}
+		if (System.getProperty("ws.nordNetVat.useMock").equals("true")) {
+			instance = new NordNetVatFake();
+			return instance;
+		}
+		instance = new NordNetVat();
+		instance.setUrl(System.getProperty("ws.nordNetVat.endpoint"));
+		return instance;
 	}
 
 	/**
@@ -74,10 +72,11 @@ public class VatClient {
 	 */
 	public static double appliquerTVA(double montant, VatType typeTVA, String segmentTVA) throws OpaleException {
 		try {
+			String localSegmentTVA = segmentTVA;
 			if (Utils.isStringNullOrEmpty(segmentTVA)) {
-				segmentTVA = "00";
+				localSegmentTVA = "00";
 			}
-			VatSegment vatSegment = new VatSegment(segmentTVA);
+			VatSegment vatSegment = new VatSegment(localSegmentTVA);
 			Vat vat = getClientInstance().findByTypeAndSegment(typeTVA, vatSegment);
 			Price price = new Price(montant, CurrencyCode.EUR);
 			double vatAmount = vat.getRate().applyVat(price).getPrice().getAmount().doubleValue();
@@ -101,10 +100,11 @@ public class VatClient {
 	 */
 	public static double getValeurTVA(VatType typeTVA, String segmentTVA) throws OpaleException {
 		try {
+			String localSegmentTVA = segmentTVA;
 			if (Utils.isStringNullOrEmpty(segmentTVA)) {
-				segmentTVA = "00";
+				localSegmentTVA = "00";
 			}
-			VatSegment vatSegment = new VatSegment(segmentTVA);
+			VatSegment vatSegment = new VatSegment(localSegmentTVA);
 			Vat vat = getClientInstance().findByTypeAndSegment(typeTVA, vatSegment);
 			return vat.getRate().getVatRate().getAmount().doubleValue();
 		} catch (Exception e) {

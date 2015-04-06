@@ -50,7 +50,7 @@ public class SwaggerConfig {
 	 * 
 	 * @return {@link ApiInfo}.
 	 */
-	private ApiInfo apiInfo() {
+	private static ApiInfo apiInfo() {
 		ApiInfo apiInfo = new ApiInfo("Opale API", "Liste des services Opale", null, null, null, null);
 		return apiInfo;
 	}

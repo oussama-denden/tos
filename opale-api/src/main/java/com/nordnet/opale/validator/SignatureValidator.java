@@ -23,8 +23,6 @@ public class SignatureValidator {
 	/**
 	 * verifer si une signature est complete ou non .
 	 * 
-	 * @param refCommande
-	 *            reference du commande.
 	 * @param isAddMode
 	 *            {@link Boolean}
 	 * @param signature
@@ -32,8 +30,7 @@ public class SignatureValidator {
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void checkSignatureComplete(String refCommande, Signature signature, boolean isAddMode)
-			throws OpaleException {
+	public static void checkSignatureComplete(Signature signature, boolean isAddMode) throws OpaleException {
 
 		if (signature != null && signature.isSigne() && isAddMode) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("4.1.1"), "4.1.1");

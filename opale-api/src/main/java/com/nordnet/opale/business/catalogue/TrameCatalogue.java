@@ -18,7 +18,7 @@ public class TrameCatalogue {
 	/**
 	 * liste des {@link OffreCatalogue} dans le catalogue.
 	 */
-	private List<OffreCatalogue> offres = new ArrayList<OffreCatalogue>();
+	private List<OffreCatalogue> offres = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.
@@ -82,7 +82,7 @@ public class TrameCatalogue {
 	 * @return {@link Map<string, OffreCatalogue>}.
 	 */
 	public Map<String, OffreCatalogue> getOffreMap() {
-		Map<String, OffreCatalogue> map = new HashMap<String, OffreCatalogue>();
+		Map<String, OffreCatalogue> map = new HashMap<>();
 		for (OffreCatalogue offreCatalogue : this.offres) {
 			map.put(offreCatalogue.getReference(), offreCatalogue);
 		}

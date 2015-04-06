@@ -151,14 +151,14 @@ public class CatalogueValidator {
 		for (DraftLigne draftLigne : draft.getDraftLignes()) {
 			OffreCatalogue offreCatalogue = trameCatalogue.isOffreExist(draftLigne.getReferenceOffre());
 			if (offreCatalogue == null) {
-				values = new ArrayList<String>();
+				values = new ArrayList<>();
 				values.add(draftLigne.getReferenceOffre());
 				validationInfo.addReason("lignes[" + i + "].offre.reference", "36.3.1.2", PropertiesUtil.getInstance()
 						.getErrorMessage("1.1.6", draftLigne.getReferenceOffre()), values);
 			} else {
 				Tarif tarifLigne = offreCatalogue.getTarifsMap().get(draftLigne.getReferenceTarif());
 				if (tarifLigne == null) {
-					values = new ArrayList<String>();
+					values = new ArrayList<>();
 					values.add(draftLigne.getReferenceTarif());
 					validationInfo.addReason("lignes[" + i + "].offre.referenceTarif", "36.3.1.4", PropertiesUtil
 							.getInstance().getErrorMessage("1.1.28", draftLigne.getReferenceTarif()), values);
@@ -166,7 +166,7 @@ public class CatalogueValidator {
 				for (DraftLigneDetail detail : draftLigne.getDraftLigneDetails()) {
 					DetailCatalogue detailCatalogue = offreCatalogue.getDetail(detail.getReferenceSelection());
 					if (detailCatalogue == null) {
-						values = new ArrayList<String>();
+						values = new ArrayList<>();
 						values.add(detail.getReferenceSelection());
 						validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].reference", "36.3.1.3",
 								PropertiesUtil.getInstance().getErrorMessage("1.1.7", detail.getReferenceSelection()),
@@ -175,7 +175,7 @@ public class CatalogueValidator {
 
 						Choice choice = detailCatalogue.getChoice(detail.getReferenceChoix());
 						if (choice == null) {
-							values = new ArrayList<String>();
+							values = new ArrayList<>();
 							values.add(detail.getReferenceChoix());
 							validationInfo.addReason("lignes[" + i + "].offre.details[" + j + "].referenceChoix",
 									"36.3.1.6",
@@ -185,7 +185,7 @@ public class CatalogueValidator {
 							if (!Utils.isStringNullOrEmpty(detail.getReferenceTarif())) {
 								Tarif tarifDetail = choice.getTarifsMap().get(detail.getReferenceTarif());
 								if (tarifDetail == null) {
-									values = new ArrayList<String>();
+									values = new ArrayList<>();
 									values.add(detail.getReferenceTarif());
 									validationInfo.addReason("lignes[" + i + "].offre.details[" + j
 											+ "].referenceTarif", "36.3.1.5", PropertiesUtil.getInstance()

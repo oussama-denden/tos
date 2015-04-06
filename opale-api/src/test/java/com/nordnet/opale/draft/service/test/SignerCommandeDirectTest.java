@@ -47,13 +47,10 @@ public class SignerCommandeDirectTest extends GlobalTestCase {
 
 	/**
 	 * tester la creation et la transmission d'une signature.
-	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
 	 */
 	@Test
 	@DatabaseSetup(value = { "/dataset/emptyDB.xml", "/dataset/signer-commande.xml" })
-	public void testSignerCommandeDirectValide() throws OpaleException {
+	public void testSignerCommandeDirectValide() {
 
 		Commande commande = null;
 		Signature signature = null;
@@ -77,12 +74,10 @@ public class SignerCommandeDirectTest extends GlobalTestCase {
 	/**
 	 * tester la creation et la transmission d'une signature pour une commande qui est deja signe.
 	 * 
-	 * @throws OpaleException
-	 *             {@link OpaleException}.
 	 * @throws JSONException
 	 *             {@link JSONException}.
 	 */
-	public void testTransmettreSignatureInvalide() throws OpaleException, JSONException {
+	public void testTransmettreSignatureInvalide() throws JSONException {
 		Commande commande = null;
 		try {
 			commande = commandeService.getCommandeByReference("REF-COMMANDE-4");

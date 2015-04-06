@@ -48,7 +48,7 @@ public class DetailCatalogue {
 	/**
 	 * liste des {@link Choice} associe au detail du catalogue.
 	 */
-	private List<Choice> choices = new ArrayList<Choice>();
+	private List<Choice> choices = new ArrayList<>();
 
 	/**
 	 * la reference de l'element parent.
@@ -213,7 +213,7 @@ public class DetailCatalogue {
 	 * @return {@link Map<String, Choice>}
 	 */
 	public Map<String, Choice> getChoiceMap() {
-		Map<String, Choice> choiceMap = new HashMap<String, Choice>();
+		Map<String, Choice> choiceMap = new HashMap<>();
 		for (Choice choice : choices) {
 			choiceMap.put(choice.getReference(), choice);
 		}
@@ -239,7 +239,7 @@ public class DetailCatalogue {
 	 * @return une {@link Map} avec la referenceChoix en cle et la referenceSelection en valeur
 	 */
 	public Map<String, String> getReferenceChoixReferenceSelectionMap() {
-		Map<String, String> referenceChoixReferenceSelectionMap = new HashMap<String, String>();
+		Map<String, String> referenceChoixReferenceSelectionMap = new HashMap<>();
 		for (Choice choice : choices) {
 			referenceChoixReferenceSelectionMap.put(choice.getReference(), referenceSelection);
 		}

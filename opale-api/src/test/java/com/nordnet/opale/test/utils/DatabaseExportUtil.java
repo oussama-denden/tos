@@ -269,9 +269,9 @@ public class DatabaseExportUtil {
 
 		try {
 			dbeo.exportDatabaseToDtd();
-			dbeo.exportDatabaseToSql(Dialect.MYSQL, "com.nordnet.opale.domain");
+			// dbeo.exportDatabaseToSql(Dialect.MYSQL, "com.nordnet.opale.domain");
 			// dbeo.exportDataBase("testWithoutOrder");
-			dbeo.exportDataBaseWithForeignKeyOrder("src/test/resources/dataset/emptyDB.xml");
+			// dbeo.exportDataBaseWithForeignKeyOrder("src/test/resources/dataset/emptyDB.xml");
 			// dbeo.exportDataBaseWithForeignKeyOrder("src/test/resources/dataset/caisseItemToCaisseFinal.xml");
 			// dbeo.exportDataBaseWithForeignKeyOrder("src/test/resources/dataset/releve/send/test-send-releve.xml");
 			// dbeo.exportDataBaseWithForeignKeyOrder("src/test/resources/dataset/bill/check/test-check-prepaid-bill.xml");

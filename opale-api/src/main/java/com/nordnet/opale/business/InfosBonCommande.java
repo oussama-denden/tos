@@ -76,6 +76,11 @@ public class InfosBonCommande {
 	private Double montantTVA;
 
 	/**
+	 * Montant de TVA reduit.
+	 */
+	private Double montantTVAReduit;
+
+	/**
 	 * {@link ModePaiement}.
 	 */
 	private ModePaiement moyenDePaiement;
@@ -93,7 +98,7 @@ public class InfosBonCommande {
 	/**
 	 * {@link InfosLignePourBonCommande}.
 	 */
-	private List<InfosLignePourBonCommande> lignes = new ArrayList<InfosLignePourBonCommande>();
+	private List<InfosLignePourBonCommande> lignes = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.
@@ -249,7 +254,22 @@ public class InfosBonCommande {
 	 *            {@link #montantTVA}.
 	 */
 	public void setMontantTVA(Double montantTVA) {
-		this.montantTVA = montantTVA;
+		this.montantTVA = Utils.round(montantTVA, Constants.DEUX);
+	}
+
+	/**
+	 * @return {@link #montantTVAReduit}.
+	 */
+	public Double getMontantTVAReduit() {
+		return montantTVAReduit;
+	}
+
+	/**
+	 * @param montantTVAReduit
+	 *            {@link #montantTVAReduit}.
+	 */
+	public void setMontantTVAReduit(Double montantTVAReduit) {
+		this.montantTVAReduit = Utils.round(montantTVAReduit, Constants.DEUX);
 	}
 
 	/**

@@ -22,6 +22,7 @@ public class ApplicationContextHolder implements ApplicationContextAware {
 	 * @param ctx
 	 *            : the current context.
 	 */
+	@Override
 	public void setApplicationContext(ApplicationContext ctx) {
 		context = ctx;
 

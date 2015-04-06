@@ -38,7 +38,7 @@ public class DraftInfoGenerator {
 		Offre offre = new Offre();
 		offre.setReferenceOffre("mensuel_jet10_base");
 		offre.setReferenceTarif("jet_surf10");
-		List<Detail> details = new ArrayList<Detail>();
+		List<Detail> details = new ArrayList<>();
 		Detail detail = new Detail();
 		detail.setReferenceSelection("kitsat");
 		detail.setReferenceChoix("trafic10g");

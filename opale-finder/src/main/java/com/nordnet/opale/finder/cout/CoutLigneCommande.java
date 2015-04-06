@@ -75,6 +75,7 @@ public class CoutLigneCommande extends CalculeCout {
 	 * 
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("null")
 	@Override
 	public Cout getCout() throws OpaleException {
 
@@ -116,7 +117,7 @@ public class CoutLigneCommande extends CalculeCout {
 					reductionDao.findReductionECParent(referenceCommande, commandeLigne.getReference(),
 							tarif.getReference());
 			// calculer la reduction sur le tarif de ligne.
-			calculerReductionECParent(reductionECParent, detailCoutTarif, tva);
+			calculerReductionECParent(reductionECParent, detailCoutTarif);
 		}
 
 		// trouver les reduction liees aux lignes.
@@ -127,10 +128,10 @@ public class CoutLigneCommande extends CalculeCout {
 		Reduction reductionDraft = reductionDao.findReduction(referenceCommande);
 
 		// calculer la reduction de ligne.
-		calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, tva, false);
+		calculerReductionLigne(reductionLigne, coutComptantTTC, tarifTTC, false);
 
 		// calculer la reduction recurrente du draft sur la ligne.
-		calculerReductionLigne(reductionDraft, coutComptantTTC, tarifTTC, tva, true);
+		calculerReductionLigne(reductionDraft, coutComptantTTC, tarifTTC, true);
 
 		coutRecurentReduitTTC = (tarifTTC - reductionRecurrentTTC) > 0 ? tarifTTC - reductionRecurrentTTC : 0;
 
@@ -157,10 +158,8 @@ public class CoutLigneCommande extends CalculeCout {
 	 * 
 	 * @param detailCoutTarif
 	 *            detail cout du tarif du ligne.
-	 * @param tva
-	 *            valeur de tva.
 	 */
-	private void calculerReductionECParent(Reduction reductionECParent, DetailCout detailCoutTarif, double tva) {
+	private void calculerReductionECParent(Reduction reductionECParent, DetailCout detailCoutTarif) {
 
 		double tarifTTC = detailCoutTarif.getCoutRecurrent().getPrix();
 		double reduction = 0d;
@@ -195,13 +194,11 @@ public class CoutLigneCommande extends CalculeCout {
 	 *            cout comptant pour une ligne.
 	 * @param coutRecurrent
 	 *            cout recurrent pour unr ligne.
-	 * @param tva
-	 *            valeur de tva.
 	 * @param isReductionDraft
 	 *            indique si la reduction est associe a un draft.
 	 */
 	private void calculerReductionLigne(Reduction reductionLigne, double coutComptant, double coutRecurrent,
-			double tva, boolean isReductionDraft) {
+			boolean isReductionDraft) {
 
 		double reduction = 0d;
 

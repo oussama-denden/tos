@@ -3,6 +3,7 @@ package com.nordnet.opale.business;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nordnet.opale.util.Constants;
@@ -238,6 +239,24 @@ public class DetailCout extends Cout {
 		this.coutRecurrent = coutRecurrent;
 	}
 
+	/**
+	 * la liset des reduciton associes a une ligne qui sont calcules<s
+	 * 
+	 * @return liste des reductions.
+	 */
+	public List<InfosReductionPourBonCommande> getInfosReductionPourBonCommande() {
+		return infosReductionPourBonCommande;
+	}
+
+	/**
+	 * 
+	 * @param infosReductionPourBonCommande
+	 *            {@link InfosReductionPourBonCommande}
+	 */
+	public void setInfosReductionPourBonCommande(List<InfosReductionPourBonCommande> infosReductionPourBonCommande) {
+		this.infosReductionPourBonCommande = infosReductionPourBonCommande;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -258,22 +277,13 @@ public class DetailCout extends Cout {
 		return new EqualsBuilder().append(numero, rhs.numero).isEquals();
 	}
 
-	/**
-	 * la liset des reduciton associes a une ligne qui sont calcules<s
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return liste des reductions.
+	 * @see java.lang.Object#hashCode()
 	 */
-	public List<InfosReductionPourBonCommande> getInfosReductionPourBonCommande() {
-		return infosReductionPourBonCommande;
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(43, 11).append(numero).toHashCode();
 	}
-
-	/**
-	 * 
-	 * @param infosReductionPourBonCommande
-	 *            {@link InfosReductionPourBonCommande}
-	 */
-	public void setInfosReductionPourBonCommande(List<InfosReductionPourBonCommande> infosReductionPourBonCommande) {
-		this.infosReductionPourBonCommande = infosReductionPourBonCommande;
-	}
-
 }

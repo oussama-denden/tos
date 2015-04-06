@@ -25,7 +25,7 @@ public class Choice {
 	/**
 	 * liste des {@link Tarif}.
 	 */
-	private List<Tarif> tarifs = new ArrayList<Tarif>();
+	private List<Tarif> tarifs = new ArrayList<>();
 
 	/**
 	 * configuration du choix.
@@ -112,7 +112,7 @@ public class Choice {
 	 * @return {@link Map<string, Tarif>}.
 	 */
 	public Map<String, Tarif> getTarifsMap() {
-		Map<String, Tarif> map = new HashMap<String, Tarif>();
+		Map<String, Tarif> map = new HashMap<>();
 		for (Tarif tarif : tarifs) {
 			map.put(tarif.getIdTarif(), tarif);
 		}

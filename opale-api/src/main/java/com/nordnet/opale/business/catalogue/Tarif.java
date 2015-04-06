@@ -54,7 +54,7 @@ public class Tarif {
 	/**
 	 * la liste des reference des {@link Frais} associe au tarif.
 	 */
-	private List<Frais> frais = new ArrayList<Frais>();
+	private List<Frais> frais = new ArrayList<>();
 
 	/**
 	 * constructeur par defaut.
@@ -208,7 +208,7 @@ public class Tarif {
 	 * @return {@link Map<string, Frais>}.
 	 */
 	public Map<String, Frais> getFraisMap() {
-		Map<String, Frais> map = new HashMap<String, Frais>();
+		Map<String, Frais> map = new HashMap<>();
 		for (Frais frais : this.frais) {
 			map.put(frais.getIdFrais(), frais);
 		}
@@ -218,8 +218,7 @@ public class Tarif {
 	public com.nordnet.opale.domain.commande.Tarif toTarifDomain() {
 
 		com.nordnet.opale.domain.commande.Tarif tarif = new com.nordnet.opale.domain.commande.Tarif();
-		List<com.nordnet.opale.domain.commande.Frais> fraisList =
-				new ArrayList<com.nordnet.opale.domain.commande.Frais>();
+		List<com.nordnet.opale.domain.commande.Frais> fraisList = new ArrayList<>();
 		for (Frais fraisCatalogue : frais) {
 			fraisList.add(fraisCatalogue.tofraisDomain());
 		}

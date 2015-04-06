@@ -14,7 +14,7 @@ public class TrameTransformationInfo extends TrameCatalogueInfo {
 	/**
 	 * liste des references contrat.
 	 */
-	private List<String> referencesContrat = new ArrayList<String>();
+	private List<String> referencesContrat = new ArrayList<>();
 
 	/**
 	 * contructeur par defaut.
