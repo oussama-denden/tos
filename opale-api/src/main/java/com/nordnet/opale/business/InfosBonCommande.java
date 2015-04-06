@@ -269,7 +269,7 @@ public class InfosBonCommande {
 	 *            {@link #montantTVAReduit}.
 	 */
 	public void setMontantTVAReduit(Double montantTVAReduit) {
-		this.montantTVAReduit = montantTVAReduit;
+		this.montantTVAReduit = Utils.round(montantTVAReduit, Constants.DEUX);
 	}
 
 	/**
