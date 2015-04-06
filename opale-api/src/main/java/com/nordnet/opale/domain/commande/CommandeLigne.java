@@ -21,7 +21,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Type;
 
+import com.google.common.base.Optional;
 import com.nordnet.opale.business.DetailCommandeLigneInfo;
 import com.nordnet.opale.business.OffreCatalogueInfo;
 import com.nordnet.opale.business.catalogue.DetailCatalogue;
@@ -142,6 +144,32 @@ public class CommandeLigne {
 	 */
 	@Enumerated(EnumType.STRING)
 	private Geste geste;
+
+	/**
+	 * Cause de non transformation.
+	 */
+	@Type(type = "text")
+	private String causeNonTransformation;
+
+	/**
+	 * date de transformation du commande vers contrat.
+	 */
+	private Date dateTransformationContrat;
+
+	/**
+	 * @return {@link #dateTransformationContrat}.
+	 */
+	public Date getDateTransformationContrat() {
+		return dateTransformationContrat;
+	}
+
+	/**
+	 * @param dateTransformationContrat
+	 *            {@link #dateTransformationContrat}.
+	 */
+	public void setDateTransformationContrat(Date dateTransformationContrat) {
+		this.dateTransformationContrat = dateTransformationContrat;
+	}
 
 	/**
 	 * constructeur par defaut.
@@ -456,6 +484,23 @@ public class CommandeLigne {
 	}
 
 	/**
+	 * 
+	 * @return {@link #causeNonTransformation}
+	 */
+	public String getCauseNonTransformation() {
+		return causeNonTransformation;
+	}
+
+	/**
+	 * 
+	 * @param causeNonTransformation
+	 *            {@link #causeNonTransformation}
+	 */
+	public void setCauseNonTransformation(String causeNonTransformation) {
+		this.causeNonTransformation = causeNonTransformation;
+	}
+
+	/**
 	 * ajouter un {@link CommandeLigneDetail} a ligne de commande.
 	 * 
 	 * @param commandeLigneDetail
@@ -606,4 +651,15 @@ public class CommandeLigne {
 		return new HashCodeBuilder(43, 11).append(id).append(referenceOffre).append(modeFacturation).toHashCode();
 	}
 
+	/**
+	 * verifier si la ligne commande a ete transforme en contrat ou non.
+	 * 
+	 * @return true si la commande a ete transformer en contrat.
+	 */
+	public boolean isTransformerEnContrat() {
+		if (Optional.fromNullable(dateTransformationContrat).isPresent()) {
+			return true;
+		}
+		return false;
+	}
 }

@@ -11,3 +11,7 @@ This changelog references the relevant changes (bug fixes and minor features) do
 	  * Fixing eclipse warnings.
 	  * Fixing bug relate to VAT value in "InformationBonCommand".
 	  * Implementing US #181: Adding VAT discount value field "montantReductionReduit" to "InfoBonCommande" business object.
+	  * Fixing but relate to VAT value in "InformationBonCommand".
+	  * Remove field dateTransformationContrat from order and add it to the order line.
+	  * Add field causeNonTransformation to the order line to indicate error occurred during transformation to contract.
+	  * Generation of the reference command in the same way as for the contract

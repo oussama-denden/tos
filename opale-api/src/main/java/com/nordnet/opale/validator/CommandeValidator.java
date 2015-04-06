@@ -5,6 +5,7 @@ import java.util.List;
 import org.joda.time.Hours;
 import org.joda.time.LocalDateTime;
 
+import com.google.common.base.Optional;
 import com.nordnet.mandatelibrary.ws.types.Customer;
 import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.business.Auteur;
@@ -91,12 +92,15 @@ public class CommandeValidator {
 	/**
 	 * valider l'auteur.
 	 * 
+	 * @param refCommande
+	 *            reference de commande.
+	 * 
 	 * @param auteur
 	 *            {@link Auteur}
 	 * @throws OpaleException
 	 *             {@link OpaleException}
 	 */
-	public static void validerAuteur(Auteur auteur) throws OpaleException {
+	public static void validerAuteur(String refCommande, Auteur auteur) throws OpaleException {
 
 		if (auteur == null) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("0.1.4", "Auteur"), "0.1.4");
@@ -137,7 +141,7 @@ public class CommandeValidator {
 	 *             {@link OpaleException}.
 	 */
 	public static void testerCommandeNonTransforme(Commande commande) throws OpaleException {
-		if (commande.getDateTransformationContrat() != null) {
+		if (commande.isTransformerEnContrat()) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.8", commande.getReference()), "2.1.8");
 		}
 
@@ -311,6 +315,27 @@ public class CommandeValidator {
 		if (paiements != null && paiements.size() > Constants.ZERO) {
 			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.20"), "2.1.20");
 		}
+	}
+
+	/**
+	 * Verifier si la transformation automatique de la ligne commande est possible.
+	 * 
+	 * @param referenceCommande
+	 *            reference commande.
+	 * @param ligne
+	 *            {@link CommandeLigne}
+	 * @param isCronCall
+	 *            is c est un appel cron.
+	 * @throws OpaleException
+	 *             {@link OpaleException}
+	 */
+	public static void checkIsTransformPossible(String referenceCommande, CommandeLigne ligne, boolean isCronCall)
+			throws OpaleException {
+		if (isCronCall && Optional.fromNullable(ligne.getCauseNonTransformation()).isPresent()) {
+			throw new OpaleException(propertiesUtil.getErrorMessage("2.1.23", referenceCommande, ligne.getReference(),
+					ligne.getCauseNonTransformation()), "2.1.23");
+		}
+
 	}
 
 }

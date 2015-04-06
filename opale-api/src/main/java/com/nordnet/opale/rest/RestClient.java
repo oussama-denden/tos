@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nordnet.common.alert.ws.client.SendAlert;
-import com.nordnet.netcatalog.ws.client.rest.RestUtil;
 import com.nordnet.opale.business.TracageInfo;
 import com.nordnet.opale.exception.InfoErreur;
 import com.nordnet.opale.exception.OpaleException;
@@ -88,6 +87,12 @@ public class RestClient {
 			responseBody = response.getBody();
 			if (RestUtil.isError(response.getStatusCode())) {
 				InfoErreur infoErreur = objectMapper.readValue(responseBody, InfoErreur.class);
+				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
+			} else if (RestUtil.isNotFound(response.getStatusCode())) {
+				InfoErreur infoErreur = new InfoErreur();
+				infoErreur.setErrorCode("404");
+				infoErreur.setErrorMessage("Not Found");
+				infoErreur.setUrl(response.getBody());
 				throw new OpaleException(infoErreur.getErrorMessage(), infoErreur.getErrorCode());
 			}
 		} catch (TopazeException e1) {

@@ -94,11 +94,6 @@ public class Commande {
 	private Date dateCreation;
 
 	/**
-	 * date de transformation du commande vers contrat.
-	 */
-	private Date dateTransformationContrat;
-
-	/**
 	 * date d'annulation de la commande.
 	 */
 	private Date dateAnnulation;
@@ -303,21 +298,6 @@ public class Commande {
 	}
 
 	/**
-	 * @return {@link #dateTransformationContrat}.
-	 */
-	public Date getDateTransformationContrat() {
-		return dateTransformationContrat;
-	}
-
-	/**
-	 * @param dateTransformationContrat
-	 *            {@link #dateTransformationContrat}.
-	 */
-	public void setDateTransformationContrat(Date dateTransformationContrat) {
-		this.dateTransformationContrat = dateTransformationContrat;
-	}
-
-	/**
 	 * 
 	 * @return {@link #dateAnnulation}
 	 */
@@ -429,18 +409,6 @@ public class Commande {
 	}
 
 	/**
-	 * verifier si la commande a ete transforme en contrat ou non.
-	 * 
-	 * @return true si la commande a ete transformer en contrat.
-	 */
-	public boolean isTransformerEnContrat() {
-		if (Optional.fromNullable(dateTransformationContrat).isPresent()) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * methode appel avant la persistance du la commande.
 	 * 
 	 * @throws OpaleException
@@ -500,5 +468,19 @@ public class Commande {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * verifier si la commande est transfomer en contrat.
+	 * 
+	 * @return true si la commande est transformer en contrat.
+	 */
+	public boolean isTransformerEnContrat() {
+		for (CommandeLigne commandeLigne : this.commandeLignes) {
+			if (!Optional.fromNullable(commandeLigne.getDateTransformationContrat()).isPresent()) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

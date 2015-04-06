@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.nordnet.common.alert.ws.client.SendAlert;
@@ -14,6 +13,7 @@ import com.nordnet.opale.domain.draft.Draft;
 import com.nordnet.opale.exception.OpaleException;
 import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.util.Constants;
+import com.nordnet.opale.util.spring.ApplicationContextHolder;
 
 /**
  * cron responsable de nettoyer la base de donnÃ©es des donnÃ©es inutiles.
@@ -33,7 +33,6 @@ public class NettoyerDB extends QuartzJobBean {
 	 */
 	private DraftService draftService;
 
-	@Autowired
 	private SendAlert sendAlert;
 
 	@Override
@@ -53,7 +52,7 @@ public class NettoyerDB extends QuartzJobBean {
 				LOGGER.error("erreur lors du netoyage de la base de donnees", e);
 
 				try {
-					sendAlert.send(System.getProperty(Constants.PRODUCT_ID), "Erreur dans le cron nettoyer DB ",
+					getSendAlert().send(System.getProperty(Constants.PRODUCT_ID), "Erreur dans le cron nettoyer DB ",
 							"cause: " + e.getCause().getLocalizedMessage(), e.getMessage());
 				} catch (Exception ex) {
 					LOGGER.error("fail to send alert", ex);
@@ -70,5 +69,21 @@ public class NettoyerDB extends QuartzJobBean {
 	 */
 	public void setDraftService(DraftService draftService) {
 		this.draftService = draftService;
+	}
+
+	/**
+	 * Get send alert.
+	 * 
+	 * @return {@link #sendAlert}
+	 */
+	private SendAlert getSendAlert() {
+		if (this.sendAlert == null) {
+			if (System.getProperty("alert.useMock").equals("true")) {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlertMock");
+			} else {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlert");
+			}
+		}
+		return sendAlert;
 	}
 }

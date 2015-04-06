@@ -79,7 +79,6 @@
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="reference" use="optional" />
 		<xsd:attribute name="referenceDraft" use="optional" />
-		<xsd:attribute name="dateTransformationContrat" use="optional" />
 		<xsd:attribute name="clientAFacturerId" use="optional" />
 		<xsd:attribute name="clientALivrerId" use="optional" />
 		<xsd:attribute name="clientSouscripteurId" use="optional" />
@@ -95,7 +94,7 @@
 	<xsd:complexType name="commandeLigne_type">
 	   <xsd:attribute name="id" use="optional" />
 		<xsd:attribute name="dateCreation" use="optional" />
-		
+		<xsd:attribute name="dateTransformationContrat" use="optional" />
 		<xsd:attribute name="qui" use="optional" />
 		<xsd:attribute name="ip" use="optional" />
 		<xsd:attribute name="canal" use="optional" />

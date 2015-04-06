@@ -8,4 +8,4 @@ from 2015-03-17.
     * opale-api
       * show only WARN/ERROR/FATAL levels in log in the qualif/prod env.
 	  * desactivate mandate validation.
-	  * Fixing but relate to VAT value in "InformationBonCommand".
+

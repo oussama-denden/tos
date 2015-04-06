@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Optional;
+import com.nordnet.common.alert.ws.client.SendAlert;
+import com.nordnet.mandatelibrary.ws.types.Customer;
+import com.nordnet.mandatelibrary.ws.types.Mandate;
 import com.nordnet.opale.adapter.MandateLibraryAdapter;
 import com.nordnet.opale.business.AjoutSignatureInfo;
 import com.nordnet.opale.business.Auteur;
@@ -171,6 +174,11 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Autowired
 	private MandateLibraryAdapter mandateLibraryAdapter;
+
+	/**
+	 * {@link SendAlert}
+	 */
+	private SendAlert sendAlert;
 
 	/**
 	 * 
@@ -582,7 +590,7 @@ public class CommandeServiceImpl implements CommandeService {
 		Commande commande = commandeRepository.findByReference(refCommande);
 		CommandeValidator.isExiste(refCommande, commande);
 
-		return transformeEnContrat(commande, auteur);
+		return transformeEnContrat(commande, auteur, false);
 	}
 
 	/**
@@ -591,48 +599,78 @@ public class CommandeServiceImpl implements CommandeService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public List<String> transformeEnContrat(Commande commande, Auteur auteur) throws OpaleException, JSONException {
+	public List<String> transformeEnContrat(Commande commande, Auteur auteur, boolean isCronCall)
+			throws OpaleException, JSONException {
+
+		CommandeValidator.testerCommandeNonTransforme(commande);
+		CommandeValidator.isAuteurValide(auteur);
+		CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 
 		List<String> referencesContrats = new ArrayList<>();
 		List<Paiement> paiement = paiementService.getPaiementEnCours(commande.getReference());
-
+		// boolean isCommandeTransformer = true;
 		for (CommandeLigne ligne : commande.getCommandeLignes()) {
-			if (ligne.getGeste().equals(Geste.VENTE)) {
-				getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
-						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
-				CommandeValidator.testerCommandeNonTransforme(commande);
-				CommandeValidator.isAuteurValide(auteur);
-				CommandeValidator.checkIsCommandeAnnule(commande, Constants.TRANSFORMER_EN_CONTRAT);
 
-				ContratPreparationInfo contratPreparationInfo =
-						ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
+			try {
+				if (!ligne.isTransformerEnContrat()) {
+					CommandeValidator.checkIsTransformPossible(commande.getReference(), ligne, isCronCall);
+					if (ligne.getGeste().equals(Geste.VENTE)) {
+						getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
+								"Transformer la ligne commande " + ligne.getReferenceOffre() + " en contrat", auteur);
 
-				/*
-				 * ajout du mode de paiement au produits prepare.
-				 */
-				ajouterModePaiementProduit(contratPreparationInfo.getProduits());
-				String refContrat = restClient.preparerContrat(contratPreparationInfo);
-				ligne.setReferenceContrat(refContrat);
+						ContratPreparationInfo contratPreparationInfo =
+								ligne.toContratPreparationInfo(commande.getReference(), auteur.getQui(), paiement);
 
-				/*
-				 * association des reductions au nouveau contrat creer.
-				 */
-				transformerReductionCommandeEnReductionContrat(commande, ligne);
+						/*
+						 * ajout du mode de paiement au produits prepare.
+						 */
+						ajouterModePaiementProduit(contratPreparationInfo.getProduits());
+						String refContrat = restClient.preparerContrat(contratPreparationInfo);
+						ligne.setReferenceContrat(refContrat);
 
-				ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne);
+						/*
+						 * association des reductions au nouveau contrat creer.
+						 */
+						transformerReductionCommandeEnReductionContrat(commande, ligne);
 
-				restClient.validerContrat(refContrat, contratValidationInfo);
+						ContratValidationInfo contratValidationInfo = creeContratValidationInfo(commande, ligne);
 
-				referencesContrats.add(refContrat);
-			} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
-				getTracage().ajouterTrace(Constants.ORDER, commande.getReference(),
-						"Transformer la ligne commande " + ligne.getReferenceOffre() + " en ordre de renouvelement",
-						auteur);
-				transformeEnOrdereRenouvellement(commande, ligne);
+						restClient.validerContrat(refContrat, contratValidationInfo);
+						ligne.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
+
+						referencesContrats.add(refContrat);
+					} else if (ligne.getGeste().equals(Geste.RENOUVELLEMENT)) {
+						getTracage().ajouterTrace(
+								Constants.ORDER,
+								commande.getReference(),
+								"Transformer la ligne commande " + ligne.getReferenceOffre()
+										+ " en ordre de renouvelement", auteur);
+						transformeEnOrdereRenouvellement(commande, ligne);
+					}
+				}
+			} catch (OpaleException e) {
+
+				if (e.getErrorCode().equals("404")) {
+					throw new OpaleException(e.getMessage(), e.getErrorCode());
+
+				} else if (!e.getErrorCode().equals("2.1.23")) {
+					ligne.setCauseNonTransformation(e.getMessage());
+
+				}
+
+				try {
+					getSendAlert().send(
+							System.getProperty(Constants.PRODUCT_ID),
+							"Erreur dans la Transformer Commande " + commande.getReference()
+									+ " En Contrat  dans la ligne " + ligne.getReference(), "cause: " + e.getMessage(),
+							e.getErrorCode());
+				} catch (Exception exception) {
+					LOGGER.error("fail to send alert", e);
+				}
+
 			}
 		}
 
-		commande.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
 		commandeRepository.save(commande);
 		return referencesContrats;
 	}
@@ -1307,5 +1345,40 @@ public class CommandeServiceImpl implements CommandeService {
 	@Override
 	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat) {
 		return commandeRepository.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
+	}
+
+	private void logMandate(Mandate mandate) {
+		LOGGER.info("/********** Info Mandate *************/");
+		LOGGER.info("RUM: " + mandate.getRum());
+		String accountKey = null;
+		List<String> customerIds = new ArrayList<String>();
+		if (mandate.getAccount() != null) {
+			accountKey = mandate.getAccount().getAccountKey();
+			if (mandate.getAccount().getCustomers() != null) {
+				for (Customer customer : mandate.getAccount().getCustomers().getCustomer()) {
+					customerIds.add(customer.getCustomerKey());
+				}
+			}
+		}
+		LOGGER.info("Mandate account key: " + accountKey);
+		LOGGER.info("Mandate CustomerIds: " + customerIds);
+		LOGGER.info("Mandate Enabled: " + mandate.getEnabled());
+
+	}
+
+	/**
+	 * Get send alert.
+	 * 
+	 * @return {@link #sendAlert}
+	 */
+	private SendAlert getSendAlert() {
+		if (this.sendAlert == null) {
+			if (System.getProperty("alert.useMock").equals("true")) {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlertMock");
+			} else {
+				sendAlert = (SendAlert) ApplicationContextHolder.getBean("sendAlert");
+			}
+		}
+		return sendAlert;
 	}
 }
