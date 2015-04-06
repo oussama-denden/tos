@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
@@ -36,7 +37,7 @@ public class TransformerEnContrat extends QuartzJobBean {
 	private CommandeService commandeService;
 
 	/**
-	 * {@link SendAlert}
+	 * {@link SendAlert}.
 	 */
 	@Autowired
 	private SendAlert sendAlert;
@@ -44,12 +45,16 @@ public class TransformerEnContrat extends QuartzJobBean {
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
-		LOGGER.info("Cron: Transformer Commande En Contrat");
-
-		List<String> Referencecommandes = commandeService.getReferenceCommandeNonAnnuleEtNonTransformes();
-
 		try {
-			for (String reference : Referencecommandes) {
+
+			if (isJobRunning(context)) {
+				LOGGER.info("Il y un job en cours d'execution.");
+				return;
+			}
+
+			LOGGER.info("Cron: Transformer Commande En Contrat");
+			List<String> referencecommandes = commandeService.getReferenceCommandeNonAnnuleEtNonTransformes();
+			for (String reference : referencecommandes) {
 				LOGGER.info(" traittement du commande " + reference);
 
 				Commande commande = commandeService.getCommandeByReference(reference);
@@ -95,5 +100,34 @@ public class TransformerEnContrat extends QuartzJobBean {
 	 */
 	public void setCommandeService(CommandeService commandeService) {
 		this.commandeService = commandeService;
+	}
+
+	/**
+	 * verifier si il ya un cron en cours d'execution.
+	 * 
+	 * @param ctx
+	 *            {@link JobExecutionException}.
+	 * @return true s'il ya un cron encore en cours d'execution.
+	 * @throws OpaleException
+	 *             {@link OpaleException}.
+	 */
+	@SuppressWarnings("unchecked")
+	private boolean isJobRunning(JobExecutionContext ctx) throws OpaleException {
+		try {
+			List<JobExecutionContext> jobs = ctx.getScheduler().getCurrentlyExecutingJobs();
+
+			for (JobExecutionContext job : jobs) {
+				// verifier s'il ya un job en cours d'execution (il faut etre sure que le temps de lancement n'est pas
+				// le meme pour etre sur qu'il ne s'agit pas de la meme instance du job).
+				if (job.getJobDetail().getJobClass().getName().equals(this.getClass().getName())
+						&& !job.getFireTime().equals(ctx.getFireTime())) {
+					return true;
+				}
+			}
+
+			return false;
+		} catch (SchedulerException e) {
+			throw new OpaleException("Exception genere par le Quartz", e);
+		}
 	}
 }
