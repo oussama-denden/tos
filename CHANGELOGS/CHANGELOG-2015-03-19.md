@@ -12,3 +12,4 @@ This changelog references the relevant changes (bug fixes and minor features) do
 	  * Remove field dateTransformationContrat from order and add it to the order line.
 	  * Add field causeNonTransformation to the order line to indicate error occurred during transformation to contract.
 	  * Generation of the reference command in the same way as for the contract
+	  * Implemting US #181: Adding VAT discount value field "montantReductionReduit" to "InfoBonCommande" business object.
