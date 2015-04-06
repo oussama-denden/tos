@@ -1275,6 +1275,7 @@ public class CommandeServiceImpl implements CommandeService {
 				coutRecurrentReduitTotalTTC));
 		infosBonCommande.getLignes().addAll(lignesPourBonCommandes);
 		infosBonCommande.setMontantTVA(infosBonCommande.getPrixTotalTTC() - infosBonCommande.getPrixTotalHT());
+		infosBonCommande.setMontantTVAReduit(infosBonCommande.getPrixReduitTTC() - infosBonCommande.getPrixReduitHT());
 		return infosBonCommande;
 	}
 
@@ -1307,5 +1308,4 @@ public class CommandeServiceImpl implements CommandeService {
 	public List<Commande> findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(String referenceContrat) {
 		return commandeRepository.findCommandeRenouvellementActiveNonTransformeeByReferenceContrat(referenceContrat);
 	}
-
 }
