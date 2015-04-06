@@ -18,8 +18,7 @@ import com.nordnet.opale.service.draft.DraftService;
 import com.nordnet.opale.test.utils.OpaleMultiSchemaXmlDataSetFactory;
 
 /**
- * Classe de test pour la methode
- * {@link DraftService#supprimerLigneDraft(String, String, DeleteInfo)} .
+ * Classe de test pour la methode {@link DraftService#supprimerLigneDraft(String, String, DeleteInfo)} .
  * 
  * @author anisselmane.
  * 
@@ -81,7 +80,7 @@ public class SupprimerLigneDraftTest extends GlobalTestCase {
 					draftInfoGenerator.getObjectFromJsonFile(DeleteInfo.class, "./requests/supprimerLigneDraft.json"));
 			fail("Unexpected error");
 		} catch (OpaleException e) {
-			assertEquals("1.1.1", e.getErrorCode());
+			assertEquals("1.1.39", e.getErrorCode());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
@@ -100,7 +99,7 @@ public class SupprimerLigneDraftTest extends GlobalTestCase {
 					draftInfoGenerator.getObjectFromJsonFile(DeleteInfo.class, "./requests/supprimerLigneDraft.json"));
 			fail("Unexpected error");
 		} catch (OpaleException e) {
-			assertEquals("1.1.1", e.getErrorCode());
+			assertEquals("1.1.39", e.getErrorCode());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			fail(e.getMessage());
