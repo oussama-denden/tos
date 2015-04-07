@@ -2,8 +2,6 @@ package com.nordnet.opale.finder.business;
 
 import java.util.Date;
 
-import org.hibernate.validator.NotNull;
-
 /**
  * Cette classe represente l'entite {@link Reduction}.
  * 
@@ -15,7 +13,6 @@ public class Reduction {
 	/**
 	 * reference du reduction.
 	 */
-	@NotNull
 	private String reference;
 
 	/**
