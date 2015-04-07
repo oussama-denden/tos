@@ -6,9 +6,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Index;
-import org.hibernate.validator.NotNull;
 
 import com.nordnet.opale.business.FraisInfo;
 import com.nordnet.opale.enums.TypeFrais;

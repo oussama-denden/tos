@@ -36,6 +36,10 @@
 		<developerConnection>scm:git:git@git.dvpt.nordnet.fr:dsi-si/opale.git</developerConnection>
 		<tag>0.0.1</tag>
 	</scm>
+	
+	<properties>
+		<version.quartz>2.2.1</version.quartz>
+	</properties>
 
 	<dependencies>
 
@@ -51,7 +55,7 @@
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
-			<version>1.8.6</version>
+			<version>${version.quartz}</version>
 		</dependency>
 
 		<!-- client saphir -->

@@ -15,9 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Index;
-import org.hibernate.validator.NotNull;
 
 import com.google.common.base.Optional;
 import com.nordnet.common.valueObject.constants.VatType;

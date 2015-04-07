@@ -7,89 +7,76 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<bean id="draftService" class="com.nordnet.opale.service.draft.DraftServiceImpl" />
-
 	<bean id="commandeService" class="com.nordnet.opale.service.commande.CommandeServiceImpl" />
 
-	<bean name="nettoyerDB" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<!-- Job Details Beans -->
+	<bean name="nettoyerDB"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<property name="jobClass" value="com.nordnet.opale.cron.NettoyerDB" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="draftService" value-ref="draftService" />
 			</map>
 		</property>
+		<property name="durability" value="true" />
 	</bean>
 
-	<!-- declaration bean supprimer commande. -->
-	<bean name="supprimerCommande" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<bean name="supprimerCommande"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<property name="jobClass" value="com.nordnet.opale.cron.SupprimerCommandes" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="commandeService" value-ref="commandeService" />
 			</map>
 		</property>
+		<property name="durability" value="true" />
 	</bean>
-	
-	<bean name="transformerEnContrat" class="org.springframework.scheduling.quartz.JobDetailBean">
+
+	<bean name="transformerEnContrat"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<property name="jobClass" value="com.nordnet.opale.cron.TransformerEnContrat" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="commandeService" value-ref="commandeService" />
 			</map>
 		</property>
+		<property name="durability" value="true" />
 	</bean>
 
 	<!-- Cron Trigger NettoyerDB -->
-	<bean id="cronTriggerNettoyerDB" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="cronTriggerNettoyerDB"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="nettoyerDB" />
 		<property name="cronExpression" value="${cronExpressionNettoyerDB}" />
 	</bean>
 
 	<!-- Cron Trigger SupprimerCommande -->
-	<bean id="cronSupprimerCommande" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="cronSupprimerCommande"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="supprimerCommande" />
 		<property name="cronExpression" value="${cronExpressionSupprimerCommande}" />
 	</bean>
-	
+
 	<!-- Cron Trigger com.nordnet.opale.cron.TransformerEnContrat -->
-	<bean id="cronTransformerEnContrat" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="cronTransformerEnContrat"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="transformerEnContrat" />
 		<property name="cronExpression" value="${cronExpressionTransformerEnContrat}" />
 	</bean>
 
+	<!-- Job Schedulers Beans -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="jobDetails">
 			<list>
 				<ref bean="nettoyerDB" />
-			</list>
-		</property>
-		<property name="triggers">
-			<list>
-				<ref bean="cronTriggerNettoyerDB" />
-			</list>
-		</property>
-	</bean>
-
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="jobDetails">
-			<list>
 				<ref bean="supprimerCommande" />
-			</list>
-		</property>
-		<property name="triggers">
-			<list>
-				<ref bean="cronSupprimerCommande" />
-			</list>
-		</property>
-	</bean>
-	
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="jobDetails">
-			<list>
 				<ref bean="transformerEnContrat" />
 			</list>
 		</property>
 		<property name="triggers">
 			<list>
+				<ref bean="cronTriggerNettoyerDB" />
+				<ref bean="cronSupprimerCommande" />
 				<ref bean="cronTransformerEnContrat" />
 			</list>
 		</property>

@@ -110,7 +110,6 @@ public class TransformerEnContrat extends QuartzJobBean {
 	 * @throws OpaleException
 	 *             {@link OpaleException}.
 	 */
-	@SuppressWarnings("unchecked")
 	private boolean isJobRunning(JobExecutionContext ctx) throws OpaleException {
 		try {
 			List<JobExecutionContext> jobs = ctx.getScheduler().getCurrentlyExecutingJobs();
@@ -129,7 +128,7 @@ public class TransformerEnContrat extends QuartzJobBean {
 			throw new OpaleException("Exception genere par le Quartz", e);
 		}
 	}
-	
+
 	/**
 	 * Get send alert.
 	 * 
