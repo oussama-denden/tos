@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
+<!DOCTYPE dataset SYSTEM "./src/test/resources/dtd/opale.dtd">
 <dataset>
 <commande id="1000" canal="welcome"  ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000001" referenceDraft="00000001" />
 <commande id="1001" canal="welcome"  ip="GRC.WEL-JOHNDOE" ts="[now]" reference="00000002" referenceDraft="00000002" dateAnnulation="[now]" />

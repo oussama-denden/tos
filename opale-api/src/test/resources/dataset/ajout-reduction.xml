@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE dataset SYSTEM ".\src\test\resources\dtd\opale.dtd">
+<!DOCTYPE dataset SYSTEM "./src/test/resources/dtd/opale.dtd">
 
 <dataset>
 <draft id="1" reference="REF-DRAFT-1"   codePartenaire="000111" ts="[now]" canal="welcome" qui="someone" annulerCommandeSource="false"/>
