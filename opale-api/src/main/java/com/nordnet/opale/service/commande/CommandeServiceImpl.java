@@ -644,6 +644,7 @@ public class CommandeServiceImpl implements CommandeService {
 								"Transformer la ligne commande " + ligne.getReferenceOffre()
 										+ " en ordre de renouvelement", auteur);
 						transformeEnOrdereRenouvellement(commande, ligne);
+						ligne.setDateTransformationContrat(PropertiesUtil.getInstance().getDateDuJour());
 					}
 				}
 			} catch (OpaleException e) {
