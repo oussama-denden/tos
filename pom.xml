@@ -47,10 +47,9 @@
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:git@git.dvpt.nordnet.fr:dsi-si/opale.git</connection>
-		<url>git@git.dvpt.nordnet.fr/dsi-si/opale.git</url>
-		<developerConnection>scm:git:git@git.dvpt.nordnet.fr:dsi-si/opale.git</developerConnection>
-		<tag>0.0.1</tag>
+		<connection>scm:git:http://stash.dvpt.nordnet.fr:7990/scm/opale/opale.git</connection>
+		<url>http://stash.dvpt.nordnet.fr:7990/scm/opale/opale.git</url>
+		<developerConnection>scm:git:http://stash.dvpt.nordnet.fr:7990/scm/opale/opale.git</developerConnection>
 	</scm>
 
 	<properties>
